@@ -3,8 +3,6 @@
 class JsonResponse {
 	
 	public $_response;
-
-
     public function __construct(){
     	$this->_response = new stdClass();
         $this->_response->type = 'ok';
@@ -12,8 +10,6 @@ class JsonResponse {
         $this->_response->data = null;
         $this->_response->extraData = null;
     }
-
-
 	public function setData($dataToSend) {
 		$this->_response->data = $dataToSend;
 	}
@@ -27,9 +23,7 @@ class JsonResponse {
 	public function setExtraData($data) {
 		$this->_response->extraData = $data;
 	}
-
 	public function echoData() {
 		echo json_encode($this->_response);
 	}
-
 }

@@ -12,8 +12,6 @@ $seatreg_db_table_names->table_seatreg = $wpdb->prefix . "seatreg";
 $seatreg_db_table_names->table_seatreg_options = $wpdb->prefix . "seatreg_options";
 $seatreg_db_table_names->table_seatreg_bookings = $wpdb->prefix . "seatreg_bookings";
 
-
-
 /*
    Useful functions
    Generating HTML stuff
@@ -21,10 +19,7 @@ $seatreg_db_table_names->table_seatreg_bookings = $wpdb->prefix . "seatreg_booki
    Database stuff
    Admin form submit stuff
    Ajax stuff
-
  */
-
-
 
 /*
 ==================================================================================================================================================================================================================
@@ -45,14 +40,11 @@ function seatreg_bookings_is_user_logged_in() {
 	}
 }
 
-
-
 /*
 ==================================================================================================================================================================================================================
 Generating HTML stuff
 ==================================================================================================================================================================================================================
 */
-
 
 function seatreg_generate_overview_section($targetRoom) {
 
@@ -64,17 +56,13 @@ function seatreg_generate_overview_section($targetRoom) {
 	    $active_tab = $_GET[ 'tab' ];
 	} 
 	seatreg_generate_overview_section_html($targetRoom, $active_tab);
-
 }
-
 
 //generate overview section html.
 function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 
 	global $wpdb;
 	global $seatreg_db_table_names;
-
-	
 
 	$registration = seatreg_get_options( $active_tab );
 
@@ -83,24 +71,17 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 	 	return;
 	 }
 
-	 $registration = $registration[0];
-
-
+	$registration = $registration[0];
 	$bookings = seatreg_get_registration_bookings( $registration->registration_code );
-
-
 	$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_name, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE seatreg_code = '$registration->registration_code' AND status = 1 GROUP BY room_name");
 	$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_name, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE seatreg_code = '$registration->registration_code' AND status = 2 GROUP BY room_name");
-
 	$regStats = getRoomSeatInfo($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
-
-
 	$structure = $registration->registration_layout;
 	$project_name = $registration->registration_name;
 	$start_date = $registration->registration_start_timestamp;
 	$end_date = $registration->registration_end_timestamp;
 
-	$regUrl =  get_site_url();   //"https://www.seatreg.com/view.php?v=$urlCode";
+	$regUrl =  get_site_url();
 	
 	$roomLoactionInStats = -1;
 	$rName = str_replace(" ", "-", $registration->registration_name); 
