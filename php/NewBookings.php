@@ -5,11 +5,9 @@
 //===========
 
 
-require_once('/libs/PHPMailer/PHPMailerAutoload.php');
+//require_once('/libs/PHPMailer/PHPMailerAutoload.php');
 
 class NewBookings {
-
-
 	public $response; //response object. 
 	protected $_isValid = true;
 	protected $_email; //confirm email is send to this address
@@ -29,12 +27,10 @@ class NewBookings {
 	
 	
     public function __construct( $code, $resp){
-
     	$this->_viewCode = $code;
         $this->response = $resp;
 
       	$this->setUp();
-
     }
 
     private function setUp() {
@@ -49,7 +45,6 @@ class NewBookings {
 			WHERE a.registration_code = %s",
 			$this->_viewCode
 		) );
-
 
 		$this->_struct = json_decode($result->registration_layout);
 		$this->_registriId = $result->id;
@@ -69,18 +64,14 @@ class NewBookings {
 		if($result->registration_password != null) {
 			$this->_regPassword = $result->registration_password;
 		}
-
 	}
 
     public function validateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $seatRoom, $emailToSend, $code, $pw, $customFields) {
-
     	$this->_email = $emailToSend;
         $this->_subPassword = $pw;
     
-    	$customFields = stripslashes_deep($customFields);
-
-   
-	
+		$customFields = stripslashes_deep($customFields);
+		
 		if( !$this->seatreg_validate_custom_fields( $customFields ) ) {
 			$this->response->setError( __('Custom field validation error','seatreg') );
 			return false;
@@ -90,7 +81,6 @@ class NewBookings {
 		$customFieldData = json_decode( $customFields );
 
     	foreach ($firstname as $key => $value) {
-    		
     		$booking = new stdClass();
     		$booking->firstname = $value;
     		$booking->lastname = $lastname[$key];
@@ -105,48 +95,34 @@ class NewBookings {
         $this->_bookings = $bookings;
 
         return true;
-
     }
 
     public function seatreg_validate_custom_fields($customFields) {
-
-		
 		$customFieldsReg = '/^\[(\[({"label":[0-9a-zA-ZÜÕÖÄüõöä\s@."]{1,102},"value":[0-9a-zA-ZÜÕÖÄüõöä\s@."-]{1,52}},?){0,6}\],?){1,3}\]$/';
-
 
 		if( !preg_match($customFieldsReg, $customFields) ) {
 			return false;
 		}
+
 		return true;
-
 	}
-
-
 	public function validateBooking() {
 
-
-		
 		//1.step
 		$this->isSeperateSeats();
-
 
 		if(!$this->_isValid) {
 			$this->response->setError('Error. Dublicated seats');
 			return;
 		}
 
-		
-
 		//password check if needed
-
 		if($this->_regPassword != null) {
-
 			if($this->_regPassword != $this->_subPassword) {
 				//registration password and user submitted passwords are not the same
 				$this->response->setError('Error. Password mismatch!');
 				return;
 			}
-
 		}
 
 		//2.step
@@ -157,45 +133,29 @@ class NewBookings {
 			return;
 		}
 
-
-
-
 		//3.step. Email check if needed
-
 		if($this->_gmailNeeded) {
-			
-
 			$gmailReg = '/^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/';
 
 			if(!preg_match($gmailReg, $this->_email)) {
 				$this->response->setError('Gmail needed!');
 				return;
 			}
-
 		}
 
 		//4.step. Time check. is registration open.
-
 		if ($this->_isOpen == false) {
 			$this->response->setError('Registration is closed');
 			return;
 		}
 
-
-
-
-
 		$registrationTime = $this->registrationTimeStatus($this->_startUnix, $this->_endUnix);
-
 		if($registrationTime != 'run') {
 			$this->response->setError('Registration is not open (time)');
 			return;
 		}
 
-
-
 		//5.step. Check if seat/seats are allready taken
-
 		$bookStatus = $this->isAllSeatsOpen(); 
 
 		if($bookStatus != 'ok') {
@@ -204,11 +164,7 @@ class NewBookings {
 		}
 
 		$this->insertPreRegistration();
-	
 	}
-
-
-	
 
 	public function getStatus() {
 		return $this->_isValid;
@@ -235,11 +191,9 @@ class NewBookings {
 				$this->_isValid = false;
 				break;
 			}
-			
 		}
 
 	}
-
 
 	private function doseSeatsExistInRooms() {
 		//check if seats are in rooms and seat numbers are correct. returns true if all is ok. false if wrong
@@ -249,7 +203,6 @@ class NewBookings {
 		$allCorrect = true;
 
 		for($i = 0; $i < $dataLen; $i++) {
-
 			$searchStatus = 'room-searching';
 
 			for($j = 0; $j < $structLen; $j++) {
@@ -285,11 +238,7 @@ class NewBookings {
 					} //end of boxes loop
 
 					break;
-
 				}
-
-				
-
 			}//end of room loop
 			
 			if($searchStatus == 'room-searching') {
@@ -323,8 +272,6 @@ class NewBookings {
 		if(!$allCorrect) {
 			$this->_isValid = false;
 		}
-
-
 	}
 
 	private function isAllSeatsOpen() {  
@@ -332,15 +279,11 @@ class NewBookings {
 		global $seatreg_db_table_names;
 
 		$dataLength = count($this->_bookings);
-
-
 		$rows = $wpdb->get_results( $wpdb->prepare(
 			"SELECT seat_id FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s",
 			$this->_registriId
 		) );
-
-
 
 		$rowsLength = count($rows);
 		$statusReport = 'ok';
@@ -361,11 +304,7 @@ class NewBookings {
 			
 		}
 		return $statusReport;
-
-
 	}
-
-
 
 	public function insertPreRegistration() {
 		//insert registration. user must confirm via email
@@ -405,8 +344,6 @@ class NewBookings {
 
 			}
 	
-
-
 	        	if($inserted) {
 
 	        		$this->response->setText('mail');
@@ -468,20 +405,13 @@ class NewBookings {
 					}*/
 	
 
-	        	}
-
-			
+				}
+				
 		}
 
 	}
 
-	
-	
-
-
-	private function changeCaptcha($length) {
-
-		
+	private function changeCaptcha($length) {		
 		$chars = "abcdefghijklmnprstuvwzyx23456789";
 		$str = "";
 		$i = 0;
@@ -530,23 +460,16 @@ class NewBookings {
 		if($startUnix > $unix) {
 			return 'wait';
 		}
-
 	}
 
 	private function generateSeatString() {
-
     	$dataLen = count($this->_bookings);
     	$seatsString = '';
 
     	for($i = 0; $i < $dataLen; $i++) {
     		$seatsString .= 'Seat nr: ' . $this->_bookings[$i]->seatNr . ' from room: ' .  $this->_bookings[$i]->seatRoom . '<br/>'; 
-    	}
+		}
+		
     	return $seatsString;
-
-    }
-	
+    }	
 }
-
-
-
-

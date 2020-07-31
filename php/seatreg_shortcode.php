@@ -1,6 +1,5 @@
 <?php
 
-
 function seatreg_shortcode() {
 	return 'from SeatReg registration shortcode';
 }
