@@ -908,24 +908,19 @@ function seatreg_generate_registration_code() {
 
 //return room info. How many bron and taken seats are in a rooms
 function getRoomSeatInfo($struct, $bronRegistrations, $takenRegistrations) {
-
 	$bronLength = count($bronRegistrations);
 	$takenLength = count($takenRegistrations);
 	
 	$regStructure = json_decode($struct);
 
-	$roomCount = count($regStructure);
-
+	$roomCount = count(is_countable($regStructure) ? $regStructure : []);
 	$howManyRegSeats = 0;
-
 	$howManyOpenSeats = 0;
 	$howManyBronSeats= 0;
 	$howManyTakenSeats = 0;
 	$howManyCustomBoxes = 0;
 	$statsArray = array();
 	$roomsInfo = array();
-
-	//print_r($structure);
 
 	for($i = 0; $i < $roomCount; $i++) {
 		//print_r($regStructure[$i]->boxes);
@@ -940,38 +935,30 @@ function getRoomSeatInfo($struct, $bronRegistrations, $takenRegistrations) {
 		$roomCustomBoxes = 0;
 
 		for($k = 0; $k < $bronLength; $k++) {  
-
 			if( $regStructure[$i]->room[1] == $bronRegistrations[$k]->room_name ) { //find how many bron seats in this room
-
 				$roomBronSeats = $bronRegistrations[$k]->total;
-				//$roomBronSeats++;
 				$howManyBronSeats += $bronRegistrations[$k]->total;
-				//$howManyBronSeats++;
 
 				break;
 			}
 		}
 
 		for($k = 0; $k < $takenLength; $k++) {
-
 			if($regStructure[$i]->room[1] == $takenRegistrations[$k]->room_name) { //find how many taken seats in this room
 				$roomTakenSeats = $takenRegistrations[$k]->total;
 				$howManyTakenSeats += $takenRegistrations[$k]->total;
+
 				break;
 			}
 		}
 		
 		for($j = 0; $j < $roomBoxCount; $j++) {
-
-			//print_r($roomBoxes[$j]);
-
 			if($roomBoxes[$j][8] == 'true') {
 				
 				if($roomBoxes[$j][10] == 'noStatus') {
 
 					$howManyOpenSeats++;
 					$roomOpenSeats++;
-
 				}
 				
 				$howManyRegSeats++;
@@ -980,7 +967,6 @@ function getRoomSeatInfo($struct, $bronRegistrations, $takenRegistrations) {
 				$howManyCustomBoxes++;
 				$roomCustomBoxes++;
 			}
-			
 		}
 
 		$roomsInfo[] = array(
@@ -1000,7 +986,6 @@ function getRoomSeatInfo($struct, $bronRegistrations, $takenRegistrations) {
 	$statsArray['roomCount'] = $roomCount;
 	$statsArray['roomsInfo'] = $roomsInfo;
 
-	//
 	return $statsArray;
 }
 
