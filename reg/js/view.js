@@ -1,8 +1,5 @@
 
 $(function() {
-
-
-
 	var ajaxUrl = '../../../../wp-admin/admin-ajax.php';
 
 	function capitalizeFirstLetter(string) {
@@ -113,20 +110,13 @@ $(function() {
 
 	SeatReg.prototype.fillLocationObj = function() {
 		//where is room located
-		
-
 		var roomsLength = this.rooms.length;
-
-
 
 		for(var i = 0; i < roomsLength; i++) {
 
 			this.locationObj[this.rooms[i].room[1].replace(/ /g,"_")] = i;
 
 		}
-
-
-
 	};
 
 
@@ -182,14 +172,8 @@ $(function() {
 				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_name'], registrations[i]['status'], null);
 
 			}
-
-			
-
 		}
 
-		
-
-		
 		if(custF != null) {
 			//console.log('Adding custom fields');
 			seatReg.fillCustom(custF);
@@ -202,18 +186,6 @@ $(function() {
 		$('.total-bron').text(roomsInfo.bronSeats);
 		$('.total-tak').text(roomsInfo.takenSeats);
 		
-		
-
-
-
-		
-		////console.log(this.rooms);
-
-
-
-		////console.log(roomsInfo.roomsInfo);
-
-
 		if(this.mobileview) {
 
 			seatReg.paintRoomsNav();
@@ -269,12 +241,7 @@ $(function() {
 		}
 	};
 
-
 	SeatReg.prototype.paintRoom = function() {
-
-
-		
-
 		//paint room boxes and add listeners
 		var documentFragment = document.createDocumentFragment();
 
@@ -291,15 +258,12 @@ $(function() {
 
 			var clickable = false;
 
-			
 			box.style.top = loc[i][2] + 'px';
 			box.style.left = loc[i][1] + 'px';
 			box.style.backgroundColor = loc[i][5];
 			box.style.zIndex = loc[i][11];
 			box.style.width = loc[i][3] + 'px';
 			box.style.height = loc[i][4] + 'px';
-
-			
 
 			if(loc[i][0] != 'noLegend') {
 				box.setAttribute('data-legend',loc[i][0]);
@@ -322,18 +286,12 @@ $(function() {
 			if(loc[i][6] != "nohover") {
 			
 				box.setAttribute('data-powertip',loc[i][6].replace(/\^/g,'<br>'));
-
-
 				box.className = box.className +' bubble-text';
 				clickable = true;
 
-				
 				var commentIcon = document.createElement('i');
 				commentIcon.className = ' fa fa-comment-o comment-icon';
 				box.appendChild(commentIcon);
-				
-
-
 			}
 			if(loc[i][10] != "noStatus") {
 
@@ -421,7 +379,6 @@ $(function() {
 
 	};
 
-
 SeatReg.prototype.paintRoomInfo = function() {
 	//room-nav-info
 	$('#current-room-name').text(this.rooms[this.currentRoom].room[1]);
@@ -429,8 +386,6 @@ SeatReg.prototype.paintRoomInfo = function() {
 	var documentFragment = $(document.createDocumentFragment());
 
 	documentFragment.append('<div class="info-item open-seats"><span>'+ myLanguage.getLang('openSeatsInRoom_') +'</span>' + infoLoc[10] +'</div>', '<div class="info-item"><span class="bron-legend"></span> <span>'+ myLanguage.getLang('pendingSeatInRoom_') +'</span>' + infoLoc[8] +'</div>', '<div class="info-item"><span class="tak-legend"></span> <span>'+ myLanguage.getLang('confirmedSeatInRoom_') +'</span>' + infoLoc[12] +'</div>');
-
-
 		/*
 			this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomBronSeats);  // index 7
 			this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomCustomBoxes); // index 8
@@ -440,9 +395,6 @@ SeatReg.prototype.paintRoomInfo = function() {
 		*/
 
 	$('#room-nav-info-inner').html(documentFragment);
-
-
-
 };
 
 SeatReg.prototype.paintRoomLegends = function() {
@@ -467,10 +419,7 @@ SeatReg.prototype.paintRoomLegends = function() {
 	var documentFragment = $(document.createDocumentFragment());
 
 	for(var i = 0; i < arrLen; i++) {
-		//console.log('legend');
-
 		documentFragment.append($('<div class="legend-div" data-target-legend='+ this.rooms[this.currentRoom].room[3][i][0].replace(/\s+/g, '_').toLowerCase() +'></div>').append('<div class="legend-box" style="background-color:'+ this.rooms[this.currentRoom].room[3][i][1] +'"></div>', '<div class="legend-name">'+ this.rooms[this.currentRoom].room[3][i][0] +'</div>'));
-
 	}
 	$('#legends').append(documentFragment);
 
@@ -488,14 +437,7 @@ SeatReg.prototype.paintRoomLegends = function() {
 
 };
 
-
-
-
-
 SeatReg.prototype.paintRoomsNav = function() {
-
-
-
 	var roomsLength = this.rooms.length;
 	var documentFragment = $(document.createDocumentFragment());
 	var scope = this;
@@ -523,14 +465,9 @@ SeatReg.prototype.paintRoomsNav = function() {
 
 	}
 	$('#room-nav-items').append(documentFragment);
-
 };
 
-
 SeatReg.prototype.roomChange = function(roomName) {
-
-	//console.log('roomChange');
-
 	$('#room-nav').removeClass('modal');
 	$('#modal-bg').css('display','none');
 	
@@ -563,7 +500,6 @@ SeatReg.prototype.roomChange = function(roomName) {
 		this.paintRoomLegends();
 		this.paintRoomInfo();
 		setMiddleSecSize(this.rooms[this.currentRoom].room[4],this.rooms[this.currentRoom].room[5]);
-
 	}
 	
 	this.paintRoom();
@@ -624,8 +560,6 @@ SeatReg.prototype.addSeatToCart = function() {
 
 	});
 
-	
-
 	cartItem.append(seatNumberDiv, roomNameDiv, delItem);
 	$('#seat-cart-items').append(cartItem);
 
@@ -633,16 +567,10 @@ SeatReg.prototype.addSeatToCart = function() {
 };
 
 SeatReg.prototype.openSeatCart = function() {
-	
-
 	var selected = this.selectedSeats.length;
 
-
-
 	if(selected == 0) {
-
 		if(this.status == 'run') {
-			
 			//$('#seat-cart-info').html('<h3>Selection is empty</h3><p>You can add ' + this.spotName + ' to cart by clicking/tabbing them</p>');
 			$('#seat-cart-info').html('<h3>'+ myLanguage.getLang('selectionIsEmpty') +'</h3><p>' + myLanguage.getLang('youCanAdd_') + this.spotName + myLanguage.getLang('_toCartClickTab') + '</p>');
 			
@@ -667,20 +595,15 @@ SeatReg.prototype.openSeatCart = function() {
 	$('#seat-cart-popup .cart-popup-inner').addClass('zoomIn');
 	$('#seat-cart-popup').css('display','block');
 	$('#modal-bg').css('display','block');
-
 };
 
 SeatReg.prototype.closeSeatCart = function() {
-
 	$('#seat-cart-popup .cart-popup-inner').removeClass('zoomIn');
 	$('#seat-cart-popup').css('display','none');
 	$('#modal-bg').css('display','none');
-	
-
 };
 
 SeatReg.prototype.openCheckOut = function() {
-
 	var arrLen = this.selectedSeats.length;
 
 	if(arrLen == 0) {
@@ -698,7 +621,6 @@ SeatReg.prototype.openInfo = function() {
 	$('#extra-info').css('display','block');
 
 };
-
 
 SeatReg.prototype.closeCheckOut = function(hideModalBg) {
 	$('#checkout-area').css('display','none');
@@ -721,7 +643,6 @@ SeatReg.prototype.closeCheckOut = function(hideModalBg) {
 };
 
 SeatReg.prototype.generateCheckout = function(arrLen) {
-	
 	$('#checkout-input-area').empty();
 	var documentFragment = $(document.createDocumentFragment());
 	var arrLen3 = this.customF.length;
@@ -752,29 +673,22 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 	}
 
 	if(arrLen > 1) {
-
 		if(this.gmailNeeded == 1) {
 			var primaryMail = $('<div style="text-align:center"><label class="field-label">'+ myLanguage.getLang('confWillBeSentTogmail') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}else {
 			var primaryMail = $('<div style="text-align:center"><label class="field-label">'+ myLanguage.getLang('confWillBeSentTo') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}
-
 		documentFragment.append(primaryMail);
 	}
 
 	$('#checkout-input-area').append(documentFragment);
 
 	if(arrLen == 1 && this.gmailNeeded == 1) {
-
-		//console.log('Gmail needed and arr 1');
 		$('#checkout-input-area .field-input[data-field="Email"]').prev().text('Email (Gmail required)');
-		
 	}
-
 };
 
 SeatReg.prototype.generateField = function(fieldName) {
-
 	var fieldText;
 	switch(fieldName) {
 		case 'FirstName':
@@ -788,14 +702,12 @@ SeatReg.prototype.generateField = function(fieldName) {
 			break;
 	}
 
-
 	var label = $('<label class="field-label"><span class="l-text">' + fieldText + '</span></label>');
 	var fieldInput = $('<input type="text" name="'+ fieldName +'[]" class="field-input" data-field="' + fieldName+ '" maxlength="100">');
 	
 	var errorText = $('<span class="field-error">error</span>');
 	label.append(fieldInput, errorText);
 	return label;
-
 };
 
 SeatReg.prototype.generateCustomField = function(custom) {
@@ -819,17 +731,11 @@ SeatReg.prototype.generateCustomField = function(custom) {
 	var errorText = $('<span class="field-error">error</span>');
 	label.append(fieldInput,errorText);
 	return label;
-	
 };
-
-
-
 
 SeatReg.prototype.openModel = function() {
 	$('#modal-bg').css('display','block');
 	$('#room-nav').addClass('modal');
-
-
 };
 
 SeatReg.prototype.closeModal = function() {
@@ -844,39 +750,18 @@ SeatReg.prototype.openSeatDialog = function(clickBox) {
 	var openDialog = this.paintSeatDialog(clickBox);
 
 	if(openDialog) {
-
-		//console.log('You can open');
 		$('#modal-bg').css('display','block');
-
-
 		$('#confirm-dialog-mob').css('display','block');
 		$('#confirm-dialog-mob-inner').removeClass('zoomOut').addClass('zoomIn');  //bounceInRight
-
-
-
-
 	}else {
 		//console.log('dont open');
 	}
-	
 };
 
 SeatReg.prototype.closeSeatDialog = function() {
-	//console.log('close seat cart');
 	$('#confirm-dialog-mob').css('display','none');
 	$('#modal-bg').css('display','none');
-
-	/*
-	$('#confirm-dialog-mob-inner').removeClass('zoomIn').addClass('zoomOut').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-		$('#confirm-dialog-mob').css('display','none');
-		$('#modal-bg').css('display','none');
-		
-	});
-*/
-
-
 };
-
 
 SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
@@ -884,8 +769,6 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	$('#confirm-dialog-mob-text').empty();
 	$('#confirm-dialog-mob-ok').css('display','none');
 
-	//console.log();
-	//console.dir( clickBox ); 
 	var hover = null;
 	var legend = null;
 	var nr = null;
@@ -899,15 +782,10 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	////console.log(clickBox);
 
 	if(clickBox.hasAttribute('data-powertip')) {
-		
 		$('#confirm-dialog-mob-hover').css('display','block');
 		hover = clickBox.getAttribute('data-powertip');
 		showDialog = true;
-
 	}
-
-	
-
 	if(clickBox.hasAttribute('data-legend')) {
 		
 		$('#confirm-dialog-mob-legend').css('display','block');
@@ -915,7 +793,6 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		showDialog = true;
 	}
 	
-
 	if(clickBox.hasAttribute('data-seat')) {
 		
 		$('#selected-seat').val(clickBox.getAttribute('data-seat'));
@@ -926,20 +803,17 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		showDialog = true;
 	}
 
-
 	if(clickBox.hasAttribute('data-status')) {
 		
 		type = clickBox.getAttribute('data-status');
 		showDialog = true;
 	}
 
-
 	if(clickBox.hasAttribute("data-selectedBox")) {
 		//clickBox.hasAttribute('data-selectedBox')
 		isSelected = true;
 	}
 	
-
 	if(hover != null) {
 		$('#confirm-dialog-mob-hover').html('<span class="dialog-hover"></span> ' + '<span class="dialog-hover-text">' + hover + '</span>');
 	}
@@ -981,8 +855,6 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 };
 
-
-
 var seatReg = new SeatReg();
 seatReg.browserInfo();
 
@@ -1001,16 +873,8 @@ if(dataReg == null) {
 	seatReg.fillLocationObj();
 }
 
-
-
-
-
-
 $(window).resize(function() {
-
-	
 		//console.log('resize detected')
-
 		rtime = new Date();
 	    if (timeout === false) {
 	        timeout = true;
@@ -1040,10 +904,7 @@ function resizeend() {
   			}
   			
   		}else {
-  			seatReg.mobileview = true;
-
-			//$('#legend-wrapper').css('display','none');
-		
+  			seatReg.mobileview = true;		
   		}
 
   		setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room[4],seatReg.rooms[seatReg.currentRoom].room[5]);
@@ -1052,22 +913,14 @@ function resizeend() {
 			legendScroll= null;
 		}
 		initLegendsScroll();
-
     }               
 }
 
-
 function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
-
-	
-
 	//console.log('screenwidth: ' + screenWidth + ' screenheight ' + screenHeight);
 	
-	
 	var navHeight = $('#room-nav-wrap').outerHeight();
-
 	var spaceForMiddleWidth = screenWidth; //how much room for seat map
-
 	var spaceForMiddleHeight = screenHeight - 30 - 30 - navHeight - 20;  // - header height, -legend height, navbar height, -spacing  --default mobile
 
 	//console.log('room-nav-wrap height on: ' + navHeight);
@@ -1076,7 +929,6 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 
 
 	$('#middle-section').css('margin-left','');
-
 
 	if(screenWidth >= 1024) {
 		//ok i have bigger screen. set legends area left and seatcart right
@@ -1090,24 +942,14 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 		if(seatReg.rooms[seatReg.currentRoom].room[3].length > 0) {
 			$('#legend-wrapper').css('display','inline-block');
 		}
-		
-
 
 	}else {
 		//mobile screen
 		$('#box-wrap').css('width', spaceForMiddleWidth- 20);
-
 	}
 
-
-	
 	$('#boxes').removeAttr('style');
-
-	
-	
 	//$('#room-nav-wrap').css('width', spaceForMiddleWidth);
-
-
 	//width of middle
 	if(roomSizeWidth > spaceForMiddleWidth) {
 		//roomsize is too wide
@@ -1135,8 +977,6 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 		//console.log('No problem with height!');
 		$('#box-wrap, #boxes').css('height', roomSizeHeight);
 	}
-
-
 
 	//legends height
 
@@ -1176,11 +1016,7 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 }
 
 function initLegendsScroll() {
-
-	//console.log('initLegendScroll');
 	if(screenWidth < 1024) {
-		//console.log('small screen');
-
 		if(seatReg.ie8 == false) {
 
 			//console.log('Create legend scroll');
@@ -1192,22 +1028,12 @@ function initLegendsScroll() {
 */
 
 		}
-		
-
 	}else {
-		//console.log('big screen');
 		$('#legend-wrapper').css('max-height',"");
-		//$('#legends').removeAttr('style');
 	}
-
-	
-
 }
 
-
-
 function initScroll(needHorizScroll, needVerticScroll) {
-
 	//destroy previous scroll
 	if(myScroll != null) {
 		myScroll.destroy();
@@ -1218,24 +1044,10 @@ function initScroll(needHorizScroll, needVerticScroll) {
 	var needToZoom = false;
 
 	if(seatReg.rooms[seatReg.currentRoom].room[4] > $('#middle-section').width() || seatReg.rooms[seatReg.currentRoom].room[5] > $('#middle-section').height()) {
-
 		needToZoom = true;
-		
 	}
 
-	
-
-
-
-	//this.rooms[this.currentRoom].room[4],this.rooms[this.currentRoom].room[5]   roomSizeWidth, roomSizeHeight
-
-	//var screenWidth = $(window).width();
-	//var screenHeight = $(window).height();
-
-
 	if(myScroll == null && seatReg.ie8 == false) {
-
-		
 			myScroll = new IScroll('#box-wrap', {
 				//mouseWheel: true,
 				keyBindings: true,
@@ -1252,88 +1064,26 @@ function initScroll(needHorizScroll, needVerticScroll) {
 				zoomMax: 30,
 				zoomMin: 0.1,
 				mouseWheelSpeed: 20,
-				
-				
 				//shrinkScrollbars: 'clip' //scape
-
 			});
-
 
 			if(needToZoom) {
 				var fitF = fitFactor();
 				myScroll.zoom(fitF);
-
-				//boxWrapSize(fitF);
-
-
 			}
-
-
-			/*myScroll.on('zoomStart', function() {
-				console.log('geh');
-			});*/
-/*
-			if(needToZoom > 0) {
-				console.log('Ok room out of view. need to zoom ' + needToZoom);
-
-				var zoomFactor = 0;
-
-				if(needToZoom > 1000) {
-					zoomFactor = 0.5;
-				}
-
-
-				myScroll.zoom(myScroll.scale - zoomFactor);
-			}
-*/
-		
-		
-/*
-		
-
-			myScroll = new IScroll('#box-wrap', {
-				mouseWheel: true,
-				keyBindings: true,
-				wheelAction: 'zoom',
-				scrollbars: true,
-				scrollX: true,
-				scrollY: true,
-				bounce: false,
-				tap: true,
-				click: true,
-				interactiveScrollbars: true,
-				freeScroll: true,
-				zoom: true,
-				zoomMax: 10,
-				zoomMin: 0.1,
-
-
-			});
-
-		*/	
-
 
 		$('#boxes').css({'cursor':"all-scroll"});
-
-
 	}
-	
-
 }
 
 function zoomStart() {
-	//console.log('zoom start');
 	var w = fitFactor();
 
 	boxWrapSize(w);
 }
 
-
 function boxWrapSize(fitF) {
-
 	var w = seatReg.rooms[seatReg.currentRoom].room[4] * fitF;
-	//console.log('Should smake middle smaller!');
-	//console.log(w);
 
 	if(w < parseInt($('#box-wrap').data('sec-size'))) {
 
@@ -1345,23 +1095,19 @@ function boxWrapSize(fitF) {
 			'width': $('#box-wrap').data('sec-size')
 		});
 	}
-
 }
 
 function fitFactor(){
-
 	    //compute witch dimension is larger width vs height
 
 	    var w = seatReg.rooms[seatReg.currentRoom].room[4] / ($('#middle-section').width() - 20);
-
 	    var h = seatReg.rooms[seatReg.currentRoom].room[5] / ($('#middle-section').height() - 20);
 	    //h = content.H / wrap.H;//zoom factor for height
 	    //w = content.W/ wrap.W;//zoom factor for width
 	    //get max between zoom factores, remove percents
 	    var renderedFactor = Math.max(w, h);
-	    //return scale factor
-
-	    //console.log(1/renderedFactor);
+		//return scale factor
+		
 	    return  1/renderedFactor;
 }
 
@@ -1431,11 +1177,8 @@ function validateInput(inputField) {
 				inputField.next().text(myLanguage.getLang('illegalCharactersDetec')).css('display','inline');
 				return false;
 			}
-
 	}
 	return true;
-	
-
 }
 
 function CustomData(label, value) {
@@ -1443,11 +1186,7 @@ function CustomData(label, value) {
 	this.value = value;
 }
 
-
 function collectData() {
-
-
-
 	var sendPack = [];
 	
 	$('#checkout-input-area .check-item').each(function() {
@@ -1489,10 +1228,6 @@ function collectData() {
 }
 
 function sendData(customFieldBack, regURL) {
-
-
-	console.log('Sending data!');
-
 	$('#checkout-confirm-btn').css('display','none');
 	$('#checkoput-area-inner .ajax-load').css('display','inline-block');
 
@@ -1504,17 +1239,8 @@ function sendData(customFieldBack, regURL) {
 		mailToSend = $('#checkout-input-area .check-item').first().find('.field-input[data-field="Email"]').val();
 	}
 
-	
-
-
-	console.log('sendData');
-	//console.log(sendPack);
-	
-
 	customFieldBack = JSON.stringify(customFieldBack);
-	
-	console.log(customFieldBack);
-	
+		
 	$.ajax({
 		type: 'POST',
 		url: ajaxUrl,
@@ -1532,70 +1258,43 @@ function sendData(customFieldBack, regURL) {
 	
 
 		success: function(data) {
-
-			console.log(data);
 			$('#checkoput-area-inner .ajax-load').css('display','none');
 
 			var is_JSON = true;
 			
 			try {
-
 				var resp = $.parseJSON(data);
-
 			} catch(err) {
-
 				is_JSON = false;
 			}
-
 			if(is_JSON) {
-
-				if(resp.type == 'ok' && resp.text == 'mail') {
-					//console.log('Submitted');
-
-
-					
+				if(resp.type == 'ok' && resp.text == 'mail') {	
 					$('#email-send').text(mailToSend);
 					needMailCheckInfo();
-
-
-
 				}else if(resp.type == 'error' && resp.text == 'Wrong captcha') {
-
 					$('#captcha-img').replaceWith(resp.data);
 					$('#checkout-confirm-btn').css('display','inline-block');
 					$('#captcha-text').text(myLanguage.getLang('wrongCaptcha'));
-
 				}else if(resp.type == 'error') {
-
 					$('#checkout-area').css('display','none');
 					$('#captcha-ref').click();
 					$('#error-text').text(resp.text);
 					$('#error').css('display','block');
-					//console.log('Error: ' + resp.text);
-					//alert(resp.text + ' Please try again');
-
-
 					$('#checkout-confirm-btn').css('display','inline-block');
-
-
 				}else {
 					$('#error-text').text(myLanguage.getLang('somethingWentWrong'));
 					$('#error').css('display','block');
 					$('#checkout-confirm-btn').css('display','inline-block');
 				}
-
 			}else {
 				$('#checkout-area').css('display','none');
 				$('#error-inner').prepend(myLanguage.getLang('somethingWentWrong'));
 				$('#error').css('display','block');
 				$('#checkout-confirm-btn').css('display','inline-block');
 			}
-
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
-
 			$('#checkout-confirm-btn').css('display','inline-block');
-
 			if (jqXHR.status === 0) {
                 alert('Not connect.\n Verify Network.');
             } else if (jqXHR.status == 404) {
@@ -1609,100 +1308,56 @@ function sendData(customFieldBack, regURL) {
             } else {
                 alert('Uncaught Error.\n' + jqXHR.responseText);
             }
-
 		}
 	});
 }
 
 function needMailCheckInfo() {
-	//seatReg.selectedSeats.length = 0;
-	//$('#seat-cart-items').empty();
-	//seatReg.closeCheckOut(false);
 	$('#checkout-area').css('display','none');
-	//$('#modal-bg').css('display', 'none');
-
-	//$('#email-conf-inner').addClass('tada');
-
 	$('#email-conf').css('display','block');
 }
 
-
-$('#room-nav-btn').on('click', function() {
-	
+$('#room-nav-btn').on('click', function() {	
 	seatReg.openModel();
-
 });
 
 $('#close-modal').on('click', function() {
-
 	seatReg.closeModal();
-
 });
-
-/*
-$('#cart-checkout-btn, .cart-icon, #cart-btn-mobile').on('click', function() {
-
-	//
-	seatReg.openSeatCart();
-
-});
-*/
 
 $('#seat-cart, .mobile-cart').on('click', function() {
 	seatReg.openSeatCart();
 });
 
-
-
 $('#dialog-close-btn').on('click', function() {
-
 	seatReg.closeSeatDialog();
-	
 });
 
 $('#confirm-dialog-mob-ok').on('click', function() {
-	//add selected seat
-
-	
-		seatReg.addSeatToCart();
-	
-		
-
+	seatReg.addSeatToCart();
 });
 
 $('#confirm-dialog-mob-cancel').on('click', function() {
 	seatReg.closeSeatDialog();
 });
+
 $('#room-nav-close').on('click', function() {
 	seatReg.closeModal();
 });
-/*
-$('#cart-popup-close').on('click', function() {
-	seatReg.closeSeatCart();
-});
-*/
+
 $('#checkout').on('click', function() {
 	seatReg.openCheckOut();
 });
-/*
-$('#checkout-close').on('click', function() {
-	seatReg.closeCheckOut(true);
-});
-*/
 
 $('#checkout-input-area').on('keyup','.field-input', function() {
-
 	validateInput($(this));
-	
 });
 
 $('.refresh-btn').on('click', function() {
 	window.location.reload();
 });
 
-
 $('#checkoput-area-inner').submit(function(e) {
-
 	e.preventDefault();
 
 	$('#request-error').text('');
@@ -1710,12 +1365,9 @@ $('#checkoput-area-inner').submit(function(e) {
 	var valid = true;
 
 	$('#checkout-input-area .field-input').each(function() {
-		
 		if(!validateInput($(this))) {
 			valid = false;
 		}
-
-
 	});
 
 	if($('#captcha-val').val() == '') {
@@ -1725,20 +1377,15 @@ $('#checkoput-area-inner').submit(function(e) {
 	}
 
 	if(valid) {
-
-
 		if(!seatReg.demo) {
 			sendData(collectData(), qs['c']);
 		}else {
 			alert('Demo');
 		}
-
 	}
-
 })
 
 $('#captcha-ref').on('click', function() {
-
 	$.ajax({
 		type: 'POST',
 		url: ajaxUrl,
@@ -1750,7 +1397,6 @@ $('#captcha-ref').on('click', function() {
 			$('#captcha-img').replaceWith(data);
 		}
 	});
-
 });
 
 $('#close-time').on('click', function() {
@@ -1758,76 +1404,44 @@ $('#close-time').on('click', function() {
 });
 
 $('.room-nav-extra-info-btn, #main-header').on('click', function() {
-
 	seatReg.openInfo();
-	
 });
-
-/*
-$('#info-close-btn').on('click', function() {
-	seatReg.closeInfo();
-});
-*/
 
 $('.mobile-legend').on('click', function() {
-
 	$('.legend-popup-legends').html($('#legends').html());
-	
-
 	$('#modal-bg').css('display','block');
 	$('#legend-popup-dialog').css('display','block');
-
 });
 
 $('.close-btn').on('click', function() {
-
 	var $activeDialog = $(this).closest('.dialog-box');
 	$activeDialog.css('display','none');
 	$('#modal-bg').css('display','none');
-	
 });
 
-
 $('.zoom-action').on('click', function() {
-	
 	if(myScroll != null) {
-
 		if($(this).data('zoom') == 'in') {
-
 			myScroll.zoom(myScroll.scale + 0.4);
-
 		}else {
-			
 			myScroll.zoom(myScroll.scale - 0.4);
-
 		}
-
 	}
-
 });
 
 $('.move-action').on('click', function() {
-
 	if(myScroll != null) {
-
 		switch($(this).data('move')) {
-
 			case 'up':
-				
-
 				if(myScroll.y < 0) {
 					myScroll.scrollBy(0, +100);
-					//boxWrapSize(myScroll.scale);
 				}
-				
 				break;
 
 			case 'left':
-				
 				if(myScroll.x < 0) {
 					myScroll.scrollBy(100, 0);
 				}
-				
 				break;
 
 			case 'right':
@@ -1835,99 +1449,49 @@ $('.move-action').on('click', function() {
 				break;
 
 			case 'down':
-				//console.log('move up');
 				var roomHeight = seatReg.rooms[seatReg.currentRoom].room[5];
 				myScroll.scrollBy(0, -100);
-				//boxWrapSize(myScroll.scale);
+
 				break;
-
 		}
-
 	}
-
 });
-
 
 if(seatReg.rooms != null) {
 	seatReg.init();
 }
 
-
-
-
-
 $('#middle-section').on( 'DOMMouseScroll mousewheel', function ( event ) {
-
 	 event.preventDefault();
 	 var mouseX = event.originalEvent.clientX;
 	 var mouseY = event.originalEvent.clientY;
 
-	 //console.log(JSON.stringify(event.currentTarget));
-	 //console.log(event);
-
-	 //console.log(mouseX);
-	 //console.log(mouseY);
-	//console.log('Scroll detected');
-
-	//$(this).off('DOMMouseScroll mousewheel');
-
-  if( event.originalEvent.detail > 0 || event.originalEvent.wheelDelta < 0 ) { //alternative options for wheelData: wheelDeltaX & wheelDeltaY
-    //scroll down
-   	   
-  		scrollDown(mouseX, mouseY);
-   
-
-  } else {
-    //scroll up
-  
-  		scrollUp(mouseX, mouseY);
-  	
-  }
+	if( event.originalEvent.detail > 0 || event.originalEvent.wheelDelta < 0 ) { //alternative options for wheelData: wheelDeltaX & wheelDeltaY
+		scrollDown(mouseX, mouseY);
+	} else {
+		scrollUp(mouseX, mouseY);
+	}
   //prevent page fom scrolling
   return false;
-
 });
 
-
-
-
-
-
 function scrollDown(mouseX, mouseY) {
-
-
 	if(myScroll != null) {
-
     	if(msie == 0) {
     		myScroll.zoom(myScroll.scale - 0.2, mouseX, mouseY, 600);
     	}else {
     		myScroll.zoom(myScroll.scale - 0.2, mouseX, mouseY, 600);
     	}
-    	//boxWrapSize(myScroll.scale);
     }
-
 }
 
 function scrollUp(mouseX, mouseY) {
-
-	
-
 	if(myScroll != null) {
-
     	if(msie == 0) {
      		myScroll.zoom(myScroll.scale + 0.2, mouseX, mouseY, 600);
      	}else {
      		myScroll.zoom(myScroll.scale + 0.2, mouseX, mouseY, 600);
      	}
-     	//boxWrapSize(myScroll.scale);
-
     }
 }
-
-
 });
-
-
-
-
-
