@@ -376,14 +376,14 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="registration-start-timestamp"><?php _e('Registration start date', 'seatreg'); ?></label>
 				<p class="help-block"><?php _e('Set when registration starts (dd.mm.yyyy)', 'seatreg'); ?></p>
-				<span class="glyphicon glyphicon-time" style="color:rgb(4, 145, 4); margin-right:3px"></span><?php _e('Registration open date', 'seatreg'); ?><br><input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
+				<span class="glyphicon glyphicon-time" style="color:rgb(4, 145, 4); margin-right:3px"></span><?php _e('Registration start date', 'seatreg'); ?><br><input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
 				<input type='hidden' value='<?php echo $options[0]->registration_start_timestamp; ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
 			</div>
 
 			<div class="form-group">
 				<label for="registration-end-timestamp"><?php _e('Registration end date', 'seatreg'); ?></label>
 				<p class="help-block"><?php _e('Set when registration ends (dd.mm.yyyy)', 'seatreg'); ?></p>
-				<span class="glyphicon glyphicon-time" style="color:rgb(250, 38, 38); margin-right:3px"></span><?php _e('Registration open date', 'seatreg'); ?><br><input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
+				<span class="glyphicon glyphicon-time" style="color:rgb(250, 38, 38); margin-right:3px"></span><?php _e('Registration end date', 'seatreg'); ?><br><input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
 				<input type='hidden' value='<?php echo $options[0]->registration_end_timestamp; ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
 			</div>
 
@@ -406,7 +406,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="payment-instructions"><?php _e('Payment instruction', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('At this moment SeatReg.com dosn\'t offer any payment systems, but you can leave informative text that instructs how to pay for booked seat/seats.', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('At this moment SeatReg dosn\'t offer any payment systems, but you can leave informative text that instructs how to pay for booked seat/seats.', 'seatreg'); ?></p>
 				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="Enter payment instructions here"><?php echo $options[0]->payment_text; ?></textarea>
 			</div>
 
@@ -438,7 +438,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="use-pending"><?php _e('Pending status', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('In default all bookings will first be in pending state. If you want bookings automatically be in confirmed state uncheck checkbox below', 'seatreg'); ?>
+					<?php _e('By default all bookings will first be in pending state. If you want bookings automatically be in confirmed state uncheck checkbox below', 'seatreg'); ?>
 				</p>
 				<div class="checkbox">
 			    	<label>
