@@ -354,7 +354,7 @@ function seatreg_generate_settings_form() {
 	 }
 
 	 $custFields = json_decode($options[0]->custom_fields);
-	 $custLen = count($custFields);
+	 $custLen = count(is_array($custFields) ? $custFields : []);
 
 	 //print_r($options);
 
@@ -630,7 +630,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	$code = $seatregData->registration_code;
 
 	$custom_fields = json_decode($seatregData->custom_fields, true);
-	$cus_length = count($custom_fields);
+	$cus_length = count(is_array($custom_fields) ? $custom_fields : []);
 	$regId = $seatregData->id;
 	$project_name = $seatregData->registration_name;
 
@@ -913,7 +913,7 @@ function getRoomSeatInfo($struct, $bronRegistrations, $takenRegistrations) {
 	
 	$regStructure = json_decode($struct);
 
-	$roomCount = count(is_countable($regStructure) ? $regStructure : []);
+	$roomCount = count(is_array($regStructure) ? $regStructure : []);
 	$howManyRegSeats = 0;
 	$howManyOpenSeats = 0;
 	$howManyBronSeats= 0;
