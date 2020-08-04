@@ -1733,14 +1733,6 @@ function seatreg_booking_submit_callback() {
 	session_start();
 
 	if($_SESSION['seatreg_captcha'] == $_POST['capv']){
-
-
-		//print_r($_POST);
-
-		//$data = json_decode( stripslashes_deep($_POST['pack']) );
-		//
-		
-
 		//$newData = new ViewData($_POST['custom'], $_POST['c'], $resp, $_POST['em'], $_POST['pw'], stripslashes_deep($_POST['pack']));
 
 		$newBooking = new NewBookings( $_POST['c'], $resp );
@@ -1755,21 +1747,16 @@ function seatreg_booking_submit_callback() {
 				$_POST['em'], 
 				$_POST['c'], 
 				$_POST['pw'], 
-				$_POST['custom']) ) {
+				$_POST['custom']) ){
 
 			$newBooking->validateBooking();
-
-		}
-		//$resp->setData( json_encode($data) );
-	
+		}	
 	}else{
-
 	    $r = randomString(10);
-	    
 	    $resp->setError('Wrong captcha');
 	    $resp->setData('<img src="php/image.php?dummy='.$r.'" id="captcha-img"/>');
-	    
 	}
+	
 	$resp->echoData();
 	die();
 }
