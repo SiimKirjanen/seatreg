@@ -265,7 +265,7 @@ function seatreg_get_options_reg($code) {
 }
 
 function registrationTimeStatus($startUnix, $endUnix) {
-	$unix=round(microtime(true) * 1000);
+	$unix = round(microtime(true) * 1000);
 
 	if($startUnix == null && $endUnix == null) {
 		return 'run';
@@ -298,7 +298,6 @@ function registrationTimeStatus($startUnix, $endUnix) {
 	if($startUnix > $unix) {
 		return 'wait';
 	}
-
 }
 
 
