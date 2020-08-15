@@ -722,20 +722,14 @@ $('#edit-update-btn').on('click', function() {
 });
 
 //text, xlsx and pdf 
-$('.seatreg_page_seatreg-management .file-type-link').on('click', function(e) {
-
+$('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e) {
 	e.preventDefault();
 
 	var timezone =	jstz.determine();
-
 	var fileType = $(this).data('file-type');
-
 	var _href = WP_Seatreg.plugin_dir_url + 'bookings/' + $(this).attr('href');
 
-	console.log(_href);
-
 	alertify.set({ buttonFocus: "ok" });
-
 	alertify.set({ labels: {
 		ok     : 'open',
 		cancel : 'cancel'
@@ -744,39 +738,20 @@ $('.seatreg_page_seatreg-management .file-type-link').on('click', function(e) {
 	alertify.confirm("<h3>" + 'Options' + "</h3><div>" + 'Current timezone: ' + timezone.name() + "</div><label>"+ 'showPending' +"<input type='checkbox' id='show-pending' checked /></label><br><label>"+ 'showConfirmed' +"<input type='checkbox' id='show-confirmed' checked /></label>", function (e) {
 
 	    if (e) {
-
-	    	
-
 	    	if($('#show-pending').is(':checked')) {
-
 	    		_href += '&s1';
-
-	    	}
-
+			}
+			
 	    	if($('#show-confirmed').is(':checked')) {
-
 	    		_href += '&s2';
-	    		
-	    	}
-
-	    		_href += '&zone=' + timezone.name();
+			}
+			
+			_href += '&zone=' + timezone.name();
 
 	    	window.open(_href,'_blank');
-
 	    }
-
 	});
-
-
-	/*switch( $(this).data('file-type') ) {
-
-	}*/
-
-
 });
-
-
-
 
 /*Settings page custom fields functions*/
 
