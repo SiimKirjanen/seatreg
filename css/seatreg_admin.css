@@ -18,13 +18,16 @@
 .seatreg-wp-admin .nav-tabs {
 	margin-top: 40px;
 }
-
+.seatreg-tabs-content {
+	background-color: #F2F2F2;
+	padding-top: 12px;
+}
 .seatreg-tabs-content .etabs { margin: 0; padding: 0; background-color: #F2F2F2;}
-.seatreg-tabs-content .tab { display: inline-block;margin-right:2px; padding: 6px 6px; zoom:1; *display:inline; background: #404040; }
-.seatreg-tabs-content .tab a { font-size: 16px; line-height: 2em; display: block; padding: 0 30px; outline: none; text-decoration: none; color: #fff;}
+.seatreg-tabs-content .tab { display: inline-block;margin-right:2px; padding: 6px 6px; zoom:1; *display:inline;background: #fff; }
+.seatreg-tabs-content .tab a { font-size: 16px; line-height: 2em; display: block; padding: 0 30px; outline: none; text-decoration: none; color: #000;}
 .seatreg-tabs-content .tab a:hover { text-decoration: underline; }
-.seatreg-tabs-content .tab.active { background: #fff; position: relative; padding-top: 20px;}
-.seatreg-tabs-content .tab a.active { font-weight: bold; color: #000;}
+.seatreg-tabs-content .tab.active { background: #404040; position: relative; padding-top: 20px;}
+.seatreg-tabs-content .tab a.active { font-weight: bold; color: #fff;}
 .seatreg-tabs-content .tab-container .panel-container {  overflow: hidden; }
 .seatreg-tabs-content .panel-container {  }
 
