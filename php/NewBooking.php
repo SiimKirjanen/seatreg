@@ -18,7 +18,6 @@ class NewBooking extends Booking {
 	protected $_registrationEndTimestamp;
 	protected $_registrationPassword = null;  //registration password if set. null default
 	protected $_isRegistrationOpen = true;
-	protected $_insertState = 1;  //all bookings will have status = 1 (pending). if 2 then (confirmed)
 	protected $_bookindId;
 	protected $_sendNewBookingNotification = false; //send notification to registration owner that someone has booked a seat
 	protected $_registrationOwnerEmail;

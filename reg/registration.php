@@ -428,6 +428,13 @@
 			</div>
 		</div>
 
+		<div id="bookings-confirmed" class="dialog-box">
+			<div id="bookings-confirmed-inner" class="dialog-box-inner border-box animated zoomIn">
+				<h2>You Bookings are confirmed</h2>
+				<button class="refresh-btn">OK</button>
+			</div>
+		</div>
+
 		<div id="error" class="dialog-box">
 			<div id="error-inner" class="dialog-box-inner border-box animated zoomIn">
 				<h2>Error</h2>
@@ -435,8 +442,6 @@
 				<button class="refresh-btn">OK</button>
 			</div>
 		</div>
-
-		
 
 		<?php if(!$isPremium) : ?>
 		<!--

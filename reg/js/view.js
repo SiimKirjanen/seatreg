@@ -1271,6 +1271,8 @@ function sendData(customFieldBack, regURL) {
 				if(resp.type == 'ok' && resp.text == 'mail') {	
 					$('#email-send').text(mailToSend);
 					needMailCheckInfo();
+				}else if(resp.type == 'ok' && resp.text == 'bookings-confirmed') {
+					bookingsConfirmedInfo();
 				}else if(resp.type == 'error' && resp.text == 'Wrong captcha') {
 					$('#captcha-img').replaceWith(resp.data);
 					$('#checkout-confirm-btn').css('display','inline-block');
@@ -1315,6 +1317,11 @@ function sendData(customFieldBack, regURL) {
 function needMailCheckInfo() {
 	$('#checkout-area').css('display','none');
 	$('#email-conf').css('display','block');
+}
+
+function bookingsConfirmedInfo() {
+	$('#checkout-area').css('display','none');
+	$('#bookings-confirmed').css('display','block');
 }
 
 $('#room-nav-btn').on('click', function() {	

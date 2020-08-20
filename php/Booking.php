@@ -1,6 +1,8 @@
 <?php
 
 class Booking {
+	protected $_requireBookingEmailConfirm = true;
+	protected $_insertState = 1;  //all bookings will have status = 1 (pending). if 2 then (confirmed)
 
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -156,7 +158,8 @@ class Booking {
 			b.registration_end_timestamp, 
 			b.registration_open, 
 			b.use_pending, 
-			b.notify_new_bookings 
+			b.notify_new_bookings,
+			b.booking_email_confirm 
 			FROM $seatreg_db_table_names->table_seatreg AS a 
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b 
 			ON a.registration_code = b.seatreg_code WHERE a.registration_code = %s",
@@ -167,7 +170,8 @@ class Booking {
 		$this->_registrationEndTimestamp = $result->registration_end_timestamp;
 		$this->_registrationLayout = json_decode($result->registration_layout);
         $this->_registrationName = $result->registration_name;
-        $this->_maxSeats = $result->seats_at_once;
+		$this->_maxSeats = $result->seats_at_once;
+		$this->_requireBookingEmailConfirm = $result->booking_email_confirm;
         
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;

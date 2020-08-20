@@ -158,10 +158,16 @@ class NewBookings extends Booking {
 
 			$dataLength = count($this->_bookings);
 			$inserted = true;
-
+			$bookingStatus = 0;
 			$confCode = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
 			$this->_bookingId = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
-				 
+			$registrationConfirmDate = null;
+
+			if(!$this->_requireBookingEmailConfirm) {
+				$bookingStatus = $this->_insertState;
+				$registrationConfirmDate = current_time( 'mysql' );
+			}
+	 
 			for($i = 0; $i < $dataLength; $i++) {
 				$wpdb->insert( 
 					$seatreg_db_table_names->table_seatreg_bookings, 
@@ -175,13 +181,15 @@ class NewBookings extends Booking {
 						'room_name' => $this->_bookings[$i]->room_name,
 						'conf_code' => $confCode, 
 						'custom_field_data' => json_encode($this->_bookings[$i]->custom_field, JSON_UNESCAPED_UNICODE),
-						'booking_id' => $this->_bookingId
+						'booking_id' => $this->_bookingId,
+						'status' => $bookingStatus,
+						'registration_confirm_date' => $registrationConfirmDate
 					), 
 					'%s'	
 				);
 			}
 
-			if($inserted) {
+			if($this->_requireBookingEmailConfirm) {
 
 				$this->response->setText('mail');
 
@@ -242,6 +250,8 @@ class NewBookings extends Booking {
 				}*/
 
 
+			}else {
+				$this->response->setText('bookings-confirmed');
 			}
 				
 		}
