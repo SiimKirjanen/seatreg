@@ -1,15 +1,11 @@
 <?php
-
 	if(empty($_GET['c'])){
 		exit();
 	}
 
 	require_once('php/reg_functions.php');
 
-	
-
 	$data = seatreg_get_options_reg($_GET['c'])[0];
-
 	$showPwdForm = false;
 	$isPremium = true;
 
@@ -27,12 +23,9 @@
 			}
 
 		}
-
-		
 	}
 
  	if(!$showPwdForm) {
-
 		$seatsInfo = json_encode( seatreg_stats_for_registration_reg($data->registration_layout, $data->registration_code) );
 	
 		if($data->show_bookings == '1') {
@@ -41,24 +34,8 @@
 			$registrations = json_encode(seatreg_get_registration_bookings_reg($_GET['c'], false));  //no names
 		}
 
-
-		
-		 // 'running', 'not_started', 'over'   null is when times have not set
-
-
 		$registrationTime = seatreg_registration_time_status_reg( $data->registration_start_timestamp,  $data->registration_end_timestamp );
-
-		
-		//$registrationTime will be:   'run', 'wait','end',
-		//echo $registrationTime;
 	}
-	
-
-
-	
-	//print_r($seatsInfo);
-	//$data2 = getTakenSpots($_GET['v']);
-	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,15 +48,10 @@
 	<link rel="stylesheet" href="css/view.all.min.css">
 
 	<?php if($data->registration_open == 1) : ?>	
-
-		
-	<script src="js/modernizr.custom.89593.min.js"></script>
-
-
+		<script src="js/modernizr.custom.89593.min.js"></script>
 	<?php else : ?>
 		
 		<style>
-
 			html, body {
 				height: 100%;
 			}
@@ -94,40 +66,28 @@
 				 vertical-align: middle;
 			}
 			#center-wrap .center-header {
-				 display: inline-block;
+				display: inline-block;
 	  			vertical-align: middle;
 			}
-			
 		</style>
-	
 	<?php endif; ?>
-
 	<!--[if lt IE 9]>
 	  <script src="js/html5shiv.js"></script>
 	  <script src="js/respond.js"></script>
 	<![endif]-->
-
-	
-
 </head>
 <body>
 <?php include('noscript.html'); ?>	
 	<input type="hidden" id="spot-name" value="<?php //echo htmlspecialchars($data['spot_name']); ?>">
 
 	<?php if(!$showPwdForm) : ?>
-
-
 		<?php if($data->registration_open == 0) : ?>
-
 	    	<div id="center-wrap">
-					<h2 class="center-header">Registration <?php echo htmlspecialchars($data->registration_name); ?> is closed at the moment</h2>
+				<h2 class="center-header">Registration <?php echo htmlspecialchars($data->registration_name); ?> is closed at the moment</h2>
 	    	</div>
-
 		<?php else : ?>
 
-
 		<header id="main-header">
-
 			<?php echo htmlspecialchars($data->registration_name);?>
 			<?php
 				/*
@@ -143,9 +103,7 @@
 			 ?>
 		</header>
 
-
 		<div id="room-nav-wrap" class="border-box no-select">
-
 			<div id="room-nav">
 				<div id="room-nav-items">
 
@@ -156,50 +114,34 @@
 
 				</div>
 			</div>
-
 			<div id="room-nav-info" class="border-box">
 				<div id="room-nav-info-inner"></div>
 			</div>
-
 			<div id="room-nav-btn-wrap" class="border-box">
-				
 				<div id="current-room-name"></div>
 				<div id="room-nav-btn">Change room</div>
 				<div class="room-nav-extra-info-btn">
 					<i class="fa fa-info-circle"></i>
 				</div>
-			
 			</div>
-
 		</div>
 
 		<div id="middle" class="no-select">
-
 			<div id="view-wrap">
-			
 				<div id="middle-section">
-					
 					<div id="box-wrap">
-
 						<div id="boxes">
 							
 						</div>
-
-
 					</div>
-
 				</div>	
-
 			</div>
 
 			<div id="legend-wrapper" class="border-box">
-				
 				<div id="legends"></div>
-
 			</div>
 
 			<div id="seat-cart" class="border-box no-select">
-
 				<div class="seat-cart-left">
 					<div class="cart-icon">
 						<div class="cart-icon-box-1"></div>
@@ -211,25 +153,20 @@
 						<div class="max-seats">Max 
 
 							<?php 
-
 								if($data->seats_at_once > 1) {
 									echo htmlspecialchars( $data->seats_at_once ),'<br>'; 
 								}else {
 									echo htmlspecialchars( $data->seats_at_once ),'<br>'; 
 								}
-							
 							?>
 
 						</div>
-
 					</div>
 				</div>
 
 				<div class="seat-cart-right">
 					<div id="cart-checkout-btn" class="border-box">Open</div>
 				</div>
-
-			
 			</div>
 
 			<div id="zoom-controller" class="no-select">
@@ -248,7 +185,6 @@
 				<i class="fa fa-info-circle"></i>
 			</div>
 			
-
 		</div>
 
 		<div id="extra-info" class="dialog-box">
@@ -273,10 +209,6 @@
 					}
 
 				 ?>
-
-					
-
-
 				 <div>Total rooms: <span class="total-rooms"></span></div>
 				 <div>Total open seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-open"></span></div>
 				 <div>Total pending seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-bron"></span></div>
@@ -288,11 +220,8 @@
 
 		<div id="modal-bg"></div>
 
-
 		<div id="legend-popup-dialog" class="dialog-box">
-			
 			<div id="legend-popup-dialog-inner" class="dialog-box-inner border-box">
-				
 				<div class="close-btn">
 					<div class="close-btn-bg"></div>
 					<i class="fa fa-times-circle"></i>
@@ -300,11 +229,8 @@
 				
 				<h2>Legends</h2>
 				<div class="legend-popup-legends">
-					
-
 				</div>
 			</div>
-
 		</div>
 
 		<div id="confirm-dialog-mob" class="dialog-box">
@@ -341,7 +267,6 @@
 					<div class="close-btn-bg"></div>
 					<i class="fa fa-times-circle"></i>
 				</div>
-
 
 				<div id="seat-cart-info"><?php //htmlspecialchars($data->spot_name); ?> Cart</div>
 				<?php if($registrationTime == 'run') : ?>
@@ -480,9 +405,6 @@
 
 			<?php endif; ?>
 
-
-
-		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 		<script>
@@ -509,7 +431,6 @@
 
 		</script>
 
-
 		<script src="js/lang/view.lang.eng.js"></script>
 		<script src="js/date.format.js"></script>
 		<script src="js/iscroll-zoom-5-1-3.js"></script>
@@ -525,8 +446,6 @@
 
 	<?php else : ?>
 
-			
-
 		<form method="post" id="pwd-form">
 			<h2 >Password protected</h2>
 			<label for="reg-pwd">Please enter password</label>
@@ -535,9 +454,6 @@
 
 		</form>
 					
-
-
-
 	<?php endif; ?>
 	
 </body>
