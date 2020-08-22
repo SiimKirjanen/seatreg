@@ -36,6 +36,9 @@
 	margin-left: -20px;
 	margin-bottom: 0;
 }
+.new-reg-title {
+	margin-bottom: 24px;
+}
 .seatreg-wp-admin .jumbotron .main-heading {
 	font-size: 38px;
     font-weight: 600;
@@ -43,9 +46,6 @@
 .seatreg-wp-admin .jumbotron .jumbotron-text {
 	font-size: 21px;
     font-weight: 600;
-}
-.seatreg-into {
-	overflow: hidden;
 }
 .seatreg-wp-admin .nav-tabs {
 	margin-top: 40px;

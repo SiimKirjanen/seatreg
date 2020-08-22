@@ -117,23 +117,6 @@ function seatreg_create_welcome() {
 		  <h2 class="main-heading">Create and manage seat registrations</h2>
 		  <p class="jumbotron-text">Design your own seat map and manage seat bookings</p>
 	    </div>
-		<div class="seatreg-into container-fluid">
-			<div class="row">
-				<div class="feature-box col-sm-6 col-md-4">
-					<h2><span class="icon-construction6 index-icon"></span>Map builder</h2>
-					<p>Builder helps you design and later modify your seat map. Create, delete, resize, move around and change color of your seats. You can also add custom legends and hover text to your seats.</p>
-				</div>
-				<div class="feature-box col-sm-6 col-md-4">
-					<h2><span class="glyphicon glyphicon-list-alt index-icon"></span>Manager</h2>
-					<p>With manager you keep an eye on your bookings. You can view, remove, confirm and change them. </p>
-				</div>
-				<div class="feature-box col-sm-6 col-md-4">
-					<h2><span class="glyphicon glyphicon-list index-icon"></span>Rooms</h2>
-					<p>Each registration consists of one or multiple rooms. So you can design different seat map in each of them.</p>
-				</div>
-			</div>
-		</div>
-
 	   <?php 
 	   		echo "<div class='container-fluid'>";
 				seatreg_create_registration_from(); 

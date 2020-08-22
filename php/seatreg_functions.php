@@ -580,9 +580,9 @@ function seatreg_create_registration_from() {
 	?>
 		
 	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post">
-			<h3>Create a new registration</h3>
+			<h3 class="new-reg-title">Create a new registration</h3>
 			<label for="new-registration-name"> <?php _e('Enter a registration name:','seatreg'); ?></label>
-	    	<input type="text" name="new-registration-name" id="new-registration-name">
+	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px">
 
 		
 			<input type='hidden' name='action' value='seatreg_create_submit' />
