@@ -1,10 +1,40 @@
+@font-face {
+	font-family: 'icomoon';
+	src:url('../fonts/icomoon.eot?-h7well');
+	src:url('../fonts/icomoon.eot?#iefix-h7well') format('embedded-opentype'),
+		url('../fonts/icomoon.woff?-h7well') format('woff'),
+		url('../fonts/icomoon.ttf?-h7well') format('truetype'),
+		url('../fonts/icomoon.svg?-h7well#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+.icon-construction6:before {
+	content: "\e600";
+}
+.index-icon {
+    margin-right: 10px;
+}
 .seatreg-wp-admin {
 	font-family: 'Open Sans', sans-serif;
 }
 .seatreg-wp-admin .jumbotron {
 	background-image: url(../img/chairs_med.jpg);
     background-size: cover;
-    margin-left: -20px;
+	margin-left: -20px;
+	margin-bottom: 0;
 }
 .seatreg-wp-admin .jumbotron .main-heading {
 	font-size: 38px;
@@ -14,7 +44,9 @@
 	font-size: 21px;
     font-weight: 600;
 }
-
+.seatreg-into {
+	overflow: hidden;
+}
 .seatreg-wp-admin .nav-tabs {
 	margin-top: 40px;
 }
@@ -670,7 +702,12 @@
 	color: black;
 }
 
-
+.seatreg-map-popup-btn {
+	padding: 0;
+}
+.registration-name-link {
+	color: rgb(51, 51, 51);
+}
 @media screen and (max-width: 1199px) {
 
 	.seatreg-tabs-content #my-regs {

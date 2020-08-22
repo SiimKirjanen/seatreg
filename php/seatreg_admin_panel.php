@@ -117,14 +117,28 @@ function seatreg_create_welcome() {
 		  <h2 class="main-heading">Create and manage seat registrations</h2>
 		  <p class="jumbotron-text">Design your own seat map and manage seat bookings</p>
 	    </div>
+		<div class="seatreg-into container-fluid">
+			<div class="row">
+				<div class="feature-box col-sm-6 col-md-4">
+					<h2><span class="icon-construction6 index-icon"></span>Map builder</h2>
+					<p>Builder helps you design and later modify your seat map. Create, delete, resize, move around and change color of your seats. You can also add custom legends and hover text to your seats.</p>
+				</div>
+				<div class="feature-box col-sm-6 col-md-4">
+					<h2><span class="glyphicon glyphicon-list-alt index-icon"></span>Manager</h2>
+					<p>With manager you keep an eye on your bookings. You can view, remove, confirm and change them. </p>
+				</div>
+				<div class="feature-box col-sm-6 col-md-4">
+					<h2><span class="glyphicon glyphicon-list index-icon"></span>Rooms</h2>
+					<p>Each registration consists of one or multiple rooms. So you can design different seat map in each of them.</p>
+				</div>
+			</div>
+		</div>
 
-	    <h2>Thank you for downloading SeatReg</h2>
-	    <p>
-	    	Lorem ipsum dolor sit amet, consectetur adipisicing elit. In aperiam ea quos impedit accusamus necessitatibus blanditiis dignissimos, mollitia ad vitae minima, dolorem facere nostrum architecto a, praesentium, sunt corporis tempore. Corrupti obcaecati veniam harum debitis assumenda nihil sit, excepturi vitae aliquam at illo. Dignissimos fugiat, consectetur. Sint rem laboriosam ullam molestiae voluptates modi eligendi deleniti debitis provident esse officia culpa ab maxime eum optio commodi ad, ipsum atque necessitatibus nihil aperiam! Debitis, enim ullam quas suscipit odio at incidunt assumenda consequatur repudiandae neque provident eum numquam voluptatum est cum consectetur deserunt libero nulla, repellendus, perferendis. Explicabo perferendis temporibus delectus id, odit dolore molestias architecto, numquam debitis consectetur porro distinctio, eveniet officiis dicta maiores dolores laborum quisquam deserunt nobis. Eum dolorem nihil temporibus, dicta harum voluptatem a nobis perspiciatis, ab voluptate reiciendis deserunt, officiis. Inventore ratione voluptate perferendis eius consequatur, mollitia labore. Autem tempora nam voluptates eveniet iusto laborum aliquid aperiam, quibusdam, voluptatem quasi blanditiis nihil? Minima cum consectetur, atque doloribus culpa reiciendis excepturi? Eius perspiciatis itaque tempore quaerat illum sapiente officiis id doloribus, officia vel ut assumenda earum laborum, fuga quam obcaecati. Nam dolores ipsa at tempore architecto natus, accusamus eligendi error velit, repudiandae nemo. Dignissimos, rem, error. Vero laboriosam qui, fugit pariatur ipsa cum incidunt delectus ea excepturi soluta dolores adipisci, beatae consequuntur reprehenderit odio provident illo rerum sunt voluptas. Voluptate et molestiae voluptatum, obcaecati assumenda deserunt hic architecto! Est dolorem cum explicabo in a. Magni, quaerat voluptates! Ullam repudiandae in doloremque pariatur tenetur dicta doloribus reprehenderit minus a quod error adipisci aperiam accusantium ratione, illo perferendis? Maxime consectetur libero ab iusto rem dolorem suscipit. Accusamus sequi facilis praesentium ducimus, asperiores reprehenderit nesciunt labore architecto hic consequatur alias aliquid adipisci repellendus voluptas, earum non rem placeat nulla id est repudiandae ex aliquam aperiam! Veritatis vel fugiat perspiciatis ipsum ut?
-	    </p>
 	   <?php 
-	   		seatreg_create_registration_from(); 
-	   		seatreg_generate_my_registrations_section();
+	   		echo "<div class='container-fluid'>";
+				seatreg_create_registration_from(); 
+				seatreg_generate_my_registrations_section();
+			echo "</div>";   
 	   	?>
 	   <div class="seatreg-builder-popup">
 			<i class="fa fa-times-circle builder-popup-close"></i>

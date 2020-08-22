@@ -307,30 +307,36 @@ function seatreg_generate_my_registrations_section() {
 
 	$registrations = seatreg_get_registrations();
 
+	if(count($registrations)) {
+		echo "<h3>Your registrations</h3>";
+	}
+	echo '<div class="row">';
+
 	foreach($registrations as $key=>$registration) {
-
 		?>
+			<div class="col-sm-6 col-md-2">
+				<h4><a class="registration-name-link" href="<?php echo plugins_url('reg/registration.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php echo htmlspecialchars( $registration->registration_name ); ?></a></h4>
 
-		<div class="my-registration-links">
-			
-			<h3><a href="<?php echo plugins_url('reg/registration.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php echo htmlspecialchars( $registration->registration_name ); ?></a></h3>
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-overview&tab='.$registration->registration_code );  ?>"><?php _e('Overview', 'seatreg'); ?></a>
 
-			<br>
+				<br>
 
-			<a href="<?php echo admin_url( 'admin.php?page=seatreg-overview&tab='.$registration->registration_code );  ?>"><?php _e('Overview', 'seatreg'); ?></a>
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-management&tab='.$registration->registration_code ); ?>"><?php _e('Bookings', 'seatreg'); ?></a>
 
-			<button type="button" class="btn btn-primary seatreg-map-popup-btn" data-registration-name="<?php echo htmlspecialchars($registration->registration_name); ?>" data-map-code="<?php echo htmlspecialchars($registration->registration_code); ?>"><?php _e('Edit map', 'seatreg'); ?></button>
+				<br>
 
-			<a href="<?php echo admin_url( 'admin.php?page=seatreg-management&tab='.$registration->registration_code ); ?>"><?php _e('Bookings', 'seatreg'); ?></a>
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-options&tab='.$registration->registration_code ); ?>"><?php _e('Settings', 'seatreg'); ?></a>
 
-			<a href="<?php echo admin_url( 'admin.php?page=seatreg-options&tab='.$registration->registration_code ); ?>"><?php _e('Settings', 'seatreg'); ?></a>
+				<br>
 
-			<a href="<?php echo plugins_url('reg/registration.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php _e('View registration', 'seatreg'); ?></a>
+				<a href="<?php echo plugins_url('reg/registration.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php _e('View registration', 'seatreg'); ?></a>
 
-		</div>
+				<br>
+				<button type="button" class="btn btn-link seatreg-map-popup-btn" data-registration-name="<?php echo htmlspecialchars($registration->registration_name); ?>" data-map-code="<?php echo htmlspecialchars($registration->registration_code); ?>"><?php _e('Edit map', 'seatreg'); ?></button>
+			</div>
 		<?php
 	}
-
+	echo '</div>';
 }
 
 function seatreg_no_registration_created_info() {
@@ -574,8 +580,8 @@ function seatreg_create_registration_from() {
 	?>
 		
 	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post">
-
-			<label for="new-registration-name"> <?php _e('Enter registration name:','seatreg'); ?></label>
+			<h3>Create a new registration</h3>
+			<label for="new-registration-name"> <?php _e('Enter a registration name:','seatreg'); ?></label>
 	    	<input type="text" name="new-registration-name" id="new-registration-name">
 
 		
