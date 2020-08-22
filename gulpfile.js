@@ -11,7 +11,7 @@ var gulp  = require("gulp"),
 	reload = browserSync.reload;
 	
 //Scripts Task
-gulp.task('view-scripts', function() {
+gulp.task('registration-scripts', function() {
 	  return gulp.src(['reg/js/date.format.js', 'reg/js/iscroll-zoom-5-1-3.js', 'reg/js/jquery.powertip.js', 'reg/js/view.js'])
 			.on('error', console.error.bind(console))
 			.pipe(concat('view.all.min.js'))
@@ -28,7 +28,15 @@ gulp.task('build-scripts', function() {
 			.pipe(gulp.dest('js/'));
 }); 
 
-//Watch Task
+gulp.task('registration-styles', function() {
+	gulp.src(['css/font-awesome.min.css', 'css/view3.css', 'css/jquery.powertip.css'])
+		.on('error', console.error.bind(console))
+		.pipe(concat('view.all.min.css'))
+		.pipe(minifyCSS())
+		.pipe(gulp.dest('css/'))
+		.pipe(reload({stream: true}));	
+});
+
 //Watches JS
 gulp.task('watch', function() {
 

@@ -20,7 +20,8 @@
     "gulp-rename": "^1.2.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "registration-scripts": "gulp registration-scripts",
+    "registration-styles": "gulp registration-styles"
   },
   "author": "",
   "license": "ISC"
