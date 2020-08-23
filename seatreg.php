@@ -38,8 +38,6 @@ register_activation_hook(__FILE__, "seatregPluginActivate");
 register_deactivation_hook(__FILE__, "seatregPluginDeactivate"); 
 
 //filters
-add_filter( 'admin_body_class', 'seatreg_admin_body_class' );
-
 function seatreg_admin_body_class($classes) {
 	if( !isset($_GET['page']) ) {
 		return $classes;
@@ -51,3 +49,9 @@ function seatreg_admin_body_class($classes) {
 		return $classes;
 	}
 }
+add_filter( 'admin_body_class', 'seatreg_admin_body_class' );
+  
+function remove_footer_admin () {
+    echo '';
+}
+add_filter('admin_footer_text', 'remove_footer_admin');
