@@ -576,25 +576,22 @@ function seatreg_generate_settings_form() {
 }
 
 function seatreg_create_registration_from() {
-
 	?>
-		
-	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post">
-			<h3 class="new-reg-title">Create a new registration</h3>
-			<label for="new-registration-name"> <?php _e('Enter a registration name:','seatreg'); ?></label>
+	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" id="create-registration-form">
+			<h3 class="new-reg-title">
+				<?php _e('Create a new registration','seatreg'); ?>:
+			</h3>
+			<label for="new-registration-name">
+				<?php _e('Enter a registration name:','seatreg'); ?>
+			</label>
 	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px">
-
-		
 			<input type='hidden' name='action' value='seatreg_create_submit' />
 			<?php
 				wp_nonce_field( 'seatreg-create-registration', 'seatreg-create-nonce' );
 				submit_button('Create new registration');
 			?>
-
 	    </form>
-
 	<?php
-
 }
 
 function seatreg_generate_booking_manager() {
@@ -1564,8 +1561,11 @@ function seatreg_check_post_credentials() {
 
 //handle new registration create
 function seatreg_create_submit_handler() {
-
 	seatreg_check_post_credentials();
+
+	if($_POST['new-registration-name'] === '') {
+		wp_die('Please provide registration name');
+	}
 
 	if( seatreg_create_new_registration($_POST['new-registration-name']) ) {
 		wp_redirect( $_POST['_wp_http_referer'] );

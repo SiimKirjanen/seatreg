@@ -93,7 +93,12 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 		window.seatreg.selectedRegistrationName = null;
 	}
 
-
+	$('#create-registration-form').on('submit', function(e) {
+		if($('#new-registration-name').val() === '') {
+			e.preventDefault();
+			alertify.error('Please enter registration name');
+		}
+	});
 
 	$('.seatreg-map-popup-btn').on('click', function() {
 
