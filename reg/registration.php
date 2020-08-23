@@ -21,7 +21,6 @@
 			if($_POST['reg_pwd'] != $data->registration_password ) {
 				$showPwdForm = true;
 			}
-
 		}
 	}
 
@@ -89,134 +88,115 @@
 
 		<header id="main-header">
 			<?php echo htmlspecialchars($data->registration_name);?>
-			<?php
-				/*
-				echo '<span class="header-time">';
-				if($data['registration_start_date'] != null) {
-					echo '<div class="flag1"></div><span class="time" title="Registration starts">', htmlspecialchars($data['registration_start_date']), '</span>';
-				}
-				if($data['registration_end_date'] != null) {
-					echo '<div class="flag2"></div><span class="time" title="Registration ends">', htmlspecialchars($data['registration_end_date']), '</span>';
-				}
-				echo '</span>';
-				*/
-			 ?>
 		</header>
+		
+		<?php if($data->registration_layout != null): ?>
+			<div id="room-nav-wrap" class="border-box no-select">
+				<div id="room-nav">
+					<div id="room-nav-items">
+						<div id="room-nav-close" class="close-btn">
+							<div class="close-btn-bg"></div>
+							<i class="fa fa-times-circle"></i>
+						</div>
+					</div>
+				</div>
 
-		<div id="room-nav-wrap" class="border-box no-select">
-			<div id="room-nav">
-				<div id="room-nav-items">
+				<div id="room-nav-info" class="border-box">
+					<div id="room-nav-info-inner"></div>
+				</div>
 
-					<div id="room-nav-close" class="close-btn">
-						<div class="close-btn-bg"></div>
-						<i class="fa fa-times-circle"></i>
+				<div id="room-nav-btn-wrap" class="border-box">
+					<div id="current-room-name"></div>
+					<div id="room-nav-btn">Change room</div>
+					<div class="room-nav-extra-info-btn">
+						<i class="fa fa-info-circle"></i>
+					</div>
+				</div>
+				
+			</div>
+			<div id="middle" class="no-select">
+				<div id="view-wrap">
+					<div id="middle-section">
+						<div id="box-wrap">
+							<div id="boxes">
+								
+							</div>
+						</div>
+					</div>	
+				</div>
+
+				<div id="legend-wrapper" class="border-box">
+					<div id="legends"></div>
+				</div>
+
+				<div id="seat-cart" class="border-box no-select">
+					<div class="seat-cart-left">
+						<div class="cart-icon">
+							<div class="cart-icon-box-1"></div>
+							<div class="cart-icon-box-2"></div>
+							<div class="cart-icon-box-3"></div>
+						</div>
+						<div id="cart-text"><span class="seats-in-cart">0</span> <?php //echo htmlspecialchars($data['spot_name']); ?> in selection
+							<div class="max-seats">Max 
+								<?php 
+									if($data->seats_at_once > 1) {
+										echo htmlspecialchars( $data->seats_at_once ),'<br>'; 
+									}else {
+										echo htmlspecialchars( $data->seats_at_once ),'<br>'; 
+									}
+								?>
+							</div>
+						</div>
 					</div>
 
+					<div class="seat-cart-right">
+						<div id="cart-checkout-btn" class="border-box">Open</div>
+					</div>
 				</div>
-			</div>
-			<div id="room-nav-info" class="border-box">
-				<div id="room-nav-info-inner"></div>
-			</div>
-			<div id="room-nav-btn-wrap" class="border-box">
-				<div id="current-room-name"></div>
-				<div id="room-nav-btn">Change room</div>
-				<div class="room-nav-extra-info-btn">
+
+				<div id="zoom-controller" class="no-select">
+					<i class="fa fa-arrow-circle-up move-action" data-move="up"></i><br>
+					<i class="fa fa-arrow-circle-left move-action" data-move="left"></i>
+					<i class="fa fa-arrow-circle-right move-action" data-move="right"></i><br>
+					<i class="fa fa-arrow-circle-down move-action" data-move="down"></i><br><br>
+					<i class="fa fa-plus zoom-action" data-zoom="in"></i><br>
+					<i class="fa fa-minus zoom-action" data-zoom="out"></i>
+				</div>
+
+				<div class="room-nav-extra-info-btn big-display-btn">
 					<i class="fa fa-info-circle"></i>
 				</div>
 			</div>
-		</div>
 
-		<div id="middle" class="no-select">
-			<div id="view-wrap">
-				<div id="middle-section">
-					<div id="box-wrap">
-						<div id="boxes">
-							
-						</div>
+			<div id="extra-info" class="dialog-box">
+						
+				<div id="extra-info-inner" class="border-box dialog-box-inner">
+					<div id="info-close-btn" class="close-btn">
+						<div class="close-btn-bg"></div>
+						<i class="fa fa-times-circle"></i>
 					</div>
-				</div>	
-			</div>
+					<h3>Registration info</h3>
+					<?php
 
-			<div id="legend-wrapper" class="border-box">
-				<div id="legends"></div>
-			</div>
+						if($data->info != null) {
+							echo '<div>',htmlspecialchars($data->info),'</div><br>';
+						}
 
-			<div id="seat-cart" class="border-box no-select">
-				<div class="seat-cart-left">
-					<div class="cart-icon">
-						<div class="cart-icon-box-1"></div>
-						<div class="cart-icon-box-2"></div>
-						<div class="cart-icon-box-3"></div>
-					</div>
-					<div id="cart-text"><span class="seats-in-cart">0</span> <?php //echo htmlspecialchars($data['spot_name']); ?> in selection
+						if($data->registration_start_timestamp != null) {
+							echo '<div><div class="flag1"></div>Registration start: <span class="time">', htmlspecialchars($data->registration_start_timestamp), '</span></div>';
+						}
+						if($data->registration_end_timestamp != null) {
+							echo '<div><div class="flag2"></div>Registration end: <span class="time">', htmlspecialchars($data->registration_end_timestamp), '</span></div>';
+						}
 
-						<div class="max-seats">Max 
-
-							<?php 
-								if($data->seats_at_once > 1) {
-									echo htmlspecialchars( $data->seats_at_once ),'<br>'; 
-								}else {
-									echo htmlspecialchars( $data->seats_at_once ),'<br>'; 
-								}
-							?>
-
-						</div>
-					</div>
-				</div>
-
-				<div class="seat-cart-right">
-					<div id="cart-checkout-btn" class="border-box">Open</div>
+					?>
+					<div>Total rooms: <span class="total-rooms"></span></div>
+					<div>Total open seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-open"></span></div>
+					<div>Total pending seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-bron"></span></div>
+					<div>Total confirmed seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-tak"></span></div>
 				</div>
 			</div>
-
-			<div id="zoom-controller" class="no-select">
-				
-				<i class="fa fa-arrow-circle-up move-action" data-move="up"></i><br>
-				<i class="fa fa-arrow-circle-left move-action" data-move="left"></i>
-				<i class="fa fa-arrow-circle-right move-action" data-move="right"></i><br>
-				<i class="fa fa-arrow-circle-down move-action" data-move="down"></i><br><br>
-
-
-				<i class="fa fa-plus zoom-action" data-zoom="in"></i><br>
-				<i class="fa fa-minus zoom-action" data-zoom="out"></i>
-			</div>
-
-			<div class="room-nav-extra-info-btn big-display-btn">
-				<i class="fa fa-info-circle"></i>
-			</div>
-			
-		</div>
-
-		<div id="extra-info" class="dialog-box">
-					
-			<div id="extra-info-inner" class="border-box dialog-box-inner">
-				<div id="info-close-btn" class="close-btn">
-					<div class="close-btn-bg"></div>
-					<i class="fa fa-times-circle"></i>
-				</div>
-				<h3>Registration info</h3>
-				<?php
-
-					if($data->info != null) {
-						echo '<div>',htmlspecialchars($data->info),'</div><br>';
-					}
-
-					if($data->registration_start_timestamp != null) {
-						echo '<div><div class="flag1"></div>Registration start: <span class="time">', htmlspecialchars($data->registration_start_timestamp), '</span></div>';
-					}
-					if($data->registration_end_timestamp != null) {
-						echo '<div><div class="flag2"></div>Registration end: <span class="time">', htmlspecialchars($data->registration_end_timestamp), '</span></div>';
-					}
-
-				 ?>
-				 <div>Total rooms: <span class="total-rooms"></span></div>
-				 <div>Total open seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-open"></span></div>
-				 <div>Total pending seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-bron"></span></div>
-				 <div>Total confirmed seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-tak"></span></div>
-
-			</div>
-
-		</div>
+		<?php endif; ?>
 
 		<div id="modal-bg"></div>
 
@@ -368,42 +348,33 @@
 			</div>
 		</div>
 
-		<?php if(!$isPremium) : ?>
-		<!--
-			<div class="view-footer">
-				www.seatreg.com
-			</div>
-		-->
-		<?php endif; ?>
+		<?php if($registrationTime == 'wait' || $registrationTime == 'end') : ?>
 
-			<?php if($registrationTime == 'wait' || $registrationTime == 'end') : ?>
+				<div class="modal-bg"></div>
 
-					<div class="modal-bg"></div>
+				<div id="time-notify" class="dialog-box" style="display:block">
+					<div class="dialog-box-inner border-box">
 
-					<div id="time-notify" class="dialog-box" style="display:block">
-						<div class="dialog-box-inner border-box">
-
-							<div id="close-time" class="close-btn">
-								<div class="close-btn-bg"></div>
-								<i class="fa fa-times-circle"></i>
-							</div>
-						
-
-							<?php
-								if($registrationTime == 'wait') {
-
-									echo '<h3>Not open yet</h3>';
-									echo '<h4>Registration starts: <span class="time">', htmlspecialchars($data->registration_start_timestamp), '</span></h4>';
-								}else if($registrationTime == 'end') {
-									echo '<h3>Closed</h3>';
-									echo '<h4>Registration ended: <span class="time">',htmlspecialchars($data->registration_end_timestamp), '</span></h4>';
-								}
-							?>
-
+						<div id="close-time" class="close-btn">
+							<div class="close-btn-bg"></div>
+							<i class="fa fa-times-circle"></i>
 						</div>
-					</div>
+				
+						<?php
+							if($registrationTime == 'wait') {
 
-			<?php endif; ?>
+								echo '<h3>Not open yet</h3>';
+								echo '<h4>Registration starts: <span class="time">', htmlspecialchars($data->registration_start_timestamp), '</span></h4>';
+							}else if($registrationTime == 'end') {
+								echo '<h3>Closed</h3>';
+								echo '<h4>Registration ended: <span class="time">',htmlspecialchars($data->registration_end_timestamp), '</span></h4>';
+							}
+						?>
+
+					</div>
+				</div>
+
+		<?php endif; ?>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
