@@ -168,29 +168,3 @@ function seatreg_create_management() {
 		</div>
 	<?php
 }
-
-function seatreg_create_builder() {
-	?>
-		<div class="seatreg-wp-admin">
-			<h2>Builder</h2>
-				<?php $registrations = seatreg_get_registrations(); ?>
-				<?php 
-					if( count($registrations) == 0 ) {
-						seatreg_no_registration_created_info();
-					}
-				?>
-				<?php foreach( $registrations as $registration ): ?> 				  	
-							<?php
-								echo '<h3>', $registration->registration_name, '</h3>';
-								echo '<button type="button" class="btn btn-primary seatreg-map-popup-btn" data-registration-name="'. $registration->registration_name .'"  data-map-code="'. $registration->registration_code .'">Edit map</button>';
-							?>
-				<?php endforeach; ?>
-			<div class="seatreg-builder-popup">
-				<i class="fa fa-times-circle builder-popup-close"></i>
-				<div class="seatreg-builder-popup-content">
-					<?php require( plugin_dir_path( __FILE__ ) . 'builder_content.php'  ); ?>
-				</div>
-			</div>
-		</div>
-	<?php
-}
