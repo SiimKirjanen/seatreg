@@ -39,15 +39,6 @@ function addSeatregPluginMenu() {
 
 	add_submenu_page(
 		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
-		'Map Builder',  //page title
-		'Map Builder',  //menu title
-		'manage_options',  //capability
-		'seatreg-builder',   //slug
-		'seatreg_create_builder'
-	);
-
-	add_submenu_page(
-		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
 		'SeatReg settings',  //page title
 		'Settings',  //menu title
 		'manage_options',  //capability
