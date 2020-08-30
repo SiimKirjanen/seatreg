@@ -356,19 +356,10 @@ $(function() {
 		document.getElementById("boxes").appendChild(documentFragment);	
 
 		if(this.rooms[this.currentRoom].room[7] !== null && this.rooms[this.currentRoom].room[7].indexOf('.') !== -1) {  //dose room have a background image?
-			$('#boxes').append('<img class="room-image" src="' + myLanguage.getLang('bgImgDir') + qs['v'] + '/' + this.rooms[this.currentRoom].room[7] + '" />');
+			console.log(myLanguage.getLang('bgImgDir'));
+			$('#boxes').append('<img class="room-image" src="../' + myLanguage.getLang('bgImgDir') + qs['c'] + '/' + this.rooms[this.currentRoom].room[7] + '" />');
 		}
-		//$('#boxes').append('<img src="m/kuresaare5.jpg" />');
-		//this.paintRoomInfo();
 
-	/*
-		$('#boxes .bubble-text').tipsy({
-			title: 'data-hover',
-			gravity: 'n',
-			html: true
-			
-		});
-	*/
 		$('#boxes .bubble-text').powerTip({
 			followMouse: true,
 			fadeInTime: 0,
@@ -376,7 +367,6 @@ $(function() {
 			intentPollInterval: 10
 			//intentSensitivity: 3
 		});
-
 	};
 
 SeatReg.prototype.paintRoomInfo = function() {

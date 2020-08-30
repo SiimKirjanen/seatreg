@@ -101,32 +101,22 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 	});
 
 	$('.seatreg-map-popup-btn').on('click', function() {
-
 		seatreg_clear_builder_data();
-
-		//console.log($.fn.jquery);
 		var code = $(this).data('map-code');
 		var promise = seaterg_admin_ajax('get_seatreg_layout_and_bookings', code, null);
 
 		promise.done(function(data) {
-			
-			//console.log(data._response.data.bookings);
-
+	
 			if(data._response.type == 'ok') {
 
 				if(data._response.data.bookings.length > 0) {
-
-					//console.log( typeof data._response.data.bookings );
-
 					var arrLen = data._response.data.bookings.length;
 
 					for(var i = 0; i < arrLen; i++) {
 						window.seatreg.bookings.push( data._response.data.bookings[i] );
 					}
-
 				}
 				
-
 				if(data._response.data.registration[0].registration_layout == null) {
 					window.seatreg.selectedRegistration = code;
 					$('.reg-title-name').text(data._response.data.registration[0].registration_name);
@@ -144,9 +134,7 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 			}
 			
 		});
-
 		promise.fail = seatreg_admin_ajax_error;
-
 	});
 
 $('.builder-popup-close').on('click', function() {

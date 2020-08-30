@@ -688,7 +688,9 @@
 		this.rooms[this.currentRoom].backgroundImageWidth = parseInt(dim[0]);
 		this.rooms[this.currentRoom].backgroundImageHeight = parseInt(dim[1]);
 		$('.room-image').remove();
-		var bgImg = $('<img class="room-image" src="' + myLanguage.getLang('bgImgDir')  + $('#urlCode').val()  + '/' + imgLog + '" />');
+		//../wp-content/plugins/seatreg_wordpress/
+
+		var bgImg = $('<img class="room-image" src="../wp-content/plugins/seatreg_wordpress/' + myLanguage.getLang('bgImgDir')  + seatreg.selectedRegistration  + '/' + imgLog + '" />');
 
 		$('.build-area').append(bgImg);
 	};
@@ -2065,7 +2067,7 @@
 		if(this.rooms[this.currentRoom].backgroundImage !== null) {
 			
 
-			var bgImg = $('<img class="room-image" src="'+ myLanguage.getLang('bgImgDir') + $('#urlCode').val() + '/' + this.rooms[this.currentRoom].backgroundImage + '" />');
+			var bgImg = $('<img class="room-image" src="../wp-content/plugins/seatreg_wordpress/'+ myLanguage.getLang('bgImgDir') + seatreg.selectedRegistration + '/' + this.rooms[this.currentRoom].backgroundImage + '" />');
 			
 			$('.build-area').append(bgImg);
 		}
@@ -2853,51 +2855,33 @@
 	
 	//get data from server
 	Registration.prototype.getData = function() {
-		//console.log('Ok starting to getData');
 		var thisScope = this;
-
 
 		$.ajax({
 			type:'POST',
 			url:'php/receiver.php',
 			//contentType: "application/json; charset=utf-8",
 			data: 'getdata=getData',
-			
 			success: function(data) {
-
-
-				
 				var is_JSON = true;
 
 				try {
-
 					var response = $.parseJSON(data);
-
 				} catch(err) {
-
 					is_JSON = false;
 				}
-
 				if(is_JSON) {
-
 					if(response.type == 'ok'){
-
 						thisScope.syncData($.parseJSON(response.data));
-						
-
 					}else if(response.type == 'error') {
-
 						$('#server-response').text(response.text);
 					}
-
 				} else {
 					alert(data);
 				}
-
 			}
 		});
 	};
-
 
 	//overrite existing registration data on server
 	Registration.prototype.updateData = function() {
@@ -3062,10 +3046,9 @@
 
 
 	//add data from server to registration. adds rooms, legends and boxes...
-	Registration.prototype.syncData = function(responseObj) {
-				
-		//console.log('syndData:');
-		//console.log(responseObj);
+	Registration.prototype.syncData = function(responseObj) {		
+		console.log('syndData:');
+		console.log(responseObj);
 		var isBoxCounterSet = false; 
 
 		if(responseObj == null){
@@ -3086,49 +3069,31 @@
 			    	this.rooms[this.currentRoom].initialName = responseObj[property]['room'][1];
 
 			    	if(typeof responseObj[property]['room'][7] !== 'undefined' && responseObj[property]['room'][7] !== null) {
-			    		//console.log(responseObj[property]['room'][7]);
+			    		console.log(responseObj[property]['room'][7]);
 			    		this.rooms[this.currentRoom].backgroundImage = responseObj[property]['room'][7];
 
 			    		//console.log($('#uploaded-images .add-img-room[data-img="'+ responseObj[property]['room'][7] +'"]').data('size'));
 
-			    		var dim = $('#uploaded-images .add-img-room[data-img="'+ responseObj[property]['room'][7] +'"]').data('size').split(",");
-			    		this.rooms[this.currentRoom].backgroundImageWidth = parseInt(dim[0]);
-			    		this.rooms[this.currentRoom].backgroundImageHeight = parseInt(dim[1]);
+			    		//var dim = $('#uploaded-images .add-img-room[data-img="'+ responseObj[property]['room'][7] +'"]').data('size').split(",");
+			    		//this.rooms[this.currentRoom].backgroundImageWidth = parseInt(dim[0]);
+			    		//this.rooms[this.currentRoom].backgroundImageHeight = parseInt(dim[1]);
 
 			    	}
 			    		
-			    	
-			    	
-
-
 			    	//update skeleton
 			    	var skeleton = responseObj[property]['skeleton'];
-
 			    	this.rooms[this.currentRoom].skeleton.changeSkeleton(skeleton[0], skeleton[1], skeleton[2], skeleton[3], skeleton[4], skeleton[5], skeleton[6]);
-			
-			    	//console.log(responseObj[property]['room']);
-
-			    	
-
 			    	var legendsLength = responseObj[property]['room'][3].length;
 
-
-
 			    	for(var k = 0; k < legendsLength; k++) {
-
 			    		this.rooms[this.currentRoom].legends.push(new Legend(responseObj[property]['room'][3][k][0], responseObj[property]['room'][3][k][1]));
 			    	}
 
-
 			    	$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"]').text(reg.rooms[reg.currentRoom].title);
-			    	//$('#room-name').val(responseObj[property]['room'][1]);
-
 			    	var arr = responseObj[property]['boxes'];
 			    	var arrLength = arr.length;
 
-
 			    	for(var i = 0; i < arrLength; i++) {  //adding boxes
-
 			    		var canReg = arr[i][8];
 
 			    		if(canReg == 'true') {
@@ -3136,54 +3101,26 @@
 			    		}else if(canReg == 'false'){
 			    			canReg = false;
 			    		}
-
-			    		////console.log('hoverText: ' + arr[i][6].replace(/\^/g,'<br>'));
-
-
 			    		this.rooms[this.currentRoom].addBoxS(arr[i][0], arr[i][1], arr[i][2], arr[i][3], arr[i][4], arr[i][7], arr[i][5], arr[i][6].replace(/\^/g,'<br>'), canReg, arr[i][10], arr[i][11]);
-			    		
-
 			    	}
 
 			    	arrLength = responseObj[property]['l'].length;
 
-
-
-
 			    	for(var r = 0; r < arrLength; r++) { //adding legends
-
-			    		//this.rooms[this.currentRoom].legends.push(new Legend(responseObj[property]['l'][i][0],responseObj[property]['l'][i][1]));
-			    		//this.allLegends.push(new Legend(responseObj[property]['l'][r][0], responseObj[property]['l'][r][1]));
-
-
 			    		this.syncAllLegends(responseObj[property]['l'][r][0], responseObj[property]['l'][r][1]);
 			    	}
-
-			    	//console.log(responseObj[property]['boxes']);
-
-			    	//[title,xPosition,yPosition,width,height,color,hoverText,id,canRegister] json
-			    	//addBox = function(title,posX,posY,sizeX,sizeY,id,color,hoverText
 			    }
 			}
 			
-			
-
-			
-				if(window.seatreg.bookings.length > 0) {
-					//console.log('hakkan registratsioone sisestama');
-					this.syncBoxStatuses(window.seatreg.bookings); //status 1 = bron, 2 = taken
-				}
-			
+			if(window.seatreg.bookings.length > 0) {
+				//console.log('hakkan registratsioone sisestama');
+				this.syncBoxStatuses(window.seatreg.bookings); //status 1 = bron, 2 = taken
+			}
 			
 			var roomElem = $('#room-selection-wrapper .room-selection').first();
-			
-
 			this.changeRoom(roomElem.attr('data-room-location'), roomElem, true, false);
 
-
 			if(this.isFreeAcc) {
-
-				
 				var isPremOver = this.whatToChange();
 
 				//remove img upload
@@ -3192,29 +3129,21 @@
 
 				$('#room-image-submit').html('<h3 style="color:red">' + myLanguage.getLang('onlyPremMembUpImg') +'</h3>').append(c);
 
-
 				if(isPremOver.premiumOverDetection === true) {
 
 					this.needToChangeStructure = true;
 					
-					
-					
-
 					$('#build-head-stats-2 .build-head-stats-2-text').text(myLanguage.getLang('fixNeededToSave'));
-
-
 					this.premiumOverDetectionNotify(isPremOver);
-
 				}
 
 			}
-
 			//this.buildBoxes();
 			//this.createLegendBox();
 			$('#build-area-loading-wrap').remove();
 		}
-
 	};
+
 	//check if legend not exist add new legend
 	Registration.prototype.syncAllLegends = function(text,color) {
 
@@ -4712,7 +4641,119 @@
 
     	//console.log(destination);
 
-    });
+	});
+
+	$('.progress').css({'display': 'none'});
+
+	var imageSubmitOptions = {    
+		beforeSubmit:  function() {
+			$('.progress').show();
+		},
+		uploadProgress: function(event, position, total, percentComplete) {
+			$('.progress-bar').width(percentComplete + '%');
+			$('.progress .sr-only').text(percentComplete + '%');
+		},
+		success:  function() {
+			$('.progress').hide();
+		},
+		complete: function(response) {
+			 $('#reset-btn').click();
+			 var respObjekt = $.parseJSON(response.responseText);
+
+			 if(respObjekt.type == 'ok') {
+				 $('#img-upload-resp').html('<div class="alert alert-success" role="alert">' + respObjekt.text + '</div>');  
+
+				 var imgRem = $(' <span class="up-img-rem" data-img="'+ respObjekt.data +'"></span>').append('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eemalda');
+				 var addImg = $(' <span class="add-img-room" data-img="'+ respObjekt.data +'" data-size="'+ respObjekt.extraData +'"></span>').append('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Lisa ruumi');
+				 var upImgBox = $('<div class="uploaded-image-box"></div>').append('<img src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration + '/' + respObjekt.data + '" class="uploaded-image" /> ', addImg, imgRem);
+
+				 $('#uploaded-images').append(upImgBox);
+			 }else if(respObjekt.type == 'error'){
+				 $('#img-upload-resp').html('<div class="alert alert-danger" role="alert">' + respObjekt.text + '</div>');
+			 }
+		}
+	}; 
+
+	$('#room-image-submit').ajaxForm(imageSubmitOptions); 
+
+	$('#uploaded-images').on('click', '.up-img-rem', function() {
+		var imgName = $(this).data('img');
+		var thisLoc = $(this);
+		var token = $('#sec_token').val();
+
+		$.ajax({
+			type:'POST',
+			url:'php/builderImgReveiver.php',
+			data: {
+				imgName:imgName,
+				code: $('#urlCode').val(),
+				token: token
+			},
+			success: function(data) {
+				var response = $.parseJSON(data);
+
+				if(response.type == 'ok') {
+					console.log('Image deleted');
+					registration.removeImgAllRooms(imgName);
+					registration.removeCurrentRoomImage();
+					$('#activ-room-img-wrap').empty().text('Ruumis pole hetkel tagatausta');
+					thisLoc.closest('.uploaded-image-box').remove();
+				}else if(response.type == 'error') {
+					console.log(response.text);
+				}
+			}
+		});
+	});
+
+	$('#uploaded-images').on('click', '.add-img-room', function() {	
+		reg.setRoomImage($(this).data('img'), $(this).data('size'));
+
+		var curImgWrap = $('<div class="cur-img-wrap"></div>');
+		var bgImg = $('<img class="uploaded-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
+		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eemalda ruumist</span>');
+
+		curImgWrap.append(bgImg, remImg);
+
+		$('#activ-room-img-wrap').empty().append(curImgWrap);
+	});
+
+	$('#background-image-modal').on('show.bs.modal', function() {
+		$('#activ-room-img-wrap').empty();
+
+		if(reg.rooms[reg.currentRoom].backgroundImage !== null) {
+			var curImgWrap = $('<div class="cur-img-wrap"></div>');
+			var bgImg = $('<img class="uploaded-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
+			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eemalda ruumist</span>');
+
+			curImgWrap.append(bgImg, remImg);
+			$('#activ-room-img-wrap').append(curImgWrap);
+		}else {
+			$('#activ-room-img-wrap').html('Ruumis pole hetkel tagatausta');
+		}
+	});
+
+	$('#activ-room-img-wrap').on('click', '#rem-room-img', function() {
+		registration.removeCurrentRoomImage();
+		$('.room-image').remove();
+		$(this).closest('.cur-img-wrap').remove();
+		$('#activ-room-img-wrap').html('Ruumis pole hetkel tagatausta pilti');
+	});
+	
+	$('#file-sub').on('click', function(e) {
+		var picName = $('#img-upload').val().split(/(\\|\/)/g).pop();
+		var re = /^[0-9a-zA-ZÜÕÖÄüõöä\-._]{1,90}$/;
+		$('#urlCode').val(seatreg.selectedRegistration);
+
+		if(picName == '') {
+			e.preventDefault();
+			$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">Vali pilt, mida ülesse laadida</div>');
+		}else {
+			if(!re.test(picName)) {
+				e.preventDefault();
+				$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">Pildi nimes on keelatud sümbolid! Palun muuda nime</div>');
+			}
+		}
+	});
 
     
 })(Jquery_1_8_3);

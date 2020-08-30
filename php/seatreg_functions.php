@@ -1874,8 +1874,8 @@ function seatreg_search_bookings_callback() {
 	seatreg_generate_booking_manager_html( $_POST['code'] , $order, $searchTerm );
 	die();
 }
-
 add_action( 'wp_ajax_seatreg_search_bookings', 'seatreg_search_bookings_callback' );
+
 function seatreg_edit_booking_callback() {
 	seatreg_check_ajax_credentials();
 
@@ -1914,5 +1914,113 @@ function seatreg_edit_booking_callback() {
 		die();
 	}
 }
-
 add_action( 'wp_ajax_seatreg_edit_booking', 'seatreg_edit_booking_callback' );
+
+function seatreg_upload_image_callback() {
+	$resp = new JsonResponse();
+
+	if(empty($_FILES["fileToUpload"]) || empty($_POST['code'])) {
+		$resp->setError('No picture selected');
+		$resp->echoData();
+		die();
+	}
+
+	$code = $_POST['code'];
+	$registration_upload_dir = WP_PLUGIN_DIR . '/seatreg_wordpress/uploads/room_images/' . $code . '/';
+	$target_file = $registration_upload_dir . basename($_FILES["fileToUpload"]["name"]);
+	$target_dimentsions = null;
+	$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+	$allowedFileTypes = array('jpg', 'png', 'jpeg', 'gif');
+
+	// Check if image file is a actual image or fake image
+	$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+
+	if($check == false) {
+		$resp->setError('File is not an image');
+		$resp->echoData();
+		die();
+	}
+	$target_dimentsions = $check[0] . ',' . $check[1];
+
+	// Check if file already exists
+	if (file_exists($target_file)) {
+		$resp->setError('Sorry, file already exists');
+		$resp->echoData();
+		die();
+
+	}
+
+	// Check file size                    
+	if ($_FILES["fileToUpload"]["size"] > 2120000 ) {
+		$resp->setError('Sorry, your file is too large');
+		$resp->echoData();
+		die();		
+	}
+
+	// Allow certain file formats
+	if( !in_array($imageFileType, $allowedFileTypes)  ) {
+		$resp->setError('Sorry, only JPG, JPEG, PNG & GIF files are allowed');
+		$resp->echoData();
+		die();
+	}
+
+	//check if folder exists
+	if (!file_exists($registration_upload_dir)) {
+		mkdir($registration_upload_dir, 0755, true); //create folder
+	}
+
+	//upload limit check
+	/*
+	$filecount = 0;
+	$files = glob($registration_upload_dir . "*.{jpg,png,gif,jpeg}",GLOB_BRACE);
+	if ($files){
+		$filecount = count($files);
+	}
+
+	if($filecount >= 3) {
+		$resp->setError('Cant upload more than 3 images');
+		$resp->echoData();
+		die();
+	}
+	*/
+			
+	if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+		$resp->setText("The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.");
+		$resp->setData(basename( $_FILES["fileToUpload"]["name"]));
+		$resp->setExtraData($target_dimentsions);
+		$resp->echoData();
+		die();
+	} else {
+		$resp->setError('Sorry, there was an error uploading your file');
+		$resp->echoData();
+		die();
+	}
+}
+add_action( 'wp_ajax_seatreg_upload_image', 'seatreg_upload_image_callback' );
+
+function showUploadedPictures($code) {
+	$strings = array();
+	$filePath = WP_PLUGIN_URL . '/seatreg_wordpress/uploads/room_images/' . $code . '/'; 
+
+	if(file_exists($filePath)) {
+		$dir = opendir($filePath);
+		while ($file = readdir($dir)) { 
+		   if (preg_match("/.png/",$file) || preg_match("/.jpg/",$file) || preg_match("/.gif/",$file) || preg_match("/.jpeg/",$file)) { 
+		   		$strings[] = $file;
+		   }
+		}
+		while (sizeof($strings) != 0){
+		  $img = array_pop($strings);
+		  $dim = getimagesize($filePath . $img);
+		  echo "<div class='uploaded-image-box'><img src='$filePath$img' class='uploaded-image' />
+		  		  <span class='add-img-room' data-img='$img' data-size='$dim[0],$dim[1]'>
+				  	 <span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Add to room
+				  </span>
+				  <span class='up-img-rem' data-img='$img'>
+				  	 <span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Remove
+				  </span>
+				  
+		  		</div>";
+		}
+	}
+}

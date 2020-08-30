@@ -464,18 +464,14 @@
 			<br>
 
 			<h4><?php _e('Upload image (2MB)', 'seatreg');?></h4>
-
-			<?php if(isset($_POST['c'])) : ?>
-				<form action="imgupload.php" method="post" enctype="multipart/form-data" id="room-image-submit">
-					
-					<input type="file" name="fileToUpload" id="img-upload">
-					<br>
-					<input type="hidden" name="code" id="urlCode"  value="<?php echo $_POST['c']; ?>">
-					<input type="hidden" value="<?php echo $_SESSION['token']; ?>" name="token">
-					<input type="submit" class="btn btn-success" name="submit" id="file-sub" value="Upload">
-					<input type="reset" class="btn btn-danger" value="Clear" id="reset-btn">
-				</form>
-			<?php endif; ?>
+			<form action="<?php echo '/wp-admin/admin-ajax.php'; ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
+				<input type="file" name="fileToUpload" id="img-upload">
+				<br>
+				<input type="hidden" name="code" id="urlCode"  value="">
+				<input type="hidden" name="action" value="seatreg_upload_image">
+				<input type="submit" class="btn btn-success" name="submit" id="file-sub" value="Upload">
+				<input type="reset" class="btn btn-danger" value="Clear" id="reset-btn">
+			</form>
 			<br>
 			<div class="progress">
 				<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
@@ -487,9 +483,7 @@
 			<br><br>
 			
 			<h4><?php _e('Previously uploaded images', 'seatreg');?></h4>
-			<div id="uploaded-images">
-				<?php if(isset($_POST['c'])) {showUploadedPictures($_POST['c']);}?>
-			</div>
+			<div id="uploaded-images"></div>
 
 			</div>
 			<div class="modal-footer">

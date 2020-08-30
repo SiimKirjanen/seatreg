@@ -29,6 +29,7 @@ function seatreg_load_admin_scripts($hook) {
 
 		wp_enqueue_script('jquery-1.8.3', plugins_url('js/jquery-1.8.3.min.js', dirname(__FILE__) ), array(), '1.8.3', true);
 		wp_enqueue_script('jquery-ui-1.9.2', plugins_url('js/jquery-ui-1.9.2.custom.min.js', dirname(__FILE__) ), array('jquery-1.8.3'), '1.9.2', true);
+		wp_enqueue_script('jquery-form', plugins_url('js/jquery.form.min.js', dirname(__FILE__) ), array('jquery-1.8.3'), '3.51.0', true);
 		wp_enqueue_script('selectable_scroll', plugins_url('js/selectableScroll.js', dirname(__FILE__) ), array('jquery-1.8.3','jquery-ui-1.9.2'), '1.0.0', true);
 		wp_enqueue_script('bootstrap-3-1-1', plugins_url('js/bootstrap.min.js', dirname(__FILE__) ), array('jquery-1.8.3'), '3.1.1', true);
 		wp_enqueue_script("jquery");
