@@ -1998,6 +1998,25 @@ function seatreg_upload_image_callback() {
 }
 add_action( 'wp_ajax_seatreg_upload_image', 'seatreg_upload_image_callback' );
 
+function seatreg_remove_img_callback() {
+	$resp = new JsonResponse();
+
+	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {
+		//check if file exists
+		$imgPath = WP_PLUGIN_DIR . '/seatreg_wordpress/uploads/room_images/' . $_POST['code'] . '/' . $_POST['imgName'];
+		
+		if(file_exists($imgPath)) {
+			unlink($imgPath);
+			$resp->setText('Image deleted');
+		}else {
+			$resp->setError('Image was not found!');
+		}
+		$resp->echoData();
+		die();
+	}
+}
+add_action( 'wp_ajax_seatreg_remove_img', 'seatreg_remove_img_callback' );
+
 function showUploadedPictures($code) {
 	$strings = array();
 	$filePath = WP_PLUGIN_URL . '/seatreg_wordpress/uploads/room_images/' . $code . '/'; 

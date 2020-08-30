@@ -4683,19 +4683,20 @@
 
 		$.ajax({
 			type:'POST',
-			url:'php/builderImgReveiver.php',
+			url: ajaxurl,
 			data: {
 				imgName:imgName,
-				code: $('#urlCode').val(),
-				token: token
+				code: seatreg.selectedRegistration,
+				token: token,
+				action: 'seatreg_remove_img',
 			},
 			success: function(data) {
 				var response = $.parseJSON(data);
 
 				if(response.type == 'ok') {
 					console.log('Image deleted');
-					registration.removeImgAllRooms(imgName);
-					registration.removeCurrentRoomImage();
+					reg.removeImgAllRooms(imgName);
+					reg.removeCurrentRoomImage();
 					$('#activ-room-img-wrap').empty().text('Ruumis pole hetkel tagatausta');
 					thisLoc.closest('.uploaded-image-box').remove();
 				}else if(response.type == 'error') {
@@ -4733,7 +4734,7 @@
 	});
 
 	$('#activ-room-img-wrap').on('click', '#rem-room-img', function() {
-		registration.removeCurrentRoomImage();
+		reg.removeCurrentRoomImage();
 		$('.room-image').remove();
 		$(this).closest('.cur-img-wrap').remove();
 		$('#activ-room-img-wrap').html('Ruumis pole hetkel tagatausta pilti');
