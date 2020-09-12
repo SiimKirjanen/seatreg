@@ -1330,20 +1330,6 @@ function seatreg_get_registration_uploaded_images($code) {
 		   		$uploadedImages[] = $img;
 		   }
 		}
-		/* while (sizeof($strings) != 0){
-		  $img = array_pop($strings);
-		  $dim = getimagesize($filePath . $img);
-		  echo "<div class='uploaded-image-box'><img src='$filePath$img' class='uploaded-image' />
-		  		  <span class='add-img-room' data-img='$img' data-size='$dim[0],$dim[1]'>
-				  	 <span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Add to room
-				  </span>
-				  <span class='up-img-rem' data-img='$img'>
-				  	 <span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Remove
-				  </span>
-				  
-		  		</div>";
-		} */
-
 	}
 	return $uploadedImages;
 }
@@ -1952,6 +1938,8 @@ function seatreg_edit_booking_callback() {
 add_action( 'wp_ajax_seatreg_edit_booking', 'seatreg_edit_booking_callback' );
 
 function seatreg_upload_image_callback() {
+	seatreg_check_ajax_credentials();
+
 	$resp = new JsonResponse();
 
 	if(empty($_FILES["fileToUpload"]) || empty($_POST['code'])) {
@@ -2003,21 +1991,6 @@ function seatreg_upload_image_callback() {
 	if (!file_exists($registration_upload_dir)) {
 		mkdir($registration_upload_dir, 0755, true); //create folder
 	}
-
-	//upload limit check
-	/*
-	$filecount = 0;
-	$files = glob($registration_upload_dir . "*.{jpg,png,gif,jpeg}",GLOB_BRACE);
-	if ($files){
-		$filecount = count($files);
-	}
-
-	if($filecount >= 3) {
-		$resp->setError('Cant upload more than 3 images');
-		$resp->echoData();
-		die();
-	}
-	*/
 			
 	if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
 		$resp->setText("The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.");
@@ -2034,6 +2007,8 @@ function seatreg_upload_image_callback() {
 add_action( 'wp_ajax_seatreg_upload_image', 'seatreg_upload_image_callback' );
 
 function seatreg_remove_img_callback() {
+	seatreg_check_ajax_credentials();
+
 	$resp = new JsonResponse();
 
 	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {

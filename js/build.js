@@ -711,12 +711,13 @@
 	Registration.prototype.generatePrevUploadedImgMarkup = function() {
 		if(window.seatreg.uploadedImages && window.seatreg.uploadedImages.length > 0) {
 			window.seatreg.uploadedImages.forEach(function(uploaded) {
-				$imgWrap = $("<div class='uploaded-image-box'></div");
+				var $imgWrap = $("<div class='uploaded-image-box'></div");
 				$imgWrap.append("<img src='../wp-content/plugins/seatreg_wordpress/uploads/room_images/" + window.seatreg.selectedRegistration + "/" + uploaded.file + "' class='uploaded-image' />");
-				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Add to room</span>");
+				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Add to room background</span>");
 				$imgWrap.append("<span class='up-img-rem' data-img='"+ uploaded.file +"'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Remove</span>");
+
+				$('#uploaded-images').append($imgWrap);
 			});
-			$('#uploaded-images').html($imgWrap);
 		}
 	};
 
@@ -4667,7 +4668,6 @@
 	$('#uploaded-images').on('click', '.up-img-rem', function() {
 		var imgName = $(this).data('img');
 		var thisLoc = $(this);
-		var token = $('#sec_token').val();
 
 		$.ajax({
 			type:'POST',
@@ -4675,7 +4675,7 @@
 			data: {
 				imgName:imgName,
 				code: seatreg.selectedRegistration,
-				token: token,
+				security: WP_Seatreg.nonce,
 				action: 'seatreg_remove_img',
 			},
 			success: function(data) {
@@ -4744,7 +4744,6 @@
 		}
 	});
 
-    
 })(Jquery_1_8_3);
 
 
