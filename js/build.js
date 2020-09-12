@@ -678,8 +678,6 @@
 		this.demo = false;
 
 		$('#room-selection-wrapper').empty();
-
-
 	};
 
 	Registration.prototype.setRoomImage = function(imgLog, size) {
@@ -688,10 +686,8 @@
 		this.rooms[this.currentRoom].backgroundImageWidth = parseInt(dim[0]);
 		this.rooms[this.currentRoom].backgroundImageHeight = parseInt(dim[1]);
 		$('.room-image').remove();
-		//../wp-content/plugins/seatreg_wordpress/
 
 		var bgImg = $('<img class="room-image" src="../wp-content/plugins/seatreg_wordpress/' + myLanguage.getLang('bgImgDir')  + seatreg.selectedRegistration  + '/' + imgLog + '" />');
-
 		$('.build-area').append(bgImg);
 	};
 
@@ -703,24 +699,26 @@
 	};
 
 	Registration.prototype.removeImgAllRooms = function(img) {
-
 		for (var property in this.rooms) {
-
 			if (this.rooms.hasOwnProperty(property)) {
-
 				if(this.rooms[property].backgroundImage == img) {
 					this.rooms[property].backgroundImage = null;
 				}
-
 			}
-
 		}
-
 	};
 
-
-
-
+	Registration.prototype.generatePrevUploadedImgMarkup = function() {
+		if(window.seatreg.uploadedImages && window.seatreg.uploadedImages.length > 0) {
+			window.seatreg.uploadedImages.forEach(function(uploaded) {
+				$imgWrap = $("<div class='uploaded-image-box'></div");
+				$imgWrap.append("<img src='../wp-content/plugins/seatreg_wordpress/uploads/room_images/" + window.seatreg.selectedRegistration + "/" + uploaded.file + "' class='uploaded-image' />");
+				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Add to room</span>");
+				$imgWrap.append("<span class='up-img-rem' data-img='"+ uploaded.file +"'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Remove</span>");
+			});
+			$('#uploaded-images').html($imgWrap);
+		}
+	};
 
 	Registration.prototype.setPremium = function() {
 		this.isFreeAcc = false;
@@ -3069,15 +3067,7 @@
 			    	this.rooms[this.currentRoom].initialName = responseObj[property]['room'][1];
 
 			    	if(typeof responseObj[property]['room'][7] !== 'undefined' && responseObj[property]['room'][7] !== null) {
-			    		console.log(responseObj[property]['room'][7]);
 			    		this.rooms[this.currentRoom].backgroundImage = responseObj[property]['room'][7];
-
-			    		//console.log($('#uploaded-images .add-img-room[data-img="'+ responseObj[property]['room'][7] +'"]').data('size'));
-
-			    		//var dim = $('#uploaded-images .add-img-room[data-img="'+ responseObj[property]['room'][7] +'"]').data('size').split(",");
-			    		//this.rooms[this.currentRoom].backgroundImageWidth = parseInt(dim[0]);
-			    		//this.rooms[this.currentRoom].backgroundImageHeight = parseInt(dim[1]);
-
 			    	}
 			    		
 			    	//update skeleton
@@ -3113,8 +3103,7 @@
 			}
 			
 			if(window.seatreg.bookings.length > 0) {
-				//console.log('hakkan registratsioone sisestama');
-				this.syncBoxStatuses(window.seatreg.bookings); //status 1 = bron, 2 = taken
+				this.syncBoxStatuses(window.seatreg.bookings);
 			}
 			
 			var roomElem = $('#room-selection-wrapper .room-selection').first();
@@ -3138,8 +3127,7 @@
 				}
 
 			}
-			//this.buildBoxes();
-			//this.createLegendBox();
+			this.generatePrevUploadedImgMarkup();
 			$('#build-area-loading-wrap').remove();
 		}
 	};

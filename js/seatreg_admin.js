@@ -106,15 +106,17 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 		var promise = seaterg_admin_ajax('get_seatreg_layout_and_bookings', code, null);
 
 		promise.done(function(data) {
-	
 			if(data._response.type == 'ok') {
-
 				if(data._response.data.bookings.length > 0) {
 					var arrLen = data._response.data.bookings.length;
 
 					for(var i = 0; i < arrLen; i++) {
 						window.seatreg.bookings.push( data._response.data.bookings[i] );
 					}
+				}
+
+				if(data._response.data.uploadedImages.length > 0) {
+					window.seatreg.uploadedImages = data._response.data.uploadedImages;
 				}
 				
 				if(data._response.data.registration[0].registration_layout == null) {
@@ -130,9 +132,7 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 					$('.seatreg-builder-popup').css({'display': 'block'});
 					window.seatreg.builder.syncData( $.parseJSON(data._response.data.registration[0].registration_layout) );
 				}
-
 			}
-			
 		});
 		promise.fail = seatreg_admin_ajax_error;
 	});

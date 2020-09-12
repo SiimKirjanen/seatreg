@@ -1315,6 +1315,39 @@ function seatreg_get_registration_bookings($code) {
 	return $bookings;
 }
 
+//return uploaded images
+function seatreg_get_registration_uploaded_images($code) {
+	$uploadedImages = array();
+	$filePath = WP_PLUGIN_DIR . '/seatreg_wordpress/uploads/room_images/' . $code . '/'; 
+
+	if(file_exists($filePath)) {
+		$dir = opendir($filePath);
+		while ($file = readdir($dir)) { 
+		   if (preg_match("/.png/",$file) || preg_match("/.jpg/",$file) || preg_match("/.gif/",$file) || preg_match("/.jpeg/",$file)) { 
+				$img = new stdClass();
+				$img->file = $file;
+				$img->size = getimagesize($filePath . $file);
+		   		$uploadedImages[] = $img;
+		   }
+		}
+		/* while (sizeof($strings) != 0){
+		  $img = array_pop($strings);
+		  $dim = getimagesize($filePath . $img);
+		  echo "<div class='uploaded-image-box'><img src='$filePath$img' class='uploaded-image' />
+		  		  <span class='add-img-room' data-img='$img' data-size='$dim[0],$dim[1]'>
+				  	 <span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Add to room
+				  </span>
+				  <span class='up-img-rem' data-img='$img'>
+				  	 <span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Remove
+				  </span>
+				  
+		  		</div>";
+		} */
+
+	}
+	return $uploadedImages;
+}
+
 //return bookins
 function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStatus ) {
 
@@ -1681,10 +1714,12 @@ function seatreg_get_registration_layout_and_bookings() {
 
 	$registration = seatreg_get_registration_data($_POST['code']);
 	$bookings = seatreg_get_registration_bookings($_POST['code']);
+	$uploadedImages = seatreg_get_registration_uploaded_images($_POST['code']);
 	
 	$dataToSend = new stdClass();
 	$dataToSend->registration = $registration;
 	$dataToSend->bookings = $bookings;
+	$dataToSend->uploadedImages = $uploadedImages;
 
 	$response = new JsonResponse();
 	$response->setData( $dataToSend);
@@ -2016,30 +2051,3 @@ function seatreg_remove_img_callback() {
 	}
 }
 add_action( 'wp_ajax_seatreg_remove_img', 'seatreg_remove_img_callback' );
-
-function showUploadedPictures($code) {
-	$strings = array();
-	$filePath = WP_PLUGIN_URL . '/seatreg_wordpress/uploads/room_images/' . $code . '/'; 
-
-	if(file_exists($filePath)) {
-		$dir = opendir($filePath);
-		while ($file = readdir($dir)) { 
-		   if (preg_match("/.png/",$file) || preg_match("/.jpg/",$file) || preg_match("/.gif/",$file) || preg_match("/.jpeg/",$file)) { 
-		   		$strings[] = $file;
-		   }
-		}
-		while (sizeof($strings) != 0){
-		  $img = array_pop($strings);
-		  $dim = getimagesize($filePath . $img);
-		  echo "<div class='uploaded-image-box'><img src='$filePath$img' class='uploaded-image' />
-		  		  <span class='add-img-room' data-img='$img' data-size='$dim[0],$dim[1]'>
-				  	 <span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Add to room
-				  </span>
-				  <span class='up-img-rem' data-img='$img'>
-				  	 <span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Remove
-				  </span>
-				  
-		  		</div>";
-		}
-	}
-}
