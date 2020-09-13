@@ -345,7 +345,6 @@ function seatreg_no_registration_created_info() {
 
 //generate settings form for registration settings
 function seatreg_generate_settings_form() {
-
 	 $active_tab = null;
 
 	if( isset( $_GET[ 'tab' ] ) ) {
@@ -355,18 +354,24 @@ function seatreg_generate_settings_form() {
 	 $options = seatreg_get_options($active_tab);
 
 	 if( count($options) == 0 ) {
-	 	seatreg_no_registration_created_info();
+		 seatreg_no_registration_created_info();
+		 
 	 	return;
 	 }
 
 	 $custFields = json_decode($options[0]->custom_fields);
 	 $custLen = count(is_array($custFields) ? $custFields : []);
-
-	 //print_r($options);
-
 	?>
 		<h3><?php echo $options[0]->registration_name, ' settings'; ?></h3>
 		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" style="max-width:600px">
+
+			<div class="form-group">
+				<label for="registration-name"><?php _e('Registration name', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php _e('You can change registration name', 'seatreg'); ?>
+				</p>
+				<input type="text" class="form-control" id="registration-name" name="registration-name" placeholder="Enter registration name" value="<?php echo $options[0]->registration_name; ?>">
+			</div>
 
 			<div class="form-group">
 				<label for="registration-status"><?php _e('Registration status', 'seatreg'); ?></label>
@@ -557,17 +562,14 @@ function seatreg_generate_settings_form() {
 
 				</div>	
 
-
 			</div>
 
 			<input type='hidden' name='action' value='seatreg-form-submit' />
 			<input type="hidden" name="registration_code" value="<?php echo $options[0]->registration_code; ?>"/>
 
 			<?php
-
 				wp_nonce_field( 'seatreg-options-submit', 'seatreg-options-nonce' );
 				submit_button( __('Save changes', 'seatreg'), 'primary', 'seatreg-settings-submit' );
-
 			?>
 
 		</from>
@@ -1597,11 +1599,9 @@ function seatreg_create_submit_handler() {
 
 add_action('admin_post_seatreg_create_submit', 'seatreg_create_submit_handler'); 
 
-//update options
-function seatreg_update_options() {
+function seatreg_update() {
 	global $wpdb;
 	global $seatreg_db_table_names;
-
 
 	if(!isset($_POST['gmail-required'])) {
 		$_POST['gmail-required'] = '0';
@@ -1631,7 +1631,7 @@ function seatreg_update_options() {
 		$_POST['show-registration-bookings'] = 1;
 	}
 	
-	$status = $wpdb->update(
+	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
 		array(
 			'registration_start_timestamp' => $_POST['start-timestamp'] == '' ? null : $_POST['start-timestamp'],
@@ -1655,17 +1655,26 @@ function seatreg_update_options() {
 		'%s'
 	);
 
-	//exit( var_dump( $wpdb->last_query ) );
+	$status2 = $wpdb->update(
+		"$seatreg_db_table_names->table_seatreg",
+		array(
+			'registration_name' => $_POST['registration-name'],
+		),
+		array(
+			'registration_code' => $_POST['registration_code']
+		),
+		'%s',
+		'%s'
+	);
 
-	return $status;
+	return ($status1 !== false && $status2 !== false);
 }
-
 
 //handle settings form submit
 function seatreg_form_submit_handle() {
 	check_admin_referer('seatreg-options-submit', 'seatreg-options-nonce');
 
-	if( seatreg_update_options() === false) {
+	if( seatreg_update() === false) {
 		wp_die('Error updating settings');
 	}else {
 		wp_redirect($_POST['_wp_http_referer']);
