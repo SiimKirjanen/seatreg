@@ -6,7 +6,6 @@ global $seatreg_db_table_names;
 require_once 'NewBookings.php';
 require_once 'JsonResponse.php';
 
-
 $seatreg_db_table_names = new stdClass();
 $seatreg_db_table_names->table_seatreg = $wpdb->prefix . "seatreg";
 $seatreg_db_table_names->table_seatreg_options = $wpdb->prefix . "seatreg_options";
@@ -47,27 +46,28 @@ Generating HTML stuff
 */
 
 function seatreg_generate_overview_section($targetRoom) {
-
 	global $wpdb;
 	global $seatreg_db_table_names;
+
 	$active_tab = null;
 
 	if( isset( $_GET[ 'tab' ] ) ) {
 	    $active_tab = $_GET[ 'tab' ];
 	} 
+
 	seatreg_generate_overview_section_html($targetRoom, $active_tab);
 }
 
 //generate overview section html.
 function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
-
 	global $wpdb;
 	global $seatreg_db_table_names;
 
 	$registration = seatreg_get_options( $active_tab );
 
 	if( count($registration) == 0 ) {
-	 	seatreg_no_registration_created_info();
+		seatreg_no_registration_created_info();
+		 
 	 	return;
 	 }
 
@@ -80,9 +80,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 	$project_name = $registration->registration_name;
 	$start_date = $registration->registration_start_timestamp;
 	$end_date = $registration->registration_end_timestamp;
-
 	$regUrl =  get_site_url();
-	
 	$roomLoactionInStats = -1;
 	$rName = str_replace(" ", "-", $registration->registration_name); 
 
@@ -144,7 +142,6 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 						<li class="room-list-item first-item" <?php if($targetRoom == 'overview') { echo 'data-active="true"';} ?> data-stats-target="overview"><?php _e('Overall', 'seatreg'); ?> </li>
 
 						<?php
-
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
 
 								if($regStats['roomsInfo'][$i]['roomName'] != $targetRoom) {
@@ -152,8 +149,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 								}else {
 									echo '<li class="room-list-item" data-active="true" data-stats-target="',$regStats['roomsInfo'][$i]['roomName'],'">',$regStats['roomsInfo'][$i]['roomName'],'</li>';
 								}
-							}
-								
+							}	
 						?>
 						
 					</ul>
@@ -165,10 +161,8 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 						<div class="overview-middle-box-h"><?php _e('Seats:', 'seatreg'); ?></div>
 						<div class="overview-middle-box-stat">
 							<?php 
-
 								if($targetRoom == 'overview') {
 									echo $regStats['seatsTotal'];
-
 								}else if($roomLoactionInStats >= 0) {
 									echo $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'];
 								}
@@ -194,7 +188,6 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 						<div class="overview-middle-box-h"><?php _e('Confirmed:', 'seatreg'); ?></div>
 						<div class="overview-middle-box-stat">
 							<?php 
-
 								if($targetRoom == 'overview') {
 									echo $regStats['takenSeats']; 
 								}else if($roomLoactionInStats >= 0) {
@@ -239,11 +232,9 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 												echo '0%';
 											}
 										}
-										
 									?>
 								</span>
 							</div>
-
 							<div class="legend-block"><span class="doughnut-legend" style="background-color:red"></span><span><?php _e('Confirmed', 'seatreg'); ?> </span>
 								<span class="legend-block-percent" style="color:red">
 									<?php 
@@ -278,7 +269,6 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 							</div>
 						<?php endif; ?>
 					</div>
-
 					<?php if($targetRoom == 'overview'): ?>
 						<input type="hidden" class="seats-total-don" value="<?php echo $regStats['seatsTotal']; ?>"/>
 						<input type="hidden" class="seats-bron-don" value="<?php echo $regStats['bronSeats']; ?>"/>
@@ -304,7 +294,6 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 
 //generate my registration section. In this section you can see your registration names with links to overview, booking manager and map builder.
 function seatreg_generate_my_registrations_section() {
-
 	$registrations = seatreg_get_registrations();
 
 	if(count($registrations)) {
@@ -597,7 +586,6 @@ function seatreg_create_registration_from() {
 }
 
 function seatreg_generate_booking_manager() {
-
 	$active_tab = null;
 	$order = 'date';
 	$searchTerm = '';
@@ -615,7 +603,6 @@ function seatreg_generate_booking_manager() {
 	}
 
 	seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm);
-
 }
 
 
@@ -623,26 +610,21 @@ function seatreg_generate_booking_manager() {
 function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm) {
 	$seatregData = seatreg_get_options($active_tab);
 
-	 if( count($seatregData) == 0 ) {
-	 	seatreg_no_registration_created_info();
-	 	return;
-	 }
+	if( count($seatregData) == 0 ) {
+		seatreg_no_registration_created_info();
 
-     $seatregData = $seatregData[0];
+		return;
+	}
 
-	//wp_die(print_r($seatregData->registration_code));
-
+    $seatregData = $seatregData[0];
 	$code = $seatregData->registration_code;
-
 	$custom_fields = json_decode($seatregData->custom_fields, true);
 	$cus_length = count(is_array($custom_fields) ? $custom_fields : []);
 	$regId = $seatregData->id;
 	$project_name = $seatregData->registration_name;
-
 	$bookings1 = seatreg_get_specific_bookings($code, $order, $searchTerm, '1');
 	$bookings2 = seatreg_get_specific_bookings($code, $order, $searchTerm, '2');
 	$row_count = count($bookings1);
-	
 	$row_count2 = count($bookings2);
 
 	if($row_count > 0) {
@@ -665,20 +647,12 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
     echo '<a href="text.php?v=', $code, '"class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a> ';
 
 	echo '<div class="bg-color">';
-
-
 		echo '<div class="tab-container">';
-
-
 			echo '<ul class="etabs">';
 				echo '<li class="tab"><a href="#', esc_html($project_name), 'bron">', __('Pending', 'seatreg'), '</a></li>';
 				echo '<li class="tab"><a href="#', esc_html($project_name), 'taken">',__('Confirmed','seatreg'),'</a></li>';
 			echo '</ul>';
-
-	
 		echo '<div class="panel-container differentBgColor">';
-
-
 				echo '<div class="registration-manager-labels">
 						<div class="seat-nr-box manager-box manager-box-link" data-order="nr">',__('SEAT','seatreg'),'</div>
 						<div class="seat-room-box manager-box manager-box-link" data-order="room">',__('ROOM','seatreg'),'</div>
@@ -686,10 +660,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						<div class="seat-name-box manager-box manager-box-link" data-order="date">',__('Date','seatreg'),'</div>
 						<div class="seat-date-box manager-box manager-box-link" data-order="id">',__('Booking id','seatreg'),'</div>	
 					</div>';
-
 				echo '<div id="',esc_html($project_name),'bron" class="tab_container">';
 
-			
 			if($row_count == 0) {
 				echo '<div class="notify-text">', __('No pending seats', 'seatreg'),'</div>';
 			}			
@@ -699,13 +671,10 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 				$custom_field_data = json_decode($row->custom_field_data, true);
 				$booking = $row->booking_id;
 				$registrationId = $row->id;
-
 				$time = strtotime($row->registration_date);
 				$myFormatForView = date("m-d-y", $time);
 				
-
 				echo '<div class="reg-seat-item">';
-
 					echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
 					echo '<div class="seat-room-box manager-box" title="',esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
 					echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
@@ -714,7 +683,6 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '<button class="show-more-info">', __('More info','seatreg'), '</button>';
 					echo "<span class='edit-btn' data-code='$code' data-booking='$booking' data-id='$registrationId'><span class='glyphicon glyphicon-edit'></span>", __('Edit','seatreg'), "</span>";
 					echo '<div class="action-select">';
-						
 						echo "<label class='action-label'>",__('Remove','seatreg'),"<input type='checkbox' value='$row->booking_id' class='bron-action' data-action='del'/></label>";
 						echo "<label class='action-label'>",__('Confirm','seatreg'),"<input type='checkbox' value='$row->booking_id' class='bron-action'data-action='confirm'/></label>";
 					echo '</div>';
@@ -723,14 +691,10 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						echo '<div>', __('Registration date:','seatreg'), '<span class="time-string">', esc_html($row->registration_date), '</span></div>';
 						echo '<div>', __('Email:', 'seatreg'), esc_html($row->email), '</div>';
 
-
-						
 						for($i = 0; $i < $cus_length; $i++) {
 							
 							echo seatreg_customfield_with_value($custom_fields[$i]['label'], $custom_field_data);
 						}
-
-						
 					echo '</div>';
 					echo '<input type="hidden" class="booking-identification" value='. $row->booking_id .' />';
 				echo '</div>'; 
@@ -740,7 +704,6 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 				echo "<div class='action-control' data-code='$code'>", __('OK','seatreg'), "</div>";
 			}
 			
-
 			echo '</div>';
 
 			echo '<div id="',esc_html($project_name),'taken" class="tab_container active">';
@@ -750,7 +713,6 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 			}
 
 			foreach ($bookings2 as $row) {
-
 				$custom_field_data = json_decode($row->custom_field_data, true);
 				$booking = $row->booking_id;
 				$registrationId = $row->id;
@@ -791,22 +753,16 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 				echo "<div class='action-control' data-code='$code'>", __('OK','seatreg'), "</div>";
 			}
 
-		
 			echo '</div>';
-
-
 		echo '</div>';
 
 	echo '</div>';
-
-	echo '</div>'; //.bg-color
+	echo '</div>'; 
 		
 	seatreg_booking_edit_modal();
-	
 }
 
 function seatreg_customfield_with_value($label, $custom_data) {
-
 	$cust_len = count($custom_data);
 	$foundIt = false;
 
@@ -837,7 +793,6 @@ function seatreg_customfield_with_value($label, $custom_data) {
 	if(!$foundIt) {
 		echo '<span class="custom-field-v">', __('Not set', 'seatreg'), '</span></div>';
 	}
-
 }
 
 function seatreg_booking_edit_modal() {
@@ -960,9 +915,7 @@ function seatreg_generate_registration_code() {
 function getRoomSeatInfo($struct, $bronRegistrations, $takenRegistrations) {
 	$bronLength = count($bronRegistrations);
 	$takenLength = count($takenRegistrations);
-	
 	$regStructure = json_decode($struct);
-
 	$roomCount = count(is_array($regStructure) ? $regStructure : []);
 	$howManyRegSeats = 0;
 	$howManyOpenSeats = 0;
@@ -973,7 +926,6 @@ function getRoomSeatInfo($struct, $bronRegistrations, $takenRegistrations) {
 	$roomsInfo = array();
 
 	for($i = 0; $i < $roomCount; $i++) {
-		//print_r($regStructure[$i]->boxes);
 		$roomBoxes = $regStructure[$i]->boxes;
 
 		//find how many bron seats in this room
@@ -1044,23 +996,14 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 	$registration = seatreg_get_registration_data($code)[0];
 	$structure = json_decode($registration->registration_layout);
 	$bookingActionLength = count($bookingActions);
-	/*echo 'ggggggg', '<br>';
-	print_r($bookingActions);
-	echo 'ggggggg', '<br>';*/
 	$seat_id;
 	$allCorrect = true;
 
 	$resp = array();
 
 	//step 1. check if room exists and contains seat with nr
-
 	foreach ($bookingActions as $key => $value) {
-		//echo 'checking ', $value->room_name, $value->seat_nr;
 		$step1Desision = seatreg_check_room_and_seat($structure, $value->room_name, $value->seat_nr);
-
-		/*echo 'lllllllllllllllllllllllllllll', '<br>';
-		print_r($step1Desision);
-		echo 'lllllllllllllllllllllllllllll', '<br>';*/
 
 		if( $step1Desision['status'] != 'ok') {
 			$allCorrect = false;
@@ -1076,27 +1019,17 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 	}
 
 	//step2. check whether seat is already pending or confirmed
-
 	$bookings = seatreg_get_registration_bookings($code);
-
 	$notBooked = true;
 
-	//print_r($bookingActions);
-
 	foreach ($bookings as $booking) {
-
 		foreach ($bookingActions as $bookingAction) {
-
 			if($booking->seat_nr == $bookingAction->seat_nr && $booking->room_name == $bookingAction->room_name && $booking->status == 2 && $bookingAction->action != 'del') {
-				
 				$notBooked = false;
 				$resp['text'] = __('Seat ', 'seatreg') . $bookingAction->seat_nr . __(' from room ', 'seatreg') . $bookingAction->room_name . __(' is already booked', 'seatreg');
 				break 2;
-
 			}
-
 		}
-
 	}
 
 	if($notBooked) {
@@ -1106,7 +1039,6 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 		$resp['status'] = 'seat-booked';
 		return $resp;
 	}
-	
 }
 
 //for booking edit
@@ -1116,14 +1048,6 @@ function seatreg_validate_edit_booking($code, $data) {
 	$allCorrect = true;
     $resp = array();
     $resp['status'] = 'ok';
-
-    //print_r($_POST['data']['room']);
-    //
-   
-   	//print_r($data);
-   	//
-   	//echo gettype( $data );
-
 	$status1 = seatreg_check_room_and_seat($structure, $data->roomName, $data->seatNr );
 
 	if( $status1['status'] != 'ok') {
@@ -1139,22 +1063,18 @@ function seatreg_validate_edit_booking($code, $data) {
 	$bookings = seatreg_get_registration_bookings($code);
 	$notBooked = true;
 
-
-	/*print_r($bookings);
-	print_r($data);*/
-
 	foreach ($bookings as $booking) {
 		if($booking->booking_id == $data->bookingId) {
-			
 			continue;
 		}
+
 		if($booking->seat_nr == $data->seatNr && $booking->room_name == $data->roomName && ($booking->status == 2 || $booking->status == 1) ) {
 			
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
 			$resp['text'] = __('Seat ', 'seatreg') . $data->roomName . __(' from room ', 'seatreg') . $booking->room_name . __(' is already booked', 'seatreg');
-			break;
 
+			break;
 		}
 	}
 	
@@ -1163,38 +1083,34 @@ function seatreg_validate_edit_booking($code, $data) {
 
 //check if booking room and seat are present in registration layout
 function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $bookingSeatNr) {
-	//echo 'Booking name= ', $bookingRoomName, ' seat nr= ', $bookingSeatNr;
-
 	$layoutLength = count($registrationLayout);
 	$allCorrect = false;
 	$status = array();
 	$searchStatus = '';
 	$errorText = '';
-	for($i = 0; $i < $layoutLength; $i++) {
 
+	for($i = 0; $i < $layoutLength; $i++) {
 		$searchStatus = 'room-searching';
 		$errorText = __('Room ','seatreg') . $bookingRoomName . __(' dose not exist!', 'seatreg');
-		//echo 'checking if', $registrationLayout[$i]->room[1], ' is', $bookingRoomName; 
+
 		if($registrationLayout[$i]->room[1] == $bookingRoomName) {
 			$searchStatus = 'seat-nr-searching';
 			$errorText = __('Seat ','seatreg') . $bookingSeatNr . __(' dose not exist in ', 'seatreg') . $bookingRoomName;
-		
 			$boxLen = count($registrationLayout[$i]->boxes);
 
 			for($k = 0; $k < $boxLen; $k++) {
-
 				if($registrationLayout[$i]->boxes[$k][8] == 'true' && $registrationLayout[$i]->boxes[$k][9] == $bookingSeatNr) {
 					$searchStatus = 'ok';
 					$allCorrect = true;
 					$seat_id = $registrationLayout[$i]->boxes[$k][7];
 					$status['newSeatId'] = $seat_id;
 					$status['oldSeatNr'] = $bookingSeatNr;
+
 					break;
 				}
 			}
 			break;
 		}
-
 	}
 
 	if(!$allCorrect) {
@@ -1205,38 +1121,7 @@ function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $boo
 		$status['status'] = $searchStatus;
 		return $status;
 	}
-
 }
-
-//for edit booking. if admin changes seat, then we need new seat id.
-/*function seatreg_return_seat_id_from_layout($registrationLayout, $seatNr, $roomName) {
-	$layoutLength = count($registrationLayout);
-	$seatId = null;
-
-	for($i = 0; $i < $layoutLength; $i++) {
-
-		if($registrationLayout[$i]->room[1] == $roomName) {
-
-			$boxLen = count($registrationLayout[$i]->boxes);
-
-			for($k = 0; $k < $boxLen; $k++) {
-
-				if($registrationLayout[$i]->boxes[$k][9] == $seatNr) {
-					$searchStatus = 'ok';
-					$allCorrect = true;
-					$seatId = $registrationLayout[$i]->boxes[$k][7];
-					break;
-				}
-			}
-
-			break;
-
-		}
-
-	}
-	return $seatId;
-}
-*/
 
 /*
 ======================================================================================================================================================
@@ -1260,7 +1145,6 @@ function seatreg_set_up_db() {
 	  PRIMARY KEY  (id),
 	  UNIQUE KEY  (registration_code)
     ) $charset_collate;";
-
 
 	dbDelta( $sql );
 
@@ -1326,21 +1210,17 @@ function seatreg_get_registration_data($code) {
 	global $seatreg_db_table_names;
 
 	if($code != null) {
-
 		$registration = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg
 			WHERE registration_code = %s",
 			$code
 		) );
-
 	}else {
-
 		$registration = $wpdb->get_results( 
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg
 			ORDER BY registration_create_timestamp
 			LIMIT 1"
 		);
-
 	}
 
 	return $registration;
@@ -1383,7 +1263,6 @@ function seatreg_get_registration_uploaded_images($code) {
 
 //return bookins
 function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStatus ) {
-
 	global $wpdb;
 	global $seatreg_db_table_names;
 
@@ -1406,7 +1285,6 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 	}
 
 	if($searchTerm == '') {
-
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
@@ -1414,9 +1292,7 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 			ORDER BY $order",
 			$code
 		) );
-
 	}else {
-
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
@@ -1427,14 +1303,12 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 			$code,
 			'%'.$searchTerm.'%'
 		) );
-
 	}
 
 	return $bookings;
 }
 
 function seatreg_get_bookings_in_room($registrationId, $roomName) {
-
 	global $wpdb;
 	global $seatreg_db_table_names;
 
@@ -1447,7 +1321,6 @@ function seatreg_get_bookings_in_room($registrationId, $roomName) {
 	) );
 
 	return $bookings;
-
 }
 
 //return specific registration options
@@ -1476,16 +1349,14 @@ function seatreg_get_options($code) {
 	}
 
 	return $options;
-
 }
 
 function seatreg_create_new_registration($newRegistrationName) {
 	global $seatreg_db_table_names;
 	global $wpdb;
+
     $charset_collate = $wpdb->get_charset_collate();
-
     $registrationCode = seatreg_generate_registration_code();
-
     $status = $wpdb->insert(
     	$seatreg_db_table_names->table_seatreg,
     	array(
@@ -1496,7 +1367,6 @@ function seatreg_create_new_registration($newRegistrationName) {
     );
 
     if($status === 1) {
-
     	$status = $wpdb->insert(
     		$seatreg_db_table_names->table_seatreg_options,
     		array(
@@ -1504,7 +1374,6 @@ function seatreg_create_new_registration($newRegistrationName) {
     		),
     		'%s'
     	);
-
     }
 
     if($status === 1) {
@@ -1519,7 +1388,6 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
-	
 	if($action->action == 'conf') {
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
@@ -1538,12 +1406,10 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s'
 		);
 	}
-		
 }
 
 //edit booking
 function seatreg_edit_booking($code, $edit_cust, $edit_seat, $edit_room, $edit_f_name, $edit_l_name, $booking, $id, $newSeatId, $oldSeatNr) {
-
 	global $seatreg_db_table_names;
 	global $wpdb;
 
@@ -1574,17 +1440,13 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 	global $wpdb;
 
 	if($whatToShow == 'all') {
-
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
 			ORDER BY room_name, seat_nr",
 			$code
 		) );
-
-		
 	}else if($whatToShow == 'pending') {
-
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
@@ -1592,10 +1454,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 			ORDER BY room_name, seat_nr",
 			$code
 		) );
-
 	}else {
-
-
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
@@ -1603,7 +1462,6 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 			ORDER BY room_name, seat_nr",
 			$code
 		) );
-
 	}
 
 	return $bookings;
@@ -1755,12 +1613,10 @@ function seatreg_get_registration_layout_and_bookings() {
 	$registration = seatreg_get_registration_data($_POST['code']);
 	$bookings = seatreg_get_registration_bookings($_POST['code']);
 	$uploadedImages = seatreg_get_registration_uploaded_images($_POST['code']);
-	
 	$dataToSend = new stdClass();
 	$dataToSend->registration = $registration;
 	$dataToSend->bookings = $bookings;
 	$dataToSend->uploadedImages = $uploadedImages;
-
 	$response = new JsonResponse();
 	$response->setData( $dataToSend);
 	wp_send_json( $response );
@@ -1768,7 +1624,6 @@ function seatreg_get_registration_layout_and_bookings() {
 add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_layout_and_bookings');
 
 function seatreg_update_layout() {
-
 	seatreg_check_ajax_credentials();
 	
 	global $wpdb;
@@ -1784,8 +1639,6 @@ function seatreg_update_layout() {
 		array('%s'),
 		array('%s')
 	);
-	//$_POST['updatedata']
-
 	$response = new JsonResponse();
 	$response->setData( $status );
 	wp_send_json( $response );
@@ -1796,7 +1649,6 @@ add_action('wp_ajax_seatreg_update_layout', 'seatreg_update_layout');
 
 function randomString($length){
 	$chars = "abcdefghijklmnoprstuvwzyx023456789";
-	//srand((double)microtime()* 1000000);
 	$str = "";
 	$i = 0;
 	
@@ -1814,8 +1666,6 @@ function seatreg_booking_submit_callback() {
 	session_start();
 
 	if($_SESSION['seatreg_captcha'] == $_POST['capv']){
-		//$newData = new ViewData($_POST['custom'], $_POST['c'], $resp, $_POST['em'], $_POST['pw'], stripslashes_deep($_POST['pack']));
-
 		$newBooking = new NewBookings( $_POST['c'], $resp );
 
 		if( $newBooking->validateBookingData(
@@ -1875,26 +1725,10 @@ add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_
 function seatreg_confirm_del_bookings_callback() {
 	seatreg_check_ajax_credentials();
 
-
-	//echo $_POST['data']['actionData'], '<br>';
-
-	//echo stripslashes_deep($_POST['data']['actionData']), '<br>';
-
 	$data = json_decode( stripslashes_deep($_POST['data']['actionData']) );
-
-	
-	//echo 'length:',count($data), '<br>';
-	//echo print_r($data[0]->booking_id);
-
-
 	$statusArray = seatreg_validate_del_conf_booking($_POST['code'], $data);
 
-	/*echo '---------------------', '<br>';
-	print_r($statusArray);
-	echo '---------------------', '<br>';*/
-
 	if ( $statusArray['status'] != 'ok' ) {
-
 		$errorText = '';
 
 		switch( $statusArray['status'] ) {
@@ -1969,7 +1803,6 @@ function seatreg_edit_booking_callback() {
 		die();
 	}
 
-	//$code, $edit_cust, $edit_seat, $edit_room, $edit_f_name, $edit_l_name, $booking, $id
 	if( seatreg_edit_booking( 
 			$_POST['code'], 
 			$bookingEdit->editCustomField, 
