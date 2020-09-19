@@ -190,70 +190,29 @@ class NewBookings extends Booking {
 			}
 
 			if($this->_requireBookingEmailConfirm) {
-
-				$this->response->setText('mail');
-
-				/*$this->changeCaptcha(3);
-
+				$this->changeCaptcha(3);
 				$seatsString = $this->generateSeatString();
+				$confirmationURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_confirm.php?confirmation-code='. $confCode;
+				$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 
-				$mail = new PHPMailer; //send confirm mail to client
-
-				//$mail->SMTPDebug = 3;                               // Enable verbose debug output
-
-
-				/*
-				$mail->isSMTP();                                      // Set mailer to use SMTP
-				$mail->Host = 'mail.veebimajutus.ee';  // Specify main and backup SMTP servers
-				$mail->SMTPAuth = true;                               // Enable SMTP authentication
-				$mail->Username = 'confirm@seatreg.com';                 // SMTP username
-				$mail->Password = 'mnK2tXMC';                           // SMTP password
-				$mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
-				$mail->Port = 465;                                    // TCP port to connect to
-				*/
-
-				/*
-				$mail->From = 'confirm@seatreg.com';
-				$mail->FromName = 'SeatReg.com';
-				//$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
-				$mail->addAddress($this->_email);               // Name is optional
-				//$mail->addReplyTo('info@example.com', 'Information');
-				//$mail->addCC('cc@example.com');
-				//$mail->addBCC('bcc@example.com');
-
-				$mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-				//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-				//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-				$mail->isHTML(true);                                  // Set email format to HTML
-
-				$mail->Subject = 'Booking confirmation';
-
-
-				$mail->Body  = 'Your selected seats are: <br/><br/>' . $seatsString . '
+				$message = 'Your selected seats are: <br/><br/>' . $seatsString . '
 							<p>Click on the link below to confirm your booking</p>
-							<a href="https://www.seatreg.com/email_conf.php?r='. $confCode.'" >https://www.seatreg.com/email_conf.php?r='. $confCode .'</a><br/>
-							(If you cant click then copy and paste it into your web browser)<br/><br/>After confirmation you can look your booking at<br> <a href="https://www.seatreg.com/booking_check.php?c='. $this->_viewCode.'&i='.$this->_bookingId.'" >https://www.seatreg.com/booking_check.php?c='. $this->_viewCode .'&i='.$this->_bookingId.'</a>';
+							<a href="' .  $confirmationURL .'" >'. $confirmationURL .'</a><br/>
+							(If you can\'t click then copy and paste it into your web browser)<br/><br/>After confirmation you can look your booking at<br> <a href="'. $bookingCheckURL .'" >'. $bookingCheckURL .'</a>';
 
-				$mail->AltBody = "Hi\r\nYour selected seats are:\r\n" . str_replace('<br/>', "\r\n", $seatsString) ."To confirm your email change please copy and paste the following link into your web browser\r\n https://www.seatreg.com/email_conf.php?r=$confCode\r\n";*/
+				$mailSent = wp_mail($this->_bookerEmail, 'Booking confirmation', $message, array(
+					"Content-type: text/html"
+				));
 
-				
-
-
-
-				/*if(!$mail->send()) {
-					$this->response->setError('We have encountered error ER-3 while performing your request');
-					
-				} else {
-
+				if($mailSent) {
 					$this->response->setText('mail');
-					
-				}*/
-
-
+				}else {
+					$this->response->setError('Oops.. the system encountered a problem while sending out confirmation email');
+				}
+				
 			}else {
 				$this->response->setText('bookings-confirmed');
-			}
-				
+			}	
 		}
 
 	}
