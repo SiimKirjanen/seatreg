@@ -25,14 +25,6 @@
 	    return size;
 	};
 
-	function supports_html5_storage() {
-	  try {
-	    return 'localStorage' in window && window['localStorage'] !== null;
-	  } catch (e) {
-	    return false;
-	  }
-	}
-
 	function Permissions() {
 		this.canDeleteBox = true;
 		this.canCreateBox = true;
