@@ -898,6 +898,51 @@ function seatreg_generate_tabs($targetPage) {
 	<?php
 }
 
+//echo out booking info and status
+function echoBooking($registrationCode, $bookingId) {
+	global $wpdb;
+	global $seatreg_db_table_names;
+
+	$registration = $wpdb->get_row( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg
+		WHERE registration_code = %s",
+		$registrationCode
+	) );
+
+	if($registration) {
+		$bookings = $wpdb->get_results( $wpdb->prepare(
+			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+			WHERE seatreg_code = %s
+			AND booking_id = %s",
+			$registrationCode,
+			$bookingId
+		) );
+
+		$options = $wpdb->get_row( $wpdb->prepare(
+			"SELECT payment_text FROM $seatreg_db_table_names->table_seatreg_options
+			WHERE seatreg_code = %s",
+			$registrationCode
+		) );
+
+		if(count($bookings) > 0) {
+			echo '<h4>', $registration->registration_name, '</h4>';
+			echo '<h4>Booking id: ', $bookingId,'</h4>';
+
+			foreach($bookings as $booking) {
+				echo 'Name: ', $booking->first_name, ' ', $booking->last_name , '<br>Seat: ', $booking->seat_nr, '<br>Room: ', $booking->room_name, '<br>Status: ', ($booking->status == 1) ? 'Pending' : 'Confirmed', '<br><br>';
+			}
+
+			if($options && $options->payment_text) {
+				echo '<h1>Payment info</h1>';
+				echo '<p>', htmlspecialchars($paymentText) ,'</p>';
+			}
+		}else {
+			echo 'Booking not found.';
+		}
+	}else {
+		echo 'Registration does not exist';
+	}
+}
 
 /*
 ======================================================================================================================================================
