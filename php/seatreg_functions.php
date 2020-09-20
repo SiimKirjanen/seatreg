@@ -463,13 +463,8 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="booking-notification"><?php _e('Booking notification', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Send me a notification when i get new booking', 'seatreg'); ?></p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="booking-notification" name="booking-notification" <?php echo $options[0]->notify_new_bookings == '1' ? 'checked':'' ?> >
-			      		<?php _e('Send notifications', 'seatreg'); ?>
-			    	</label>
-			  	</div>
+				<p class="help-block"><?php _e('Send a notification when you got new booking. Leave empty for no notification.', 'seatreg'); ?></p>
+				<input type="email" class="form-control" id="booking-notification" name="booking-notification" placeholder="Email" value="<?php echo $options[0]->notify_new_bookings; ?>">
 			</div>
 
 			<div class="form-group">
@@ -1159,7 +1154,7 @@ function seatreg_set_up_db() {
 	  registration_open tinyint(1) NOT NULL DEFAULT '1',
 	  use_pending tinyint(1) NOT NULL DEFAULT '1',
 	  registration_password varchar(40) DEFAULT NULL,
-	  notify_new_bookings tinyint(1) NOT NULL DEFAULT '0',
+	  notify_new_bookings varchar(255) DEFAULT NULL,
 	  show_bookings tinyint(1) NOT NULL DEFAULT '0',
 	  payment_text text DEFAULT NULL,
 	  info text DEFAULT NULL,
@@ -1522,12 +1517,6 @@ function seatreg_update() {
 		$_POST['use-pending'] = 1;
 	}
 
-	if(!isset($_POST['booking-notification'])) {
-		$_POST['booking-notification'] = '0';
-	}else {
-		$_POST['booking-notification'] = 1;
-	}
-
 	if(!isset($_POST['show-registration-bookings'])) {
 		$_POST['show-registration-bookings'] = '0';  
 	}else {
@@ -1544,7 +1533,7 @@ function seatreg_update() {
 			'registration_open' => $_POST['registration-status'],
 			'use_pending' => $_POST['use-pending'],
 			'registration_password' => $_POST['registration-password'] == '' ? null : $_POST['registration-password'],
-			'notify_new_bookings' => $_POST['booking-notification'],
+			'notify_new_bookings' => $_POST['booking-notification'] ? $_POST['booking-notification'] : null,
 			'show_bookings' => $_POST['show-registration-bookings'],
 			'payment_text' => $_POST['payment-instructions'] == '' ? null : $_POST['payment-instructions'],
 			'info' => $_POST['registration-info-text'],

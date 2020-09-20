@@ -19,7 +19,6 @@ class NewBooking extends Booking {
 	protected $_registrationPassword = null;  //registration password if set. null default
 	protected $_isRegistrationOpen = true;
 	protected $_bookindId;
-	protected $_sendNewBookingNotification = false; //send notification to registration owner that someone has booked a seat
 	protected $_registrationOwnerEmail;
 	protected $_maxSeats = 1;  //how many seats per booking can be booked
 	protected $_gmailNeeded = false;  //require gmail address from registrants
@@ -73,8 +72,8 @@ class NewBooking extends Booking {
 		$seatsString = $this->generateSeatString();
 		echo $seatsString;
 
-		if($this->_sendNewBookingNotification) {
-			sendBookingNotificationEmail($this->_registrationName, $seatsString);
+		if($this->_sendNewBookingNotificationEmail) {
+			sendBookingNotificationEmail($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
 		}
 	}
 

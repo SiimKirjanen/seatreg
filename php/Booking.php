@@ -4,6 +4,7 @@ class Booking {
 	protected $_requireBookingEmailConfirm = true;
 	protected $_insertState = 1;  //all bookings will have status = 1 (pending). if 2 then (confirmed)
 	protected $_registrationName;
+	protected $_sendNewBookingNotificationEmail = null; //send notification to that someone has booked a seat
 
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -160,7 +161,8 @@ class Booking {
 			b.registration_open, 
 			b.use_pending, 
 			b.notify_new_bookings,
-			b.booking_email_confirm 
+			b.booking_email_confirm,
+			b.registration_password 
 			FROM $seatreg_db_table_names->table_seatreg AS a 
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b 
 			ON a.registration_code = b.seatreg_code WHERE a.registration_code = %s",
@@ -189,14 +191,7 @@ class Booking {
         if($result->registration_password != null) {
 			$this->_registrationPassword = $result->registration_password;
         }
-        
-		if($result->notify_new_bookings == '1') {
-			$this->_sendNewBookingNotification = true;
-			/* TODO need to get email where to send notification about new booking */
-			/* $stmt = $db->prepare('SELECT email FROM users WHERE id = :id');
-			$stmt->execute(array(':id'=>$row['users_id']));
-			$row2 = $stmt->fetch(PDO::FETCH_ASSOC);
-			$this->_ownerEmail = $row2['email']; */
-		}
+		
+		$this->_sendNewBookingNotificationEmail = $result->notify_new_bookings;
 	}
 }

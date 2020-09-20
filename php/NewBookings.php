@@ -22,7 +22,6 @@ class NewBookings extends Booking {
 	protected $_isRegistrationOpen = true; //is registration open
 	protected $_bookingId; //id for booking
 	protected $_maxSeats = 1;  //how many seats per booking can be booked
-	protected $_sendNewBookingNotification = false; //send notification to that someone has booked a seat
 	
     public function __construct( $code, $resp){
     	$this->_registrationCode = $code;
@@ -163,6 +162,7 @@ class NewBookings extends Booking {
 			$confCode = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
 			$this->_bookingId = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
 			$registrationConfirmDate = null;
+			$seatsString = $this->generateSeatString();
 
 			if(!$this->_requireBookingEmailConfirm) {
 				$bookingStatus = $this->_insertState;
@@ -192,7 +192,6 @@ class NewBookings extends Booking {
 
 			if($this->_requireBookingEmailConfirm) {
 				$this->changeCaptcha(3);
-				$seatsString = $this->generateSeatString();
 				$confirmationURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_confirm.php?confirmation-code='. $confCode;
 				$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 
@@ -212,8 +211,8 @@ class NewBookings extends Booking {
 				}
 				
 			}else {
-				if($this->_sendNewBookingNotification) {
-					sendBookingNotificationEmail($this->_registrationName, $seatsString);
+				if($this->_sendNewBookingNotificationEmail) {
+					sendBookingNotificationEmail($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
 				}
 				
 				$this->response->setText('bookings-confirmed');
