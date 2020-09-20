@@ -7,7 +7,6 @@
 
 	$data = seatreg_get_options_reg($_GET['c'])[0];
 	$showPwdForm = false;
-	$isPremium = true;
 
 	if($data->registration_password != null ) {
 		//view password is set
@@ -177,7 +176,6 @@
 					</div>
 					<h3>Registration info</h3>
 					<?php
-
 						if($data->info != null) {
 							echo '<div>',htmlspecialchars($data->info),'</div><br>';
 						}
@@ -188,7 +186,6 @@
 						if($data->registration_end_timestamp != null) {
 							echo '<div><div class="flag2"></div>Registration end: <span class="time">', htmlspecialchars($data->registration_end_timestamp), '</span></div>';
 						}
-
 					?>
 					<div>Total rooms: <span class="total-rooms"></span></div>
 					<div>Total open seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-open"></span></div>
@@ -263,17 +260,14 @@
 		</div>
 
 		<div id="checkout-area" class="dialog-box">
-
 			<form id="checkoput-area-inner" class="dialog-box-inner border-box">
-
 				<div id="checkout-close" class="close-btn">
 					<div class="close-btn-bg"></div>
 					<i class="fa fa-times-circle"></i>
 				</div>
 				<div class="checkout-header">Checkout</div>
 				<div id="checkout-input-area"></div>
-				<div id="captchaWrap">
-					
+				<div id="captchaWrap">				
 					<label for="captcha-val" style="vertical-align:middle">
 						<span id="captcha-text">Enter code:</span>
 					</label>
@@ -282,21 +276,15 @@
 						<i class="fa fa-refresh"></i>
 					</div><br>
 					
-					<input type="text" id="captcha-val" name="capv" />
-				
+					<input type="text" id="captcha-val" name="capv" />				
 				</div>
-
 				<button type="submit" id="checkout-confirm-btn" class="seatreg-btn green-btn">OK</button>
-
 				<img src="css/ajax_loader.gif" alt="Loading" class="ajax-load">
 				<div id="request-error"></div>
-
 			</form>
-
 		</div>
 
 		<input type="hidden" name="pw" id="sub-pwd" value="<?php if(!empty($_POST['reg_pwd'])) {echo $_POST['reg_pwd'];} ?>" />
-
 
 		<div id="bottom-wrapper">
 			<div class="mobile-cart">
@@ -308,17 +296,13 @@
 				<div class="cart-icon-text">
 					<span class="seats-in-cart">0</span> in selection 
 					<span class="max-seats">Max 
-
 							<?php 
-
 								if($data->seats_at_once > 1) {
 									echo htmlspecialchars($data->seats_at_once),'<br>'; 
 								}else {
 									echo htmlspecialchars($data->seats_at_once),'<br>'; 
-								}
-							
+								}	
 							?>
-
 					</span>
 				</div>
 			</div>
@@ -349,12 +333,10 @@
 		</div>
 
 		<?php if($registrationTime == 'wait' || $registrationTime == 'end') : ?>
-
 				<div class="modal-bg"></div>
 
 				<div id="time-notify" class="dialog-box" style="display:block">
 					<div class="dialog-box-inner border-box">
-
 						<div id="close-time" class="close-btn">
 							<div class="close-btn-bg"></div>
 							<i class="fa fa-times-circle"></i>
@@ -362,7 +344,6 @@
 				
 						<?php
 							if($registrationTime == 'wait') {
-
 								echo '<h3>Not open yet</h3>';
 								echo '<h4>Registration starts: <span class="time">', htmlspecialchars($data->registration_start_timestamp), '</span></h4>';
 							}else if($registrationTime == 'end') {
@@ -370,7 +351,6 @@
 								echo '<h4>Registration ended: <span class="time">',htmlspecialchars($data->registration_end_timestamp), '</span></h4>';
 							}
 						?>
-
 					</div>
 				</div>
 
@@ -379,27 +359,19 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 		<script>
-
 			var is_JSON = true;
 
 			try {
-				
 				var seatLimit = <?php echo $data->seats_at_once;?>;
 				var gmail = <?php echo $data->gmail_required;?>;
 				var dataReg = $.parseJSON('<?php echo $data->registration_layout;?>');
 				var roomsInfo = $.parseJSON('<?php echo $seatsInfo;?>');
-				var custF = $.parseJSON('<?php  if($isPremium) {echo $data->custom_fields;} ?>')
+				var custF = $.parseJSON('<?php echo $data->custom_fields; ?>');
 				var regTime = <?php echo "'$registrationTime';";?>
 				var registrations = $.parseJSON(<?php echo "'$registrations'";?>);
-				
-
 			} catch(err) {
-
 				is_JSON = false;
 			}
-
-			console.log(registrations);
-
 		</script>
 
 		<script src="js/lang/view.lang.eng.js"></script>
@@ -408,24 +380,15 @@
 		<script src="js/jquery.powertip.js"></script>
 		<script src="js/view.js"></script>
 
-<!--
-		<script src="js/view.all.min.js"></script>
--->		
-
 		<?php endif; //end of is registration open ?>  
 
-
 	<?php else : ?>
-
 		<form method="post" id="pwd-form">
 			<h2 >Password protected</h2>
 			<label for="reg-pwd">Please enter password</label>
 			<input type="password" name="reg_pwd" id="reg-pwd" /><br><br>
 			<input type="submit" value="OK" />
-
-		</form>
-					
+		</form>			
 	<?php endif; ?>
-	
 </body>
 </html>
