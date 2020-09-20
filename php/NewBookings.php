@@ -5,6 +5,7 @@
 //===========
 
 require_once('Booking.php');
+require_once('emails.php');
 
 class NewBookings extends Booking {
 	public $response; //response object. 
@@ -21,7 +22,7 @@ class NewBookings extends Booking {
 	protected $_isRegistrationOpen = true; //is registration open
 	protected $_bookingId; //id for booking
 	protected $_maxSeats = 1;  //how many seats per booking can be booked
-	protected $_sendNewBookingNotification = false; //send notification to registration owner that someone has booked a seat
+	protected $_sendNewBookingNotification = false; //send notification to that someone has booked a seat
 	
     public function __construct( $code, $resp){
     	$this->_registrationCode = $code;
@@ -211,10 +212,13 @@ class NewBookings extends Booking {
 				}
 				
 			}else {
+				if($this->_sendNewBookingNotification) {
+					sendBookingNotificationEmail($this->_registrationName, $seatsString);
+				}
+				
 				$this->response->setText('bookings-confirmed');
 			}	
 		}
-
 	}
 
 	private function changeCaptcha($length) {		

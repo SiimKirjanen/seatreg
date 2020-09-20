@@ -5,13 +5,13 @@
 //===========
 
 require_once('Booking.php');
+require_once('emails.php');
 
 class NewBooking extends Booking {
 	public $reply;
 	protected $_valid = true;
 	protected $_confirmationCode;
 	protected $_bookings;
-    protected $_registrationName;
 	protected $_registrationLayout;
 	protected $_registrationCode;
 	protected $_registrationStartTimestamp;
@@ -74,10 +74,7 @@ class NewBooking extends Booking {
 		echo $seatsString;
 
 		if($this->_sendNewBookingNotification) {
-			/* $mail2->Subject = "$this->_registrationName has a new booking";
-			$mail2->Body = "Hello <br>This is a notification email telling you that $this->_registrationName has a new booking <br><br> $seatsString <br><br> You can disable booking notification in options if you don't want to receive them. ";
-			$mail2->AltBody = "Hello \r\n  this is a notification email telling you that $this->_registrationName has a new booking \r\n \r\n $seatsString \r\n \r\n You can disable booking notification in options if you don't want to receive them.";
-			$mail2->send(); */
+			sendBookingNotificationEmail($this->_registrationName, $seatsString);
 		}
 	}
 
