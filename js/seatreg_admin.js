@@ -1,12 +1,11 @@
 var Jquery_1_8_3 = jQuery.noConflict( true );
 
 (function($) {
-
 	var canvasSupport = ($('html').hasClass('no-canvas') ? false : true);
 	var bookingOrderInManager = null;
 		
-	console.log('jQuery version: ' + $.fn.jquery);
-	console.log('jQUery UI version ' + $.ui.version);
+	//console.log('jQuery version: ' + $.fn.jquery);
+	//console.log('jQUery UI version ' + $.ui.version);
 
 	window.seatreg = {
 		builder: null,
@@ -15,7 +14,6 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 	};
 
 	function seaterg_admin_ajax(action, code, data) {
-
 		return $.ajax({
 				url: ajaxurl,
 				type: 'POST',
@@ -27,10 +25,9 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 					data: data
 				}
 			});
-
 	}
-	function seaterg_admin_ajax2(action, code, data) {
 
+	function seaterg_admin_ajax2(action, code, data) {
 		return $.ajax({
 				url: ajaxurl,
 				type: 'POST',
@@ -41,23 +38,7 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 					data: data
 				}
 			});
-
 	}
-	function seaterg_admin_ajax3(action, code, data) {
-
-		return $.ajax({
-				url: ajaxurl,
-				type: 'GET',
-				data: {
-					action: action,
-					security: WP_Seatreg.nonce,
-					code: code,
-					data: data
-				}
-			});
-
-	}
-
 
 	function seatreg_edit_booking(action, code, editInfo ) {
 		return $.ajax({
@@ -77,7 +58,6 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 				}
 			});
 	}
-
 
 	function seatreg_admin_ajax_error(jqXHR, textStatus, errorThrown) {
 		console.log('error');
@@ -140,7 +120,6 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 $('.builder-popup-close').on('click', function() {
 
 	if( window.seatreg.builder.needToSave == true) {
-
 		alertify.set({ 
 			labels: {
 		    	ok     : myLanguage.getLang('ok'),
@@ -150,14 +129,11 @@ $('.builder-popup-close').on('click', function() {
 		});
 
 		alertify.confirm(myLanguage.getLang('unsavedChanges'),function(e) {
-
 			if (e) {
 				$('.seatreg-builder-popup').css({'display':'none'});
 				window.seatreg.builder.clearRegistrationData();
 			} 
-
 		});
-
 	}else {
 		$('.seatreg-builder-popup').css({'display':'none'});
 		seatreg_clear_builder_data();
@@ -172,11 +148,9 @@ $('#registration-start-timestamp').datepicker({
 	altFormat: '@',
 	dateFormat: 'dd.mm.yy'
 }).on('keyup', function() {
-
 	if($(this).val() == '') {
 		$('#start-timestamp').val('');
 	}
-
 });
 
 $('#registration-end-timestamp').datepicker({
@@ -184,28 +158,22 @@ $('#registration-end-timestamp').datepicker({
 	altFormat: '@',
 	dateFormat: 'dd.mm.yy'
 }).on('keyup', function() {
-
 	if($(this).val() == '') {
 		$('#end-timestamp').val('');
 	}
-
 });
 
 $('.datepicker-altfield').each(function() {
-	console.log('date');
 	if( $(this).val() != '' ) {
 		console.log('hey');
 		var date = new Date(parseInt( $(this).val() ));
 		var formattedDate = date.format("d.m.Y");
 		$(this).prev('.option-datepicker').val(formattedDate);
 	}
-
 });
 
 //add registration code to href in map builder
 $('#registration-link').on('click', function(e) {
-
-
 	var href = $(this).attr('href');
 	href = href.split('?')[0];  
 	
@@ -218,39 +186,26 @@ $('.tab-container').easytabs({
 	//updateHash: false
 }); 
 
-
 $('#existing-regs').on('click', '.room-list-item', function() {
-
 	var code = $('#seatreg-reg-code').val();
 	var target = $(this).attr('data-stats-target');
 	var scope = $(this);
 	var overViewContainer = $(this).closest('.reg-overview');
 	overViewContainer.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
 
-
 	var promise = seaterg_admin_ajax2('seatreg_get_room_stats', code, target);
 
 	promise.done(function(data) {
-
 		overViewContainer.html(data).promise().done(function() {
-
-			
-
 			overViewContainer.find('.time-stamp').each(function() {
-
-
 				if(myLanguage.getLang('language') == 'eng') {
-
 					if($(this).text() != 'Start date not set' && $(this).text() != 'End date not set') {
 						var date = new Date(parseInt($(this).text()));
-
 						$(this).text(date.format("d.M.Y H:i"));
 
 						//$(this).localTimeFromTimestamp('MM.dd.yyyy HH:mm');	
 					}
-
 				}else if(myLanguage.getLang('language') == 'et') {
-
 					if($(this).text() != 'Alguskuupäev määramata' && $(this).text() != 'Lõppkuupäev määramata') {
 						var date = new Date(parseInt($(this).text()));
 
@@ -258,18 +213,11 @@ $('#existing-regs').on('click', '.room-list-item', function() {
 
 						//$(this).localTimeFromTimestamp('MM.dd.yyyy HH:mm');	
 					}
-
 				}
-				
 			});
 
 			var donutWrapper = overViewContainer.find('.reg-overview-donuts');
-			overViewContainer.find('.ajax_loader').remove();
-			//console.log(donutWrapper);
-			//console.log('SeatTotal: ' + donutWrapper.find('.seats-total-don').val());
-			//console.log('BronTotal: ' + donutWrapper.find('.seats-bron-don').val());
-			//console.log('TakenTotal: ' + donutWrapper.find('.seats-taken-don').val());
-			
+			overViewContainer.find('.ajax_loader').remove();			
 			var doughnutData = [
 				{
 					value: parseInt(donutWrapper.find('.seats-total-don').val()),
@@ -295,12 +243,10 @@ $('#existing-regs').on('click', '.room-list-item', function() {
 		
 	});
 	promise.fail = seatreg_admin_ajax_error;
-
 });
 
 $('.reg-overview-donuts').each(function() {
 	var donutWrapper = $(this);
-
 	var doughnutData = [
 		{
 			value: parseInt(donutWrapper.find('.seats-total-don').val()),
@@ -321,10 +267,7 @@ $('.reg-overview-donuts').each(function() {
 		var ctx = donutWrapper.find('.stats-doughnut').get(0).getContext("2d");
 		var myNewChart = new Chart(ctx).Doughnut(doughnutData,{animation: false});
 	}			
-
 });
-
-
 
 /*
 ==================================================================================================================================================================================================================
@@ -332,25 +275,18 @@ Booking manager
 ==================================================================================================================================================================================================================
 */
 
-
-//order by
 $('#seatreg-booking-manager').on('click','.manager-box-link', function() {
-
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
 	var orderBy = $(this).attr('data-order');
 	bookingOrderInManager = orderBy;
-
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
 	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
-
 
 	var promise = seaterg_admin_ajax2('seatreg_get_booking_manager', code, {searchTerm: searchTerm, orderby: orderBy});
 
 	promise.done(function(data) {
-
 		wrapper.empty().html(data).promise().done(function() {
-
 			wrapper.find('.tab-container').easytabs({
 				animate: false,
 				animationSpeed: 0
@@ -370,67 +306,41 @@ $('#seatreg-booking-manager').on('click','.manager-box-link', function() {
 				}
 		
 			});
-
 		});
-
 	});
 	
 	promise.fail = seatreg_admin_ajax_error;
-
-
 });
-
 
 //remove input check from other option
 $('#seatreg-booking-manager').on('click', '.bron-action', function(e) {
-
 	var check = $(this);
-
 	var bookingId = check.closest('.reg-seat-item').find('.booking-identification').val();
-
 	check.closest('.action-select').find('.bron-action').not(check).prop('checked', false);
-
 	var confirmCheck = check.closest('.reg-seat-item').find('.bron-action[data-action=confirm]').is(':checked');
 	var delCheck = check.closest('.reg-seat-item').find('.bron-action[data-action=del]').is(':checked');
-	
-
-	//check.closest('.action-select').find('.bron-action').not(check).prop('checked', false);
-
-	//find if multi registration. same bookingId
-	
-	$(this).closest('.tab_container').find('.bron-action').not(check).each(function() {
-
 		
-
+	$(this).closest('.tab_container').find('.bron-action').not(check).each(function() {
 		if( $(this).closest('.reg-seat-item').find('.booking-identification').val() == bookingId ) {
-			console.log('leidsin multi reg!');
 			$(this).closest('.reg-seat-item').find('.bron-action[data-action=del]').prop('checked', delCheck);
 			$(this).closest('.reg-seat-item').find('.bron-action[data-action=confirm]').prop('checked', confirmCheck);
-
-			
 		}
-
 	});
-
 });
 
 $('#seatreg-booking-manager').on('click', '.show-more-info', function() {
 	$(this).parent().find('.more-info').slideToggle();
 });
 
-
 //when search bookings
 $('#seatreg-booking-manager').on('click', '.search-button', function(e) {
-
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
 	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
-
 	var promise = seaterg_admin_ajax2('seatreg_search_bookings', code, {searchTerm: searchTerm ,orderby: bookingOrderInManager});
 
 	promise.done(function(data) {
-
 		wrapper.empty().html(data).promise().done(function() {
 			wrapper.find('.tab-container').easytabs({
 				animate: false,
@@ -450,16 +360,11 @@ $('#seatreg-booking-manager').on('click', '.search-button', function(e) {
 				}
 
 			});
-
 		});
-
-
 	});
 
 	promise.fail = seatreg_admin_ajax_error;
-
 });
-
 
 //chen confirm or del bookings
 $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
@@ -467,24 +372,13 @@ $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
 	var data = [];
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
-	
-
-
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
-
-	//var sidePanel = button.parent().parent().parent().parent().parent();
 	
 	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
 	button.parent().find('.reg-seat-item').each(function() {
-		
-
 		$(this).find('.bron-action').each(function() {
-
 			if($(this).prop('checked')) {
-
 				if($(this).attr('data-action') == 'del') {
-					//console.log('want to delete ' + $(this).val());
-					//data.push([$(this).val(), 'del',]);
 					data.push({
 						booking_id: $(this).val(),
 						action: 'del',
@@ -492,8 +386,6 @@ $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
 						seat_nr: $(this).closest('.reg-seat-item').find('.seat-nr-box').text()
 					});
 				}else if($(this).attr('data-action') == 'confirm') {
-					//console.log('want to confirm ' + $(this).val());
-					//data.push([$(this).val(), 'conf']);
 					data.push({
 						booking_id: $(this).val(),
 						action: 'conf',
@@ -501,18 +393,13 @@ $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
 						seat_nr: $(this).closest('.reg-seat-item').find('.seat-nr-box').text()
 					});
 				}
-
 			}
-
 		});
-
 	});
-
 
 	var promise = seaterg_admin_ajax2('seatreg_confirm_del_bookings', code, {searchTerm: searchTerm ,orderby: bookingOrderInManager, actionData: JSON.stringify(data)});
 
 	promise.done(function(data) {
-
 		wrapper.empty().html(data).promise().done(function() {
 			wrapper.find('.tab-container').easytabs({
 				animate: false,
@@ -520,105 +407,78 @@ $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
 				//updateHash: false
 			});
 			wrapper.find('.time-string').each(function() {
-
 				if(myLanguage.getLang('language') == 'eng') {
-
 					//$(this).localTimeFromUTC('MM.dd.yyyy HH:mm');
 
 				}else if(myLanguage.getLang('language') == 'et') {
-
 					//$(this).localTimeFromUTC('dd.MM.yyyy HH:mm');
-
 				}
-
 			});
-
 		});
-
 	});
 
 	promise.fail = seatreg_admin_ajax_error;
-
 });
 
 //booking edit click. Show edit modal
 $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
-
 	var info = $(this).parent();
 	var modal = $('#edit-modal');
-
 	var modalCutsom = $('#modal-body-custom');
 	modalCutsom.empty();
-
 	modal.find('#edit-seat').val(info.find('.seat-nr-box').text());
 	modal.find('#edit-room').val(info.find('.seat-room-box').text());
 	modal.find('#edit-fname').val(info.find('.f-name').val());
 	modal.find('#edit-lname').val(info.find('.l-name').val());
-
 	modal.find('#modal-code').val($(this).attr('data-code'));
-
 	modal.find('#booking-id').val($(this).attr('data-booking'));
 	modal.find('#r-id').val($(this).attr('data-id'));
-
 	info.find('.custom-field').each(function() {
-		////console.log($(this).find('.custom-field-l'));
 		modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l">'+ $(this).find('.custom-field-l').text() +'<input type="text" class="modal-custom-v" value="'+ $(this).find('.custom-field-v').text() +'" /></label></div>');
 	});
 
 	$('#edit-room-error, #edit-seat-error').text('');
 	modal.modal('show');
-
 });
 
-
 $('#edit-update-btn').on('click', function() {
-	//append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
 	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'css/ajax_loader2.gif' + '" alt="Loading..." class="ajax-load" />');
 	var subBtn = $(this);
 	var modal = $('#edit-modal');
 	var customFields = [];
 	var code = $('#seatreg-reg-code').val();
-
-
 	var seat_number = modal.find('#edit-seat').val();
 	var seat_room = modal.find('#edit-room').val(); 
 	var first_name = modal.find('#edit-fname').val();
 	var last_name = modal.find('#edit-lname').val();
 
-	/*var data = [];
-	data.push({
-		edit_cust:customFields,
-		seat_nr: seat_number,
-		room_name: seat_ruum,
-		edit_f_name: first_name,
-		edit_l_name: last_name,
-		code: $('#modal-code').val(),
-		booking: $('#booking-id').val(),
-		id: $('#r-id').val()
-	});*/
-
 	$('#edit-room-error, #edit-seat-error').text('');
 	if(seat_number == '') {
 		$('#edit-seat-error').text('No seat');
 		subBtn.css('display','inline').next().css('display','none');
+
 		return;
 	}
 	if(seat_room == ''){
 		$('#edit-room-error').text('No room');
 		subBtn.css('display','inline').next().css('display','none');
+
 		return;
 	}
 
 	if(first_name == ''){
 		$('#edit-fname-error').text('First name empty');
 		subBtn.css('display','inline').next().css('display','none');
+
 		return;
 	}
 	if(last_name == ''){
 		$('#edit-lname-error').text('Last name empty');
 		subBtn.css('display','inline').next().css('display','none');
+
 		return;
 	}
+
 	modal.find('.modal-custom').each(function() {
 		var custObj = {};
 
@@ -630,9 +490,6 @@ $('#edit-update-btn').on('click', function() {
 		
 	});
 
-	//$('#booking-edit-form').serialize() + '&edit_cust=' + JSON.stringify(customFields) + '&code=' + $('#modal-code').val() + '&booking=' + $('#booking-id').val() + '&id=' + $('#r-id').val() 
-	//
-	//
 	editInfo = {
 		'firstName': first_name,
 		'lastName': last_name,
@@ -646,16 +503,10 @@ $('#edit-update-btn').on('click', function() {
 	var promise = seatreg_edit_booking('seatreg_edit_booking', code, editInfo);
 
 	promise.done(function(data) {
-
 		subBtn.css('display','inline').next().css('display','none');
-
-		console.log(data);
-
 		
 		if(data.status == 'updated') {
-
 			var bookingLoc = $('#r-id').val();
-
 			var bookingInfo = $('#seatreg-booking-manager .edit-btn[data-id="'+ bookingLoc +'"]').parent();
 			bookingInfo.find('.seat-nr-box').text(seat_number);
 			bookingInfo.find('.seat-room-box').text(seat_room);
@@ -663,35 +514,26 @@ $('#edit-update-btn').on('click', function() {
 			bookingInfo.find('.f-name').val(first_name);
 			bookingInfo.find('.l-name').val(last_name);
 
-
 			//correct custom fields
 			var a = customFields.length;
 			bookingInfo.find('.custom-field').each(function() {
 				var found = false;
 
 				for(var i = 0; i < a; i++) {
-					
 					if($(this).find('.custom-field-l').text() == customFields[i]['label']) {
 						found = true;
 						$(this).find('.custom-field-v').text(customFields[i]['value']);
 						break;
 					}
-
 				}
 
 				if(!found) {
 					$(this).find('.custom-field-v').text('Not set');
 				}
-
-
 			});
-
-
 			alertify.success("Booking updated");
 
 		}else {
-
-
 			if(data.status == 'room-searching') {
 				$('#edit-room-error').text('Room dose not exist');
 			}
@@ -704,14 +546,10 @@ $('#edit-update-btn').on('click', function() {
 			if(data.status == 'update failed') {
 				alert('Error updating booking');
 			}
-			
 		}
-
-
 	});
 
 	promise.fail = seatreg_admin_ajax_error;
-
 });
 
 //text, xlsx and pdf 
@@ -747,11 +585,7 @@ $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e)
 });
 
 /*Settings page custom fields functions*/
-
-
-
 $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
-
 		e.preventDefault();
 
 		var optionReq = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,30}$/;
@@ -759,35 +593,24 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 		var selectedSelect = $(this).closest('.cust-field-create').find('.custom-field-select').find(':selected').attr('data-type');
 		var existElems = $(this).closest('.user-custom-field-options').find('.existing-custom-fields');
 
-
-		console.log('labelElem: ' +  selectedSelect);
-
-
 		if(labelElem.val() == '') {
-			//console.log('Label value tyhi');
 			labelElem.focus();
 			return;
 		}
 		if(!optionReq.test(labelElem.val())) {
-			//console.log('Option value not accepted');
 			labelElem.focus();
 			return;
 		}
 
-
 		if(selectedSelect != 'select') {
 			seatreg_insert_custom_field(labelElem.val(), selectedSelect, [], existElems);
-			$(this).parent().find('.cust-input-label').val('');
-
-			//$(this).closest('.cust-field-create').accordion('activate', false );
-			
+			$(this).parent().find('.cust-input-label').val('');			
 		}else {
-
 			var cusOptions = $(this).closest('.user-custom-field-options').find('.existing-options').find('.option-value');
-			//console.log($(this).prev().find('.existing-options'));
+
 			if(cusOptions.length == 0) {
-				//console.log('Need options');
 				$(this).prev().find('.option-name').focus();
+
 				return;
 			}
 
@@ -801,33 +624,19 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 			$(this).parent().find('.existing-options').empty();
 				
 		}
-
-
 });
 
 function seatreg_insert_custom_field(label,type,options, placeToPut) {
-		/*
-		//console.log('Label= ' + label);
-		//console.log('Type= ' + type);
-		*/
-		//console.log(options);
-
-		
-
 		var containerDiv = $('<div class="custom-container"></div>');
 
 		if(type == 'field') {
-
 			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label><i class="fa fa-times-circle remove-cust-item"></i>'); 
 			containerDiv.attr('data-type','text').append(cusLabel);
-
 		}else if(type == 'checkbox') {
-
 			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="checkbox"/></label><i class="fa fa-times-circle remove-cust-item"></i>'); 
 			containerDiv.attr('data-type','check').append(cusLabel);
 
 		}else if(type == 'select') {
-
 			var lab = $('<label><span class="l-text">'+ label + '</span></label>'); 
 			var sel = $('<select></select>');
 			var arrlen = options.length;
@@ -838,49 +647,33 @@ function seatreg_insert_custom_field(label,type,options, placeToPut) {
 			var remBtn = '<i class="fa fa-times-circle remove-cust-item"></i>';
 			lab.append(sel,remBtn);
 			containerDiv.attr('data-type','sel').append(lab);
-
 		}	
-
 		placeToPut.append(containerDiv);
-
 }
 
 
 
 $('.seatreg_page_seatreg-options .custom-field-select').on('change', function() {
-	//console.log('change');
-	//console.log($(this));
-	
 	var createBox = $('.seatreg_page_seatreg-options .cust-field-create');
 
 	if($(this).find(":selected").attr('data-type') == 'field') {
 		createBox.find('.select-radio-create').css('display','none');
-
 	}else if($(this).find(":selected").attr('data-type') == 'checkbox') {
 		createBox.find('.select-radio-create').css('display','none');
-
 	}else if($(this).find(":selected").attr('data-type') == 'select') {
-		//console.log('Select selected');
-		//buildSelectRadioOptions(createBox, 'select');
 		createBox.find('.select-radio-create').css('display','block');
-
 	}
-
-
 });
 
 $('.seatreg_page_seatreg-options .add-select-option').on('click', function(e) {
-		////console.log('Add select option to select click');
 		e.preventDefault();
-
 		var optionReq = /^[0-9a-zA-ZÜÕÖÄüõöä\s-]{1,20}$/;
 
 		if($(this).prev().find('.option-name').val() == '') {
-			//console.log('Option value tyhi');
 			$(this).prev().focus();
+
 			return;
 		}
-
 
 		if(!optionReq.test($(this).prev().find('.option-name').val())) {
 			//console.log('Option value not accepted');
@@ -898,16 +691,12 @@ $('.seatreg_page_seatreg-options .add-select-option').on('click', function(e) {
 });
 
 
-$('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.remove-cust-item', function() {
-			
+$('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.remove-cust-item', function() {		
 	$(this).closest('.custom-container').remove();
-
 });
 
-$('.seatreg_page_seatreg-options .cust-field-create').on('click','.remove-cust-item', function() {
-			
+$('.seatreg_page_seatreg-options .cust-field-create').on('click','.remove-cust-item', function() {	
 	$(this).parent().remove();
-
 });
 
 function SeatregCustomField(label, type, options) {
@@ -918,47 +707,23 @@ function SeatregCustomField(label, type, options) {
 
 //when user submits seatreg settings. First generate #custom-fields hidden input value. 
 $('#seatreg-settings-submit').on('click', function(e) {
-			
-	//e.preventDefault();
-
 	var customFieldArray = [];  //array to store custom inputs
 
-
 	$('#seatreg-settings-form .custom-container').each(function() {
-
  			if($(this).attr('data-type') != 'sel') {
-
  				customFieldArray.push(new SeatregCustomField($(this).find('.l-text').text(), $(this).attr('data-type'), []));
-
  			}else {
-
  				var optArr = [];
 
- 				////console.log($(this).);
-
  				$(this).find('option').each(function() {
- 					//console.log('hey');
  					optArr.push($(this).text());
- 				});
-
+				 });
+				 
  				customFieldArray.push(new SeatregCustomField($(this).find('.l-text').text(), $(this).attr('data-type'), optArr));
-
- 			}
-
-
- 			
- 			
+ 			}	
  	}); 
-
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
-
- 	
-
 });
-
-//
-
-
 
 })(Jquery_1_8_3);
 
