@@ -5,6 +5,7 @@
 //===========
 
 require_once('/libs/PHPMailer/PHPMailerAutoload.php');
+require_once('./util/registration_time_status.php');
 
 class ViewData {
 	public $response; //response object
@@ -47,7 +48,6 @@ class ViewData {
         $this->response = $resp;
         $this->_email = $emailToSend;
         $this->_subPassword = $pw;
-        //$this->seatLoc = new stdClass();
       	$this->setUp();
 	}
 	
@@ -63,20 +63,8 @@ class ViewData {
     }
 
 	public function validateData() {
-
-
 		//Validation
 	
-		/*if( !$this->seatreg_validate_data() ) {
-			//print_r($this->data);
-
-			$this->response->setError( __('Validation error','seatreg') );
-			//
-			//
-			//$this->response->setError( json_encode($this->_data) );
-			return;
-		}*/
-
 		//1.step
 		$this->isSeperateSeats();
 
@@ -86,7 +74,6 @@ class ViewData {
 		}
 
 		//password check if needed
-
 		if($this->_regPassword != null) {
 			if($this->_regPassword != $this->_subPassword) {
 				//registration password and user submitted passwords are not the same
@@ -119,7 +106,7 @@ class ViewData {
 			return;
 		}
 
-		$registrationTime = $this->registrationTimeStatus($this->_startUnix, $this->_endUnix);
+		$registrationTime = registrationTimeStatus($this->_startUnix, $this->_endUnix);
 		if($registrationTime != 'run') {
 			$this->response->setError('Registration is not open (time)');
 			return;
@@ -224,26 +211,26 @@ class ViewData {
 			
 			if($searchStatus == 'room-searching') {
 				//did not find this room
-				//$this->response->setError('<h1>Room '. $this->_data[$i][1] . ' was not found</h1>');
 				$this->response->setError('Room ' . $this->_bookings[$i]->seatRoom . ' dose not exist anymore or has been renamed. Please refresh page and try again');
 				$allCorrect = false;
+
 				break;
 
 			}else if($searchStatus == 'seat-searching') {
 				//seat dose not exist
-				//$this->response->setError('id '. $this->_data[$i][0] . ' was not found');
 				$this->response->setError('Your selected seat/seats have been deleted or updated. Please refresh page and try again');
 				$allCorrect = false;
+
 				break;
 			}else if($searchStatus == 'seat-nr-check') {
-				//$this->response->setError('id '. $this->_data[$i][0] . ' number was not correct');
 				$this->response->setError('Your selected seat/seats have been deleted or updated. Please refresh page and try again');
 				$allCorrect = false;
+
 				break;
 			}else if($searchStatus == 'seat-taken') {
-				//$this->response->setError('id '. $this->_data[$i][0] . ' is not available');
 				$this->response->setError('Someone has managed to register seat ' . $this->_bookings[$i]->seatNr . ' in room ' . $this->_bookings[$i]->seatRoom . ' before you. Please refresh page and try again');
 				$allCorrect = false;
+
 				break;
 			}
 
@@ -254,7 +241,7 @@ class ViewData {
 		}
 	}
 
-	private function isAllSeatsOpen() {  //.
+	private function isAllSeatsOpen() {  
 		global $wpdb;
 		global $seatreg_db_table_names;
 
@@ -264,14 +251,9 @@ class ViewData {
 			WHERE seatreg_code = %s",
 			$this->_registriId
 		) );
-
-		/*$stmt = $db -> query("SELECT seat_id FROM registrations WHERE registry_id = $this->_registriId");
-		$rows = $stmt->fetchAll(PDO::FETCH_NUM);*/
-
 		$rowsLength = count($rows);
 		$statusReport = 'ok';
 
-		//echo '<pre>', print_r($rows), '</pre>';
 		for($i = 0; $i < $dataLength; $i++) {
 			for($j = 0; $j < $rowsLength; $j++) {
 				if(in_array($this->_bookings[$i]->seatId, $rows[$j])) {
@@ -289,22 +271,13 @@ class ViewData {
 		//send notification email to registration owen if this option is enabled.
 		if($this->_isValid) {
 			//insert registration data
-
 			global $wpdb;
 			global $seatreg_db_table_names;
 
-			/*$stmt = $db -> prepare('SELECT id FROM registry WHERE code = :code');
-			$stmt->execute(array(':code'=>$this->_viewCode));
-			$row = $stmt->fetch(PDO::FETCH_ASSOC); 
-			$regId = $row['id'];*/
-
 			$dataLength = count($this->_bookings);
 			$inserted = true;
-
 			$confCode = sha1(mt_rand(10000,99999).time().$this->_email);
 			$this->_bookingId = sha1(mt_rand(10000,99999).time().$this->_email);
-
-			//$this->response->setData( $this->_data[0][0] );
 				 
 			for($i = 0; $i < $dataLength; $i++) {
 				$wpdb->insert( 
@@ -323,70 +296,11 @@ class ViewData {
 					), 
 					'%s'	
 				);
-
 			}
 	
 			if($inserted) {
-
 				$this->response->setText('mail');
-
-				/*$this->changeCaptcha(3);
-
-				$seatsString = $this->generateSeatString();
-
-				$mail = new PHPMailer; //send confirm mail to client
-
-				//$mail->SMTPDebug = 3;                               // Enable verbose debug output
-
-
-				/*
-				$mail->isSMTP();                                      // Set mailer to use SMTP
-				$mail->Host = 'mail.veebimajutus.ee';  // Specify main and backup SMTP servers
-				$mail->SMTPAuth = true;                               // Enable SMTP authentication
-				$mail->Username = 'confirm@seatreg.com';                 // SMTP username
-				$mail->Password = 'mnK2tXMC';                           // SMTP password
-				$mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
-				$mail->Port = 465;                                    // TCP port to connect to
-				*/
-
-				/*
-				$mail->From = 'confirm@seatreg.com';
-				$mail->FromName = 'SeatReg.com';
-				//$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
-				$mail->addAddress($this->_email);               // Name is optional
-				//$mail->addReplyTo('info@example.com', 'Information');
-				//$mail->addCC('cc@example.com');
-				//$mail->addBCC('bcc@example.com');
-
-				$mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-				//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-				//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-				$mail->isHTML(true);                                  // Set email format to HTML
-
-				$mail->Subject = 'Booking confirmation';
-
-
-				$mail->Body  = 'Your selected seats are: <br/><br/>' . $seatsString . '
-							<p>Click on the link below to confirm your booking</p>
-							<a href="https://www.seatreg.com/email_conf.php?r='. $confCode.'" >https://www.seatreg.com/email_conf.php?r='. $confCode .'</a><br/>
-							(If you cant click then copy and paste it into your web browser)<br/><br/>After confirmation you can look your booking at<br> <a href="https://www.seatreg.com/booking_check.php?c='. $this->_viewCode.'&i='.$this->_bookingId.'" >https://www.seatreg.com/booking_check.php?c='. $this->_viewCode .'&i='.$this->_bookingId.'</a>';
-
-				$mail->AltBody = "Hi\r\nYour selected seats are:\r\n" . str_replace('<br/>', "\r\n", $seatsString) ."To confirm your email change please copy and paste the following link into your web browser\r\n https://www.seatreg.com/email_conf.php?r=$confCode\r\n";*/
-
-				
-
-
-
-				/*if(!$mail->send()) {
-					$this->response->setError('We have encountered error ER-3 while performing your request');
-					
-				} else {
-
-					$this->response->setText('mail');
-					
-				}*/
-
-
+				$this->changeCaptcha(3);
 			}	
 		}
 	}
@@ -428,7 +342,6 @@ class ViewData {
 
 	private function changeCaptcha($length) {
 		$chars = "abcdefghijklmnprstuvwzyx23456789";
-		//srand((double)microtime()* 1000000);
 		$str = "";
 		$i = 0;
 		
@@ -440,42 +353,5 @@ class ViewData {
 		}
 
 		$_SESSION['captcha'] = $str;
-	}
-
-	private function registrationTimeStatus($startUnix, $endUnix) {
-		$unix=round(microtime(true) * 1000);
-
-		if($startUnix == null && $endUnix == null) {
-			return 'run';
-		}
-
-		if($endUnix == null && $unix > $startUnix) {
-			return 'run';
-		}
-
-		if($endUnix == null && $unix < $startUnix) {
-			return 'wait';
-		}
-
-		if($startUnix == null && $unix < $endUnix) {
-			return 'run';
-		}
-
-		if($startUnix == null && $unix > $endUnix) {
-			return 'end';
-		}
-
-		if($startUnix < $unix && $endUnix > $unix) {
-			return 'run';
-		}
-
-		if($unix > $endUnix) {
-			return 'end';
-		}
-
-		if($startUnix > $unix) {
-			return 'wait';
-		}
-
 	}
 }

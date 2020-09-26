@@ -6,6 +6,7 @@
 
 require_once('Booking.php');
 require_once('emails.php');
+require_once('util/registration_time_status.php');
 
 class NewBookings extends Booking {
 	public $response; //response object. 
@@ -113,7 +114,7 @@ class NewBookings extends Booking {
 			return;
 		}
 
-		$registrationTime = $this->registrationTimeStatus($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
+		$registrationTime = registrationTimeStatus($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
 		if($registrationTime != 'run') {
 			$this->response->setError('Registration is not open (time)');
 			return;

@@ -3,6 +3,7 @@
 		exit();
 	}
 
+	require_once('./../php/util/registration_time_status.php');
 	require_once('php/reg_functions.php');
 
 	$data = seatreg_get_options_reg($_GET['c'])[0];
@@ -32,7 +33,7 @@
 			$registrations = json_encode(seatreg_get_registration_bookings_reg($_GET['c'], false));  //no names
 		}
 
-		$registrationTime = seatreg_registration_time_status_reg( $data->registration_start_timestamp,  $data->registration_end_timestamp );
+		$registrationTime = registrationTimeStatus( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 	}
 ?>
 <!DOCTYPE html>
