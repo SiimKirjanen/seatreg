@@ -4,7 +4,6 @@
 	/*data coming from registration view. Someone wants to book a seat*/
 //===========
 
-require_once('/libs/PHPMailer/PHPMailerAutoload.php');
 require_once('./util/registration_time_status.php');
 
 class ViewData {
