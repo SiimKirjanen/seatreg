@@ -5,6 +5,7 @@
 	right: 50px;
 	font-size: 30px;
 	cursor: pointer;
+	z-index: 1;
 }
 .seatreg-map-builder-page .seatreg-builder-popup {
 	display: none;
