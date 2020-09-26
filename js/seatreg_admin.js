@@ -13,6 +13,10 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 		bookings: []
 	};
 
+	$('.time-stamp').each(function() {
+		$(this).text(timeStampToDateString($(this).text()));
+	});
+
 	function seaterg_admin_ajax(action, code, data) {
 		return $.ajax({
 				url: ajaxurl,
@@ -71,6 +75,16 @@ var Jquery_1_8_3 = jQuery.noConflict( true );
 		window.seatreg.bookings = [];
 		window.seatreg.selectedRegistration = null;
 		window.seatreg.selectedRegistrationName = null;
+	}
+
+	function timeStampToDateString(timeStampText) {
+		if(!isNaN(timeStampText)) {
+			var date = new Date(parseInt(timeStampText));
+
+			return date.format("d.M.Y H:i");
+		}
+		
+		return timeStampText;
 	}
 
 	$('#create-registration-form').on('submit', function(e) {
@@ -198,22 +212,7 @@ $('#existing-regs').on('click', '.room-list-item', function() {
 	promise.done(function(data) {
 		overViewContainer.html(data).promise().done(function() {
 			overViewContainer.find('.time-stamp').each(function() {
-				if(myLanguage.getLang('language') == 'eng') {
-					if($(this).text() != 'Start date not set' && $(this).text() != 'End date not set') {
-						var date = new Date(parseInt($(this).text()));
-						$(this).text(date.format("d.M.Y H:i"));
-
-						//$(this).localTimeFromTimestamp('MM.dd.yyyy HH:mm');	
-					}
-				}else if(myLanguage.getLang('language') == 'et') {
-					if($(this).text() != 'Alguskuupäev määramata' && $(this).text() != 'Lõppkuupäev määramata') {
-						var date = new Date(parseInt($(this).text()));
-
-						$(this).text(date.format("d.m.Y H:i"));
-
-						//$(this).localTimeFromTimestamp('MM.dd.yyyy HH:mm');	
-					}
-				}
+				$(this).text(timeStampToDateString($(this).text()));
 			});
 
 			var donutWrapper = overViewContainer.find('.reg-overview-donuts');
