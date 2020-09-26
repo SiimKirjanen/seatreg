@@ -4,13 +4,10 @@
 ================================
 registration functions
 ================================
-
 */
-//define( 'SHORTINIT', true );
 
 require_once '../../../../wp-load.php';
 require_once '../php/JsonResponse.php';
-
 
 global $wpdb;
 global $seatreg_db_table_names;
@@ -20,10 +17,7 @@ $seatreg_db_table_names->table_seatreg = $wpdb->prefix . "seatreg";
 $seatreg_db_table_names->table_seatreg_options = $wpdb->prefix . "seatreg_options";
 $seatreg_db_table_names->table_seatreg_bookings = $wpdb->prefix . "seatreg_bookings";
 
-
-
 function seatreg_stats_for_registration_reg($structure, $code) {
-
 	global $wpdb;
 	global $seatreg_db_table_names;
 
@@ -47,16 +41,13 @@ function seatreg_stats_for_registration_reg($structure, $code) {
 		$code
 	) );
 
-
 	$statsArray =  getSeatsStats($structure, $bookings, $bookings2);
-	return $statsArray;
-	
-	
+
+	return $statsArray;	
 }
 
 //get info of seats. how many, open, bron... in each room and total info
 function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
-	
 	$bronLength = count($bronRegistrations);
 	$takenLength = count($takenRegistrations);
 	$regStructure = json_decode($struct);
@@ -70,13 +61,8 @@ function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 	$roomsInfo = array();
 
 	for($i = 0; $i < $roomCount; $i++) {
-		//print_r($regStructure[$i]->boxes);
 		$roomBoxes = $regStructure[$i]->boxes;
-
 		//find how many bron seats in this room
-
-
-
 		$roomBoxCount = count($roomBoxes);
 		$roomRegSeats = 0;  //how many reg seats
 		$roomOpenSeats = 0; //how many open reg seats
@@ -84,45 +70,30 @@ function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 		$roomBronSeats = 0;	//bron seats
 		$roomCustomBoxes = 0;
 
-
 		for($k = 0; $k < $bronLength; $k++) {  
-
 			if( $regStructure[$i]->room[1] == $bronRegistrations[$k]->room_name ) { //find how many bron seats in this room
-
 				$roomBronSeats = $bronRegistrations[$k]->total;
-				//$roomBronSeats++;
 				$howManyBronSeats += $bronRegistrations[$k]->total;
-				//$howManyBronSeats++;
 
 				break;
 			}
-
 		}
 
 		for($k = 0; $k < $takenLength; $k++) {
-
 			if($regStructure[$i]->room[1] == $takenRegistrations[$k]->room_name) { //find how many taken seats in this room
 				$roomTakenSeats = $takenRegistrations[$k]->total;
 				$howManyTakenSeats += $takenRegistrations[$k]->total;
+
 				break;
 			}
-
 		}
 		
-
 		for($j = 0; $j < $roomBoxCount; $j++) {
-
-			//print_r($roomBoxes[$j]);
-
 			if($roomBoxes[$j][8] == 'true') {
-				
 				if($roomBoxes[$j][10] == 'noStatus') {
-
 					$howManyOpenSeats++;
 					$roomOpenSeats++;
-
 				}
-				
 
 				$howManyRegSeats++;
 				$roomRegSeats++;
@@ -130,7 +101,6 @@ function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 				$howManyCustomBoxes++;
 				$roomCustomBoxes++;
 			}
-			
 		}
 
 		$roomsInfo[] = array(
@@ -141,8 +111,6 @@ function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 			'roomBronSeats' => $roomBronSeats,
 			'roomCustomBoxes' => $roomCustomBoxes
 		);
-
-
 	}
 
 	$statsArray['seatsTotal'] = $howManyRegSeats;
@@ -152,13 +120,11 @@ function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 	$statsArray['roomCount'] = $roomCount;
 	$statsArray['roomsInfo'] = $roomsInfo;
 
-	//
 	return $statsArray;
 }
 
-
 function seatreg_registration_time_status_reg($startUnix, $endUnix) {
-	$unix=round(microtime(true) * 1000);
+	$unix = round(microtime(true) * 1000);
 
 	if($startUnix == null && $endUnix == null) {
 		return 'run';
@@ -191,17 +157,13 @@ function seatreg_registration_time_status_reg($startUnix, $endUnix) {
 	if($startUnix > $unix) {
 		return 'wait';
 	}
-
 }
 
-
 function seatreg_get_registration_bookings_reg($code, $show_bookings) {
-
 	global $wpdb;
 	global $seatreg_db_table_names;
 
 	if($show_bookings == 1) {
-
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT seat_id, room_name, status, CONCAT(first_name, ' ', last_name) AS reg_name
 			FROM $seatreg_db_table_names->table_seatreg_bookings
@@ -209,9 +171,7 @@ function seatreg_get_registration_bookings_reg($code, $show_bookings) {
 			AND (status = '1' OR status = '2')",
 			$code
 		) );
-
 	}else {
-
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT seat_id, room_name, status 
 			FROM $seatreg_db_table_names->table_seatreg_bookings
@@ -219,10 +179,7 @@ function seatreg_get_registration_bookings_reg($code, $show_bookings) {
 			AND (status = '1' OR status = '2')",
 			$code
 		) );
-		
 	}
-
-	
 
 	return $bookings;
 }
@@ -252,7 +209,6 @@ function seatreg_get_options_reg($code) {
 	}
 
 	return $options;
-
 }
 
 function registrationTimeStatus($startUnix, $endUnix) {
@@ -290,43 +246,3 @@ function registrationTimeStatus($startUnix, $endUnix) {
 		return 'wait';
 	}
 }
-
-
-/*
-===========================================
-Ajax stuff
-===========================================
-*/
-
-
-
-	
-
-	//echo 'tere tere';
-	//die();
-
-	/*if($_SESSION['seatreg_captcha'] == $_POST['capv']){
-
-		$data = json_decode($_POST['pack']);
-		$newData = new ViewData($data,$_POST['v'], $resp, $_POST['em'], $_POST['pw']);
-		$newData->validateData();
-
-	}else{
-
-	    $r = randomString(10);
-	    
-	    $resp->setError('Wrong captcha');
-	    $resp->setData('<img src="php/image.php?dummy='.$r.'" id="captcha-img"/>');
-	    
-	}*/
-
-//}
-
-/*if( function_exists('add_action') ) {
-	echo '<h1>Function olemas</h1>';
-}else {
-	echo '<h1>Function ei ole olemas</h1>';
-}*/
-
-
-
