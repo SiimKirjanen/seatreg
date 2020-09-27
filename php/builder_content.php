@@ -113,7 +113,7 @@
 			<div class="modal-body">
 			<div class="hover-dialog-info"></div>
 			<label for="box-hover-text"><?php _e('Enter text', 'seatreg');?></label><br>
-			<textarea id="box-hover-text" rows="4" cols="26" maxlength="150"></textarea>
+			<textarea id="box-hover-text" rows="4" cols="26"></textarea>
 			<div><?php _e('Leave field empty to remove existing hover text', 'seatreg');?></div>
 			</div>
 			<div class="modal-footer">
@@ -204,7 +204,7 @@
 					</label>
 
 				</div>
-				<input type="text" id="new-legend-text" maxlength="20" class="form-control"><br>
+				<input type="text" id="new-legend-text" class="form-control"><br>
 				<span id="new-legend-text-rem"></span><br>
 				<div class="next-step step-btn" data-slide="1" data-slide-open="2"><?php _e('Step 2.', 'seatreg');?>  <span class="glyphicon glyphicon-arrow-right"></span></div>
 			</div>

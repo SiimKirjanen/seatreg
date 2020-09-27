@@ -1931,7 +1931,8 @@ body {
 	.legend-div {
 		display: block;
 		margin-right: 0px;
-		text-align: left
+		text-align: left;
+		max-width: 200px;
 	}
 
 	.big-display-btn {

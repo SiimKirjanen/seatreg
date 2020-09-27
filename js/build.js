@@ -2300,33 +2300,22 @@
 			},1000,"easeOutCubic");
 
 		}else if(nextSlide == 2) { //step 2
-			if(currentSlide == 1) {  //step 1 open
-				var reqExprLegendtext = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,20}$/;
-				
-				if(reqExprLegendtext.test($('#new-legend-text').val())) {
-
+			if(currentSlide == 1) {  //step 1 open				
+				if($('#new-legend-text').val() !== "") {
 					if(!reg.legendNameExists($('#new-legend-text').val())) {
-
 						$('#legend-creator .legend-dialog-slide').animate({
-						height: "300px"
+							height: "300px"
 						},1000, "easeOutCubic");
-
 						$('#legend-creator').animate({
 							marginLeft: "-=500px"
 						},1000,"easeOutCubic");
-
 					}else {
 						$('#new-legend-text-rem').html('<span style="color:red">'+ myLanguage.getLang('legendNameTaken') +'</span>');
 					}
-				
-				}else if ($('#new-legend-text').val() == "") {
-					$('#new-legend-text-rem').html('<span style="color:red">' + myLanguage.getLang('lagendNameMissing') + '</span>');
 				}else {
-					$('#new-legend-text-rem').html('<div style="color:red">'+ myLanguage.getLang('illegalCharactersDetec') +'</div>');
+					$('#new-legend-text-rem').html('<span style="color:red">' + myLanguage.getLang('lagendNameMissing') + '</span>');
 				}
-
 			}else if(currentSlide == 3) { //step 3 open
-
 				$('#legend-creator .legend-dialog-slide').animate({
 						height: "300px"
 				},1000, "easeOutCubic");
@@ -2335,7 +2324,6 @@
 					marginLeft: "+=500px"
 				},1000,"easeOutCubic");
 			}
-
 		}else if(nextSlide == 3) { //step 3
 			$('#legend-creator .legend-dialog-slide').animate({
 						height: "160px"
@@ -2456,36 +2444,33 @@
 	
 	$('#create-new-legend').on('click', function() {
 		if($('#new-legend-text').val() != '') {
-			var reqExprLegendtext = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,20}$/;
+			var added = reg.addLegendBox($('#new-legend-text').val(), $('#hiddenColor').val());
 
-			if(reqExprLegendtext.test($('#new-legend-text').val())) {
-				var added = reg.addLegendBox($('#new-legend-text').val(), $('#hiddenColor').val());
+			if(added) {
+				$('.legend-dialog-info-legend').remove();
+				var showInfo = cahngeLegendDialogMessage(); 
 
-				if(added) {
-					$('.legend-dialog-info-legend').remove();
-					var showInfo = cahngeLegendDialogMessage(); 
+				if(showInfo) {
+					$('.legend-dialog-info').css('display','block');
+				}else {
+					$('.legend-dialog-info').css('display','none');
+				}
 
-					if(showInfo) {
-						$('.legend-dialog-info').css('display','block');
+				$('#legend-creator').slideUp(400, function() {
+					cleanUpLegendDialog();
+
+					if($('html').hasClass('cssanimations')) {
+						$('#toggle-lcreator').addClass('change-btn-to-green green-toggle').removeClass('change-btn-to-red red-toggle');
+						$('#toggle-lcreator').text('Create new legen');
 					}else {
-						$('.legend-dialog-info').css('display','none');
+						$('#toggle-lcreator').addClass('green-toggle').removeClass('red-toggle').text(myLanguage.getLang('createLegend'));
 					}
 
-					$('#legend-creator').slideUp(400, function() {
-						cleanUpLegendDialog();
-
-						if($('html').hasClass('cssanimations')) {
-							$('#toggle-lcreator').addClass('change-btn-to-green green-toggle').removeClass('change-btn-to-red red-toggle');
-							$('#toggle-lcreator').text('Create new legen');
-						}else {
-							$('#toggle-lcreator').addClass('green-toggle').removeClass('red-toggle').text(myLanguage.getLang('createLegend'));
-						}
-
-						$('.legend-dialog-commands').css('display','block');
-						$('.legend-dialog-upper').slideDown();
-					});
-				}
+					$('.legend-dialog-commands').css('display','block');
+					$('.legend-dialog-upper').slideDown();
+				});
 			}
+			
 		}else {
 			$('#new-legend-text').addClass('input-focus').focus();
 			$('#new-legend-text-rem').text(myLanguage.getLang('missingName'));
@@ -2866,44 +2851,12 @@
 		html: true
 		
 	});
-
-	function updateCountdown(target) {
-		var reqExprLegendtext = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,20}$/;
-
-		switch(target) {
-			case 'legendName':
-				var remaining = 20 - $('#new-legend-text').val().length;
-				$('#new-legend-text-rem').text(remaining + myLanguage.getLang('_charRemaining'));
-
-				if(!reqExprLegendtext.test($('#new-legend-text').val()) && $('#new-legend-text').val() != "") {
-					$('#new-legend-text-rem').html('<div style="color:red">'+ myLanguage.getLang('illegalCharactersDetec') +'</div>');
-				}
-
-				break;
-		}
-	}
-    
+	    
     $('#room-name-dialog-input').keyup(function(e) {		
     	if (e.which == 13) {
 			$(this).blur();
 			$('#room-dialog-ok').click();
     	}
-    });
-
-    $('#box-hover-text').change(function() {
-    	updateCountdown('hoverText');
-	});
-	
-    $('#box-hover-text').keyup(function() {
-    	updateCountdown('hoverText');
-    });
-
-    $('#new-legend-text').change(function() {
-    	updateCountdown('legendName');
-	});
-	
-    $('#new-legend-text').keyup(function() {
-    	updateCountdown('legendName');
     });
 
     $('.save-check').on('click', function(event) {

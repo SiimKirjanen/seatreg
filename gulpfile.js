@@ -29,11 +29,11 @@ gulp.task('build-scripts', function() {
 }); 
 
 gulp.task('registration-styles', function() {
-	gulp.src(['css/font-awesome.min.css', 'css/view3.css', 'css/jquery.powertip.css'])
+	gulp.src(['reg/css/font-awesome.min.css', 'reg/css/view3.css', 'reg/css/jquery.powertip.css'])
 		.on('error', console.error.bind(console))
 		.pipe(concat('view.all.min.css'))
 		.pipe(minifyCSS())
-		.pipe(gulp.dest('css/'))
+		.pipe(gulp.dest('reg/css/'))
 		.pipe(reload({stream: true}));	
 });
 
