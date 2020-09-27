@@ -1,4 +1,5 @@
 node_modules
 .vscode
 uploads
+# https://stackoverflow.com/questions/33711910/tfpdf-cant-open-file-c-webprojects-www-diners-font-unifont-dejavusanscondense/37549271#37549271
 php/libs/tfpdf/font/unifont/dejavusanscondensed.mtx.php
