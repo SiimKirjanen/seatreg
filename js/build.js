@@ -2732,13 +2732,6 @@
 		reg.checkBubbles();
 		reg.changeHelperText();
 
-		var reqExpr = /^[0-9a-zA-ZÜÕÖÄüõöä,!?\s]{0,150}$/;
-
-		if(!reqExpr.test($('#box-hover-text').val())) {
-
-			return;
-		}
-
 		if(reg.activeBoxArray.length > 0) {
 			var hoverValue = $('#box-hover-text').val().replace(/\n|\r/g, '<br>');; //.replace(/\n|\r/g, '<br>'); //&lt;br/&gt; 
 
@@ -2875,19 +2868,9 @@
 	});
 
 	function updateCountdown(target) {
-		var reqExprHovertext = /^[0-9a-zA-ZÜÕÖÄüõöä,!?\s]{0,150}$/;
 		var reqExprLegendtext = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,20}$/;
-		
+
 		switch(target) {
-			case 'hoverText':
-				var remaining = 150 - $('#box-hover-text').val().length;
-				$('.box-hover-char-rem').text(remaining +  myLanguage.getLang('_charRemaining'));
-
-				if(!reqExprHovertext.test($('#box-hover-text').val())) {
-					$('.box-hover-char-rem').html('<span style="color:red">'+ myLanguage.getLang('illegalCharactersDetec') +'</span>');
-				}
-
-				break;
 			case 'legendName':
 				var remaining = 20 - $('#new-legend-text').val().length;
 				$('#new-legend-text-rem').text(remaining + myLanguage.getLang('_charRemaining'));
@@ -2899,7 +2882,6 @@
 				break;
 		}
 	}
-
     
     $('#room-name-dialog-input').keyup(function(e) {		
     	if (e.which == 13) {

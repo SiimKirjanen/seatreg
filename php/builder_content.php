@@ -114,7 +114,6 @@
 			<div class="hover-dialog-info"></div>
 			<label for="box-hover-text"><?php _e('Enter text', 'seatreg');?></label><br>
 			<textarea id="box-hover-text" rows="4" cols="26" maxlength="150"></textarea>
-			<div class="box-hover-char-rem"></div>
 			<div><?php _e('Leave field empty to remove existing hover text', 'seatreg');?></div>
 			</div>
 			<div class="modal-footer">
@@ -294,12 +293,9 @@
 			<h4 class="modal-title" id="myModalLabel"><?php _e('Room name', 'seatreg');?></h4>
 			</div>
 			<div class="modal-body">
-
 			<label for="room-name-dialog-input"><?php _e('Enter room name:', 'seatreg');?> </label>
 			<input type="text" id="room-name-dialog-input">
-			<div class="room-name-char-rem"></div>
 			<div class="room-name-error"></div>
-		
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'seatreg');?></button>
