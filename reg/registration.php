@@ -82,7 +82,15 @@
 	<?php if(!$showPwdForm) : ?>
 		<?php if($data->registration_open == 0) : ?>
 	    	<div id="center-wrap">
-				<h2 class="center-header">Registration <?php echo htmlspecialchars($data->registration_name); ?> is closed at the moment</h2>
+				<h2 class="center-header">
+					<?php
+						printf(
+							/* translators: %s: Name of the registration */
+							__( 'Registration %s is closed at the moment', 'seatreg' ),
+							$data->registration_name
+						);
+					?>
+				</h2>
 	    	</div>
 		<?php else : ?>
 
@@ -107,7 +115,9 @@
 
 				<div id="room-nav-btn-wrap" class="border-box">
 					<div id="current-room-name"></div>
-					<div id="room-nav-btn">Change room</div>
+					<div id="room-nav-btn">
+						<?php _e('Change room', 'seatreg'); ?>
+					</div>
 					<div class="room-nav-extra-info-btn">
 						<i class="fa fa-info-circle"></i>
 					</div>
@@ -136,9 +146,10 @@
 							<div class="cart-icon-box-2"></div>
 							<div class="cart-icon-box-3"></div>
 						</div>
-						<div id="cart-text"><span class="seats-in-cart">0</span> <?php //echo htmlspecialchars($data['spot_name']); ?> in selection
-							<div class="max-seats">Max 
+						<div id="cart-text"><span class="seats-in-cart">0</span> <?php _e('in selection', 'seatreg'); ?> 
+							<div class="max-seats">
 								<?php 
+									_e('Max', 'seatreg');
 									if($data->seats_at_once > 1) {
 										echo htmlspecialchars( $data->seats_at_once ),'<br>'; 
 									}else {
@@ -150,7 +161,11 @@
 					</div>
 
 					<div class="seat-cart-right">
-						<div id="cart-checkout-btn" class="border-box">Open</div>
+						<div id="cart-checkout-btn" class="border-box">
+							<?php 
+								_e('Open', 'seatreg');
+							?>
+						</div>
 					</div>
 				</div>
 
@@ -175,23 +190,60 @@
 						<div class="close-btn-bg"></div>
 						<i class="fa fa-times-circle"></i>
 					</div>
-					<h3>Registration info</h3>
+					<h3>
+						<?php 
+							_e('Registration info', 'seatreg');
+						?>
+					</h3>
 					<?php
 						if($data->info != null) {
 							echo '<div>',htmlspecialchars($data->info),'</div><br>';
 						}
 
 						if($data->registration_start_timestamp != null) {
-							echo '<div><div class="flag1"></div>Registration start: <span class="time">', htmlspecialchars($data->registration_start_timestamp), '</span></div>';
+							?>
+								<div>
+									<div class="flag1"></div>
+									<?php 
+										_e('Registration start', 'seatreg');
+									?>
+									<span class="time">
+										<?php
+											htmlspecialchars($data->registration_start_timestamp);
+										?>
+									</span>
+								</div>
+							<?php
 						}
+
 						if($data->registration_end_timestamp != null) {
-							echo '<div><div class="flag2"></div>Registration end: <span class="time">', htmlspecialchars($data->registration_end_timestamp), '</span></div>';
+							?>
+								<div>
+									<div class="flag2"></div>
+									<?php 
+										_e('Registration end', 'seatreg');
+									?>
+									<span class="time">
+										<?php
+											htmlspecialchars($data->registration_end_timestamp);
+										?>
+									</span>
+								</div>
+							<?php
 						}
 					?>
-					<div>Total rooms: <span class="total-rooms"></span></div>
-					<div>Total open seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-open"></span></div>
-					<div>Total pending seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-bron"></span></div>
-					<div>Total confirmed seats <?php //htmlspecialchars($data['spot_name']); ?>: <span class="total-tak"></span></div>
+					<div>
+						<?php _e('Total rooms', 'seatreg'); ?>: <span class="total-rooms"></span>
+					</div>
+					<div>
+						<?php _e('Total open seats', 'seatreg'); ?>: <span class="total-open"></span>
+					</div>
+					<div>
+						<?php _e('Total pending seats', 'seatreg'); ?>: <span class="total-bron"></span>
+					</div>
+					<div>
+						<?php _e('Total confirmed seats', 'seatreg'); ?>: <span class="total-tak"></span>
+					</div>
 				</div>
 			</div>
 		<?php endif; ?>
@@ -205,7 +257,11 @@
 					<i class="fa fa-times-circle"></i>
 				</div>
 				
-				<h2>Legends</h2>
+				<h2>
+					<?php
+						_e('Legends', 'seatreg');
+					?>
+				</h2>
 				<div class="legend-popup-legends">
 				</div>
 			</div>
@@ -226,8 +282,16 @@
 				<?php if($registrationTime == 'run') : ?>
 
 					<div id="confirm-dialog-bottom">
-						<div id="confirm-dialog-mob-ok" class="seatreg-btn green-btn">Add to selection</div>
-						<div id="confirm-dialog-mob-cancel" class="seatreg-btn red-btn">Close</div>
+						<div id="confirm-dialog-mob-ok" class="seatreg-btn green-btn">
+							<?php 
+								_e('Add to selection', 'seatreg');
+							?>
+						</div>
+						<div id="confirm-dialog-mob-cancel" class="seatreg-btn red-btn">
+							<?php 
+								_e('Close', 'seatreg');
+							?>
+						</div>
 					</div>
 
 				<?php endif; ?>
@@ -246,16 +310,32 @@
 					<i class="fa fa-times-circle"></i>
 				</div>
 
-				<div id="seat-cart-info"><?php //htmlspecialchars($data->spot_name); ?> Cart</div>
+				<div id="seat-cart-info">
+					<?php 
+						_e('Cart', 'seatreg');
+					?>
+				</div>
 				<?php if($registrationTime == 'run') : ?>
 					<div id="seat-cart-rows">
-						<div class="row-nr">NR</div>
-						<div class="row-room">Room</div>
+						<div class="row-nr">
+							<?php
+								_e('NR', 'seatreg');
+							?>
+						</div>
+						<div class="row-room">
+							<?php 
+								_e('Room', 'seatreg');
+							?>
+						</div>
 					</div>
 					
 					<div id="seat-cart-items"></div>
 					
-					<div id="checkout" class="seatreg-btn green-btn">Checkout</div>
+					<div id="checkout" class="seatreg-btn green-btn">
+						<?php
+							_e('Checkout', 'seatreg');
+						?>
+					</div>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -266,11 +346,19 @@
 					<div class="close-btn-bg"></div>
 					<i class="fa fa-times-circle"></i>
 				</div>
-				<div class="checkout-header">Checkout</div>
+				<div class="checkout-header">
+					<?php
+						_e('Checkout', 'seatreg');
+					?>
+				</div>
 				<div id="checkout-input-area"></div>
 				<div id="captchaWrap">				
 					<label for="captcha-val" style="vertical-align:middle">
-						<span id="captcha-text">Enter code:</span>
+						<span id="captcha-text">
+							<?php
+								_e('Enter code', 'seatreg');
+							?>:
+						</span>
 					</label>
 					<img src="php/image.php" id="captcha-img" alt="captcha image"/>
 					<div id="captcha-ref" class="refresh1">
@@ -279,7 +367,11 @@
 					
 					<input type="text" id="captcha-val" name="capv" />				
 				</div>
-				<button type="submit" id="checkout-confirm-btn" class="seatreg-btn green-btn">OK</button>
+				<button type="submit" id="checkout-confirm-btn" class="seatreg-btn green-btn">
+					<?php 
+						_e('OK', 'seatreg');
+					?>
+				</button>
 				<img src="css/ajax_loader.gif" alt="Loading" class="ajax-load">
 				<div id="request-error"></div>
 			</form>
@@ -295,41 +387,79 @@
 					<div class="cart-icon-box-3"></div>
 				</div>
 				<div class="cart-icon-text">
-					<span class="seats-in-cart">0</span> in selection 
-					<span class="max-seats">Max 
-							<?php 
-								if($data->seats_at_once > 1) {
-									echo htmlspecialchars($data->seats_at_once),'<br>'; 
-								}else {
-									echo htmlspecialchars($data->seats_at_once),'<br>'; 
-								}	
-							?>
+					<span class="seats-in-cart">0</span> 
+					<?php 
+						_e('in selection', 'seatreg');
+					?>
+					<span class="max-seats">
+						<?php
+							_e('Max', 'seatreg');
+						?>
+						<?php 
+							if($data->seats_at_once > 1) {
+								echo htmlspecialchars($data->seats_at_once),'<br>'; 
+							}else {
+								echo htmlspecialchars($data->seats_at_once),'<br>'; 
+							}	
+						?>
 					</span>
 				</div>
 			</div>
-			<div class="mobile-legend">Show legends</div>
+			<div class="mobile-legend">
+				<?php 
+					_e('Show legends', 'seatreg');
+				?>
+			</div>
 		</div>
 
 		<div id="email-conf" class="dialog-box">
 			<div id="email-conf-inner" class="dialog-box-inner border-box animated zoomIn">
-				<h2>Confirm email sent to <span id="email-send"></span></h2>
-				<p>You need to confirm your <?php //htmlspecialchars($data->spot_name); ?> selection by following confirm email instructions. Make sure you check your junk folders.</p>
-				<button class="refresh-btn">OK</button>
+				<h2>
+					<?php 
+						_e('Confirm email sent to', 'seatreg'); 
+					?>
+				<span id="email-send"></span></h2>
+				<p>
+				<?php 
+					_e('You need to confirm your selection by following confirm email instructions. Make sure you check your junk folders', 'seatreg');
+				?>.
+				</p>
+				<button class="refresh-btn">
+					<?php 
+						_e('OK', 'seatreg');
+					?>
+				</button>
 			</div>
 		</div>
 
 		<div id="bookings-confirmed" class="dialog-box">
 			<div id="bookings-confirmed-inner" class="dialog-box-inner border-box animated zoomIn">
-				<h2>You Bookings are confirmed</h2>
-				<button class="refresh-btn">OK</button>
+				<h2>
+					<?php 
+						_e('You Bookings are confirmed', 'seatreg');
+					?>		
+				</h2>
+				<button class="refresh-btn">
+					<?php 
+						_e('OK', 'seatreg');
+					?>
+				</button>
 			</div>
 		</div>
 
 		<div id="error" class="dialog-box">
 			<div id="error-inner" class="dialog-box-inner border-box animated zoomIn">
-				<h2>Error</h2>
+				<h2>
+					<?php 
+						_e('Error', 'seatreg');
+					?>
+				</h2>
 				<p id="error-text"></p>
-				<button class="refresh-btn">OK</button>
+				<button class="refresh-btn">
+					<?php 
+						_e('OK', 'seatreg');
+					?>
+				</button>
 			</div>
 		</div>
 
@@ -345,11 +475,11 @@
 				
 						<?php
 							if($registrationTime == 'wait') {
-								echo '<h3>Not open yet</h3>';
-								echo '<h4>Registration starts: <span class="time">', htmlspecialchars($data->registration_start_timestamp), '</span></h4>';
+								echo '<h3>', _e('Not open yet', 'seatreg'), '</h3>';
+								echo '<h4>', _e('Registration starts', 'seatreg'), ': <span class="time">', htmlspecialchars($data->registration_start_timestamp), '</span></h4>';
 							}else if($registrationTime == 'end') {
-								echo '<h3>Closed</h3>';
-								echo '<h4>Registration ended: <span class="time">',htmlspecialchars($data->registration_end_timestamp), '</span></h4>';
+								echo '<h3>', _e('Closed', 'seatreg'), '</h3>';
+								echo '<h4>', _e('Registration ended'), ': <span class="time">',htmlspecialchars($data->registration_end_timestamp), '</span></h4>';
 							}
 						?>
 					</div>
@@ -385,10 +515,18 @@
 
 	<?php else : ?>
 		<form method="post" id="pwd-form">
-			<h2 >Password protected</h2>
-			<label for="reg-pwd">Please enter password</label>
+			<h2>
+				<?php 
+					_e('Password protected', 'seatreg');
+				?>
+			</h2>
+			<label for="reg-pwd">
+				<?php 
+					_e('Please enter password', 'seatreg');
+				?>
+			</label>
 			<input type="password" name="reg_pwd" id="reg-pwd" /><br><br>
-			<input type="submit" value="OK" />
+			<input type="submit" value="<?php _e('OK', 'seatreg'); ?>" />
 		</form>			
 	<?php endif; ?>
 </body>
