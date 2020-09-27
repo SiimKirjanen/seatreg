@@ -5,6 +5,7 @@
 //===========
 
 require_once('./util/registration_time_status.php');
+require_once('util/session_captcha.php');
 
 class ViewData {
 	public $response; //response object
@@ -299,7 +300,7 @@ class ViewData {
 	
 			if($inserted) {
 				$this->response->setText('mail');
-				$this->changeCaptcha(3);
+				changeCaptcha(3);
 			}	
 		}
 	}
@@ -337,20 +338,5 @@ class ViewData {
 		}
 
 		$this->_maxSeats = $result->seats_at_once;
-	}
-
-	private function changeCaptcha($length) {
-		$chars = "abcdefghijklmnprstuvwzyx23456789";
-		$str = "";
-		$i = 0;
-		
-		while($i < $length){
-			$num = rand() % 33;
-			$temp = substr($chars, $num, 1);
-			$str = $str.$temp;
-			$i++;
-		}
-
-		$_SESSION['captcha'] = $str;
 	}
 }

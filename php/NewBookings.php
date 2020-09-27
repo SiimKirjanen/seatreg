@@ -7,6 +7,7 @@
 require_once('Booking.php');
 require_once('emails.php');
 require_once('util/registration_time_status.php');
+require_once('util/session_captcha.php');
 
 class NewBookings extends Booking {
 	public $response; //response object. 
@@ -192,7 +193,7 @@ class NewBookings extends Booking {
 			}
 
 			if($this->_requireBookingEmailConfirm) {
-				$this->changeCaptcha(3);
+				changeCaptcha(3);
 				$confirmationURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_confirm.php?confirmation-code='. $confCode;
 				$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 
@@ -220,19 +221,4 @@ class NewBookings extends Booking {
 			}	
 		}
 	}
-
-	private function changeCaptcha($length) {		
-		$chars = "abcdefghijklmnprstuvwzyx23456789";
-		$str = "";
-		$i = 0;
-		
-		while($i < $length){
-			$num = rand() % 33;
-			$temp = substr($chars, $num, 1);
-			$str = $str.$temp;
-			$i++;
-		}
-		
-		$_SESSION['captcha'] = $str;
-	}	
 }
