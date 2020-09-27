@@ -490,6 +490,10 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 		<script>
+			var seatregTranslations = $.parseJSON('<?php echo json_encode(generateTranslationsObject()); ?>');
+		</script>
+
+		<script>
 			var is_JSON = true;
 
 			try {
@@ -505,7 +509,6 @@
 			}
 		</script>
 
-		<script src="js/lang/view.lang.eng.js"></script>
 		<script src="js/date.format.js"></script>
 		<script src="js/iscroll-zoom-5-1-3.js"></script>
 		<script src="js/jquery.powertip.js"></script>

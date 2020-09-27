@@ -2,20 +2,21 @@
 $(function() {
 	var ajaxUrl = '../../../../wp-admin/admin-ajax.php';
 
+	var translator = {
+		translate: function(translationKey) {
+			if(seatregTranslations && seatregTranslations.hasOwnProperty(translationKey)) {
+				return seatregTranslations[translationKey];
+			}
+		}
+	};
+
 	function capitalizeFirstLetter(string) {
 	    return string.charAt(0).toUpperCase() + string.slice(1);
 	}
 
 	$('.time').each(function() {
 		var date = new Date(parseInt($(this).text()));
-
-		if(myLanguage.getLang('language') == 'eng') {
-			$(this).text(date.format("d.M.Y H:i"));
-		}else if(myLanguage.getLang('language') == 'et') {
-			$(this).text(date.format("d.m.Y H:i"));
-		}
-		
-
+		$(this).text(date.format("d.M.Y H:i"));
 	});
 
 
@@ -41,8 +42,6 @@ $(function() {
 	    }
 	    return size;
 	};
-
-
 
 	var qs = (function(a) {
 	    if (a == "") return {};
@@ -74,7 +73,7 @@ $(function() {
 		this.gmailNeeded = gmail;
 		this.status = regTime;
 		//this.spotName = $('#spot-name').val();
-		this.spotName = myLanguage.getLang('seat');
+		this.spotName = translator.translate('seat');
 		this.demo = false;
 		
 	}
@@ -356,8 +355,8 @@ $(function() {
 		document.getElementById("boxes").appendChild(documentFragment);	
 
 		if(this.rooms[this.currentRoom].room[7] !== null && this.rooms[this.currentRoom].room[7].indexOf('.') !== -1) {  //dose room have a background image?
-			console.log(myLanguage.getLang('bgImgDir'));
-			$('#boxes').append('<img class="room-image" src="../' + myLanguage.getLang('bgImgDir') + qs['c'] + '/' + this.rooms[this.currentRoom].room[7] + '" />');
+			console.log(translator.translate('bgImgDir'));
+			$('#boxes').append('<img class="room-image" src="../' + translator.translate('bgImgDir') + qs['c'] + '/' + this.rooms[this.currentRoom].room[7] + '" />');
 		}
 
 		$('#boxes .bubble-text').powerTip({
@@ -375,7 +374,7 @@ SeatReg.prototype.paintRoomInfo = function() {
 	var infoLoc = this.rooms[this.currentRoom].room;
 	var documentFragment = $(document.createDocumentFragment());
 
-	documentFragment.append('<div class="info-item open-seats"><span>'+ myLanguage.getLang('openSeatsInRoom_') +'</span>' + infoLoc[10] +'</div>', '<div class="info-item"><span class="bron-legend"></span> <span>'+ myLanguage.getLang('pendingSeatInRoom_') +'</span>' + infoLoc[8] +'</div>', '<div class="info-item"><span class="tak-legend"></span> <span>'+ myLanguage.getLang('confirmedSeatInRoom_') +'</span>' + infoLoc[12] +'</div>');
+	documentFragment.append('<div class="info-item open-seats"><span>'+ translator.translate('openSeatsInRoom_') +'</span>' + infoLoc[10] +'</div>', '<div class="info-item"><span class="bron-legend"></span> <span>'+ translator.translate('pendingSeatInRoom_') +'</span>' + infoLoc[8] +'</div>', '<div class="info-item"><span class="tak-legend"></span> <span>'+ translator.translate('confirmedSeatInRoom_') +'</span>' + infoLoc[12] +'</div>');
 		/*
 			this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomBronSeats);  // index 7
 			this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomCustomBoxes); // index 8
@@ -514,7 +513,7 @@ SeatReg.prototype.addSeatToCart = function() {
 	var cartItem = $('<div class="cart-item" data-cart-id="' + seatId + '"></div>');
 	var seatNumberDiv = $('<div class="cart-item-nr">' + seatNr + '</div>');
 	var roomNameDiv = $('<div class="cart-item-room">' + roomName + '</div>');
-	var delItem = $('<div class="remove-cart-item"><i class="fa fa-times-circle"></i><span style="padding-left:4px">'+ myLanguage.getLang('remove') +'</span></div>').on('click', function() {
+	var delItem = $('<div class="remove-cart-item"><i class="fa fa-times-circle"></i><span style="padding-left:4px">'+ translator.translate('remove') +'</span></div>').on('click', function() {
 		//console.log('Remove item');
 
 		var item = $(this).closest('.cart-item');
@@ -532,16 +531,16 @@ SeatReg.prototype.addSeatToCart = function() {
 		$('#boxes .box[data-seat="'+ removeId +'"]').removeAttr('data-selectedbox');
 
 		if(scope.selectedSeats.length == 0) {
-			$('#seat-cart-info').html('<h3>'+ myLanguage.getLang('selectionIsEmpty') +'</h3><p>' + myLanguage.getLang('youCanAdd_') + scope.spotName + myLanguage.getLang('_toCartClickTab') + '</p>');
+			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('youCanAdd_') + scope.spotName + translator.translate('_toCartClickTab') + '</p>');
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
 		}else {
 			var selected = scope.selectedSeats.length;
 			var infoText;
 			if(selected > 1) {
-				infoText = selected + myLanguage.getLang('_selected');
+				infoText = selected + translator.translate('_selected');
 			}else {
-				infoText = selected + myLanguage.getLang('_selected');
+				infoText = selected + translator.translate('_selected');
 			}
 			$('#seat-cart-info').text(infoText);
 		
@@ -562,21 +561,21 @@ SeatReg.prototype.openSeatCart = function() {
 	if(selected == 0) {
 		if(this.status == 'run') {
 			//$('#seat-cart-info').html('<h3>Selection is empty</h3><p>You can add ' + this.spotName + ' to cart by clicking/tabbing them</p>');
-			$('#seat-cart-info').html('<h3>'+ myLanguage.getLang('selectionIsEmpty') +'</h3><p>' + myLanguage.getLang('youCanAdd_') + this.spotName + myLanguage.getLang('_toCartClickTab') + '</p>');
+			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('youCanAdd_') + this.spotName + translator.translate('_toCartClickTab') + '</p>');
 			
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
 		}else {
-			$('#seat-cart-info').html('<h3>'+ myLanguage.getLang('regClosedAtMoment') +'</h3>');
+			$('#seat-cart-info').html('<h3>'+ translator.translate('regClosedAtMoment') +'</h3>');
 		}
 
 	}else {
 		$('#seat-cart-rows').css('display','block');
 		var infoText;
 		if(selected > 1) {
-			infoText = selected + myLanguage.getLang('_selected');
+			infoText = selected + translator.translate('_selected');
 		}else {
-			infoText = selected + myLanguage.getLang('_selected');
+			infoText = selected + translator.translate('_selected');
 		}
 		$('#seat-cart-info').text(infoText);
 		$('#checkout').css('display','inline-block');
@@ -664,9 +663,9 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 
 	if(arrLen > 1) {
 		if(this.gmailNeeded == 1) {
-			var primaryMail = $('<div style="text-align:center"><label class="field-label">'+ myLanguage.getLang('confWillBeSentTogmail') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
+			var primaryMail = $('<div style="text-align:center"><label class="field-label">'+ translator.translate('confWillBeSentTogmail') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}else {
-			var primaryMail = $('<div style="text-align:center"><label class="field-label">'+ myLanguage.getLang('confWillBeSentTo') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
+			var primaryMail = $('<div style="text-align:center"><label class="field-label">'+ translator.translate('confWillBeSentTo') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}
 		documentFragment.append(primaryMail);
 	}
@@ -682,13 +681,13 @@ SeatReg.prototype.generateField = function(fieldName) {
 	var fieldText;
 	switch(fieldName) {
 		case 'FirstName':
-			fieldText = myLanguage.getLang('firstName');
+			fieldText = translator.translate('firstName');
 			break;
 		case 'LastName':
-			fieldText = myLanguage.getLang('lastName');
+			fieldText = translator.translate('lastName');
 			break;
 		case 'Email':
-			fieldText = myLanguage.getLang('eMail');
+			fieldText = translator.translate('eMail');
 			break;
 	}
 
@@ -816,25 +815,25 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 			if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
 
 				if(this.status == 'run') {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>'+ myLanguage.getLang('add_') + ' ' + this.spotName + ' ' + nr + myLanguage.getLang('_fromRoom_') + ' ' + room + myLanguage.getLang('_toSelection') +'</h4>' + '</div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h4>' + '</div>');
 					$('#confirm-dialog-mob-ok').css('display','inline-block');
 				}else {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>' + this.spotName + ' ' + nr + myLanguage.getLang('_fromRoom_')  + room + '</h4></div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>' + this.spotName + ' ' + nr + translator.translate('_fromRoom_')  + room + '</h4></div>');
 				}
 
 			}else if(type == 'tak') {
 				$('#confirm-dialog-mob-ok').css('display','none');
-				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify"><h4>'+ myLanguage.getLang('this_') + this.spotName + myLanguage.getLang('_isOccupied') + '</h4></div>');
+				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify"><h4>'+ translator.translate('this_') + this.spotName + translator.translate('_isOccupied') + '</h4></div>');
 			}else if(type == 'bron') {
 				$('#confirm-dialog-mob-ok').css('display','none');
-				$('#confirm-dialog-mob-text').html('<div class="seat-bron-notify"><h4>' + myLanguage.getLang('this_') +  ' ' + this.spotName + myLanguage.getLang('_isPendingState') +'</h4>'+ myLanguage.getLang('regOwnerNotConfirmed') +'</div>');
+				$('#confirm-dialog-mob-text').html('<div class="seat-bron-notify"><h4>' + translator.translate('this_') +  ' ' + this.spotName + translator.translate('_isPendingState') +'</h4>'+ translator.translate('regOwnerNotConfirmed') +'</div>');
 			}else if(type == 'rbox' && this.selectedSeats.length >= this.seatLimit ) {
 				$('#confirm-dialog-mob-ok').css('display','none');
-				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ myLanguage.getLang('selectionIsFull') +'</div>');
+				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ translator.translate('selectionIsFull') +'</div>');
 				
 			}
 		}else {
-			$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>' + capitalizeFirstLetter(this.spotName)  + ' ' + nr + myLanguage.getLang('_fromRoom_')  + ' ' + room + myLanguage.getLang('_isAlreadyInCart') +'</h4></div>');
+			$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>' + capitalizeFirstLetter(this.spotName)  + ' ' + nr + translator.translate('_fromRoom_')  + ' ' + room + translator.translate('_isAlreadyInCart') +'</h4></div>');
 		}	
 	}
 	if(showDialog) {
@@ -856,7 +855,7 @@ if (typeof seatregdemo !== 'undefined') {
 if(dataReg == null) {
 	//$('#middle-section').html('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span> Registration under construction</div>');
 	//$('#seat-cart, #zoom-controller, #room-nav-btn-wrap, .room-nav-extra-info-btn').css({'display': 'none'});
-	$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ myLanguage.getLang('_regUnderConstruction') +'</div>');
+	$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ translator.translate('_regUnderConstruction') +'</div>');
 	return false;
 	//throw new Error("Registration under construction");
 }else {
@@ -1112,7 +1111,7 @@ function validateInput(inputField) {
 
 
 	if(value == '') {
-		inputField.next().text(myLanguage.getLang('emptyField')).css('display','inline');
+		inputField.next().text(translator.translate('emptyField')).css('display','inline');
 		return false;
 	}
 
@@ -1124,7 +1123,7 @@ function validateInput(inputField) {
 				inputField.next().text('').css('display','inline');
 				//inputField.next().text(50 - value.length + ' characters remaining').css('display','inline');
 			}else {
-				inputField.next().text(myLanguage.getLang('illegalCharactersDetec')).css('display','inline');
+				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','inline');
 				return false;
 			}
 
@@ -1135,7 +1134,7 @@ function validateInput(inputField) {
 			if(defReg.test(value)) {
 				inputField.next().css('display','none');
 			}else {
-				inputField.next().text(myLanguage.getLang('illegalCharactersDetec')).css('display','inline');
+				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','inline');
 				return false;
 			}
 
@@ -1152,7 +1151,7 @@ function validateInput(inputField) {
 				inputField.next().css('display','none');
 			}else {
 				
-				inputField.next().text(myLanguage.getLang('emailNotCorrect')).css('display','inline');
+				inputField.next().text(translator.translate('emailNotCorrect')).css('display','inline');
 	
 				return false;
 			}
@@ -1164,7 +1163,7 @@ function validateInput(inputField) {
 			if(defReg.test(value)) {
 				inputField.next().css('display','none');
 			}else {
-				inputField.next().text(myLanguage.getLang('illegalCharactersDetec')).css('display','inline');
+				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','inline');
 				return false;
 			}
 	}
@@ -1266,7 +1265,7 @@ function sendData(customFieldBack, regURL) {
 				}else if(resp.type == 'error' && resp.text == 'Wrong captcha') {
 					$('#captcha-img').replaceWith(resp.data);
 					$('#checkout-confirm-btn').css('display','inline-block');
-					$('#captcha-text').text(myLanguage.getLang('wrongCaptcha'));
+					$('#captcha-text').text(translator.translate('wrongCaptcha'));
 				}else if(resp.type == 'error') {
 					$('#checkout-area').css('display','none');
 					$('#captcha-ref').click();
@@ -1274,13 +1273,13 @@ function sendData(customFieldBack, regURL) {
 					$('#error').css('display','block');
 					$('#checkout-confirm-btn').css('display','inline-block');
 				}else {
-					$('#error-text').text(myLanguage.getLang('somethingWentWrong'));
+					$('#error-text').text(translator.translate('somethingWentWrong'));
 					$('#error').css('display','block');
 					$('#checkout-confirm-btn').css('display','inline-block');
 				}
 			}else {
 				$('#checkout-area').css('display','none');
-				$('#error-inner').prepend(myLanguage.getLang('somethingWentWrong'));
+				$('#error-inner').prepend(translator.translate('somethingWentWrong'));
 				$('#error').css('display','block');
 				$('#checkout-confirm-btn').css('display','inline-block');
 			}
