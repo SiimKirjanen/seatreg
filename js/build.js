@@ -2838,31 +2838,28 @@
 			$('.room-name-error').text(myLanguage.getLang('roomNameMissing')).css('display','block');
 		}else {
 			if(!reg.roomNameExists($('#room-name-dialog-input').val())) {
-				var reqExprRoomNameText = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,20}$/;
+				var oldRoomName = reg.rooms[reg.currentRoom].title;
+				reg.rooms[reg.currentRoom].title = $('#room-name-dialog-input').val();
+				$('.room-title-name').text(reg.rooms[reg.currentRoom].title);
+				$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"]').text(reg.rooms[reg.currentRoom].title);
 
-				if(reqExprRoomNameText.test($('#room-name-dialog-input').val())) {
-					var oldRoomName = reg.rooms[reg.currentRoom].title;
-					reg.rooms[reg.currentRoom].title = $('#room-name-dialog-input').val();
-					$('.room-title-name').text(reg.rooms[reg.currentRoom].title);
-					$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"]').text(reg.rooms[reg.currentRoom].title);
+				if(oldRoomName != "") {
+					var newRoom = reg.rooms[reg.currentRoom].title;
+					var initName = reg.rooms[reg.currentRoom].initialName;
 
-					if(oldRoomName != "") {
-						var newRoom = reg.rooms[reg.currentRoom].title;
-						var initName = reg.rooms[reg.currentRoom].initialName;
+					reg.roomNameChange[initName] = newRoom;
 
-						reg.roomNameChange[initName] = newRoom;
-
-						alertify.success(myLanguage.getLang('roomNameChanged'));
-					}else {
-						if(reg.rooms[reg.currentRoom].initialName == "") {
-							reg.rooms[reg.currentRoom].initialName = reg.rooms[reg.currentRoom].title;
-						}
-						alertify.success(myLanguage.getLang('roomNameSet'));
+					alertify.success(myLanguage.getLang('roomNameChanged'));
+				}else {
+					if(reg.rooms[reg.currentRoom].initialName == "") {
+						reg.rooms[reg.currentRoom].initialName = reg.rooms[reg.currentRoom].title;
 					}
-					
-					$('#room-name-dialog').modal('toggle');
-					reg.needToSave = true;
+					alertify.success(myLanguage.getLang('roomNameSet'));
 				}
+				
+				$('#room-name-dialog').modal('toggle');
+				reg.needToSave = true;
+				
 			}else {
 				$('.room-name-error').text(myLanguage.getLang('roomNameExists')).css('display','block');
 			}
@@ -2880,18 +2877,8 @@
 	function updateCountdown(target) {
 		var reqExprHovertext = /^[0-9a-zA-ZÜÕÖÄüõöä,!?\s]{0,150}$/;
 		var reqExprLegendtext = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,20}$/;
-		var reqExprRoomNametext = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,20}$/;
-
+		
 		switch(target) {
-			case 'roomName':
-				var remaining = 20 - $('#room-name-dialog-input').val().length;
-	   			$('.room-name-char-rem').text(remaining + myLanguage.getLang('_charRemaining'));
-
-	   			if(!reqExprRoomNametext.test($('#room-name-dialog-input').val())) {
-					$('.room-name-char-rem').html('<div style="color:red">'+ myLanguage.getLang('illegalCharactersDetec') +'</div>');
-				}
-
-				break;
 			case 'hoverText':
 				var remaining = 150 - $('#box-hover-text').val().length;
 				$('.box-hover-char-rem').text(remaining +  myLanguage.getLang('_charRemaining'));
@@ -2913,16 +2900,9 @@
 		}
 	}
 
-	//updateCountdown();
-    $('#room-name-dialog-input').change(function() {
-    	updateCountdown('roomName');
-	});
-	
-    $('#room-name-dialog-input').keyup(function(e) {
-		updateCountdown('roomName');
-		
+    
+    $('#room-name-dialog-input').keyup(function(e) {		
     	if (e.which == 13) {
-			//console.log('enter up');
 			$(this).blur();
 			$('#room-dialog-ok').click();
     	}

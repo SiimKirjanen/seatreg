@@ -296,7 +296,7 @@
 			<div class="modal-body">
 
 			<label for="room-name-dialog-input"><?php _e('Enter room name:', 'seatreg');?> </label>
-			<input type="text" id="room-name-dialog-input" maxlength="20">
+			<input type="text" id="room-name-dialog-input">
 			<div class="room-name-char-rem"></div>
 			<div class="room-name-error"></div>
 		
