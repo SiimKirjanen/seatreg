@@ -25,6 +25,14 @@
 	    return size;
 	};
 
+	var translator = {
+		translate: function(translationKey) {
+			if(WP_Seatreg.translations && WP_Seatreg.translations.hasOwnProperty(translationKey)) {
+				return WP_Seatreg.translations[translationKey];
+			}
+		}
+	};
+
 	function Permissions() {
 		this.canDeleteBox = true;
 		this.canCreateBox = true;
@@ -479,7 +487,7 @@
 		this.rooms[this.currentRoom].backgroundImageHeight = parseInt(dim[1]);
 		$('.room-image').remove();
 
-		var bgImg = $('<img class="room-image" src="../wp-content/plugins/seatreg_wordpress/' + myLanguage.getLang('bgImgDir')  + seatreg.selectedRegistration  + '/' + imgLog + '" />');
+		var bgImg = $('<img class="room-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration  + '/' + imgLog + '" />');
 		$('.build-area').append(bgImg);
 	};
 
@@ -528,14 +536,14 @@
 						$('.build-area .drag-box[data-id="' + this.activeBoxArray[i] + '"]').removeClass('box-hover');
 					}
 				}else {
-					alert(myLanguage.getLang('hoverError'));
+					alert(translator.translate('hoverError'));
 				}
 			}
 
 			if(newHover == '') {
-				alertify.success(myLanguage.getLang('hoverDeleteSuccess'));
+				alertify.success(translator.translate('hoverDeleteSuccess'));
 			}else {
-				alertify.success(myLanguage.getLang('hoverTextAdded'));
+				alertify.success(translator.translate('hoverTextAdded'));
 				this.needToSave = true;
 			}
 		}
@@ -550,26 +558,26 @@
 				$('#new-legend-text').focus();
 				alertify.set({ 
 					labels: {
-				    	ok     : myLanguage.getLang('ok'),
-				    	cancel: myLanguage.getLang('cancel')
+				    	ok     : translator.translate('ok'),
+				    	cancel: translator.translate('cancel')
 					},
 					buttonFocus: "ok"  
 				});
 
-				alertify.alert(myLanguage.getLang('legendNameTaken'));
+				alertify.alert(translator.translate('legendNameTaken'));
 
 				return false;
 			}
 			if(this.allLegends[i].color == color) {
 				alertify.set({ 
 					labels: {
-				    	ok     : myLanguage.getLang('ok'),
-				    	cancel: myLanguage.getLang('cancel')
+				    	ok     : translator.translate('ok'),
+				    	cancel: translator.translate('cancel')
 					},
 					buttonFocus: "ok"  
 				});
 
-				alertify.alert(myLanguage.getLang('legendColorTaken'));
+				alertify.alert(translator.translate('legendColorTaken'));
 				return false;
 			}
 		}
@@ -616,12 +624,12 @@
 				}
 
 			} else {
-				alert(myLanguage.getLang('legendChangeError'));
+				alert(translator.translate('legendChangeError'));
 			}
 
 		}
 
-		alertify.success(myLanguage.getLang('legendAddedTo_') + arrLength + myLanguage.getLang('_boxes'));
+		alertify.success(translator.translate('legendAddedTo_') + arrLength + translator.translate('_boxes'));
 		this.afterColorChange(oldLegend);
 		this.createLegendBox();
 
@@ -649,7 +657,7 @@
 
 		var activeBoxesInfoString = '';
 		if(arrLength > 0) {
-			activeBoxesInfoString = myLanguage.getLang('liYouHaveSelectedSpan_') + arrLength + myLanguage.getLang('_boxes');
+			activeBoxesInfoString = translator.translate('liYouHaveSelectedSpan_') + arrLength + translator.translate('_boxes');
 		}
 
 		return activeBoxesInfoString;
@@ -731,12 +739,12 @@
 					colorBox.css({
 						'background-color':'yellow',
 					}).addClass('legend-box-circle');
-					textSpan.text(myLanguage.getLang('pendingSeat'));
+					textSpan.text(translator.translate('pendingSeat'));
 					break;
 
 				case 1:
 					colorBox.css('background-color','red').addClass('legend-box-circle');
-					textSpan.text(myLanguage.getLang('confirmedSeat'));
+					textSpan.text(translator.translate('confirmedSeat'));
 					break;
 			}
 			$('.legends').append(colorBox,textSpan);
@@ -797,13 +805,13 @@
 		if(this.activeBoxArray.length == 0) {
 			alertify.set({ 
 				labels: {
-			    	ok     : myLanguage.getLang('ok'),
-			    	cancel: myLanguage.getLang('cancel')
+			    	ok     : translator.translate('ok'),
+			    	cancel: translator.translate('cancel')
 				},
 				buttonFocus: "ok"  
 			});
-			var hoverGuide = '<div><div class="guide-block">'+ myLanguage.getLang('toSelectOneBox_') +'<div class="guide-item guide-item-mouse"></div></div><br><div class="guide-block"> '+ myLanguage.getLang('toSelectMultiBox_') +' <div class="guide-item guide-item-lasso"></div></div>';
-			alertify.alert('<span class="bold-text">' + myLanguage.getLang('selectBoxesToAddHover') + hoverGuide);
+			var hoverGuide = '<div><div class="guide-block">'+ translator.translate('toSelectOneBox_') +'<div class="guide-item guide-item-mouse"></div></div><br><div class="guide-block"> '+ translator.translate('toSelectMultiBox_') +' <div class="guide-item guide-item-lasso"></div></div>';
+			alertify.alert('<span class="bold-text">' + translator.translate('selectBoxesToAddHover') + hoverGuide);
 
 			return;
 		}
@@ -818,7 +826,7 @@
 					this.existingHover.push(this.rooms[this.currentRoom].boxes[index].hoverText);
 				}
 			}else {
-				alert(myLanguage.getLang('hoverError'));
+				alert(translator.translate('hoverError'));
 			}
 		}		
 	};
@@ -869,7 +877,7 @@
 
 				var imgWrap = $('<div>', {
 					"id": "build-area-loading-wrap"
-				}).append(loadingImg, "<span class='loading-text'>"+ myLanguage.getLang('loading') +"</span>");
+				}).append(loadingImg, "<span class='loading-text'>"+ translator.translate('loading') +"</span>");
 
 				var changeScope = $(this);
 
@@ -895,7 +903,7 @@
 			$('.room-title-name').text('');
 			
 		}else {
-			alert(myLanguage.getLang('noPermToAddRoom'));
+			alert(translator.translate('noPermToAddRoom'));
 		}
 	};
 
@@ -903,7 +911,7 @@
 		var size = Object.size(this.rooms);
 
 		if(size == 1) {
-			alert(myLanguage.getLang('oneRoomNeeded'));
+			alert(translator.translate('oneRoomNeeded'));
 		}else if(size > 1) {
 			delete this.rooms[this.currentRoom];
 			this.needToSave = true;
@@ -1052,12 +1060,12 @@
 			$('#build-area-loading-wrap').remove();
 			alertify.set({ 
 				labels: {
-			    	ok     : myLanguage.getLang('ok'),
-			    	cancel: myLanguage.getLang('cancel')
+			    	ok     : translator.translate('ok'),
+			    	cancel: translator.translate('cancel')
 				},
 				buttonFocus: "ok"  
 			});
-			alertify.alert(myLanguage.getLang('alreadyInRoom'));
+			alertify.alert(translator.translate('alreadyInRoom'));
 		}
 	};
 
@@ -1212,7 +1220,7 @@
 
 		this.needToSave = true;
 		this.createLegendBox();
-		alertify.success(myLanguage.getLang('legendNameChanged'));
+		alertify.success(translator.translate('legendNameChanged'));
 	};
 
 	Registration.prototype.changeLegendColorTo = function(legendName, newColor) {
@@ -1263,29 +1271,29 @@
 				$('.build-area-wrapper .' + this.rooms[this.currentRoom].boxes[i].id).css('background-color',newColor);
 			}
 		}
-		alertify.success(myLanguage.getLang('legendColorChanged'));
+		alertify.success(translator.translate('legendColorChanged'));
 	};
 
 	//deletes box or boxes which are active. in activeboxes array. for mouse 1 and 4.
 	Registration.prototype.deleteBoxes = function() {
 		if(!this.permissions.canDeleteBox) {
-			alert(myLanguage.getLang('noPermToDel'));
+			alert(translator.translate('noPermToDel'));
 			return;
 		}
 
 		if(this.action == 1) {	//normal mouse delete
 			if(this.activeBoxArray.length == 0) {	//no boxes selected
-				var delGuide = '<div><div class="guide-block">'+ myLanguage.getLang('toSelectOneBox_') +' <div class="guide-item guide-item-mouse"></div></div><br><div class="guide-block">'+ myLanguage.getLang('toSelectMultiBox_') +'<div class="guide-item guide-item-lasso"></div></div>';
+				var delGuide = '<div><div class="guide-block">'+ translator.translate('toSelectOneBox_') +' <div class="guide-item guide-item-mouse"></div></div><br><div class="guide-block">'+ translator.translate('toSelectMultiBox_') +'<div class="guide-item guide-item-lasso"></div></div>';
 				
 				alertify.set({ 
 					labels: {
-				    	ok     : myLanguage.getLang('ok'),
-				    	cancel: myLanguage.getLang('cancel')
+				    	ok     : translator.translate('ok'),
+				    	cancel: translator.translate('cancel')
 					},
 					buttonFocus: "ok"  
 				});
 
-				alertify.alert('<span class="bold-text">'+ myLanguage.getLang('selectBoxesToDelete') +'</span>' + delGuide);
+				alertify.alert('<span class="bold-text">'+ translator.translate('selectBoxesToDelete') +'</span>' + delGuide);
 
 				return;
 			}
@@ -1302,12 +1310,12 @@
 			if(this.activeBoxArray.length == 0){
 				alertify.set({ 
 					labels: {
-				    	ok     : myLanguage.getLang('ok'),
-				    	cancel: myLanguage.getLang('cancel')
+				    	ok     : translator.translate('ok'),
+				    	cancel: translator.translate('cancel')
 					},
 					buttonFocus: "ok"  
 				});
-				alertify.alert(myLanguage.getLang('selectBoxesToDelete'));
+				alertify.alert(translator.translate('selectBoxesToDelete'));
 
 				return;
 			}
@@ -1353,7 +1361,7 @@
 		//add fragment to build area. .skeleton-box are in fragment
 		$('.build-area').append(fragment);
 		if(this.rooms[this.currentRoom].backgroundImage !== null) {
-			var bgImg = $('<img class="room-image" src="../wp-content/plugins/seatreg_wordpress/'+ myLanguage.getLang('bgImgDir') + seatreg.selectedRegistration + '/' + this.rooms[this.currentRoom].backgroundImage + '" />');
+			var bgImg = $('<img class="room-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/'+ seatreg.selectedRegistration + '/' + this.rooms[this.currentRoom].backgroundImage + '" />');
 			
 			$('.build-area').append(bgImg);
 		}
@@ -1459,7 +1467,7 @@
 						regScope.activeBoxArray.push($(this).attr('data-id'));
 						regScope.deleteBoxes();
 					}else {
-						alert(myLanguage.getLang('noPermToDel'));
+						alert(translator.translate('noPermToDel'));
 					}
 				}
 		}).each(function() {
@@ -1823,12 +1831,12 @@
 
 		       		alertify.set({ 
 						labels: {
-					    	ok     : myLanguage.getLang('ok'),
-					    	cancel: myLanguage.getLang('cancel')
+					    	ok     : translator.translate('ok'),
+					    	cancel: translator.translate('cancel')
 						},
 						buttonFocus: "ok"  
 					});
-		       		alertify.alert(myLanguage.getLang('allRoomsNeedName'));
+		       		alertify.alert(translator.translate('allRoomsNeedName'));
 
 		       		return false;
 		       }
@@ -1914,7 +1922,7 @@
 					registration_code: window.seatreg.selectedRegistration
 				},
 			success: function(data) {
-				$('#update-data').find('.glyphicon').css({'display':'inline'}).end().find('.fa').css({'display': 'none'}).end().find('.save-text').text(myLanguage.getLang('save'));
+				$('#update-data').find('.glyphicon').css({'display':'inline'}).end().find('.fa').css({'display': 'none'}).end().find('.save-text').text(translator.translate('save'));
 				if(data._response.type == 'ok') {
 					scope.needToSave = false;
 
@@ -1926,7 +1934,7 @@
 					}
 
 					scope.roomNameChange = {};
-					alertify.success(myLanguage.getLang('saved'));
+					alertify.success(translator.translate('saved'));
 
 					$('#server-response').empty();
 				}else {
@@ -2267,7 +2275,7 @@
 		onSubmit: function(hsb,hex,rgb,el,bySetColor) {
 			reg.changeBoxColor(hex);
 			$('#color-dialog').modal('toggle');
-			alertify.success(myLanguage.getLang('colorApplied'));	
+			alertify.success(translator.translate('colorApplied'));	
 		}
 	});
 
@@ -2310,10 +2318,10 @@
 							marginLeft: "-=500px"
 						},1000,"easeOutCubic");
 					}else {
-						$('#new-legend-text-rem').html('<span style="color:red">'+ myLanguage.getLang('legendNameTaken') +'</span>');
+						$('#new-legend-text-rem').html('<span style="color:red">'+ translator.translate('legendNameTaken') +'</span>');
 					}
 				}else {
-					$('#new-legend-text-rem').html('<span style="color:red">' + myLanguage.getLang('lagendNameMissing') + '</span>');
+					$('#new-legend-text-rem').html('<span style="color:red">' + translator.translate('lagendNameMissing') + '</span>');
 				}
 			}else if(currentSlide == 3) { //step 3 open
 				$('#legend-creator .legend-dialog-slide').animate({
@@ -2350,7 +2358,7 @@
 
 		if(reg.allLegends.length == 0) {
 			showNotify = true;
-			$('.legend-dialog-info').append('<li class="legend-dialog-info-box"><span class="glyphicon glyphicon-exclamation-sign"></span>'+ myLanguage.getLang('noLegendsCreated') +'</li>');
+			$('.legend-dialog-info').append('<li class="legend-dialog-info-box"><span class="glyphicon glyphicon-exclamation-sign"></span>'+ translator.translate('noLegendsCreated') +'</li>');
 			$('.legend-dialog-commands').slideUp();
 		}
 
@@ -2359,7 +2367,7 @@
 			$('#apply-legend').text('Add legend to ' + reg.activeBoxArray.length + ' boxes');
 		}else {
 			showNotify = true;
-			$('#legend-dialog .legend-dialog-info').prepend('<li class="legend-dialog-info-box"><span class="glyphicon glyphicon-exclamation-sign"></span>'+ myLanguage.getLang('_noSelectBoxToAddLegend') +'</li>');
+			$('#legend-dialog .legend-dialog-info').prepend('<li class="legend-dialog-info-box"><span class="glyphicon glyphicon-exclamation-sign"></span>'+ translator.translate('_noSelectBoxToAddLegend') +'</li>');
 			$('.legend-dialog-div:first').css('display','none');
 		}
 
@@ -2381,7 +2389,7 @@
 				toggleBtn.addClass('change-btn-to-green green-toggle').removeClass('change-btn-to-red red-toggle');
 				toggleBtn.text('Create new legen');
 			}else {
-				toggleBtn.addClass('green-toggle').removeClass('red-toggle').text(myLanguage.getLang('createLegend'));
+				toggleBtn.addClass('green-toggle').removeClass('red-toggle').text(translator.translate('createLegend'));
 			}
 
 			//legend creator slide up
@@ -2417,9 +2425,9 @@
 				$('.legend-dialog-upper').slideUp(400, function() {
 					if($('html').hasClass('cssanimations')) {
 						toggleBtn.addClass('change-btn-to-red red-toggle').removeClass('change-btn-to-green green-toggle');
-						toggleBtn.text(myLanguage.getLang('cancelLegendCreation'));
+						toggleBtn.text(translator.translate('cancelLegendCreation'));
 					}else {
-						toggleBtn.removeClass('green-toggle').addClass('red-toggle').text(myLanguage.getLang('cancelLegendCreation'));					
+						toggleBtn.removeClass('green-toggle').addClass('red-toggle').text(translator.translate('cancelLegendCreation'));					
 					}
 
 					$('#legend-creator').slideDown(400);
@@ -2430,9 +2438,9 @@
 
 				if($('html').hasClass('cssanimations')) {
 					toggleBtn.addClass('change-btn-to-red red-toggle').removeClass('change-btn-to-green green-toggle');
-					toggleBtn.text(myLanguage.getLang('cancelLegendCreation'));
+					toggleBtn.text(translator.translate('cancelLegendCreation'));
 				}else {
-					toggleBtn.addClass('red-toggle').removeClass('green-toggle').text(myLanguage.getLang('cancelLegendCreation'));	
+					toggleBtn.addClass('red-toggle').removeClass('green-toggle').text(translator.translate('cancelLegendCreation'));	
 				}
 
 				$('.legend-dialog-upper').slideUp(400, function() {
@@ -2463,7 +2471,7 @@
 						$('#toggle-lcreator').addClass('change-btn-to-green green-toggle').removeClass('change-btn-to-red red-toggle');
 						$('#toggle-lcreator').text('Create new legen');
 					}else {
-						$('#toggle-lcreator').addClass('green-toggle').removeClass('red-toggle').text(myLanguage.getLang('createLegend'));
+						$('#toggle-lcreator').addClass('green-toggle').removeClass('red-toggle').text(translator.translate('createLegend'));
 					}
 
 					$('.legend-dialog-commands').css('display','block');
@@ -2473,7 +2481,7 @@
 			
 		}else {
 			$('#new-legend-text').addClass('input-focus').focus();
-			$('#new-legend-text-rem').text(myLanguage.getLang('missingName'));
+			$('#new-legend-text-rem').text(translator.translate('missingName'));
 		}
 	});
 
@@ -2481,7 +2489,7 @@
 		var selectedLegend = $('#use-select :selected').text();
 
 		if(selectedLegend == '') {
-			alertify.alert(myLanguage.getLang('chooseLegend'));
+			alertify.alert(translator.translate('chooseLegend'));
 		}else {
 			reg.changeLegend(selectedLegend);
 		}
@@ -2620,14 +2628,14 @@
 						marginLeft: "-=500px",
 					},1000,"easeOutCubic");
 				}else {
-					$('#new-legend-name-info').html('<span style="color:red">'+ myLanguage.getLang('legendNameTaken') +'</span>');
+					$('#new-legend-name-info').html('<span style="color:red">'+ translator.translate('legendNameTaken') +'</span>');
 				}
 			}else {
-				$('#new-legend-name-info').html('<span style="color:red">'+ myLanguage.getLang('illegalCharactersDetec') +'</span>');
+				$('#new-legend-name-info').html('<span style="color:red">'+ translator.translate('illegalCharactersDetec') +'</span>');
 				$('#new-legend-name').focus();
 			}	
 		}else {
-			$('#new-legend-name-info').html('<span style="color:red">'+ myLanguage.getLang('enterLegendName') +'</span>');
+			$('#new-legend-name-info').html('<span style="color:red">'+ translator.translate('enterLegendName') +'</span>');
 			$('#new-legend-name').focus();
 		}
 	});
@@ -2646,7 +2654,7 @@
 					height: "130px"
 			},1000,"easeOutCubic");
 		}else {
-			$('#new-legend-color-info').html('<span style="color:red">'+ myLanguage.getLang('legendColorTaken') +'</span>');
+			$('#new-legend-color-info').html('<span style="color:red">'+ translator.translate('legendColorTaken') +'</span>');
 		}
 	});
 
@@ -2675,13 +2683,13 @@
 		if(!reg.rooms[reg.currentRoom].bronOrRegCheck()) {
 			alertify.set({ 
 				labels: {
-			    	ok     : myLanguage.getLang('ok'),
-			    	cancel: myLanguage.getLang('cancel')
+			    	ok     : translator.translate('ok'),
+			    	cancel: translator.translate('cancel')
 				},
 				buttonFocus: "cancel"  
 			});
 
-			alertify.confirm(myLanguage.getLang('deleteRoom_') + reg.rooms[reg.currentRoom].title + " ?", function (e) {
+			alertify.confirm(translator.translate('deleteRoom_') + reg.rooms[reg.currentRoom].title + " ?", function (e) {
 			    if (e) {
 			        reg.deleteCurrentRoom();
 			    }
@@ -2690,19 +2698,19 @@
 		}else {
 			alertify.set({ 
 				labels: {
-			    	ok     : myLanguage.getLang('ok'),
-			    	cancel: myLanguage.getLang('cancel')
+			    	ok     : translator.translate('ok'),
+			    	cancel: translator.translate('cancel')
 				},
 				buttonFocus: "ok"  
 			});
 
-			alertify.alert(myLanguage.getLang('cantDelRoom_') +'<span class="bold-text">' + reg.rooms[reg.currentRoom].title + '</span>' + myLanguage.getLang('_cantDelRoomBecause'));
+			alertify.alert(translator.translate('cantDelRoom_') +'<span class="bold-text">' + reg.rooms[reg.currentRoom].title + '</span>' + translator.translate('_cantDelRoomBecause'));
 		}
 	});
 
 	$('#update-data').on('click', function() {
 		$(this).prop('disabled', true);
-		$('#update-data').find('.glyphicon').css({'display':'none'}).end().find('.fa').css({'display': 'inline'}).end().find('.save-text').text(myLanguage.getLang('saving'));
+		$('#update-data').find('.glyphicon').css({'display':'none'}).end().find('.fa').css({'display': 'inline'}).end().find('.save-text').text(translator.translate('saving'));
 		
 		if(reg.sendValidation()) {
 			reg.rooms[reg.currentRoom].correctRoomBoxesIndex();
@@ -2751,11 +2759,11 @@
 		if(reg.activeBoxArray.length > 0) {
 			$("#color-dialog").modal("toggle");
 		}else {
-			var palleteGuide = '<div><div class="guide-block">'+ myLanguage.getLang('toSelectOneBox_') +'<div class="guide-item guide-item-mouse"></div></div><br><div class="guide-block">'+ myLanguage.getLang('toSelectMultiBox_') +'<div class="guide-item guide-item-lasso"></div></div>';
+			var palleteGuide = '<div><div class="guide-block">'+ translator.translate('toSelectOneBox_') +'<div class="guide-item guide-item-mouse"></div></div><br><div class="guide-block">'+ translator.translate('toSelectMultiBox_') +'<div class="guide-item guide-item-lasso"></div></div>';
 			alertify.set({ 
 				labels: {
-			    	ok     : myLanguage.getLang('ok'),
-			    	cancel: myLanguage.getLang('cancel')
+			    	ok     : translator.translate('ok'),
+			    	cancel: translator.translate('cancel')
 				},
 				buttonFocus: "ok"  
 			});
@@ -2792,7 +2800,7 @@
 		//build skeleton
 		reg.buildSkeleton();
 		reg.needToSave = true;
-		alertify.success(myLanguage.getLang('buildingGridUpdated'));
+		alertify.success(translator.translate('buildingGridUpdated'));
 		//buildSkeleton(50,50,5,5,4,4);
 	});
 
@@ -2813,7 +2821,7 @@
 	$('#room-dialog-ok').on('click', function() {
 		if($('#room-name-dialog-input').val() == '') {
 			$('#room-name-dialog-input').focus();
-			$('.room-name-error').text(myLanguage.getLang('roomNameMissing')).css('display','block');
+			$('.room-name-error').text(translator.translate('roomNameMissing')).css('display','block');
 		}else {
 			if(!reg.roomNameExists($('#room-name-dialog-input').val())) {
 				var oldRoomName = reg.rooms[reg.currentRoom].title;
@@ -2827,19 +2835,19 @@
 
 					reg.roomNameChange[initName] = newRoom;
 
-					alertify.success(myLanguage.getLang('roomNameChanged'));
+					alertify.success(translator.translate('roomNameChanged'));
 				}else {
 					if(reg.rooms[reg.currentRoom].initialName == "") {
 						reg.rooms[reg.currentRoom].initialName = reg.rooms[reg.currentRoom].title;
 					}
-					alertify.success(myLanguage.getLang('roomNameSet'));
+					alertify.success(translator.translate('roomNameSet'));
 				}
 				
 				$('#room-name-dialog').modal('toggle');
 				reg.needToSave = true;
 				
 			}else {
-				$('.room-name-error').text(myLanguage.getLang('roomNameExists')).css('display','block');
+				$('.room-name-error').text(translator.translate('roomNameExists')).css('display','block');
 			}
 		}
 	});
@@ -2867,13 +2875,13 @@
 
     		alertify.set({ 
 				labels: {
-			    	ok     : myLanguage.getLang('ok'),
-			    	cancel: myLanguage.getLang('cancel')
+			    	ok     : translator.translate('ok'),
+			    	cancel: translator.translate('cancel')
 				},
 				buttonFocus: "cancel"  
 			});
 
-    		alertify.confirm(myLanguage.getLang('unsavedChanges'),function(e) {
+    		alertify.confirm(translator.translate('unsavedChanges'),function(e) {
     			if (e) {
     				window.open(location,"_self");
 				} 

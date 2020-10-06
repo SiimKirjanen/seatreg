@@ -5,6 +5,7 @@
 
 	require_once('./../php/util/registration_time_status.php');
 	require_once('php/reg_functions.php');
+	require_once('./../php/seatreg_strings.php');
 
 	$data = seatreg_get_options_reg($_GET['c'])[0];
 	$showPwdForm = false;
