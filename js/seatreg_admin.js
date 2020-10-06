@@ -1,5 +1,3 @@
-var Jquery_1_8_3 = jQuery.noConflict( true );
-
 (function($) {
 	var canvasSupport = ($('html').hasClass('no-canvas') ? false : true);
 	var bookingOrderInManager = null;
@@ -724,6 +722,6 @@ $('#seatreg-settings-submit').on('click', function(e) {
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
 });
 
-})(Jquery_1_8_3);
+})(jQuery);
 
 
