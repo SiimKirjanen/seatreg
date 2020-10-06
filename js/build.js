@@ -2890,7 +2890,10 @@
 
 	$('.progress').css({'display': 'none'});
 
-	var imageSubmitOptions = {    
+	var imageSubmitOptions = {
+		data: {
+			security: WP_Seatreg.nonce
+		}, 
 		beforeSubmit:  function() {
 			$('.progress').show();
 		},

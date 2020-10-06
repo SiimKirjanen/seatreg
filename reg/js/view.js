@@ -356,7 +356,7 @@ $(function() {
 
 		if(this.rooms[this.currentRoom].room[7] !== null && this.rooms[this.currentRoom].room[7].indexOf('.') !== -1) {  //dose room have a background image?
 			console.log(translator.translate('bgImgDir'));
-			$('#boxes').append('<img class="room-image" src="../' + translator.translate('bgImgDir') + qs['c'] + '/' + this.rooms[this.currentRoom].room[7] + '" />');
+			$('#boxes').append('<img class="room-image" src="../uploads/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room[7] + '" />');
 		}
 
 		$('#boxes .bubble-text').powerTip({
