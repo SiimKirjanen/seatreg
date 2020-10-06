@@ -17,7 +17,6 @@ function seatreg_load_admin_scripts($hook) {
 	);
 
 	if(in_array($screen->id, $allowedToLoadStylesAndScripts)) {
-		
 		wp_enqueue_style('jquery-ui-style', plugins_url('css/custom-theme/jquery-ui-1.9.2.custom.min.css', dirname(__FILE__) ), array(), '1.9.2', 'all');
 		wp_enqueue_style('bootstrap-styles', plugins_url('css/bootstrap.min.css', dirname(__FILE__) ), array(), '3.1.1', 'all');
 		wp_enqueue_style('tipsy_style', plugins_url('css/tipsy.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
@@ -29,6 +28,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_style('Google_open_sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,600', array(), '1.0.0', 'all');
 
 		wp_enqueue_script("jquery");
+		wp_enqueue_script("jquery-form");
 		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery-ui-datepicker');
 		wp_enqueue_script('jquery-ui-draggable');
@@ -36,7 +36,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('jquery-ui-selectable');
 		wp_enqueue_script('jquery-effects-core');
 		wp_enqueue_script('jquery-effects-bounce');
-		wp_enqueue_script('jquery-form', plugins_url('js/jquery.form.min.js', dirname(__FILE__) ), array('jquery'), '3.51.0', true);
+
 		wp_enqueue_script('selectable_scroll', plugins_url('js/selectableScroll.js', dirname(__FILE__) ), array('jquery','jquery-ui-core', 'jquery-ui-draggable', 'jquery-ui-selectable'), '1.0.0', true);
 		wp_enqueue_script('bootstrap-3-1-1', plugins_url('js/bootstrap.min.js', dirname(__FILE__) ), array('jquery'), '3.1.1', true);
 		wp_enqueue_script('alertify', plugins_url('js/alertify.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
