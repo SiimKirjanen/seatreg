@@ -607,7 +607,7 @@ body {
 	vertical-align: middle;
 	font-size: 40px;
 /*
-	background: url(viewsprites.png) no-repeat;
+	background: url(registrationsprite.png) no-repeat;
 	background-position: -42px 0;
 */
 	cursor: pointer;
@@ -1041,7 +1041,7 @@ body {
 .dialog-hover {
 	
 
-	background: url(viewsprites.png) no-repeat;
+	background: url(registrationsprite.png) no-repeat;
 	background-position: -93px 0;
 	width: 24px;
 	height: 24px;
@@ -1271,7 +1271,7 @@ body {
 	cursor: pointer;
 	color:red;
 /*	
-	background: url(viewsprites.png) no-repeat;
+	background: url(registrationsprite.png) no-repeat;
 	background-position: 0 0;
 */
 }
@@ -1359,7 +1359,7 @@ body {
 }
 
 .flag1, .flag2 {
-	background: url(viewsprites.png) no-repeat;
+	background: url(registrationsprite.png) no-repeat;
 	display: inline-block;
 }
 
