@@ -92,6 +92,7 @@ function seatreg_generate_admin_strings() {
     $translations->save = __('Save', 'seatreg');
     $translations->saving = __('Saving...', 'seatreg');
     $translations->saved = __('Saved...', 'seatreg');
+    $translations->room = __('room', 'seatreg');
 
     return $translations;
 }

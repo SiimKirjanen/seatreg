@@ -191,8 +191,8 @@
 	*/
 
 	//Room class. Registration can have many rooms.Room hase user made boxes, skeleton info and ...
-	function Room(id) {
-		this.title = "";		//room title.
+	function Room(id, title) {
+		this.title = title;		//room title.
 		this.initialName = "";
 		this.roomId = id;		//for finding in assosiative array
 		this.boxes = [];		//stores user made boxes
@@ -834,77 +834,73 @@
 	//adds new room object to registration. new Room object to assosiative array. 1: firstRoom, 2: secondRoom
 	Registration.prototype.addRoom = function(ignoreLimit,boxIndexSave,buildSkeleton){
 		var regScope = this;
-
-		if(this.permissions.canCreateRoom == true) {
-			
-			if(boxIndexSave) {
-				this.rooms[this.currentRoom].correctRoomBoxesIndex();
-			}
-
-			if(ignoreLimit == false) {
-				this.needToSave = true;
-			}
-			
-			this.rooms[this.roomLocator] = new Room(this.roomLocator);
-			$('#active-room').removeAttr('id');
-			$('#build-head-stats-3 .room-counter').text(Object.size(this.rooms));
-
-			//set mouse action back to 1 or 6 for touch device
-
-			if($('html').hasClass('touch')) {
-				//add mouse-option
-				$('#mouse-option-active').removeAttr('id');
-				$('.mouse-action-boxes .action6').attr('id','mouse-option-active');
-				$('.build-area-wrapper').removeAttr('data-cursor');
-				reg.action = 6;
-			}else {
-				$('#mouse-option-active').removeAttr('id');
-				$('.mouse-action-boxes .action1').attr('id','mouse-option-active');
-				$('.build-area-wrapper').removeAttr('data-cursor');
-				reg.action = 1;
-			}
-
-			this.roomLabel = $('#room-selection-wrapper .room-selection').length + 1;
-			$('<div>').addClass('room-selection').attr({
-				'id': 'active-room',
-				'data-room-location': regScope.roomLocator
-			}).text(regScope.roomLabel).on('click', function() {
-				var loadingImg = $('<img>', {
-					"src": window.WP_Seatreg.plugin_dir_url + "css/loading.png",
-					"id": "loading-img"
-					
-				});
-
-				var imgWrap = $('<div>', {
-					"id": "build-area-loading-wrap"
-				}).append(loadingImg, "<span class='loading-text'>"+ translator.translate('loading') +"</span>");
-
-				var changeScope = $(this);
-
-				$('#build-section').append(imgWrap);
-				
-				setTimeout(function(){
-					regScope.changeRoom(changeScope.attr('data-room-location'), changeScope, false, true);
-				}, 300);
-			}).appendTo('#room-selection-wrapper');
-
-			this.roomLabel++;
-			this.currentRoom = this.roomLocator;
-			this.roomLocator++;
-			clearBuildArea();
-
-			if(buildSkeleton) {
-				this.buildSkeleton();
-				this.createLegendBox();
-			}
-			
-			this.canOpenColor = true;
-			$('.palette-call').removeAttr('id');
-			$('.room-title-name').text('');
-			
-		}else {
-			alert(translator.translate('noPermToAddRoom'));
+	
+		if(boxIndexSave) {
+			this.rooms[this.currentRoom].correctRoomBoxesIndex();
 		}
+
+		if(ignoreLimit == false) {
+			this.needToSave = true;
+		}
+		
+		this.rooms[this.roomLocator] = new Room(this.roomLocator, this.roomLocator + ' ' + translator.translate('room'));
+		$('#active-room').removeAttr('id');
+		$('#build-head-stats-3 .room-counter').text(Object.size(this.rooms));
+
+		//set mouse action back to 1 or 6 for touch device
+
+		if($('html').hasClass('touch')) {
+			//add mouse-option
+			$('#mouse-option-active').removeAttr('id');
+			$('.mouse-action-boxes .action6').attr('id','mouse-option-active');
+			$('.build-area-wrapper').removeAttr('data-cursor');
+			reg.action = 6;
+		}else {
+			$('#mouse-option-active').removeAttr('id');
+			$('.mouse-action-boxes .action1').attr('id','mouse-option-active');
+			$('.build-area-wrapper').removeAttr('data-cursor');
+			reg.action = 1;
+		}
+
+		this.roomLabel = $('#room-selection-wrapper .room-selection').length + 1;
+		$('<div>').addClass('room-selection').attr({
+			'id': 'active-room',
+			'data-room-location': regScope.roomLocator
+		}).text(regScope.rooms[regScope.roomLabel].title).on('click', function() {
+			var loadingImg = $('<img>', {
+				"src": window.WP_Seatreg.plugin_dir_url + "css/loading.png",
+				"id": "loading-img"
+				
+			});
+
+			var imgWrap = $('<div>', {
+				"id": "build-area-loading-wrap"
+			}).append(loadingImg, "<span class='loading-text'>"+ translator.translate('loading') +"</span>");
+
+			var changeScope = $(this);
+
+			$('#build-section').append(imgWrap);
+			
+			setTimeout(function(){
+				regScope.changeRoom(changeScope.attr('data-room-location'), changeScope, false, true);
+			}, 300);
+		}).appendTo('#room-selection-wrapper');
+
+		this.roomLabel++;
+		this.currentRoom = this.roomLocator;
+		this.roomLocator++;
+		clearBuildArea();
+
+		if(buildSkeleton) {
+			this.buildSkeleton();
+			this.createLegendBox();
+		}
+		
+		this.canOpenColor = true;
+		$('.palette-call').removeAttr('id');
+		$('.room-title-name').text(this.rooms[this.currentRoom].title);
+			
+		
 	};
 
 	Registration.prototype.deleteCurrentRoom = function() {
@@ -926,12 +922,12 @@
 	};
 
 	//check if room name exists in registration. return true if found. false if not
+	//don't include current room 
 	Registration.prototype.roomNameExists = function(roomName) {
 		for (var property in this.rooms) {
 		    if (this.rooms.hasOwnProperty(property)) {
-		        if(this.rooms[property].title.toLowerCase() == roomName.toLowerCase()) {
-
-		        	return true;
+		        if(this.rooms[property].title.toLowerCase() == roomName.toLowerCase() && this.rooms[property].roomId !== this.currentRoom) {
+					return true;
 		        }  
 		    }
 		}
