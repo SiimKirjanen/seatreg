@@ -491,7 +491,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		<script>
 			try {
-				var seatregTranslations = $.parseJSON('<?php echo json_encode(generateTranslationsObject()); ?>');
+				var seatregTranslations = $.parseJSON('<?php echo json_encode(seatreg_generate_registration_stringes()); ?>');
 				var seatLimit = <?php echo $data->seats_at_once;?>;
 				var gmail = <?php echo $data->gmail_required;?>;
 				var dataReg = $.parseJSON('<?php echo $data->registration_layout;?>');

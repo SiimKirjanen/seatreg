@@ -53,7 +53,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_localize_script('seatreg_admin', 'WP_Seatreg', array(
 			'nonce' => wp_create_nonce('seatreg-admin-nonce'),
 			'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
-			'translations' => generateBuilderStrings(), 
+			'translations' => seatreg_generate_admin_strings(), 
 		));
 	}
 }

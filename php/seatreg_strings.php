@@ -1,6 +1,6 @@
 <?php
 
-function generateTranslationsObject() {
+function seatreg_generate_registration_stringes() {
 	$translations = new stdClass();
 	$translations->illegalCharactersDetec = __('Illegal characters detected', 'seatreg');
 	$translations->emailNotCorrect = __('Email address is not correct', 'seatreg');
@@ -37,7 +37,7 @@ function generateTranslationsObject() {
 	return $translations;
 }
 
-function generateBuilderStrings() {
+function seatreg_generate_admin_strings() {
     $translations = new stdClass();
     $translations->hoverDeleteSuccess = __('Hover text deleted', 'seatreg');
     $translations->hoverTextAdded = __('Hover text added', 'seatreg');
@@ -85,6 +85,7 @@ function generateBuilderStrings() {
     $translations->enterLegendName = __('Enter legend name', 'seatreg');
     $translations->ok = __('Ok', 'seatreg');
     $translations->cancel = __('Cancel', 'seatreg');
+    $translations->unsavedChanges = __('Unsaved Changes', 'seatreg');
     $translations->_boxes = __(' boxes', 'seatreg');
     $translations->pendingSeat = __('Pending seat', 'seatreg');
     $translations->confirmedSeat = __('Confirmed seat', 'seatreg');

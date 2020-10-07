@@ -5,6 +5,14 @@
 	//console.log('jQuery version: ' + $.fn.jquery);
 	//console.log('jQUery UI version ' + $.ui.version);
 
+	var translator = {
+		translate: function(translationKey) {
+			if(WP_Seatreg.translations && WP_Seatreg.translations.hasOwnProperty(translationKey)) {
+				return WP_Seatreg.translations[translationKey];
+			}
+		}
+	};
+
 	window.seatreg = {
 		builder: null,
 		selectedRegistration: null,
@@ -134,13 +142,13 @@ $('.builder-popup-close').on('click', function() {
 	if( window.seatreg.builder.needToSave == true) {
 		alertify.set({ 
 			labels: {
-		    	ok     : myLanguage.getLang('ok'),
-		    	cancel: myLanguage.getLang('cancel')
+		    	ok     : translator.translate('ok'),
+		    	cancel: translator.translate('cancel')
 			},
 			buttonFocus: "cancel"  
 		});
 
-		alertify.confirm(myLanguage.getLang('unsavedChanges'),function(e) {
+		alertify.confirm(translator.translate('unsavedChanges'),function(e) {
 			if (e) {
 				$('.seatreg-builder-popup').css({'display':'none'});
 				window.seatreg.builder.clearRegistrationData();
@@ -292,11 +300,11 @@ $('#seatreg-booking-manager').on('click','.manager-box-link', function() {
 
 			wrapper.find('.time-string').each(function() {
 
-				if(myLanguage.getLang('language') == 'eng') {
+				if(translator.translate('language') == 'eng') {
 
 					//$(this).localTimeFromUTC('MM.dd.yyyy HH:mm');
 
-				}else if(myLanguage.getLang('language') == 'et') {
+				}else if(translator.translate('language') == 'et') {
 
 					//$(this).localTimeFromUTC('dd.MM.yyyy HH:mm');
 						
@@ -346,11 +354,11 @@ $('#seatreg-booking-manager').on('click', '.search-button', function(e) {
 			});
 			wrapper.find('.time-string').each(function() {
 
-				if(myLanguage.getLang('language') == 'eng') {
+				if(translator.translate('language') == 'eng') {
 
 					//$(this).localTimeFromUTC('MM.dd.yyyy HH:mm');
 
-				}else if(myLanguage.getLang('language') == 'et') {
+				}else if(translator.translate('language') == 'et') {
 
 					//$(this).localTimeFromUTC('dd.MM.yyyy HH:mm');
 
@@ -404,10 +412,10 @@ $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
 				//updateHash: false
 			});
 			wrapper.find('.time-string').each(function() {
-				if(myLanguage.getLang('language') == 'eng') {
+				if(translator.translate('language') == 'eng') {
 					//$(this).localTimeFromUTC('MM.dd.yyyy HH:mm');
 
-				}else if(myLanguage.getLang('language') == 'et') {
+				}else if(translator.translate('language') == 'et') {
 					//$(this).localTimeFromUTC('dd.MM.yyyy HH:mm');
 				}
 			});
