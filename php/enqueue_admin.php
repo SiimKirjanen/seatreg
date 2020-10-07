@@ -7,6 +7,7 @@ require_once('seatreg_strings.php');
 	============================================
 */
 
+add_action('admin_enqueue_scripts', 'seatreg_load_admin_scripts');
 function seatreg_load_admin_scripts($hook) {
 	$screen = get_current_screen();
 	$allowedToLoadStylesAndScripts = array(
@@ -57,4 +58,3 @@ function seatreg_load_admin_scripts($hook) {
 		));
 	}
 }
-add_action('admin_enqueue_scripts', 'seatreg_load_admin_scripts');
