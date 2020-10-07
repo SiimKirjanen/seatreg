@@ -1,5 +1,5 @@
 <?php
-require_once '../../../../wp-load.php';
+require_once('../php/load_wp.php');
 require_once('../php/seatreg_functions.php');
 require_once("../php/libs/xlsxwriter.class.php");
 

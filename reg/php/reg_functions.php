@@ -6,8 +6,8 @@ registration functions
 ================================
 */
 
-require_once '../../../../wp-load.php';
-require_once '../php/JsonResponse.php';
+require_once('../php/load_wp.php');
+require_once('../php/JsonResponse.php');
 
 global $wpdb;
 global $seatreg_db_table_names;
@@ -41,13 +41,13 @@ function seatreg_stats_for_registration_reg($structure, $code) {
 		$code
 	) );
 
-	$statsArray =  seatreg_get_seats_stats($structure, $bookings, $bookings2);
+	$statsArray =  getSeatsStats($structure, $bookings, $bookings2);
 
 	return $statsArray;	
 }
 
 //get info of seats. how many, open, bron... in each room and total info
-function seatreg_get_seats_stats($struct, $bronRegistrations, $takenRegistrations) {
+function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 	$bronLength = count($bronRegistrations);
 	$takenLength = count($takenRegistrations);
 	$regStructure = json_decode($struct);
