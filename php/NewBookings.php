@@ -115,7 +115,7 @@ class NewBookings extends Booking {
 			return;
 		}
 
-		$registrationTime = registrationTimeStatus($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
+		$registrationTime = seatreg_registration_time_status($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
 		if($registrationTime != 'run') {
 			$this->response->setError('Registration is not open (time)');
 			return;
@@ -193,7 +193,7 @@ class NewBookings extends Booking {
 			}
 
 			if($this->_requireBookingEmailConfirm) {
-				changeCaptcha(3);
+				seatreg_change_captcha(3);
 				$confirmationURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_confirm.php?confirmation-code='. $confCode;
 				$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 
@@ -214,7 +214,7 @@ class NewBookings extends Booking {
 				
 			}else {
 				if($this->_sendNewBookingNotificationEmail) {
-					sendBookingNotificationEmail($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
+					seatreg_send_booking_notification_email($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
 				}
 				
 				$this->response->setText('bookings-confirmed');

@@ -75,7 +75,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 	$bookings = seatreg_get_registration_bookings( $registration->registration_code );
 	$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_name, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE seatreg_code = '$registration->registration_code' AND status = 1 GROUP BY room_name");
 	$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_name, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE seatreg_code = '$registration->registration_code' AND status = 2 GROUP BY room_name");
-	$regStats = getRoomSeatInfo($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
+	$regStats = seatreg_get_room_seat_info($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
 	$structure = $registration->registration_layout;
 	$project_name = $registration->registration_name;
 	$start_date = $registration->registration_start_timestamp;
@@ -849,7 +849,7 @@ function seatreg_generate_tabs($targetPage) {
 }
 
 //echo out booking info and status
-function echoBooking($registrationCode, $bookingId) {
+function seatreg_echo_booking($registrationCode, $bookingId) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 
@@ -902,12 +902,12 @@ Registration logic and math
 
 //return registration code
 function seatreg_generate_registration_code() {
-	return substr(md5( microtime() ), 0,10);
+	return substr(md5( microtime() ), 0, 10);
 }
 
 
 //return room info. How many bron and taken seats are in a rooms
-function getRoomSeatInfo($struct, $bronRegistrations, $takenRegistrations) {
+function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrations) {
 	$bronLength = count($bronRegistrations);
 	$takenLength = count($takenRegistrations);
 	$regStructure = json_decode($struct);
@@ -1479,6 +1479,7 @@ function seatreg_check_post_credentials() {
 }
 
 //handle new registration create
+add_action('admin_post_seatreg_create_submit', 'seatreg_create_submit_handler'); 
 function seatreg_create_submit_handler() {
 	seatreg_check_post_credentials();
 
@@ -1494,8 +1495,6 @@ function seatreg_create_submit_handler() {
 	}
 
 }
-
-add_action('admin_post_seatreg_create_submit', 'seatreg_create_submit_handler'); 
 
 function seatreg_update() {
 	global $wpdb;
@@ -1563,6 +1562,7 @@ function seatreg_update() {
 }
 
 //handle settings form submit
+add_action('admin_post_seatreg-form-submit', 'seatreg_form_submit_handle'); 
 function seatreg_form_submit_handle() {
 	check_admin_referer('seatreg-options-submit', 'seatreg-options-nonce');
 
@@ -1574,8 +1574,6 @@ function seatreg_form_submit_handle() {
 	}
 
 }
-
-add_action('admin_post_seatreg-form-submit', 'seatreg_form_submit_handle'); 
 
 /*
 ====================================================================================================================================================================================
@@ -1595,7 +1593,7 @@ function seatreg_check_ajax_credentials() {
 	}
 }
 
-
+add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_layout_and_bookings');
 function seatreg_get_registration_layout_and_bookings() {
 	seatreg_check_ajax_credentials();
 
@@ -1610,8 +1608,8 @@ function seatreg_get_registration_layout_and_bookings() {
 	$response->setData( $dataToSend);
 	wp_send_json( $response );
 }
-add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_layout_and_bookings');
 
+add_action('wp_ajax_seatreg_update_layout', 'seatreg_update_layout');
 function seatreg_update_layout() {
 	seatreg_check_ajax_credentials();
 	
@@ -1633,8 +1631,6 @@ function seatreg_update_layout() {
 	wp_send_json( $response );
 
 }
-add_action('wp_ajax_seatreg_update_layout', 'seatreg_update_layout');
-
 
 function randomString($length){
 	$chars = "abcdefghijklmnoprstuvwzyx023456789";
@@ -1650,6 +1646,8 @@ function randomString($length){
 	return $str;
 }
 
+add_action( 'wp_ajax_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
+add_action( 'wp_ajax_nopriv_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
 function seatreg_booking_submit_callback() {
 	$resp = new JsonResponse();
 	session_start();
@@ -1681,9 +1679,7 @@ function seatreg_booking_submit_callback() {
 	die();
 }
 
-add_action( 'wp_ajax_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
-add_action( 'wp_ajax_nopriv_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
-
+add_action( 'wp_ajax_seatreg_get_room_stats', 'seatreg_get_room_stats_callback' );
 function seatreg_get_room_stats_callback() {
 	seatreg_check_ajax_credentials();
 
@@ -1691,26 +1687,22 @@ function seatreg_get_room_stats_callback() {
 	die();
 }
 
-
-add_action( 'wp_ajax_seatreg_get_room_stats', 'seatreg_get_room_stats_callback' );
+add_action( 'wp_ajax_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
+add_action( 'wp_ajax_nopriv_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
 function seatreg_new_captcha_callback() {
 	$r = randomString(10);
 	echo '<img src="php/image.php?dummy='.$r.'" id="captcha-img" />';
 	die();
 }
 
-add_action( 'wp_ajax_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
-add_action( 'wp_ajax_nopriv_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
-
-
+add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_callback' );
 function seatreg_get_booking_manager_callback() {
 	seatreg_check_ajax_credentials();
 	seatreg_generate_booking_manager_html($_POST['code'], $_POST['data']['orderby'], $_POST['data']['searchTerm'] );
 	die();
 }
 
-
-add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_callback' );
+add_action( 'wp_ajax_seatreg_confirm_del_bookings', 'seatreg_confirm_del_bookings_callback' );
 function seatreg_confirm_del_bookings_callback() {
 	seatreg_check_ajax_credentials();
 
@@ -1755,8 +1747,7 @@ function seatreg_confirm_del_bookings_callback() {
 	die();
 }
 
-add_action( 'wp_ajax_seatreg_confirm_del_bookings', 'seatreg_confirm_del_bookings_callback' );
-
+add_action( 'wp_ajax_seatreg_search_bookings', 'seatreg_search_bookings_callback' );
 function seatreg_search_bookings_callback() {
 	seatreg_check_ajax_credentials();
 	$order = 'date';
@@ -1772,8 +1763,8 @@ function seatreg_search_bookings_callback() {
 	seatreg_generate_booking_manager_html( $_POST['code'] , $order, $searchTerm );
 	die();
 }
-add_action( 'wp_ajax_seatreg_search_bookings', 'seatreg_search_bookings_callback' );
 
+add_action( 'wp_ajax_seatreg_edit_booking', 'seatreg_edit_booking_callback' );
 function seatreg_edit_booking_callback() {
 	seatreg_check_ajax_credentials();
 
@@ -1811,8 +1802,8 @@ function seatreg_edit_booking_callback() {
 		die();
 	}
 }
-add_action( 'wp_ajax_seatreg_edit_booking', 'seatreg_edit_booking_callback' );
 
+add_action( 'wp_ajax_seatreg_upload_image', 'seatreg_upload_image_callback' );
 function seatreg_upload_image_callback() {
 	seatreg_check_ajax_credentials();
 
@@ -1880,8 +1871,8 @@ function seatreg_upload_image_callback() {
 		die();
 	}
 }
-add_action( 'wp_ajax_seatreg_upload_image', 'seatreg_upload_image_callback' );
 
+add_action( 'wp_ajax_seatreg_remove_img', 'seatreg_remove_img_callback' );
 function seatreg_remove_img_callback() {
 	seatreg_check_ajax_credentials();
 
@@ -1901,4 +1892,3 @@ function seatreg_remove_img_callback() {
 		die();
 	}
 }
-add_action( 'wp_ajax_seatreg_remove_img', 'seatreg_remove_img_callback' );

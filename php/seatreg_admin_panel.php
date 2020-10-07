@@ -6,7 +6,7 @@
 	==========================
 */
 
-function addSeatregPluginMenu() {
+function seatreg_add_plugin_menu() {
 	//Generate SeatReg Admin page
 	add_menu_page(
 		'SeatReg',  //header title

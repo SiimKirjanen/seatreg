@@ -1,6 +1,6 @@
 <?php 
 
-function registrationTimeStatus($startUnix, $endUnix) {
+function seatreg_registration_time_status($startUnix, $endUnix) {
     $unix = round(microtime(true) * 1000);
 
     if($startUnix == null && $endUnix == null) {

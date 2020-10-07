@@ -1,6 +1,6 @@
 <?php
 
-function changeCaptcha($length) {		
+function seatreg_change_captcha($length) {		
     $chars = "abcdefghijklmnprstuvwzyx23456789";
     $str = "";
     $i = 0;

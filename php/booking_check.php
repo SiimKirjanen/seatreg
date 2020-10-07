@@ -17,7 +17,7 @@
 <body>
 	<?php
 		if(!empty($_GET['registration']) && !empty($_GET['id'])) {
-			echoBooking($_GET['registration'], $_GET['id']);
+			seatreg_echo_booking($_GET['registration'], $_GET['id']);
 		} 
 	?>
 </body>

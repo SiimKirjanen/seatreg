@@ -29,7 +29,7 @@ function seatregPluginDeactivate() {
 
 //actions
 if( is_admin() ) {
-	add_action('admin_menu', 'addSeatregPluginMenu');
+	add_action('admin_menu', 'seatreg_add_plugin_menu');
 }
 add_action( 'init', 'seatreg_register_shortcode' );
 

@@ -41,13 +41,13 @@ function seatreg_stats_for_registration_reg($structure, $code) {
 		$code
 	) );
 
-	$statsArray =  getSeatsStats($structure, $bookings, $bookings2);
+	$statsArray =  seatreg_get_seats_stats($structure, $bookings, $bookings2);
 
 	return $statsArray;	
 }
 
 //get info of seats. how many, open, bron... in each room and total info
-function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
+function seatreg_get_seats_stats($struct, $bronRegistrations, $takenRegistrations) {
 	$bronLength = count($bronRegistrations);
 	$takenLength = count($takenRegistrations);
 	$regStructure = json_decode($struct);

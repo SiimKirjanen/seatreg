@@ -106,7 +106,7 @@ class ViewData {
 			return;
 		}
 
-		$registrationTime = registrationTimeStatus($this->_startUnix, $this->_endUnix);
+		$registrationTime = seatreg_registration_time_status($this->_startUnix, $this->_endUnix);
 		if($registrationTime != 'run') {
 			$this->response->setError('Registration is not open (time)');
 			return;
@@ -300,7 +300,7 @@ class ViewData {
 	
 			if($inserted) {
 				$this->response->setText('mail');
-				changeCaptcha(3);
+				seatreg_change_captcha(3);
 			}	
 		}
 	}

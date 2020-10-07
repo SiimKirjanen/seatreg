@@ -74,7 +74,7 @@ class NewBooking extends Booking {
 		echo $seatsString;
 
 		if($this->_sendNewBookingNotificationEmail) {
-			sendBookingNotificationEmail($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
+			seatreg_send_booking_notification_email($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
 		}
 	}
 
@@ -95,7 +95,7 @@ class NewBooking extends Booking {
 			echo 'Registration is closed at the moment';
 			return;
 		}
-		$registrationTimeCheck = registrationTimeStatus($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
+		$registrationTimeCheck = seatreg_registration_time_status($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
 		if($registrationTimeCheck != 'run') {
 			echo 'Registration is not open (time)';
 			return;

@@ -34,7 +34,7 @@
 			$registrations = json_encode(seatreg_get_registration_bookings_reg($_GET['c'], false));  //no names
 		}
 
-		$registrationTime = registrationTimeStatus( $data->registration_start_timestamp,  $data->registration_end_timestamp );
+		$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 	}
 ?>
 <!DOCTYPE html>
@@ -480,7 +480,7 @@
 								echo '<h4>', _e('Registration starts', 'seatreg'), ': <span class="time">', htmlspecialchars($data->registration_start_timestamp), '</span></h4>';
 							}else if($registrationTime == 'end') {
 								echo '<h3>', _e('Closed', 'seatreg'), '</h3>';
-								echo '<h4>', _e('Registration ended'), ': <span class="time">',htmlspecialchars($data->registration_end_timestamp), '</span></h4>';
+								echo '<h4>', _e('Registration ended', 'seatreg'), ': <span class="time">',htmlspecialchars($data->registration_end_timestamp), '</span></h4>';
 							}
 						?>
 					</div>
@@ -489,15 +489,9 @@
 		<?php endif; ?>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-
 		<script>
-			var seatregTranslations = $.parseJSON('<?php echo json_encode(generateTranslationsObject()); ?>');
-		</script>
-
-		<script>
-			var is_JSON = true;
-
 			try {
+				var seatregTranslations = $.parseJSON('<?php echo json_encode(generateTranslationsObject()); ?>');
 				var seatLimit = <?php echo $data->seats_at_once;?>;
 				var gmail = <?php echo $data->gmail_required;?>;
 				var dataReg = $.parseJSON('<?php echo $data->registration_layout;?>');
@@ -506,7 +500,7 @@
 				var regTime = <?php echo "'$registrationTime';";?>
 				var registrations = $.parseJSON(<?php echo "'$registrations'";?>);
 			} catch(err) {
-				is_JSON = false;
+				alert('Data gathering failed');
 			}
 		</script>
 		<script src="js/registration.min.js"></script>
