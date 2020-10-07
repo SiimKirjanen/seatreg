@@ -45,7 +45,7 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<link rel="shortcut icon" type="image/png" href="favicon.png"/>
 	<link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="css/view.all.min.css">
+	<link rel="stylesheet" href="css/registration.min.css">
 
 	<?php if($data->registration_open == 1) : ?>	
 		<script src="js/modernizr.custom.89593.min.js"></script>
@@ -509,11 +509,7 @@
 				is_JSON = false;
 			}
 		</script>
-
-		<script src="js/date.format.js"></script>
-		<script src="js/iscroll-zoom-5-1-3.js"></script>
-		<script src="js/jquery.powertip.js"></script>
-		<script src="js/view.js"></script>
+		<script src="js/registration.min.js"></script>
 
 		<?php endif; //end of is registration open ?>  
 
