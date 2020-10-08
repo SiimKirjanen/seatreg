@@ -1,6 +1,6 @@
 <?php
 
-require_once('../php/load_wp.php');
+require_once('../php/util/load_wp.php');
 require_once('../php/seatreg_functions.php');
 require_once('../php/libs/tfpdf/tfpdf.php');
 

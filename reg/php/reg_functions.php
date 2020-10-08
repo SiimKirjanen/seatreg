@@ -6,7 +6,7 @@ registration functions
 ================================
 */
 
-require_once('../php/load_wp.php');
+require_once('../php/util/load_wp.php');
 require_once('../php/JsonResponse.php');
 
 global $wpdb;

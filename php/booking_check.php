@@ -3,7 +3,7 @@
 	/*client may want to check if her booking exists*/
 	//===========
 
-	require_once('./load_wp.php');
+	require_once('./util/load_wp.php');
 	require_once('./seatreg_functions.php');
 ?>
 
