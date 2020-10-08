@@ -318,7 +318,7 @@ function seatreg_generate_my_registrations_section() {
 
 				<br>
 
-				<a href="<?php echo plugins_url('reg/registration.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php _e('View registration', 'seatreg'); ?></a>
+				<a href="<?php echo plugins_url('registration/index.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php _e('View registration', 'seatreg'); ?></a>
 
 				<br>
 				<button type="button" class="btn btn-link seatreg-map-popup-btn" data-registration-name="<?php echo htmlspecialchars($registration->registration_name); ?>" data-map-code="<?php echo htmlspecialchars($registration->registration_code); ?>"><?php _e('Edit map', 'seatreg'); ?></button>

@@ -8,7 +8,7 @@
 		exit();
 	}
 	
-	require_once('./../reg/php/reg_functions.php');
+	require_once('./../registration/php/reg_functions.php');
 	require_once('./NewBooking.php');
 ?>
 <!DOCTYPE html>
