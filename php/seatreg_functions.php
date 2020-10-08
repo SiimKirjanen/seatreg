@@ -145,9 +145,9 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
 
 								if($regStats['roomsInfo'][$i]['roomName'] != $targetRoom) {
-									echo '<li class="room-list-item" data-stats-target="',$regStats['roomsInfo'][$i]['roomName'],'">',$regStats['roomsInfo'][$i]['roomName'],'</li>';
+									echo '<li class="room-list-item" data-stats-target="',$regStats['roomsInfo'][$i]['roomName'],'">', htmlspecialchars($regStats['roomsInfo'][$i]['roomName']),'</li>';
 								}else {
-									echo '<li class="room-list-item" data-active="true" data-stats-target="',$regStats['roomsInfo'][$i]['roomName'],'">',$regStats['roomsInfo'][$i]['roomName'],'</li>';
+									echo '<li class="room-list-item" data-active="true" data-stats-target="',$regStats['roomsInfo'][$i]['roomName'],'">', htmlspecialchars($regStats['roomsInfo'][$i]['roomName']),'</li>';
 								}
 							}	
 						?>
@@ -304,7 +304,7 @@ function seatreg_generate_my_registrations_section() {
 	foreach($registrations as $key=>$registration) {
 		?>
 			<div class="col-sm-6 col-md-2">
-				<h4><a class="registration-name-link" href="<?php echo plugins_url('reg/registration.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php echo htmlspecialchars( $registration->registration_name ); ?></a></h4>
+				<h4><a class="registration-name-link" href="<?php echo plugins_url('registration/index.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php echo htmlspecialchars( $registration->registration_name ); ?></a></h4>
 
 				<a href="<?php echo admin_url( 'admin.php?page=seatreg-overview&tab='.$registration->registration_code );  ?>"><?php _e('Overview', 'seatreg'); ?></a>
 
@@ -351,7 +351,7 @@ function seatreg_generate_settings_form() {
 	 $custFields = json_decode($options[0]->custom_fields);
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	?>
-		<h3><?php echo $options[0]->registration_name, ' settings'; ?></h3>
+		<h3><?php echo htmlspecialchars($options[0]->registration_name), ' settings'; ?></h3>
 		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" style="max-width:600px">
 
 			<div class="form-group">
@@ -839,9 +839,9 @@ function seatreg_generate_tabs($targetPage) {
 
 	<h2 class="nav-tab-wrapper"> 
     <?php foreach($registration as $key=>$value): ?>
-	    
-		<a href="?page=<?php echo $targetPage; ?>&tab=<?php echo $value->registration_code; ?>" class="nav-tab <?php echo $active_tab == $value->registration_code ? 'nav-tab-active' : ''; ?>"><?php echo $value->registration_name; ?></a>
-			
+		<a href="?page=<?php echo $targetPage; ?>&tab=<?php echo $value->registration_code; ?>" class="nav-tab <?php echo $active_tab == $value->registration_code ? 'nav-tab-active' : ''; ?>">
+			<?php echo htmlspecialchars($value->registration_name); ?>
+		</a>
     <?php endforeach; ?>
 	</h2>
 	
