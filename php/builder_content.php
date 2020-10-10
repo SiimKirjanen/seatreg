@@ -75,7 +75,7 @@
 				<i class="fa fa-coffee" style="display:none"></i>
 				<span style="margin-left:4px" class="save-text"><?php _e('Save', 'seatreg');?></span>
 			</button>
-			<a id="registration-link" class="save-check view-btn" target="_blank" href="<?php echo plugins_url('reg/registration.php', dirname(__FILE__) ); ?>">
+			<a id="registration-link" class="save-check view-btn" target="_blank" href="<?php echo plugins_url('registration/index.php', dirname(__FILE__) ); ?>">
 				<span class="glyphicon glyphicon-eye-open"></span><span style="margin-left:4px" class="link-text"><?php _e('View registration', 'seatreg');?></span>
 			</a>
 			<div id="server-response"></div>
