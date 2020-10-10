@@ -46,6 +46,10 @@ function seatreg_generate_admin_strings() {
     $translations->buildingGridUpdated = __('Building grid updated', 'seatreg');
     $translations->roomNameChanged = __('Room name changed', 'seatreg');
     $translations->roomNameSet = __('New Room added', 'seatreg');
+    $translations->roomNotExist = __('Room does not exist', 'seatreg');
+    $translations->seatNotExist = __('Seat dose not exist', 'seatreg');
+    $translations->seatAlreadyBookedPending = __('Seat is already booked/pending', 'seatreg');
+    $translations->errorBookingUpdate = __('Error updating booking', 'seatreg');
     $translations->hoverError = __('Error while creating hover', 'seatreg');
     $translations->legendChangeError = __('Error while changing legend', 'seatreg');
     $translations->legendNameTaken = __('Legend name is taken', 'seatreg');
@@ -93,6 +97,11 @@ function seatreg_generate_admin_strings() {
     $translations->saving = __('Saving...', 'seatreg');
     $translations->saved = __('Saved...', 'seatreg');
     $translations->room = __('room', 'seatreg');
+    $translations->bookingUpdated = __('Booking updated', 'seatreg');
+    $translations->notSet = __('Not set', 'seatreg');
+    $translations->enterRegistrationName = __('Please enter registration name', 'seatreg');
+    $translations->registrationNameLimit = __('Name must be between 1-255 characters', 'seatreg');
+
 
     return $translations;
 }

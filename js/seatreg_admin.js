@@ -94,9 +94,14 @@
 	}
 
 	$('#create-registration-form').on('submit', function(e) {
-		if($('#new-registration-name').val() === '') {
+		var newRegistrationName = $('#new-registration-name').val();
+
+		if(newRegistrationName === '') {
 			e.preventDefault();
-			alertify.error('Please enter registration name');
+			alertify.error(translator.translate('enterRegistrationName'));
+		}else if(newRegistrationName.length > 255) {
+			e.preventDefault();
+			alertify.error(translator.translate('registrationNameLimit'));
 		}
 	});
 
@@ -533,23 +538,23 @@ $('#edit-update-btn').on('click', function() {
 				}
 
 				if(!found) {
-					$(this).find('.custom-field-v').text('Not set');
+					$(this).find('.custom-field-v').text(translator.translate('notSet'));
 				}
 			});
-			alertify.success("Booking updated");
+			alertify.success(translator.translate('bookingUpdated'));
 
 		}else {
 			if(data.status == 'room-searching') {
-				$('#edit-room-error').text('Room dose not exist');
+				$('#edit-room-error').text(translator.translate('roomNotExist'));
 			}
 			if(data.status == 'seat-nr-searching') {
-				$('#edit-seat-error').text('Seat dose not exist');
+				$('#edit-seat-error').text(translator.translate('seatNotExist'));
 			}
 			if(data.status == 'seat-booked') {
-				$('#edit-seat-error').text('Seat is already booked/pending');
+				$('#edit-seat-error').text(translator.translate('seatAlreadyBookedPending'));
 			}
 			if(data.status == 'update failed') {
-				alert('Error updating booking');
+				alert(translator.translate('errorBookingUpdate'));
 			}
 		}
 	});
