@@ -78,7 +78,8 @@ class NewBookings extends Booking {
 		$this->isSeperateSeats();
 
 		if(!$this->_isValid) {
-			$this->response->setError('Error. Dublicated seats');
+			$this->response->setError(__('Error. Dublicated seats', 'seatreg'));
+
 			return;
 		}
 
@@ -86,7 +87,8 @@ class NewBookings extends Booking {
 		if($this->_registrationPassword != null) {
 			if($this->_registrationPassword != $this->_submittedPassword) {
 				//registration password and user submitted passwords are not the same
-				$this->response->setError('Error. Password mismatch!');
+				$this->response->setError(__('Error. Password mismatch!', 'seatreg'));
+				
 				return;
 			}
 		}
@@ -104,20 +106,20 @@ class NewBookings extends Booking {
 			$gmailReg = '/^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/';
 
 			if(!preg_match($gmailReg, $this->_bookerEmail)) {
-				$this->response->setError('Gmail needed!');
+				$this->response->setError(__('Gmail needed!', 'seatreg'));
 				return;
 			}
 		}
 
 		//4.step. Time check. is registration open.
 		if ($this->_isRegistrationOpen == false) {
-			$this->response->setError('Registration is closed');
+			$this->response->setError(__('Registration is closed', 'seatreg'));
 			return;
 		}
 
 		$registrationTime = seatreg_registration_time_status($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
 		if($registrationTime != 'run') {
-			$this->response->setError('Registration is not open (time)');
+			$this->response->setError(__('Registration is not open', 'seatreg'));
 			return;
 		}
 
@@ -197,19 +199,25 @@ class NewBookings extends Booking {
 				$confirmationURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_confirm.php?confirmation-code='. $confCode;
 				$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 
-				$message = 'Your selected seats are: <br/><br/>' . $seatsString . '
-							<p>Click on the link below to confirm your booking</p>
-							<a href="' .  $confirmationURL .'" >'. $confirmationURL .'</a><br/>
-							(If you can\'t click then copy and paste it into your web browser)<br/><br/>After confirmation you can look your booking at<br> <a href="'. $bookingCheckURL .'" >'. $bookingCheckURL .'</a>';
 
-				$mailSent = wp_mail($this->_bookerEmail, 'Booking confirmation', $message, array(
+				$message = __('Your selected seats are', 'seatreg') . ': <br/><br/>' . $seatsString . '
+							<p>' . __('Click on the link below to confirm your booking', 'seatreg') . '</p>
+							<a href="' .  $confirmationURL .'" >'. $confirmationURL .'</a><br/>
+							('. __('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>
+							' .__('After confirmation you can look your booking at', 'seatreg') . '<br> <a href="'. $bookingCheckURL .'" >'. $bookingCheckURL .'</a>';
+
+				$mailSent = wp_mail($this->_bookerEmail, __('Booking confirmation', 'seatreg'), $message, array(
 					"Content-type: text/html"
 				));
 
 				if($mailSent) {
 					$this->response->setText('mail');
+					if($this->_sendNewBookingNotificationEmail) {
+						seatreg_send_booking_notification_email($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
+					}
+					
 				}else {
-					$this->response->setError('Oops.. the system encountered a problem while sending out confirmation email');
+					$this->response->setError(__('Oops.. the system encountered a problem while sending out confirmation email', 'seatreg'));
 				}
 				
 			}else {
