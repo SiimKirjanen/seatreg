@@ -1652,7 +1652,23 @@ function seatreg_booking_submit_callback() {
 	$resp = new JsonResponse();
 	session_start();
 
-	if($_SESSION['seatreg_captcha'] == $_POST['capv']){
+	if($_SESSION['seatreg_captcha'] == $_POST['capv']) {
+
+		if( empty($_POST['FirstName']) || 
+			empty($_POST['LastName']) || 
+			empty($_POST['Email']) || 
+			empty($_POST['item-id']) ||
+			empty($_POST['item-nr']) ||
+			empty($_POST['item-room']) ||
+			empty($_POST['em']) ||
+			empty($_POST['c']) ||
+			!isset($_POST['pw']) ||
+			empty($_POST['custom'])) {
+				$resp->setError('Missing data');
+				$resp->echoData();
+				die();
+		}
+
 		$newBooking = new NewBookings( $_POST['c'], $resp );
 
 		if( $newBooking->validateBookingData(
