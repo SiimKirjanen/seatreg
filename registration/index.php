@@ -435,11 +435,18 @@
 
 		<div id="bookings-confirmed" class="dialog-box">
 			<div id="bookings-confirmed-inner" class="dialog-box-inner border-box animated zoomIn">
-				<h2>
+				<h2 class="booking-confirmed-header">
 					<?php 
 						_e('You Bookings are confirmed', 'seatreg');
 					?>		
 				</h2>
+				<p>
+					<?php _e('You can look your bookings status at the following link'); ?><br>
+					<a href="" class="booking-check-url" target="_blank"></a>
+				</p>
+				<p>
+					<?php _e('Save the link for future reference', 'seatreg'); ?>
+				</p>
 				<button class="refresh-btn">
 					<?php 
 						_e('OK', 'seatreg');

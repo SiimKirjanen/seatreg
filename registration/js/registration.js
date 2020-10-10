@@ -1249,8 +1249,10 @@ function sendData(customFieldBack, regURL) {
 				if(resp.type == 'ok' && resp.text == 'mail') {	
 					$('#email-send').text(mailToSend);
 					needMailCheckInfo();
-				}else if(resp.type == 'ok' && resp.text == 'bookings-confirmed') {
-					bookingsConfirmedInfo();
+				}else if(resp.type == 'ok' && resp.text == 'bookings-confirmed-status-2') {
+					bookingsConfirmedInfo(resp.data, 2);
+				}else if(resp.type == 'ok' && resp.text == 'bookings-confirmed-status-1') {
+					bookingsConfirmedInfo(resp.data, 1);
 				}else if(resp.type == 'error' && resp.text == 'Wrong captcha') {
 					$('#captcha-img').replaceWith(resp.data);
 					$('#checkout-confirm-btn').css('display','inline-block');
@@ -1297,9 +1299,16 @@ function needMailCheckInfo() {
 	$('#email-conf').css('display','block');
 }
 
-function bookingsConfirmedInfo() {
+function bookingsConfirmedInfo(data, status) {
+	$('.booking-check-url').text(data).attr('href', data);
 	$('#checkout-area').css('display','none');
 	$('#bookings-confirmed').css('display','block');
+
+	if(status === 1) {
+		$('.booking-confirmed-header').text(translator.translate('bookingsConfirmedPending'));
+	}else if (status === 2) {
+		$('.booking-confirmed-header').text(translator.translate('bookingsConfirmed'));
+	}
 }
 
 $('#room-nav-btn').on('click', function() {	

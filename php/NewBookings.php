@@ -167,6 +167,7 @@ class NewBookings extends Booking {
 			$this->_bookingId = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
 			$registrationConfirmDate = null;
 			$seatsString = $this->generateSeatString();
+			$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 
 			if(!$this->_requireBookingEmailConfirm) {
 				$bookingStatus = $this->_insertState;
@@ -197,9 +198,6 @@ class NewBookings extends Booking {
 			if($this->_requireBookingEmailConfirm) {
 				seatreg_change_captcha(3);
 				$confirmationURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_confirm.php?confirmation-code='. $confCode;
-				$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
-
-
 				$message = __('Your selected seats are', 'seatreg') . ': <br/><br/>' . $seatsString . '
 							<p>' . __('Click on the link below to confirm your booking', 'seatreg') . '</p>
 							<a href="' .  $confirmationURL .'" >'. $confirmationURL .'</a><br/>
@@ -224,8 +222,13 @@ class NewBookings extends Booking {
 				if($this->_sendNewBookingNotificationEmail) {
 					seatreg_send_booking_notification_email($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
 				}
-				
-				$this->response->setText('bookings-confirmed');
+				if($this->_insertState === 1) {
+					$this->response->setText('bookings-confirmed-status-1');
+					$this->response->setData($bookingCheckURL);
+				}else if($this->_insertState === 2) {
+					$this->response->setText('bookings-confirmed-status-2');
+					$this->response->setData($bookingCheckURL);
+				}
 			}	
 		}
 	}

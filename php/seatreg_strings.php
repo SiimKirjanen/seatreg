@@ -33,6 +33,8 @@ function seatreg_generate_registration_stringes() {
 	$translations->eMail = __('Email', 'seatreg');
 	$translations->this_ = __('This', 'seatreg');
     $translations->_selected = __(' selected', 'seatreg');
+    $translations->bookingsConfirmed = __('You Bookings are confirmed', 'seatreg');
+    $translations->bookingsConfirmedPending = __('Your bookings are now in pending state. Registration owner needs to confirm them', 'seatreg');
 
 	return $translations;
 }
