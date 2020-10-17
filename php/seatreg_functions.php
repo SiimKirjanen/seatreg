@@ -282,10 +282,6 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					<?php endif; ?>
 
 				<?php echo '</div>';?>
-
-				<?php echo '<div class="reg-overview-bottom">';?>
-					<a class="ov-bottom-h-3" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($regUrl); ?>" target="_blank"><i class="fa fa-facebook-square"></i> <?php _e('Share', 'seatreg'); ?></a>
-				<?php echo '</div>';?>
 			<?php echo '</div>';?>
 	  </div>
 
