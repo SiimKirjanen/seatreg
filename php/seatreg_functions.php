@@ -1144,7 +1144,7 @@ function seatreg_set_up_db() {
 	  seatreg_code varchar(40) NOT NULL,
 	  registration_start_timestamp varchar(13) DEFAULT NULL,
 	  registration_end_timestamp varchar(13) DEFAULT NULL,
-	  custom_fields text DEFAULT NULL,
+	  custom_fields text DEFAULT '[]',
 	  seats_at_once int(11) NOT NULL DEFAULT '1',
 	  gmail_required tinyint(1) DEFAULT '0',
 	  registration_open tinyint(1) NOT NULL DEFAULT '1',
