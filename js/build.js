@@ -208,24 +208,29 @@
 		this.backgroundImageHeight = null;
 	}
 
-	//returns object with room info. skeleton and boxes
 	Room.prototype.returnRoomData = function() {
-		var roomData = {};	//stores skeleton and boxes info
-		roomData['l'] = [];
-		var arrLength2 = reg.allLegends.length;
+		var roomData = {
+			legends: []
+		};
+		var allLegendsLength = reg.allLegends.length;
 
-		for( var j = 0; j < arrLength2; j++) {
-			roomData['l'].push([reg.allLegends[j].text, reg.allLegends[j].color]);
+		for( var j = 0; j < allLegendsLength; j++) {
+			roomData['legends'].push({
+				text: reg.allLegends[j].text,
+				color: reg.allLegends[j].color
+			});
 		}
 
 		roomData['g'] = [reg.roomLocator,reg.regBoxCounter];
 
 		var roomLegendArray = [];
+		var roomLegendsLength = this.legends.length;
 
-		var legendsLength = this.legends.length;
-
-		for(var c = 0; c < legendsLength; c++) {
-			roomLegendArray.push([this.legends[c].text, this.legends[c].color]);
+		for(var c = 0; c < roomLegendsLength; c++) {
+			roomLegendArray.push({
+				text: this.legends[c].text,
+				color: this.legends[c].color  
+			});
 		}
 
 		roomData['room'] = [this.roomId, this.title, this.roomText, roomLegendArray, this.roomWidth + 10, this.roomHeight + 10, this.roomSeatCounter, this.backgroundImage];
@@ -1845,7 +1850,6 @@
     //collect data for sending to server
 	Registration.prototype.collectData = function() {
 		var mySon = [];
-		var howManyRooms = Object.size(this.rooms);
 
 		for (var property in this.rooms) {
 		    if (this.rooms.hasOwnProperty(property)) {
@@ -2003,7 +2007,7 @@
 			    	var legendsLength = responseObj[property]['room'][3].length;
 
 			    	for(var k = 0; k < legendsLength; k++) {
-			    		this.rooms[this.currentRoom].legends.push(new Legend(responseObj[property]['room'][3][k][0], responseObj[property]['room'][3][k][1]));
+			    		this.rooms[this.currentRoom].legends.push(new Legend(responseObj[property]['room'][3][k].text, responseObj[property]['room'][3][k].color));
 			    	}
 
 			    	$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"]').text(reg.rooms[reg.currentRoom].title);
@@ -2021,10 +2025,10 @@
 			    		this.rooms[this.currentRoom].addBoxS(arr[i][0], arr[i][1], arr[i][2], arr[i][3], arr[i][4], arr[i][7], arr[i][5], arr[i][6].replace(/\^/g,'<br>'), canReg, arr[i][10], arr[i][11]);
 			    	}
 
-			    	arrLength = responseObj[property]['l'].length;
+			    	arrLength = responseObj[property]['legends'].length;
 
 			    	for(var r = 0; r < arrLength; r++) { //adding legends
-			    		this.syncAllLegends(responseObj[property]['l'][r][0], responseObj[property]['l'][r][1]);
+			    		this.syncAllLegends(responseObj[property]['legends'][r].text, responseObj[property]['legends'][r].color);
 			    	}
 			    }
 			}

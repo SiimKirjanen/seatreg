@@ -158,8 +158,6 @@ $(function() {
 
 		var reLength = Object.size(registrations);
 
-		console.log(registrations);
-
 		for(var i = 0; i < reLength; i++) {
 
 			if(registrations[i].hasOwnProperty('reg_name')) {
@@ -389,31 +387,27 @@ SeatReg.prototype.paintRoomInfo = function() {
 SeatReg.prototype.paintRoomLegends = function() {
 	//paint legend boxes
 
-	//console.log('paintRoomLegends');
 	$('#legends').empty();
 	var arrLen = this.rooms[this.currentRoom].room[3].length;
 
 	if(arrLen > 0) {
-
 		if(this.mobileview) {
 			$('#legend-wrapper').css('display','none');
 		}else {
 			$('#legend-wrapper').css('display','inline-block');
 		}
-
 	}else {
 		$('#legend-wrapper, .mobile-legend').css('display','none');
-		
 	}
+
 	var documentFragment = $(document.createDocumentFragment());
 
 	for(var i = 0; i < arrLen; i++) {
-		documentFragment.append($('<div class="legend-div" data-target-legend='+ this.rooms[this.currentRoom].room[3][i][0].replace(/\s+/g, '_').toLowerCase() +'></div>').append('<div class="legend-box" style="background-color:'+ this.rooms[this.currentRoom].room[3][i][1] +'"></div>', '<div class="legend-name">'+ this.rooms[this.currentRoom].room[3][i][0] +'</div>'));
+		documentFragment.append($('<div class="legend-div" data-target-legend='+ this.rooms[this.currentRoom].room[3][i].text.replace(/\s+/g, '_').toLowerCase() +'></div>').append('<div class="legend-box" style="background-color:'+ this.rooms[this.currentRoom].room[3][i].color +'"></div>', '<div class="legend-name">'+ this.rooms[this.currentRoom].room[3][i].text +'</div>'));
 	}
+
 	$('#legends').append(documentFragment);
-
 	$('#legends .legend-div').on('click', function() {
-
 		var clickLegend = $(this).data('target-legend');
 		var legendBoxes = $('#boxes .box[data-leg='+ clickLegend +']');
 		legendBoxes.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function() {
