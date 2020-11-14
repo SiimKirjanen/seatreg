@@ -210,7 +210,11 @@
 
 	Room.prototype.returnRoomData = function() {
 		var roomData = {
-			legends: []
+			legends: [],
+			global: {
+				roomLocator: reg.roomLocator,
+				boxCounter: reg.regBoxCounter
+			}
 		};
 		var allLegendsLength = reg.allLegends.length;
 
@@ -220,9 +224,7 @@
 				color: reg.allLegends[j].color
 			});
 		}
-
-		roomData['g'] = [reg.roomLocator,reg.regBoxCounter];
-
+				
 		var roomLegendArray = [];
 		var roomLegendsLength = this.legends.length;
 
@@ -1990,7 +1992,7 @@
 			for (var property in responseObj) {
 			    if (responseObj.hasOwnProperty(property)) {
 			    	if(!isBoxCounterSet){
-			    		this.regBoxCounter = responseObj[property]['g'][1];
+			    		this.regBoxCounter = responseObj[property]['global'].boxCounter;
 			    	}
 			        
 			    	this.addRoom(true,false,false);
