@@ -214,6 +214,15 @@
 			global: {
 				roomLocator: reg.roomLocator,
 				boxCounter: reg.regBoxCounter
+			},
+			skeleton: {
+				width: this.skeleton.width,
+				height: this.skeleton.height,
+				countX: this.skeleton.countX,
+				countY: this.skeleton.countY,
+				marginX: this.skeleton.marginX,
+				marginY: this.skeleton.marginY,
+				buildGrid: this.skeleton.buildGrid
 			}
 		};
 		var allLegendsLength = reg.allLegends.length;
@@ -236,7 +245,6 @@
 		}
 
 		roomData['room'] = [this.roomId, this.title, this.roomText, roomLegendArray, this.roomWidth + 10, this.roomHeight + 10, this.roomSeatCounter, this.backgroundImage];
-		roomData['skeleton'] = [this.skeleton.width, this.skeleton.height, this.skeleton.countX, this.skeleton.countY, this.skeleton.marginX, this.skeleton.marginY, this.skeleton.buildGrid];
 		roomData['boxes'] = [];
 
 		var arrLength = this.boxes.length;
@@ -2005,7 +2013,15 @@
 			    		
 			    	//update skeleton
 			    	var skeleton = responseObj[property]['skeleton'];
-			    	this.rooms[this.currentRoom].skeleton.changeSkeleton(skeleton[0], skeleton[1], skeleton[2], skeleton[3], skeleton[4], skeleton[5], skeleton[6]);
+			    	this.rooms[this.currentRoom].skeleton.changeSkeleton(
+						skeleton.width, 
+						skeleton.height, 
+						skeleton.countX, 
+						skeleton.countY, 
+						skeleton.marginX, 
+						skeleton.marginY, 
+						skeleton.buildGrid
+					);
 			    	var legendsLength = responseObj[property]['room'][3].length;
 
 			    	for(var k = 0; k < legendsLength; k++) {
