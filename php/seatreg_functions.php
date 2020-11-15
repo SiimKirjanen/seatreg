@@ -928,7 +928,7 @@ function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrat
 		$roomCustomBoxes = 0;
 
 		for($k = 0; $k < $bronLength; $k++) {  
-			if( $regStructure[$i]->room[1] == $bronRegistrations[$k]->room_name ) { //find how many bron seats in this room
+			if( $regStructure[$i]->room->name == $bronRegistrations[$k]->room_name ) { //find how many bron seats in this room
 				$roomBronSeats = $bronRegistrations[$k]->total;
 				$howManyBronSeats += $bronRegistrations[$k]->total;
 
@@ -937,7 +937,7 @@ function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrat
 		}
 
 		for($k = 0; $k < $takenLength; $k++) {
-			if($regStructure[$i]->room[1] == $takenRegistrations[$k]->room_name) { //find how many taken seats in this room
+			if($regStructure[$i]->room->name == $takenRegistrations[$k]->room_name) { //find how many taken seats in this room
 				$roomTakenSeats = $takenRegistrations[$k]->total;
 				$howManyTakenSeats += $takenRegistrations[$k]->total;
 
@@ -963,7 +963,7 @@ function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrat
 		}
 
 		$roomsInfo[] = array(
-			'roomName' => $regStructure[$i]->room[1],
+			'roomName' => $regStructure[$i]->room->name,
 			'roomSeatsTotal' => $roomRegSeats,
 			'roomOpenSeats' => $roomRegSeats - $roomTakenSeats - $roomBronSeats,
 			'roomTakenSeats' => $roomTakenSeats,

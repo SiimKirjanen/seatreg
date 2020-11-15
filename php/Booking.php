@@ -55,7 +55,7 @@ class Booking {
 			for($j = 0; $j < $layoutLenght; $j++) {
 				//looking user selected seat items
 
-				if($this->_registrationLayout[$j]->room[1] == $this->_bookings[$i]->room_name) {
+				if($this->_registrationLayout[$j]->room->name == $this->_bookings[$i]->room_name) {
 					//found room
 					$searchStatus = 'seat-searching';
 					

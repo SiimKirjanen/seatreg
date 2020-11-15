@@ -244,7 +244,17 @@
 			});
 		}
 
-		roomData['room'] = [this.roomId, this.title, this.roomText, roomLegendArray, this.roomWidth + 10, this.roomHeight + 10, this.roomSeatCounter, this.backgroundImage];
+		roomData['room'] = {
+			id: this.roomId,
+			name: this.title,
+			text: this.roomText,
+			legends: roomLegendArray,
+			with: this.roomWidth + 10,
+			height: this.roomHeight + 10,
+			seatCounter: this.roomSeatCounter,
+			backgroundImage: this.backgroundImage
+		}
+
 		roomData['boxes'] = [];
 
 		var arrLength = this.boxes.length;
@@ -941,7 +951,11 @@
 	Registration.prototype.roomNameExists = function(roomName) {
 		for (var property in this.rooms) {
 		    if (this.rooms.hasOwnProperty(property)) {
-		        if(this.rooms[property].title.toLowerCase() == roomName.toLowerCase() && this.rooms[property].roomId !== this.currentRoom) {
+				if(
+					typeof this.rooms[property].title !== 'undefined' && 
+					this.rooms[property].title.toLowerCase() == roomName.toLowerCase() && 
+					this.rooms[property].roomId !== this.currentRoom
+				) {
 					return true;
 		        }  
 		    }
@@ -1988,7 +2002,7 @@
 		}
 	};
 
-	//add data from server to registration. adds rooms, legends and boxes...
+	//SyncData from server
 	Registration.prototype.syncData = function(responseObj) {		
 		var isBoxCounterSet = false; 
 
@@ -2004,11 +2018,12 @@
 			    	}
 			        
 			    	this.addRoom(true,false,false);
-			    	this.rooms[this.currentRoom].title = responseObj[property]['room'][1];
-			    	this.rooms[this.currentRoom].initialName = responseObj[property]['room'][1];
+			    	this.rooms[this.currentRoom].title = responseObj[property]['room'].title;
+			    	this.rooms[this.currentRoom].initialName = responseObj[property]['room'].title;
 
-			    	if(typeof responseObj[property]['room'][7] !== 'undefined' && responseObj[property]['room'][7] !== null) {
-			    		this.rooms[this.currentRoom].backgroundImage = responseObj[property]['room'][7];
+					var roomBackgroundImage = responseObj[property]['room'].backgroundImage;
+			    	if(typeof roomBackgroundImage !== 'undefined' && roomBackgroundImage !== null) {
+			    		this.rooms[this.currentRoom].backgroundImage = roomBackgroundImage;
 			    	}
 			    		
 			    	//update skeleton
@@ -2022,10 +2037,11 @@
 						skeleton.marginY, 
 						skeleton.buildGrid
 					);
-			    	var legendsLength = responseObj[property]['room'][3].length;
+					var roomLegends = responseObj[property]['room'].legends;
+			    	var roomLegendsLength = responseObj[property]['room'].legends.length;
 
-			    	for(var k = 0; k < legendsLength; k++) {
-			    		this.rooms[this.currentRoom].legends.push(new Legend(responseObj[property]['room'][3][k].text, responseObj[property]['room'][3][k].color));
+			    	for(var k = 0; k < roomLegendsLength; k++) {
+			    		this.rooms[this.currentRoom].legends.push(new Legend(roomLegends[k].text, roomLegends[k].color));
 			    	}
 
 			    	$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"]').text(reg.rooms[reg.currentRoom].title);

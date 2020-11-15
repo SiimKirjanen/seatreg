@@ -210,7 +210,7 @@
 									?>
 									<span class="time">
 										<?php
-											htmlspecialchars($data->registration_start_timestamp);
+										    echo htmlspecialchars($data->registration_start_timestamp);
 										?>
 									</span>
 								</div>
@@ -226,7 +226,7 @@
 									?>
 									<span class="time">
 										<?php
-											htmlspecialchars($data->registration_end_timestamp);
+											echo htmlspecialchars($data->registration_end_timestamp);
 										?>
 									</span>
 								</div>

@@ -1,4 +1,3 @@
-
 $(function() {
 	var ajaxUrl = '../../../../wp-admin/admin-ajax.php';
 
@@ -112,9 +111,7 @@ $(function() {
 		var roomsLength = this.rooms.length;
 
 		for(var i = 0; i < roomsLength; i++) {
-
-			this.locationObj[this.rooms[i].room[1].replace(/ /g,"_")] = i;
-
+			this.locationObj[this.rooms[i].room.name.replace(/ /g,"_")] = i;
 		}
 	};
 
@@ -134,23 +131,13 @@ $(function() {
 
 		for (var property in roomsInfo.roomsInfo) {
 			if (roomsInfo.roomsInfo.hasOwnProperty(property)) {
-
-				////console.log(roomsInfo.roomsInfo[property]);
-				////console.log('asub:');
-
 				var roomLoc = this.locationObj[roomsInfo.roomsInfo[property].roomName.replace(/ /g,"_")];
 
-
-				this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomBronSeats,roomsInfo.roomsInfo[property].roomCustomBoxes,roomsInfo.roomsInfo[property].roomOpenSeats,roomsInfo.roomsInfo[property].roomSeatsTotal,roomsInfo.roomsInfo[property].roomTakenSeats);
-
-				/*
-				this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomBronSeats);  // index 7
-				this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomCustomBoxes); // index 8
-				this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomOpenSeats); //index 9
-				this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomSeatsTotal); // index 10
-				this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomTakenSeats); // index 11
-				*/
-	 
+				this.rooms[roomLoc].room['roomBronSeats'] = roomsInfo.roomsInfo[property].roomBronSeats;
+				this.rooms[roomLoc].room['roomCustomBoxes'] = roomsInfo.roomsInfo[property].roomCustomBoxes;
+				this.rooms[roomLoc].room['roomOpenSeats'] = roomsInfo.roomsInfo[property].roomOpenSeats;
+				this.rooms[roomLoc].room['roomSeatsTotal'] = roomsInfo.roomsInfo[property].roomSeatsTotal;
+				this.rooms[roomLoc].room['roomTakenSeats'] = roomsInfo.roomsInfo[property].roomTakenSeats;	 
 			}
 		}
 
@@ -161,13 +148,9 @@ $(function() {
 		for(var i = 0; i < reLength; i++) {
 
 			if(registrations[i].hasOwnProperty('reg_name')) {
-
 				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_name'], registrations[i]['status'], registrations[i]['reg_name']);
-
 			}else {
-
 				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_name'], registrations[i]['status'], null);
-
 			}
 		}
 
@@ -184,20 +167,18 @@ $(function() {
 		$('.total-tak').text(roomsInfo.takenSeats);
 		
 		if(this.mobileview) {
-
 			seatReg.paintRoomsNav();
 			seatReg.paintRoomInfo();
-			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room[4],seatReg.rooms[seatReg.currentRoom].room[5]);
+			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.with, seatReg.rooms[seatReg.currentRoom].room.height);
 			seatReg.paintRoomLegends();
 			seatReg.paintRoom();
 		}else {
 			seatReg.paintRoomsNav();
 			seatReg.paintRoomInfo();
 			seatReg.paintRoomLegends();
-			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room[4],seatReg.rooms[seatReg.currentRoom].room[5]);
+			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.with, seatReg.rooms[seatReg.currentRoom].room.height);
 			seatReg.paintRoom();
 		}
-
 	};
 
 	SeatReg.prototype.addRegistration = function(seat_id, room, status, reg_name) {
@@ -343,18 +324,15 @@ $(function() {
 
 		for(var i = 0; i < arrLen; i++) {
 			if(this.selectedSeats[i].room == roomName) {
-				//add selected seat mark
-				//console.log('Seat is selected!');
-				
+				//add selected seat mark				
 				documentFragment.querySelector('.box[data-seat="' + this.selectedSeats[i].id + '"]').setAttribute('data-selectedbox','true');
 			}
 		}
 
 		document.getElementById("boxes").appendChild(documentFragment);	
 
-		if(this.rooms[this.currentRoom].room[7] !== null && this.rooms[this.currentRoom].room[7].indexOf('.') !== -1) {  //dose room have a background image?
-			console.log(translator.translate('bgImgDir'));
-			$('#boxes').append('<img class="room-image" src="../uploads/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room[7] + '" />');
+		if(this.rooms[this.currentRoom].room.backgroundImage !== null && this.rooms[this.currentRoom].room.backgroundImage.indexOf('.') !== -1) {  //dose room have a background image?
+			$('#boxes').append('<img class="room-image" src="../uploads/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room.backgroundImage + '" />');
 		}
 
 		$('#boxes .bubble-text').powerTip({
@@ -362,24 +340,23 @@ $(function() {
 			fadeInTime: 0,
 			fadeOutTime:0,
 			intentPollInterval: 10
-			//intentSensitivity: 3
 		});
 	};
 
 SeatReg.prototype.paintRoomInfo = function() {
 	//room-nav-info
-	$('#current-room-name').text(this.rooms[this.currentRoom].room[1]);
+	$('#current-room-name').text(this.rooms[this.currentRoom].room.name);
 	var infoLoc = this.rooms[this.currentRoom].room;
 	var documentFragment = $(document.createDocumentFragment());
 
-	documentFragment.append('<div class="info-item open-seats"><span>'+ translator.translate('openSeatsInRoom_') +'</span>' + infoLoc[10] +'</div>', '<div class="info-item"><span class="bron-legend"></span> <span>'+ translator.translate('pendingSeatInRoom_') +'</span>' + infoLoc[8] +'</div>', '<div class="info-item"><span class="tak-legend"></span> <span>'+ translator.translate('confirmedSeatInRoom_') +'</span>' + infoLoc[12] +'</div>');
-		/*
-			this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomBronSeats);  // index 7
-			this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomCustomBoxes); // index 8
-			this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomOpenSeats); //index 9
-			this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomSeatsTotal); // index 10
-			this.rooms[roomLoc].room.push(roomsInfo.roomsInfo[property].roomTakenSeats); // index 11
-		*/
+	documentFragment.append(
+		'<div class="info-item open-seats">' + 
+		'<span>' + 
+		translator.translate('openSeatsInRoom_') +
+		'</span>' + 
+		infoLoc.roomOpenSeats + 
+		'</div>', 
+		'<div class="info-item"><span class="bron-legend"></span> <span>'+ translator.translate('pendingSeatInRoom_') +'</span>' + infoLoc.roomBronSeats +'</div>', '<div class="info-item"><span class="tak-legend"></span> <span>'+ translator.translate('confirmedSeatInRoom_') +'</span>' + infoLoc.roomTakenSeats +'</div>');
 
 	$('#room-nav-info-inner').html(documentFragment);
 };
@@ -388,7 +365,7 @@ SeatReg.prototype.paintRoomLegends = function() {
 	//paint legend boxes
 
 	$('#legends').empty();
-	var arrLen = this.rooms[this.currentRoom].room[3].length;
+	var arrLen = this.rooms[this.currentRoom].room.legends.length;
 
 	if(arrLen > 0) {
 		if(this.mobileview) {
@@ -403,7 +380,7 @@ SeatReg.prototype.paintRoomLegends = function() {
 	var documentFragment = $(document.createDocumentFragment());
 
 	for(var i = 0; i < arrLen; i++) {
-		documentFragment.append($('<div class="legend-div" data-target-legend='+ this.rooms[this.currentRoom].room[3][i].text.replace(/\s+/g, '_').toLowerCase() +'></div>').append('<div class="legend-box" style="background-color:'+ this.rooms[this.currentRoom].room[3][i].color +'"></div>', '<div class="legend-name">'+ this.rooms[this.currentRoom].room[3][i].text +'</div>'));
+		documentFragment.append($('<div class="legend-div" data-target-legend='+ this.rooms[this.currentRoom].room.legends[i].text.replace(/\s+/g, '_').toLowerCase() +'></div>').append('<div class="legend-box" style="background-color:'+ this.rooms[this.currentRoom].room.legends[i].color +'"></div>', '<div class="legend-name">'+ this.rooms[this.currentRoom].room.legends[i].text +'</div>'));
 	}
 
 	$('#legends').append(documentFragment);
@@ -426,13 +403,11 @@ SeatReg.prototype.paintRoomsNav = function() {
 	var scope = this;
 
 	for(var i = 0; i < roomsLength; i++) {
-
-		var roomName = this.rooms[i].room[1];
-
+		var roomName = this.rooms[i].room.name;
 		var navItem = $('<div>', {
 			'class': 'room-nav-link',
 			'data-open': roomName.replace(/ /g,"_")
-		}).html(roomName + ' <span class="open-seats-rem">(' + this.rooms[i].room[10] + ')</span>').on('click', function() {
+		}).html(roomName + ' <span class="open-seats-rem">(' + this.rooms[i].room.roomOpenSeats + ')</span>').on('click', function() {
 			
 			//$('#seat-cart').append('<p>start</p>');
 			scope.roomChange($(this).attr('data-open'));
@@ -473,13 +448,11 @@ SeatReg.prototype.roomChange = function(roomName) {
 	$('#legends').empty();	//clear legends
 
 	if(this.mobileview <= 1024) {
-		//console.log('roomchange mobile');
 		this.paintRoomLegends();
 		this.paintRoomInfo();
 		setMiddleSecSize(this.rooms[this.currentRoom].room[4],this.rooms[this.currentRoom].room[5]);
 
 	}else {
-		//console.log('roomchange nomobile');
 		this.paintRoomLegends();
 		this.paintRoomInfo();
 		setMiddleSecSize(this.rooms[this.currentRoom].room[4],this.rooms[this.currentRoom].room[5]);
@@ -552,9 +525,8 @@ SeatReg.prototype.addSeatToCart = function() {
 SeatReg.prototype.openSeatCart = function() {
 	var selected = this.selectedSeats.length;
 
-	if(selected == 0) {
+	if(selected == 0) {	
 		if(this.status == 'run') {
-			//$('#seat-cart-info').html('<h3>Selection is empty</h3><p>You can add ' + this.spotName + ' to cart by clicking/tabbing them</p>');
 			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('youCanAdd_') + this.spotName + translator.translate('_toCartClickTab') + '</p>');
 			
 			$('#checkout').css('display','none');
@@ -756,7 +728,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	var legend = null;
 	var nr = null;
 	var type = 'box';
-	var room = this.rooms[this.currentRoom].room[1];
+	var room = this.rooms[this.currentRoom].room.name;
 	var showDialog = false;
 	var isSelected = false;
 
@@ -847,11 +819,9 @@ if (typeof seatregdemo !== 'undefined') {
 }
 
 if(dataReg == null) {
-	//$('#middle-section').html('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span> Registration under construction</div>');
-	//$('#seat-cart, #zoom-controller, #room-nav-btn-wrap, .room-nav-extra-info-btn').css({'display': 'none'});
 	$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ translator.translate('_regUnderConstruction') +'</div>');
+
 	return false;
-	//throw new Error("Registration under construction");
 }else {
 	seatReg.fillLocationObj();
 }
@@ -922,7 +892,7 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 		spaceForMiddleHeight = screenHeight - 30 - navHeight - 30;  //- header height, - navbar height, -footer if needed
 		$('#middle-section').css('margin-left', legendWidth -120);
 
-		if(seatReg.rooms[seatReg.currentRoom].room[3].length > 0) {
+		if(seatReg.rooms[seatReg.currentRoom].room.legends.length > 0) {
 			$('#legend-wrapper').css('display','inline-block');
 		}
 
