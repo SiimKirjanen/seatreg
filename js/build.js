@@ -2018,8 +2018,8 @@
 			    	}
 			        
 			    	this.addRoom(true,false,false);
-			    	this.rooms[this.currentRoom].title = responseObj[property]['room'].title;
-			    	this.rooms[this.currentRoom].initialName = responseObj[property]['room'].title;
+			    	this.rooms[this.currentRoom].title = responseObj[property]['room'].name;
+			    	this.rooms[this.currentRoom].initialName = responseObj[property]['room'].name;
 
 					var roomBackgroundImage = responseObj[property]['room'].backgroundImage;
 			    	if(typeof roomBackgroundImage !== 'undefined' && roomBackgroundImage !== null) {
