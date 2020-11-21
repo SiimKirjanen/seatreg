@@ -118,8 +118,8 @@
 	*/
 
 	//box class 12 construct
-	function Box(title, xPos, yPos, xSize, ySize, id, color, hoverText, canIRegister, seat, status, zIndex) {
-		this.legend = title;
+	function Box(legend, xPos, yPos, xSize, ySize, id, color, hoverText, canIRegister, seat, status, zIndex) {
+		this.legend = legend;
 		this.xPosition = xPos;
 		this.yPosition = yPos;
 		this.width = xSize;
@@ -131,7 +131,6 @@
 		this.seat = seat;
 		this.status = status;
 		this.zIndex = zIndex;
-		////console.log('creating box with z-index: ' + zIndex);
 	}
 
 	//Change box values. position and size
@@ -249,7 +248,7 @@
 			name: this.title,
 			text: this.roomText,
 			legends: roomLegendArray,
-			with: this.roomWidth + 10,
+			width: this.roomWidth + 10,
 			height: this.roomHeight + 10,
 			seatCounter: this.roomSeatCounter,
 			backgroundImage: this.backgroundImage
@@ -265,7 +264,20 @@
 			}else{
 				canReg = "false";
 			}
-			roomData['boxes'].push([this.boxes[i].legend, Math.round(this.boxes[i].xPosition), Math.round(this.boxes[i].yPosition), Math.round(this.boxes[i].width), Math.round(this.boxes[i].height), this.boxes[i].color, this.boxes[i].hoverText.replace(/<br>/g,'^'), this.boxes[i].id, canReg, this.boxes[i].seat,'noStatus', this.boxes[i].zIndex]);
+			roomData['boxes'].push({
+				legend: this.boxes[i].legend,
+				xPosition: Math.round(this.boxes[i].xPosition),
+				yPosition: Math.round(this.boxes[i].yPosition),
+				width: Math.round(this.boxes[i].width),
+				height: Math.round(this.boxes[i].height),
+				color: this.boxes[i].color,
+				hoverText: this.boxes[i].hoverText.replace(/<br>/g,'^'),
+				id: this.boxes[i].id,
+				canRegister: canReg,
+				seat: this.boxes[i].seat,
+				status: 'noStatus',
+				zIndex: this.boxes[i].zIndex
+			});
 		}
 
 		return roomData;
@@ -297,7 +309,7 @@
 		$('.room-box-counter').text(this.boxes.length);
 	};
 
-	//add box to room from server
+	//add box to room from server data
 	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
@@ -2049,14 +2061,26 @@
 			    	var arrLength = arr.length;
 
 			    	for(var i = 0; i < arrLength; i++) {  //adding boxes
-			    		var canReg = arr[i][8];
+			    		var canReg = arr[i].canRegister;
 
 			    		if(canReg == 'true') {
 			    			canReg = true;
 			    		}else if(canReg == 'false'){
 			    			canReg = false;
 			    		}
-			    		this.rooms[this.currentRoom].addBoxS(arr[i][0], arr[i][1], arr[i][2], arr[i][3], arr[i][4], arr[i][7], arr[i][5], arr[i][6].replace(/\^/g,'<br>'), canReg, arr[i][10], arr[i][11]);
+			    		this.rooms[this.currentRoom].addBoxS(
+							arr[i].legend,
+							arr[i].xPosition,
+							arr[i].yPosition, 
+							arr[i].width, 
+							arr[i].height, 
+							arr[i].id, 
+							arr[i].color, 
+							arr[i].hoverText.replace(/\^/g,'<br>'), 
+							canReg, 
+							arr[i].status, 
+							arr[i].zIndex
+						);
 			    	}
 
 			    	arrLength = responseObj[property]['legends'].length;

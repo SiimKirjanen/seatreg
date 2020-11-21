@@ -33,7 +33,8 @@ $(function() {
 	var msie = ua.indexOf("MSIE ");
 
 	 Object.size = function(obj) {
-	    var size = 0, key;
+		var size = 0, key;
+		
 	    for (key in obj) {
 	        if(obj.hasOwnProperty(key)){
 	        	size++;
@@ -71,10 +72,8 @@ $(function() {
 		this.customF = [];
 		this.gmailNeeded = gmail;
 		this.status = regTime;
-		//this.spotName = $('#spot-name').val();
 		this.spotName = translator.translate('seat');
 		this.demo = false;
-		
 	}
 
 	function CartItem(id,nr,room) {
@@ -96,14 +95,12 @@ $(function() {
 
 		if(!document.addEventListener ){
 	        this.ie8 = true;
-	        $('#box-wrap').css('overflow','auto');
-	        
-	    }
+	        $('#box-wrap').css('overflow','auto'); 
+		}
+		
 	    if(screenWidth >= 1024) {
 	    	this.mobileview = false;
 	    }
-
-
 	};
 
 	SeatReg.prototype.fillLocationObj = function() {
@@ -115,13 +112,11 @@ $(function() {
 		}
 	};
 
-
 	SeatReg.prototype.fillCustom = function(customs) {
 		this.customF = customs;
 	};
 
 	SeatReg.prototype.init = function() {
-
 		//add roomsInfo to seatReg
 
 		this.bronSeats = roomsInfo.bronSeats;
@@ -142,11 +137,9 @@ $(function() {
 		}
 
 		//adding registrations
-
 		var reLength = Object.size(registrations);
 
 		for(var i = 0; i < reLength; i++) {
-
 			if(registrations[i].hasOwnProperty('reg_name')) {
 				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_name'], registrations[i]['status'], registrations[i]['reg_name']);
 			}else {
@@ -155,9 +148,7 @@ $(function() {
 		}
 
 		if(custF != null) {
-			//console.log('Adding custom fields');
 			seatReg.fillCustom(custF);
-
 		}
 
 		//fill extra info
@@ -169,101 +160,81 @@ $(function() {
 		if(this.mobileview) {
 			seatReg.paintRoomsNav();
 			seatReg.paintRoomInfo();
-			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.with, seatReg.rooms[seatReg.currentRoom].room.height);
+			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.width, seatReg.rooms[seatReg.currentRoom].room.height);
 			seatReg.paintRoomLegends();
 			seatReg.paintRoom();
 		}else {
 			seatReg.paintRoomsNav();
 			seatReg.paintRoomInfo();
 			seatReg.paintRoomLegends();
-			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.with, seatReg.rooms[seatReg.currentRoom].room.height);
+			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.width, seatReg.rooms[seatReg.currentRoom].room.height);
 			seatReg.paintRoom();
 		}
 	};
 
 	SeatReg.prototype.addRegistration = function(seat_id, room, status, reg_name) {
-
 		var roomLocation = this.locationObj[room.replace(/ /g,"_")];
-
 		var boxesLen = this.rooms[roomLocation].boxes.length;
 
 		for(var j = 0; j < boxesLen; j++) {
-
-			if(this.rooms[roomLocation].boxes[j][7] == seat_id) {
-
+			if(this.rooms[roomLocation].boxes[j].id == seat_id) {
 				if(status == 1) {
-					this.rooms[roomLocation].boxes[j][10] = 'bronRegister';
+					this.rooms[roomLocation].boxes[j].status = 'bronRegister';
 				}else {
-					this.rooms[roomLocation].boxes[j][10] = 'takenRegister';
+					this.rooms[roomLocation].boxes[j].status = 'takenRegister';
 				}
 
 				if(reg_name != null) {	//need to show name
-
-					if(this.rooms[roomLocation].boxes[j][6] == "nohover") { //no bubble text
-						this.rooms[roomLocation].boxes[j][6] = reg_name;
+					if(this.rooms[roomLocation].boxes[j].hoverText === "nohover") { //no bubble text
+						this.rooms[roomLocation].boxes[j].hoverText = reg_name;
 					}else {  //need to add name at the beginning of bubble text
-						//var bText = this.rooms[roomLocation].boxes[j][6];
-						
-						this.rooms[roomLocation].boxes[j][6] = reg_name + '^^' + this.rooms[roomLocation].boxes[j][6];
+						this.rooms[roomLocation].boxes[j].hoverText = reg_name + '^^' + this.rooms[roomLocation].boxes[j].hoverText;
 					}
-
 				}
 
 				break;
 			}
-
-			//if(this.rooms[j]['rooms'][0]['rooms'][1]) {
-
-			//}
-
 		}
 	};
 
 	SeatReg.prototype.paintRoom = function() {
 		//paint room boxes and add listeners
 		var documentFragment = document.createDocumentFragment();
-
 		var loc = this.rooms[this.currentRoom].boxes;
-
 		var boxLength = loc.length;
-
 		var scope = this;
 
 		for(var i = 0; i < boxLength; i++) {
-
 			var box = document.createElement('div');
 			box.className = "box";
 
 			var clickable = false;
 
-			box.style.top = loc[i][2] + 'px';
-			box.style.left = loc[i][1] + 'px';
-			box.style.backgroundColor = loc[i][5];
-			box.style.zIndex = loc[i][11];
-			box.style.width = loc[i][3] + 'px';
-			box.style.height = loc[i][4] + 'px';
+			box.style.top = loc[i].yPosition + 'px';
+			box.style.left = loc[i].xPosition + 'px';
+			box.style.backgroundColor = loc[i].color;
+			box.style.zIndex = loc[i].zIndex;
+			box.style.width = loc[i].width + 'px';
+			box.style.height = loc[i].height + 'px';
 
-			if(loc[i][0] != 'noLegend') {
-				box.setAttribute('data-legend',loc[i][0]);
-				box.setAttribute('data-leg',loc[i][0].replace(/\s+/g, '_').toLowerCase());
+			if(loc[i].legend !== 'noLegend') {
+				box.setAttribute('data-legend',loc[i].legend);
+				box.setAttribute('data-leg',loc[i].legend.replace(/\s+/g, '_').toLowerCase());
 				clickable = true;
 			}
 
-
-			if(loc[i][8] == "true") {
-				
-			
-				box.setAttribute('data-seat',loc[i][7]);
+			if(loc[i].canRegister == "true") {
+				box.setAttribute('data-seat',loc[i].id);
 				var number = document.createElement('div');
 				number.className = "seat-number";
-				var newContent = document.createTextNode(loc[i][9]);
+				var newContent = document.createTextNode(loc[i].seat);
 				number.appendChild(newContent);
 				box.appendChild(number);
 				clickable = true;
 			}
-			if(loc[i][6] != "nohover") {
-			
-				box.setAttribute('data-powertip',loc[i][6].replace(/\^/g,'<br>'));
+
+			if(loc[i].hoverText !== "nohover") {
+				box.setAttribute('data-powertip',loc[i].hoverText.replace(/\^/g,'<br>'));
 				box.className = box.className +' bubble-text';
 				clickable = true;
 
@@ -271,56 +242,45 @@ $(function() {
 				commentIcon.className = ' fa fa-comment-o comment-icon';
 				box.appendChild(commentIcon);
 			}
-			if(loc[i][10] != "noStatus") {
 
-				if(loc[i][10] == "bronRegister") {
-				
+			if(loc[i].status !== "noStatus") {
+				if(loc[i].status == "bronRegister") {
 					box.setAttribute('data-status','bron');
 					var bronSign = document.createElement('div');
 					bronSign.className = "bron-sign";
 					box.appendChild(bronSign);
-					
-
-				}else if(loc[i][10] == "takenRegister") {
-					
+				}else if(loc[i].status == "takenRegister") {
 					box.setAttribute('data-status','tak');
 					var takSign = document.createElement('div');
 					takSign.className = "taken-sign";
 					box.appendChild(takSign);
 				}
 				clickable = true;
-
 			}
+
 			if(clickable) {
 				box.className = box.className + ' cursor';
 			}
 					
 			if (!this.ie8){
 				box.addEventListener('tap',function() {
-					//$('#seat-cart').append('tap<br>');
 					scope.openSeatDialog(this);
 					
 				},false);
-
 			}else{
 				//IE
-			
 				box.attachEvent('onclick',function(evt) {
-					//console.log('IE8 click');
 					var evt = evt || window.event;
 					var target = evt.target || evt.srcElement;
 					scope.openSeatDialog(target);
 				});
 			}
-			
-
 			documentFragment.appendChild(box);
-
 		}
 
 		//check if seat is in cart
 		var arrLen = this.selectedSeats.length;
-		var roomName = this.rooms[this.currentRoom].room[1];
+		var roomName = this.rooms[this.currentRoom].room.name;
 
 		for(var i = 0; i < arrLen; i++) {
 			if(this.selectedSeats[i].room == roomName) {
@@ -363,7 +323,6 @@ SeatReg.prototype.paintRoomInfo = function() {
 
 SeatReg.prototype.paintRoomLegends = function() {
 	//paint legend boxes
-
 	$('#legends').empty();
 	var arrLen = this.rooms[this.currentRoom].room.legends.length;
 
@@ -394,7 +353,6 @@ SeatReg.prototype.paintRoomLegends = function() {
 	});
 
 	initLegendsScroll();
-
 };
 
 SeatReg.prototype.paintRoomsNav = function() {
@@ -408,19 +366,14 @@ SeatReg.prototype.paintRoomsNav = function() {
 			'class': 'room-nav-link',
 			'data-open': roomName.replace(/ /g,"_")
 		}).html(roomName + ' <span class="open-seats-rem">(' + this.rooms[i].room.roomOpenSeats + ')</span>').on('click', function() {
-			
-			//$('#seat-cart').append('<p>start</p>');
 			scope.roomChange($(this).attr('data-open'));
-
 		});
 
 		if(seatReg.currentRoom == i) {
 			navItem.addClass('active-nav-link');
 		}
 
-
 		navItem.appendTo(documentFragment);
-
 	}
 	$('#room-nav-items').append(documentFragment);
 };
@@ -443,23 +396,20 @@ SeatReg.prototype.roomChange = function(roomName) {
 	$('#room-nav-items .active-nav-link').removeClass('active-nav-link');
 	$('#room-nav-items').find('.room-nav-link[data-open=' + roomName +']').addClass('active-nav-link');
 
-
 	$('#boxes').empty();	//clear boxes
 	$('#legends').empty();	//clear legends
 
 	if(this.mobileview <= 1024) {
 		this.paintRoomLegends();
 		this.paintRoomInfo();
-		setMiddleSecSize(this.rooms[this.currentRoom].room[4],this.rooms[this.currentRoom].room[5]);
-
+		setMiddleSecSize(this.rooms[this.currentRoom].room.width, this.rooms[this.currentRoom].room.height);
 	}else {
 		this.paintRoomLegends();
 		this.paintRoomInfo();
-		setMiddleSecSize(this.rooms[this.currentRoom].room[4],this.rooms[this.currentRoom].room[5]);
+		setMiddleSecSize(this.rooms[this.currentRoom].room.width, this.rooms[this.currentRoom].room.height);
 	}
 	
 	this.paintRoom();
-	
 };
 
 SeatReg.prototype.addSeatToCart = function() {
@@ -474,15 +424,11 @@ SeatReg.prototype.addSeatToCart = function() {
 	$('.seats-in-cart').text(this.selectedSeats.length);
 	$('#boxes .box[data-seat="' + seatId + '"]').attr('data-selectedBox','true');
 
-
 	//add to seat cart popup
-
 	var cartItem = $('<div class="cart-item" data-cart-id="' + seatId + '"></div>');
 	var seatNumberDiv = $('<div class="cart-item-nr">' + seatNr + '</div>');
 	var roomNameDiv = $('<div class="cart-item-room">' + roomName + '</div>');
 	var delItem = $('<div class="remove-cart-item"><i class="fa fa-times-circle"></i><span style="padding-left:4px">'+ translator.translate('remove') +'</span></div>').on('click', function() {
-		//console.log('Remove item');
-
 		var item = $(this).closest('.cart-item');
 		var removeId = item.attr('data-cart-id');
 
@@ -528,7 +474,6 @@ SeatReg.prototype.openSeatCart = function() {
 	if(selected == 0) {	
 		if(this.status == 'run') {
 			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('youCanAdd_') + this.spotName + translator.translate('_toCartClickTab') + '</p>');
-			
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
 		}else {
@@ -564,6 +509,7 @@ SeatReg.prototype.openCheckOut = function() {
 	if(arrLen == 0) {
 		return;
 	}
+
 	$('#seat-cart-popup').css('display','none');
 	this.generateCheckout(arrLen);
 	$('#checkout-area').css('display','block');
@@ -574,51 +520,34 @@ SeatReg.prototype.openCheckOut = function() {
 SeatReg.prototype.openInfo = function() {
 	$('#modal-bg').css('display','block');
 	$('#extra-info').css('display','block');
-
 };
 
 SeatReg.prototype.closeCheckOut = function(hideModalBg) {
 	$('#checkout-area').css('display','none');
-	$('#modal-bg').css('display','none');
-
-/*
-
-	$('#checkoput-area-inner').addClass('bounceOutLeft').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-		
-		if(hideModalBg) {
-			
-		}
-		
-
-		$(this).removeClass('bounceOutLeft');
-	});
-
-*/
-	
+	$('#modal-bg').css('display','none');	
 };
 
 SeatReg.prototype.generateCheckout = function(arrLen) {
 	$('#checkout-input-area').empty();
 	var documentFragment = $(document.createDocumentFragment());
 	var arrLen3 = this.customF.length;
-	for(var i = 0; i < arrLen; i++) {
 
+	for(var i = 0; i < arrLen; i++) {
 		var checkItem = $('<div class="check-item"></div>');
 		var checkItemHeader = $('<div class="check-item-head">'+ this.spotName +' nr <span>' + this.selectedSeats[i].nr + '</span><br><span>' + this.selectedSeats[i].room + '</span></div>');
 		var documentFragment2 = $(document.createDocumentFragment());
 		var arrLen2 = this.selectedSeats[i].defFields.length;
 		
-
 		for(var j = 0; j < arrLen2; j++) {
-
 			var field = this.generateField(this.selectedSeats[i].defFields[j]);
-
 			documentFragment2.append(field);
 		}
+
 		for(var j = 0; j < arrLen3; j++) {
 			var field = this.generateCustomField(this.customF[j]);
 			documentFragment2.append(field);
 		}
+
 		var seatId = $('<input type="hidden" class="item-id" name="item-id[]" value="' + this.selectedSeats[i].id + '" />');
 		var seatNr = $('<input type="hidden" class="item-nr" name="item-nr[]" value="' + this.selectedSeats[i].nr + '" />');
 		var seatRoom = $('<input type="hidden" class="item-room" name="item-room[]" value="' + this.selectedSeats[i].room + '" />');
@@ -700,8 +629,6 @@ SeatReg.prototype.closeModal = function() {
 };
 
 SeatReg.prototype.openSeatDialog = function(clickBox) {
-	//console.log('OpenSeatDialog');
-	////console.log(clickBox);
 	var openDialog = this.paintSeatDialog(clickBox);
 
 	if(openDialog) {
@@ -719,7 +646,6 @@ SeatReg.prototype.closeSeatDialog = function() {
 };
 
 SeatReg.prototype.paintSeatDialog = function(clickBox) {
-
 	$('#confirm-dialog-mob-hover, #confirm-dialog-mob-legend').empty().css('display','none');
 	$('#confirm-dialog-mob-text').empty();
 	$('#confirm-dialog-mob-ok').css('display','none');
@@ -734,22 +660,18 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 	var jClickBox = $(clickBox);
 
-	////console.log(clickBox);
-
 	if(clickBox.hasAttribute('data-powertip')) {
 		$('#confirm-dialog-mob-hover').css('display','block');
 		hover = clickBox.getAttribute('data-powertip');
 		showDialog = true;
 	}
 	if(clickBox.hasAttribute('data-legend')) {
-		
 		$('#confirm-dialog-mob-legend').css('display','block');
 		legend = clickBox.getAttribute('data-legend');
 		showDialog = true;
 	}
 	
 	if(clickBox.hasAttribute('data-seat')) {
-		
 		$('#selected-seat').val(clickBox.getAttribute('data-seat'));
 		$('#selected-seat-room').val(room);
 		type = 'rbox';
@@ -759,13 +681,11 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	}
 
 	if(clickBox.hasAttribute('data-status')) {
-		
 		type = clickBox.getAttribute('data-status');
 		showDialog = true;
 	}
 
 	if(clickBox.hasAttribute("data-selectedBox")) {
-		//clickBox.hasAttribute('data-selectedBox')
 		isSelected = true;
 	}
 	
@@ -776,7 +696,6 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		$('#confirm-dialog-mob-legend').html('Legend: <div class="dialog-legend-box" style="background-color:' + jClickBox.css('background-color') + '"></div><span class="dialog-legend-text">' + legend + '</span>');
 	}
 	if(type != 'box') {
-
 		if(!isSelected) {
 			if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
 
@@ -796,7 +715,6 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 			}else if(type == 'rbox' && this.selectedSeats.length >= this.seatLimit ) {
 				$('#confirm-dialog-mob-ok').css('display','none');
 				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ translator.translate('selectionIsFull') +'</div>');
-				
 			}
 		}else {
 			$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>' + capitalizeFirstLetter(this.spotName)  + ' ' + nr + translator.translate('_fromRoom_')  + ' ' + room + translator.translate('_isAlreadyInCart') +'</h4></div>');
@@ -807,7 +725,6 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	}else {
 		return false;
 	}
-
 };
 
 var seatReg = new SeatReg();
@@ -815,7 +732,6 @@ seatReg.browserInfo();
 
 if (typeof seatregdemo !== 'undefined') {
     seatReg.demo = true;
-
 }
 
 if(dataReg == null) {
@@ -827,13 +743,11 @@ if(dataReg == null) {
 }
 
 $(window).resize(function() {
-		//console.log('resize detected')
 		rtime = new Date();
 	    if (timeout === false) {
 	        timeout = true;
 	        setTimeout(resizeend, delta);
 	    }
-  	
 });
 
 function resizeend() {
@@ -841,26 +755,20 @@ function resizeend() {
         setTimeout(resizeend, delta);
     } else {
         timeout = false;
-
-        //console.log('resizing done!');
-
         screenWidth = $(window).width();
-        //console.log('Setting with to ' + screenWidth);
   		screenHeight = $(window).height();
 
   		if(screenWidth > 1024) {
-  			seatReg.mobileview = false;
+			seatReg.mobileview = false;
+			  
   			if($('#room-nav').hasClass('modal')) {
   				$('#room-nav').removeClass('modal');
   				$('#modal-bg').css('display','none');
-  				//$('#legend-wrapper').css('display','inline-block');
   			}
-  			
   		}else {
   			seatReg.mobileview = true;		
   		}
-
-  		setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room[4],seatReg.rooms[seatReg.currentRoom].room[5]);
+  		setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.width, seatReg.rooms[seatReg.currentRoom].room.height);
   		if(legendScroll != null) {
 			legendScroll.destroy();
 			legendScroll= null;
@@ -870,22 +778,16 @@ function resizeend() {
 }
 
 function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
-	//console.log('screenwidth: ' + screenWidth + ' screenheight ' + screenHeight);
-	
 	var navHeight = $('#room-nav-wrap').outerHeight();
 	var spaceForMiddleWidth = screenWidth; //how much room for seat map
 	var spaceForMiddleHeight = screenHeight - 30 - 30 - navHeight - 20;  // - header height, -legend height, navbar height, -spacing  --default mobile
-
-	//console.log('room-nav-wrap height on: ' + navHeight);
 	var needHorizScroll = false;
 	var needVerticScroll = false;
-
 
 	$('#middle-section').css('margin-left','');
 
 	if(screenWidth >= 1024) {
 		//ok i have bigger screen. set legends area left and seatcart right
-		//console.log('big screen set legends and cart on side');
 		var legendWidth = $('#legend-wrapper').outerWidth();
 		
 		spaceForMiddleWidth = spaceForMiddleWidth - legendWidth - 150; //seat cart and legends box and addextra for space
@@ -902,7 +804,6 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 	}
 
 	$('#boxes').removeAttr('style');
-	//$('#room-nav-wrap').css('width', spaceForMiddleWidth);
 	//width of middle
 	if(roomSizeWidth > spaceForMiddleWidth) {
 		//roomsize is too wide
@@ -911,7 +812,6 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 		$('#boxes').css('width',roomSizeWidth + 15);
 
 	}else {
-		//console.log('No problem with width!');
 		$('#box-wrap, #boxes').css('width', roomSizeWidth);
 	}
 
@@ -919,15 +819,10 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 
 	if(roomSizeHeight > spaceForMiddleHeight) {
 		needVerticScroll = true;
-		//console.log('screenheight on ' + screenHeight);
-		//console.log('vaba ruumi on (height)' + spaceForMiddleHeight);
-		//console.log('roomHeight ' + roomSizeHeight);
-
 		$('#box-wrap').css('height', spaceForMiddleHeight);
 		$('#boxes').css('height',roomSizeHeight + 15);
 
 	}else {
-		//console.log('No problem with height!');
 		$('#box-wrap, #boxes').css('height', roomSizeHeight);
 	}
 
@@ -1002,9 +897,7 @@ function initScroll(needHorizScroll, needVerticScroll) {
 
 	if(myScroll == null && seatReg.ie8 == false) {
 			myScroll = new IScroll('#box-wrap', {
-				//mouseWheel: true,
 				keyBindings: true,
-				//wheelAction: 'zoom',
 				scrollbars: true,
 				scrollX: true,
 				scrollY: true,
@@ -1017,7 +910,6 @@ function initScroll(needHorizScroll, needVerticScroll) {
 				zoomMax: 30,
 				zoomMin: 0.1,
 				mouseWheelSpeed: 20,
-				//shrinkScrollbars: 'clip' //scape
 			});
 
 			if(needToZoom) {

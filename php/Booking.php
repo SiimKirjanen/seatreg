@@ -63,14 +63,14 @@ class Booking {
 
 					for($k = 0; $k < $boxesLenght; $k++) {
 						//looping boxes
-						if($this->_registrationLayout[$j]->boxes[$k][8] == 'true' && $this->_registrationLayout[$j]->boxes[$k][7] == $this->_bookings[$i]->seat_id) {
+						if($this->_registrationLayout[$j]->boxes[$k]->canRegister === 'true' && $this->_registrationLayout[$j]->boxes[$k]->id == $this->_bookings[$i]->seat_id) {
 							
 							//found box
-							if($this->_registrationLayout[$j]->boxes[$k][10] == 'noStatus') {
+							if($this->_registrationLayout[$j]->boxes[$k]->status == 'noStatus') {
 								//seat is available
 								$searchStatus = 'seat-nr-check';
 							
-								if($this->_registrationLayout[$j]->boxes[$k][9] == $this->_bookings[$i]->seat_nr) {
+								if($this->_registrationLayout[$j]->boxes[$k]->seat == $this->_bookings[$i]->seat_nr) {
 									$searchStatus = 'seat-ok';
 								}
 

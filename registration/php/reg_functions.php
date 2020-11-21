@@ -89,8 +89,8 @@ function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 		}
 		
 		for($j = 0; $j < $roomBoxCount; $j++) {
-			if($roomBoxes[$j][8] == 'true') {
-				if($roomBoxes[$j][10] == 'noStatus') {
+			if($roomBoxes[$j]->canRegister === 'true') {
+				if($roomBoxes[$j]->status === 'noStatus') {
 					$howManyOpenSeats++;
 					$roomOpenSeats++;
 				}
