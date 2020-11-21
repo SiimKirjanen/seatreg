@@ -1082,16 +1082,16 @@ function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $boo
 		$searchStatus = 'room-searching';
 		$errorText = __('Room ','seatreg') . $bookingRoomName . __(' dose not exist!', 'seatreg');
 
-		if($registrationLayout[$i]->room[1] == $bookingRoomName) {
+		if($registrationLayout[$i]->room->name == $bookingRoomName) {
 			$searchStatus = 'seat-nr-searching';
 			$errorText = __('Seat ','seatreg') . $bookingSeatNr . __(' dose not exist in ', 'seatreg') . $bookingRoomName;
 			$boxLen = count($registrationLayout[$i]->boxes);
 
 			for($k = 0; $k < $boxLen; $k++) {
-				if($registrationLayout[$i]->boxes[$k][8] == 'true' && $registrationLayout[$i]->boxes[$k][9] == $bookingSeatNr) {
+				if($registrationLayout[$i]->boxes[$k]->canRegister == 'true' && $registrationLayout[$i]->boxes[$k]->seat == $bookingSeatNr) {
 					$searchStatus = 'ok';
 					$allCorrect = true;
-					$seat_id = $registrationLayout[$i]->boxes[$k][7];
+					$seat_id = $registrationLayout[$i]->boxes[$k]->id;
 					$status['newSeatId'] = $seat_id;
 					$status['oldSeatNr'] = $bookingSeatNr;
 
