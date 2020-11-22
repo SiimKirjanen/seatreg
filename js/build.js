@@ -2016,7 +2016,7 @@
 
 	//SyncData from server
 	Registration.prototype.syncData = function(responseObj) {		
-		if(responseObj == null){
+		if($.isEmptyObject(responseObj)){
 			this.addRoom(false,false,true);
 			$('#build-area-loading-wrap').remove();
 			$('#room-name-dialog').modal("toggle");
