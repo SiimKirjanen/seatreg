@@ -501,7 +501,7 @@
 				var seatregTranslations = $.parseJSON('<?php echo json_encode(seatreg_generate_registration_stringes()); ?>');
 				var seatLimit = <?php echo $data->seats_at_once;?>;
 				var gmail = <?php echo $data->gmail_required;?>;
-				var dataReg = $.parseJSON('<?php echo $data->registration_layout;?>');
+				var dataReg = $.parseJSON('<?php echo $data->registration_layout;?>').roomData;
 				var roomsInfo = $.parseJSON('<?php echo $seatsInfo;?>');
 				var custF = $.parseJSON('<?php echo $data->custom_fields; ?>');
 				var regTime = <?php echo "'$registrationTime';";?>

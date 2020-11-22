@@ -118,7 +118,6 @@ $(function() {
 
 	SeatReg.prototype.init = function() {
 		//add roomsInfo to seatReg
-
 		this.bronSeats = roomsInfo.bronSeats;
 		this.openSeats = roomsInfo.openSeats;
 		this.seatsTotal = roomsInfo.seatsTotal;
@@ -359,6 +358,7 @@ SeatReg.prototype.paintRoomsNav = function() {
 	var roomsLength = this.rooms.length;
 	var documentFragment = $(document.createDocumentFragment());
 	var scope = this;
+	console.log(this.rooms);
 
 	for(var i = 0; i < roomsLength; i++) {
 		var roomName = this.rooms[i].room.name;

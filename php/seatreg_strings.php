@@ -7,7 +7,8 @@ function seatreg_generate_registration_stringes() {
 	$translations->wrongCaptcha = __('Wrong code!', 'seatreg');
 	$translations->somethingWentWrong = __('Something went wrong. Please try again', 'seatreg');
 	$translations->selectionIsEmpty = __('Selection is empty', 'seatreg');
-	$translations->youCanAdd_ = __('You can add ', 'seatreg');
+    $translations->youCanAdd_ = __('You can add ', 'seatreg');
+    $translations->_toCartClickTab = __(' to cart by clicking boxes', 'seatreg');
 	$translations->toCartClickTab = __(' to selection by clicking/tabbing them', 'seatreg');
 	$translations->regClosedAtMoment = __('Registration is closed at the moment', 'seatreg');
 	$translations->confWillBeSentTo = __('Confirmation will be sent to:', 'seatreg');
@@ -27,7 +28,7 @@ function seatreg_generate_registration_stringes() {
 	$translations->openSeatsInRoom_ = __('Open seats in room: ', 'seatreg');
 	$translations->pendingSeatInRoom_ = __('Pending seats in room: ', 'seatreg');
 	$translations->confirmedSeatInRoom_ = __('Confirmed seats in room: ', 'seatreg');
-	$translations->seat = __('Seat', 'seatreg');
+	$translations->seat = __('seat', 'seatreg');
 	$translations->firstName = __('Firstname', 'seatreg');
 	$translations->lastName = __('Lastname', 'seatreg');
 	$translations->eMail = __('Email', 'seatreg');
