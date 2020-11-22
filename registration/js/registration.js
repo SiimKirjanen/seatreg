@@ -57,7 +57,7 @@ $(function() {
 
 
 	function SeatReg() {
-		this.rooms = dataReg;
+		this.rooms = dataReg.roomData;
 		this.seatLimit = seatLimit;
 		this.currentRoom = 0;
 		this.css3 = false;
@@ -734,7 +734,7 @@ if (typeof seatregdemo !== 'undefined') {
     seatReg.demo = true;
 }
 
-if(dataReg == null) {
+if($.isEmptyObject(dataReg)) {
 	$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ translator.translate('_regUnderConstruction') +'</div>');
 
 	return false;

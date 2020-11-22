@@ -1130,7 +1130,7 @@ function seatreg_set_up_db() {
 	  registration_code varchar(40) NOT NULL,
 	  registration_name varchar(255) NOT NULL, 
 	  registration_create_timestamp timestamp DEFAULT CURRENT_TIMESTAMP,
-	  registration_layout mediumtext DEFAULT NULL,
+	  registration_layout mediumtext DEFAULT '{}',
 	  PRIMARY KEY  (id),
 	  UNIQUE KEY  (registration_code)
     ) $charset_collate;";
