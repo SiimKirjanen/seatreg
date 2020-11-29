@@ -135,7 +135,7 @@ class Booking {
 
 		$this->_registrationStartTimestamp = $result->registration_start_timestamp;
 		$this->_registrationEndTimestamp = $result->registration_end_timestamp;
-		$this->_registrationLayout = json_decode($result->registration_layout);
+		$this->_registrationLayout = json_decode($result->registration_layout)->roomData;
         $this->_registrationName = $result->registration_name;
 		$this->_maxSeats = $result->seats_at_once;
 		$this->_requireBookingEmailConfirm = $result->booking_email_confirm;
