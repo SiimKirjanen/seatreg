@@ -76,7 +76,6 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 	$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_name, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE seatreg_code = '$registration->registration_code' AND status = 1 GROUP BY room_name");
 	$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_name, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE seatreg_code = '$registration->registration_code' AND status = 2 GROUP BY room_name");
 	$regStats = seatreg_get_room_seat_info($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
-	$structure = $registration->registration_layout;
 	$project_name = $registration->registration_name;
 	$start_date = $registration->registration_start_timestamp;
 	$end_date = $registration->registration_end_timestamp;
@@ -906,7 +905,7 @@ function seatreg_generate_registration_code() {
 function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrations) {
 	$bronLength = count($bronRegistrations);
 	$takenLength = count($takenRegistrations);
-	$regStructure = json_decode($struct);
+	$regStructure = json_decode($struct)->roomData;
 	$roomCount = count(is_array($regStructure) ? $regStructure : []);
 	$howManyRegSeats = 0;
 	$howManyOpenSeats = 0;
@@ -983,7 +982,7 @@ function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrat
 //check if room and seat exist in structure and are not already booked
 function seatreg_validate_del_conf_booking($code, $bookingActions) {
 	$registration = seatreg_get_registration_data($code)[0];
-	$structure = json_decode($registration->registration_layout);
+	$structure = json_decode($registration->registration_layout)->roomData;
 	$bookingActionLength = count($bookingActions);
 	$seat_id;
 	$allCorrect = true;
@@ -1033,7 +1032,7 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 //for booking edit
 function seatreg_validate_edit_booking($code, $data) {
 	$registration = seatreg_get_registration_data($code)[0];
-	$structure = json_decode($registration->registration_layout);
+	$structure = json_decode($registration->registration_layout)->roomData;
 	$allCorrect = true;
     $resp = array();
     $resp['status'] = 'ok';
