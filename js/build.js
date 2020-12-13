@@ -190,8 +190,9 @@
 	*/
 
 	//Room class. Registration can have many rooms.Room hase user made boxes, skeleton info and ...
-	function Room(id, title) {
+	function Room(id, title, uuid) {
 		this.title = title;		//room title.
+		this.uuid = uuid;
 		this.initialName = "";
 		this.roomId = id;		//for finding in assosiative array
 		this.boxes = [];		//stores user made boxes
@@ -231,6 +232,7 @@
 
 		roomData['room'] = {
 			id: this.roomId,
+			uuid: this.uuid,
 			name: this.title,
 			text: this.roomText,
 			legends: roomLegendArray,
@@ -855,7 +857,7 @@
 	};
 
 	//adds new room object to registration. new Room object to assosiative array. 1: firstRoom, 2: secondRoom
-	Registration.prototype.addRoom = function(ignoreLimit,boxIndexSave,buildSkeleton){
+	Registration.prototype.addRoom = function(ignoreLimit,boxIndexSave,buildSkeleton, uuid){
 		var regScope = this;
 	
 		if(boxIndexSave) {
@@ -866,7 +868,11 @@
 			this.needToSave = true;
 		}
 		
-		this.rooms[this.roomLocator] = new Room(this.roomLocator, this.roomLocator + ' ' + translator.translate('room'));
+		this.rooms[this.roomLocator] = new Room(
+			this.roomLocator,
+			this.roomLocator + ' ' + translator.translate('room'),
+			uuid
+		);
 		$('#active-room').removeAttr('id');
 		$('#build-head-stats-3 .room-counter').text(Object.size(this.rooms));
 
@@ -889,11 +895,10 @@
 		$('<div>').addClass('room-selection').attr({
 			'id': 'active-room',
 			'data-room-location': regScope.roomLocator
-		}).text(regScope.rooms[regScope.roomLabel].title).on('click', function() {
+		}).text(regScope.rooms[regScope.roomLocator].title).on('click', function() {
 			var loadingImg = $('<img>', {
 				"src": window.WP_Seatreg.plugin_dir_url + "css/loading.png",
 				"id": "loading-img"
-				
 			});
 
 			var imgWrap = $('<div>', {
@@ -2017,7 +2022,7 @@
 	//SyncData from server
 	Registration.prototype.syncData = function(responseObj) {		
 		if($.isEmptyObject(responseObj)){
-			this.addRoom(false,false,true);
+			this.addRoom(false,false,true, generateUUID());
 			$('#build-area-loading-wrap').remove();
 			$('#room-name-dialog').modal("toggle");
 		}else {
@@ -2031,7 +2036,7 @@
 
 			for (var property in roomData) {
 			    if (roomData.hasOwnProperty(property)) {
-			    	this.addRoom(true,false,false);
+			    	this.addRoom(true,false,false, roomData[property]['room'].uuid);
 			    	this.rooms[this.currentRoom].title = roomData[property]['room'].name;
 			    	this.rooms[this.currentRoom].initialName = roomData[property]['room'].name;
 
@@ -2234,6 +2239,13 @@
 	
 	function clearBuildArea() {
 		$('.build-area').empty();
+	}
+
+	function generateUUID() {
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+			return v.toString(16);
+		}) + new Date().valueOf();
 	}
 
 	/*
@@ -2727,7 +2739,7 @@
 
 	//adds new room
 	$('#new-room-create').on('click', function() {
-            reg.addRoom(false,true,true);
+            reg.addRoom(false,true,true, generateUUID());
             $('#room-name-dialog').modal("toggle"); 	
 	});
 
