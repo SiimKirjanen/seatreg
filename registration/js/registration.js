@@ -76,10 +76,11 @@ $(function() {
 		this.demo = false;
 	}
 
-	function CartItem(id,nr,room) {
+	function CartItem(id,nr,room, roomUUID) {
 		this.id = id;
 		this.nr = nr;
 		this.room = room;
+		this.roomUUID = roomUUID;
 		this.defFields = ['FirstName','LastName','Email'];
 		this.customFields = [];
 	};
@@ -140,9 +141,9 @@ $(function() {
 
 		for(var i = 0; i < reLength; i++) {
 			if(registrations[i].hasOwnProperty('reg_name')) {
-				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_name'], registrations[i]['status'], registrations[i]['reg_name']);
+				seatReg.addRegistration(registrations[i]['seat_id'], this.getRoomNameFromLayout(registrations[i]['room_uuid']), registrations[i]['status'], registrations[i]['reg_name']);
 			}else {
-				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_name'], registrations[i]['status'], null);
+				seatReg.addRegistration(registrations[i]['seat_id'], this.getRoomNameFromLayout(registrations[i]['room_uuid']), registrations[i]['status'], null);
 			}
 		}
 
@@ -169,6 +170,21 @@ $(function() {
 			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.width, seatReg.rooms[seatReg.currentRoom].room.height);
 			seatReg.paintRoom();
 		}
+	};
+
+	SeatReg.prototype.getRoomNameFromLayout = function(roomUUID) {
+		var roomsLength = this.rooms.length;
+		var roomName = null;
+
+		for(var i = 0; i < roomsLength; i++) {
+			
+			if(this.rooms[i].room.uuid === roomUUID) {
+				roomName = this.rooms[i].room.name;
+				break;
+			}
+		}
+
+		return roomName;
 	};
 
 	SeatReg.prototype.addRegistration = function(seat_id, room, status, reg_name) {
@@ -358,7 +374,6 @@ SeatReg.prototype.paintRoomsNav = function() {
 	var roomsLength = this.rooms.length;
 	var documentFragment = $(document.createDocumentFragment());
 	var scope = this;
-	console.log(this.rooms);
 
 	for(var i = 0; i < roomsLength; i++) {
 		var roomName = this.rooms[i].room.name;
@@ -414,18 +429,18 @@ SeatReg.prototype.roomChange = function(roomName) {
 
 SeatReg.prototype.addSeatToCart = function() {
 	//adding selected seat to seat cart
-
 	var seatId = document.getElementById('selected-seat').value;
 	var seatNr = document.getElementById('selected-seat-nr').value;
 	var roomName = document.getElementById('selected-seat-room').value;
+	var roomUUID = document.getElementById('selected-room-uuid').value;
 	var scope = this;
-	this.selectedSeats.push(new CartItem(seatId, seatNr, roomName));
+	this.selectedSeats.push(new CartItem(seatId, seatNr, roomName, roomUUID));
 	
 	$('.seats-in-cart').text(this.selectedSeats.length);
 	$('#boxes .box[data-seat="' + seatId + '"]').attr('data-selectedBox','true');
 
 	//add to seat cart popup
-	var cartItem = $('<div class="cart-item" data-cart-id="' + seatId + '"></div>');
+	var cartItem = $('<div class="cart-item" data-cart-id="' + seatId + '" data-room-uuid="'+ roomUUID +'"></div>');
 	var seatNumberDiv = $('<div class="cart-item-nr">' + seatNr + '</div>');
 	var roomNameDiv = $('<div class="cart-item-room">' + roomName + '</div>');
 	var delItem = $('<div class="remove-cart-item"><i class="fa fa-times-circle"></i><span style="padding-left:4px">'+ translator.translate('remove') +'</span></div>').on('click', function() {
@@ -550,9 +565,9 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 
 		var seatId = $('<input type="hidden" class="item-id" name="item-id[]" value="' + this.selectedSeats[i].id + '" />');
 		var seatNr = $('<input type="hidden" class="item-nr" name="item-nr[]" value="' + this.selectedSeats[i].nr + '" />');
-		var seatRoom = $('<input type="hidden" class="item-room" name="item-room[]" value="' + this.selectedSeats[i].room + '" />');
+		var roomUUID = $('<input type="hidden" name="room-uuid[]" value="' + this.selectedSeats[i].roomUUID + '" />');
 
-		checkItem.append(checkItemHeader, documentFragment2,seatId,seatNr,seatRoom);
+		checkItem.append(checkItemHeader, documentFragment2, seatId, seatNr, roomUUID);
 		documentFragment.append(checkItem);
 	}
 
@@ -598,10 +613,8 @@ SeatReg.prototype.generateCustomField = function(custom) {
 	var label = $('<label class="field-label custom-input"><span class="l-text">' + custom.label +  '</span></label>');
 
 	if(custom.type == 'text') {
-		//console.log('Creating text field');
 		var fieldInput = $('<input type="text" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type +'" maxlength="50">');
 	}else if(custom.type == 'check') {
-		//console.log('Creating checkbox');
 		var fieldInput = $('<input type="checkbox" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type + '" value="'+ custom.label +'">');
 	}else if(custom.type == 'sel') {
 		var fieldInput = $('<select name="'+ custom.label +'[]" class="field-input" data-type="' + custom.type + '"></select>');
@@ -623,7 +636,6 @@ SeatReg.prototype.openModel = function() {
 };
 
 SeatReg.prototype.closeModal = function() {
-	//console.log('closing modal');
 	$('#modal-bg').css('display','none');
 	$('#room-nav').removeClass('modal');
 };
@@ -654,6 +666,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	var legend = null;
 	var nr = null;
 	var type = 'box';
+	var currentRoom = this.rooms[this.currentRoom].room;
 	var room = this.rooms[this.currentRoom].room.name;
 	var showDialog = false;
 	var isSelected = false;
@@ -673,7 +686,8 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	
 	if(clickBox.hasAttribute('data-seat')) {
 		$('#selected-seat').val(clickBox.getAttribute('data-seat'));
-		$('#selected-seat-room').val(room);
+		$('#selected-seat-room').val(currentRoom.name);
+		$('#selected-room-uuid').val(currentRoom.uuid);
 		type = 'rbox';
 		nr = clickBox.getElementsByTagName('div')[0].firstChild.nodeValue;
 		$('#selected-seat-nr').val(nr);

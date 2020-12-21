@@ -129,7 +129,7 @@ function seatreg_get_registration_bookings_reg($code, $show_bookings) {
 
 	if($show_bookings == 1) {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT seat_id, room_name, status, CONCAT(first_name, ' ', last_name) AS reg_name
+			"SELECT seat_id, room_uuid, status, CONCAT(first_name, ' ', last_name) AS reg_name
 			FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
 			AND (status = '1' OR status = '2')",
@@ -137,7 +137,7 @@ function seatreg_get_registration_bookings_reg($code, $show_bookings) {
 		) );
 	}else {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT seat_id, room_name, status 
+			"SELECT seat_id, room_uuid, status 
 			FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
 			AND (status = '1' OR status = '2')",

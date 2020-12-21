@@ -1166,7 +1166,7 @@ function seatreg_set_up_db() {
 		email varchar(255) NOT NULL,
 		seat_id varchar(255) NOT NULL,
 		seat_nr int(11) NOT NULL,
-		room_name varchar(255) NOT NULL,
+		room_uuid varchar(255) NOT NULL,
 		registration_date timestamp DEFAULT CURRENT_TIMESTAMP,
 		registration_confirm_date datetime DEFAULT NULL,
 		custom_field_data text,
@@ -1293,7 +1293,31 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 		) );
 	}
 
+	$registration = $wpdb->get_row( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg
+		WHERE registration_code = %s",
+		$code
+	) );
+
+	$roomData = json_decode($registration->registration_layout)->roomData;
+
+	foreach ($bookings as $booking) {
+		$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+	}
+
 	return $bookings;
+}
+
+function seatreg_get_room_name_from_layout($roomsLayout, $bookingRoomUuid) {
+	$roomName = null;
+
+	foreach($roomsLayout as $roomLayout) {
+		if($roomLayout->room->uuid === $bookingRoomUuid) {
+			$roomName = $roomLayout->room->name;
+		}
+	}
+
+	return $roomName;
 }
 
 function seatreg_get_bookings_in_room($registrationId, $roomName) {
@@ -1652,7 +1676,7 @@ function seatreg_booking_submit_callback() {
 			empty($_POST['Email']) || 
 			empty($_POST['item-id']) ||
 			empty($_POST['item-nr']) ||
-			empty($_POST['item-room']) ||
+			empty($_POST['room-uuid']) ||
 			empty($_POST['em']) ||
 			empty($_POST['c']) ||
 			!isset($_POST['pw']) ||
@@ -1670,12 +1694,12 @@ function seatreg_booking_submit_callback() {
 				$_POST['Email'], 
 				$_POST['item-id'], 
 				$_POST['item-nr'], 
-				$_POST['item-room'], 
 				$_POST['em'], 
 				$_POST['c'], 
 				$_POST['pw'], 
-				$_POST['custom']) ){
-
+				$_POST['custom'],
+				$_POST['room-uuid']) 
+		){
 			$newBooking->validateBooking();
 		}	
 	}else{

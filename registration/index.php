@@ -300,6 +300,7 @@
 				<input type="hidden" id="selected-seat">
 				<input type="hidden" id="selected-seat-room">
 				<input type="hidden" id="selected-seat-nr">
+				<input type="hidden" id="selected-room-uuid">
 			</div>
 		</div>
 

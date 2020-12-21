@@ -32,7 +32,7 @@ class NewBookings extends Booking {
       	$this->getRegistrationAndOptions();
     }
 
-    public function validateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $seatRoom, $emailToSend, $code, $pw, $customFields) {
+    public function validateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID) {
     	$this->_bookerEmail = $emailToSend;
         $this->_submittedPassword = $pw;
     
@@ -53,7 +53,7 @@ class NewBookings extends Booking {
     		$booking->email = $email[$key];
     		$booking->seat_id = $seatID[$key];
     		$booking->seat_nr = $seatNr[$key];
-    		$booking->room_name = $seatRoom[$key];
+			$booking->room_uuid = $roomUUID[$key];
     		$booking->custom_field = $customFieldData[$key];
 
     		$bookings[] = $booking;
@@ -184,7 +184,7 @@ class NewBookings extends Booking {
 						'email' => $this->_bookings[$i]->email,
 						'seat_id' => $this->_bookings[$i]->seat_id,
 						'seat_nr' => $this->_bookings[$i]->seat_nr,
-						'room_name' => $this->_bookings[$i]->room_name,
+						'room_uuid' => $this->_bookings[$i]->room_uuid,
 						'conf_code' => $confCode, 
 						'custom_field_data' => json_encode($this->_bookings[$i]->custom_field, JSON_UNESCAPED_UNICODE),
 						'booking_id' => $this->_bookingId,
