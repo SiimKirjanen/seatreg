@@ -1,5 +1,11 @@
+html {
+	font-size: 100%;
+}
 .index-icon {
     margin-right: 10px;
+}
+.seatreg-wp-admin input[type=checkbox]:focus {
+	outline: none;
 }
 .seatreg-wp-admin {
 	font-family: 'Open Sans', sans-serif;
