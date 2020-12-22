@@ -1455,7 +1455,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
-			ORDER BY room_name, seat_nr",
+			ORDER BY room_uuid, seat_nr",
 			$code
 		) );
 	}else if($whatToShow == 'pending') {
@@ -1463,7 +1463,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
 			AND status = 1
-			ORDER BY room_name, seat_nr",
+			ORDER BY room_uuid, seat_nr",
 			$code
 		) );
 	}else {
@@ -1471,9 +1471,21 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
 			AND status = 2
-			ORDER BY room_name, seat_nr",
+			ORDER BY room_uuid, seat_nr",
 			$code
 		) );
+	}
+
+	$registration = $wpdb->get_row( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg
+		WHERE registration_code = %s",
+		$code
+	) );
+
+	$roomData = json_decode($registration->registration_layout)->roomData;
+
+	foreach($bookings as $booking) {
+		$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
 	}
 
 	return $bookings;
