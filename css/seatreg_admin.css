@@ -32,19 +32,22 @@ html {
 }
 .seatreg-tabs-content {
 	background-color: #F2F2F2;
-	padding-top: 12px;
+	padding: 12px 16px 0 16px;
 }
-.seatreg-tabs-content .etabs { margin: 0; padding: 0; background-color: #F2F2F2;}
+.seatreg-tabs-content .etabs { margin: 0; padding: 0; background-color: #F2F2F2; padding-bottom: 6px}
 .seatreg-tabs-content .tab { display: inline-block;margin-right:2px; padding: 6px 6px; zoom:1; *display:inline;background: #fff; }
 .seatreg-tabs-content .tab a { font-size: 16px; line-height: 2em; display: block; padding: 0 30px; outline: none; text-decoration: none; color: #000;}
 .seatreg-tabs-content .tab a:hover { text-decoration: underline; }
-.seatreg-tabs-content .tab.active { background: #404040; position: relative; padding-top: 20px;}
+.seatreg-tabs-content .tab.active { background: #404040; position: relative;}
 .seatreg-tabs-content .tab a.active { font-weight: bold; color: #fff;}
+.seatreg-tabs-content .tab-container { padding: 12px 0}
 .seatreg-tabs-content .tab-container .panel-container {  overflow: hidden; }
 .seatreg-tabs-content .panel-container {  }
 
 
-
+.seatreg-tabs-content .form-group {
+	margin-bottom: 25px;
+}
 
 .seatreg-tabs-content #admin-wrapper {
 	width: 960px;
@@ -396,11 +399,9 @@ html {
 }
 
 .seatreg-tabs-content .action-select .bron-action {
-	vertical-align: top;
 	margin-left: 4px;
-	margin-right: 4px;
 	cursor: pointer;
-
+	margin-top: 0;
 }
 
 .seatreg-tabs-content .action-control:hover {
@@ -428,10 +429,8 @@ html {
 	float: right;
 	position: relative;
 	background-color: #fff;
-
-
-
 }
+
 .seatreg-tabs-content .notify-text {
 	text-align: center;
 	margin-top: 10px;
@@ -534,10 +533,7 @@ html {
 	line-height: 42px;
 }
 .seatreg-tabs-content .option-box {
-	margin: 0 auto;
 	margin-top: 20px;
-	width: 92%;
-	padding: 0 1%;
 	padding-bottom: 20px;
 	border-bottom: 1px solid black;
 }
@@ -587,9 +583,7 @@ html {
 .seatreg-tabs-content .select-radio-create {
 	display: none;
 }
-.seatreg-tabs-content .remove-cust-item, .seatreg-tabs-content .remove-sel-item {
-	
-}
+
 .seatreg-tabs-content .remove-sel-item {
 	vertical-align: middle;
 }
@@ -600,10 +594,14 @@ html {
 	margin-bottom: 10px;
 }
 
+.seatreg-tabs-content .custom-container input[type=checkbox] {
+	margin-top: 0;
+}
+
 .seatreg-tabs-content .remove-cust-item {
 	cursor: pointer;
 	color: red;
-	
+	margin-left: 6px;
 }
 .seatreg-tabs-content .cust-field-create {
 	margin-top: 10px;
