@@ -88,10 +88,10 @@ function customFieldWithValueXlsx($label, $custom_data) {
 $header = array(
 	'Seat number'=>'string',
 	'Room name'=>'string',
-	'Date'=>'string',
-	'Email'=>'string',
-	'Status'=>'string',
 	'Name' =>'string',
+	'Email'=>'string',
+	'Date'=>'string',
+	'Status'=>'string',
 	'Confirm date' => 'string'
 );
 
@@ -113,7 +113,7 @@ for($i=0;$i<$regLen;$i++) {
 	$status = ($registrations[$i]->status == 2) ? "Confirmed" : "Pending";
 	$date = new DateTime($registrations[$i]->registration_date, $UTC );
 	$date->setTimezone( $newTZ );
-	$registretionData = array($registrations[$i]->seat_nr, $registrations[$i]->room_name, $date->format('Y-M-d H:i:s'), $registrations[$i]->email, $status, $registrations[$i]->first_name . ' ' . $registrations[$i]->last_name);
+	$registretionData = array($registrations[$i]->seat_nr, $registrations[$i]->room_name, $registrations[$i]->first_name . ' ' . $registrations[$i]->last_name,  $registrations[$i]->email, $date->format('Y-M-d H:i:s'), $status);
 
 	if($status =='Confirmed') {
 		$date = new DateTime($registrations[$i]->registration_confirm_date, $UTC );
