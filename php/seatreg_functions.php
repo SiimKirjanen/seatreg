@@ -317,6 +317,11 @@ function seatreg_generate_my_registrations_section() {
 
 				<br>
 				<button type="button" class="btn btn-link seatreg-map-popup-btn" data-registration-name="<?php echo htmlspecialchars($registration->registration_name); ?>" data-map-code="<?php echo htmlspecialchars($registration->registration_code); ?>"><?php _e('Edit map', 'seatreg'); ?></button>
+				<br>
+				<?php
+					seatreg_create_delete_registration_from($registration->registration_code);
+				?>
+
 			</div>
 		<?php
 	}
@@ -324,7 +329,7 @@ function seatreg_generate_my_registrations_section() {
 }
 
 function seatreg_no_registration_created_info() {
-	echo 'No registration!';
+	echo 'No registrations created!';
 }
 
 //generate settings form for registration settings
@@ -570,6 +575,19 @@ function seatreg_create_registration_from() {
 			<?php
 				wp_nonce_field( 'seatreg-create-registration', 'seatreg-create-nonce' );
 				submit_button('Create new registration');
+			?>
+	    </form>
+	<?php
+}
+
+function seatreg_create_delete_registration_from($registrationCode) {
+	?>
+	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" class="seatreg-delete-registration-form">
+	    	<input type="hidden" name="registration-code" value="<?php echo $registrationCode; ?>" />
+			<input type='hidden' name='action' value='seatreg_delete_registration' />
+			<?php
+				wp_nonce_field( 'seatreg-create-registration', 'seatreg-create-nonce' );
+				submit_button('Delete', 'delete-registration-btn', 'delete-registration', false);
 			?>
 	    </form>
 	<?php
@@ -1130,6 +1148,7 @@ function seatreg_set_up_db() {
 	  registration_name varchar(255) NOT NULL, 
 	  registration_create_timestamp timestamp DEFAULT CURRENT_TIMESTAMP,
 	  registration_layout mediumtext DEFAULT '{}',
+	  is_deleted tinyint(1) NOT NULL DEFAULT '0',
 	  PRIMARY KEY  (id),
 	  UNIQUE KEY  (registration_code)
     ) $charset_collate;";
@@ -1186,7 +1205,7 @@ function seatreg_get_registrations() {
 	global $seatreg_db_table_names;
 
 	$registrations = $wpdb->get_results(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg"
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg WHERE is_deleted = false"
 	);
 
 	return $registrations;
@@ -1346,7 +1365,8 @@ function seatreg_get_options($code) {
 			FROM $seatreg_db_table_names->table_seatreg AS a
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 			ON a.registration_code = b.seatreg_code
-			WHERE a.registration_code = %s",
+			WHERE a.registration_code = %s
+			AND a.is_deleted = false",
 			$code
 		) );
 	}else {
@@ -1355,6 +1375,7 @@ function seatreg_get_options($code) {
 			FROM $seatreg_db_table_names->table_seatreg AS a
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 			ON a.registration_code = b.seatreg_code
+			WHERE a.is_deleted = false
 			ORDER BY a.registration_create_timestamp
 			LIMIT 1"
 		);
@@ -1522,7 +1543,32 @@ function seatreg_create_submit_handler() {
 	}else {
 		wp_die( _e('Something went wrong while creating a new registration', 'seatreg') );
 	}
+}
 
+//handle registration delete
+add_action('admin_post_seatreg_delete_registration', 'seatreg_delete_registration_handler'); 
+function seatreg_delete_registration_handler() {
+	global $wpdb;
+	global $seatreg_db_table_names;
+	seatreg_check_post_credentials();
+
+	$status = $wpdb->update(
+		"$seatreg_db_table_names->table_seatreg",
+		array(
+			'is_deleted' => 1,
+		),
+		array(
+			'registration_code' => $_POST['registration-code']
+		),
+		'%s'
+	);
+
+	if( $status ) {
+		wp_redirect( $_POST['_wp_http_referer'] );
+		die();
+	}else {
+		wp_die( _e('Something went wrong while deleting a registration', 'seatreg') );
+	}
 }
 
 function seatreg_update() {

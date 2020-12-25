@@ -32,7 +32,7 @@ html {
 }
 .seatreg-tabs-content {
 	background-color: #F2F2F2;
-	padding: 12px 16px 0 16px;
+	padding: 24px 16px 12px 24px;
 }
 .seatreg-tabs-content .etabs { margin: 0; padding: 0; background-color: #F2F2F2; padding-bottom: 6px}
 .seatreg-tabs-content .tab { display: inline-block;margin-right:2px; padding: 6px 6px; zoom:1; *display:inline;background: #fff; }
@@ -40,7 +40,6 @@ html {
 .seatreg-tabs-content .tab a:hover { text-decoration: underline; }
 .seatreg-tabs-content .tab.active { background: #404040; position: relative;}
 .seatreg-tabs-content .tab a.active { font-weight: bold; color: #fff;}
-.seatreg-tabs-content .tab-container { padding: 12px 0}
 .seatreg-tabs-content .tab-container .panel-container {  overflow: hidden; }
 .seatreg-tabs-content .panel-container {  }
 
@@ -85,18 +84,14 @@ html {
 	min-height: 608px;
 }
 
-
-
 .seatreg-tabs-content .reg-overview-top {
-	padding: 20px;
+	padding-bottom: 20px;
 	overflow: hidden;
-
 }
 
 .seatreg-tabs-content .reg-overview-aside {
 	width: 220px;
 	float: left;
-	padding-left: 20px;
 	padding-right: 20px;
 	text-overflow: ellipsis;
 	min-height: 180px;
@@ -173,10 +168,6 @@ html {
 } 
 .seatreg-tabs-content .overview-last-box {
 	margin-right: 0;
-}
-.seatreg-tabs-content .reg-overview-donuts {
-	padding: 20px;
-	
 }
 .seatreg-tabs-content .reg-overview-bottom {
 	background-color: #404040;
@@ -439,7 +430,24 @@ html {
 
 /*buttons*/
 
-.seatreg-tabs-content .change-name-wrap {
+.seatreg-delete-registration-form {
+	margin-top: 8px;
+}
+.seatreg-delete-registration-form .glyphicon-trash{
+	color: red;
+}
+.seatreg-delete-registration-form .delete-registration-btn, .seatreg-delete-registration-form .delete-registration-btn:active, .seatreg-delete-registration-form .delete-registration-btn:focus {
+	padding: 0;
+	min-height: auto;
+	line-height: normal;
+	border: none;
+	color: red;
+	box-shadow: none;
+}
+.seatreg-delete-registration-form .delete-registration-btn:hover {
+	color: red;
+}
+.change-name-wrap {
 	margin-bottom: 8px;
 }
 
@@ -680,7 +688,7 @@ html {
 	color: black;
 }
 
-.seatreg-map-popup-btn {
+.seatreg-map-popup-btn, .seatreg-delete-btn {
 	padding: 0;
 }
 .registration-name-link {
