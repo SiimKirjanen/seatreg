@@ -582,7 +582,7 @@ function seatreg_create_registration_from() {
 
 function seatreg_create_delete_registration_from($registrationCode) {
 	?>
-	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" class="seatreg-delete-registration-form">
+	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" class="seatreg-delete-registration-form" onsubmit="return confirm('Do you really want to delete?');">
 	    	<input type="hidden" name="registration-code" value="<?php echo $registrationCode; ?>" />
 			<input type='hidden' name='action' value='seatreg_delete_registration' />
 			<?php
