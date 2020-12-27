@@ -1268,6 +1268,10 @@ function seatreg_get_registration_uploaded_images($code) {
 	return $uploadedImages;
 }
 
+function seatreg_order_bookings_by_room_name($a, $b) {
+	return strcmp($a->room_name, $b->room_name);
+}
+
 //return bookins
 function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStatus ) {
 	global $wpdb;
@@ -1284,7 +1288,7 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 			$order = 'first_name';
 			break;
 		case 'room':
-			$order = 'room_name';
+			$order = 'room_uuid';
 			break;
 		case 'id':
 			$order = 'booking_id';
@@ -1306,7 +1310,7 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 			AND status = $bookingStatus
 			AND CONCAT(first_name, ' ', last_name,' ', booking_id) 
 			LIKE %s
-			ORDER BY $order",
+			ORDER BY $order 'seat_nr",
 			$code,
 			'%'.$searchTerm.'%'
 		) );
@@ -1322,6 +1326,10 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 
 	foreach ($bookings as $booking) {
 		$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+	}
+
+	if($order === 'room_uuid') {
+		usort($bookings, "seatreg_order_bookings_by_room_name");
 	}
 
 	return $bookings;
