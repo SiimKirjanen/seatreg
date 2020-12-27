@@ -1279,7 +1279,7 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 
 	switch($order) {
 		case 'date':
-			$order = 'registration_date';
+			$order = 'registration_date, seat_nr';
 			break;
 		case 'nr':
 			$order = 'seat_nr';
@@ -1288,34 +1288,21 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 			$order = 'first_name';
 			break;
 		case 'room':
-			$order = 'room_uuid';
+			$order = 'room_uuid, seat_nr';
 			break;
 		case 'id':
-			$order = 'booking_id';
+			$order = 'booking_id, seat_nr';
 			break;
 	}
 
-	if($searchTerm == '') {
-		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE seatreg_code = %s
-			AND status = $bookingStatus
-			ORDER BY $order",
-			$code
-		) );
-	}else {
-		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE seatreg_code = %s
-			AND status = $bookingStatus
-			AND CONCAT(first_name, ' ', last_name,' ', booking_id) 
-			LIKE %s
-			ORDER BY $order 'seat_nr",
-			$code,
-			'%'.$searchTerm.'%'
-		) );
-	}
-
+	$bookings = $wpdb->get_results( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+		WHERE seatreg_code = %s
+		AND status = $bookingStatus
+		ORDER BY $order",
+		$code
+	));
+	
 	$registration = $wpdb->get_row( $wpdb->prepare(
 		"SELECT * FROM $seatreg_db_table_names->table_seatreg
 		WHERE registration_code = %s",
@@ -1330,6 +1317,31 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 
 	if($order === 'room_uuid') {
 		usort($bookings, "seatreg_order_bookings_by_room_name");
+	}
+
+	if($searchTerm !== '') {
+		$bookings = array_filter($bookings, function($booking) use($searchTerm) {
+			if( strpos($booking->booking_id, $searchTerm) !== false ) {
+				return true;
+			}
+			if( strpos($booking->room_name, $searchTerm) !== false ) {
+				return true;
+			}
+			if( strpos($booking->seat_nr, $searchTerm) !== false ) {
+				return true;
+			}
+			if( strpos($booking->first_name, $searchTerm) !== false ) {
+				return true;
+			}
+			if( strpos($booking->last_name, $searchTerm) !== false ) {
+				return true;
+			}
+			if( strpos($booking->email, $searchTerm) !== false ) {
+				return true;
+			}
+
+			return false;
+		});
 	}
 
 	return $bookings;
