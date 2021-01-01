@@ -882,7 +882,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 		) );
 
 		$roomData = json_decode($registration->registration_layout)->roomData;
-		
+
 		foreach ($bookings as $booking) {
 			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
 		}
@@ -1060,18 +1060,18 @@ function seatreg_validate_edit_booking($code, $data) {
 	$allCorrect = true;
     $resp = array();
     $resp['status'] = 'ok';
-	$status1 = seatreg_check_room_and_seat($structure, $data->roomName, $data->seatNr );
+	$status = seatreg_check_room_and_seat($structure, $data->roomName, $data->seatNr );
 
-	if( $status1['status'] != 'ok') {
+	if( $status['status'] != 'ok') {
 			$allCorrect = false;
-			$resp['status'] = $status1['status'];
-			$resp['text'] = $status1['text'];
+			$resp['status'] = $status['status'];
+			$resp['text'] = $status['text'];
 			return $resp;
 	}else {
-		$resp['newSeatId'] = $status1['newSeatId'];
+		$resp['newSeatId'] = $status['newSeatId'];
 		$resp['oldSeatNr'] = $data->seatNr;
+		$resp['roomUUID'] = $status['roomUUID'];
 	}
-
 	$bookings = seatreg_get_registration_bookings($code);
 	$notBooked = true;
 
@@ -1079,9 +1079,9 @@ function seatreg_validate_edit_booking($code, $data) {
 		if($booking->booking_id == $data->bookingId) {
 			continue;
 		}
+		$booking->room_name = seatreg_get_room_name_from_layout($structure, $booking->room_uuid);
 
-		if($booking->seat_nr == $data->seatNr && $booking->room_name == $data->roomName && ($booking->status == 2 || $booking->status == 1) ) {
-			
+		if($booking->seat_nr == $data->seatNr && $booking->room_name == $status['roomUUID'] && ($booking->status == 2 || $booking->status == 1) ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
 			$resp['text'] = __('Seat ', 'seatreg') . $data->roomName . __(' from room ', 'seatreg') . $booking->room_name . __(' is already booked', 'seatreg');
@@ -1117,6 +1117,7 @@ function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $boo
 					$seat_id = $registrationLayout[$i]->boxes[$k]->id;
 					$status['newSeatId'] = $seat_id;
 					$status['oldSeatNr'] = $bookingSeatNr;
+					$status['roomUUID'] = $registrationLayout[$i]->room->uuid;
 
 					break;
 				}
@@ -1468,23 +1469,22 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 }
 
 //edit booking
-function seatreg_edit_booking($code, $edit_cust, $edit_seat, $edit_room, $edit_f_name, $edit_l_name, $booking, $id, $newSeatId, $oldSeatNr) {
+function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_name, $booking_id, $seat_id) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
 	$status = $wpdb->update( 
 		$seatreg_db_table_names->table_seatreg_bookings,
 		array( 
-			'first_name' => $edit_f_name,
-			'last_name' => $edit_l_name,
-			'seat_nr' => $edit_seat,
-			'room_name' => $edit_room,
-			'custom_field_data' => $edit_cust,
-			'seat_id' => $newSeatId
+			'first_name' => $f_name,
+			'last_name' => $l_name,
+			'seat_nr' => $seat_nr,
+			'room_uuid' => $room_uuid,
+			'custom_field_data' => $custom_fields,
+			'seat_id' => $seat_id
 		), 
 		array(
-			'booking_id' => $booking	
-
+			'booking_id' => $booking_id	
 		),
 		'%s'
 	);
@@ -1901,16 +1901,13 @@ function seatreg_edit_booking_callback() {
 	}
 
 	if( seatreg_edit_booking( 
-			$_POST['code'], 
 			$bookingEdit->editCustomField, 
 			$bookingEdit->seatNr, 
-			$bookingEdit->roomName, 
+			$statusArray['roomUUID'], 
 			$bookingEdit->firstName,
 			$bookingEdit->lastName,
 			$bookingEdit->bookingId, 
-			$bookingEdit->seatId,
-			$statusArray['newSeatId'],
-			$statusArray['oldSeatNr']
+			$statusArray['newSeatId']
 		) !== false) {
 		wp_send_json( array('status'=>'updated') );
 		die();
