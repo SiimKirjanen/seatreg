@@ -687,7 +687,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '<div class="seat-room-box manager-box" title="',esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
 					echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
 					echo '<div class="seat-date-box manager-box" title="',esc_html($row->registration_date),'">',esc_html($myFormatForView),'</div>';
-					echo "<div class='seat-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
+					echo "<div class='booking-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
 					echo '<button class="show-more-info">', __('More info','seatreg'), '</button>';
 					echo "<span class='edit-btn' data-code='$code' data-booking='$booking' data-id='$registrationId'><span class='glyphicon glyphicon-edit'></span>", __('Edit','seatreg'), "</span>";
 					echo '<div class="action-select">';
@@ -732,7 +732,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '<div class="seat-room-box manager-box" title="',esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
 					echo '<div class="seat-name-box manager-box" title="'.esc_html($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
 					echo '<div class="seat-date-box manager-box" title="',esc_html($row->registration_date),'">',esc_html($myFormatForView),'</div>';
-					echo "<div class='seat-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
+					echo "<div class='booking-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
 					echo '<button class="show-more-info">', __('More info','seatreg'), '</button>';
 					echo "<span class='edit-btn' data-code='$code' data-booking='$booking' data-id='$registrationId'><span class='glyphicon glyphicon-edit'></span>", __('Edit','seatreg'), "</span>";
 					echo '<div class="action-select">';
@@ -842,16 +842,18 @@ function seatreg_booking_edit_modal() {
 //generate tabs
 function seatreg_generate_tabs($targetPage) {
 	$active_tab = null;
+	$registrations = seatreg_get_registrations();
+
 	if( isset( $_GET[ 'tab' ] ) ) {
 	    $active_tab = $_GET[ 'tab' ];
+	}else {
+		$active_tab = $registrations[0]->registration_code;
 	} 
-
-	$registration = seatreg_get_registrations();
 
 	?>
 
 	<h2 class="nav-tab-wrapper"> 
-    <?php foreach($registration as $key=>$value): ?>
+    <?php foreach($registrations as $key=>$value): ?>
 		<a href="?page=<?php echo $targetPage; ?>&tab=<?php echo $value->registration_code; ?>" class="nav-tab <?php echo $active_tab == $value->registration_code ? 'nav-tab-active' : ''; ?>">
 			<?php echo htmlspecialchars($value->registration_name); ?>
 		</a>

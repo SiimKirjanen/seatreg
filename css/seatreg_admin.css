@@ -16,6 +16,15 @@ html {
 	margin-left: -20px;
 	margin-bottom: 0;
 }
+.seatreg-wp-admin .nav-tab:first-of-type {
+	margin-left: 0;
+}
+.seatreg-wp-admin .nav-tab {
+	background: #F2F2F2;
+}
+.seatreg-wp-admin .nav-tab.nav-tab-active {
+	text-decoration: underline;
+}
 .new-reg-title {
 	margin-bottom: 24px;
 }
@@ -32,7 +41,9 @@ html {
 }
 .seatreg-tabs-content {
 	background-color: #F2F2F2;
-	padding: 24px 16px 12px 24px;
+	padding: 24px;
+	border: 1px solid #ccc;
+	border-top: none;
 }
 .seatreg-tabs-content .etabs { margin: 0; padding: 0; background-color: #F2F2F2; padding-bottom: 6px}
 .seatreg-tabs-content .tab { display: inline-block;margin-right:2px; padding: 6px 6px; zoom:1; *display:inline;background: #fff; }
@@ -350,6 +361,9 @@ html {
 .seatreg-tabs-content .manager-box {
 	display: inline-block;
 }
+.seatreg-tabs-content .reg-seat-item .booking-id-box {
+	min-width: 340px;
+}
 .seatreg-tabs-content .manager-box-link:hover {
 	cursor: pointer;
 	text-decoration: underline;
@@ -375,7 +389,7 @@ html {
 }
 .seatreg-tabs-content .more-info {
 	display: none;
-	padding: 10px 0;
+	padding-top: 10px;
 }
 .seatreg-tabs-content .action-control {
 	background-color: #404040;
@@ -385,8 +399,7 @@ html {
 	cursor: pointer;
 	color:#fff;
 	padding: 4px 0;
-	margin-top: 4px;
-
+	margin-top: 24px;
 }
 
 .seatreg-tabs-content .action-select .bron-action {
@@ -424,8 +437,12 @@ html {
 
 .seatreg-tabs-content .notify-text {
 	text-align: center;
-	margin-top: 10px;
+	margin-top: 24px;
 	font-size: 20px;
+}
+
+.seatreg-tabs-content .action-select label {
+	margin-bottom: 0;
 }
 
 /*buttons*/
@@ -628,8 +645,11 @@ html {
 }
 .seatreg-tabs-content .manager-search-wrap {
 	width: 200px;
-	margin-top: 14px;
+	margin-top: 6px;
 	float: right;
+}
+.seatreg-tabs-content .manager-search:focus {
+	box-shadow: none;
 }
 
 .seatreg-tabs-content .option-input {
@@ -682,7 +702,7 @@ html {
 
 .seatreg-tabs-content .file-type-link {
 	float: right;
-	margin-top: 18px;
+	margin-top: 10px;
 	margin-right: 20px;
 	font-size: 18px;
 	color: black;
@@ -695,7 +715,6 @@ html {
 	color: rgb(51, 51, 51);
 }
 @media screen and (max-width: 1199px) {
-
 	.seatreg-tabs-content #my-regs {
 		width: 970px;
 		padding: 0 15px;

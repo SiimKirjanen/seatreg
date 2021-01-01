@@ -95,13 +95,15 @@ function seatreg_create_options() {
 
 function seatreg_create_overview() {
 	?>
-		<h1><?php _e('SeatReg overview'); ?></h1>
-	<?php
-		seatreg_generate_tabs('seatreg-overview');
-	?>
-	<div class="seatreg-tabs-content">
-		<?php seatreg_generate_overview_section('overview'); ?> 
-	</div>
+		<div class="seatreg-wp-admin wrap">
+			<h1><?php _e('SeatReg overview'); ?></h1>
+			<?php
+				seatreg_generate_tabs('seatreg-overview');
+			?>
+			<div class="seatreg-tabs-content">
+				<?php seatreg_generate_overview_section('overview'); ?> 
+			</div>
+		</div>
 	<?php
 }
 
