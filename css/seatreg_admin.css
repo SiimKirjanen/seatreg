@@ -387,10 +387,12 @@ html {
 	margin-bottom: -50px;
 	font-weight: 600;
 }
+
 .seatreg-tabs-content .more-info {
 	display: none;
 	padding-top: 10px;
 }
+
 .seatreg-tabs-content .action-control {
 	background-color: #404040;
 	text-align: center;
@@ -400,6 +402,11 @@ html {
 	color:#fff;
 	padding: 4px 0;
 	margin-top: 24px;
+}
+
+.seatreg-tabs-content .settings-heading {
+	margin-top: 0;
+	margin-bottom: 24px;
 }
 
 .seatreg-tabs-content .action-select .bron-action {
@@ -630,7 +637,6 @@ html {
 }
 .seatreg-tabs-content .cust-field-create {
 	margin-top: 10px;
-	margin-bottom: 20px;
 }
 .seatreg-tabs-content .select-option {
 	margin-bottom: 6px;

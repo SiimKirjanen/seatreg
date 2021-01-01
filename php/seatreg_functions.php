@@ -351,7 +351,7 @@ function seatreg_generate_settings_form() {
 	 $custFields = json_decode($options[0]->custom_fields);
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	?>
-		<h3><?php echo htmlspecialchars($options[0]->registration_name), ' settings'; ?></h3>
+		<h3 class="settings-heading"><?php echo htmlspecialchars($options[0]->registration_name), ' settings'; ?></h3>
 		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" style="max-width:600px">
 
 			<div class="form-group">
@@ -553,7 +553,7 @@ function seatreg_generate_settings_form() {
 
 			<?php
 				wp_nonce_field( 'seatreg-options-submit', 'seatreg-options-nonce' );
-				submit_button( __('Save changes', 'seatreg'), 'primary', 'seatreg-settings-submit' );
+				submit_button( __('Save changes', 'seatreg'), 'primary', 'seatreg-settings-submit', false );
 			?>
 
 		</from>
