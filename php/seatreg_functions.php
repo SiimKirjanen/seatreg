@@ -881,6 +881,12 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			$bookingId
 		) );
 
+		$roomData = json_decode($registration->registration_layout)->roomData;
+		
+		foreach ($bookings as $booking) {
+			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+		}
+
 		$options = $wpdb->get_row( $wpdb->prepare(
 			"SELECT payment_text FROM $seatreg_db_table_names->table_seatreg_options
 			WHERE seatreg_code = %s",
