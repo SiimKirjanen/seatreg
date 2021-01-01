@@ -1315,7 +1315,7 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 		$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
 	}
 
-	if($order === 'room_uuid') {
+	if($order === 'room_uuid, seat_nr') {
 		usort($bookings, "seatreg_order_bookings_by_room_name");
 	}
 
