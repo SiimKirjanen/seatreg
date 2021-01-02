@@ -573,7 +573,7 @@ function seatreg_create_registration_from() {
 	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px">
 			<input type='hidden' name='action' value='seatreg_create_submit' />
 			<?php
-				wp_nonce_field( 'seatreg-create-registration', 'seatreg-create-nonce' );
+				wp_nonce_field( 'seatreg-admin-nonce', 'seatreg-admin-nonce' );
 				submit_button('Create new registration');
 			?>
 	    </form>
@@ -586,7 +586,7 @@ function seatreg_create_delete_registration_from($registrationCode) {
 	    	<input type="hidden" name="registration-code" value="<?php echo $registrationCode; ?>" />
 			<input type='hidden' name='action' value='seatreg_delete_registration' />
 			<?php
-				wp_nonce_field( 'seatreg-create-registration', 'seatreg-create-nonce' );
+				wp_nonce_field( 'seatreg-admin-nonce', 'seatreg-admin-nonce' );
 				submit_button('Delete', 'delete-registration-btn', 'delete-registration', false);
 			?>
 	    </form>
@@ -1547,9 +1547,9 @@ Admin form submit stuff
 */
 
 //credentials check
-function seatreg_check_post_credentials() {
-	if ( ! wp_verify_nonce( $_POST['seatreg-create-nonce'], 'seatreg-create-registration' ) ) {
-	    wp_die('Nonce!');
+function seatreg_nonce_check() {
+	if ( ! wp_verify_nonce( $_POST['seatreg-admin-nonce'], 'seatreg-admin-nonce' ) ) {
+	    wp_die('Nonce validation failed!');
 	}
 	if( !current_user_can('manage_options') ) {
 		 wp_die('You are not allowed to do this');
@@ -1559,7 +1559,7 @@ function seatreg_check_post_credentials() {
 //handle new registration create
 add_action('admin_post_seatreg_create_submit', 'seatreg_create_submit_handler'); 
 function seatreg_create_submit_handler() {
-	seatreg_check_post_credentials();
+	seatreg_nonce_check();
 
 	if($_POST['new-registration-name'] === '') {
 		wp_die('Please provide registration name');
@@ -1578,7 +1578,7 @@ add_action('admin_post_seatreg_delete_registration', 'seatreg_delete_registratio
 function seatreg_delete_registration_handler() {
 	global $wpdb;
 	global $seatreg_db_table_names;
-	seatreg_check_post_credentials();
+	seatreg_nonce_check();
 
 	$status = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg",
