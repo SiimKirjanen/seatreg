@@ -635,12 +635,11 @@
 	
 }
 .seatreg-map-builder-page .legends {
-	display: table;
-	margin: 6px auto;
-
-
+	display: flex;
+	margin: 12px;
+	justify-content: center;
+	align-items: center;
 }
-
 .seatreg-map-builder-page .legend-box {
 	width: 20px;
 	height: 20px;
