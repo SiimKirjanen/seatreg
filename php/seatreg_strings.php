@@ -104,7 +104,7 @@ function seatreg_generate_admin_strings() {
     $translations->notSet = __('Not set', 'seatreg');
     $translations->enterRegistrationName = __('Please enter registration name', 'seatreg');
     $translations->registrationNameLimit = __('Name must be between 1-255 characters', 'seatreg');
-
+    $translations->pleaseEnterName = __('Please enter name', 'seatreg');
 
     return $translations;
 }

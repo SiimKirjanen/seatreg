@@ -64,7 +64,7 @@ class NewBookings extends Booking {
     }
 
     public function seatreg_validate_custom_fields($customFields) {
-		$customFieldsReg = '/^\[(\[({"label":[0-9a-zA-ZÜÕÖÄüõöä\s@."]{1,102},"value":[0-9a-zA-ZÜÕÖÄüõöä\s@."-]{1,52}},?){0,6}\],?){1,3}\]$/';
+		$customFieldsReg = '/^\[(\[({"label":["\s\p{L}]{1,30},"value":["\s\p{L}]{1,50}},?){0,6}\],?){1,3}\]$/u';
 
 		if( !preg_match($customFieldsReg, $customFields) ) {
 			return false;

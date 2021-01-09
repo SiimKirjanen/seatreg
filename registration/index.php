@@ -517,6 +517,7 @@
 		<script src="js/jquery.powertip.js"></script>
 		<script src="js/registration.js"></script>
 		-->
+		
 		<script src="js/registration.min.js"></script>
 		
 		<?php endif; //end of is registration open ?>  

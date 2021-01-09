@@ -598,16 +598,12 @@ $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e)
 $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 		e.preventDefault();
 
-		var optionReq = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,30}$/;
 		var labelElem = $(this).closest('.cust-field-create').find('.cust-input-label');
 		var selectedSelect = $(this).closest('.cust-field-create').find('.custom-field-select').find(':selected').attr('data-type');
 		var existElems = $(this).closest('.user-custom-field-options').find('.existing-custom-fields');
 
 		if(labelElem.val() == '') {
-			labelElem.focus();
-			return;
-		}
-		if(!optionReq.test(labelElem.val())) {
+			alertify.error(translator.translate('pleaseEnterName'));
 			labelElem.focus();
 			return;
 		}

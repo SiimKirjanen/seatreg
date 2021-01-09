@@ -971,14 +971,10 @@ function fitFactor(){
 }
 
 function validateInput(inputField) {
-
 	var defReg = /^[0-9a-zA-ZÜÕÖÄüõöä\s-@]{1,50}$/;
-	//var emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 	var emailReg = /^[0-9a-zA-ZÜÕÖÄüõöä\s-@."]{1,50}$/;
 	var gmailReg = /^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/;
 	var value = inputField.val();
-
 
 	if(value == '') {
 		inputField.next().text(translator.translate('emptyField')).css('display','inline');
@@ -986,32 +982,15 @@ function validateInput(inputField) {
 	}
 
 	switch(inputField.attr('data-field')) {
-
-		case 'Firstname':
-			
-			if(defReg.test(value)) {
-				inputField.next().text('').css('display','inline');
-				//inputField.next().text(50 - value.length + ' characters remaining').css('display','inline');
-			}else {
-				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','inline');
-				return false;
-			}
-
+		case 'FirstName':
+			inputField.next().text('').css('display','inline');
+	
 			break;
-
-		case 'Lastname':
-			
-			if(defReg.test(value)) {
-				inputField.next().css('display','none');
-			}else {
-				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','inline');
-				return false;
-			}
-
+		case 'LastName':
+			inputField.next().css('display','none');
+		
 			break;
-
 		case 'Email':
-
 			var useThis = emailReg;
 			if(seatReg.gmailNeeded == 1) {
 				useThis = gmailReg;
@@ -1020,14 +999,12 @@ function validateInput(inputField) {
 			if(useThis.test(value)) {
 				inputField.next().css('display','none');
 			}else {
-				
 				inputField.next().text(translator.translate('emailNotCorrect')).css('display','inline');
 	
 				return false;
 			}
 
 			break;
-
 		default:
 			//custom field validation
 			if(defReg.test(value)) {
@@ -1049,10 +1026,7 @@ function collectData() {
 	var sendPack = [];
 	
 	$('#checkout-input-area .check-item').each(function() {
-		//var itemPack = [];
 		var customFieldPack = [];
-		////console.log($(this).find('.item-id').val());
-		//itemPack.push($(this).find('.item-id').val(), $(this).find('.item-room').val(), $(this).find('.item-nr').val(), $(this).find('.field-input[data-field="FirstName"]').val(), $(this).find('.field-input[data-field="LastName"]').val(), $(this).find('.field-input[data-field="Email"]').val());
 
 		$(this).find('.custom-input').each(function() {
 
