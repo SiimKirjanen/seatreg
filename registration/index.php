@@ -71,14 +71,9 @@
 			}
 		</style>
 	<?php endif; ?>
-	<!--[if lt IE 9]>
-	  <script src="js/html5shiv.js"></script>
-	  <script src="js/respond.js"></script>
-	<![endif]-->
 </head>
 <body>
 <?php include('noscript.html'); ?>	
-	<input type="hidden" id="spot-name" value="<?php //echo htmlspecialchars($data['spot_name']); ?>">
 
 	<?php if(!$showPwdForm) : ?>
 		<?php if($data->registration_open == 0) : ?>
@@ -95,11 +90,10 @@
 	    	</div>
 		<?php else : ?>
 
-		<header id="main-header">
-			<?php echo htmlspecialchars($data->registration_name);?>
-		</header>
-		
-		<?php if($data->registration_layout != null): ?>
+		<?php if($data->registration_layout != null && $data->registration_layout !== '{}'): ?>
+			<header id="main-header">
+				<?php echo htmlspecialchars($data->registration_name);?>
+			</header>
 			<div id="room-nav-wrap" class="border-box no-select">
 				<div id="room-nav">
 					<div id="room-nav-items">
