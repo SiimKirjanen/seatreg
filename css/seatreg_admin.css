@@ -302,6 +302,7 @@ html {
 
 .seatreg-tabs-content .time-block {
 	margin-bottom: 6px;
+	margin-left: 10px;
 }
 
 .seatreg-tabs-content .registration-manager-labels {
@@ -353,8 +354,11 @@ html {
 }
 .seatreg-tabs-content .action-select {
 	float: right;
-	display: inline-block;
 }
+.seatreg-tabs-content .action-select label {
+	margin-left: 10px;
+}
+
 .seatreg-tabs-content .show-more-info {
 	margin-right: 10px;
 }
@@ -745,7 +749,6 @@ html {
 	}
 	.seatreg-tabs-content .action-select {
 		margin-top: 10px;
-		display: inline-block;
 		text-align: right;
 		float: right;
 	}
