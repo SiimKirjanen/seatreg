@@ -78,7 +78,7 @@ echo 'NR, Room, Name, Registration date, Status', "\r\n\r\n";
 for($i=0;$i<$regLen;$i++) {
 	$registrantCustomData = json_decode($registrations[$i]->custom_field_data, true);
 	$status = ($registrations[$i]->status == 2) ? "Confirmed" : "Pending";
-	$date = new DateTime($registrations[$i]->registration_date, $UTC );
+	$date = new DateTime($registrations[$i]->booking_date, $UTC );
 	$date->setTimezone( $newTZ );
 
 	echo $registrations[$i]->seat_nr, ', ',$registrations[$i]->room_name, ', ',$registrations[$i]->first_name, ' ',$registrations[$i]->last_name,', ', $date->format('Y-M-d H:i:s'), ', ', $status, "\r\n";
@@ -88,7 +88,7 @@ for($i=0;$i<$regLen;$i++) {
 	}
 
 	if($status == "Confirmed") {
-		$date = new DateTime($registrations[$i]->registration_confirm_date, $UTC );
+		$date = new DateTime($registrations[$i]->booking_confirm_date, $UTC );
 		$date->setTimezone( $newTZ );
 		echo 'Confirmation date: ', $date->format('Y-M-d H:i:s'), "\r\n";
 	}

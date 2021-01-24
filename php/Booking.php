@@ -24,7 +24,7 @@ class Booking {
 		$bookingsLength = count($this->_bookings);
 		$bookedBookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE seatreg_code = %s AND status != 0",
+			WHERE registration_code = %s AND status != 0",
 			$this->_registrationCode
 		) );
 		$bookedBookingsLength = count($bookedBookings);
@@ -129,7 +129,7 @@ class Booking {
 			b.registration_password 
 			FROM $seatreg_db_table_names->table_seatreg AS a 
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b 
-			ON a.registration_code = b.seatreg_code WHERE a.registration_code = %s",
+			ON a.registration_code = b.registration_code WHERE a.registration_code = %s",
 			$this->_registrationCode
 		) );
 

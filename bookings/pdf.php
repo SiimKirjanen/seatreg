@@ -163,7 +163,7 @@ for($i=0;$i<$regLen;$i++) {
 	$pdf->Cell(6);
 	$pdf->Cell(40,10,$registrations[$i]->room_name,0,0,'C');
 
-	$date = new DateTime($registrations[$i]->registration_date, $UTC );
+	$date = new DateTime($registrations[$i]->booking_date, $UTC );
 	$date->setTimezone( $newTZ );
 
 	$pdf->Cell(40,10,$date->format('Y-M-d H:i:s'),0,0,'C');

@@ -42,7 +42,7 @@ class NewBooking extends Booking {
 		$registration = $wpdb->get_row( $wpdb->prepare(
 			"SELECT registration_layout FROM $seatreg_db_table_names->table_seatreg
 			WHERE registration_code = %s",
-			$rows[0]->seatreg_code
+			$rows[0]->registration_code
 		) );
 
 		if(count($rows) == 0) {
@@ -54,7 +54,7 @@ class NewBooking extends Booking {
 			foreach ($this->_bookings as $booking) {
 				$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
 			}
-			$this->_registrationCode = $this->_bookings[0]->seatreg_code; 
+			$this->_registrationCode = $this->_bookings[0]->registration_code; 
 			$this->_bookingId = $this->_bookings[0]->booking_id;
 		}
 	}

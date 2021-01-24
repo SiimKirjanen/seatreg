@@ -25,7 +25,7 @@ function seatreg_stats_for_registration_reg($structure, $code) {
 		"SELECT room_name,
 		COUNT(id) AS total
 		FROM  $seatreg_db_table_names->table_seatreg_bookings
-		WHERE seatreg_code = %s
+		WHERE registration_code = %s
 		AND status = 1
 		GROUP BY room_name",
 		$code
@@ -35,7 +35,7 @@ function seatreg_stats_for_registration_reg($structure, $code) {
 		"SELECT room_name,
 		COUNT(id) AS total
 		FROM  $seatreg_db_table_names->table_seatreg_bookings
-		WHERE seatreg_code = %s
+		WHERE registration_code = %s
 		AND status = 2
 		GROUP BY room_name",
 		$code
@@ -137,7 +137,7 @@ function seatreg_get_registration_bookings_reg($code, $show_bookings) {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT seat_id, room_uuid, status, CONCAT(first_name, ' ', last_name) AS reg_name
 			FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE seatreg_code = %s
+			WHERE registration_code = %s
 			AND (status = '1' OR status = '2')",
 			$code
 		) );
@@ -145,7 +145,7 @@ function seatreg_get_registration_bookings_reg($code, $show_bookings) {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT seat_id, room_uuid, status 
 			FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE seatreg_code = %s
+			WHERE registration_code = %s
 			AND (status = '1' OR status = '2')",
 			$code
 		) );
@@ -163,7 +163,7 @@ function seatreg_get_options_reg($code) {
 			"SELECT a.*, b.* 
 			FROM $seatreg_db_table_names->table_seatreg AS a
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
-			ON a.registration_code = b.seatreg_code
+			ON a.registration_code = b.registration_code
 			WHERE a.registration_code = %s",
 			$code
 		) );
@@ -172,7 +172,7 @@ function seatreg_get_options_reg($code) {
 			"SELECT a.*, b.* 
 			FROM $seatreg_db_table_names->table_seatreg AS a
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
-			ON a.registration_code = b.seatreg_code
+			ON a.registration_code = b.registration_code
 			ORDER BY a.registration_create_timestamp
 			LIMIT 1"
 		);

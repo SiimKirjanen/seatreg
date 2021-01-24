@@ -190,7 +190,7 @@ class NewBookings extends Booking {
 				$wpdb->insert( 
 					$seatreg_db_table_names->table_seatreg_bookings, 
 					array(
-						'seatreg_code' => $this->_registrationCode, 
+						'registration_code' => $this->_registrationCode, 
 						'first_name' => $this->_bookings[$i]->firstname, 
 						'last_name' => $this->_bookings[$i]->lastname,
 						'email' => $this->_bookings[$i]->email,
@@ -201,7 +201,7 @@ class NewBookings extends Booking {
 						'custom_field_data' => json_encode($this->_bookings[$i]->custom_field, JSON_UNESCAPED_UNICODE),
 						'booking_id' => $this->_bookingId,
 						'status' => $bookingStatus,
-						'registration_confirm_date' => $registrationConfirmDate
+						'booking_confirm_date' => $registrationConfirmDate
 					), 
 					'%s'	
 				);
