@@ -11,7 +11,7 @@ class Booking {
     	$seatsString = '';
 
     	for($i = 0; $i < $dataLen; $i++) {
-    		$seatsString .= 'Seat nr: ' . $this->_bookings[$i]->seat_nr . ' from room: ' . $this->_bookings[$i]->room_name . '<br/>'; 
+    		$seatsString .= 'Seat nr: <b>' . $this->_bookings[$i]->seat_nr . '</b> from room: <b>' . $this->_bookings[$i]->room_name . '</b><br/>'; 
 		}
 		
     	return $seatsString;
@@ -33,7 +33,7 @@ class Booking {
 		for($i = 0; $i < $bookingsLength; $i++) {
 			for($j = 0; $j < $bookedBookingsLength; $j++) {
 				if($this->_bookings[$i]->seat_id == $bookedBookings[$j]->seat_id) {
-					$statusReport = 'Someone has taken seat '. $this->_bookings[$i]->seat_nr . ' in room ' . $this->_bookings[$i]->room_name . ' before you. Please refresh registration page and choose another seat.';
+					$statusReport = 'Seat <b>'. $this->_bookings[$i]->seat_nr . '</b> in room <b>' . $this->_bookings[$i]->room_name . '</b > is already confirmed.';
 
 					break 2;
 				}

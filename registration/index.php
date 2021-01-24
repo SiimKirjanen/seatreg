@@ -124,7 +124,7 @@
 					<div id="middle-section">
 						<div id="box-wrap">
 							<div id="boxes">
-								
+					
 							</div>
 						</div>
 					</div>	

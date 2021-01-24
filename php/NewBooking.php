@@ -39,11 +39,21 @@ class NewBooking extends Booking {
 			$this->_confirmationCode
 		) );
 
+		$registration = $wpdb->get_row( $wpdb->prepare(
+			"SELECT registration_layout FROM $seatreg_db_table_names->table_seatreg
+			WHERE registration_code = %s",
+			$rows[0]->seatreg_code
+		) );
+
 		if(count($rows) == 0) {
 			$this->reply = 'Nothing to confirm.<br>This request is confirmed/expired/deleted.<br>';
 			$this->_valid = false;
 		}else {
+			$roomData = json_decode($registration->registration_layout)->roomData;
 			$this->_bookings = $rows; 
+			foreach ($this->_bookings as $booking) {
+				$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+			}
 			$this->_registrationCode = $this->_bookings[0]->seatreg_code; 
 			$this->_bookingId = $this->_bookings[0]->booking_id;
 		}
@@ -64,10 +74,8 @@ class NewBooking extends Booking {
 		);
 
 		if($this->_insertState == 1) {
-			echo 'Thank you. <br>';
 			echo 'You booking is now in pending state. Registration owner must confirm it.<br><br>';
 		}else {
-			echo 'Thank you. <br>';
 			echo 'You booking is now confirmed.<br><br>';
 		}
 		$seatsString = $this->generateSeatString();

@@ -33,6 +33,9 @@ class NewBookings extends Booking {
     }
 
     public function validateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID) {
+		global $wpdb;
+		global $seatreg_db_table_names;
+
     	$this->_bookerEmail = $emailToSend;
         $this->_submittedPassword = $pw;
     
@@ -57,9 +60,21 @@ class NewBookings extends Booking {
     		$booking->custom_field = $customFieldData[$key];
 
     		$bookings[] = $booking;
-    	}
-        $this->_bookings = $bookings;
+		}
 
+		$registration = $wpdb->get_row( $wpdb->prepare(
+			"SELECT registration_layout FROM $seatreg_db_table_names->table_seatreg
+			WHERE registration_code = %s",
+			$code
+		) );
+		$roomData = json_decode($registration->registration_layout)->roomData;
+		
+		foreach ($bookings as $booking) {
+			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+		}
+
+		$this->_bookings = $bookings;
+		
         return true;
     }
 
@@ -144,11 +159,8 @@ class NewBookings extends Booking {
 
 		for($i = 0; $i < $dataLen; $i++) {
 			if(!in_array($this->_bookings[$i]->seat_id, $seatIds)) {
-				//print_r($seatIds);
-				//echo $this->_data[$i][0], ' not in array. insert it--------';
 				array_push($seatIds, $this->_bookings[$i]->seat_id);
 			}else {
-				//echo $this->_data[$i][0], ' is already in. return false--------';
 				$this->_isValid = false;
 				break;
 			}

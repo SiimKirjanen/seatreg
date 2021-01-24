@@ -357,14 +357,14 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="registration-name"><?php _e('Registration name', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('You can change registration name', 'seatreg'); ?>
+					<?php _e('Change registration name', 'seatreg'); ?>.
 				</p>
 				<input type="text" class="form-control" id="registration-name" name="registration-name" placeholder="Enter registration name" value="<?php echo $options[0]->registration_name; ?>">
 			</div>
 
 			<div class="form-group">
 				<label for="registration-status"><?php _e('Registration status', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('You can close and open your registration', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('Close and open registration', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="registration-status" name="registration-status" value="1" <?php echo $options[0]->registration_open == '1' ? 'checked':'' ?> >
@@ -375,21 +375,21 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="registration-start-timestamp"><span class="glyphicon glyphicon-time" style="color:rgb(4, 145, 4); margin-right:3px"></span><?php _e('Registration start date', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Set when registration starts (dd.mm.yyyy)', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
 				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
 				<input type='hidden' value='<?php echo $options[0]->registration_start_timestamp; ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
 			</div>
 
 			<div class="form-group">
 				<label for="registration-end-timestamp"><span class="glyphicon glyphicon-time" style="color:rgb(250, 38, 38); margin-right:3px"></span><?php _e('Registration end date', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Set when registration ends (dd.mm.yyyy)', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
 				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
 				<input type='hidden' value='<?php echo $options[0]->registration_end_timestamp; ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
 			</div>
 
 			<div class="form-group">
 				<label for="show-registration-bookings"><?php _e('Show bookings', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Let people see who has made a booking', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('Let people see who has made a booking in registration page', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="show-registration-bookings" name="show-registration-bookings" <?php echo $options[0]->show_bookings == '1' ? 'checked':'' ?> > 
@@ -400,13 +400,13 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="registration-info-text"><?php _e('Registration info text', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('You can set registration info text.', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('Set registration info text. Will be displayed in registration page', 'seatreg'); ?>.</p>
 				<textarea class="form-control" id="registration-info-text" name="registration-info-text" placeholder="Enter info text here"><?php echo $options[0]->info; ?></textarea>
 			</div>
 
 			<div class="form-group">
 				<label for="payment-instructions"><?php _e('Payment instruction', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('At this moment SeatReg dosn\'t offer any payment systems, but you can leave informative text that instructs how to pay for booked seat/seats.', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('At the moment SeatReg plugin dosn\'t offer any payment systems, but you can leave informative text that instructs how to pay for booked seat/seats.', 'seatreg'); ?></p>
 				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="Enter payment instructions here"><?php echo $options[0]->payment_text; ?></textarea>
 			</div>
 
@@ -872,7 +872,8 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE seatreg_code = %s
-			AND booking_id = %s",
+			AND booking_id = %s
+			AND status != 0",
 			$registrationCode,
 			$bookingId
 		) );
@@ -899,7 +900,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 
 			if($options && $options->payment_text) {
 				echo '<h1>Payment info</h1>';
-				echo '<p>', htmlspecialchars($paymentText) ,'</p>';
+				echo '<p>', htmlspecialchars($options->payment_text) ,'</p>';
 			}
 		}else {
 			echo 'Booking not found.';
@@ -1192,7 +1193,7 @@ function seatreg_set_up_db() {
 		registration_date timestamp DEFAULT CURRENT_TIMESTAMP,
 		registration_confirm_date datetime DEFAULT NULL,
 		custom_field_data text,
-		status int(11) NOT NULL DEFAULT '0',
+		status int(2) NOT NULL DEFAULT 0,
 		booking_id varchar(40) NOT NULL,
 		conf_code char(40) NOT NULL,
 		PRIMARY KEY  (id),
