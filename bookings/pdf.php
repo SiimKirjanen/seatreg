@@ -172,7 +172,7 @@ for($i=0;$i<$regLen;$i++) {
 	$pdf->Cell(80,10,'Name: ' . $registrations[$i]->first_name . ' ' . $registrations[$i]->last_name,0,1);
 
 	if($status =='Confirmed') {
-		$date = new DateTime($registrations[$i]->registration_confirm_date, $UTC );
+		$date = new DateTime($registrations[$i]->booking_confirm_date, $UTC );
 		$date->setTimezone( $newTZ );
 		$pdf->Cell(80,10,'Confirm date: ' . $date->format('Y-M-d H:i:s'),0,1);
 	}
