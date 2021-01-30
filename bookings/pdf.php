@@ -128,7 +128,7 @@ try {
 
 for($i=0;$i<$regLen;$i++) {
 	$registrantCustomData = json_decode($registrations[$i]->custom_field_data, true);
-	$status = ($registrations[$i]->status == 2) ? "Confirmed" : "Pending";
+	$status = ($registrations[$i]->status == 2) ? "Approved" : "Pending";
 
 	$pdf->Cell(20,10,$registrations[$i]->seat_nr,0,0,'C');
 	$pdf->Cell(6);
@@ -142,10 +142,10 @@ for($i=0;$i<$regLen;$i++) {
 	$pdf->Cell(40,10,$status,0,1,'C');
 	$pdf->Cell(80,10,'Name: ' . $registrations[$i]->first_name . ' ' . $registrations[$i]->last_name,0,1);
 
-	if($status =='Confirmed') {
+	if($status =='Approved') {
 		$date = new DateTime($registrations[$i]->booking_confirm_date, $UTC );
 		$date->setTimezone( $newTZ );
-		$pdf->Cell(80,10,'Confirm date: ' . $date->format('Y-M-d H:i:s'),0,1);
+		$pdf->Cell(80,10,'Approve date: ' . $date->format('Y-M-d H:i:s'),0,1);
 	}
 
 	for($j = 0; $j < $customFieldsCount; $j++) {

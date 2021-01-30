@@ -684,18 +684,17 @@ $('.seatreg_page_seatreg-options .add-select-option').on('click', function(e) {
 		}
 
 		if(!optionReq.test($(this).prev().find('.option-name').val())) {
-			//console.log('Option value not accepted');
 			$(this).prev().focus();
+
 			return;
 		}
 		if($(this).prev().prev().find('.select-option').length >= 10) {
-			//console.log('Cant create more than 10 options per select');
 			$(this).next().text('Cant create more than 10 options per select');
+
 			return;
 		}
 
 		$(this).prev().prev().append('<li class="select-option"><span class="option-value">'+ $(this).prev().find('.option-name').val() +'</span><i class="fa fa-times-circle remove-cust-item"></i></li>');
-
 });
 
 

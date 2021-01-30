@@ -61,7 +61,7 @@ $header = array(
 	'Email'=>'string',
 	'Date'=>'string',
 	'Status'=>'string',
-	'Confirm date' => 'string'
+	'Approve date' => 'string'
 );
 
 $data = array();
@@ -79,12 +79,12 @@ $currentDate->setTimezone( $newTZ );
 
 for($i=0;$i<$regLen;$i++) {	
 	$registrantCustomData = json_decode($registrations[$i]->custom_field_data, true);
-	$status = ($registrations[$i]->status == 2) ? "Confirmed" : "Pending";
+	$status = ($registrations[$i]->status == 2) ? "Approved" : "Pending";
 	$date = new DateTime($registrations[$i]->booking_date, $UTC );
 	$date->setTimezone( $newTZ );
 	$registretionData = array($registrations[$i]->seat_nr, $registrations[$i]->room_name, $registrations[$i]->first_name . ' ' . $registrations[$i]->last_name,  $registrations[$i]->email, $date->format('Y-M-d H:i:s'), $status);
 
-	if($status =='Confirmed') {
+	if($status =='Approved') {
 		$date = new DateTime($registrations[$i]->booking_confirm_date, $UTC );
 		$date->setTimezone( $newTZ );
 		$registretionData[] = $date->format('Y-M-d H:i:s');
@@ -93,8 +93,8 @@ for($i=0;$i<$regLen;$i++) {
 	}
 
 	for($j = 0; $j < $customFieldsCount; $j++) {
-		$header[$customFields[$j]->label] = 'string';
-		$registretionData[] = customFieldWithValueXlsx($customFields[$j]->label, $registrantCustomData);
+		$header[$customFields[$j]['label']] = 'string';
+		$registretionData[] = customFieldWithValueXlsx($customFields[$j]['label'], $registrantCustomData);
 	}
 	$data[] = $registretionData;
 }
@@ -107,7 +107,7 @@ header('Cache-Control: must-revalidate');
 header('Pragma: public');
 	
 $writer = new XLSXWriter();
-$writer->setAuthor('Some Author');
+$writer->setAuthor('SeatReg WordPress');
 $writer->writeSheet($data,'Sheet1',$header);
 $writer->writeToStdOut();
 

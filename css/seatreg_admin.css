@@ -633,6 +633,9 @@ html {
 .seatreg-tabs-content .custom-container {
 	margin-bottom: 10px;
 }
+.seatreg-tabs-content .existing-custom-fields {
+	margin-left: 10px;
+}
 
 .seatreg-tabs-content .custom-container input[type=checkbox] {
 	margin-top: 0;
@@ -645,6 +648,7 @@ html {
 }
 .seatreg-tabs-content .cust-field-create {
 	margin-top: 10px;
+	margin-left: 10px;
 }
 .seatreg-tabs-content .select-option {
 	margin-bottom: 6px;

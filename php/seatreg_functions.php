@@ -406,19 +406,19 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="payment-instructions"><?php _e('Payment instruction', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('At the moment SeatReg plugin dosn\'t offer any payment systems, but you can leave informative text that instructs how to pay for booked seat/seats.', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('At the moment this plugin dosn\'t offer any payment systems, but you can leave informative text that instructs how to pay for booked seat/seats', 'seatreg'); ?>.</p>
 				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="Enter payment instructions here"><?php echo $options[0]->payment_text; ?></textarea>
 			</div>
 
 			<div class="form-group">
-				<label for="registration-max-seats"><?php _e('Max seats', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Set how many seats can people register per order', 'seatreg'); ?></p>
+				<label for="registration-max-seats"><?php _e('Max seats per booking', 'seatreg'); ?></label>
+				<p class="help-block"><?php _e('Set how many seats can be added to the booking', 'seatreg'); ?>.</p>
 				<input type="number" class="form-control" id="registration-max-seats" name="registration-max-seats" value="<?php echo $options[0]->seats_at_once; ?>">
 			</div>
 
 			<div class="form-group">
 				<label for="gmail-required"><?php _e('Gmail required', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Registrant must use gmail account', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('Registrant must use gmail account', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="gmail-required" name="gmail-required" value="1" <?php echo $options[0]->gmail_required == '1' ? 'checked':'' ?> > 
@@ -430,7 +430,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="registration-password"><?php _e('Password', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('You can set a password. Only people who know it can view your registration and book a seat. Leave it empty for no password.', 'seatreg'); ?>
+					<?php _e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
 				</p>
 				<input type="text" class="form-control" id="registration-password" name="registration-password" placeholder="Enter password here" value="<?php echo $options[0]->registration_password; ?>">
 			</div>
@@ -438,7 +438,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="use-pending"><?php _e('Pending status', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('By default all bookings will first be in pending state. If you want bookings automatically be in confirmed state uncheck checkbox below', 'seatreg'); ?>
+					<?php _e('By default all bookings will first be in pending state. If you want bookings automatically to be in approved state then uncheck below', 'seatreg'); ?>
 				</p>
 				<div class="checkbox">
 			    	<label>
@@ -451,7 +451,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="use-pending"><?php _e('Booking email confirm', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('Bookings must be confirmed with email.', 'seatreg'); ?>
+					<?php _e('Bookings must be confirmed with email', 'seatreg'); ?>.
 				</p>
 				<div class="checkbox">
 			    	<label>
@@ -463,7 +463,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="booking-notification"><?php _e('Booking notification', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Send a notification when you got new booking. Leave empty for no notification.', 'seatreg'); ?></p>
+				<p class="help-block"><?php _e('Send a notification when you got new booking. Leave empty for no notification', 'seatreg'); ?>.</p>
 				<input type="email" class="form-control" id="booking-notification" name="booking-notification" placeholder="Email" value="<?php echo $options[0]->notify_new_bookings; ?>">
 			</div>
 
@@ -471,17 +471,16 @@ function seatreg_generate_settings_form() {
 				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
 					<label><?php _e('Custom fields', 'seatreg'); ?></label>
 					<p class="help-block">
-						<?php _e('Custom fields allow you to ask extra information from clients ( You can ask registrants to enter their favourite food )', 'seatreg'); ?>
+						<?php _e('Custom fields allow you to ask extra information for bookings', 'seatreg'); ?>.
 					</p>
 					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
 
-					<div class="existing-custom-fields">
+					<?php if( $custLen > 0 ) : ?>
+						<div class="existing-custom-fields">
+						<div style="margin-bottom: 6px"><?php _e('Existing custom fields', 'seatreg'); ?></div>
 						<?php
-
 							for($i = 0; $i < $custLen; $i++) {
-
 								if($custFields[$i]->type == 'sel') {
-
 									$optLen = count($custFields[$i]->options);
 									echo '<div class="custom-container" data-type="sel">';
 										echo '<label><span class="l-text">', $custFields[$i]->label, '</span>';
@@ -506,13 +505,13 @@ function seatreg_generate_settings_form() {
 										echo '<label><span class="l-text">', $custFields[$i]->label, '</span> <input type="checkbox" /></label><i class="fa fa-times-circle remove-cust-item"></i>';
 									echo '</div>';
 								}
-
 							}
 						?>
-					</div>
+						</div>
+					<?php endif; ?>
 
 					<div class="cust-field-create">
-						<h3><?php _e('Create new custom field', 'seatreg'); ?></h3>
+						<div style="margin-bottom: 6px"><?php _e('Create new custom field', 'seatreg'); ?></div>
 						<div>
 							<label><?php _e('Name', 'seatreg'); ?>:
 								<input type="text" class="cust-input-label" maxlenght="30"/>
