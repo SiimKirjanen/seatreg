@@ -12,5 +12,7 @@ function seatreg_change_captcha($length) {
         $i++;
     }
     
-    $_SESSION['captcha'] = $str;
+    $_SESSION['seatreg_captcha'] = $str;
+
+    return $str;
 }	
