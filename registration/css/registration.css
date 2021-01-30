@@ -1420,6 +1420,10 @@ body {
 	content: "\e600";
 }
 
+.seats-in-cart {
+	font-weight: 700;
+}
+
 /*Animations*/
 
 

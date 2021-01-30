@@ -6,20 +6,20 @@ function seatreg_generate_registration_stringes() {
 	$translations->emailNotCorrect = __('Email address is not correct', 'seatreg');
 	$translations->wrongCaptcha = __('Wrong code!', 'seatreg');
 	$translations->somethingWentWrong = __('Something went wrong. Please try again', 'seatreg');
-	$translations->selectionIsEmpty = __('Selection is empty', 'seatreg');
+	$translations->selectionIsEmpty = __('Booking is empty', 'seatreg');
     $translations->youCanAdd_ = __('You can add ', 'seatreg');
-    $translations->_toCartClickTab = __(' to cart by clicking boxes', 'seatreg');
+    $translations->_toCartClickTab = __(' to booking by clicking boxes', 'seatreg');
 	$translations->toCartClickTab = __(' to selection by clicking/tabbing them', 'seatreg');
 	$translations->regClosedAtMoment = __('Registration is closed at the moment', 'seatreg');
 	$translations->confWillBeSentTo = __('Confirmation will be sent to:', 'seatreg');
 	$translations->confWillBeSentTogmail = __('Confirmation will be sent to (Gmail):', 'seatreg');
 	$translations->gmailReq = __('Email (Gmail required)', 'seatreg');
 	$translations->_fromRoom_ = __(' from room ', 'seatreg');
-	$translations->_toSelection = __(' to selection?', 'seatreg');
+	$translations->_toSelection = __(' to booking?', 'seatreg');
 	$translations->_isOccupied = __(' is occupied', 'seatreg');
 	$translations->_isPendingState = __(' is in pending state', 'seatreg');
 	$translations->regOwnerNotConfirmed = __('(registration admin has not confirmed it)', 'seatreg');
-	$translations->selectionIsFull = __('Selection is full', 'seatreg');
+	$translations->selectionIsFull = __('Booking is full', 'seatreg');
 	$translations->_isAlreadyInCart = __(' is already in cart!', 'seatreg');
 	$translations->_regUnderConstruction = __('Registration under construction', 'seatreg');
 	$translations->emptyField = __('Empty field', 'seatreg');
@@ -34,6 +34,8 @@ function seatreg_generate_registration_stringes() {
 	$translations->eMail = __('Email', 'seatreg');
 	$translations->this_ = __('This ', 'seatreg');
     $translations->_selected = __(' selected', 'seatreg');
+    $translations->_seatSelected = __(' seat selected', 'seatreg');
+    $translations->_seatsSelected = __(' seats selected', 'seatreg');
     $translations->bookingsConfirmed = __('You Bookings are confirmed', 'seatreg');
     $translations->bookingsConfirmedPending = __('Your bookings are now in pending state. Registration owner needs to confirm them', 'seatreg');
 

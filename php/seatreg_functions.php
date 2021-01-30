@@ -652,7 +652,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 		echo '<div class="tab-container">';
 			echo '<ul class="etabs">';
 				echo '<li class="tab"><a href="#', esc_html($project_name), 'bron">', __('Pending', 'seatreg'), '</a></li>';
-				echo '<li class="tab"><a href="#', esc_html($project_name), 'taken">',__('Confirmed','seatreg'),'</a></li>';
+				echo '<li class="tab"><a href="#', esc_html($project_name), 'taken">',__('Approved','seatreg'),'</a></li>';
 			echo '</ul>';
 		echo '<div class="panel-container differentBgColor">';
 				echo '<div class="registration-manager-labels">
@@ -686,7 +686,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo "<span class='edit-btn' data-code='$code' data-booking='$booking' data-id='$registrationId'><span class='glyphicon glyphicon-edit'></span>", __('Edit','seatreg'), "</span>";
 					echo '<div class="action-select">';
 						echo "<label class='action-label'>",__('Remove','seatreg'),"<input type='checkbox' value='$row->booking_id' class='bron-action' data-action='del'/></label>";
-						echo "<label class='action-label'>",__('Confirm','seatreg'),"<input type='checkbox' value='$row->booking_id' class='bron-action'data-action='confirm'/></label>";
+						echo "<label class='action-label'>",__('Approve','seatreg'),"<input type='checkbox' value='$row->booking_id' class='bron-action'data-action='confirm'/></label>";
 					echo '</div>';
 
 					echo '<div class="more-info">';
@@ -711,7 +711,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 			echo '<div id="',esc_html($project_name),'taken" class="tab_container active">';
 
 			if($row_count2 == 0) {
-				echo '<div class="notify-text">', __('No confirmed seats', 'seatreg'), '</div>';
+				echo '<div class="notify-text">', __('No approved seats', 'seatreg'), '</div>';
 			}
 
 			foreach ($bookings2 as $row) {
@@ -736,7 +736,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 
 					echo '<div class="more-info">';
 						echo '<div>Registration date: <span class="time-string">', esc_html( $row->booking_date ), '</span></div>';
-						echo '<div>Confirmation date: <span class="time-string">', esc_html( $row->booking_confirm_date ), '</span></div>';
+						echo '<div>Approval date: <span class="time-string">', esc_html( $row->booking_confirm_date ), '</span></div>';
 						echo '<div>Email: ', esc_html( $row->email ), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {

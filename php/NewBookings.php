@@ -1,7 +1,7 @@
 <?php
 
 //===========
-	/*data coming from registration. Someone wants to book a seat*/
+	/* Data coming from registration. Someone wants to book a seat/seats */
 //===========
 
 require_once('Booking.php');

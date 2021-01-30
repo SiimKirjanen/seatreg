@@ -1,7 +1,7 @@
 <?php
 
 //===========
-/*for confirm seat selection*/
+	/* For booking confirm */
 //===========
 
 require_once('Booking.php');
@@ -28,14 +28,15 @@ class NewBooking extends Booking {
 		$this->_confirmationCode = $code;
 	}
 
-	protected function getBookings() {
+	protected function getNotConfirmedBookings() {
 		//find out if confirmation code is in db and return all bookings with that code
 		global $wpdb;
 		global $seatreg_db_table_names;
 
 		$rows = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE conf_code = %s",
+			WHERE conf_code = %s
+			AND status = 0",
 			$this->_confirmationCode
 		) );
 
@@ -46,7 +47,7 @@ class NewBooking extends Booking {
 		) );
 
 		if(count($rows) == 0) {
-			$this->reply = 'Nothing to confirm.<br>This request is confirmed/expired/deleted.<br>';
+			$this->reply = __('This booking is already confirmed/expired/deleted', 'seaterg');
 			$this->_valid = false;
 		}else {
 			$roomData = json_decode($registration->registration_layout)->roomData;
@@ -74,22 +75,28 @@ class NewBooking extends Booking {
 		);
 
 		if($this->_insertState == 1) {
-			echo 'You booking is now in pending state. Registration owner must confirm it.<br><br>';
+			_e('You booking is now in pending state. Registration owner must approve it', 'seatreg');
+			echo '.<br><br>';
 		}else {
-			echo 'You booking is now confirmed.<br><br>';
+			_e('You booking is now confirmed', 'seatreg');
+			echo '<br><br>';
 		}
-		$seatsString = $this->generateSeatString();
-		echo $seatsString;
+		$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
+		printf(
+			__('You can look your booking at %s', 'seatreg'), 
+			"<a href='$bookingCheckURL'>$bookingCheckURL</a>"
+		);
 
 		if($this->_sendNewBookingNotificationEmail) {
+			$seatsString = $this->generateSeatString();
 			seatreg_send_booking_notification_email($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
 		}
 	}
 
 	public function startConfirm() {
-		$this->getBookings();
+		$this->getNotConfirmedBookings();
 
-		//1 step. Does confirmation code exist?
+		//1 step. Does confirmation code exists? Is booking already confirmed?
 		if($this->_valid == false) {
 			echo $this->reply;
 			return;
@@ -100,12 +107,12 @@ class NewBooking extends Booking {
 
 		//3 step. Is registtration open?
 		if(!$this->_isRegistrationOpen) {
-			echo 'Registration is closed at the moment';
+			_e('Registration is closed at the moment', 'seaterg');
 			return;
 		}
 		$registrationTimeCheck = seatreg_registration_time_status($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
 		if($registrationTimeCheck != 'run') {
-			echo 'Registration is not open (time)';
+			_e('Registration is not open', 'seatreg');
 			return;
 		}
 
@@ -125,7 +132,5 @@ class NewBooking extends Booking {
 
 		//6 step. confirm bookings
 		$this->confirmBookings();  //this also updates structure
-
-		echo '<br/>Thank you';
 	}
 }

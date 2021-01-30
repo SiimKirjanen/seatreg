@@ -466,9 +466,9 @@ SeatReg.prototype.addSeatToCart = function() {
 			var selected = scope.selectedSeats.length;
 			var infoText;
 			if(selected > 1) {
-				infoText = selected + translator.translate('_selected');
+				infoText = selected + translator.translate('_seatsSelected');
 			}else {
-				infoText = selected + translator.translate('_selected');
+				infoText = selected + translator.translate('_seatSelected');
 			}
 			$('#seat-cart-info').text(infoText);
 		
@@ -499,9 +499,9 @@ SeatReg.prototype.openSeatCart = function() {
 		$('#seat-cart-rows').css('display','block');
 		var infoText;
 		if(selected > 1) {
-			infoText = selected + translator.translate('_selected');
+			infoText = selected + translator.translate('_seatsSelected');
 		}else {
-			infoText = selected + translator.translate('_selected');
+			infoText = selected + translator.translate('_seatSelected');
 		}
 		$('#seat-cart-info').text(infoText);
 		$('#checkout').css('display','inline-block');
@@ -1104,7 +1104,7 @@ function sendData(customFieldBack, regURL) {
 				}else if(resp.type == 'error') {
 					$('#checkout-area').css('display','none');
 					$('#captcha-ref').click();
-					$('#error-text').text(resp.text);
+					$('#error-text').html(resp.text);
 					$('#error').css('display','block');
 					$('#checkout-confirm-btn').css('display','inline-block');
 				}else {

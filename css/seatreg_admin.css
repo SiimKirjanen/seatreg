@@ -728,6 +728,11 @@ html {
 .registration-name-link {
 	color: rgb(51, 51, 51);
 }
+.seatreg_page_seatreg-management .booking-status-check-wrap input[type=checkbox] {
+	margin-top: 0;
+	margin-left: 6px;
+}
+
 @media screen and (max-width: 1199px) {
 	.seatreg-tabs-content #my-regs {
 		width: 970px;

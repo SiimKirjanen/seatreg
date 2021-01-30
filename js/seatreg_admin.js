@@ -576,7 +576,9 @@ $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e)
 		cancel : 'cancel'
 	} });
 
-	alertify.confirm("<h3>" + 'Options' + "</h3><div>" + 'Current timezone: ' + timezone.name() + "</div><label>"+ 'showPending' +"<input type='checkbox' id='show-pending' checked /></label><br><label>"+ 'showConfirmed' +"<input type='checkbox' id='show-confirmed' checked /></label>", function (e) {
+	alertify.confirm("<div>" + 'Current timezone: ' + timezone.name() + "</div><br>" + 
+	"<div class='booking-status-check-wrap'><label>show pending bookins<input type='checkbox' id='show-pending' checked /></label></div>" +
+	"<div class='booking-status-check-wrap'><label>show approved bookings<input type='checkbox' id='show-confirmed' checked /></label></div>", function (e) {
 
 	    if (e) {
 	    	if($('#show-pending').is(':checked')) {

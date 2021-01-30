@@ -16,7 +16,7 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="shortcut icon" type="image/png" href="favicon.png"/>
-	<title>SeatReg.com</title>
+	<title>Booking confirm</title>
 </head>
 <body>
 	<div>

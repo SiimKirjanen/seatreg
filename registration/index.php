@@ -136,21 +136,18 @@
 
 				<div id="seat-cart" class="border-box no-select">
 					<div class="seat-cart-left">
-						<div class="cart-icon">
-							<div class="cart-icon-box-1"></div>
-							<div class="cart-icon-box-2"></div>
-							<div class="cart-icon-box-3"></div>
-						</div>
-						<div id="cart-text"><span class="seats-in-cart">0</span> <?php _e('in selection', 'seatreg'); ?> 
+						<div id="cart-text">
+							<div class="seats-in-cart">0</div>
+							<div><?php _e('seats selected', 'seatreg'); ?></div> 
 							<div class="max-seats">
-								<?php 
+								(<?php 
 									_e('Max', 'seatreg');
 									if($data->seats_at_once > 1) {
-										echo htmlspecialchars( $data->seats_at_once ),'<br>'; 
+										echo htmlspecialchars( $data->seats_at_once ); 
 									}else {
-										echo htmlspecialchars( $data->seats_at_once ),'<br>'; 
+										echo htmlspecialchars( $data->seats_at_once ); 
 									}
-								?>
+								?>)
 							</div>
 						</div>
 					</div>
@@ -279,7 +276,7 @@
 					<div id="confirm-dialog-bottom">
 						<div id="confirm-dialog-mob-ok" class="seatreg-btn green-btn">
 							<?php 
-								_e('Add to selection', 'seatreg');
+								_e('Add to booking', 'seatreg');
 							?>
 						</div>
 						<div id="confirm-dialog-mob-cancel" class="seatreg-btn red-btn">
@@ -385,7 +382,7 @@
 				<div class="cart-icon-text">
 					<span class="seats-in-cart">0</span> 
 					<?php 
-						_e('in selection', 'seatreg');
+						_e('in booking', 'seatreg');
 					?>
 					<span class="max-seats">
 						<?php
@@ -417,7 +414,7 @@
 				<span id="email-send"></span></h2>
 				<p>
 				<?php 
-					_e('You need to confirm your selection by following confirm email instructions. Make sure you check your junk folders', 'seatreg');
+					_e('You need to confirm your booking by following email instructions. Make sure you check your junk folders', 'seatreg');
 				?>.
 				</p>
 				<button class="refresh-btn">
