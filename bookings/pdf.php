@@ -27,39 +27,20 @@ if(empty($_GET['zone'])) {
 }
 
 $registrationInfo = seatreg_get_options($_GET['v'])[0];
-
-//print_r($registrationInfo);
-//echo $registrationInfo->registration_name;
-//exit();
-
 $registrations = seatreg_get_data_for_booking_file($_GET['v'], $showWhat);
-
-//print_r($registrations);
-//exit();
 
 $projectName = $registrationInfo->registration_name;
 $customFields = json_decode($registrationInfo->custom_fields, true);
 $customFieldsCount = count($customFields);
 $regLen = count($registrations);
 
-//echo count($customFields[0]);
-//echo '<pre>', print_r($customFields), '</pre>';
-//echo $customFields[0]['label'];
-//echo '<pre>', print_r($registrations), '</pre>';
-//echo '<pre>', print_r($registrationInfo), '</pre>';
-
 function customFieldWithValuePDF($label, $custom_data) {
 	$cust_len = count($custom_data);
-	//echo 'Custom field length: ',$cust_len, '<br>';
 	$foundIt = false;
 	$string = $label . ': ';
 	
-	//echo '-----Alustan otsinguga----<br>';
 	for($k = 0; $k < $cust_len; $k++) {
-		//echo 'Otsin: ', $label, '<br>';
-		//echo 'Leidsin: ', $custom_data[$k]['label'], '<br>';
 		if($custom_data[$k]->label == $label) {
-			//echo 'Match leitud!!!!!!!!!!!!!!';
 			if($custom_data[$k]->value === true) {
 				$string .= 'Yes';
 			}else if($custom_data[$k]->value === false) {
@@ -68,10 +49,8 @@ function customFieldWithValuePDF($label, $custom_data) {
 				$string .= $custom_data[$k]->value;
 			}
 			$foundIt = true;
+
 			break;
-		}else {
-			//echo 'Label: ',$label, 'ei võrdu: ',$custom_data[$k]['label'], '<br />';
-			//echo 'Ei olnud match<br></br>';
 		}
 	}
 
@@ -83,13 +62,9 @@ function customFieldWithValuePDF($label, $custom_data) {
 }
 
 class PDF extends tFPDF {
-	// Page header
 	function Header() {
 		$this->SetFont('Arial','B',14);
-		// Logo
-		//$this->Cell(30,0,'SeatReg.com',0,0,'C');
 		$this->Image('../img/seatreg_logo.png',9,5,30);
-		// Arial bold 15
 		
 		// Move to the right
 		$this->Cell(70);
@@ -128,9 +103,6 @@ class PDF extends tFPDF {
 
 // Instanciation of inherited class
 $pdf = new PDF();
-//$pdf->SetTitle('Hey hey');  //$GLOBALS['projectName']
-//$pdf->AddFont('DejaVu','','/DejaVuSansCondensed.ttf',true);
-//php/libs/tfpdf/font/unifont/
 $pdf->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
 $pdf->AliasNbPages();
 $pdf->AddPage();
@@ -154,7 +126,6 @@ try {
 	exit();
 }
 
-//echo $date->format('Y-m-d H:i:s');
 for($i=0;$i<$regLen;$i++) {
 	$registrantCustomData = json_decode($registrations[$i]->custom_field_data, true);
 	$status = ($registrations[$i]->status == 2) ? "Confirmed" : "Pending";
@@ -182,8 +153,6 @@ for($i=0;$i<$regLen;$i++) {
 	}
 
 	$pdf->Ln(10);
-	//$text = $registrations[$i]['seat_nr'] . ' ' . $registrations[$i]['room_name'] . $registrations[$i]['first_name'] . ' ' . $registrations[$i]['last_name'];
-	//$pdf->Cell(0,10,$text,0,1);
 }
 	
 $pdf->Output();	

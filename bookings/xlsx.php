@@ -21,47 +21,19 @@ if(empty($_GET['zone'])) {
 }
 
 $registrationInfo = seatreg_get_options($_GET['v'])[0];
-
-//print_r($registrationInfo);
-
-//echo $registrationInfo->registration_name;
-
-//exit();
-
 $registrations = seatreg_get_data_for_booking_file($_GET['v'], $showWhat);
-
-//print_r($registrations);
-
-//exit();
-
-
 $projectName = $registrationInfo->registration_name;
 $customFields = json_decode($registrationInfo->custom_fields, true);
 $customFieldsCount = count($customFields);
 $regLen = count($registrations);
 
-//echo count($customFields[0]);
-//echo '<pre>', print_r($customFields), '</pre>';
-//echo $customFields[0]['label'];
-//echo '<pre>', print_r($registrations), '</pre>';
-//echo '<pre>', print_r($registrationInfo), '</pre>';
-
-//$registrationInfo['project_name']
-
 function customFieldWithValueXlsx($label, $custom_data) {
 	$cust_len = count($custom_data);
-	//echo 'Custom field length: ',$cust_len, '<br>';
 	$foundIt = false;
 	$string = '';
-	//echo '-----Alustan otsinguga----<br>';
 
 	for($k = 0; $k < $cust_len; $k++) {
-		//echo 'Otsin: ', $label, '<br>';
-		//echo 'Leidsin: ', $custom_data[$k]['label'], '<br>';
-
 		if($custom_data[$k]->label == $label) {
-			//echo 'Match leitud!!!!!!!!!!!!!!';
-
 			if($custom_data[$k]->value === true) {
 				$string = 'Yes';
 			}else if($custom_data[$k]->value === false) {
@@ -72,9 +44,6 @@ function customFieldWithValueXlsx($label, $custom_data) {
 
 			$foundIt = true;
 			break;
-		}else {
-			//echo 'Label: ',$label, 'ei võrdu: ',$custom_data[$k]['label'], '<br />';
-			//echo 'Ei olnud match<br></br>';
 		}
 	}
 
@@ -127,11 +96,8 @@ for($i=0;$i<$regLen;$i++) {
 		$header[$customFields[$j]->label] = 'string';
 		$registretionData[] = customFieldWithValueXlsx($customFields[$j]->label, $registrantCustomData);
 	}
-	//echo '<pre>', print_r($registretionData), '</pre>';
 	$data[] = $registretionData;
 }
-
-//echo '<pre>', print_r($data), '</pre>';
 
 $filename =  $projectName . ' ' . $currentDate->format('Y-M-d') . ".xlsx";
 header('Content-disposition: attachment; filename="'.XLSXWriter::sanitize_filename($filename).'"');
@@ -143,8 +109,6 @@ header('Pragma: public');
 $writer = new XLSXWriter();
 $writer->setAuthor('Some Author');
 $writer->writeSheet($data,'Sheet1',$header);
-//$writer->writeSheet($data2,'Sheet2');
 $writer->writeToStdOut();
-//$writer->writeToFile('example.xlsx');
-//echo $writer->writeToString();
+
 exit(0);

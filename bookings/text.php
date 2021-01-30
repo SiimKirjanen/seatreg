@@ -45,22 +45,14 @@ header('Content-Disposition: attachment; filename="'.$projectName.' '.$currentDa
 
 function customFieldWithValueText($label, $custom_data) {
 	$cust_len = count($custom_data);
-	//echo 'Custom field length: ',$cust_len, '<br>';
 	$foundIt = false;
 	$string = $label . ': ';
-	//echo '-----Alustan otsinguga----<br>';
 
 	for($k = 0; $k < $cust_len; $k++) {
-		//echo 'Otsin: ', $label, '<br>';
-		//echo 'Leidsin: ', $custom_data[$k]['label'], '<br>';
 		if($custom_data[$k]['label'] == $label) {
-			//echo 'Match leitud!!!!!!!!!!!!!!';
 			$string .= $custom_data[$k]['value'];
 			$foundIt = true;
 			break;
-		}else {
-			//echo 'Label: ',$label, 'ei võrdu: ',$custom_data[$k]['label'], '<br />';
-			//echo 'Ei olnud match<br></br>';
 		}
 	}
 
