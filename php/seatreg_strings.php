@@ -18,7 +18,7 @@ function seatreg_generate_registration_stringes() {
 	$translations->_toSelection = __(' to selection?', 'seatreg');
 	$translations->_isOccupied = __(' is occupied', 'seatreg');
 	$translations->_isPendingState = __(' is in pending state', 'seatreg');
-	$translations->regOwnerNotConfirmed = __('(registration owner has not confirmed it yet)', 'seatreg');
+	$translations->regOwnerNotConfirmed = __('(registration admin has not confirmed it)', 'seatreg');
 	$translations->selectionIsFull = __('Selection is full', 'seatreg');
 	$translations->_isAlreadyInCart = __(' is already in cart!', 'seatreg');
 	$translations->_regUnderConstruction = __('Registration under construction', 'seatreg');
@@ -32,7 +32,7 @@ function seatreg_generate_registration_stringes() {
 	$translations->firstName = __('Firstname', 'seatreg');
 	$translations->lastName = __('Lastname', 'seatreg');
 	$translations->eMail = __('Email', 'seatreg');
-	$translations->this_ = __('This', 'seatreg');
+	$translations->this_ = __('This ', 'seatreg');
     $translations->_selected = __(' selected', 'seatreg');
     $translations->bookingsConfirmed = __('You Bookings are confirmed', 'seatreg');
     $translations->bookingsConfirmedPending = __('Your bookings are now in pending state. Registration owner needs to confirm them', 'seatreg');
