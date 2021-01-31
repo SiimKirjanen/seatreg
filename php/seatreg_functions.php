@@ -39,6 +39,24 @@ function seatreg_bookings_is_user_logged_in() {
 	}
 }
 
+//generating nonce fields without html id attribute
+function seatrag_generate_nonce_field() {
+	?>
+		<input type="hidden" name="seatreg-admin-nonce" value="<?php echo wp_create_nonce( 'seatreg-admin-nonce' ); ?>" />
+		<?php echo wp_referer_field( false ); ?>
+	<?php
+}
+
+//nonce check
+function seatreg_nonce_check() {
+	if ( ! wp_verify_nonce( $_POST['seatreg-admin-nonce'], 'seatreg-admin-nonce' ) ) {
+	    wp_die('Nonce validation failed!');
+	}
+	if( !current_user_can('manage_options') ) {
+		 wp_die('You are not allowed to do this');
+	}
+}
+
 /*
 ==================================================================================================================================================================================================================
 Generating HTML stuff
@@ -565,8 +583,8 @@ function seatreg_create_registration_from() {
 			</label>
 	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px">
 			<input type='hidden' name='action' value='seatreg_create_submit' />
+			<?php echo seatrag_generate_nonce_field(); ?>
 			<?php
-				wp_nonce_field( 'seatreg-admin-nonce', 'seatreg-admin-nonce' );
 				submit_button('Create new registration');
 			?>
 	    </form>
@@ -578,9 +596,9 @@ function seatreg_create_delete_registration_from($registrationCode) {
 	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" class="seatreg-delete-registration-form" onsubmit="return confirm('Do you really want to delete?');">
 	    	<input type="hidden" name="registration-code" value="<?php echo $registrationCode; ?>" />
 			<input type='hidden' name='action' value='seatreg_delete_registration' />
+			<?php echo seatrag_generate_nonce_field(); ?>
 			<?php
-				wp_nonce_field( 'seatreg-admin-nonce', 'seatreg-admin-nonce' );
-				submit_button('Delete', 'delete-registration-btn', 'delete-registration', false);
+				submit_button('Delete', 'delete-registration-btn', 'delete-registration', false, array( 'id' => "delete-$registrationCode" ));
 			?>
 	    </form>
 	<?php
@@ -1208,7 +1226,7 @@ function seatreg_get_registrations() {
 	global $seatreg_db_table_names;
 
 	$registrations = $wpdb->get_results(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg WHERE is_deleted = false"
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg WHERE is_deleted = 0"
 	);
 
 	return $registrations;
@@ -1540,16 +1558,6 @@ Admin form submit stuff
 ======================================================================================================================================================
 */
 
-//credentials check
-function seatreg_nonce_check() {
-	if ( ! wp_verify_nonce( $_POST['seatreg-admin-nonce'], 'seatreg-admin-nonce' ) ) {
-	    wp_die('Nonce validation failed!');
-	}
-	if( !current_user_can('manage_options') ) {
-		 wp_die('You are not allowed to do this');
-	}
-}
-
 //handle new registration create
 add_action('admin_post_seatreg_create_submit', 'seatreg_create_submit_handler'); 
 function seatreg_create_submit_handler() {
@@ -1677,18 +1685,6 @@ function seatreg_form_submit_handle() {
 Ajax stuff
 ====================================================================================================================================================================================
 */
-
-//check credentials
-function seatreg_check_ajax_credentials() {
-	if( !check_ajax_referer('seatreg-admin-nonce', 'security') ) {
-		return wp_send_json_error( 'Nonce error' );
-		wp_die();
-	}
-	if( !current_user_can('manage_options') ) {
-		return wp_send_json_error( 'You are not allowed to do this' );
-		wp_die();
-	}
-}
 
 add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_layout_and_bookings');
 function seatreg_get_registration_layout_and_bookings() {
