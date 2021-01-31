@@ -21,27 +21,27 @@ function seatreg_stats_for_registration_reg($structure, $code) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 
-	$bookings = $wpdb->get_results( $wpdb->prepare(
-		"SELECT room_name,
+	$pendingBookings = $wpdb->get_results( $wpdb->prepare(
+		"SELECT room_uuid,
 		COUNT(id) AS total
 		FROM  $seatreg_db_table_names->table_seatreg_bookings
 		WHERE registration_code = %s
 		AND status = 1
-		GROUP BY room_name",
+		GROUP BY room_uuid",
 		$code
 	) );
 
-	$bookings2 = $wpdb->get_results( $wpdb->prepare(
-		"SELECT room_name,
+	$confirmedBookings = $wpdb->get_results( $wpdb->prepare(
+		"SELECT room_uuid,
 		COUNT(id) AS total
 		FROM  $seatreg_db_table_names->table_seatreg_bookings
 		WHERE registration_code = %s
 		AND status = 2
-		GROUP BY room_name",
+		GROUP BY room_uuid",
 		$code
 	) );
 
-	$statsArray =  getSeatsStats($structure, $bookings, $bookings2);
+	$statsArray =  getSeatsStats($structure, $pendingBookings, $confirmedBookings);
 
 	return $statsArray;	
 }
@@ -77,7 +77,7 @@ function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 		$roomCustomBoxes = 0;
 
 		for($k = 0; $k < $bronLength; $k++) {  
-			if( $regStructure[$i]->room->name == $bronRegistrations[$k]->room_name ) { //find how many bron seats in this room
+			if( $regStructure[$i]->room->uuid == $bronRegistrations[$k]->room_uuid ) { //find how many bron seats in this room
 				$roomBronSeats = $bronRegistrations[$k]->total;
 				$howManyBronSeats += $bronRegistrations[$k]->total;
 
@@ -86,7 +86,7 @@ function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 		}
 
 		for($k = 0; $k < $takenLength; $k++) {
-			if($regStructure[$i]->room->name == $takenRegistrations[$k]->room_name) { //find how many taken seats in this room
+			if($regStructure[$i]->room->uuid == $takenRegistrations[$k]->room_uuid) { //find how many taken seats in this room
 				$roomTakenSeats = $takenRegistrations[$k]->total;
 				$howManyTakenSeats += $takenRegistrations[$k]->total;
 
@@ -110,7 +110,7 @@ function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
 		}
 
 		$roomsInfo[] = array(
-			'roomName' => $regStructure[$i]->room->name,
+			'roomUuid' => $regStructure[$i]->room->uuid,
 			'roomSeatsTotal' => $roomRegSeats,
 			'roomOpenSeats' => $roomRegSeats - $roomTakenSeats - $roomBronSeats,
 			'roomTakenSeats' => $roomTakenSeats,

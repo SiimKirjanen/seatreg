@@ -109,7 +109,7 @@ $(function() {
 		var roomsLength = this.rooms.length;
 
 		for(var i = 0; i < roomsLength; i++) {
-			this.locationObj[this.rooms[i].room.name.replace(/ /g,"_")] = i;
+			this.locationObj[this.rooms[i].room.uuid] = i;
 		}
 	};
 
@@ -126,7 +126,7 @@ $(function() {
 
 		for (var property in roomsInfo.roomsInfo) {
 			if (roomsInfo.roomsInfo.hasOwnProperty(property)) {
-				var roomLoc = this.locationObj[roomsInfo.roomsInfo[property].roomName.replace(/ /g,"_")];
+				var roomLoc = this.locationObj[roomsInfo.roomsInfo[property].roomUuid];
 
 				this.rooms[roomLoc].room['roomBronSeats'] = roomsInfo.roomsInfo[property].roomBronSeats;
 				this.rooms[roomLoc].room['roomCustomBoxes'] = roomsInfo.roomsInfo[property].roomCustomBoxes;
@@ -141,9 +141,9 @@ $(function() {
 
 		for(var i = 0; i < reLength; i++) {
 			if(registrations[i].hasOwnProperty('reg_name')) {
-				seatReg.addRegistration(registrations[i]['seat_id'], this.getRoomNameFromLayout(registrations[i]['room_uuid']), registrations[i]['status'], registrations[i]['reg_name']);
+				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], registrations[i]['reg_name']);
 			}else {
-				seatReg.addRegistration(registrations[i]['seat_id'], this.getRoomNameFromLayout(registrations[i]['room_uuid']), registrations[i]['status'], null);
+				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], null);
 			}
 		}
 
@@ -187,8 +187,8 @@ $(function() {
 		return roomName;
 	};
 
-	SeatReg.prototype.addRegistration = function(seat_id, room, status, reg_name) {
-		var roomLocation = this.locationObj[room.replace(/ /g,"_")];
+	SeatReg.prototype.addRegistration = function(seat_id, room_uuid, status, reg_name) {
+		var roomLocation = this.locationObj[room_uuid];
 		var boxesLen = this.rooms[roomLocation].boxes.length;
 
 		for(var j = 0; j < boxesLen; j++) {
@@ -379,8 +379,8 @@ SeatReg.prototype.paintRoomsNav = function() {
 		var roomName = this.rooms[i].room.name;
 		var navItem = $('<div>', {
 			'class': 'room-nav-link',
-			'data-open': roomName.replace(/ /g,"_")
-		}).html(roomName + ' <span class="open-seats-rem">(' + this.rooms[i].room.roomOpenSeats + ')</span>').on('click', function() {
+			'data-open': this.rooms[i].room.uuid
+		}).html(roomName).on('click', function() {
 			scope.roomChange($(this).attr('data-open'));
 		});
 
@@ -393,11 +393,11 @@ SeatReg.prototype.paintRoomsNav = function() {
 	$('#room-nav-items').append(documentFragment);
 };
 
-SeatReg.prototype.roomChange = function(roomName) {
+SeatReg.prototype.roomChange = function(roomUUID) {
 	$('#room-nav').removeClass('modal');
 	$('#modal-bg').css('display','none');
 	
-	this.currentRoom = this.locationObj[roomName];
+	this.currentRoom = this.locationObj[roomUUID];
 
 	if(myScroll != null) {
 		myScroll.destroy();
@@ -409,7 +409,7 @@ SeatReg.prototype.roomChange = function(roomName) {
 	}
 
 	$('#room-nav-items .active-nav-link').removeClass('active-nav-link');
-	$('#room-nav-items').find('.room-nav-link[data-open=' + roomName +']').addClass('active-nav-link');
+	$('#room-nav-items').find('.room-nav-link[data-open=' + roomUUID +']').addClass('active-nav-link');
 
 	$('#boxes').empty();	//clear boxes
 	$('#legends').empty();	//clear legends

@@ -502,12 +502,12 @@
 				alert('Data gathering failed');
 			}
 		</script>
-		<!--
+	<!--
 		<script src="js/date.format.js"></script>
 		<script src="js/iscroll-zoom-5-1-3.js"></script>
 		<script src="js/jquery.powertip.js"></script>
 		<script src="js/registration.js"></script>
-		-->
+	-->
 		
 		<script src="js/registration.min.js"></script>
 		

@@ -930,11 +930,9 @@ body {
 
 /*seat cart rules*/
 #seat-cart {
-
 	display: none;
 	border-radius: 4px;
 	cursor: pointer;
-
 }
 #cart-checkout-btn {
 	display: none;
@@ -956,19 +954,6 @@ body {
 #cart-checkout-btn:hover {
 	background-color: rgb(0, 0, 219);
 } 
-
-
-.seat-cart-left {
-	
-}
-	
-.seat-cart-right {
-	/*
-	float: right;
-	width: 30%;
-	text-align: center;
-	*/
-}
 
 .cart-icon {
 	
@@ -1150,7 +1135,7 @@ body {
 	text-align: center;
 	border: 1px solid #ccc;
 	border-radius: 4px;
-	top: 280px;
+	top: 234px;
 	right: 4px;
 	padding: 10px 10px;
 
@@ -1859,23 +1844,18 @@ body {
 }
 
 @media only screen and (min-width: 1024px) {
-
-
-
 	#seat-cart {
 		display: block;
 		width: 120px;
 		position: absolute;
 		right: 4px;
-		top: 0;
+		top: 52px;
 		height: auto;
 		border: 1px solid #ccc;
 		margin: 0;
 
 	}
-
 	.cart-icon {
-		
 		width: 60px;
 		height: 60px;
 		cursor: pointer;
@@ -1956,8 +1936,6 @@ body {
 }
 
 @media only screen and (min-width: 1025px) {
-	
-	
 	#legends {
 		display: inline-block;
 		text-align: left;
@@ -1971,21 +1949,13 @@ body {
 	.big-display-btn {
 		position: absolute;
 		right: 40px;
-		top: 226px;
+		top: 0;
 		margin-top: 0px;
 	}
-
-	
-
 }
+
 @media only screen and (max-width: 1024px) {
-		
 	#legend-wrapper {
 		display: none;
-	}
-		
+	}	
 }
-
-
-
-
