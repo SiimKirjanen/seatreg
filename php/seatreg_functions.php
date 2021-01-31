@@ -91,8 +91,8 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 
 	$registration = $registration[0];
 	$bookings = seatreg_get_registration_bookings( $registration->registration_code );
-	$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_name, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND status = 1 GROUP BY room_name");
-	$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_name, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND status = 2 GROUP BY room_name");
+	$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND status = 1 GROUP BY room_uuid");
+	$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND status = 2 GROUP BY room_uuid");
 	$regStats = seatreg_get_room_seat_info($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
 	$project_name = $registration->registration_name;
 	$start_date = $registration->registration_start_timestamp;
@@ -965,7 +965,7 @@ function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrat
 		$roomCustomBoxes = 0;
 
 		for($k = 0; $k < $bronLength; $k++) {  
-			if( $regStructure[$i]->room->name == $bronRegistrations[$k]->room_name ) { //find how many bron seats in this room
+			if( $regStructure[$i]->room->uuid == $bronRegistrations[$k]->room_uuid ) { //find how many bron seats in this room
 				$roomBronSeats = $bronRegistrations[$k]->total;
 				$howManyBronSeats += $bronRegistrations[$k]->total;
 
@@ -974,7 +974,7 @@ function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrat
 		}
 
 		for($k = 0; $k < $takenLength; $k++) {
-			if($regStructure[$i]->room->name == $takenRegistrations[$k]->room_name) { //find how many taken seats in this room
+			if($regStructure[$i]->room->uuid == $takenRegistrations[$k]->room_uuid) { //find how many taken seats in this room
 				$roomTakenSeats = $takenRegistrations[$k]->total;
 				$howManyTakenSeats += $takenRegistrations[$k]->total;
 
@@ -1685,6 +1685,17 @@ function seatreg_form_submit_handle() {
 Ajax stuff
 ====================================================================================================================================================================================
 */
+
+function seatreg_check_ajax_credentials() {	
+	if( !check_ajax_referer('seatreg-admin-nonce', 'security') ) {	
+		return wp_send_json_error( 'Nonce error' );	
+		wp_die();	
+	}	
+	if( !current_user_can('manage_options') ) {	
+		return wp_send_json_error( 'You are not allowed to do this' );	
+		wp_die();	
+	}	
+}
 
 add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_layout_and_bookings');
 function seatreg_get_registration_layout_and_bookings() {
