@@ -912,7 +912,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			echo '<h4>Booking id: ', $bookingId,'</h4>';
 
 			foreach($bookings as $booking) {
-				echo 'Name: ', $booking->first_name, ' ', $booking->last_name , '<br>Seat: ', $booking->seat_nr, '<br>Room: ', $booking->room_name, '<br>Status: ', ($booking->status == 1) ? 'Pending' : 'Confirmed', '<br><br>';
+				echo 'Name: ', $booking->first_name, ' ', $booking->last_name , '<br>Seat: ', $booking->seat_nr, '<br>Room: ', $booking->room_name, '<br>Status: ', ($booking->status === "1") ? 'Pending' : 'Confirmed', '<br><br>';
 			}
 
 			if($options && $options->payment_text) {
@@ -1050,7 +1050,7 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 
 	foreach ($bookings as $booking) {
 		foreach ($bookingActions as $bookingAction) {
-			if($booking->seat_nr == $bookingAction->seat_nr && $booking->room_name == $bookingAction->room_name && $booking->status == 2 && $bookingAction->action != 'del') {
+			if($booking->seat_nr == $bookingAction->seat_nr && $booking->room_name == $bookingAction->room_name && $booking->status === "2" && $bookingAction->action != 'del') {
 				$notBooked = false;
 				$resp['text'] = __('Seat ', 'seatreg') . $bookingAction->seat_nr . __(' from room ', 'seatreg') . $bookingAction->room_name . __(' is already booked', 'seatreg');
 				break 2;
@@ -1095,7 +1095,7 @@ function seatreg_validate_edit_booking($code, $data) {
 		}
 		$booking->room_name = seatreg_get_room_name_from_layout($structure, $booking->room_uuid);
 
-		if($booking->seat_nr == $data->seatNr && $booking->room_name == $status['roomUUID'] && ($booking->status == 2 || $booking->status == 1) ) {
+		if($booking->seat_nr === $data->seatNr && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
 			$resp['text'] = __('Seat ', 'seatreg') . $data->roomName . __(' from room ', 'seatreg') . $booking->room_name . __(' is already booked', 'seatreg');

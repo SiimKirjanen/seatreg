@@ -128,7 +128,7 @@ try {
 
 for($i=0;$i<$regLen;$i++) {
 	$registrantCustomData = json_decode($registrations[$i]->custom_field_data, true);
-	$status = ($registrations[$i]->status == 2) ? "Approved" : "Pending";
+	$status = ($registrations[$i]->status === "2") ? "Approved" : "Pending";
 
 	$pdf->Cell(20,10,$registrations[$i]->seat_nr,0,0,'C');
 	$pdf->Cell(6);

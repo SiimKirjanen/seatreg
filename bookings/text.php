@@ -69,7 +69,7 @@ echo 'NR, Room, Name, Registration date, Status', "\r\n\r\n";
 
 for($i=0;$i<$regLen;$i++) {
 	$registrantCustomData = json_decode($registrations[$i]->custom_field_data, true);
-	$status = ($registrations[$i]->status == 2) ? "Approved" : "Pending";
+	$status = ($registrations[$i]->status === "2") ? "Approved" : "Pending";
 	$date = new DateTime($registrations[$i]->booking_date, $UTC );
 	$date->setTimezone( $newTZ );
 

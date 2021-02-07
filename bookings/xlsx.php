@@ -79,7 +79,7 @@ $currentDate->setTimezone( $newTZ );
 
 for($i=0;$i<$regLen;$i++) {	
 	$registrantCustomData = json_decode($registrations[$i]->custom_field_data, true);
-	$status = ($registrations[$i]->status == 2) ? "Approved" : "Pending";
+	$status = ($registrations[$i]->status === "2") ? "Approved" : "Pending";
 	$date = new DateTime($registrations[$i]->booking_date, $UTC );
 	$date->setTimezone( $newTZ );
 	$registretionData = array($registrations[$i]->seat_nr, $registrations[$i]->room_name, $registrations[$i]->first_name . ' ' . $registrations[$i]->last_name,  $registrations[$i]->email, $date->format('Y-M-d H:i:s'), $status);
