@@ -60,8 +60,15 @@ function seatreg_create_welcome() {
 		  <h2 class="main-heading"><?php _e('Create and manage seat registrations', 'seatreg'); ?></h2>
 		  <p class="jumbotron-text"><?php _e('Design your own seat map and manage seat bookings', 'seatreg'); ?></p>
 	    </div>
+		<div class="donate-wrap">
+			<form action="https://www.paypal.com/donate" method="post" target="_blank">
+				<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
+				<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+				<img alt="" border="0" src="https://www.paypal.com/en_EE/i/scr/pixel.gif" width="1" height="1" />
+			</form>
+		</div>
 	   <?php 
-	   		echo "<div class='container-fluid'>";
+	   		echo "<div class='container-fluid' style='margin-top:-12px'>";
 				seatreg_create_registration_from(); 
 				seatreg_generate_my_registrations_section();
 			echo "</div>";   
