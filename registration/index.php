@@ -487,7 +487,7 @@
 
 		<?php endif; ?>
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="js/jquery.3.5.1.min.js"></script>
 		<script>
 			try {
 				var seatregTranslations = $.parseJSON('<?php echo json_encode(seatreg_generate_registration_stringes()); ?>');
