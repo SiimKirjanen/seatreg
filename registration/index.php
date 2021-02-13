@@ -326,7 +326,7 @@
 					
 					<div id="checkout" class="seatreg-btn green-btn">
 						<?php
-							_e('Checkout', 'seatreg');
+							_e('Next', 'seatreg');
 						?>
 					</div>
 				<?php endif; ?>
@@ -341,7 +341,7 @@
 				</div>
 				<div class="checkout-header">
 					<?php
-						_e('Checkout', 'seatreg');
+						_e('Booking data', 'seatreg');
 					?>
 				</div>
 				<div id="checkout-input-area"></div>

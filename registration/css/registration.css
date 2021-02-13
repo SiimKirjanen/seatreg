@@ -1166,9 +1166,8 @@ body {
 }
 .check-item {
 	text-align: left;
-	width: 170px;
 	display: inline-block;
-	margin-right: 10px;
+	margin: 0 6px;
 }
 .field-label {
 	display: block;
@@ -1176,7 +1175,6 @@ body {
 }
 .field-input {
 	display: block;
-	width: 100%;
 }
 
 #checkoput-area-inner {
@@ -1190,7 +1188,7 @@ body {
 	color: red;
 }
 .checkout-header {
-	margin-bottom: 4px;
+	margin-bottom: 8px;
 	font-size: 20px;
 	font-weight: bold;
 }
@@ -1322,6 +1320,7 @@ body {
 }
 #checkoput-area-inner .ajax-load {
 	display: none;
+	margin-top: 8px;
 }
 #captcha-img {
 	vertical-align: middle;
