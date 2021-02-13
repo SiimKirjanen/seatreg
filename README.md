@@ -1,6 +1,6 @@
-<div style="text-align:center">
+<p align="center">
     <img src="img/seatreg.png" alt="SeatReg">
-</div>
+</p>
 
 
 # SeatReg - Create and manage seat registrations
