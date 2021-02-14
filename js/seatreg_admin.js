@@ -211,23 +211,21 @@ $('.tab-container').easytabs({
 	//updateHash: false
 }); 
 
-$('#existing-regs').on('click', '.room-list-item', function() {
+$('#existing-regs-wrap').on('click', '.room-list-item', function() {
 	var code = $('#seatreg-reg-code').val();
 	var target = $(this).attr('data-stats-target');
-	var scope = $(this);
 	var overViewContainer = $(this).closest('.reg-overview');
 	overViewContainer.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
 
 	var promise = seaterg_admin_ajax2('seatreg_get_room_stats', code, target);
 
 	promise.done(function(data) {
-		overViewContainer.html(data).promise().done(function() {
-			overViewContainer.find('.time-stamp').each(function() {
+		overViewContainer.replaceWith(data).promise().done(function() {
+			$('#existing-regs-wrap .reg-overview').find('.time-stamp').each(function() {
 				$(this).text(timeStampToDateString($(this).text()));
 			});
 
-			var donutWrapper = overViewContainer.find('.reg-overview-donuts');
-			overViewContainer.find('.ajax_loader').remove();			
+			var donutWrapper = $('#existing-regs-wrap').find('.reg-overview-donuts');		
 			var doughnutData = [
 				{
 					value: parseInt(donutWrapper.find('.seats-total-don').val()),

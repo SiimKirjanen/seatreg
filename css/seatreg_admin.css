@@ -100,6 +100,12 @@ html {
 	min-height: 608px;
 }
 
+.seatreg-tabs-content .reg-overview-middle-wrap {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+}
+
 .seatreg-tabs-content .reg-overview-top {
 	padding-bottom: 20px;
 	overflow: hidden;
@@ -812,7 +818,9 @@ html {
 	.seatreg-tabs-content .reg-section-buttons {
 		width: 20%;
 	}
-
+	.seatreg-tabs-content .reg-overview-middle-wrap {
+		display: block;
+	}
 
     .seatreg-tabs-content #my-regs {
     	width: auto;
@@ -836,6 +844,8 @@ html {
 	.seatreg-tabs-content .admin-right-side {
 		width: 70%;
 		margin:0;
+
+
 	}
 	.seatreg-tabs-content .reg-overview-aside {
 		float: none;
@@ -844,6 +854,7 @@ html {
 		min-height: 0;
 		text-align: center;
 		margin-bottom: 0;
+		padding-right: 0;
 	}
 	
 	.seatreg-tabs-content .room-list-item {
@@ -896,6 +907,7 @@ html {
 		margin-right: 10px;
 		display: inline-block;
 		float: none;
+		margin: 0 4px;
 	}
 	.seatreg-tabs-content .room-list-item {
 		display: inline-block;

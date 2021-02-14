@@ -103,7 +103,6 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 
 	?>
 
-	  <div>
 	  		<?php echo '<div class="reg-overview" id="existing-regs">';?>
 	  			<input type="hidden" id="seatreg-reg-code" value="<?php echo $registration->registration_code; ?>"/>
 
@@ -151,7 +150,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					?>
 	  				
 				<?php echo '</div>';?>
-
+				<?php echo '<div class="reg-overview-middle-wrap">'; ?>			
 				<?php echo '<div class="reg-overview-aside">';?>
 
 					<ul class="room-list">
@@ -299,9 +298,8 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					<?php endif; ?>
 
 				<?php echo '</div>';?>
+				<?php echo '</div>'; ?>	
 			<?php echo '</div>';?>
-	  </div>
-
 	  <?php		
 }
 
