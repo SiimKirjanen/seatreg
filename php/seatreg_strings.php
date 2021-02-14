@@ -21,7 +21,7 @@ function seatreg_generate_registration_stringes() {
 	$translations->regOwnerNotConfirmed = __('(registration admin has not confirmed it)', 'seatreg');
 	$translations->selectionIsFull = __('Booking is full', 'seatreg');
 	$translations->_isAlreadyInCart = __(' is already in cart!', 'seatreg');
-	$translations->_regUnderConstruction = __('Registration under construction', 'seatreg');
+	$translations->_regUnderConstruction = __('Under construction', 'seatreg');
 	$translations->emptyField = __('Empty field', 'seatreg');
 	$translations->remove = __('Remove', 'seatreg');
 	$translations->add_ = __('Add ', 'seatreg');

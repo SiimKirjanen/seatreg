@@ -218,6 +218,16 @@ $(function() {
 		var loc = this.rooms[this.currentRoom].boxes;
 		var boxLength = loc.length;
 		var scope = this;
+		var boxWrap = document.getElementById("box-wrap");
+		var roomIsEmptyWrap = document.getElementById('room-is-empty');
+		
+		boxWrap.classList.remove("dont-display");
+		roomIsEmptyWrap.classList.add('dont-display');
+
+		if(boxLength === 0) {
+			boxWrap.classList.add("dont-display");
+			roomIsEmptyWrap.classList.remove('dont-display');
+		}
 
 		for(var i = 0; i < boxLength; i++) {
 			var box = document.createElement('div');
@@ -843,52 +853,18 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 	//legends height
 
 	if(screenWidth < 1024) {
-		//console.log('setting up legends height');
-
-		//var roomNavHeight = $('#room-nav-wrap').outerHeight();
-		//var middleHeight = $('#box-wrap').outerHeight();
-		//var heightNow = 30 + middleHeight + roomNavHeight + 80; //header, mapheight, nav height, cartheight
-		//console.log('heightnow = ' + heightNow);
-		//var remainingHeight = screenHeight - heightNow;
-
-
 		$('#legend-wrapper').css('display','none');
-		/*
-		if(screenHeight > heightNow && remainingHeight > 30) {
-			//console.log('ok i can set new max-height to legends area = ' + remainingHeight);
-
-
-			//$('#legend-wrapper').css('max-height',screenHeight - heightNow);
-
-			
-
-		}else {
-			//$('#legend-wrapper').css('max-height',30);
-		}
-		*/
 	}
-
 
 	$('#box-wrap').attr('data-sec-size', $('#box-wrap').css('width'));
 
 	//init iScroll
-
 	initScroll(needHorizScroll, needVerticScroll);  //for seat map
-	
 }
 
 function initLegendsScroll() {
 	if(screenWidth < 1024) {
 		if(seatReg.ie8 == false) {
-
-			//console.log('Create legend scroll');
-/*
-			legendScroll = new IScroll('#legend-wrapper', {
-				mouseWheel: true,
-				scrollbars: true,
-			});
-*/
-
 		}
 	}else {
 		$('#legend-wrapper').css('max-height',"");
@@ -1029,31 +1005,18 @@ function collectData() {
 		var customFieldPack = [];
 
 		$(this).find('.custom-input').each(function() {
-
 			var type = $(this).find('.field-input').attr('data-type');
 
 			if(type == 'text') {
-
 				customFieldPack.push(new CustomData($(this).find('.l-text').text(),$(this).find('.field-input').val()));
-
 			}else if(type == 'check') {
-
-				//console.log($(this).find('.field-input').is(":checked"));
 				customFieldPack.push(new CustomData($(this).find('.l-text').text(),$(this).find('.field-input').is(":checked")));
-
 			}else if(type == 'sel') {
-				//console.log();
 				customFieldPack.push(new CustomData($(this).find('.l-text').text(),$(this).find('.field-input').find(":selected").val()));
-			}
-
-			//customFieldPack[$(this).attr('data-field')] = $(this).val();
-			
-	
+			}	
 		});
 
 		sendPack.push(customFieldPack);
-
-		//sendPack.push(itemPack);
 	});
 
 	return sendPack;

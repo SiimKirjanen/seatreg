@@ -127,7 +127,12 @@
 					
 							</div>
 						</div>
-					</div>	
+					</div>
+					<div id="room-is-empty" class="dont-display">
+						<p class="room-is-empty-text">
+							<?php _e('Room is empty', 'seatreg'); ?>
+						</p>
+					</div>		
 				</div>
 
 				<div id="legend-wrapper" class="border-box">
@@ -374,25 +379,20 @@
 
 		<div id="bottom-wrapper">
 			<div class="mobile-cart">
-				<div class="cart-icon">
-					<div class="cart-icon-box-1"></div>
-					<div class="cart-icon-box-2"></div>
-					<div class="cart-icon-box-3"></div>
-				</div>
 				<div class="cart-icon-text">
 					<span class="seats-in-cart">0</span> 
 					<?php 
-						_e('in booking', 'seatreg');
+						_e('seats selected', 'seatreg');
 					?>
 					<span class="max-seats">
-						<?php
+						(<?php
 							_e('Max', 'seatreg');
 						?>
 						<?php 
 							if($data->seats_at_once > 1) {
-								echo htmlspecialchars($data->seats_at_once),'<br>'; 
+								echo htmlspecialchars($data->seats_at_once),')<br>'; 
 							}else {
-								echo htmlspecialchars($data->seats_at_once),'<br>'; 
+								echo htmlspecialchars($data->seats_at_once),')<br>'; 
 							}	
 						?>
 					</span>
@@ -502,15 +502,14 @@
 				alert('Data gathering failed');
 			}
 		</script>
-	<!--
+	
 		<script src="js/date.format.js"></script>
 		<script src="js/iscroll-zoom-5-1-3.js"></script>
 		<script src="js/jquery.powertip.js"></script>
 		<script src="js/registration.js"></script>
-	-->
-		
+		<!--
 		<script src="js/registration.min.js"></script>
-		
+		-->
 		<?php endif; //end of is registration open ?>  
 
 	<?php else : ?>

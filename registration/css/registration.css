@@ -494,15 +494,12 @@ body {
 #main-header {
 	height: 30px;
 	font-weight: bold;
-	/*
-	background-color: #404040;
-	*/
-
 	color: black;
 	text-align: center;
 	font-size: 22px;
 	position: relative;
 	cursor: pointer;
+	margin-top: 6px;
 }
 .header-time {
 	display: none;
@@ -533,6 +530,7 @@ body {
 }
 #room-nav-info {
 	margin-top: 4px;
+	margin-bottom: 12px;
 }
 #room-nav-info, #room-nav-btn-wrap {
 	float: left;
@@ -649,6 +647,12 @@ body {
 	overflow: hidden;
 	position: relative;
 	border: 1px solid #ccc;
+}
+.dont-display {
+	display: none;
+}
+.room-is-empty-text {
+	font-weight: 700;
 }
 
 .room-image {
