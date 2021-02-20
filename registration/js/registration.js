@@ -803,7 +803,8 @@ function resizeend() {
 
 function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 	var navHeight = $('#room-nav-wrap').outerHeight();
-	var spaceForMiddleWidth = screenWidth; //how much room for seat map
+	var cartWidth = $('#seat-cart').outerWidth(true);
+	var spaceForMiddleWidth = screenWidth - 20; //how much room for seat map
 	var spaceForMiddleHeight = screenHeight - 30 - 30 - navHeight - 20;  // - header height, -legend height, navbar height, -spacing  --default mobile
 	var needHorizScroll = false;
 	var needVerticScroll = false;
@@ -812,11 +813,15 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 
 	if(screenWidth >= 1024) {
 		//ok i have bigger screen. set legends area left and seatcart right
-		var legendWidth = $('#legend-wrapper').outerWidth();
+		var legendWidth = 0;
+
+		if($('#legend-wrapper').is(':visible')) {
+			legendWidth = $('#legend-wrapper').outerWidth(true);
+		}
 		
-		spaceForMiddleWidth = spaceForMiddleWidth - legendWidth - 150; //seat cart and legends box and addextra for space
+		spaceForMiddleWidth = spaceForMiddleWidth - legendWidth - cartWidth; //seat cart and legends box and addextra for space
 		spaceForMiddleHeight = screenHeight - 30 - navHeight - 30;  //- header height, - navbar height, -footer if needed
-		$('#middle-section').css('margin-left', legendWidth -120);
+		$('#middle-section').css('margin-left', legendWidth - cartWidth);
 
 		if(seatReg.rooms[seatReg.currentRoom].room.legends.length > 0) {
 			$('#legend-wrapper').css('display','inline-block');
