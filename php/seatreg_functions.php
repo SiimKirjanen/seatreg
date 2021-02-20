@@ -491,40 +491,42 @@ function seatreg_generate_settings_form() {
 					</p>
 					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
 
-					<?php if( $custLen > 0 ) : ?>
-						<div class="existing-custom-fields">
-						<div style="margin-bottom: 6px"><?php _e('Existing custom fields', 'seatreg'); ?></div>
-						<?php
-							for($i = 0; $i < $custLen; $i++) {
-								if($custFields[$i]->type == 'sel') {
-									$optLen = count($custFields[$i]->options);
-									echo '<div class="custom-container" data-type="sel">';
-										echo '<label><span class="l-text">', $custFields[$i]->label, '</span>';
-											echo '<select>';
+					<div class="existing-custom-fields">
+						<?php if( $custLen > 0 ) : ?>
+							
+							<div style="margin-bottom: 6px"><?php _e('Existing custom fields', 'seatreg'); ?></div>
+							<?php
+								for($i = 0; $i < $custLen; $i++) {
+									if($custFields[$i]->type == 'sel') {
+										$optLen = count($custFields[$i]->options);
+										echo '<div class="custom-container" data-type="sel">';
+											echo '<label><span class="l-text">', $custFields[$i]->label, '</span>';
+												echo '<select>';
 
-												for($j = 0; $j < $optLen; $j++) {
-													echo '<option><span class="option-value">', $custFields[$i]->options[$j] ,'</span></option>';
-												}
+													for($j = 0; $j < $optLen; $j++) {
+														echo '<option><span class="option-value">', $custFields[$i]->options[$j] ,'</span></option>';
+													}
 
-											echo '</select>';
-										echo '</label>';
-										echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
-									echo '</div>';
+												echo '</select>';
+											echo '</label>';
+											echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
+										echo '</div>';
 
-								}else if($custFields[$i]->type == 'text'){
-									echo '<div class="custom-container" data-type="text">';
-										echo '<label><span class="l-text">', $custFields[$i]->label, '</span>', '<input type="text" /> </label><i class="fa fa-times-circle remove-cust-item"></i>';
-									echo '</div>';
+									}else if($custFields[$i]->type == 'text'){
+										echo '<div class="custom-container" data-type="text">';
+											echo '<label><span class="l-text">', $custFields[$i]->label, '</span>', '<input type="text" /> </label><i class="fa fa-times-circle remove-cust-item"></i>';
+										echo '</div>';
 
-								}else if($custFields[$i]->type == 'check') {
-									echo '<div class="custom-container" data-type="check">';
-										echo '<label><span class="l-text">', $custFields[$i]->label, '</span> <input type="checkbox" /></label><i class="fa fa-times-circle remove-cust-item"></i>';
-									echo '</div>';
+									}else if($custFields[$i]->type == 'check') {
+										echo '<div class="custom-container" data-type="check">';
+											echo '<label><span class="l-text">', $custFields[$i]->label, '</span> <input type="checkbox" /></label><i class="fa fa-times-circle remove-cust-item"></i>';
+										echo '</div>';
+									}
 								}
-							}
-						?>
-						</div>
-					<?php endif; ?>
+							?>
+							
+						<?php endif; ?>
+					</div>
 
 					<div class="cust-field-create">
 						<div style="margin-bottom: 6px"><?php _e('Create new custom field', 'seatreg'); ?></div>
