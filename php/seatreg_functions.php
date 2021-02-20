@@ -707,7 +707,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '</div>';
 
 					echo '<div class="more-info">';
-						echo '<div>', __('Registration date:','seatreg'), '<span class="time-string">', esc_html($row->booking_date), '</span></div>';
+						echo '<div>', __('Registration date:','seatreg'), ' <span class="time-string">', esc_html($row->booking_date), '</span> (YYYY-MM-DD HH:MM:SS)</div>';
 						echo '<div>', __('Email:', 'seatreg'), esc_html($row->email), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {
@@ -752,8 +752,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '</div>';
 
 					echo '<div class="more-info">';
-						echo '<div>Registration date: <span class="time-string">', esc_html( $row->booking_date ), '</span></div>';
-						echo '<div>Approval date: <span class="time-string">', esc_html( $row->booking_confirm_date ), '</span></div>';
+						echo '<div>Registration date: <span class="time-string">', esc_html( $row->booking_date ), '</span> (YYYY-MM-DD HH:MM:SS)</div>';
+						echo '<div>Approval date: <span class="time-string">', esc_html( $row->booking_confirm_date ), '</span> (YYYY-MM-DD HH:MM:SS)</div>';
 						echo '<div>Email: ', esc_html( $row->email ), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {
