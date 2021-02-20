@@ -26,6 +26,17 @@ if(empty($_GET['zone'])) {
 	exit();
 }
 
+$UTC = new DateTimeZone("UTC");
+
+try {
+	$newTZ = new DateTimeZone($_GET['zone']);
+}catch(Exception $e) {
+	echo 'Cant generate PDF because of Unknown or bad timezone (', $_GET['zone'], ')';
+	exit();
+}
+$currentDate = new DateTime(null, $UTC);
+$currentDate->setTimezone( $newTZ );
+
 $registrationInfo = seatreg_get_options($_GET['v'])[0];
 $registrations = seatreg_get_data_for_booking_file($_GET['v'], $showWhat);
 
@@ -40,13 +51,13 @@ function customFieldWithValuePDF($label, $custom_data) {
 	$string = $label . ': ';
 	
 	for($k = 0; $k < $cust_len; $k++) {
-		if($custom_data[$k]->label == $label) {
-			if($custom_data[$k]->value === true) {
-				$string .= 'Yes';
-			}else if($custom_data[$k]->value === false) {
-				$string .= 'No';
+		if($custom_data[$k]['label'] == $label) {
+			if($custom_data[$k]['value'] === true) {
+				$string .= __('Yes', 'seatreg');
+			}else if($custom_data[$k]['value'] === false) {
+				$string .= __('No', 'seatreg');
 			}else {
-				$string .= $custom_data[$k]->value;
+				$string .= $custom_data[$k]['value'];
 			}
 			$foundIt = true;
 
@@ -102,7 +113,10 @@ class PDF extends tFPDF {
 }
 
 // Instanciation of inherited class
+$title = $projectName . ' ' . $currentDate->format('Y-M-d');
 $pdf = new PDF();
+$pdf->SetTitle( $title );
+$pdf->SetAuthor('SeatReg WordPress');
 $pdf->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
 $pdf->AliasNbPages();
 $pdf->AddPage();
@@ -149,10 +163,10 @@ for($i=0;$i<$regLen;$i++) {
 	}
 
 	for($j = 0; $j < $customFieldsCount; $j++) {
-		$pdf->Cell(40,10,customFieldWithValuePDF($customFields[$j]->label, $registrantCustomData),0,1);
+		$pdf->Cell(40,10,customFieldWithValuePDF($customFields[$j]['label'], $registrantCustomData),0,1);
 	}
 
 	$pdf->Ln(10);
 }
 	
-$pdf->Output();	
+$pdf->Output($title .'.pdf', 'I');	

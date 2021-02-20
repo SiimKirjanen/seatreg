@@ -82,7 +82,7 @@
 					<?php
 						printf(
 							/* translators: %s: Name of the registration */
-							__( 'Registration %s is closed at the moment', 'seatreg' ),
+							__( '%s is closed at the moment', 'seatreg' ),
 							$data->registration_name
 						);
 					?>
@@ -189,7 +189,7 @@
 					</div>
 					<h3>
 						<?php 
-							_e('Registration info', 'seatreg');
+							_e('Info', 'seatreg');
 						?>
 					</h3>
 					<?php
@@ -202,7 +202,7 @@
 								<div>
 									<div class="flag1"></div>
 									<?php 
-										_e('Registration start', 'seatreg');
+										_e('Registration starts', 'seatreg');
 									?>
 									<span class="time">
 										<?php
@@ -218,7 +218,7 @@
 								<div>
 									<div class="flag2"></div>
 									<?php 
-										_e('Registration end', 'seatreg');
+										_e('Registration ends', 'seatreg');
 									?>
 									<span class="time">
 										<?php

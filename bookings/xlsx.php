@@ -33,13 +33,13 @@ function customFieldWithValueXlsx($label, $custom_data) {
 	$string = '';
 
 	for($k = 0; $k < $cust_len; $k++) {
-		if($custom_data[$k]->label == $label) {
-			if($custom_data[$k]->value === true) {
-				$string = 'Yes';
-			}else if($custom_data[$k]->value === false) {
-				$string = 'No';
+		if($custom_data[$k]['label'] == $label) {
+			if($custom_data[$k]['value'] === true) {
+				$string = __('Yes', 'seatreg');
+			}else if($custom_data[$k]['value'] === false) {
+				$string = __('No', 'seatreg');
 			}else {
-				$string = $custom_data[$k]->value;
+				$string = $custom_data[$k]['value'];
 			}
 
 			$foundIt = true;
