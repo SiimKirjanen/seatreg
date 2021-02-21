@@ -7,7 +7,14 @@
 	require_once('php/reg_functions.php');
 	require_once('./../php/seatreg_strings.php');
 
-	$data = seatreg_get_options_reg($_GET['c'])[0];
+	$data = seatreg_get_options_reg($_GET['c']);
+
+	if(!$data) {
+		_e('Registration not found', 'seatreg');
+
+		exit();
+	}
+
 	$showPwdForm = false;
 
 	if($data->registration_password != null ) {

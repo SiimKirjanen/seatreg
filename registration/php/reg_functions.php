@@ -158,25 +158,12 @@ function seatreg_get_options_reg($code) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 
-	if($code != null) {
-		$options = $wpdb->get_results( $wpdb->prepare(
-			"SELECT a.*, b.* 
-			FROM $seatreg_db_table_names->table_seatreg AS a
-			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
-			ON a.registration_code = b.registration_code
-			WHERE a.registration_code = %s",
-			$code
-		) );
-	}else {
-		$options = $wpdb->get_results( 
-			"SELECT a.*, b.* 
-			FROM $seatreg_db_table_names->table_seatreg AS a
-			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
-			ON a.registration_code = b.registration_code
-			ORDER BY a.registration_create_timestamp
-			LIMIT 1"
-		);
-	}
-
-	return $options;
+	return $wpdb->get_row( $wpdb->prepare(
+		"SELECT a.*, b.* 
+		FROM $seatreg_db_table_names->table_seatreg AS a
+		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
+		ON a.registration_code = b.registration_code
+		WHERE a.registration_code = %s",
+		$code
+	) );
 }
