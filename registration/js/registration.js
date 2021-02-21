@@ -954,6 +954,7 @@ function fitFactor(){
 function validateInput(inputField) {
 	var emailReg = /^\S+@\S+$/;
 	var gmailReg = /^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/;
+	var customField = /^[\s\p{L}]{1,50}$/u;
 	var value = inputField.val();
 
 	if(value == '') {
@@ -987,7 +988,13 @@ function validateInput(inputField) {
 			break;
 		default:
 			//custom field validation
-			inputField.next().css('display','none');
+			if(customField.test(value)) {				
+				inputField.next().css('display','none');	
+			}else {	
+				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','inline');	
+
+				return false;	
+			}
 	}
 	return true;
 }

@@ -43,6 +43,7 @@
 	<meta charset="UTF-8">
 	<title><?php echo htmlspecialchars( $data->registration_name ); ?></title>
 	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
 	<link rel="shortcut icon" type="image/png" href="favicon.png"/>
 	<link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/registration.min.css">

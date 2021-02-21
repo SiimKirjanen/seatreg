@@ -42,7 +42,7 @@ class NewBookings extends Booking {
 		$customFields = stripslashes_deep($customFields);
 		
 		if( !$this->seatreg_validate_custom_fields( $customFields ) ) {
-			$this->response->setError( __('Custom field validation error','seatreg') );
+			$this->response->setError( __('Input validation failed','seatreg') );
 			return false;
 		}
 

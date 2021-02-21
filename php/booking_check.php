@@ -11,7 +11,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="shortcut icon" type="image/png" href="favicon.png"/>
+	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
 	<title>Booking check</title>
 </head>
 <body>
@@ -22,12 +22,3 @@
 	?>
 </body>
 </html>
-
-
-
-
-	
-
-	
-
-	
