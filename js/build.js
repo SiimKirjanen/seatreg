@@ -2986,7 +2986,7 @@
 				 $('#img-upload-resp').html('<div class="alert alert-success" role="alert">' + respObjekt.text + '</div>');  
 
 				 var imgRem = $(' <span class="up-img-rem" data-img="'+ respObjekt.data +'"></span>').append('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eemalda');
-				 var addImg = $(' <span class="add-img-room" data-img="'+ respObjekt.data +'" data-size="'+ respObjekt.extraData +'"></span>').append('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Lisa ruumi');
+				 var addImg = $(' <span class="add-img-room" data-img="'+ respObjekt.data +'" data-size="'+ respObjekt.extraData +'"></span>').append('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Add to room');
 				 var upImgBox = $('<div class="uploaded-image-box"></div>').append('<img src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration + '/' + respObjekt.data + '" class="uploaded-image" /> ', addImg, imgRem);
 
 				 $('#uploaded-images').append(upImgBox);
@@ -3017,7 +3017,7 @@
 					console.log('Image deleted');
 					reg.removeImgAllRooms(imgName);
 					reg.removeCurrentRoomImage();
-					$('#activ-room-img-wrap').empty().text('Ruumis pole hetkel tagatausta');
+					$('#activ-room-img-wrap').empty().text('Room doe/s not have background image');
 					thisLoc.closest('.uploaded-image-box').remove();
 				}else if(response.type == 'error') {
 					console.log(response.text);
@@ -3031,7 +3031,7 @@
 
 		var curImgWrap = $('<div class="cur-img-wrap"></div>');
 		var bgImg = $('<img class="uploaded-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
-		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eemalda ruumist</span>');
+		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove from room</span>');
 
 		curImgWrap.append(bgImg, remImg);
 
@@ -3044,12 +3044,12 @@
 		if(reg.rooms[reg.currentRoom].backgroundImage !== null) {
 			var curImgWrap = $('<div class="cur-img-wrap"></div>');
 			var bgImg = $('<img class="uploaded-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
-			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eemalda ruumist</span>');
+			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove from room</span>');
 
 			curImgWrap.append(bgImg, remImg);
 			$('#activ-room-img-wrap').append(curImgWrap);
 		}else {
-			$('#activ-room-img-wrap').html('Ruumis pole hetkel tagatausta');
+			$('#activ-room-img-wrap').html('Current room doe\'s not have background image');
 		}
 	});
 
@@ -3057,7 +3057,7 @@
 		reg.removeCurrentRoomImage();
 		$('.room-image').remove();
 		$(this).closest('.cur-img-wrap').remove();
-		$('#activ-room-img-wrap').html('Ruumis pole hetkel tagatausta pilti');
+		$('#activ-room-img-wrap').html('Current room doe\'s not have background image');
 	});
 	
 	$('#file-sub').on('click', function(e) {
@@ -3067,11 +3067,11 @@
 
 		if(picName == '') {
 			e.preventDefault();
-			$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">Vali pilt, mida ülesse laadida</div>');
+			$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">Choose a picture to upload</div>');
 		}else {
 			if(!re.test(picName)) {
 				e.preventDefault();
-				$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">Pildi nimes on keelatud sümbolid! Palun muuda nime</div>');
+				$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">Image name contains illegal characters</div>');
 			}
 		}
 	});

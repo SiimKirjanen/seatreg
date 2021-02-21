@@ -174,7 +174,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 
 				<?php echo '<div class="reg-overview-middle">';?>
 					<div class="overview-middle-box">
-						<div class="overview-middle-box-h"><?php _e('Seats:', 'seatreg'); ?></div>
+						<div class="overview-middle-box-h"><?php _e('Seats', 'seatreg'); ?></div>
 						<div class="overview-middle-box-stat">
 							<?php 
 								if($targetRoom == 'overview') {
@@ -187,7 +187,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					</div>
 
 					<div class="overview-middle-box">
-						<div class="overview-middle-box-h"><?php _e('Open:', 'seatreg'); ?></div>
+						<div class="overview-middle-box-h"><?php _e('Open', 'seatreg'); ?></div>
 						<div class="overview-middle-box-stat">
 							<?php 
 								if($targetRoom == 'overview') {
@@ -201,7 +201,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					</div>
 
 					<div class="overview-middle-box">
-						<div class="overview-middle-box-h"><?php _e('Confirmed:', 'seatreg'); ?></div>
+						<div class="overview-middle-box-h"><?php _e('Confirmed', 'seatreg'); ?></div>
 						<div class="overview-middle-box-stat">
 							<?php 
 								if($targetRoom == 'overview') {
@@ -214,7 +214,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					</div>
 
 					<div class="overview-middle-box">
-						<div class="overview-middle-box-h"><?php _e('Pending:', 'seatreg'); ?></div>
+						<div class="overview-middle-box-h"><?php _e('Pending', 'seatreg'); ?></div>
 						<div class="overview-middle-box-stat">
 							<?php 
 								if($targetRoom == 'overview') {
@@ -576,10 +576,10 @@ function seatreg_create_registration_from() {
 	?>
 	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" id="create-registration-form">
 			<h3 class="new-reg-title">
-				<?php _e('Create a new registration','seatreg'); ?>:
+				<?php _e('Create new registration','seatreg'); ?>:
 			</h3>
 			<label for="new-registration-name">
-				<?php _e('Enter a registration name:','seatreg'); ?>
+				<?php _e('Enter registration name','seatreg'); ?>
 			</label>
 	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px">
 			<input type='hidden' name='action' value='seatreg_create_submit' />
