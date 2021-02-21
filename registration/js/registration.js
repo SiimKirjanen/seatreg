@@ -817,12 +817,20 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 
 		if($('#legend-wrapper').is(':visible')) {
 			legendWidth = $('#legend-wrapper').outerWidth(true);
+
+			if(legendWidth > cartWidth) {
+				$('#seat-cart').css('margin-left', (legendWidth - cartWidth) + 10);
+				cartWidth = $('#seat-cart').outerWidth(true);
+			}else {
+				$('#legend-wrapper').css('margin-right', (cartWidth - legendWidth) + 5);
+				legendWidth = $('#legend-wrapper').outerWidth(true);
+			}
 		}
 		
-		spaceForMiddleWidth = spaceForMiddleWidth - legendWidth - cartWidth; //seat cart and legends box and addextra for space
+		spaceForMiddleWidth = spaceForMiddleWidth - legendWidth - cartWidth - 20;
 		spaceForMiddleHeight = screenHeight - 30 - navHeight - 30;  //- header height, - navbar height, -footer if needed
-		$('#middle-section').css('margin-left', legendWidth - cartWidth);
 
+		
 		if(seatReg.rooms[seatReg.currentRoom].room.legends.length > 0) {
 			$('#legend-wrapper').css('display','inline-block');
 		}
