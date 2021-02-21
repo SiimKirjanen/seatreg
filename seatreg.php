@@ -16,26 +16,19 @@ if( is_admin() ) {
 }
 
 require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_functions.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_shortcode.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'php/JsonResponse.php' );
 
 function seatregPluginActivate() {
 	seatreg_set_up_db();
 }
 
-function seatregPluginDeactivate() {
-
-}
-
 //actions
 if( is_admin() ) {
 	add_action('admin_menu', 'seatreg_add_plugin_menu');
 }
-add_action( 'init', 'seatreg_register_shortcode' );
 
 //hooks
 register_activation_hook(__FILE__, "seatregPluginActivate");
-register_deactivation_hook(__FILE__, "seatregPluginDeactivate"); 
 
 //filters
 add_filter( 'admin_body_class', 'seatreg_admin_body_class' );
