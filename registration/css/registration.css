@@ -1139,7 +1139,7 @@ body {
 	text-align: center;
 	border: 1px solid #ccc;
 	border-radius: 4px;
-	top: 234px;
+	top: 256px;
 	right: 4px;
 	padding: 10px 10px;
 	margin: 0 10px;
@@ -1193,7 +1193,7 @@ body {
 }
 .checkout-header {
 	margin-bottom: 8px;
-	font-size: 20px;
+	font-size: 16px;
 	font-weight: bold;
 }
 #prim-mail {
@@ -1284,6 +1284,16 @@ body {
 	top: 0;
 	left: 0;
 }
+#seat-cart {
+	padding: 10px 0;
+}
+#seat-cart-items {
+	margin-bottom: 24px;
+}
+#seat-cart-info {
+	margin-bottom: 12px;
+	font-weight: 700;
+}
 
 .dialog-box:before {
 	content: '';
@@ -1297,7 +1307,7 @@ body {
 	vertical-align: middle;
 	width: 80%;
 	background-color: white;
-	padding: 10px;
+	padding: 24px 12px;
 	border: 6px solid black;
 	-webkit-user-select: none;  /* Chrome all / Safari all */
 	  -moz-user-select: none;     /* Firefox all */
@@ -1305,6 +1315,10 @@ body {
 	  user-select: none;          /* Likely future */ 
 
 	border-radius: 3px;
+}
+.dialog-box-inner h5 {
+	margin-top: 0;
+	margin-bottom: 24px;
 }
 .seatreg-btn {
 	display: inline-block;

@@ -724,24 +724,24 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 			if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
 
 				if(this.status == 'run') {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h4>' + '</div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5>' + '</div>');
 					$('#confirm-dialog-mob-ok').css('display','inline-block');
 				}else {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>' + this.spotName + ' ' + nr + translator.translate('_fromRoom_')  + room + '</h4></div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + this.spotName + ' ' + nr + translator.translate('_fromRoom_')  + room + '</h5></div>');
 				}
 
 			}else if(type == 'tak') {
 				$('#confirm-dialog-mob-ok').css('display','none');
-				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify"><h4>'+ translator.translate('this_') + this.spotName + translator.translate('_isOccupied') + '</h4></div>');
+				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify"><h5>'+ translator.translate('this_') + this.spotName + translator.translate('_isOccupied') + '</h5></div>');
 			}else if(type == 'bron') {
 				$('#confirm-dialog-mob-ok').css('display','none');
-				$('#confirm-dialog-mob-text').html('<div class="seat-bron-notify"><h4>' + translator.translate('this_') +  ' ' + this.spotName + translator.translate('_isPendingState') +'</h4>'+ translator.translate('regOwnerNotConfirmed') +'</div>');
+				$('#confirm-dialog-mob-text').html('<div class="seat-bron-notify"><h5>' + translator.translate('this_') +  ' ' + this.spotName + translator.translate('_isPendingState') +'</h5>'+ translator.translate('regOwnerNotConfirmed') +'</div>');
 			}else if(type == 'rbox' && this.selectedSeats.length >= this.seatLimit ) {
 				$('#confirm-dialog-mob-ok').css('display','none');
 				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ translator.translate('selectionIsFull') +'</div>');
 			}
 		}else {
-			$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h4>' + capitalizeFirstLetter(this.spotName)  + ' ' + nr + translator.translate('_fromRoom_')  + ' ' + room + translator.translate('_isAlreadyInCart') +'</h4></div>');
+			$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + capitalizeFirstLetter(this.spotName)  + ' ' + nr + translator.translate('_isAlreadySelected') +'</h5></div>');
 		}	
 	}
 	if(showDialog) {
