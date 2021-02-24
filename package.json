@@ -1,7 +1,6 @@
 {
-  "name": "Seatreg",
-  "version": "0.0.0",
-  "description": "",
+  "name": "SeatReg",
+  "version": "1.0.0",
   "main": "gulpfile.js",
   "dependencies": {
     "browser-sync": "~2.2.3",
@@ -23,6 +22,6 @@
     "registration-scripts": "gulp registration-scripts",
     "registration-styles": "gulp registration-styles"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Siim Kirjanen",
+  "license": "GPLv2 or later"
 }
