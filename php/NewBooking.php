@@ -6,6 +6,7 @@
 
 require_once('Booking.php');
 require_once('emails.php');
+require_once('constants.php');
 require_once('./util/registration_time_status.php');
 
 class NewBooking extends Booking {
@@ -81,7 +82,7 @@ class NewBooking extends Booking {
 			_e('You booking is now confirmed', 'seatreg');
 			echo '<br><br>';
 		}
-		$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
+		$bookingCheckURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 		printf(
 			__('You can look your booking at %s', 'seatreg'), 
 			"<a href='$bookingCheckURL'>$bookingCheckURL</a>"

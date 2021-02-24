@@ -5,6 +5,7 @@ global $seatreg_db_table_names;
 
 require_once 'NewBookings.php';
 require_once 'JsonResponse.php';
+require_once 'constants.php';
 
 $seatreg_db_table_names = new stdClass();
 $seatreg_db_table_names->table_seatreg = $wpdb->prefix . "seatreg";
@@ -1273,7 +1274,7 @@ function seatreg_get_registration_bookings($code) {
 //return uploaded images
 function seatreg_get_registration_uploaded_images($code) {
 	$uploadedImages = array();
-	$filePath = WP_PLUGIN_DIR . '/seatreg_wordpress/uploads/room_images/' . $code . '/'; 
+	$filePath = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . $code . '/'; 
 
 	if(file_exists($filePath)) {
 		$dir = opendir($filePath);
@@ -1933,7 +1934,7 @@ function seatreg_upload_image_callback() {
 	}
 
 	$code = $_POST['code'];
-	$registration_upload_dir = WP_PLUGIN_DIR . '/seatreg_wordpress/uploads/room_images/' . $code . '/';
+	$registration_upload_dir = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . $code . '/';
 	$target_file = $registration_upload_dir . basename($_FILES["fileToUpload"]["name"]);
 	$target_dimentsions = null;
 	$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
@@ -1997,7 +1998,7 @@ function seatreg_remove_img_callback() {
 
 	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {
 		//check if file exists
-		$imgPath = WP_PLUGIN_DIR . '/seatreg_wordpress/uploads/room_images/' . $_POST['code'] . '/' . $_POST['imgName'];
+		$imgPath = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . $_POST['code'] . '/' . $_POST['imgName'];
 		
 		if(file_exists($imgPath)) {
 			unlink($imgPath);

@@ -6,6 +6,7 @@
 
 require_once('Booking.php');
 require_once('emails.php');
+require_once('constants.php');
 require_once('util/registration_time_status.php');
 require_once('util/session_captcha.php');
 
@@ -179,7 +180,7 @@ class NewBookings extends Booking {
 			$this->_bookingId = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
 			$registrationConfirmDate = null;
 			$seatsString = $this->generateSeatString();
-			$bookingCheckURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
+			$bookingCheckURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 
 			if(!$this->_requireBookingEmailConfirm) {
 				$bookingStatus = $this->_insertState;
@@ -209,7 +210,7 @@ class NewBookings extends Booking {
 
 			if($this->_requireBookingEmailConfirm) {
 				seatreg_change_captcha(3);
-				$confirmationURL = WP_PLUGIN_URL . '/seatreg_wordpress/php/booking_confirm.php?confirmation-code='. $confCode;
+				$confirmationURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_confirm.php?confirmation-code='. $confCode;
 				$message = __('Your selected seats are', 'seatreg') . ': <br/><br/>' . $seatsString . '
 							<p>' . __('Click on the link below to confirm your booking', 'seatreg') . '</p>
 							<a href="' .  $confirmationURL .'" >'. $confirmationURL .'</a><br/>
