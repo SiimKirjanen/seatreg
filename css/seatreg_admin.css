@@ -486,6 +486,7 @@ html {
 	border: none;
 	color: red;
 	box-shadow: none;
+	background: #fff;
 }
 .seatreg-delete-registration-form .delete-registration-btn:hover {
 	color: red;

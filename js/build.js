@@ -512,7 +512,7 @@
 		this.rooms[this.currentRoom].backgroundImageHeight = parseInt(dim[1]);
 		$('.room-image').remove();
 
-		var bgImg = $('<img class="room-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration  + '/' + imgLog + '" />');
+		var bgImg = $('<img class="room-image" src="'+ window.WP_Seatreg.plugin_dir_url +'uploads/room_images/' + seatreg.selectedRegistration  + '/' + imgLog + '" />');
 		$('.build-area').append(bgImg);
 	};
 
@@ -537,7 +537,7 @@
 		if(window.seatreg.uploadedImages && window.seatreg.uploadedImages.length > 0) {
 			window.seatreg.uploadedImages.forEach(function(uploaded) {
 				var $imgWrap = $("<div class='uploaded-image-box'></div");
-				$imgWrap.append("<img src='../wp-content/plugins/seatreg_wordpress/uploads/room_images/" + window.seatreg.selectedRegistration + "/" + uploaded.file + "' class='uploaded-image' />");
+				$imgWrap.append("<img src='" + window.WP_Seatreg.plugin_dir_url + "uploads/room_images/" + window.seatreg.selectedRegistration + "/" + uploaded.file + "' class='uploaded-image' />");
 				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Add to room background</span>");
 				$imgWrap.append("<span class='up-img-rem' data-img='"+ uploaded.file +"'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Remove</span>");
 
@@ -1389,7 +1389,7 @@
 		//add fragment to build area. .skeleton-box are in fragment
 		$('.build-area').append(fragment);
 		if(this.rooms[this.currentRoom].backgroundImage !== null) {
-			var bgImg = $('<img class="room-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/'+ seatreg.selectedRegistration + '/' + this.rooms[this.currentRoom].backgroundImage + '" />');
+			var bgImg = $('<img class="room-image" src="' + window.WP_Seatreg.plugin_dir_url + 'uploads/room_images/'+ seatreg.selectedRegistration + '/' + this.rooms[this.currentRoom].backgroundImage + '" />');
 			
 			$('.build-area').append(bgImg);
 		}
@@ -2987,7 +2987,7 @@
 
 				 var imgRem = $(' <span class="up-img-rem" data-img="'+ respObjekt.data +'"></span>').append('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eemalda');
 				 var addImg = $(' <span class="add-img-room" data-img="'+ respObjekt.data +'" data-size="'+ respObjekt.extraData +'"></span>').append('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Add to room');
-				 var upImgBox = $('<div class="uploaded-image-box"></div>').append('<img src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration + '/' + respObjekt.data + '" class="uploaded-image" /> ', addImg, imgRem);
+				 var upImgBox = $('<div class="uploaded-image-box"></div>').append('<img src="' + window.WP_Seatreg.plugin_dir_url + 'uploads/room_images/' + seatreg.selectedRegistration + '/' + respObjekt.data + '" class="uploaded-image" /> ', addImg, imgRem);
 
 				 $('#uploaded-images').append(upImgBox);
 			 }else if(respObjekt.type == 'error'){
@@ -3030,7 +3030,7 @@
 		reg.setRoomImage($(this).data('img'), $(this).data('size'));
 
 		var curImgWrap = $('<div class="cur-img-wrap"></div>');
-		var bgImg = $('<img class="uploaded-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
+		var bgImg = $('<img class="uploaded-image" src="' + window.WP_Seatreg.plugin_dir_url + 'uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
 		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove from room</span>');
 
 		curImgWrap.append(bgImg, remImg);
@@ -3043,7 +3043,7 @@
 
 		if(reg.rooms[reg.currentRoom].backgroundImage !== null) {
 			var curImgWrap = $('<div class="cur-img-wrap"></div>');
-			var bgImg = $('<img class="uploaded-image" src="../wp-content/plugins/seatreg_wordpress/uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
+			var bgImg = $('<img class="uploaded-image" src="'+ window.WP_Seatreg.plugin_dir_url +'uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
 			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove from room</span>');
 
 			curImgWrap.append(bgImg, remImg);
