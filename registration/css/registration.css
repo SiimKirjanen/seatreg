@@ -873,6 +873,9 @@ body {
 	display: inline-block;
 	cursor: pointer;
 }
+.legend-div:last-of-type {
+	margin-bottom: 0;
+}
 .legend-box {
 	width: 20px;
 	height: 20px;
@@ -1924,7 +1927,7 @@ body {
 		left: 4px;
 		top: 0;
 		max-height: none;
-		padding: 4px;
+		padding: 8px;
 		
 	}
 	.legend-div {

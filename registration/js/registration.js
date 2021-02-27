@@ -825,9 +825,11 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 				$('#legend-wrapper').css('margin-right', (cartWidth - legendWidth) + 5);
 				legendWidth = $('#legend-wrapper').outerWidth(true);
 			}
+			spaceForMiddleWidth = spaceForMiddleWidth - legendWidth - cartWidth - 20;
+		}else {
+			spaceForMiddleWidth = spaceForMiddleWidth - cartWidth * 2;
 		}
 		
-		spaceForMiddleWidth = spaceForMiddleWidth - legendWidth - cartWidth - 20;
 		spaceForMiddleHeight = screenHeight - 30 - navHeight - 30;  //- header height, - navbar height, -footer if needed
 
 		
