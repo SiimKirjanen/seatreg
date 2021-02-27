@@ -3,14 +3,28 @@ var gulp  = require("gulp"),
 	browserSync = require('browser-sync'),
 	concat = require('gulp-concat'),
 	minifyCSS = require('gulp-minify-css'),
+	gulpRev = require('gulp-rev'),
+	del = require('del'),
 	reload = browserSync.reload;
+
+gulp.task('clean:cache', function () {
+	return del([
+		'registration/css/registration-*.min.css',
+		'registration/js/registration-*.min.js',
+	]);
+});
 	
 gulp.task('registration-scripts', function() {
 	  return gulp.src(['registration/js/date.format.js', 'registration/js/iscroll-zoom-5-1-3.js', 'registration/js/jquery.powertip.js', 'registration/js/registration.js'])
 			.on('error', console.error.bind(console))
 			.pipe(concat('registration.min.js'))
 			.pipe(uglify())
-			.pipe(gulp.dest('registration/js'));
+			.pipe(gulpRev())
+			.pipe(gulp.dest('registration/js'))
+			.pipe(gulpRev.manifest({
+				merge: true
+			}))
+			.pipe(gulp.dest('./'))
 }); 
 
 gulp.task('registration-styles', function() {
@@ -18,6 +32,10 @@ gulp.task('registration-styles', function() {
 		.on('error', console.error.bind(console))
 		.pipe(concat('registration.min.css'))
 		.pipe(minifyCSS())
+		.pipe(gulpRev())
 		.pipe(gulp.dest('registration/css'))
-		.pipe(reload({stream: true}));	
+		.pipe(gulpRev.manifest({
+			merge: true
+		}))
+		.pipe(gulp.dest('./'))
 });

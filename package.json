@@ -15,8 +15,10 @@
     "gulp-plumber": "~1.0.0"
   },
   "devDependencies": {
+    "del": "^6.0.0",
     "gulp-minify-css": "^1.0.0",
-    "gulp-rename": "^1.2.2"
+    "gulp-rename": "^1.2.2",
+    "gulp-rev": "^9.0.0"
   },
   "scripts": {
     "registration-scripts": "gulp registration-scripts",

@@ -43,6 +43,9 @@
 
 		$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 	}
+
+	$manifestFileContents = file_get_contents("../rev-manifest.json");
+	$manifest = json_decode($manifestFileContents, true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +55,7 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
 	<link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="css/registration.min.css">
+	<link rel="stylesheet" href="css/<?php echo $manifest['registration.min.css']; ?>">
 
 	<?php if($data->registration_open == 1) : ?>	
 		<script src="js/modernizr.custom.89593.min.js"></script>
@@ -516,7 +519,7 @@
 		<script src="js/registration.js"></script>
 	-->	
 	
-		<script src="js/registration.min.js"></script>
+		<script src="js/<?php echo $manifest['registration.min.js']; ?>"></script>
 	
 		<?php endif; //end of is registration open ?>  
 
