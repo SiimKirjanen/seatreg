@@ -2985,7 +2985,7 @@
 			 if(respObjekt.type == 'ok') {
 				 $('#img-upload-resp').html('<div class="alert alert-success" role="alert">' + respObjekt.text + '</div>');  
 
-				 var imgRem = $(' <span class="up-img-rem" data-img="'+ respObjekt.data +'"></span>').append('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Eemalda');
+				 var imgRem = $(' <span class="up-img-rem" data-img="'+ respObjekt.data +'"></span>').append('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove');
 				 var addImg = $(' <span class="add-img-room" data-img="'+ respObjekt.data +'" data-size="'+ respObjekt.extraData +'"></span>').append('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Add to room');
 				 var upImgBox = $('<div class="uploaded-image-box"></div>').append('<img src="' + window.WP_Seatreg.plugin_dir_url + 'uploads/room_images/' + seatreg.selectedRegistration + '/' + respObjekt.data + '" class="uploaded-image" /> ', addImg, imgRem);
 
@@ -3014,11 +3014,14 @@
 				var response = $.parseJSON(data);
 
 				if(response.type == 'ok') {
-					console.log('Image deleted');
 					reg.removeImgAllRooms(imgName);
-					reg.removeCurrentRoomImage();
-					$('#activ-room-img-wrap').empty().text('Room doe/s not have background image');
 					thisLoc.closest('.uploaded-image-box').remove();
+
+					if(reg.rooms[reg.currentRoom].backgroundImage === imgName) {
+						reg.removeCurrentRoomImage();
+						$('#activ-room-img-wrap').empty().text('Room doe/s not have background image');
+					}
+					
 				}else if(response.type == 'error') {
 					console.log(response.text);
 				}
