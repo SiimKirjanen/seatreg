@@ -442,7 +442,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	modal.find('#booking-id').val($(this).attr('data-booking'));
 	modal.find('#r-id').val($(this).attr('data-id'));
 	info.find('.custom-field').each(function() {
-		modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l">'+ $(this).find('.custom-field-l').text() +'<input type="text" class="modal-custom-v" value="'+ $(this).find('.custom-field-v').text() +'" /></label></div>');
+		modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l">'+ $(this).find('.custom-field-l').text() +' <input type="text" class="modal-custom-v" value="'+ $(this).find('.custom-field-v').text() +'" /></label></div>');
 	});
 
 	$('#edit-room-error, #edit-seat-error').text('');

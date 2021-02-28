@@ -802,7 +802,8 @@ function resizeend() {
 }
 
 function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
-	var navHeight = $('#room-nav-wrap').outerHeight();
+	var navHeight = $('#room-nav-wrap').outerHeight(true);
+	var infoHeight = $('.top-info-bar').outerHeight(true) || 0;
 	var cartWidth = $('#seat-cart').outerWidth(true);
 	var spaceForMiddleWidth = screenWidth - 20; //how much room for seat map
 	var spaceForMiddleHeight = screenHeight - 30 - 30 - navHeight - 20;  // - header height, -legend height, navbar height, -spacing  --default mobile
@@ -829,10 +830,9 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 		}else {
 			spaceForMiddleWidth = spaceForMiddleWidth - cartWidth * 2;
 		}
-		
-		spaceForMiddleHeight = screenHeight - 30 - navHeight - 30;  //- header height, - navbar height, -footer if needed
 
-		
+		spaceForMiddleHeight = screenHeight - 30 - navHeight - infoHeight - 30;  //- header height, - navbar height, -footer if needed
+
 		if(seatReg.rooms[seatReg.currentRoom].room.legends.length > 0) {
 			$('#legend-wrapper').css('display','inline-block');
 		}

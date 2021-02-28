@@ -618,6 +618,11 @@ body {
 
 /*end of nav rules*/
 
+.top-info-bar {
+	text-align: center;
+	margin-bottom: 6px;
+	font-weight: 700;
+}
 
 /*Seat map rules*/
 

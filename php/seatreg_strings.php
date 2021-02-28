@@ -26,9 +26,9 @@ function seatreg_generate_registration_stringes() {
 	$translations->emptyField = __('Empty field', 'seatreg');
 	$translations->remove = __('Remove', 'seatreg');
 	$translations->add_ = __('Add ', 'seatreg');
-	$translations->openSeatsInRoom_ = __('Open seats in room: ', 'seatreg');
-	$translations->pendingSeatInRoom_ = __('Pending seats in room: ', 'seatreg');
-	$translations->confirmedSeatInRoom_ = __('Confirmed seats in room: ', 'seatreg');
+	$translations->openSeatsInRoom_ = __('Open seats in the room: ', 'seatreg');
+	$translations->pendingSeatInRoom_ = __('Pending seats in the room: ', 'seatreg');
+	$translations->confirmedSeatInRoom_ = __('Confirmed seats in the room: ', 'seatreg');
 	$translations->seat = __('seat', 'seatreg');
 	$translations->firstName = __('Firstname', 'seatreg');
 	$translations->lastName = __('Lastname', 'seatreg');

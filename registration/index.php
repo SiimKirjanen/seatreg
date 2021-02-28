@@ -127,8 +127,12 @@
 						<i class="fa fa-info-circle"></i>
 					</div>
 				</div>
-				
 			</div>
+			<?php if($data->info): ?>
+				<div class="top-info-bar">
+					<?php echo htmlspecialchars($data->info); ?>
+				</div>
+			<?php endif; ?>
 			<div id="middle" class="no-select">
 				<div id="view-wrap">
 					<div id="middle-section">

@@ -326,14 +326,16 @@ function seatreg_generate_my_registrations_section() {
 
 				<br>
 
-				<a href="<?php echo admin_url( 'admin.php?page=seatreg-options&tab='.$registration->registration_code ); ?>"><?php _e('Settings', 'seatreg'); ?></a>
+				<a href="<?php echo plugins_url('registration/index.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php _e('Registration', 'seatreg'); ?></a>
 
 				<br>
 
-				<a href="<?php echo plugins_url('registration/index.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php _e('View registration', 'seatreg'); ?></a>
-
-				<br>
 				<button type="button" class="btn btn-link seatreg-map-popup-btn" data-registration-name="<?php echo htmlspecialchars($registration->registration_name); ?>" data-map-code="<?php echo htmlspecialchars($registration->registration_code); ?>"><?php _e('Edit map', 'seatreg'); ?></button>
+
+				<br>
+
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-options&tab='.$registration->registration_code ); ?>"><?php _e('Settings', 'seatreg'); ?></a>
+				
 				<br>
 				<?php
 					seatreg_create_delete_registration_from($registration->registration_code);
@@ -435,7 +437,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="gmail-required"><?php _e('Gmail required', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Registrant must use gmail account', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php _e('Gmail account is required when making a booking', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="gmail-required" name="gmail-required" value="1" <?php echo $options[0]->gmail_required == '1' ? 'checked':'' ?> > 
@@ -455,7 +457,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="use-pending"><?php _e('Pending status', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('By default all bookings will first be in pending state. If you want bookings automatically to be in approved state then uncheck below', 'seatreg'); ?>
+					<?php _e('By default all bookings will first be in pending state so admin can approve them (booking manager). If you want bookings automatically to be in approved state then uncheck below', 'seatreg'); ?>
 				</p>
 				<div class="checkbox">
 			    	<label>
@@ -488,7 +490,7 @@ function seatreg_generate_settings_form() {
 				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
 					<label><?php _e('Custom fields', 'seatreg'); ?></label>
 					<p class="help-block">
-						<?php _e('Custom fields allow you to ask extra information for bookings', 'seatreg'); ?>.
+						<?php _e('Custom fields allow you to ask extra information in bookings', 'seatreg'); ?>.
 					</p>
 					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
 
@@ -577,7 +579,7 @@ function seatreg_create_registration_from() {
 	?>
 	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" id="create-registration-form">
 			<h3 class="new-reg-title">
-				<?php _e('Create new registration','seatreg'); ?>:
+				<?php _e('Create new registration','seatreg'); ?>
 			</h3>
 			<label for="new-registration-name">
 				<?php _e('Enter registration name','seatreg'); ?>
@@ -709,7 +711,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 
 					echo '<div class="more-info">';
 						echo '<div>', __('Registration date:','seatreg'), ' <span class="time-string">', esc_html($row->booking_date), '</span> (YYYY-MM-DD HH:MM:SS)</div>';
-						echo '<div>', __('Email:', 'seatreg'), esc_html($row->email), '</div>';
+						echo '<div>', __('Email:', 'seatreg'), ' ', esc_html($row->email), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {
 							
