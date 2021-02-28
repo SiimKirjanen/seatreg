@@ -22,7 +22,8 @@
   },
   "scripts": {
     "registration-scripts": "gulp registration-scripts",
-    "registration-styles": "gulp registration-styles"
+    "registration-styles": "gulp registration-styles",
+    "watch": "gulp watch"
   },
   "author": "Siim Kirjanen",
   "license": "GPLv2 or later"
