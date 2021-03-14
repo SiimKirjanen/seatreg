@@ -1479,25 +1479,17 @@
 				$(this).addClass('active-box');	//set this box active
 
 				regScope.showClickControls();
-			}
-			if(regScope.action == 3 && regScope.permissions.canDeleteBox == true) {
+			}else if(regScope.action == 3) {
 				regScope.activeBoxArray.length = 0;	//make sure activebox in empty.
 				regScope.activeBoxArray.push($(this).attr('data-id'));
 				regScope.deleteBoxes();
-			}			
-		}).on('dblclick', function(){
-			if(reg.action == 1) {	//dblclick ovly works in action 1				
+			}		
+		}).on('mouseenter', function(e) {
+			if(regScope.action === 3 && leftButtonDown === true) {
+				regScope.activeBoxArray.length = 0;	//make sure activebox in empty.
+				regScope.activeBoxArray.push($(this).attr('data-id'));
+				regScope.deleteBoxes();
 			}
-		}).on('hover', function(e) {
-				if(regScope.action == 3 && leftButtonDown == true) {
-					if(regScope.permissions.canDeleteBox == true) {
-						regScope.activeBoxArray.length = 0;	//make sure activebox in empty.
-						regScope.activeBoxArray.push($(this).attr('data-id'));
-						regScope.deleteBoxes();
-					}else {
-						alert(translator.translate('noPermToDel'));
-					}
-				}
 		}).each(function() {
 			if(reg.action == 2) {
 				$(this).removeClass('active-box');
@@ -1540,7 +1532,7 @@
 				top: this.rooms[this.currentRoom].boxes[i].yPosition,
 				'background-color': this.rooms[this.currentRoom].boxes[i].color,
 				'z-index': this.rooms[this.currentRoom].boxes[i].zIndex
-			}).on('click', function() { //chen you klik box				
+			}).on('click', function() { //chen you klik box			
 				if(regScope.action == 1) {	//is mouse action 1?
 					regScope.activeBoxArray.length = 0;  //make sure activebox in empty.
 					regScope.activeBoxArray.push($(this).attr('data-id'));	//this box in now active
@@ -1549,20 +1541,13 @@
 
 					regScope.showClickControls();
 				}
-				if(regScope.action == 3 && regScope.permissions.canDeleteBox == true) {
+				if(regScope.action == 3) {
 					regScope.activeBoxArray.length = 0;	//make sure activebox in empty.
 					regScope.rooms[regScope.currentRoom].deleteBox($(this).attr('data-id'));
 				}	
-			}).on('dblclick', function(){
-				if(reg.action == 1) {	//dblclick ovly works in action 1					
-				}
-			}).on('hover', function(e) {
+			}).on('mouseenter', function() {
 				if(regScope.action == 3 && leftButtonDown == true) {
-					if(regScope.permissions.canDeleteBox == true) {
-						regScope.rooms[regScope.currentRoom].deleteBox($(this).attr('data-id'));
-					}else {
-					
-					}	
+					regScope.rooms[regScope.currentRoom].deleteBox($(this).attr('data-id'));
 				}
 			}).appendTo('.build-area').each(function(){
 				if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister == true) {
@@ -1614,7 +1599,6 @@
 						$(this).addClass('active-box');	//set this box active
 					}else {
 						multiDragBoxes = $('.build-area .active-box');
-						//console.log('Multidrag start');
 					}	
 				},
 				drag: function(event, ui) {
@@ -1715,7 +1699,6 @@
 							if(location !== false) {
 								
 								var resizedBox = $('.drag-box[data-id='+ regScope.activeBoxArray[i] +']');
-								//console.log(parseInt(resizedBox.css('left')), parseInt(resizedBox.css('top')), parseInt(resizedBox.css('width')), parseInt(resizedBox.css('height')));
 								regScope.rooms[regScope.currentRoom].boxes[location].changeValues(parseInt(resizedBox.css('left')), parseInt(resizedBox.css('top')), parseInt(resizedBox.css('width')), parseInt(resizedBox.css('height')));
 							}
 						} 
@@ -2923,9 +2906,8 @@
 		gravity: 'n',
 		live: true,
 		html: true
-		
-	});
-	    
+	});	 
+	   
     $('#room-name-dialog-input').keyup(function(e) {		
     	if (e.which == 13) {
 			$(this).blur();
