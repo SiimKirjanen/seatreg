@@ -33,49 +33,6 @@
 		}
 	};
 
-	function Permissions() {
-		this.canDeleteBox = true;
-		this.canCreateBox = true;
-		this.canMoveBox = true;
-		this.canResizeBox = true;
-		this.canCreateRoom = true;
-		this.canDeleteRoom = true;
-	}
-
-	//changing permissions
-	Permissions.prototype.changePermissions = function(canDelBox,canCreBox,canMovBox,canResBox,canCreRoom,canDelRoom){
-		this.canDeleteBox = canDelBox;
-		this.canCreateBox = canCreBox;
-		this.canMoveBox = canMovBox;
-		this.canResizeBox = canResBox;
-		this.canCreateRoom = canCreRoom;
-		this.canDeleteRoom = canDelRoom;
-	};
-
-	/*
-		*--------------building help object---------------	
-	*/
-
-	var buildHelp = {
-		est: {
-			defaultText: 'Tere ma üritan sind aidata',
-			recycleBinHover: 'Selle abil saad selekteeritud kaste kustutada',
-			legendHover: 'Saad teha registratsioonile legende (abistavatele objektidele)',
-			customBoxCreateHover: 'Saad muuda registreerimis kohti tavalisteks kastideks',
-			bubbleTextHover: 'Saad anda kastile/kastidele hõljumis teksti',
-			paletteHover: 'Saad värvida kaste. NB! Värvida ei saa registreerimis kohti (need on rohelised)',
-			gridHover: 'Saad muuta abiruudustikku.',
-			mouseAction1Hover: 'Selle abil saad erinevaid kaste ringi liigutada, suurust muuta',
-			mouseAction2Hover: 'Selel abil saad luua kiiresti registreerimis kohti. Hoia vasakut hiireklahvi all ja liiguta ringi või kliki abiruudustiku peale',
-			mouseAction3Hover: 'Kustukummiga saad kustutada tehtud kaste',
-			mouseAction4Hover: 'Lasso tööriist. Selle abil saad selekteerida mitu kasti korraga',
-			mouseAction5Hover: 'Selle abil saad luua abistavaid objekte (näiteks uks). Hoia vasakut hiireklahvi all ja liiguta ringi või kliki abiruudustiku peale'
-		},
-		eng: {
-
-		}
-	};
-
 	/*
 		*------Skeleton class and methods---------
 	*/
@@ -463,7 +420,6 @@
 		this.activeBoxArray = [];	//user select box or boxes
 		this.action = 1; //mouse action: 1 = regular, action 2 = creator, action 3 = delete, action 4 = lasso
 		this.needMultiDrag = false;
-		this.permissions = new Permissions();
 		this.canOpenColor = true;
 		this.existingHover = []; //if bubble text is already present. store here
 		this.bigTitle = "Suur pealkiri";
@@ -487,7 +443,6 @@
 		this.activeBoxArray = [];	//user select box or boxes
 		this.action = 1; //mouse action: 1 = regular, action 2 = creator, action 3 = delete, action 4 = lasso
 		this.needMultiDrag = false;
-		this.permissions = new Permissions();
 		this.canOpenColor = true;
 		this.existingHover = []; //if bubble text is already present. store here
 		this.bigTitle = "Suur pealkiri";
@@ -1320,11 +1275,6 @@
 
 	//deletes box or boxes which are active. in activeboxes array. for mouse 1 and 4.
 	Registration.prototype.deleteBoxes = function() {
-		if(!this.permissions.canDeleteBox) {
-			alert(translator.translate('noPermToDel'));
-			return;
-		}
-
 		if(this.action == 1) {	//normal mouse delete
 			if(this.activeBoxArray.length == 0) {	//no boxes selected
 				var delGuide = '<div><div class="guide-block">'+ translator.translate('toSelectOneBox_') +' <div class="guide-item guide-item-mouse"></div></div><br><div class="guide-block">'+ translator.translate('toSelectMultiBox_') +'<div class="guide-item guide-item-lasso"></div></div>';
@@ -1410,67 +1360,60 @@
 			$('.build-area').append(bgImg);
 		}
 
-		if(regScope.permissions.canCreateBox) {	//do i have permissions for that?
-			$('.build-area .skeleton-box').on('click', function(){	//skeleton-box click				
-			}).on('mouseenter', function(){	//when mouse enters element
+
+		$('.build-area .skeleton-box').on('mouseenter', function(){
+			if(regScope.action == 2 && leftButtonDown == true) {
+				var skelStyle = $(this).attr('style');
+				var dataCounter = 'b' +  regScope.regBoxCounter;
+				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#61B329', 'nohover',true, "noStatus", 1);  //add box to room
+				regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, true);
+			}else if(regScope.action == 5 && leftButtonDown == true) {
+				var skelStyle = $(this).attr('style');
+				var dataCounter = 'b' +  regScope.regBoxCounter;
+				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#cccccc', 'nohover',false, "noStatus", 1);  //add box to room
+				regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, false);
+			}
+		}).on('mousedown', function() {  //down klik on element
+			if(regScope.action == 2) {
+				var skelStyle = $(this).attr('style');
+				var dataCounter = 'b' +  regScope.regBoxCounter;	
+				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#61B329', 'nohover',true,'noStatus',1);  //add box to room
+				regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, true);
+			}else if(regScope.action == 5) {
+				var skelStyle = $(this).attr('style');
+				var dataCounter = 'b' +  regScope.regBoxCounter;
+				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#cccccc', 'nohover',false,'noStatus',1);  //add box to room
+				regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, false);
+			}
+		});
+
+		$('.build-area-wrapper').off().on('click', function(e) {
+			var $this = $(this);
+			var target = $(e.target);
+
+			if(target.hasClass('drag-box') ) {
+
+				return;
+			}
+
+			var relX = e.pageX + $this.scrollLeft() - $this.offset().left;  //+ $this.scrollLeft()
+			var relY = e.pageY + $this.scrollTop() - $this.offset().top;
+
+			e.stopPropagation();
+
+			if(relX > roomSkeleton.totalWidth || relY > roomSkeleton.totalHeight) {
+				var dataCounter = 'b' +  regScope.regBoxCounter;
+				var skelStyle = 'width: ' + roomSkeleton.width + 'px; height: ' + roomSkeleton.height + 'px; position: absolute; top: ' + (relY - roomSkeleton.height/2) + 'px; left: ' + (relX - roomSkeleton.width/2) + 'px;';
 				
-				if(regScope.action == 2 && leftButtonDown == true) {
-					var skelStyle = $(this).attr('style');
-					var dataCounter = 'b' +  regScope.regBoxCounter;
-					regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#61B329', 'nohover',true, "noStatus", 1);  //add box to room
-					regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, true);
-				}else if(regScope.action == 5 && leftButtonDown == true) {
-					var skelStyle = $(this).attr('style');
-					var dataCounter = 'b' +  regScope.regBoxCounter;
-					regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#cccccc', 'nohover',false, "noStatus", 1);  //add box to room
-					regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, false);
-				}
-			}).on('mousedown', function() {  //down klik on element
-				if(regScope.action == 2) {
-					var skelStyle = $(this).attr('style');
-					var dataCounter = 'b' +  regScope.regBoxCounter;	
-					regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#61B329', 'nohover',true,'noStatus',1);  //add box to room
+				if(regScope.action == 2) { 
+					regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#61B329', 'nohover',true,'noStatus',1);  //add box to room
 					regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, true);
 				}else if(regScope.action == 5) {
-					var skelStyle = $(this).attr('style');
-					var dataCounter = 'b' +  regScope.regBoxCounter;
-					regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#cccccc', 'nohover',false,'noStatus',1);  //add box to room
+					regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#cccccc', 'nohover',false,'noStatus',1);  //add box to room
 					regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, false);
 				}
-			});
-
-			$('.build-area-wrapper').off().on('click', function(e) {
-				var $this = $(this);
-				var target = $(e.target);
-
-				if(target.hasClass('drag-box') ) {
-
-					return;
-				}
-
-				var relX = e.pageX + $this.scrollLeft() - $this.offset().left;  //+ $this.scrollLeft()
-				var relY = e.pageY + $this.scrollTop() - $this.offset().top;
-
-				e.stopPropagation();
-
-				if(relX > roomSkeleton.totalWidth || relY > roomSkeleton.totalHeight) {
-					var dataCounter = 'b' +  regScope.regBoxCounter;
-					var skelStyle = 'width: ' + roomSkeleton.width + 'px; height: ' + roomSkeleton.height + 'px; position: absolute; top: ' + (relY - roomSkeleton.height/2) + 'px; left: ' + (relX - roomSkeleton.width/2) + 'px;';
-					
-					if(regScope.action == 2) { 
-						regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#61B329', 'nohover',true,'noStatus',1);  //add box to room
-						regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, true);
-					}else if(regScope.action == 5) {
-						regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#cccccc', 'nohover',false,'noStatus',1);  //add box to room
-						regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, false);
-					}
-				}else {
-				}
-			});
-
-		}else {
-
-		}
+			}
+		});
 	};
 
 	//creates a box out of skeleton box
@@ -1591,132 +1534,127 @@
 		var boxCollection = $('.build-area .drag-box'); 
 		var multiDragBoxes = null;
 
-		if(regScope.permissions.canMoveBox) {	//can i drag it around?
-			boxCollection.draggable({
-				containment: ".build-area",  
-				scroll: true, 
-				scrollSensitivity: 50,
-				scrollSpeed: 30, 
-				//snap: true,
-				//snapMode: "outer",
-				//snapTolerance: 10,
-				stack: ".drag-box",
-				disabled: disableDrag,
-				start: function(){
-					if(!regScope.needMultiDrag) {
-						regScope.activeBoxArray.length = 0;  //make sure activebox in empty.
-						regScope.activeBoxArray.push($(this).attr('data-id'));	//this box in now active
-						$('.active-box').removeClass('active-box');	//remove all previous active
-						$(this).addClass('active-box');	//set this box active
-					}else {
-						multiDragBoxes = $('.build-area .active-box');
-					}	
-				},
-				drag: function(event, ui) {
+		boxCollection.draggable({
+			containment: ".build-area",  
+			scroll: true, 
+			scrollSensitivity: 50,
+			scrollSpeed: 30, 
+			//snap: true,
+			//snapMode: "outer",
+			//snapTolerance: 10,
+			stack: ".drag-box",
+			disabled: disableDrag,
+			start: function(){
+				if(!regScope.needMultiDrag) {
+					regScope.activeBoxArray.length = 0;  //make sure activebox in empty.
+					regScope.activeBoxArray.push($(this).attr('data-id'));	//this box in now active
+					$('.active-box').removeClass('active-box');	//remove all previous active
+					$(this).addClass('active-box');	//set this box active
+				}else {
+					multiDragBoxes = $('.build-area .active-box');
+				}	
+			},
+			drag: function(event, ui) {
 
-					if(regScope.needMultiDrag) {
-						var currentLoc = $(this).position();
-				        var prevLoc = $(this).data('prevLoc');
-				        if (!prevLoc) {
-				            prevLoc = ui.originalPosition;
-				        }
+				if(regScope.needMultiDrag) {
+					var currentLoc = $(this).position();
+					var prevLoc = $(this).data('prevLoc');
+					if (!prevLoc) {
+						prevLoc = ui.originalPosition;
+					}
 
-	        			var offsetLeft = currentLoc.left-prevLoc.left;
-	        			var offsetTop = currentLoc.top-prevLoc.top;
-	        			var outOfContainer = false;
+					var offsetLeft = currentLoc.left-prevLoc.left;
+					var offsetTop = currentLoc.top-prevLoc.top;
+					var outOfContainer = false;
 
-	        			multiDragBoxes.each(function(){
-					        $this =$(this);
-					        var p = $this.position();
-					        var l = p.left;
-							var t = p.top;
-							
-					        if(l + offsetLeft <= 0 || t + offsetTop <= 0) {					        
-					        	outOfContainer = true;
-					        }
-					    });
-
-					    if(!outOfContainer) {
-					    	multiDragBoxes.each(function(){
-						        $this =$(this);
-						        var p = $this.position();
-						        var l = p.left;
-						        var t = p.top;
-						        $this.css('left', l+offsetLeft);
-						        $this.css('top', t+offsetTop);
-						    });
-					    	$(this).data('prevLoc', currentLoc);
-					    }
-	        		}
-				},
-				stop: function(event, ui) {
-					if(!regScope.needMultiDrag) {
-						var location = regScope.rooms[regScope.currentRoom].findBox($(this).attr('data-id'));
-						if(location !== false) {
-							regScope.rooms[regScope.currentRoom].boxes[location].changePosition(ui.position.left, ui.position.top);
+					multiDragBoxes.each(function(){
+						$this =$(this);
+						var p = $this.position();
+						var l = p.left;
+						var t = p.top;
+						
+						if(l + offsetLeft <= 0 || t + offsetTop <= 0) {					        
+							outOfContainer = true;
 						}
-					}else {
-						multiDragBoxes.each(function() {
-							$this = $(this);
-							var location = regScope.rooms[regScope.currentRoom].findBox($this.attr('data-id'));
-							if(location !== false) {
-								regScope.rooms[regScope.currentRoom].boxes[location].changePosition(parseInt($this.css('left')), parseInt($this.css('top')));
-							}
+					});
+
+					if(!outOfContainer) {
+						multiDragBoxes.each(function(){
+							$this =$(this);
+							var p = $this.position();
+							var l = p.left;
+							var t = p.top;
+							$this.css('left', l+offsetLeft);
+							$this.css('top', t+offsetTop);
 						});
+						$(this).data('prevLoc', currentLoc);
 					}
 				}
-			});
-		}
-
-		if(regScope.permissions.canResizeBox) {		//can i resize box?
-			var autoHide = true;
-
-			if($('html').hasClass('touch')) {
-				autoHide = false;
-			}
-
-			boxCollection.resizable({
-				autoHide: autoHide,
-				handles: "n, e, s, w, ne, se, sw, nw",
-				disabled: disableDrag,
-				alsoResize: false,
-				//containment: ".build-area-wrapper",
-				
-				start: function(event, ui) {
-					
-					if(regScope.activeBoxArray.length == 0) {
-						$('.build-area .drag-box').resizable("option","alsoResize", false); 
+			},
+			stop: function(event, ui) {
+				if(!regScope.needMultiDrag) {
+					var location = regScope.rooms[regScope.currentRoom].findBox($(this).attr('data-id'));
+					if(location !== false) {
+						regScope.rooms[regScope.currentRoom].boxes[location].changePosition(ui.position.left, ui.position.top);
 					}
-					if(regScope.activeBoxArray.indexOf($(this).data('id')) == -1) {
-						regScope.activeBoxArray.push($(this).data('id'));
-						$(this).addClass('active-box');
-					}
-					
-					//$('.active-box').removeClass('active-box');	//remove all previous active
-					//$(this).addClass('active-box');	//set this box active
-				},
-				stop: function(event, ui) {
-					var aLen = regScope.activeBoxArray.length;
-
-					if(aLen == 1) {
-						var location = regScope.rooms[regScope.currentRoom].findBox(regScope.activeBoxArray[0]);
+				}else {
+					multiDragBoxes.each(function() {
+						$this = $(this);
+						var location = regScope.rooms[regScope.currentRoom].findBox($this.attr('data-id'));
 						if(location !== false) {
-							regScope.rooms[regScope.currentRoom].boxes[location].changeValues(ui.position.left, ui.position.top, ui.size.width, ui.size.height);
+							regScope.rooms[regScope.currentRoom].boxes[location].changePosition(parseInt($this.css('left')), parseInt($this.css('top')));
 						}
-					}else {
-						for(var i = 0; i < aLen; i++) {
-							var location = regScope.rooms[regScope.currentRoom].findBox(regScope.activeBoxArray[i]);
+					});
+				}
+			}
+		});
+		
+		var autoHide = true;
 
-							if(location !== false) {
-								
-								var resizedBox = $('.drag-box[data-id='+ regScope.activeBoxArray[i] +']');
-								regScope.rooms[regScope.currentRoom].boxes[location].changeValues(parseInt(resizedBox.css('left')), parseInt(resizedBox.css('top')), parseInt(resizedBox.css('width')), parseInt(resizedBox.css('height')));
-							}
-						} 
-					}
-				} 
-			});
+		if($('html').hasClass('touch')) {
+			autoHide = false;
 		}
+
+		boxCollection.resizable({
+			autoHide: autoHide,
+			handles: "n, e, s, w, ne, se, sw, nw",
+			disabled: disableDrag,
+			alsoResize: false,
+			//containment: ".build-area-wrapper",
+			
+			start: function(event, ui) {
+				
+				if(regScope.activeBoxArray.length == 0) {
+					$('.build-area .drag-box').resizable("option","alsoResize", false); 
+				}
+				if(regScope.activeBoxArray.indexOf($(this).data('id')) == -1) {
+					regScope.activeBoxArray.push($(this).data('id'));
+					$(this).addClass('active-box');
+				}
+				
+			},
+			stop: function(event, ui) {
+				var aLen = regScope.activeBoxArray.length;
+
+				if(aLen == 1) {
+					var location = regScope.rooms[regScope.currentRoom].findBox(regScope.activeBoxArray[0]);
+					if(location !== false) {
+						regScope.rooms[regScope.currentRoom].boxes[location].changeValues(ui.position.left, ui.position.top, ui.size.width, ui.size.height);
+					}
+				}else {
+					for(var i = 0; i < aLen; i++) {
+						var location = regScope.rooms[regScope.currentRoom].findBox(regScope.activeBoxArray[i]);
+
+						if(location !== false) {
+							
+							var resizedBox = $('.drag-box[data-id='+ regScope.activeBoxArray[i] +']');
+							regScope.rooms[regScope.currentRoom].boxes[location].changeValues(parseInt(resizedBox.css('left')), parseInt(resizedBox.css('top')), parseInt(resizedBox.css('width')), parseInt(resizedBox.css('height')));
+						}
+					} 
+				}
+			} 
+		});
+		
 
 		if(regScope.action == 6) {
 			//with touch device disable all drag and resize
@@ -1756,9 +1694,8 @@
 			}
 			
 			//restore draggable and resizable option on drag-box
-			if(this.permissions.canMoveBox) {
-				$('.build-area-wrapper .drag-box').draggable("option","disabled",false).resizable( "option", "disabled", false );
-			}
+			$('.build-area-wrapper .drag-box').draggable("option","disabled",false).resizable( "option", "disabled", false );
+			
 		}else if(this.action == 2) { 	//speed creator tool selected
 			$('.build-area-wrapper').attr('data-cursor','2');
 			//check if lasso is initialized and then remove it.
@@ -1766,11 +1703,8 @@
 				$( ".build-area-wrapper" ).selectableScroll( "destroy" );
 			}
 			
-			if(this.permissions.canMoveBox) {
-				//console.log('disabling drag and resize');
-				$('.drag-box').draggable("disable").resizable("disable");//disable drag and resize when speed creator tool
-			}
-			
+			//console.log('disabling drag and resize');
+			$('.drag-box').draggable("disable").resizable("disable");//disable drag and resize when speed creator tool
 		}else if(this.action == 3) { //speed delete tool selected
 			//check if lasso is initialized and then remove it.
 			$('.build-area-wrapper').attr('data-cursor','4');
@@ -1779,17 +1713,12 @@
 				$( ".build-area-wrapper" ).selectableScroll( "destroy" );
 			}
 
-			if(this.permissions.canMoveBox) {
-				$('.drag-box').draggable("disable").resizable("disable");	//disable drag and resize when speed delete tool
-			}
+			$('.drag-box').draggable("disable").resizable("disable");	//disable drag and resize when speed delete tool
 			
 		}else if(this.action == 4) {	//lasso tool selected
 			$('.build-area-wrapper').attr('data-cursor','5');
-
-			if(this.permissions.canMoveBox) {
-				$('.drag-box').draggable("option","disabled",false).resizable("option","disabled",false);	//disable drag and resize when lasso tool .draggable("disable")
-			}
-			
+			$('.drag-box').draggable("option","disabled",false).resizable("option","disabled",false);	//disable drag and resize when lasso tool .draggable("disable")
+		
 			//initialize selectable 
 			$('.build-area-wrapper').selectableScroll({
 		 			selecting: function( event, ui ) {
@@ -1832,9 +1761,7 @@
 			if($('.build-area-wrapper').hasClass('ui-selectable')) {
 				$( ".build-area-wrapper" ).selectableScroll( "destroy" );
 			}
-			if(this.permissions.canMoveBox) {
-				$('.drag-box').draggable("disable").resizable("disable");	//disable drag and resize when speed delete tool
-			}
+			$('.drag-box').draggable("disable").resizable("disable");	//disable drag and resize when speed delete tool
 		}else if(this.action == 6) {  //in touch devices, move around tool
 
 			if($('.build-area-wrapper').hasClass('ui-selectable')) {
