@@ -371,6 +371,8 @@ SeatReg.prototype.paintRoomLegends = function() {
 	$('#legends .legend-div').on('click', function() {
 		var clickLegend = $(this).data('target-legend');
 		var legendBoxes = $('#boxes .box[data-leg='+ clickLegend +']');
+		
+		legendBoxes.css("--animationColor", legendBoxes.css('background-color'));
 		legendBoxes.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function() {
 			$(this).removeClass('legend-animation');
 		});

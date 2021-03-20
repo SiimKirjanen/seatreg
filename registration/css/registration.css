@@ -702,8 +702,8 @@ body {
 			box-shadow: none;
         }
         50%  { 
-			 -webkit-box-shadow: 0 0 40px 2px red;
-			 box-shadow: 0 0 40px 2px red;
+			 -webkit-box-shadow: 0 0 40px 2px var(--animationColor);
+			 box-shadow: 0 0 40px 2px var(--animationColor);
         }
         100% { 
 			-webkit-box-shadow: none;
@@ -716,8 +716,8 @@ body {
 			box-shadow: none;
         }
         50%  { 
-			-moz-box-shadow: 0 0 40px 2px red;
-			box-shadow: 0 0 40px 2px red;
+			-moz-box-shadow: 0 0 40px 2px var(--animationColor);
+			box-shadow: 0 0 40px 2px var(--animationColor);
         }
         100% { 
 			-moz-box-shadow: none;
@@ -730,8 +730,8 @@ body {
 			box-shadow: none;
         }
         50%  { 
-			-ms-box-shadow: 0 0 40px 2px red;
-			box-shadow: 0 0 40px 2px red;
+			-ms-box-shadow: 0 0 40px 2px var(--animationColor);
+			box-shadow: 0 0 40px 2px var(--animationColor);
         }
         100% { 
 			-ms-box-shadow: none;
@@ -740,7 +740,6 @@ body {
 }
 
 .legend-animation {
-
 	-webkit-animation: legblink 1s 2;
 	-moz-animation:    legblink 1s 2;
 	-ms-animation:     legblink 1s 2; 
