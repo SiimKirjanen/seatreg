@@ -224,10 +224,6 @@ class NewBookings extends Booking {
 
 				if($mailSent) {
 					$this->response->setText('mail');
-					if($this->_sendNewBookingNotificationEmail) {
-						seatreg_send_booking_notification_email($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
-					}
-					
 				}else {
 					$this->response->setError(__('Oops.. the system encountered a problem while sending out confirmation email', 'seatreg'));
 				}
