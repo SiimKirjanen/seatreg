@@ -318,14 +318,6 @@ function seatreg_generate_my_registrations_section() {
 			<div class="col-sm-6 col-md-2">
 				<h4><a class="registration-name-link" href="<?php echo plugins_url('registration/index.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php echo htmlspecialchars( $registration->registration_name ); ?></a></h4>
 
-				<a href="<?php echo admin_url( 'admin.php?page=seatreg-overview&tab='.$registration->registration_code );  ?>"><?php _e('Overview', 'seatreg'); ?></a>
-
-				<br>
-
-				<a href="<?php echo admin_url( 'admin.php?page=seatreg-management&tab='.$registration->registration_code ); ?>"><?php _e('Bookings', 'seatreg'); ?></a>
-
-				<br>
-
 				<a href="<?php echo plugins_url('registration/index.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php _e('Registration', 'seatreg'); ?></a>
 
 				<br>
@@ -334,9 +326,18 @@ function seatreg_generate_my_registrations_section() {
 
 				<br>
 
-				<a href="<?php echo admin_url( 'admin.php?page=seatreg-options&tab='.$registration->registration_code ); ?>"><?php _e('Settings', 'seatreg'); ?></a>
-				
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-overview&tab='.$registration->registration_code );  ?>"><?php _e('Overview', 'seatreg'); ?></a>
+
 				<br>
+
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-options&tab='.$registration->registration_code ); ?>"><?php _e('Settings', 'seatreg'); ?></a>
+
+				<br>
+
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-management&tab='.$registration->registration_code ); ?>"><?php _e('Bookings', 'seatreg'); ?></a>
+
+				<br>
+
 				<?php
 					seatreg_create_delete_registration_from($registration->registration_code);
 				?>
