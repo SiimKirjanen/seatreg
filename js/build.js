@@ -553,12 +553,24 @@
 			for(var i = 0; i < arrLength; i++) {
 				var index = this.rooms[this.currentRoom].findBox(this.activeBoxArray[i]);
 				if(index !== false) {
+					var box = $('.build-area .drag-box[data-id="' + this.activeBoxArray[i] + '"]');
+
 					if(newHover != '') {
 						this.rooms[this.currentRoom].boxes[index].hoverText = newHover;
-						$('.build-area .drag-box[data-id="' + this.activeBoxArray[i] + '"]').attr('original-title',newHover).addClass('box-hover');
+						if(box.data('powertip')) {
+							box.data('powertip', newHover).addClass('box-hover');
+						}else {
+							box.data('powertip', newHover).addClass('box-hover').powerTip({
+								fadeInTime: 0,
+								fadeOutTime:0,
+								intentPollInterval: 10,
+								placement: 's'
+							});
+						}
+						
 					}else {
 						this.rooms[this.currentRoom].boxes[index].hoverText = "nohover";
-						$('.build-area .drag-box[data-id="' + this.activeBoxArray[i] + '"]').removeClass('box-hover');
+						box.removeClass('box-hover');
 					}
 				}else {
 					alert(translator.translate('hoverError'));
@@ -818,16 +830,12 @@
 		}
 	};
 
-	Registration.prototype.changeHelperText = function(textCode) {
-		$('#help-area .help-text').empty();		
-		$('#help-area .help-text').text(buildHelp[this.regLang][textCode]);		
-	};
-
 	//check if active boxes have hover text already. if so then add text to existingHover array
 	Registration.prototype.checkBubbles = function() {
 		this.existingHover.length = 0;
+		var arrLength = this.activeBoxArray.length;
 
-		if(this.activeBoxArray.length == 0) {
+		if(arrLength == 0) {
 			alertify.set({ 
 				labels: {
 			    	ok     : translator.translate('ok'),
@@ -841,8 +849,6 @@
 			return;
 		}
 		
-		var arrLength = this.activeBoxArray.length;
-
 		for(var i = 0; i < arrLength; i++) {
 			var index = this.rooms[this.currentRoom].findBox(this.activeBoxArray[i]);
 
@@ -1024,6 +1030,15 @@
 		return false;
 	};
 
+	Registration.prototype.initHoverText = function() {
+		$('.build-area-wrapper .box-hover').powerTip({
+			fadeInTime: 0,
+			fadeOutTime:0,
+			intentPollInterval: 10,
+			placement: 's'
+		});
+	};
+
 	Registration.prototype.changeRoom = function(id, element, isInit, lIndexCheck) {		
 		if(lIndexCheck) {
 			this.rooms[this.currentRoom].correctRoomBoxesIndex();
@@ -1064,7 +1079,8 @@
 			this.buildSkeleton();  //builds skeleton grid
 			this.buildBoxes();	//builds boxes if it finds some....
 			this.createLegendBox();
-
+			this.initHoverText();
+		
 			$('.room-title-name').text(this.rooms[this.currentRoom].title);
 			$('.room-box-counter').text(this.rooms[this.currentRoom].boxes.length);
 
@@ -1458,7 +1474,7 @@
 	};
 
 	//creates a box out of skeleton box
-	Registration.prototype.buildBoxOutOfSkeleton = function(skelStyle, dataCounter, regScope, isRegSpot) {
+	Registration.prototype.buildBoxOutOfSkeleton = function(skelStyle, dataCounter, regScope) {
 		var nr = this.rooms[this.currentRoom].roomSeatCounter;
 		var disableDrag = true;
 
@@ -1504,8 +1520,7 @@
 		});
 
 		box.appendTo('.build-area');  //fainally ad box to build-area
-		var disableD = true;
-		regScope.addDraggableResisableListeners(disableD);
+		regScope.addDraggableResisableListeners(true);
 	}
 
 	//this method is used for building already existing rooms. like when you change room. build old ruum
@@ -1522,7 +1537,7 @@
 		var boxCount = this.rooms[this.currentRoom].boxes.length;
 
 		for(var i = 0; i < boxCount; i++) {
-			var box = $('<div>').addClass('drag-box ' + this.rooms[this.currentRoom].boxes[i].id).attr({
+			$('<div>').addClass('drag-box ' + this.rooms[this.currentRoom].boxes[i].id).attr({
 				'data-id': this.rooms[this.currentRoom].boxes[i].id
 			}).css({
 				width: this.rooms[this.currentRoom].boxes[i].width + 'px',
@@ -1550,7 +1565,7 @@
 					regScope.rooms[regScope.currentRoom].deleteBox($(this).attr('data-id'));
 				}
 			}).appendTo('.build-area').each(function(){
-				if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister == true) {
+				if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister === true) {
 					$(this).addClass('can-register').attr('data-seatnr', regScope.rooms[regScope.currentRoom].boxes[i].seat);
 					$(this).append($('<div>').addClass('seat-number').text(regScope.rooms[regScope.currentRoom].boxes[i].seat));
 
@@ -1559,20 +1574,16 @@
 					}else if(regScope.rooms[regScope.currentRoom].boxes[i].status == 'takenRegister') {
 						$(this).addClass('bron-register').append($('<div>').addClass('taken-sign'));
 					}
-					if(regScope.rooms[regScope.currentRoom].boxes[i].hoverText != 'nohover') {
-						$(this).attr('title', regScope.rooms[regScope.currentRoom].boxes[i].hoverText).addClass('box-hover');
-					}
-				}else if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister == false) {
+				}else {
 					$(this).addClass('no-register');
-					if(regScope.rooms[regScope.currentRoom].boxes[i].hoverText != 'nohover') {
-						$(this).attr('original-title', regScope.rooms[regScope.currentRoom].boxes[i].hoverText).addClass('box-hover');
-					}
+				}
+
+				if(regScope.rooms[regScope.currentRoom].boxes[i].hoverText != 'nohover') {
+					$(this).attr('data-powertip', regScope.rooms[regScope.currentRoom].boxes[i].hoverText).addClass('box-hover');
 				}
 			});	//adds to dom
 		}
-
-		var disableD = false;
-		regScope.addDraggableResisableListeners(disableD);
+		regScope.addDraggableResisableListeners(false);
 	};
 
 	Registration.prototype.addDraggableResisableListeners = function(disableDrag) {
@@ -2772,10 +2783,9 @@
 
 	$('#box-hover-submit').on('click', function() {
 		reg.checkBubbles();
-		reg.changeHelperText();
 
 		if(reg.activeBoxArray.length > 0) {
-			var hoverValue = $('#box-hover-text').val().replace(/\n|\r/g, '<br>');; //.replace(/\n|\r/g, '<br>'); //&lt;br/&gt; 
+			var hoverValue = $('#box-hover-text').val().replace(/\n|\r/g, '<br>'); //.replace(/\n|\r/g, '<br>'); //&lt;br/&gt; 
 
 			reg.changeHoverText(hoverValue);
 			$("#hover-dialog").modal('toggle');
@@ -2901,12 +2911,15 @@
 		}
 	});
 
+	/*
 	$('.build-area-wrapper .box-hover').tipsy({
 		title: 'original-title',
 		gravity: 'n',
 		live: true,
 		html: true
 	});	 
+	*/
+	
 	   
     $('#room-name-dialog-input').keyup(function(e) {		
     	if (e.which == 13) {
