@@ -1064,6 +1064,10 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 
 	//step2. check whether seat is already pending or confirmed
 	$bookings = seatreg_get_registration_bookings($code);
+	foreach($bookings as $booking) {
+		$booking->room_name = seatreg_get_room_name_from_layout($structure, $booking->room_uuid);
+	}
+
 	$notBooked = true;
 
 	foreach ($bookings as $booking) {

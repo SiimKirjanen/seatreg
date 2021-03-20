@@ -71,7 +71,7 @@ class NewBookings extends Booking {
     }
 
     public function seatreg_validate_custom_fields($customFields) {
-		$customFieldsReg = '/^\[(\[({"label":["\s\p{L}]{1,30},"value":["\s\p{L}]{1,50}},?){0,6}\],?){1,5}\]$/u';
+		$customFieldsReg = '/^\[(\[({"label":["\s\p{L}]{1,30},"value":["\s\p{L}]{1,50}},?){0,6}\],?){1,' . $this->_maxSeats .'}\]$/u';
 
 		if( !preg_match($customFieldsReg, $customFields) ) {
 			return false;
