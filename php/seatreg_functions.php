@@ -369,6 +369,7 @@ function seatreg_generate_settings_form() {
 
 	 $custFields = json_decode($options[0]->custom_fields);
 	 $custLen = count(is_array($custFields) ? $custFields : []);
+	 $adminEmail = get_option( 'admin_email' );
 	?>
 		<h3 class="settings-heading"><?php echo htmlspecialchars($options[0]->registration_name), ' settings'; ?></h3>
 		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" style="max-width:600px">
@@ -457,7 +458,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="use-pending"><?php _e('Pending status', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('By default all bookings will first be in pending state so admin can approve them (booking manager). If you want bookings automatically to be in approved state then uncheck below', 'seatreg'); ?>
+					<?php _e('By default all bookings will first be in pending state so admin can approve them (booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
 				</p>
 				<div class="checkbox">
 			    	<label>
@@ -482,15 +483,28 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="booking-notification"><?php _e('Booking notification', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Send a notification when you got new booking. Leave empty for no notification', 'seatreg'); ?>.</p>
-				<input type="email" class="form-control" id="booking-notification" name="booking-notification" placeholder="Email" value="<?php echo $options[0]->notify_new_bookings; ?>">
+				<p class="help-block">
+					<?php
+						printf(
+							/* translators: %s: email address */
+							__( 'Send a notification to %s when you got a new booking.', 'seatreg' ),
+							$adminEmail
+						);
+					?>
+				</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="booking-notification" name="booking-notification" value="1" <?php echo $options[0]->notify_new_bookings == '1' ? 'checked':'' ?> >
+			      		<?php _e('Send notifications', 'seatreg'); ?>
+			    	</label>
+			  	</div>
 			</div>
 
 			<div class="form-group">
 				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
 					<label><?php _e('Custom fields', 'seatreg'); ?></label>
 					<p class="help-block">
-						<?php _e('Custom fields allow you to ask extra information in bookings', 'seatreg'); ?>.
+						<?php _e('Custom fields allow you to ask extra information in bookings.', 'seatreg'); ?>
 					</p>
 					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
 
@@ -1190,7 +1204,7 @@ function seatreg_set_up_db() {
 	  registration_open tinyint(1) NOT NULL DEFAULT 1,
 	  use_pending tinyint(1) NOT NULL DEFAULT 1,
 	  registration_password varchar(255) DEFAULT NULL,
-	  notify_new_bookings varchar(255) DEFAULT NULL,
+	  notify_new_bookings tinyint(1) NOT NULL DEFAULT 1,
 	  show_bookings tinyint(1) NOT NULL DEFAULT 0,
 	  payment_text text DEFAULT NULL,
 	  info text DEFAULT NULL,

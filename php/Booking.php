@@ -4,7 +4,7 @@ class Booking {
 	protected $_requireBookingEmailConfirm = true;
 	protected $_insertState = 1;  //all bookings will have status = 1 (pending). if 2 then (confirmed)
 	protected $_registrationName;
-	protected $_sendNewBookingNotificationEmail = null; //send notification to that someone has booked a seat
+	protected $_sendNewBookingNotificationEmail = null; //send notification to admin that someone has booked a seat
 
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);

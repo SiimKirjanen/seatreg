@@ -216,9 +216,10 @@ class NewBookings extends Booking {
 							<a href="' .  $confirmationURL .'" >'. $confirmationURL .'</a><br/>
 							('. __('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>
 							' .__('After confirmation you can look your booking at', 'seatreg') . '<br> <a href="'. $bookingCheckURL .'" >'. $bookingCheckURL .'</a>';
-
+				$adminEmail = get_option( 'admin_email' );
 				$mailSent = wp_mail($this->_bookerEmail, __('Booking confirmation', 'seatreg'), $message, array(
-					"Content-type: text/html"
+					"Content-type: text/html",
+					"FROM: $adminEmail"
 				));
 
 				if($mailSent) {
