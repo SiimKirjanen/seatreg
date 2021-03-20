@@ -5,8 +5,8 @@
 		<h2 class="room-title"><?php _e('Room:', 'seatreg');?> <span class="room-title-name"></span><span class="change-room-name"><?php _e('Change name', 'seatreg');?></span></h2>
 		<div id="room-selection-wrapper"></div>
 		<div class="cre-del-room-wrapper">
-			<span id="new-room-create" class="room-action"><span class="glyphicon glyphicon-plus"></span><?php _e('Add room', 'seatreg');?> </span>
-			<span id="current-room-delete" class="room-action"><span class="glyphicon glyphicon-minus"></span><?php _e('Delete room', 'seatreg');?></span>
+			<span id="new-room-create" class="room-action"><span class="glyphicon glyphicon-plus"></span> <?php _e('Add room', 'seatreg');?> </span>
+			<span id="current-room-delete" class="room-action"><span class="glyphicon glyphicon-minus"></span> <?php _e('Delete room', 'seatreg');?></span>
 		</div>
 	</div> <!-- end of build head-->
 	

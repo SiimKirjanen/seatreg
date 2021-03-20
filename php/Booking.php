@@ -1,10 +1,21 @@
 <?php
 
 class Booking {
+	protected $_bookings; //seat bookings 
+	protected $_registrationLayout;
+	protected $_registrationCode;
+	protected $_valid = true;
 	protected $_requireBookingEmailConfirm = true;
 	protected $_insertState = 1;  //all bookings will have status = 1 (pending). if 2 then (confirmed)
 	protected $_registrationName;
 	protected $_sendNewBookingNotificationEmail = null; //send notification to admin that someone has booked a seat
+	protected $_maxSeats = 1;  //how many seats per booking can be booked
+	protected $_isRegistrationOpen = true; //is registration open
+	protected $_registrationPassword = null;  //registration password if set. null default
+	protected $_registrationEndTimestamp; //when registration ends
+	protected $_registrationStartTimestamp;
+	protected $_gmailNeeded = false;  //require gmail address from registrants
+	
 
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -41,6 +52,14 @@ class Booking {
 		}
 
 		return $statusReport;
+	}
+
+	protected function seatsLimitCheck() {
+		if(count($this->_bookings) > $this->_maxSeats) {
+			return false;
+		}
+
+		return true;
 	}
     
     protected function doSeatsExistInRegistrationLayoutCheck() {

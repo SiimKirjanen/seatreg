@@ -1946,6 +1946,7 @@
 			this.addRoom(false,false,true, generateUUID());
 			$('#build-area-loading-wrap').remove();
 			$('#room-name-dialog').modal("toggle");
+			this.setBuilderHeight();
 		}else {
 			var roomData = responseObj.roomData;
 			this.regBoxCounter = responseObj.global.boxCounter;

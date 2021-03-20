@@ -11,19 +11,9 @@ require_once('./util/registration_time_status.php');
 
 class NewBooking extends Booking {
 	public $reply;
-	protected $_valid = true;
 	protected $_confirmationCode;
-	protected $_bookings;
-	protected $_registrationLayout;
-	protected $_registrationCode;
-	protected $_registrationStartTimestamp;
-	protected $_registrationEndTimestamp;
-	protected $_registrationPassword = null;  //registration password if set. null default
-	protected $_isRegistrationOpen = true;
 	protected $_bookindId;
 	protected $_registrationOwnerEmail;
-	protected $_maxSeats = 1;  //how many seats per booking can be booked
-	protected $_gmailNeeded = false;  //require gmail address from registrants
 	
 	public function __construct($code){
 		$this->_confirmationCode = $code;
@@ -97,15 +87,26 @@ class NewBooking extends Booking {
 	public function startConfirm() {
 		$this->getNotConfirmedBookings();
 
-		//1 step. Does confirmation code exists? Is booking already confirmed?
-		if($this->_valid == false) {
+		if(!$this->_valid) {
 			echo $this->reply;
 			return;
 		}
 
-		//2 step. Get registration with options
 		$this->getRegistrationAndOptions();
 
+		//1 step
+		//Selected seat limit check
+		if(!$this->seatsLimitCheck()) {
+			_e('Error. Seat limit exceeded', 'seatreg');
+			return;
+		}
+
+		//2 step. Does confirmation code exists? Is booking already confirmed?
+		if(!$this->_valid) {
+			echo $this->reply;
+			return;
+		}
+		
 		//3 step. Is registtration open?
 		if(!$this->_isRegistrationOpen) {
 			_e('Registration is closed at the moment', 'seaterg');

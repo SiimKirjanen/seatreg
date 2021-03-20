@@ -12,21 +12,12 @@ require_once('util/session_captcha.php');
 
 class NewBookings extends Booking {
 	public $response; //response object. 
-	protected $_isValid = true;
 	protected $_bookerEmail; //confirm email is send to this address
-	protected $_bookings; //seat bookings 
-	protected $_registrationLayout;
-	protected $_registrationCode;
-	protected $_gmailNeeded = false;  //require gmail address from registrants
-	protected $_registrationStartTimestamp;
-	protected $_registrationEndTimestamp; //when registration ends
 	protected $_submittedPassword;  //user submitted password
-	protected $_registrationPassword = null;  //registration password if set. null default
-	protected $_isRegistrationOpen = true; //is registration open
 	protected $_bookingId; //id for booking
-	protected $_maxSeats = 1;  //how many seats per booking can be booked
+	protected $_isValid = true;
 	
-    public function __construct( $code, $resp){
+    public function __construct($code, $resp){
     	$this->_registrationCode = $code;
         $this->response = $resp;
 
@@ -80,7 +71,7 @@ class NewBookings extends Booking {
     }
 
     public function seatreg_validate_custom_fields($customFields) {
-		$customFieldsReg = '/^\[(\[({"label":["\s\p{L}]{1,30},"value":["\s\p{L}]{1,50}},?){0,6}\],?){1,3}\]$/u';
+		$customFieldsReg = '/^\[(\[({"label":["\s\p{L}]{1,30},"value":["\s\p{L}]{1,50}},?){0,6}\],?){1,5}\]$/u';
 
 		if( !preg_match($customFieldsReg, $customFields) ) {
 			return false;
@@ -88,17 +79,8 @@ class NewBookings extends Booking {
 
 		return true;
 	}
+
 	public function validateBooking() {
-
-		//1.step
-		$this->isSeperateSeats();
-
-		if(!$this->_isValid) {
-			$this->response->setError(__('Error. Dublicated seats', 'seatreg'));
-
-			return;
-		}
-
 		//password check if needed
 		if($this->_registrationPassword != null) {
 			if($this->_registrationPassword != $this->_submittedPassword) {
@@ -109,7 +91,24 @@ class NewBookings extends Booking {
 			}
 		}
 
+		//1.step
+		//Selected seat limit check
+		if(!$this->seatsLimitCheck()) {
+			$this->response->setError(__('Error. Seat limit exceeded', 'seatreg'));
+
+			return;
+		}
+
 		//2.step
+		$this->isSeperateSeats();
+
+		if(!$this->_isValid) {
+			$this->response->setError(__('Error. Dublicated seats', 'seatreg'));
+
+			return;
+		}
+
+		//3.step
 		//seat room, id, nr and is availvable check.
 		$seatsStatusCheck = $this->doSeatsExistInRegistrationLayoutCheck();
 		if($seatsStatusCheck != 'ok') {
@@ -117,7 +116,7 @@ class NewBookings extends Booking {
 			return;
 		}
 
-		//3.step. Email check if needed
+		//4.step. Email check if needed
 		if($this->_gmailNeeded) {
 			$gmailReg = '/^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/';
 
@@ -127,7 +126,7 @@ class NewBookings extends Booking {
 			}
 		}
 
-		//4.step. Time check. is registration open.
+		//5.step. Time check. is registration open.
 		if ($this->_isRegistrationOpen == false) {
 			$this->response->setError(__('Registration is closed', 'seatreg'));
 			return;
@@ -139,7 +138,7 @@ class NewBookings extends Booking {
 			return;
 		}
 
-		//5.step. Check if seat/seats are allready taken
+		//6.step. Check if seat/seats are allready taken
 		$bookStatus = $this->isAllSelectedSeatsOpen(); 
 		if($bookStatus != 'ok') {
 			$this->response->setError($bookStatus);
