@@ -1599,16 +1599,9 @@
 	}
 }
 
-@media only screen and (min-height: 900px) {
-	.seatreg-map-builder-page .build-area-wrapper {
-		height: 500px;
-	}
-}
-
 ::-webkit-scrollbar-corner {
 	background-color: #F2F2F2;
 }
-
 
 
 /*!

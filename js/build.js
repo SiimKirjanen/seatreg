@@ -2020,6 +2020,7 @@
 			var roomElem = $('#room-selection-wrapper .room-selection').first();
 			this.changeRoom(roomElem.attr('data-room-location'), roomElem, true, false);
 			this.generatePrevUploadedImgMarkup();
+			this.setBuilderHeight();
 			$('#build-area-loading-wrap').remove();
 		}
 	};
@@ -2143,6 +2144,16 @@
 		});
 
 		return biggestIndex + 1;	
+	};
+
+	Registration.prototype.setBuilderHeight = function() {
+		var screenHeight = $(window).height();
+		var buildHeadHeight = $('.build-head').outerHeight(true);
+		var buildSectionHeight = $('#build-section').outerHeight(true);
+		var buildControlsHeight = $('.build-controls').outerHeight(true);
+		var extraHeight = 200;
+
+		$('.build-area-wrapper').height(screenHeight - buildHeadHeight - buildSectionHeight - buildControlsHeight - extraHeight);
 	};
 
 	/*
@@ -3000,5 +3011,4 @@
 			}
 		}
 	});
-
 })(jQuery);

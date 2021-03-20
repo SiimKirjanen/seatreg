@@ -101,7 +101,7 @@ function seatreg_generate_admin_strings() {
     $translations->confirmedSeat = __('Confirmed seat', 'seatreg');
     $translations->save = __('Save', 'seatreg');
     $translations->saving = __('Saving...', 'seatreg');
-    $translations->saved = __('Saved...', 'seatreg');
+    $translations->saved = __('Saved', 'seatreg');
     $translations->room = __('room', 'seatreg');
     $translations->bookingUpdated = __('Booking updated', 'seatreg');
     $translations->notSet = __('Not set', 'seatreg');
