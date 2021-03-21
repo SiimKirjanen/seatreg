@@ -366,8 +366,6 @@
 					}
 				}
 			}
-
-		} else {  //location check else
 		}
 	};
 
@@ -513,13 +511,14 @@
 					if(newHover != '') {
 						this.rooms[this.currentRoom].boxes[index].hoverText = newHover;
 						if(box.data('powertip')) {
-							box.data('powertip', newHover).addClass('box-hover');
+							box.attr('data-powertip', newHover).data('powertip', newHover).addClass('box-hover');
 						}else {
-							box.data('powertip', newHover).addClass('box-hover').powerTip({
+							box.attr('data-powertip', newHover).addClass('box-hover').powerTip({
 								fadeInTime: 0,
 								fadeOutTime:0,
 								intentPollInterval: 10,
-								placement: 's'
+								placement: 's',
+								manual: true
 							});
 						}
 						
@@ -985,12 +984,13 @@
 		return false;
 	};
 
-	Registration.prototype.initHoverText = function() {
+	Registration.prototype.initToolTip = function() {
 		$('.build-area-wrapper .box-hover').powerTip({
 			fadeInTime: 0,
 			fadeOutTime:0,
 			intentPollInterval: 10,
-			placement: 's'
+			placement: 's',
+			manual: true
 		});
 	};
 
@@ -1030,7 +1030,7 @@
 			this.buildSkeleton();  //builds skeleton grid
 			this.buildBoxes();	//builds boxes if it finds some....
 			this.createLegendBox();
-			this.initHoverText();
+			this.initToolTip();
 		
 			$('.room-title-name').text(this.rooms[this.currentRoom].title);
 			$('.room-box-counter').text(this.rooms[this.currentRoom].boxes.length);
@@ -1445,6 +1445,13 @@
 				regScope.activeBoxArray.push($(this).attr('data-id'));
 				regScope.deleteBoxes();
 			}
+			if($(this).data('powertip') && leftButtonDown === false) {
+				$.powerTip.show($(this))
+			}
+		}).on('mouseleave', function() {
+			if($(this).data('powertip')) {
+				$.powerTip.hide();
+			}
 		}).each(function() {
 			if(reg.action == 2) {
 				$(this).removeClass('active-box');
@@ -1459,7 +1466,6 @@
 		});
 
 		box.appendTo('.build-area');  //fainally ad box to build-area
-		//regScope.addDraggableResisableListeners(true);
 	}
 
 	//this method is used for building already existing rooms. like when you change room. build old room
@@ -1500,8 +1506,15 @@
 					regScope.rooms[regScope.currentRoom].deleteBox($(this).attr('data-id'));
 				}	
 			}).on('mouseenter', function() {
-				if(regScope.action == 3 && leftButtonDown == true) {
+				if(regScope.action == 3 && leftButtonDown === true) {
 					regScope.rooms[regScope.currentRoom].deleteBox($(this).attr('data-id'));
+				}
+				if($(this).data('powertip') && leftButtonDown === false) {
+					$.powerTip.show($(this))
+				}
+			}).on('mouseleave', function() {
+				if($(this).data('powertip')) {
+					$.powerTip.hide();
 				}
 			}).appendTo('.build-area').each(function(){
 				if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister === true) {
@@ -1522,6 +1535,7 @@
 				}
 			});	//adds to dom
 		}
+		regScope.initToolTip();
 		regScope.addDraggableListeners();
 		regScope.addResisableListeners();
 	};
@@ -1531,9 +1545,6 @@
 			return true;
 		}
 		disableDrag = false;
-		console.log('Adding draggable listeners!');
-
-
 		var regScope = this;
 		var boxCollection = $('.build-area .drag-box'); 
 		var multiDragBoxes = null;
@@ -1709,10 +1720,8 @@
 		var regScope = this;
 
 		if($('.build-area-wrapper').hasClass('ui-selectable')) {
-			console.log('Skipping adding selectableScroll');
 			return true;
 		}
-		console.log('Adding selectableScroll');
 		
 		$('.build-area-wrapper').selectableScroll({
 			filter: ".drag-box",
