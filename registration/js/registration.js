@@ -371,7 +371,7 @@ SeatReg.prototype.paintRoomLegends = function() {
 	$('#legends .legend-div').on('click', function() {
 		var clickLegend = $(this).data('target-legend');
 		var legendBoxes = $('#boxes .box[data-leg='+ clickLegend +']');
-		
+
 		legendBoxes.css("--animationColor", legendBoxes.css('background-color'));
 		legendBoxes.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function() {
 			$(this).removeClass('legend-animation');
@@ -500,7 +500,7 @@ SeatReg.prototype.openSeatCart = function() {
 
 	if(selected == 0) {	
 		if(this.status == 'run') {
-			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('youCanAdd_') + this.spotName + translator.translate('_toCartClickTab') + '</p>');
+			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('selectingGuide') + '</p>');
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
 		}else {
@@ -585,9 +585,9 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 
 	if(arrLen > 1) {
 		if(this.gmailNeeded == 1) {
-			var primaryMail = $('<div style="text-align:center"><label class="field-label">'+ translator.translate('confWillBeSentTogmail') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
+			var primaryMail = $('<div style="text-align:center;margin-top:16px"><label class="field-label">'+ translator.translate('confWillBeSentTogmail') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}else {
-			var primaryMail = $('<div style="text-align:center"><label class="field-label">'+ translator.translate('confWillBeSentTo') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
+			var primaryMail = $('<div style="text-align:center;margin-top:16px"><label class="field-label">'+ translator.translate('confWillBeSentTo') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}
 		documentFragment.append(primaryMail);
 	}

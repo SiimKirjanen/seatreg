@@ -364,20 +364,22 @@
 					?>
 				</div>
 				<div id="checkout-input-area"></div>
-				<div id="captchaWrap">				
-					<label for="captcha-val" style="vertical-align:middle">
-						<span id="captcha-text">
-							<?php
-								_e('Enter code', 'seatreg');
-							?>:
-						</span>
-					</label>
-					<img src="php/image.php" id="captcha-img" alt="captcha image"/>
-					<div id="captcha-ref" class="refresh1">
-						<i class="fa fa-refresh"></i>
-					</div><br>
-					
-					<input type="text" id="captcha-val" name="capv" />				
+				<div id="captchaWrap">
+					<div style="justify-content:center">
+						<label for="captcha-val" style="vertical-align:middle">
+							<span id="captcha-text">
+								<?php
+									_e('Enter code', 'seatreg');
+								?>:
+							</span>
+						</label>
+						<img src="php/image.php" id="captcha-img" alt="captcha image"/>
+						<div id="captcha-ref" class="refresh1">
+							<i class="fa fa-refresh"></i>
+						</div><br>
+						
+						<input type="text" id="captcha-val" name="capv" />	
+					</div>
 				</div>
 				<button type="submit" id="checkout-confirm-btn" class="seatreg-btn green-btn">
 					<?php 

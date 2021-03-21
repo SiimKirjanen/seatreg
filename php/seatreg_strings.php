@@ -6,9 +6,9 @@ function seatreg_generate_registration_stringes() {
 	$translations->emailNotCorrect = __('Email address is not correct', 'seatreg');
 	$translations->wrongCaptcha = __('Wrong code!', 'seatreg');
 	$translations->somethingWentWrong = __('Something went wrong. Please try again', 'seatreg');
-	$translations->selectionIsEmpty = __('Booking is empty', 'seatreg');
+	$translations->selectionIsEmpty = __('Seat selection is empty', 'seatreg');
     $translations->youCanAdd_ = __('You can add ', 'seatreg');
-    $translations->_toCartClickTab = __(' to booking by clicking boxes', 'seatreg');
+    $translations->_toCartClickTab = __(' to selection by selecting boxes', 'seatreg');
 	$translations->toCartClickTab = __(' to selection by clicking/tabbing them', 'seatreg');
 	$translations->regClosedAtMoment = __('Registration is closed at the moment', 'seatreg');
 	$translations->confWillBeSentTo = __('Confirmation will be sent to:', 'seatreg');
@@ -39,6 +39,7 @@ function seatreg_generate_registration_stringes() {
     $translations->_seatsSelected = __(' seats selected', 'seatreg');
     $translations->bookingsConfirmed = __('You Bookings are confirmed', 'seatreg');
     $translations->bookingsConfirmedPending = __('Your bookings are now in pending state. Registration owner needs to confirm them', 'seatreg');
+    $translations->selectingGuide = __('Select a seat you want to add to booking');
 
 	return $translations;
 }

@@ -1062,7 +1062,7 @@ body {
 }
 #confirm-dialog-bottom {
 	text-align: center;
-	margin-top: 10px;
+	margin-top: 16px;
 }
 .green-btn:hover {
 	background-color: #51A816;
@@ -1078,8 +1078,9 @@ body {
 .confirm-dialog-mob-block {
 	margin-bottom: 10px;
 }
-.add-seat-text {
-	font-size: 20px;
+.add-seat-text h5{
+	font-size: 18px;
+	font-weight: normal;
 }
 
 .cart-item {
@@ -1186,6 +1187,7 @@ body {
 }
 .field-input {
 	display: block;
+	margin-top: 4px;
 }
 
 #checkoput-area-inner {
@@ -1199,7 +1201,7 @@ body {
 	color: red;
 }
 .checkout-header {
-	margin-bottom: 8px;
+	margin-bottom: 16px;
 	font-size: 16px;
 	font-weight: bold;
 }
@@ -1207,7 +1209,7 @@ body {
 	display: inline;
 }
 #checkout-confirm-btn {
-	margin-top: 10px;
+	margin-top: 16px;
 }
 #request-error {
 	display: none;
@@ -1301,7 +1303,9 @@ body {
 	margin-bottom: 12px;
 	font-weight: 700;
 }
-
+#seat-cart-info p {
+	font-weight: normal;
+}
 .dialog-box:before {
 	content: '';
 	display: inline-block;
@@ -1330,7 +1334,7 @@ body {
 .seatreg-btn {
 	display: inline-block;
 	cursor: pointer;
-	padding: 4px 6px;
+	padding: 4px 10px;
 	color: #fff;
 	border: 1px solid #000;
 	-webkit-border-radius: 3px;
@@ -1351,9 +1355,11 @@ body {
 	vertical-align: middle;
 }
 #captchaWrap {
-	margin-top: 5px;
+	margin: 10px 6px 0;
 	position: relative;
-	text-align: center;
+	text-align: left;
+	display: flex;
+	justify-content: center;
 }
 #captcha-ref {
 	
@@ -1376,6 +1382,7 @@ body {
 	vertical-align: middle;
 	width: 17px;
 	height: 30px;
+	cursor: pointer;
 }
 
 .flag1{
