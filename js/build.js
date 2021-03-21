@@ -1005,11 +1005,7 @@
 			this.showClickControls();
 			this.canOpenColor = true;
 			$('.palette-call').removeAttr('id');
-
-			if($('.build-area-wrapper').hasClass('ui-selectable')) {
-				$( ".build-area-wrapper" ).selectableScroll( "destroy" );
-			}
-
+			this.removeSelectableScroll();
 			$('#active-room').removeAttr('id');
 			element.attr('id','active-room');
 			$('#mouse-option-active').removeAttr('id');
@@ -1463,10 +1459,10 @@
 		});
 
 		box.appendTo('.build-area');  //fainally ad box to build-area
-		regScope.addDraggableResisableListeners(true);
+		//regScope.addDraggableResisableListeners(true);
 	}
 
-	//this method is used for building already existing rooms. like when you change room. build old ruum
+	//this method is used for building already existing rooms. like when you change room. build old room
 	Registration.prototype.buildBoxes = function() {
 		var regScope = this;
 
@@ -1526,10 +1522,18 @@
 				}
 			});	//adds to dom
 		}
-		regScope.addDraggableResisableListeners(false);
+		regScope.addDraggableListeners();
+		regScope.addResisableListeners();
 	};
 
-	Registration.prototype.addDraggableResisableListeners = function(disableDrag) {
+	Registration.prototype.addDraggableListeners = function() {
+		if(this.hasDraggableListeners()) {
+			return true;
+		}
+		disableDrag = false;
+		console.log('Adding draggable listeners!');
+
+
 		var regScope = this;
 		var boxCollection = $('.build-area .drag-box'); 
 		var multiDragBoxes = null;
@@ -1555,7 +1559,6 @@
 				}	
 			},
 			drag: function(event, ui) {
-
 				if(regScope.needMultiDrag) {
 					var currentLoc = $(this).position();
 					var prevLoc = $(this).data('prevLoc');
@@ -1608,7 +1611,34 @@
 				}
 			}
 		});
-		
+	};
+
+	Registration.prototype.hasDraggableListeners = function() {
+		if($('.build-area-wrapper .drag-box').hasClass("ui-draggable")) {
+			return true;
+		}
+
+		return false;
+	};
+
+	Registration.prototype.removeDraggableListeners = function() {
+		if(this.hasDraggableListeners()) {
+			$('.build-area-wrapper .drag-box').draggable("destroy");
+		}
+	};
+
+	Registration.prototype.disableDraggableListeners = function() {
+		if(this.hasDraggableListeners()) {
+			$('.build-area-wrapper .drag-box').draggable("option","disabled",false)
+		}
+	};
+
+	Registration.prototype.addResisableListeners = function(disableDrag) {
+		if(this.hasResizableListeners()) {
+			return true;
+		}
+		var regScope = this;
+		var boxCollection = $('.build-area .drag-box'); 
 		var autoHide = true;
 
 		if($('html').hasClass('touch')) {
@@ -1620,10 +1650,8 @@
 			handles: "n, e, s, w, ne, se, sw, nw",
 			disabled: disableDrag,
 			alsoResize: false,
-			//containment: ".build-area-wrapper",
-			
+
 			start: function(event, ui) {
-				
 				if(regScope.activeBoxArray.length == 0) {
 					$('.build-area .drag-box').resizable("option","alsoResize", false); 
 				}
@@ -1654,11 +1682,75 @@
 				}
 			} 
 		});
-		
+	};
 
-		if(regScope.action == 6) {
-			//with touch device disable all drag and resize
-			boxCollection.draggable("disable").resizable("disable");//disable drag and resize when speed creator tool
+	Registration.prototype.hasResizableListeners = function () {
+		var dragBoxes = $('.build-area-wrapper .drag-box');
+
+		if(dragBoxes.hasClass("ui-resizable")) {
+			return true;
+		}
+		return false;
+	};
+
+	Registration.prototype.removeResisableListeners = function() {
+		if(this.hasResizableListeners()) {
+			$('.build-area-wrapper .drag-box').resizable("destroy");
+		}
+	};
+
+	Registration.prototype.disableResisableListeners = function() {
+		if(this.hasResizableListeners()) {
+			$('.build-area-wrapper .drag-box').resizable("option","disabled",false);
+		}
+	};
+
+	Registration.prototype.addselectableScroll = function() {
+		var regScope = this;
+
+		if($('.build-area-wrapper').hasClass('ui-selectable')) {
+			console.log('Skipping adding selectableScroll');
+			return true;
+		}
+		console.log('Adding selectableScroll');
+		
+		$('.build-area-wrapper').selectableScroll({
+			filter: ".drag-box",
+			stop: function( event, ui ) {
+				//alsoResize: ".active-box",
+				$('.build-area .ui-selected').addClass('active-box').removeClass('ui-selected');
+
+				var bIndex = regScope.biggestzIndex();
+
+				$('.build-area .active-box').each(function() {
+					regScope.activeBoxArray.push($(this).attr('data-id'));
+					$(this).css({'zIndex':bIndex});
+				});
+
+				if($('.build-area .active-box').length > 1) {
+					$('.build-area .drag-box').resizable( "option", "alsoResize", ".active-box" );
+					regScope.needMultiDrag = true;
+				}else {
+					$('.build_area .drag-box').resizable( "option", "alsoResize", false );
+					regScope.needMultiDrag = false;
+				}
+
+				regScope.showClickControls();
+			},
+			start: function( event, ui ) {
+				regScope.activeBoxArray.length = 0;
+				$('.build-area .drag-box').removeClass('active-box');
+			},
+			scrollSnapX: 30,
+			scrollSnapY: 30,
+			scrollAmount: 6,
+			scrollIntervalTime: 100	
+		});
+	};
+
+	Registration.prototype.removeSelectableScroll = function() {
+		if($('.build-area-wrapper').hasClass('ui-selectable')) {
+			$( ".build-area-wrapper" ).selectableScroll( "destroy" ).removeClass('ui-selectable');
 		}
 	};
 
@@ -1685,90 +1777,42 @@
 
 		if(this.action == 1) { 			//normal mouse action
 			regScope.needMultiDrag = false;
-
 			$('.build-area-wrapper').attr('data-cursor','1');
-			//build-area-wrapper
-			//check if lasso is initialized and then remove it.
-			if($('.build-area-wrapper').hasClass('ui-selectable')) {
-				$( ".build-area-wrapper" ).selectableScroll( "destroy" );
-			}
-			
-			//restore draggable and resizable option on drag-box
-			$('.build-area-wrapper .drag-box').draggable("option","disabled",false).resizable( "option", "disabled", false );
+
+			regScope.removeSelectableScroll();		
+			regScope.addDraggableListeners();
+			regScope.addResisableListeners();
 			
 		}else if(this.action == 2) { 	//speed creator tool selected
 			$('.build-area-wrapper').attr('data-cursor','2');
-			//check if lasso is initialized and then remove it.
-			if($('.build-area-wrapper').hasClass('ui-selectable')) {
-				$( ".build-area-wrapper" ).selectableScroll( "destroy" );
-			}
-			
-			//console.log('disabling drag and resize');
-			$('.drag-box').draggable("disable").resizable("disable");//disable drag and resize when speed creator tool
-		}else if(this.action == 3) { //speed delete tool selected
-			//check if lasso is initialized and then remove it.
-			$('.build-area-wrapper').attr('data-cursor','4');
-	
-			if($('.build-area-wrapper').hasClass('ui-selectable')) {
-				$( ".build-area-wrapper" ).selectableScroll( "destroy" );
-			}
 
-			$('.drag-box').draggable("disable").resizable("disable");	//disable drag and resize when speed delete tool
+			regScope.removeSelectableScroll();	
+			regScope.removeDraggableListeners();
+			regScope.removeResisableListeners();
+
+		}else if(this.action == 3) { //speed delete tool selected
+			$('.build-area-wrapper').attr('data-cursor','4');
+
+			regScope.removeSelectableScroll();	
+			regScope.removeDraggableListeners();
+			regScope.removeResisableListeners();
 			
 		}else if(this.action == 4) {	//lasso tool selected
 			$('.build-area-wrapper').attr('data-cursor','5');
-			$('.drag-box').draggable("option","disabled",false).resizable("option","disabled",false);	//disable drag and resize when lasso tool .draggable("disable")
-		
-			//initialize selectable 
-			$('.build-area-wrapper').selectableScroll({
-		 			selecting: function( event, ui ) {
-		 				
-		 			},
-		 			filter: ".drag-box",
-		 			stop: function( event, ui ) {
-		 				//alsoResize: ".active-box",
-		 				$('.build-area .ui-selected').addClass('active-box').removeClass('ui-selected');
 
-		 				var bIndex = regScope.biggestzIndex();
-
-		 				$('.build-area .active-box').each(function() {
-		 					regScope.activeBoxArray.push($(this).attr('data-id'));
-		 					$(this).css({'zIndex':bIndex});
-		 				});
-
-		 				if($('.build-area .active-box').length > 1) {
-		 					$('.build-area .drag-box').resizable( "option", "alsoResize", ".active-box" );
-		 					regScope.needMultiDrag = true;
-		 				}else {
-		 					$('.build_area .drag-box').resizable( "option", "alsoResize", false );
-		 					regScope.needMultiDrag = false;
-		 				}
-
-		 				regScope.showClickControls();
-		 			},
-		 			start: function( event, ui ) {
-		 				regScope.activeBoxArray.length = 0;
-		 				$('.build-area .drag-box').removeClass('active-box');
-		 			},
-		 			scrollSnapX: 30,
-		 			scrollSnapY: 30,
-		 			scrollAmount: 6,
-		 			scrollIntervalTime: 100	
-		 	});
+			regScope.addDraggableListeners();
+			regScope.addResisableListeners();
+			regScope.addselectableScroll();
 		}else if(this.action == 5) {  //normal box creation tool
 			$('.build-area-wrapper').attr('data-cursor','3');
 
-			if($('.build-area-wrapper').hasClass('ui-selectable')) {
-				$( ".build-area-wrapper" ).selectableScroll( "destroy" );
-			}
-			$('.drag-box').draggable("disable").resizable("disable");	//disable drag and resize when speed delete tool
+			regScope.removeSelectableScroll();	
+			regScope.removeDraggableListeners();
+			regScope.removeResisableListeners();
 		}else if(this.action == 6) {  //in touch devices, move around tool
-
-			if($('.build-area-wrapper').hasClass('ui-selectable')) {
-				$( ".build-area-wrapper" ).selectableScroll( "destroy" );
-			}
-
-			$('.drag-box').draggable("disable").resizable("disable");
+			regScope.addselectableScroll();
+			regScope.removeDraggableListeners();
+			regScope.removeResisableListeners();
 		}
 	};
 
