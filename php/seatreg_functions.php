@@ -60,6 +60,13 @@ function seatreg_nonce_check() {
 	}
 }
 
+//capability check
+function seatreg_check_user_capabilities() {
+	if( !current_user_can('manage_options') ) {	
+		wp_die('You are not allowed to do this');	
+	}
+}
+
 /*
 ==================================================================================================================================================================================================================
 Generating HTML stuff
@@ -1710,6 +1717,7 @@ function seatreg_update() {
 //handle settings form submit
 add_action('admin_post_seatreg-form-submit', 'seatreg_form_submit_handle'); 
 function seatreg_form_submit_handle() {
+	seatreg_check_user_capabilities();
 	check_admin_referer('seatreg-options-submit', 'seatreg-options-nonce');
 
 	if( seatreg_update() === false) {
@@ -1727,20 +1735,21 @@ Ajax stuff
 ====================================================================================================================================================================================
 */
 
-function seatreg_check_ajax_credentials() {	
+function seatreg_ajax_security_check() {
+	seatreg_check_user_capabilities();
+	seatreg_check_ajax_nonce();
+}
+
+function seatreg_check_ajax_nonce() {	
 	if( !check_ajax_referer('seatreg-admin-nonce', 'security') ) {	
 		return wp_send_json_error( 'Nonce error' );	
-		wp_die();	
-	}	
-	if( !current_user_can('manage_options') ) {	
-		return wp_send_json_error( 'You are not allowed to do this' );	
 		wp_die();	
 	}	
 }
 
 add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_layout_and_bookings');
 function seatreg_get_registration_layout_and_bookings() {
-	seatreg_check_ajax_credentials();
+	seatreg_ajax_security_check();
 
 	$registration = seatreg_get_registration_data($_POST['code']);
 	$bookings = seatreg_get_registration_bookings($_POST['code']);
@@ -1756,7 +1765,7 @@ function seatreg_get_registration_layout_and_bookings() {
 
 add_action('wp_ajax_seatreg_update_layout', 'seatreg_update_layout');
 function seatreg_update_layout() {
-	seatreg_check_ajax_credentials();
+	seatreg_ajax_security_check();
 	
 	global $wpdb;
 	global $seatreg_db_table_names;
@@ -1842,7 +1851,7 @@ function seatreg_booking_submit_callback() {
 
 add_action( 'wp_ajax_seatreg_get_room_stats', 'seatreg_get_room_stats_callback' );
 function seatreg_get_room_stats_callback() {
-	seatreg_check_ajax_credentials();
+	seatreg_ajax_security_check();
 
 	seatreg_generate_overview_section_html($_POST['data'], $_POST['code']);
 
@@ -1860,7 +1869,7 @@ function seatreg_new_captcha_callback() {
 
 add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_callback' );
 function seatreg_get_booking_manager_callback() {
-	seatreg_check_ajax_credentials();
+	seatreg_ajax_security_check();
 	seatreg_generate_booking_manager_html($_POST['code'], $_POST['data']['orderby'], $_POST['data']['searchTerm'] );
 
 	die();
@@ -1868,7 +1877,7 @@ function seatreg_get_booking_manager_callback() {
 
 add_action( 'wp_ajax_seatreg_confirm_del_bookings', 'seatreg_confirm_del_bookings_callback' );
 function seatreg_confirm_del_bookings_callback() {
-	seatreg_check_ajax_credentials();
+	seatreg_ajax_security_check();
 
 	$data = json_decode( stripslashes_deep($_POST['data']['actionData']) );
 	$statusArray = seatreg_validate_del_conf_booking($_POST['code'], $data);
@@ -1917,7 +1926,7 @@ function seatreg_confirm_del_bookings_callback() {
 
 add_action( 'wp_ajax_seatreg_search_bookings', 'seatreg_search_bookings_callback' );
 function seatreg_search_bookings_callback() {
-	seatreg_check_ajax_credentials();
+	seatreg_ajax_security_check();
 	$order = 'date';
 	$searchTerm = '';
 
@@ -1935,7 +1944,7 @@ function seatreg_search_bookings_callback() {
 
 add_action( 'wp_ajax_seatreg_edit_booking', 'seatreg_edit_booking_callback' );
 function seatreg_edit_booking_callback() {
-	seatreg_check_ajax_credentials();
+	seatreg_ajax_security_check();
 
 	$bookingEdit = new stdClass();
 	$bookingEdit->firstName = $_POST['fname'];
@@ -1974,7 +1983,7 @@ function seatreg_edit_booking_callback() {
 
 add_action( 'wp_ajax_seatreg_upload_image', 'seatreg_upload_image_callback' );
 function seatreg_upload_image_callback() {
-	seatreg_check_ajax_credentials();
+	seatreg_ajax_security_check();
 
 	$resp = new JsonResponse();
 
@@ -2050,7 +2059,7 @@ function seatreg_upload_image_callback() {
 
 add_action( 'wp_ajax_seatreg_remove_img', 'seatreg_remove_img_callback' );
 function seatreg_remove_img_callback() {
-	seatreg_check_ajax_credentials();
+	seatreg_ajax_security_check();
 
 	$resp = new JsonResponse();
 
