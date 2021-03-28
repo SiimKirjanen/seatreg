@@ -16,7 +16,8 @@ if(!isset($_GET['s1']) && isset($_GET['s2'])) {
 }
 
 if(empty($_GET['zone'])) {
-	echo 'Timezone is missing';
+	esc_html_e('Timezone is missing', 'seatreg');
+
 	exit();
 }
 
@@ -35,9 +36,9 @@ function customFieldWithValueXlsx($label, $custom_data) {
 	for($k = 0; $k < $cust_len; $k++) {
 		if($custom_data[$k]['label'] == $label) {
 			if($custom_data[$k]['value'] === true) {
-				$string = __('Yes', 'seatreg');
+				$string = esc_html__('Yes', 'seatreg');
 			}else if($custom_data[$k]['value'] === false) {
-				$string = __('No', 'seatreg');
+				$string = esc_html__('No', 'seatreg');
 			}else {
 				$string = $custom_data[$k]['value'];
 			}
@@ -48,7 +49,7 @@ function customFieldWithValueXlsx($label, $custom_data) {
 	}
 
 	if(!$foundIt) {
-		$string = 'not set';
+		$string = esc_html__(' not set', 'seatreg');
 	}
 
 	return $string;
@@ -70,7 +71,11 @@ $UTC = new DateTimeZone("UTC");
 try {
 	$newTZ = new DateTimeZone($_GET['zone']);
 }catch(Exception $e) {
-	echo 'Cant generate PDF because of Unknown or bad timezone (', $_GET['zone'], ')';
+	printf(
+		esc_html('Can\'t generate XLSX because of Unknown or bad timezone (%s)'),
+		esc_html($_GET['zone'])
+	);
+
 	exit();
 }
 
@@ -82,7 +87,7 @@ for($i=0;$i<$regLen;$i++) {
 	$status = ($registrations[$i]->status === "2") ? "Approved" : "Pending";
 	$date = new DateTime($registrations[$i]->booking_date, $UTC );
 	$date->setTimezone( $newTZ );
-	$registretionData = array($registrations[$i]->seat_nr, $registrations[$i]->room_name, $registrations[$i]->first_name . ' ' . $registrations[$i]->last_name,  $registrations[$i]->email, $date->format('Y-M-d H:i:s'), $status);
+	$registretionData = array(esc_html($registrations[$i]->seat_nr), esc_html($registrations[$i]->room_name), esc_html($registrations[$i]->first_name) . ' ' . esc_html($registrations[$i]->last_name),  esc_html($registrations[$i]->email), $date->format('Y-M-d H:i:s'), $status);
 
 	if($status =='Approved') {
 		$date = new DateTime($registrations[$i]->booking_confirm_date, $UTC );
@@ -99,7 +104,7 @@ for($i=0;$i<$regLen;$i++) {
 	$data[] = $registretionData;
 }
 
-$filename =  $projectName . ' ' . $currentDate->format('Y-M-d') . ".xlsx";
+$filename =  esc_html($projectName) . ' ' . $currentDate->format('Y-M-d') . ".xlsx";
 header('Content-disposition: attachment; filename="'.XLSXWriter::sanitize_filename($filename).'"');
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 header('Content-Transfer-Encoding: binary');

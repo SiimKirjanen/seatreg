@@ -22,7 +22,7 @@ class Booking {
     	$seatsString = '';
 
     	for($i = 0; $i < $dataLen; $i++) {
-    		$seatsString .= 'Seat nr: <b>' . $this->_bookings[$i]->seat_nr . '</b> from room: <b>' . $this->_bookings[$i]->room_name . '</b><br/>'; 
+    		$seatsString .= 'Seat nr: <b>' . esc_html($this->_bookings[$i]->seat_nr) . '</b> from room: <b>' . esc_html($this->_bookings[$i]->room_name) . '</b><br/>'; 
 		}
 		
     	return $seatsString;
@@ -44,7 +44,7 @@ class Booking {
 		for($i = 0; $i < $bookingsLength; $i++) {
 			for($j = 0; $j < $bookedBookingsLength; $j++) {
 				if($this->_bookings[$i]->seat_id == $bookedBookings[$j]->seat_id) {
-					$statusReport = 'Seat <b>'. $this->_bookings[$i]->seat_nr . '</b> in room <b>' . $this->_bookings[$i]->room_name . '</b > is already confirmed.';
+					$statusReport = 'Seat <b>'. esc_html($this->_bookings[$i]->seat_nr) . '</b> in room <b>' . esc_html($this->_bookings[$i]->room_name) . '</b > is already confirmed.';
 
 					break 2;
 				}
@@ -56,6 +56,7 @@ class Booking {
 
 	protected function seatsLimitCheck() {
 		if(count($this->_bookings) > $this->_maxSeats) {
+
 			return false;
 		}
 
@@ -107,20 +108,24 @@ class Booking {
 			}//end of room loop
 
 			if($searchStatus == 'room-searching') {
-				$status = 'Room '. $this->_bookings[$i]->room_name . ' was not found';
+				$status = 'Room '. esc_html($this->_bookings[$i]->room_name) . ' was not found';
 				$allCorrect = false;
+
 				break;
 			}else if($searchStatus == 'seat-searching') {
-				$status = 'id '. $this->_bookings[$i]->seat_id . ' was not found';
+				$status = 'id '. esc_html($this->_bookings[$i]->seat_id) . ' was not found';
 				$allCorrect = false;
+
 				break;
 			}else if($searchStatus == 'seat-nr-check') {
-				$status = 'id '. $this->_bookings[$i]->seat_nr . ' number was not correct';
+				$status = 'id '. esc_html($this->_bookings[$i]->seat_nr) . ' number was not correct';
 				$allCorrect = false;
+
 				break;
 			}else if($searchStatus == 'seat-taken') {
-				$status = 'id '. $this->_bookings[$i]->seat_id . ' is not available';
+				$status = 'id '. esc_html($this->_bookings[$i]->seat_id) . ' is not available';
 				$allCorrect = false;
+				
 				break;
 			}
 

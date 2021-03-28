@@ -17,7 +17,8 @@ if(!isset($_GET['s1']) && isset($_GET['s2'])) {
 }
 
 if(empty($_GET['zone'])) {
-	echo 'Timezone is missing';
+	esc_html_e('Timezone is missing', 'seatreg');
+
 	exit();
 }
 
@@ -33,7 +34,11 @@ $UTC = new DateTimeZone("UTC");
 try {
 	$newTZ = new DateTimeZone($_GET['zone']);
 }catch(Exception $e) {
-	echo 'Cant generate PDF because of Unknown or bad timezone (', $_GET['zone'], ')';
+	printf(
+		esc_html('Can\'t generate text because of Unknown or bad timezone (%s)'),
+		esc_html($_GET['zone'])
+	);
+
 	exit();
 }
 
@@ -41,7 +46,7 @@ $currentDate = new DateTime(null, $UTC);
 $currentDate->setTimezone( $newTZ );
 
 header("Content-type: text/plain");
-header('Content-Disposition: attachment; filename="'.$projectName.' '.$currentDate->format('Y-M-d').'.txt"');
+header('Content-Disposition: attachment; filename="'. esc_html($projectName) .' '.$currentDate->format('Y-M-d').'.txt"');
 
 function customFieldWithValueText($label, $custom_data) {
 	$cust_len = count($custom_data);
@@ -50,20 +55,20 @@ function customFieldWithValueText($label, $custom_data) {
 
 	for($k = 0; $k < $cust_len; $k++) {
 		if($custom_data[$k]['label'] == $label) {
-			$string .= $custom_data[$k]['value'];
+			$string .= esc_html($custom_data[$k]['value']);
 			$foundIt = true;
 			break;
 		}
 	}
 
 	if(!$foundIt) {
-		$string .= ' not set';
+		$string .= esc_html__(' not set', 'seatreg');
 	}
 
 	return $string;
 }
 
-echo $projectName, " bookings\r\n", 'Date: ', $currentDate->format('Y-M-d H:i:s'), "\r\n\r\n";
+echo esc_html($projectName), " bookings\r\n", 'Date: ', $currentDate->format('Y-M-d H:i:s'), "\r\n\r\n";
 
 echo 'NR, Room, Name, Registration date, Status', "\r\n\r\n";
 
@@ -73,7 +78,7 @@ for($i=0;$i<$regLen;$i++) {
 	$date = new DateTime($registrations[$i]->booking_date, $UTC );
 	$date->setTimezone( $newTZ );
 
-	echo $registrations[$i]->seat_nr, ', ',$registrations[$i]->room_name, ', ',$registrations[$i]->first_name, ' ',$registrations[$i]->last_name,', ', $date->format('Y-M-d H:i:s'), ', ', $status, "\r\n";
+	echo esc_html($registrations[$i]->seat_nr), ', ', esc_html($registrations[$i]->room_name), ', ', esc_html($registrations[$i]->first_name), ' ', esc_html($registrations[$i]->last_name),', ', $date->format('Y-M-d H:i:s'), ', ', $status, "\r\n";
 
 	for($j = 0; $j < $customFieldsCount; $j++) {
 		echo customFieldWithValueText($customFields[$j]['label'], $registrantCustomData), "\r\n\r\n";

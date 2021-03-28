@@ -22,7 +22,8 @@ if(!isset($_GET['s1']) && isset($_GET['s2'])) {
 }
 
 if(empty($_GET['zone'])) {
-	echo 'Timezone is missing';
+	esc_html_e('Timezone is missing', 'seatreg');
+
 	exit();
 }
 
@@ -31,9 +32,14 @@ $UTC = new DateTimeZone("UTC");
 try {
 	$newTZ = new DateTimeZone($_GET['zone']);
 }catch(Exception $e) {
-	echo 'Cant generate PDF because of Unknown or bad timezone (', $_GET['zone'], ')';
+	printf(
+		esc_html('Can\'t generate PDF because of Unknown or bad timezone (%s)'),
+		esc_html($_GET['zone'])
+	);
+
 	exit();
 }
+
 $currentDate = new DateTime(null, $UTC);
 $currentDate->setTimezone( $newTZ );
 
@@ -53,11 +59,11 @@ function customFieldWithValuePDF($label, $custom_data) {
 	for($k = 0; $k < $cust_len; $k++) {
 		if($custom_data[$k]['label'] == $label) {
 			if($custom_data[$k]['value'] === true) {
-				$string .= __('Yes', 'seatreg');
+				$string .= esc_html__('Yes', 'seatreg');
 			}else if($custom_data[$k]['value'] === false) {
-				$string .= __('No', 'seatreg');
+				$string .= esc_html__('No', 'seatreg');
 			}else {
-				$string .= $custom_data[$k]['value'];
+				$string .= esc_html($custom_data[$k]['value']);
 			}
 			$foundIt = true;
 
@@ -66,7 +72,7 @@ function customFieldWithValuePDF($label, $custom_data) {
 	}
 
 	if(!$foundIt) {
-		$string .= ' not set';
+		$string .= esc_html__(' not set', 'seatreg');
 	}
 
 	return $string;
@@ -89,7 +95,11 @@ class PDF extends tFPDF {
 		try {
 			$newTZ = new DateTimeZone($_GET['zone']);
 		}catch(Exception $e) {
-			echo 'Cant generate PDF because of Unknown or bad timezone (', $_GET['zone'], ')';
+			printf(
+				esc_html('Can\'t generate PDF because of Unknown or bad timezone (%s)'),
+				esc_html($_GET['zone'])
+			);
+
 			exit(); 
 		}
 
@@ -113,11 +123,11 @@ class PDF extends tFPDF {
 }
 
 // Instanciation of inherited class
-$title = $projectName . ' ' . $currentDate->format('Y-M-d');
+$title = esc_html($projectName . ' ' . $currentDate->format('Y-M-d'));
 $pdf = new PDF();
 $pdf->SetTitle( $title );
 $pdf->SetAuthor('SeatReg WordPress');
-$pdf->AddFont('DejaVu','','DejaVuSansCondensed.ttf',true);
+$pdf->AddFont('DejaVu','','DejaVuSansCondensed.ttf', true);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('DejaVu','U',12);
@@ -136,7 +146,11 @@ $UTC = new DateTimeZone("UTC");
 try {
 	$newTZ = new DateTimeZone($_GET['zone']);
 }catch(Exception $e) {
-	echo 'Cant generate PDF because of Unknown or bad timezone (', $_GET['zone'], ')';
+	printf(
+		esc_html('Can\'t generate PDF because of Unknown or bad timezone (%s)'),
+		esc_html($_GET['zone'])
+	);
+
 	exit();
 }
 
@@ -144,17 +158,17 @@ for($i=0;$i<$regLen;$i++) {
 	$registrantCustomData = json_decode($registrations[$i]->custom_field_data, true);
 	$status = ($registrations[$i]->status === "2") ? "Approved" : "Pending";
 
-	$pdf->Cell(20,10,$registrations[$i]->seat_nr,0,0,'C');
+	$pdf->Cell(20,10, esc_html($registrations[$i]->seat_nr),0,0,'C');
 	$pdf->Cell(6);
-	$pdf->Cell(40,10,$registrations[$i]->room_name,0,0,'C');
+	$pdf->Cell(40,10, esc_html($registrations[$i]->room_name),0,0,'C');
 
 	$date = new DateTime($registrations[$i]->booking_date, $UTC );
 	$date->setTimezone( $newTZ );
 
 	$pdf->Cell(40,10,$date->format('Y-M-d H:i:s'),0,0,'C');
-	$pdf->Cell(40,10,$registrations[$i]->email,0,0,'C');
+	$pdf->Cell(40,10, esc_html($registrations[$i]->email),0,0,'C');
 	$pdf->Cell(40,10,$status,0,1,'C');
-	$pdf->Cell(80,10,'Name: ' . $registrations[$i]->first_name . ' ' . $registrations[$i]->last_name,0,1);
+	$pdf->Cell(80,10,'Name: ' . esc_html($registrations[$i]->first_name) . ' ' . esc_html($registrations[$i]->last_name),0,1);
 
 	if($status =='Approved') {
 		$date = new DateTime($registrations[$i]->booking_confirm_date, $UTC );
