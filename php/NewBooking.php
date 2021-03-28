@@ -38,7 +38,7 @@ class NewBooking extends Booking {
 		) );
 
 		if(count($rows) == 0) {
-			$this->reply = __('This booking is already confirmed/expired/deleted', 'seaterg');
+			$this->reply = esc_html__('This booking is already confirmed/expired/deleted', 'seaterg');
 			$this->_valid = false;
 		}else {
 			$roomData = json_decode($registration->registration_layout)->roomData;
@@ -66,16 +66,16 @@ class NewBooking extends Booking {
 		);
 
 		if($this->_insertState == 1) {
-			_e('You booking is now in pending state. Registration owner must approve it', 'seatreg');
+			esc_html_e('You booking is now in pending state. Registration owner must approve it', 'seatreg');
 			echo '.<br><br>';
 		}else {
-			_e('You booking is now confirmed', 'seatreg');
+			esc_html_e('You booking is now confirmed', 'seatreg');
 			echo '<br><br>';
 		}
 		$bookingCheckURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 		printf(
-			__('You can look your booking at %s', 'seatreg'), 
-			"<a href='$bookingCheckURL'>$bookingCheckURL</a>"
+			esc_html__('You can look your booking at %s', 'seatreg'), 
+			esc_html("<a href='$bookingCheckURL'>$bookingCheckURL</a>")
 		);
 
 		if($this->_sendNewBookingNotificationEmail) {
@@ -88,7 +88,8 @@ class NewBooking extends Booking {
 		$this->getNotConfirmedBookings();
 
 		if(!$this->_valid) {
-			echo $this->reply;
+			esc_html_e($this->reply);
+
 			return;
 		}
 
@@ -97,38 +98,44 @@ class NewBooking extends Booking {
 		//1 step
 		//Selected seat limit check
 		if(!$this->seatsLimitCheck()) {
-			_e('Error. Seat limit exceeded', 'seatreg');
+			esc_html_e('Error. Seat limit exceeded', 'seatreg');
+
 			return;
 		}
 
 		//2 step. Does confirmation code exists? Is booking already confirmed?
 		if(!$this->_valid) {
-			echo $this->reply;
+			esc_html_e($this->reply);
+
 			return;
 		}
 		
 		//3 step. Is registtration open?
 		if(!$this->_isRegistrationOpen) {
-			_e('Registration is closed at the moment', 'seaterg');
+			esc_html_e('Registration is closed at the moment', 'seaterg');
+
 			return;
 		}
 		$registrationTimeCheck = seatreg_registration_time_status($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
 		if($registrationTimeCheck != 'run') {
-			_e('Registration is not open', 'seatreg');
+			esc_html_e('Registration is not open', 'seatreg');
+
 			return;
 		}
 
 		//4 step. Check if all selected seats are ok
 		$seatsStatusCheck = $this->doSeatsExistInRegistrationLayoutCheck();
 		if($seatsStatusCheck != 'ok') {
-			echo $seatsStatusCheck;
+			esc_html_e($seatsStatusCheck);
+
 			return;
 		}
 
 		//5 step. Check if seat/seats is already bron or taken
 		$seatsOpenCheck = $this->isAllSelectedSeatsOpen(); 
 		if($seatsOpenCheck != 'ok') {
-			echo $seatsOpenCheck;
+			esc_html_e($seatsOpenCheck);
+
 			exit();
 		}	
 

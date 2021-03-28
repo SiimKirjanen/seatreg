@@ -16,7 +16,9 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
-	<title>Booking confirm</title>
+	<title>
+		<?php esc_html_e('Booking confirm', 'seatreg'); ?>
+	</title>
 </head>
 <body>
 	<div>

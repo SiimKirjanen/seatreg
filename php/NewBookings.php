@@ -74,6 +74,7 @@ class NewBookings extends Booking {
 		$customFieldsReg = '/^\[(\[({"label":["\s\p{L}]{1,30},"value":["\s\p{L}]{1,50}},?){0,6}\],?){1,' . $this->_maxSeats .'}\]$/u';
 
 		if( !preg_match($customFieldsReg, $customFields) ) {
+
 			return false;
 		}
 
@@ -113,6 +114,7 @@ class NewBookings extends Booking {
 		$seatsStatusCheck = $this->doSeatsExistInRegistrationLayoutCheck();
 		if($seatsStatusCheck != 'ok') {
 			$this->response->setError($seatsStatusCheck);
+
 			return;
 		}
 
@@ -122,6 +124,7 @@ class NewBookings extends Booking {
 
 			if(!preg_match($gmailReg, $this->_bookerEmail)) {
 				$this->response->setError(__('Gmail needed!', 'seatreg'));
+
 				return;
 			}
 		}
@@ -129,12 +132,14 @@ class NewBookings extends Booking {
 		//5.step. Time check. is registration open.
 		if ($this->_isRegistrationOpen == false) {
 			$this->response->setError(__('Registration is closed', 'seatreg'));
+
 			return;
 		}
 
 		$registrationTime = seatreg_registration_time_status($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
 		if($registrationTime != 'run') {
 			$this->response->setError(__('Registration is not open', 'seatreg'));
+
 			return;
 		}
 
@@ -142,6 +147,7 @@ class NewBookings extends Booking {
 		$bookStatus = $this->isAllSelectedSeatsOpen(); 
 		if($bookStatus != 'ok') {
 			$this->response->setError($bookStatus);
+
 			return;
 		}
 
@@ -162,6 +168,7 @@ class NewBookings extends Booking {
 				array_push($seatIds, $this->_bookings[$i]->seat_id);
 			}else {
 				$this->_isValid = false;
+
 				break;
 			}
 		}
@@ -210,13 +217,13 @@ class NewBookings extends Booking {
 			if($this->_requireBookingEmailConfirm) {
 				seatreg_change_captcha(3);
 				$confirmationURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_confirm.php?confirmation-code='. $confCode;
-				$message = __('Your selected seats are', 'seatreg') . ': <br/><br/>' . $seatsString . '
-							<p>' . __('Click on the link below to confirm your booking', 'seatreg') . '</p>
-							<a href="' .  $confirmationURL .'" >'. $confirmationURL .'</a><br/>
-							('. __('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>
-							' .__('After confirmation you can look your booking at', 'seatreg') . '<br> <a href="'. $bookingCheckURL .'" >'. $bookingCheckURL .'</a>';
+				$message = esc_html__('Your selected seats are', 'seatreg') . ': <br/><br/>' . esc_html($seatsString) . '
+							<p>' . esc_html__('Click on the link below to confirm your booking', 'seatreg') . '</p>
+							<a href="' .  esc_attr($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
+							('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>
+							' . esc_html__('After confirmation you can look your booking at', 'seatreg') . '<br> <a href="'. esc_attr($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) .'</a>';
 				$adminEmail = get_option( 'admin_email' );
-				$mailSent = wp_mail($this->_bookerEmail, __('Booking confirmation', 'seatreg'), $message, array(
+				$mailSent = wp_mail($this->_bookerEmail, esc_html__('Booking confirmation', 'seatreg'), $message, array(
 					"Content-type: text/html",
 					"FROM: $adminEmail"
 				));
@@ -224,7 +231,7 @@ class NewBookings extends Booking {
 				if($mailSent) {
 					$this->response->setText('mail');
 				}else {
-					$this->response->setError(__('Oops.. the system encountered a problem while sending out confirmation email', 'seatreg'));
+					$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out confirmation email', 'seatreg'));
 				}
 				
 			}else {

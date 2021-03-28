@@ -30,12 +30,14 @@ Useful functions
 //for bookings pdf, xlsx adn text files. Do view those files you need to be logged in and have permissions
 function seatreg_bookings_is_user_logged_in() {
 	if( !is_user_logged_in() ) {
-		_e('Please log in to view this area', 'seatreg');
+		esc_html_e('Please log in to view this area', 'seatreg');
+
 		exit();
 	}
 
 	if( !current_user_can('manage_options') ) {
-		_e('No permissions', 'seatreg');
+		esc_html_e('No permissions', 'seatreg');
+
 		exit();
 	}
 }
@@ -105,31 +107,35 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 	?>
 
 	  		<?php echo '<div class="reg-overview" id="existing-regs">';?>
-	  			<input type="hidden" id="seatreg-reg-code" value="<?php echo $registration->registration_code; ?>"/>
+	  			<input type="hidden" id="seatreg-reg-code" value="<?php esc_attr_e($registration->registration_code); ?>"/>
 
 				<?php echo '<div class="reg-overview-top">';?>
-
 	  				<?php 
 	  					if($targetRoom == 'overview') {
-	  						echo "<div class='reg-overview-top-header'>$project_name</div>"; 
+							echo '<div class="reg-overview-top-header">';
+								esc_html_e($project_name); 
+							echo '</div>'; 
 	  					}else {
-	  						echo "<div class='reg-overview-top-header'>$targetRoom</div>"; 
+							echo '<div class="reg-overview-top-header">';
+								esc_html_e($targetRoom); 
+							echo '</div>';
 	  					}
 	  				?>
 
-					<?php 
+					<?php
 						if($targetRoom == 'overview') {
 							echo "<div class='reg-overview-top-bron-notify'>";
-								echo $regStats['bronSeats'],' ', __('pending seats', 'seatreg'), '!';
+								echo esc_html($regStats['bronSeats']),' ', esc_html__('pending seats', 'seatreg'), '!';
 							echo '</div>';
 						}else {
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
 								if($regStats['roomsInfo'][$i]['roomName'] == $targetRoom) {
 									echo '<div class="reg-overview-top-bron-notify">';
-										echo $regStats['roomsInfo'][$i]['roomBronSeats'],' ', __('pending seats', 'seatreg'), '!';
+										echo esc_html($regStats['roomsInfo'][$i]['roomBronSeats']),' ', esc_html__('pending seats', 'seatreg'), '!';
 									echo '</div>'; 
 									
 									$roomLoactionInStats = $i;
+
 									break;
 								}
 							}
@@ -137,8 +143,9 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					?>
 
 					<?php 
-						$start = __('Start date not set', 'seatreg');
-						$end = __('End date not set', 'seatreg');
+						$start = esc_html__('Start date not set', 'seatreg');
+						$end = esc_html__('End date not set', 'seatreg');
+
 						if(!empty($start_date)) {
 							$start = $start_date;
 						}
@@ -155,16 +162,14 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 				<?php echo '<div class="reg-overview-aside">';?>
 
 					<ul class="room-list">
-
-						<li class="room-list-item first-item" <?php if($targetRoom == 'overview') { echo 'data-active="true"';} ?> data-stats-target="overview"><?php _e('Overall', 'seatreg'); ?> </li>
+						<li class="room-list-item first-item" <?php if($targetRoom == 'overview') { echo 'data-active="true"';} ?> data-stats-target="overview"><?php esc_html_e('Overall', 'seatreg'); ?> </li>
 
 						<?php
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
-
 								if($regStats['roomsInfo'][$i]['roomName'] != $targetRoom) {
-									echo '<li class="room-list-item" data-stats-target="',$regStats['roomsInfo'][$i]['roomName'],'">', htmlspecialchars($regStats['roomsInfo'][$i]['roomName']),'</li>';
+									echo '<li class="room-list-item" data-stats-target="', esc_attr($regStats['roomsInfo'][$i]['roomName']),'">', esc_html($regStats['roomsInfo'][$i]['roomName']),'</li>';
 								}else {
-									echo '<li class="room-list-item" data-active="true" data-stats-target="',$regStats['roomsInfo'][$i]['roomName'],'">', htmlspecialchars($regStats['roomsInfo'][$i]['roomName']),'</li>';
+									echo '<li class="room-list-item" data-active="true" data-stats-target="', esc_attr($regStats['roomsInfo'][$i]['roomName']),'">', esc_html($regStats['roomsInfo'][$i]['roomName']),'</li>';
 								}
 							}	
 						?>
@@ -175,53 +180,61 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 
 				<?php echo '<div class="reg-overview-middle">';?>
 					<div class="overview-middle-box">
-						<div class="overview-middle-box-h"><?php _e('Seats', 'seatreg'); ?></div>
+						<div class="overview-middle-box-h">
+							<?php esc_html_e('Seats', 'seatreg'); ?>
+						</div>
 						<div class="overview-middle-box-stat">
 							<?php 
 								if($targetRoom == 'overview') {
-									echo $regStats['seatsTotal'];
+									echo esc_html($regStats['seatsTotal']);
 								}else if($roomLoactionInStats >= 0) {
-									echo $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'];
+									echo esc_html($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']);
 								}
 							?>
 						</div>	
 					</div>
 
 					<div class="overview-middle-box">
-						<div class="overview-middle-box-h"><?php _e('Open', 'seatreg'); ?></div>
+						<div class="overview-middle-box-h">
+							<?php esc_html_e('Open', 'seatreg'); ?>
+						</div>
 						<div class="overview-middle-box-stat">
 							<?php 
 								if($targetRoom == 'overview') {
-									echo $regStats['openSeats']; 
+									echo esc_html($regStats['openSeats']); 
 
 								}else if($roomLoactionInStats >= 0) {
-									echo $regStats['roomsInfo'][$roomLoactionInStats]['roomOpenSeats'];
+									echo esc_html($regStats['roomsInfo'][$roomLoactionInStats]['roomOpenSeats']);
 								}
 							?>
 						</div>	
 					</div>
 
 					<div class="overview-middle-box">
-						<div class="overview-middle-box-h"><?php _e('Confirmed', 'seatreg'); ?></div>
+						<div class="overview-middle-box-h">
+							<?php esc_html_e('Confirmed', 'seatreg'); ?>
+						</div>
 						<div class="overview-middle-box-stat">
 							<?php 
 								if($targetRoom == 'overview') {
-									echo $regStats['takenSeats']; 
+									echo esc_html($regStats['takenSeats']); 
 								}else if($roomLoactionInStats >= 0) {
-									echo $regStats['roomsInfo'][$roomLoactionInStats]['roomTakenSeats'];
+									echo esc_html($regStats['roomsInfo'][$roomLoactionInStats]['roomTakenSeats']);
 								}
 							?>
 						</div>	
 					</div>
 
 					<div class="overview-middle-box">
-						<div class="overview-middle-box-h"><?php _e('Pending', 'seatreg'); ?></div>
+						<div class="overview-middle-box-h">
+							<?php esc_html_e('Pending', 'seatreg'); ?>
+						</div>
 						<div class="overview-middle-box-stat">
 							<?php 
 								if($targetRoom == 'overview') {
-									echo $regStats['bronSeats']; 
+									echo esc_html($regStats['bronSeats']); 
 								}else if($roomLoactionInStats >= 0) {
-									echo $regStats['roomsInfo'][$roomLoactionInStats]['roomBronSeats'];
+									echo esc_html($regStats['roomsInfo'][$roomLoactionInStats]['roomBronSeats']);
 								}
 							?>
 						</div>	
@@ -236,7 +249,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					<div class="stats-doughnut-legend">
 						<?php if($regStats['seatsTotal']): ?>
 
-							<div class="legend-block"><span class="doughnut-legend" style="background-color:#61B329"></span><span><?php _e('Open', 'seatreg'); ?> </span>
+							<div class="legend-block"><span class="doughnut-legend" style="background-color:#61B329"></span><span><?php esc_html_e('Open', 'seatreg'); ?> </span>
 								<span class="legend-block-percent" style="color:#61B329">
 									<?php 
 										if($targetRoom == 'overview') {
@@ -252,7 +265,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 									?>
 								</span>
 							</div>
-							<div class="legend-block"><span class="doughnut-legend" style="background-color:red"></span><span><?php _e('Confirmed', 'seatreg'); ?> </span>
+							<div class="legend-block"><span class="doughnut-legend" style="background-color:red"></span><span><?php esc_html_e('Confirmed', 'seatreg'); ?> </span>
 								<span class="legend-block-percent" style="color:red">
 									<?php 
 										if($targetRoom == 'overview') {
@@ -268,7 +281,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 									?>
 								</span>
 							</div>
-							<div class="legend-block"><span class="doughnut-legend" style="background-color:yellow"></span><span><?php _e('Pending', 'seatreg'); ?> </span>
+							<div class="legend-block"><span class="doughnut-legend" style="background-color:yellow"></span><span><?php esc_html_e('Pending', 'seatreg'); ?> </span>
 								<span class="legend-block-percent" style="color:#26a6d1">
 									<?php 
 										if($targetRoom == 'overview') {
@@ -287,15 +300,15 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 						<?php endif; ?>
 					</div>
 					<?php if($targetRoom == 'overview'): ?>
-						<input type="hidden" class="seats-total-don" value="<?php echo $regStats['seatsTotal']; ?>"/>
-						<input type="hidden" class="seats-bron-don" value="<?php echo $regStats['bronSeats']; ?>"/>
-						<input type="hidden" class="seats-taken-don" value="<?php echo $regStats['takenSeats']; ?>"/>
-						<input type="hidden" class="seats-open-don" value="<?php echo $regStats['openSeats']; ?>"/>
+						<input type="hidden" class="seats-total-don" value="<?php echo esc_attr($regStats['seatsTotal']); ?>"/>
+						<input type="hidden" class="seats-bron-don" value="<?php echo esc_attr($regStats['bronSeats']); ?>"/>
+						<input type="hidden" class="seats-taken-don" value="<?php echo esc_attr($regStats['takenSeats']); ?>"/>
+						<input type="hidden" class="seats-open-don" value="<?php echo esc_attr($regStats['openSeats']); ?>"/>
 					<?php else: ?>
-						<input type="hidden" class="seats-total-don" value="<?php echo $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']; ?>"/>
-						<input type="hidden" class="seats-bron-don" value="<?php echo $regStats['roomsInfo'][$roomLoactionInStats]['roomBronSeats']; ?>"/>
-						<input type="hidden" class="seats-taken-don" value="<?php echo $regStats['roomsInfo'][$roomLoactionInStats]['roomTakenSeats']; ?>"/>
-						<input type="hidden" class="seats-open-don" value="<?php echo $regStats['roomsInfo'][$roomLoactionInStats]['roomOpenSeats']; ?>"/>
+						<input type="hidden" class="seats-total-don" value="<?php echo esc_attr($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']); ?>"/>
+						<input type="hidden" class="seats-bron-don" value="<?php echo esc_attr($regStats['roomsInfo'][$roomLoactionInStats]['roomBronSeats']); ?>"/>
+						<input type="hidden" class="seats-taken-don" value="<?php echo esc_attr($regStats['roomsInfo'][$roomLoactionInStats]['roomTakenSeats']); ?>"/>
+						<input type="hidden" class="seats-open-don" value="<?php echo esc_attr($regStats['roomsInfo'][$roomLoactionInStats]['roomOpenSeats']); ?>"/>
 					<?php endif; ?>
 
 				<?php echo '</div>';?>
@@ -309,32 +322,34 @@ function seatreg_generate_my_registrations_section() {
 	$registrations = seatreg_get_registrations();
 
 	if(count($registrations)) {
-		echo "<h3>Your registrations</h3>";
+		echo '<h3>';
+			esc_html_e('Your registrations', 'seatreg');
+		echo '</h3>';
 	}
 	echo '<div class="row">';
 
 	foreach($registrations as $key=>$registration) {
 		?>
 			<div class="col-sm-6 col-md-2">
-				<h4><a class="registration-name-link" href="<?php echo plugins_url('registration/index.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php echo htmlspecialchars( $registration->registration_name ); ?></a></h4>
+				<h4><a class="registration-name-link" href="<?php echo plugins_url('registration/index.php?c=' . esc_html($registration->registration_code), dirname(__FILE__) ); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h4>
 
-				<a href="<?php echo plugins_url('registration/index.php?c=' . $registration->registration_code, dirname(__FILE__) ); ?>" target="_blank"><?php _e('Registration', 'seatreg'); ?></a>
-
-				<br>
-
-				<button type="button" class="btn btn-link seatreg-map-popup-btn" data-registration-name="<?php echo htmlspecialchars($registration->registration_name); ?>" data-map-code="<?php echo htmlspecialchars($registration->registration_code); ?>"><?php _e('Edit map', 'seatreg'); ?></button>
+				<a href="<?php echo plugins_url('registration/index.php?c=' . esc_html($registration->registration_code), dirname(__FILE__) ); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
 
 				<br>
 
-				<a href="<?php echo admin_url( 'admin.php?page=seatreg-overview&tab='.$registration->registration_code );  ?>"><?php _e('Overview', 'seatreg'); ?></a>
+				<button type="button" class="btn btn-link seatreg-map-popup-btn" data-registration-name="<?php echo esc_attr($registration->registration_name); ?>" data-map-code="<?php echo esc_attr($registration->registration_code); ?>"><?php esc_html_e('Edit map', 'seatreg'); ?></button>
 
 				<br>
 
-				<a href="<?php echo admin_url( 'admin.php?page=seatreg-options&tab='.$registration->registration_code ); ?>"><?php _e('Settings', 'seatreg'); ?></a>
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-overview&tab='.$registration->registration_code );  ?>"><?php esc_html_e('Overview', 'seatreg'); ?></a>
 
 				<br>
 
-				<a href="<?php echo admin_url( 'admin.php?page=seatreg-management&tab='.$registration->registration_code ); ?>"><?php _e('Bookings', 'seatreg'); ?></a>
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-options&tab='.$registration->registration_code ); ?>"><?php esc_html_e('Settings', 'seatreg'); ?></a>
+
+				<br>
+
+				<a href="<?php echo admin_url( 'admin.php?page=seatreg-management&tab='.$registration->registration_code ); ?>"><?php esc_html_e('Bookings', 'seatreg'); ?></a>
 
 				<br>
 
@@ -349,7 +364,7 @@ function seatreg_generate_my_registrations_section() {
 }
 
 function seatreg_no_registration_created_info() {
-	echo 'No registrations created!';
+	esc_html_e('No registrations created!', 'seatreg');
 }
 
 //generate settings form for registration settings
@@ -372,157 +387,159 @@ function seatreg_generate_settings_form() {
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	 $adminEmail = get_option( 'admin_email' );
 	?>
-		<h3 class="settings-heading"><?php echo htmlspecialchars($options[0]->registration_name), ' settings'; ?></h3>
+		<h3 class="settings-heading">
+			<?php echo esc_html($options[0]->registration_name), ' settings'; ?>
+		</h3>
 		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" style="max-width:600px">
 
 			<div class="form-group">
-				<label for="registration-name"><?php _e('Registration name', 'seatreg'); ?></label>
+				<label for="registration-name"><?php esc_html_e('Registration name', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('Change registration name', 'seatreg'); ?>.
+					<?php esc_html_e('Change registration name', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-name" name="registration-name" placeholder="Enter registration name" value="<?php echo $options[0]->registration_name; ?>">
+				<input type="text" class="form-control" id="registration-name" name="registration-name" placeholder="Enter registration name" value="<?php echo esc_attr($options[0]->registration_name); ?>">
 			</div>
 
 			<div class="form-group">
-				<label for="registration-status"><?php _e('Registration status', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Close and open registration', 'seatreg'); ?>.</p>
+				<label for="registration-status"><?php esc_html_e('Registration status', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Close and open registration', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="registration-status" name="registration-status" value="1" <?php echo $options[0]->registration_open == '1' ? 'checked':'' ?> >
-			      		<?php _e('Open', 'seatreg'); ?>
+			      		<?php esc_html_e('Open', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>
 
 			<div class="form-group">
-				<label for="registration-start-timestamp"><span class="glyphicon glyphicon-time" style="color:rgb(4, 145, 4); margin-right:3px"></span><?php _e('Registration start date', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
+				<label for="registration-start-timestamp"><span class="glyphicon glyphicon-time" style="color:rgb(4, 145, 4); margin-right:3px"></span><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
 				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
-				<input type='hidden' value='<?php echo $options[0]->registration_start_timestamp; ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
+				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_start_timestamp); ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
 			</div>
 
 			<div class="form-group">
 				<label for="registration-end-timestamp"><span class="glyphicon glyphicon-time" style="color:rgb(250, 38, 38); margin-right:3px"></span><?php _e('Registration end date', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
 				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
-				<input type='hidden' value='<?php echo $options[0]->registration_end_timestamp; ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
+				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_end_timestamp); ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
 			</div>
 
 			<div class="form-group">
-				<label for="show-registration-bookings"><?php _e('Show bookings', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Let people see who has made a booking in registration page', 'seatreg'); ?>.</p>
+				<label for="show-registration-bookings"><?php esc_html_e('Show bookings', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Let people see who has made a booking in registration page', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="show-registration-bookings" name="show-registration-bookings" <?php echo $options[0]->show_bookings == '1' ? 'checked':'' ?> > 
-			      		<?php _e('Show bookings', 'seatreg'); ?>
+			      		<?php esc_html_e('Show bookings', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>
 
 			<div class="form-group">
-				<label for="registration-info-text"><?php _e('Registration info text', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Set registration info text. Will be displayed in registration page', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="registration-info-text" name="registration-info-text" placeholder="Enter info text here"><?php echo $options[0]->info; ?></textarea>
+				<label for="registration-info-text"><?php esc_html_e('Registration info text', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Set registration info text. Will be displayed in registration page', 'seatreg'); ?>.</p>
+				<textarea class="form-control" id="registration-info-text" name="registration-info-text" placeholder="Enter info text here"><?php echo esc_html($options[0]->info); ?></textarea>
 			</div>
 
 			<div class="form-group">
-				<label for="payment-instructions"><?php _e('Payment instruction', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('At the moment this plugin dosn\'t offer any payment systems, but you can leave informative text that instructs how to pay for booked seat/seats', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="Enter payment instructions here"><?php echo $options[0]->payment_text; ?></textarea>
+				<label for="payment-instructions"><?php esc_html_e('Payment instruction', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('At the moment this plugin dosn\'t offer any payment systems, but you can leave informative text that instructs how to pay for booked seat/seats', 'seatreg'); ?>.</p>
+				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="Enter payment instructions here"><?php echo esc_html($options[0]->payment_text); ?></textarea>
 			</div>
 
 			<div class="form-group">
-				<label for="registration-max-seats"><?php _e('Max seats per booking', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Set how many seats can be added to the booking', 'seatreg'); ?>.</p>
-				<input type="number" class="form-control" id="registration-max-seats" name="registration-max-seats" value="<?php echo $options[0]->seats_at_once; ?>">
+				<label for="registration-max-seats"><?php esc_html_e('Max seats per booking', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Set how many seats can be added to the booking', 'seatreg'); ?>.</p>
+				<input type="number" class="form-control" id="registration-max-seats" name="registration-max-seats" value="<?php echo esc_html($options[0]->seats_at_once); ?>">
 			</div>
 
 			<div class="form-group">
-				<label for="gmail-required"><?php _e('Gmail required', 'seatreg'); ?></label>
-				<p class="help-block"><?php _e('Gmail account is required when making a booking', 'seatreg'); ?>.</p>
+				<label for="gmail-required"><?php esc_html_e('Gmail required', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Gmail account is required when making a booking', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="gmail-required" name="gmail-required" value="1" <?php echo $options[0]->gmail_required == '1' ? 'checked':'' ?> > 
-			      		<?php _e('Allow only gmail accounts', 'seatreg'); ?>
+			      		<?php esc_html_e('Allow only gmail accounts', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>
 
 			<div class="form-group">
-				<label for="registration-password"><?php _e('Password', 'seatreg'); ?></label>
+				<label for="registration-password"><?php esc_html_e('Password', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
+					<?php esc_html_e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-password" name="registration-password" placeholder="Enter password here" value="<?php echo $options[0]->registration_password; ?>">
+				<input type="text" class="form-control" id="registration-password" name="registration-password" placeholder="Enter password here" value="<?php echo esc_html($options[0]->registration_password); ?>">
 			</div>
 
 			<div class="form-group">
-				<label for="use-pending"><?php _e('Pending status', 'seatreg'); ?></label>
+				<label for="use-pending"><?php esc_html_e('Pending status', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('By default all bookings will first be in pending state so admin can approve them (booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
+					<?php esc_html_e('By default all bookings will first be in pending state so admin can approve them (booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
 				</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="use-pending" name="use-pending" value="1" <?php echo $options[0]->use_pending == '1' ? 'checked':'' ?> > 
-			      		<?php _e('Use pending', 'seatreg'); ?>
+			      		<?php esc_html_e('Use pending', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>
 
 			<div class="form-group">
-				<label for="use-pending"><?php _e('Booking email confirm', 'seatreg'); ?></label>
+				<label for="use-pending"><?php esc_html_e('Booking email confirm', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php _e('Bookings must be confirmed with email', 'seatreg'); ?>.
+					<?php esc_html_e('Bookings must be confirmed with email', 'seatreg'); ?>.
 				</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="email-confirm" name="email-confirm" value="1" <?php echo $options[0]->booking_email_confirm == '1' ? 'checked':'' ?> >
-			      		<?php _e('Email confirm', 'seatreg'); ?>
+			      		<?php esc_html_e('Email confirm', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>
 
 			<div class="form-group">
-				<label for="booking-notification"><?php _e('Booking notification', 'seatreg'); ?></label>
+				<label for="booking-notification"><?php esc_html_e('Booking notification', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
 						printf(
 							/* translators: %s: email address */
-							__( 'Send a notification to %s when you got a new booking.', 'seatreg' ),
-							$adminEmail
+							esc_html__( 'Send a notification to %s when you got a new booking.', 'seatreg' ),
+							esc_html($adminEmail)
 						);
 					?>
 				</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="booking-notification" name="booking-notification" value="1" <?php echo $options[0]->notify_new_bookings == '1' ? 'checked':'' ?> >
-			      		<?php _e('Send notifications', 'seatreg'); ?>
+			      		<?php esc_html_e('Send notifications', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>
 
 			<div class="form-group">
 				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
-					<label><?php _e('Custom fields', 'seatreg'); ?></label>
+					<label><?php esc_html_e('Custom fields', 'seatreg'); ?></label>
 					<p class="help-block">
-						<?php _e('Custom fields allow you to ask extra information in bookings.', 'seatreg'); ?>
+						<?php esc_html_e('Custom fields allow you to ask extra information in bookings.', 'seatreg'); ?>
 					</p>
 					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
 
 					<div class="existing-custom-fields">
 						<?php if( $custLen > 0 ) : ?>
 							
-							<div style="margin-bottom: 6px"><?php _e('Existing custom fields', 'seatreg'); ?></div>
+							<div style="margin-bottom: 6px"><?php esc_html_e('Existing custom fields', 'seatreg'); ?></div>
 							<?php
 								for($i = 0; $i < $custLen; $i++) {
 									if($custFields[$i]->type == 'sel') {
 										$optLen = count($custFields[$i]->options);
 										echo '<div class="custom-container" data-type="sel">';
-											echo '<label><span class="l-text">', $custFields[$i]->label, '</span>';
+											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>';
 												echo '<select>';
 
 													for($j = 0; $j < $optLen; $j++) {
-														echo '<option><span class="option-value">', $custFields[$i]->options[$j] ,'</span></option>';
+														echo '<option><span class="option-value">', esc_html($custFields[$i]->options[$j]) ,'</span></option>';
 													}
 
 												echo '</select>';
@@ -532,12 +549,12 @@ function seatreg_generate_settings_form() {
 
 									}else if($custFields[$i]->type == 'text'){
 										echo '<div class="custom-container" data-type="text">';
-											echo '<label><span class="l-text">', $custFields[$i]->label, '</span>', '<input type="text" /> </label><i class="fa fa-times-circle remove-cust-item"></i>';
+											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>', '<input type="text" /> </label><i class="fa fa-times-circle remove-cust-item"></i>';
 										echo '</div>';
 
 									}else if($custFields[$i]->type == 'check') {
 										echo '<div class="custom-container" data-type="check">';
-											echo '<label><span class="l-text">', $custFields[$i]->label, '</span> <input type="checkbox" /></label><i class="fa fa-times-circle remove-cust-item"></i>';
+											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span> <input type="checkbox" /></label><i class="fa fa-times-circle remove-cust-item"></i>';
 										echo '</div>';
 									}
 								}
@@ -547,38 +564,38 @@ function seatreg_generate_settings_form() {
 					</div>
 
 					<div class="cust-field-create">
-						<div style="margin-bottom: 6px"><?php _e('Create new custom field', 'seatreg'); ?></div>
+						<div style="margin-bottom: 6px"><?php esc_html_e('Create new custom field', 'seatreg'); ?></div>
 						<div>
-							<label><?php _e('Name', 'seatreg'); ?>:
+							<label><?php esc_html_e('Name', 'seatreg'); ?>:
 								<input type="text" class="cust-input-label" maxlenght="30"/>
 							</label>
 
-							<label><?php _e('Type', 'seatreg'); ?>:
+							<label><?php esc_html_e('Type', 'seatreg'); ?>:
 								<select class="custom-field-select">
-									<option data-type="field"><?php _e('Text', 'seatreg'); ?></option>
-									<option data-type="checkbox"><?php _e('Checkbox', 'seatreg'); ?></option>
-									<option data-type="select"><?php _e('Select', 'seatreg'); ?></option> 
+									<option data-type="field"><?php esc_html_e('Text', 'seatreg'); ?></option>
+									<option data-type="checkbox"><?php esc_html_e('Checkbox', 'seatreg'); ?></option>
+									<option data-type="select"><?php esc_html_e('Select', 'seatreg'); ?></option> 
 								</select>
 							</label>
 
 							<div class="select-radio-create">
 								<ul class="existing-options"></ul>
 
-								<label><?php _e('Insert options (max 10)', 'seatreg'); ?>
+								<label><?php esc_html_e('Insert options (max 10)', 'seatreg'); ?>
 									<input type="text" class="option-name" maxlength="20">
 								</label>
 
-								<button class="add-select-option"><?php _e('Add option', 'seatreg'); ?></button>
+								<button class="add-select-option"><?php esc_html_e('Add option', 'seatreg'); ?></button>
 								<div class="select-error"></div>
 							</div>
-							<button class="apply-custom-field"><?php _e('Add custom field', 'seatreg'); ?></button>
+							<button class="apply-custom-field"><?php esc_html_e('Add custom field', 'seatreg'); ?></button>
 						</div>
 					</div>
 				</div>	
 			</div>
 
 			<input type='hidden' name='action' value='seatreg-form-submit' />
-			<input type="hidden" name="registration_code" value="<?php echo $options[0]->registration_code; ?>"/>
+			<input type="hidden" name="registration_code" value="<?php echo esc_attr($options[0]->registration_code); ?>"/>
 
 			<?php
 				wp_nonce_field( 'seatreg-options-submit', 'seatreg-options-nonce' );
@@ -594,10 +611,10 @@ function seatreg_create_registration_from() {
 	?>
 	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" id="create-registration-form">
 			<h3 class="new-reg-title">
-				<?php _e('Create new registration','seatreg'); ?>
+				<?php esc_html_e('Create new registration','seatreg'); ?>
 			</h3>
 			<label for="new-registration-name">
-				<?php _e('Enter registration name','seatreg'); ?>
+				<?php esc_html_e('Enter registration name','seatreg'); ?>
 			</label>
 	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px">
 			<input type='hidden' name='action' value='seatreg_create_submit' />
@@ -612,7 +629,7 @@ function seatreg_create_registration_from() {
 function seatreg_create_delete_registration_from($registrationCode) {
 	?>
 	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" class="seatreg-delete-registration-form" onsubmit="return confirm('Do you really want to delete?');">
-	    	<input type="hidden" name="registration-code" value="<?php echo $registrationCode; ?>" />
+	    	<input type="hidden" name="registration-code" value="<?php echo esc_attr($registrationCode); ?>" />
 			<input type='hidden' name='action' value='seatreg_delete_registration' />
 			<?php echo seatrag_generate_nonce_field(); ?>
 			<?php
@@ -665,46 +682,45 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	$row_count2 = count($bookings2);
 
 	if($row_count > 0) {
-		echo "<div class='bron-count-notify'>", $row_count, __(' pending bookings!', 'seatreg'), "</div>";
+		echo "<div class='bron-count-notify'>", $row_count, esc_html__(' pending bookings!', 'seatreg'), "</div>";
 	}
 	
 	$project_name = str_replace(' ', '_', $project_name);
 
-	echo '<input type="hidden" id="seatreg-reg-code" value="', $seatregData->registration_code, '"/>';
-	echo '<div class="input-group manager-search-wrap">
-				<input type="hidden" id="seatreg-reg-code" value=",<?php echo $registration->registration_code; ?>"/>
-            	<input type="text" class="form-control manager-search" placeholder="Search booking"', ($searchTerm != '') ? "value='$searchTerm'" : '','>
-            	<div class="input-group-btn">
-                	<button class="btn btn-default search-button" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-            	</div>
-          </div>';
+	echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
+	echo '<div class="input-group manager-search-wrap">';
+				echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($registration->registration_code), '"/>';
+            	echo '<input type="text" class="form-control manager-search" placeholder="Search booking" value="', esc_attr($searchTerm), '"/>';
+            	echo '<div class="input-group-btn">';
+                	echo '<button class="btn btn-default search-button" type="submit"><i class="glyphicon glyphicon-search"></i></button>';
+            	echo '</div>';
+          echo '</div>';
 	
-    echo '<a href="pdf.php?v=', $code , '" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a> ';
-    echo '<a href="xlsx.php?v=', $code, '" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a> ';
-    echo '<a href="text.php?v=', $code, '"class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a> ';
+    echo '<a href="pdf.php?v=', esc_attr($code) , '" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a> ';
+    echo '<a href="xlsx.php?v=', esc_attr($code), '" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a> ';
+    echo '<a href="text.php?v=', esc_attr($code), '"class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a> ';
 
 	echo '<div class="bg-color">';
 		echo '<div class="tab-container">';
 			echo '<ul class="etabs">';
-				echo '<li class="tab"><a href="#', esc_html($project_name), 'bron">', __('Pending', 'seatreg'), '</a></li>';
-				echo '<li class="tab"><a href="#', esc_html($project_name), 'taken">',__('Approved','seatreg'),'</a></li>';
+				echo '<li class="tab"><a href="#', esc_html($project_name), 'bron">', esc_html_e('Pending', 'seatreg'), '</a></li>';
+				echo '<li class="tab"><a href="#', esc_html($project_name), 'taken">', esc_html_e('Approved','seatreg'),'</a></li>';
 			echo '</ul>';
 		echo '<div class="panel-container differentBgColor">';
 				echo '<div class="registration-manager-labels">
-						<div class="seat-nr-box manager-box manager-box-link" data-order="nr">',__('SEAT','seatreg'),'</div>
-						<div class="seat-room-box manager-box manager-box-link" data-order="room">',__('ROOM','seatreg'),'</div>
-						<div class="seat-name-box manager-box manager-box-link" data-order="name">',__('NAME','seatreg'),'</div>
-						<div class="seat-name-box manager-box manager-box-link" data-order="date">',__('Date','seatreg'),'</div>
-						<div class="seat-date-box manager-box manager-box-link" data-order="id">',__('Booking id','seatreg'),'</div>	
+						<div class="seat-nr-box manager-box manager-box-link" data-order="nr">', esc_html__('SEAT','seatreg'),'</div>
+						<div class="seat-room-box manager-box manager-box-link" data-order="room">', esc_html__('ROOM','seatreg'),'</div>
+						<div class="seat-name-box manager-box manager-box-link" data-order="name">', esc_html__('NAME','seatreg'),'</div>
+						<div class="seat-name-box manager-box manager-box-link" data-order="date">', esc_html__('Date','seatreg'),'</div>
+						<div class="seat-date-box manager-box manager-box-link" data-order="id">', esc_html__('Booking id','seatreg'),'</div>	
 					</div>';
-				echo '<div id="',esc_html($project_name),'bron" class="tab_container">';
+				echo '<div id="', esc_html($project_name), 'bron" class="tab_container">';
 
 			if($row_count == 0) {
-				echo '<div class="notify-text">', __('No pending seats', 'seatreg'),'</div>';
+				echo '<div class="notify-text">', esc_html__('No pending seats', 'seatreg'),'</div>';
 			}			
 
 			foreach ($bookings1 as $row) {
-
 				$custom_field_data = json_decode($row->custom_field_data, true);
 				$booking = $row->booking_id;
 				$registrationId = $row->id;
@@ -717,36 +733,36 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
 					echo '<div class="seat-date-box manager-box" title="',esc_html($row->booking_date),'">',esc_html($myFormatForView),'</div>';
 					echo "<div class='booking-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
-					echo '<button class="show-more-info">', __('More info','seatreg'), '</button>';
-					echo "<span class='edit-btn' data-code='$code' data-booking='$booking' data-id='$registrationId'><span class='glyphicon glyphicon-edit'></span>", __('Edit','seatreg'), "</span>";
+					echo '<button class="show-more-info">', esc_html__('More info','seatreg'), '</button>';
+					echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><span class='glyphicon glyphicon-edit'></span>", esc_html__('Edit','seatreg'), "</span>";
 					echo '<div class="action-select">';
-						echo "<label class='action-label'>",__('Remove','seatreg'),"<input type='checkbox' value='$row->booking_id' class='bron-action' data-action='del'/></label>";
-						echo "<label class='action-label'>",__('Approve','seatreg'),"<input type='checkbox' value='$row->booking_id' class='bron-action'data-action='confirm'/></label>";
+						echo "<label class='action-label'>", esc_html__('Remove','seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
+						echo "<label class='action-label'>", esc_html__('Approve','seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action'data-action='confirm'/></label>";
 					echo '</div>';
 
 					echo '<div class="more-info">';
-						echo '<div>', __('Registration date:','seatreg'), ' <span class="time-string">', esc_html($row->booking_date), '</span> (YYYY-MM-DD HH:MM:SS)</div>';
-						echo '<div>', __('Email:', 'seatreg'), ' ', esc_html($row->email), '</div>';
+						echo '<div>', esc_html__('Registration date:','seatreg'), ' <span class="time-string">', esc_html($row->booking_date), '</span> (YYYY-MM-DD HH:MM:SS)</div>';
+						echo '<div>', esc_html__('Email:', 'seatreg'), ' ', esc_html($row->email), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {
 							
 							echo seatreg_customfield_with_value($custom_fields[$i]['label'], $custom_field_data);
 						}
 					echo '</div>';
-					echo '<input type="hidden" class="booking-identification" value='. $row->booking_id .' />';
+					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
 				echo '</div>'; 
 			}
 		
 			if($row_count > 0) {
-				echo "<div class='action-control' data-code='$code'>", __('OK','seatreg'), "</div>";
+				echo "<div class='action-control' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
 			}
 			
 			echo '</div>';
 
-			echo '<div id="',esc_html($project_name),'taken" class="tab_container active">';
+			echo '<div id="', esc_html($project_name),'taken" class="tab_container active">';
 
 			if($row_count2 == 0) {
-				echo '<div class="notify-text">', __('No approved seats', 'seatreg'), '</div>';
+				echo '<div class="notify-text">', esc_html__('No approved seats', 'seatreg'), '</div>';
 			}
 
 			foreach ($bookings2 as $row) {
@@ -756,17 +772,15 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 				$time = strtotime($row->booking_date);
 				$myFormatForView = date("m-d-y", $time);
 				echo '<div class="reg-seat-item">';
-
 					echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
-					echo '<div class="seat-room-box manager-box" title="',esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
-					echo '<div class="seat-name-box manager-box" title="'.esc_html($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
-					echo '<div class="seat-date-box manager-box" title="',esc_html($row->booking_date),'">',esc_html($myFormatForView),'</div>';
-					echo "<div class='booking-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
-					echo '<button class="show-more-info">', __('More info','seatreg'), '</button>';
-					echo "<span class='edit-btn' data-code='$code' data-booking='$booking' data-id='$registrationId'><span class='glyphicon glyphicon-edit'></span>", __('Edit','seatreg'), "</span>";
+					echo '<div class="seat-room-box manager-box" title="',esc_attr($row->room_name),'">', esc_html($row->room_name),'</div>';
+					echo '<div class="seat-name-box manager-box" title="'.esc_attr($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
+					echo '<div class="seat-date-box manager-box" title="',esc_attr($row->booking_date),'">',esc_html($myFormatForView),'</div>';
+					echo "<div class='booking-id-box manager-box' title='",esc_attr($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
+					echo '<button class="show-more-info">', esc_html__('More info','seatreg'), '</button>';
+					echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><span class='glyphicon glyphicon-edit'></span>", esc_html__('Edit','seatreg'), "</span>";
 					echo '<div class="action-select">';
-						
-						echo "<label>Remove<input type='checkbox' value='$row->booking_id' class='bron-action' data-action='del'/></label>";
+						echo "<label>", esc_html__('Remove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
 					echo '</div>';
 
 					echo '<div class="more-info">';
@@ -775,19 +789,16 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						echo '<div>Email: ', esc_html( $row->email ), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {
-							
 							echo seatreg_customfield_with_value($custom_fields[$i]['label'], $custom_field_data);
 						}
 
-						
 					echo '</div>';
-					echo '<input type="hidden" class="booking-identification" value='. $row->booking_id .' />';
+					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
 				echo '</div>'; 
-				
 			}
 
 			if($row_count2 > 0) {
-				echo "<div class='action-control' data-code='$code'>", __('OK','seatreg'), "</div>";
+				echo "<div class='action-control' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
 			}
 
 			echo '</div>';
@@ -803,32 +814,30 @@ function seatreg_customfield_with_value($label, $custom_data) {
 	$cust_len = count($custom_data);
 	$foundIt = false;
 
-	echo '<div class="custom-field"><span class="custom-field-l">', htmlspecialchars($label), '</span>: ';
+	echo '<div class="custom-field"><span class="custom-field-l">', esc_html($label), '</span>: ';
 
 	for($j = 0; $j < $cust_len; $j++) {
-
 		if($custom_data[$j]['label'] == $label) {
 
 			if($custom_data[$j]['value'] === true) {
 
-				echo '<span class="custom-field-v">', __('Yes', 'seatreg'), '</span></div>';
+				echo '<span class="custom-field-v">', esc_html__('Yes', 'seatreg'), '</span></div>';
 
 			}else if($custom_data[$j]['value'] === false) {
 
-				echo '<span class="custom-field-v">', __('No', 'seatreg'), '</span></div>';
+				echo '<span class="custom-field-v">', esc_html__('No', 'seatreg'), '</span></div>';
 
 			}else {
-				echo '<span class="custom-field-v">', htmlspecialchars($custom_data[$j]['value']), '</span></div>';
+				echo '<span class="custom-field-v">', esc_html__($custom_data[$j]['value']), '</span></div>';
 			}
 			
 			$foundIt = true;
 			break;
 		}
-
 	}
 
 	if(!$foundIt) {
-		echo '<span class="custom-field-v">', __('Not set', 'seatreg'), '</span></div>';
+		echo '<span class="custom-field-v">', esc_html__('Not set', 'seatreg'), '</span></div>';
 	}
 }
 
@@ -840,16 +849,16 @@ function seatreg_booking_edit_modal() {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel"><?php _e('Edit booking', 'seatreg'); ?></h4>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
+        <h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Edit booking', 'seatreg'); ?></h4>
       </div>
       <div class="modal-body">
 		<form id="booking-edit-form">
-	        <label><?php _e('Seat', 'seatreg'); ?> <input type="text" id="edit-seat" name="seat-nr"/></label> <span id="edit-seat-error"></span><br>
-	        <label><?php _e('Room', 'seatreg'); ?> <input type="text" id="edit-room" name="room"/></label> <span id="edit-room-error"></span><br>
+	        <label><?php esc_html_e('Seat', 'seatreg'); ?> <input type="text" id="edit-seat" name="seat-nr"/></label> <span id="edit-seat-error"></span><br>
+	        <label><?php esc_html_e('Room', 'seatreg'); ?> <input type="text" id="edit-room" name="room"/></label> <span id="edit-room-error"></span><br>
 	        
-	        <label><?php _e('First Name', 'seatreg'); ?> <input type="text" id="edit-fname" name="first-name"/></label><span id="edit-fname-error"></span><br>
-			<label><?php _e('Last Name', 'seatreg'); ?> <input type="text" id="edit-lname" name="last-name"/></label><span id="edit-lname-error"></span><br>
+	        <label><?php esc_html_e('First Name', 'seatreg'); ?> <input type="text" id="edit-fname" name="first-name"/></label><span id="edit-fname-error"></span><br>
+			<label><?php esc_html_e('Last Name', 'seatreg'); ?> <input type="text" id="edit-lname" name="last-name"/></label><span id="edit-lname-error"></span><br>
 			<input type="hidden" id="modal-code">
 			<input type="hidden" id="booking-id">
 			<input type="hidden" id="r-id">
@@ -857,8 +866,8 @@ function seatreg_booking_edit_modal() {
 	     </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'seatreg'); ?></button>
-        <button type="button" class="btn btn-primary" id="edit-update-btn"><?php _e('Save changes', 'seatreg'); ?></button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>
+        <button type="button" class="btn btn-primary" id="edit-update-btn"><?php esc_html_e('Save changes', 'seatreg'); ?></button>
       </div>
     </div>
   </div>
@@ -883,8 +892,8 @@ function seatreg_generate_tabs($targetPage) {
 
 	<h2 class="nav-tab-wrapper"> 
     <?php foreach($registrations as $key=>$value): ?>
-		<a href="?page=<?php echo $targetPage; ?>&tab=<?php echo $value->registration_code; ?>" class="nav-tab <?php echo $active_tab == $value->registration_code ? 'nav-tab-active' : ''; ?>">
-			<?php echo htmlspecialchars($value->registration_name); ?>
+		<a href="?page=<?php echo esc_html($targetPage); ?>&tab=<?php echo esc_html($value->registration_code); ?>" class="nav-tab <?php echo $active_tab == $value->registration_code ? 'nav-tab-active' : ''; ?>">
+			<?php echo esc_html($value->registration_name); ?>
 		</a>
     <?php endforeach; ?>
 	</h2>
@@ -926,22 +935,22 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 		) );
 
 		if(count($bookings) > 0) {
-			echo '<h4>', $registration->registration_name, '</h4>';
-			echo '<h4>Booking id: ', $bookingId,'</h4>';
+			echo '<h4>', esc_html($registration->registration_name), '</h4>';
+			echo '<h4>Booking id: ', esc_html($bookingId),'</h4>';
 
 			foreach($bookings as $booking) {
-				echo 'Name: ', $booking->first_name, ' ', $booking->last_name , '<br>Seat: ', $booking->seat_nr, '<br>Room: ', $booking->room_name, '<br>Status: ', ($booking->status === "1") ? 'Pending' : 'Confirmed', '<br><br>';
+				echo 'Name: ', esc_html($booking->first_name), ' ', esc_html($booking->last_name) , '<br>Seat: ', esc_html($booking->seat_nr), '<br>Room: ', esc_html($booking->room_name), '<br>Status: ', ($booking->status === "1") ? 'Pending' : 'Confirmed', '<br><br>';
 			}
 
 			if($options && $options->payment_text) {
-				echo '<h1>Payment info</h1>';
-				echo '<p>', htmlspecialchars($options->payment_text) ,'</p>';
+				echo '<h1>', esc_html__('Payment info', 'seatreg'), '</h1>';
+				echo '<p>', esc_html($options->payment_text) ,'</p>';
 			}
 		}else {
-			echo 'Booking not found.';
+			esc_html_e('Booking not found.', 'seatreg');
 		}
 	}else {
-		echo 'Registration does not exist';
+		esc_html_e('Registration does not exist', 'seatreg');
 	}
 }
 
@@ -1053,12 +1062,14 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 			$allCorrect = false;
 			$resp['status'] = $step1Desision['status'];
 			$resp['text'] = $step1Desision['text'];
+
 			break;
 		}
 	}
 
 	
 	if(!$allCorrect) {
+
 		return $resp;
 	}
 
@@ -1074,7 +1085,8 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 		foreach ($bookingActions as $bookingAction) {
 			if($booking->seat_nr == $bookingAction->seat_nr && $booking->room_name == $bookingAction->room_name && $booking->status === "2" && $bookingAction->action != 'del') {
 				$notBooked = false;
-				$resp['text'] = __('Seat ', 'seatreg') . $bookingAction->seat_nr . __(' from room ', 'seatreg') . $bookingAction->room_name . __(' is already booked', 'seatreg');
+				$resp['text'] = esc_html__('Seat ', 'seatreg') . esc_html($bookingAction->seat_nr) . esc_html__(' from room ', 'seatreg') . esc_html($bookingAction->room_name) . esc_html__(' is already booked', 'seatreg');
+
 				break 2;
 			}
 		}
@@ -1082,9 +1094,11 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 
 	if($notBooked) {
 		$resp['status'] = 'ok';
+
 		return $resp;
 	}else {
 		$resp['status'] = 'seat-booked';
+
 		return $resp;
 	}
 }
@@ -1102,6 +1116,7 @@ function seatreg_validate_edit_booking($code, $data) {
 			$allCorrect = false;
 			$resp['status'] = $status['status'];
 			$resp['text'] = $status['text'];
+
 			return $resp;
 	}else {
 		$resp['newSeatId'] = $status['newSeatId'];
@@ -1113,6 +1128,7 @@ function seatreg_validate_edit_booking($code, $data) {
 
 	foreach ($bookings as $booking) {
 		if($booking->booking_id == $data->bookingId) {
+
 			continue;
 		}
 		$booking->room_name = seatreg_get_room_name_from_layout($structure, $booking->room_uuid);
@@ -1120,7 +1136,7 @@ function seatreg_validate_edit_booking($code, $data) {
 		if($booking->seat_nr === $data->seatNr && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
-			$resp['text'] = __('Seat ', 'seatreg') . $data->roomName . __(' from room ', 'seatreg') . $booking->room_name . __(' is already booked', 'seatreg');
+			$resp['text'] = esc_html__('Seat ', 'seatreg') . esc_html($data->roomName) . esc_html__(' from room ', 'seatreg') . esc_html($booking->room_name) . esc_html__(' is already booked', 'seatreg');
 
 			break;
 		}
@@ -1139,11 +1155,11 @@ function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $boo
 
 	for($i = 0; $i < $layoutLength; $i++) {
 		$searchStatus = 'room-searching';
-		$errorText = __('Room ','seatreg') . $bookingRoomName . __(' dose not exist!', 'seatreg');
+		$errorText = esc_html__('Room ','seatreg') . esc_html($bookingRoomName) . esc_html__(' dose not exist!', 'seatreg');
 
 		if($registrationLayout[$i]->room->name == $bookingRoomName) {
 			$searchStatus = 'seat-nr-searching';
-			$errorText = __('Seat ','seatreg') . $bookingSeatNr . __(' dose not exist in ', 'seatreg') . $bookingRoomName;
+			$errorText = esc_html__('Seat ','seatreg') . esc_html($bookingSeatNr) . esc_html__(' dose not exist in ', 'seatreg') . esc_html($bookingRoomName);
 			$boxLen = count($registrationLayout[$i]->boxes);
 
 			for($k = 0; $k < $boxLen; $k++) {
@@ -1165,9 +1181,11 @@ function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $boo
 	if(!$allCorrect) {
 		$status['status'] = $searchStatus;
 		$status['text'] = $errorText;
+
 		return $status;
 	}else {
 		$status['status'] = $searchStatus;
+
 		return $status;
 	}
 }
@@ -1591,9 +1609,10 @@ function seatreg_create_submit_handler() {
 
 	if( seatreg_create_new_registration($_POST['new-registration-name']) ) {
 		wp_redirect( $_POST['_wp_http_referer'] );
+
 		die();
 	}else {
-		wp_die( _e('Something went wrong while creating a new registration', 'seatreg') );
+		wp_die( esc_html_e('Something went wrong while creating a new registration', 'seatreg') );
 	}
 }
 
@@ -1619,7 +1638,7 @@ function seatreg_delete_registration_handler() {
 		wp_redirect( $_POST['_wp_http_referer'] );
 		die();
 	}else {
-		wp_die( _e('Something went wrong while deleting a registration', 'seatreg') );
+		wp_die( esc_html_e('Something went wrong while deleting a registration', 'seatreg') );
 	}
 }
 
@@ -1826,6 +1845,7 @@ function seatreg_get_room_stats_callback() {
 	seatreg_check_ajax_credentials();
 
 	seatreg_generate_overview_section_html($_POST['data'], $_POST['code']);
+
 	die();
 }
 
@@ -1833,7 +1853,8 @@ add_action( 'wp_ajax_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
 add_action( 'wp_ajax_nopriv_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
 function seatreg_new_captcha_callback() {
 	$r = randomString(10);
-	echo '<img src="php/image.php?dummy='.$r.'" id="captcha-img" />';
+	echo '<img src="php/image.php?dummy='. esc_html($r) .'" id="captcha-img" />';
+
 	die();
 }
 
@@ -1841,6 +1862,7 @@ add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_
 function seatreg_get_booking_manager_callback() {
 	seatreg_check_ajax_credentials();
 	seatreg_generate_booking_manager_html($_POST['code'], $_POST['data']['orderby'], $_POST['data']['searchTerm'] );
+
 	die();
 }
 
@@ -1857,12 +1879,15 @@ function seatreg_confirm_del_bookings_callback() {
 		switch( $statusArray['status'] ) {
 			case 'room-searching':
 				$errorText = $statusArray['text'];
+
 				break;
 			case 'seat-nr-searching';
 				$errorText = $statusArray['text'];
+
 				break;
 			case 'seat-booked';
 				$errorText = $statusArray['text'];
+
 				break;
 
 		}
@@ -1886,6 +1911,7 @@ function seatreg_confirm_del_bookings_callback() {
 		$searchTerm = $_POST['data']['searchTerm'];
 	}
 	seatreg_generate_booking_manager_html( $_POST['code'] , $order, $searchTerm );
+
 	die();
 }
 
@@ -1903,6 +1929,7 @@ function seatreg_search_bookings_callback() {
 		$searchTerm = $_POST['data']['searchTerm'];
 	}
 	seatreg_generate_booking_manager_html( $_POST['code'] , $order, $searchTerm );
+
 	die();
 }
 
@@ -1922,6 +1949,7 @@ function seatreg_edit_booking_callback() {
 
 	if ( $statusArray['status'] != 'ok' ) {
 		wp_send_json( array('status'=>$statusArray['status'], 'text'=> $statusArray['text'] ) );
+
 		die();
 	}
 
@@ -1935,9 +1963,11 @@ function seatreg_edit_booking_callback() {
 			$statusArray['newSeatId']
 		) !== false) {
 		wp_send_json( array('status'=>'updated') );
+
 		die();
 	}else {
 		wp_send_json( array('status'=>'update failed') );
+
 		die();
 	}
 }
@@ -1951,6 +1981,7 @@ function seatreg_upload_image_callback() {
 	if(empty($_FILES["fileToUpload"]) || empty($_POST['code'])) {
 		$resp->setError('No picture selected');
 		$resp->echoData();
+
 		die();
 	}
 
@@ -1967,6 +1998,7 @@ function seatreg_upload_image_callback() {
 	if($check == false) {
 		$resp->setError('File is not an image');
 		$resp->echoData();
+
 		die();
 	}
 	$target_dimentsions = $check[0] . ',' . $check[1];
@@ -1975,6 +2007,7 @@ function seatreg_upload_image_callback() {
 	if (file_exists($target_file)) {
 		$resp->setError('Sorry, file already exists');
 		$resp->echoData();
+
 		die();
 
 	}
@@ -1983,6 +2016,7 @@ function seatreg_upload_image_callback() {
 	if ($_FILES["fileToUpload"]["size"] > 2120000 ) {
 		$resp->setError('Sorry, your file is too large');
 		$resp->echoData();
+
 		die();		
 	}
 
@@ -1990,6 +2024,7 @@ function seatreg_upload_image_callback() {
 	if( !in_array($imageFileType, $allowedFileTypes)  ) {
 		$resp->setError('Sorry, only JPG, JPEG, PNG & GIF files are allowed');
 		$resp->echoData();
+
 		die();
 	}
 
@@ -2003,10 +2038,12 @@ function seatreg_upload_image_callback() {
 		$resp->setData(basename( $_FILES["fileToUpload"]["name"]));
 		$resp->setExtraData($target_dimentsions);
 		$resp->echoData();
+
 		die();
 	} else {
 		$resp->setError('Sorry, there was an error uploading your file');
 		$resp->echoData();
+
 		die();
 	}
 }
@@ -2028,6 +2065,7 @@ function seatreg_remove_img_callback() {
 			$resp->setError('Image was not found!');
 		}
 		$resp->echoData();
+		
 		die();
 	}
 }
