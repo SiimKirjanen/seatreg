@@ -218,7 +218,7 @@
 
 				<div id="picker2"></div>
 				<div class="prev-step step-btn" data-slide="2" data-slide-open="1"><?php esc_html_e('Step 1.', 'seatreg');?> <span class="glyphicon glyphicon-arrow-left"></span></div>
-				<div class="next-step step-btn" data-slide="2" data-slide-open="3"><?php _esc_html_ee('Step 3.', 'seatreg');?> <span class="glyphicon glyphicon-arrow-right"></span></div>
+				<div class="next-step step-btn" data-slide="2" data-slide-open="3"><?php esc_html_e('Step 3.', 'seatreg');?> <span class="glyphicon glyphicon-arrow-right"></span></div>
 			</div>
 			<div class="legend-dialog-slide">
 				<div>
