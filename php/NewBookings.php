@@ -217,11 +217,11 @@ class NewBookings extends Booking {
 			if($this->_requireBookingEmailConfirm) {
 				seatreg_change_captcha(3);
 				$confirmationURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_confirm.php?confirmation-code='. $confCode;
-				$message = esc_html__('Your selected seats are', 'seatreg') . ': <br/><br/>' . esc_html($seatsString) . '
+				$message = esc_html__('Your selected seats are', 'seatreg') . ': <br/><br/>' . $seatsString . '
 							<p>' . esc_html__('Click on the link below to confirm your booking', 'seatreg') . '</p>
-							<a href="' .  esc_attr($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
+							<a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
 							('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>
-							' . esc_html__('After confirmation you can look your booking at', 'seatreg') . '<br> <a href="'. esc_attr($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) .'</a>';
+							' . esc_html__('After confirmation you can look your booking at', 'seatreg') . '<br> <a href="'. esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) .'</a>';
 				$adminEmail = get_option( 'admin_email' );
 				$mailSent = wp_mail($this->_bookerEmail, esc_html__('Booking confirmation', 'seatreg'), $message, array(
 					"Content-type: text/html",

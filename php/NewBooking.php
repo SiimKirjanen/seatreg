@@ -75,7 +75,7 @@ class NewBooking extends Booking {
 		$bookingCheckURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 		printf(
 			esc_html__('You can look your booking at %s', 'seatreg'), 
-			esc_html("<a href='$bookingCheckURL'>$bookingCheckURL</a>")
+			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"
 		);
 
 		if($this->_sendNewBookingNotificationEmail) {
