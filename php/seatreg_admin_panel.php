@@ -21,32 +21,32 @@ function seatreg_add_plugin_menu() {
 	//Generate SeatReg Admin Page Sub Pages
 	add_submenu_page(
 		'seatreg-welcome',
-		sprintf(__('%s Home', 'seatreg'), 'SeatReg'),
-		__('Home', 'seatreg'),
+		sprintf(esc_html__('%s Home', 'seatreg'), 'SeatReg'),
+		esc_html__('Home', 'seatreg'),
 		'manage_options',
 		'seatreg-welcome',
 		'seatreg_create_welcome'
 	);
 	add_submenu_page(
 		'seatreg-welcome',   //slug 
-		sprintf(__('%s Overview', 'seatreg'), 'SeatReg'),  //page title
-		__('Overview', 'seatreg'),  //menu title
+		sprintf(esc_html('%s Overview', 'seatreg'), 'SeatReg'),  //page title
+		esc_html('Overview', 'seatreg'),  //menu title
 		'manage_options',  //capability
 		'seatreg-overview',   //slug
 		'seatreg_create_overview'  //callback
 	);
 	add_submenu_page(
 		'seatreg-welcome',   //slug 
-		sprintf(__('%s Settings', 'seatreg'), 'SeatReg'),  //page title
-		__('Settings', 'seatreg'),  //menu title
+		sprintf(esc_html('%s Settings', 'seatreg'), 'SeatReg'),  //page title
+		esc_html('Settings', 'seatreg'),  //menu title
 		'manage_options',  //capability
 		'seatreg-options',   //slug
 		'seatreg_create_options'
 	);
 	add_submenu_page(
 		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
-		sprintf(__('%s Bookings', 'seatreg'), 'SeatReg'),  //page title
-		__('Bookings', 'seatreg'),  //menu title
+		sprintf(esc_html('%s Bookings', 'seatreg'), 'SeatReg'),  //page title
+		esc_html('Bookings', 'seatreg'),  //menu title
 		'manage_options',  //capability
 		'seatreg-management',   //slug
 		'seatreg_create_management'

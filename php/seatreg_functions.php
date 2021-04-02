@@ -606,7 +606,7 @@ function seatreg_generate_settings_form() {
 
 			<?php
 				wp_nonce_field( 'seatreg-options-submit', 'seatreg-options-nonce' );
-				submit_button( __('Save changes', 'seatreg'), 'primary', 'seatreg-settings-submit', false );
+				submit_button( esc_html('Save changes', 'seatreg'), 'primary', 'seatreg-settings-submit', false );
 			?>
 
 		</from>
