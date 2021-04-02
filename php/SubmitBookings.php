@@ -34,7 +34,8 @@ class SubmitBookings extends Booking {
 		$customFields = stripslashes_deep($customFields);
 		
 		if( !$this->seatreg_validate_custom_fields( $customFields ) ) {
-			$this->response->setError( __('Input validation failed','seatreg') );
+			$this->response->setValidationError( esc_html__('Custom field validation failed','seatreg') );
+
 			return false;
 		}
 
@@ -86,7 +87,7 @@ class SubmitBookings extends Booking {
 		if($this->_registrationPassword != null) {
 			if($this->_registrationPassword != $this->_submittedPassword) {
 				//registration password and user submitted passwords are not the same
-				$this->response->setError(__('Error. Password mismatch!', 'seatreg'));
+				$this->response->setError(esc_html__('Error. Password mismatch!', 'seatreg'));
 				
 				return;
 			}
@@ -95,7 +96,7 @@ class SubmitBookings extends Booking {
 		//1.step
 		//Selected seat limit check
 		if(!$this->seatsLimitCheck()) {
-			$this->response->setError(__('Error. Seat limit exceeded', 'seatreg'));
+			$this->response->setError(esc_html__('Error. Seat limit exceeded', 'seatreg'));
 
 			return;
 		}
@@ -104,7 +105,7 @@ class SubmitBookings extends Booking {
 		$this->isSeperateSeats();
 
 		if(!$this->_isValid) {
-			$this->response->setError(__('Error. Dublicated seats', 'seatreg'));
+			$this->response->setError(esc_html__('Error. Dublicated seats', 'seatreg'));
 
 			return;
 		}
@@ -123,7 +124,7 @@ class SubmitBookings extends Booking {
 			$gmailReg = '/^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/';
 
 			if(!preg_match($gmailReg, $this->_bookerEmail)) {
-				$this->response->setError(__('Gmail needed!', 'seatreg'));
+				$this->response->setError(esc_html__('Gmail needed!', 'seatreg'));
 
 				return;
 			}
@@ -131,14 +132,14 @@ class SubmitBookings extends Booking {
 
 		//5.step. Time check. is registration open.
 		if ($this->_isRegistrationOpen == false) {
-			$this->response->setError(__('Registration is closed', 'seatreg'));
+			$this->response->setError(esc_html__('Registration is closed', 'seatreg'));
 
 			return;
 		}
 
 		$registrationTime = seatreg_registration_time_status($this->_registrationStartTimestamp, $this->_registrationEndTimestamp);
 		if($registrationTime != 'run') {
-			$this->response->setError(__('Registration is not open', 'seatreg'));
+			$this->response->setError(esc_html__('Registration is not open', 'seatreg'));
 
 			return;
 		}

@@ -549,9 +549,10 @@ SeatReg.prototype.openInfo = function() {
 	$('#extra-info').css('display','block');
 };
 
-SeatReg.prototype.closeCheckOut = function(hideModalBg) {
+SeatReg.prototype.closeCheckOut = function() {
 	$('#checkout-area').css('display','none');
-	$('#modal-bg').css('display','none');	
+	$('#modal-bg').css('display','none');
+	$('#request-error').text('').css('display', 'none');	
 };
 
 SeatReg.prototype.generateCheckout = function(arrLen) {
@@ -970,7 +971,8 @@ function validateInput(inputField) {
 	var value = inputField.val();
 
 	if(value == '') {
-		inputField.next().text(translator.translate('emptyField')).css('display','inline');
+		inputField.next().text(translator.translate('emptyField')).css('display','block');
+
 		return false;
 	}
 
@@ -992,7 +994,7 @@ function validateInput(inputField) {
 			if(useThis.test(value)) {
 				inputField.next().css('display','none');
 			}else {
-				inputField.next().text(translator.translate('emailNotCorrect')).css('display','inline');
+				inputField.next().text(translator.translate('emailNotCorrect')).css('display','block');
 	
 				return false;
 			}
@@ -1003,7 +1005,7 @@ function validateInput(inputField) {
 			if(customField.test(value)) {				
 				inputField.next().css('display','none');	
 			}else {	
-				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','inline');	
+				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','block');	
 
 				return false;	
 			}
@@ -1080,15 +1082,19 @@ function sendData(customFieldBack, regURL) {
 					bookingsConfirmedInfo(resp.data, 1);
 				}else if(resp.type == 'error' && resp.text == 'Wrong captcha') {
 					$('#captcha-img').replaceWith(resp.data);
+					$('#request-error').text(translator.translate('wrongCaptcha')).css('display','block');
 					$('#checkout-confirm-btn').css('display','inline-block');
-					$('#captcha-text').text(translator.translate('wrongCaptcha'));
 				}else if(resp.type == 'error') {
 					$('#checkout-area').css('display','none');
 					$('#captcha-ref').click();
 					$('#error-text').html(resp.text);
 					$('#error').css('display','block');
 					$('#checkout-confirm-btn').css('display','inline-block');
-				}else {
+				}else if(resp.type == 'validation-error') {
+					$('#captcha-ref').click();
+					$('#checkout-confirm-btn').css('display','inline-block');
+					$('#request-error').text(resp.text).css('display','block');
+				} else {
 					$('#error-text').text(translator.translate('somethingWentWrong'));
 					$('#error').css('display','block');
 					$('#checkout-confirm-btn').css('display','inline-block');
@@ -1192,15 +1198,12 @@ $('#checkoput-area-inner').submit(function(e) {
 	if($('#captcha-val').val() == '') {
 		$('#captcha-val').focus();
 		$('#request-error').text('Enter captcha').css('display','block');
+
 		return;
 	}
 
 	if(valid) {
-		if(!seatReg.demo) {
-			sendData(collectData(), qs['c']);
-		}else {
-			alert('Demo');
-		}
+		sendData(collectData(), qs['c']);
 	}
 })
 
@@ -1236,6 +1239,7 @@ $('.close-btn').on('click', function() {
 	var $activeDialog = $(this).closest('.dialog-box');
 	$activeDialog.css('display','none');
 	$('#modal-bg').css('display','none');
+	$('#request-error').text('').css('display', 'none');
 });
 
 $('.zoom-action').on('click', function() {

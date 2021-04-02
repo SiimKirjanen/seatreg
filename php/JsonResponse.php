@@ -20,6 +20,11 @@ class JsonResponse {
 		$this->_response->text = $errorText;
 	}
 
+	public function setValidationError($errorText) {
+		$this->_response->type = 'validation-error';
+		$this->_response->text = $errorText;
+	}
+
 	public function setText($text) {
 		$this->_response->text = $text;
 	}

@@ -1820,6 +1820,7 @@ function seatreg_booking_submit_callback() {
 			empty($_POST['custom'])) {
 				$resp->setError('Missing data');
 				$resp->echoData();
+				
 				die();
 		}
 
