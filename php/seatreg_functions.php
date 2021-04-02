@@ -43,9 +43,9 @@ function seatreg_bookings_is_user_logged_in() {
 }
 
 //generating nonce fields without html id attribute
-function seatrag_generate_nonce_field() {
+function seatrag_generate_nonce_field($action) {
 	?>
-		<input type="hidden" name="seatreg-admin-nonce" value="<?php echo wp_create_nonce( 'seatreg-admin-nonce' ); ?>" />
+		<input type="hidden" name="<?php echo $action; ?>" value="<?php echo wp_create_nonce( $action ); ?>" />
 		<?php echo wp_referer_field( false ); ?>
 	<?php
 }
@@ -625,7 +625,7 @@ function seatreg_create_registration_from() {
 			</label>
 	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px">
 			<input type='hidden' name='action' value='seatreg_create_submit' />
-			<?php echo seatrag_generate_nonce_field(); ?>
+			<?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
 			<?php
 				submit_button('Create new registration');
 			?>
@@ -638,7 +638,7 @@ function seatreg_create_delete_registration_from($registrationCode) {
 	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" class="seatreg-delete-registration-form" onsubmit="return confirm('Do you really want to delete?');">
 	    	<input type="hidden" name="registration-code" value="<?php echo esc_attr($registrationCode); ?>" />
 			<input type='hidden' name='action' value='seatreg_delete_registration' />
-			<?php echo seatrag_generate_nonce_field(); ?>
+			<?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
 			<?php
 				submit_button('Delete', 'delete-registration-btn', 'delete-registration', false, array( 'id' => "delete-$registrationCode" ));
 			?>
@@ -1806,47 +1806,57 @@ function seatreg_booking_submit_callback() {
 	$resp = new JsonResponse();
 	session_start();
 
-	if($_SESSION['seatreg_captcha'] == $_POST['capv']) {
-
-		if( empty($_POST['FirstName']) || 
-			empty($_POST['LastName']) || 
-			empty($_POST['Email']) || 
-			empty($_POST['item-id']) ||
-			empty($_POST['item-nr']) ||
-			empty($_POST['room-uuid']) ||
-			empty($_POST['em']) ||
-			empty($_POST['c']) ||
-			!isset($_POST['pw']) ||
-			empty($_POST['custom'])) {
-				$resp->setError('Missing data');
-				$resp->echoData();
+	if ( ! wp_verify_nonce( $_POST['seatreg-booking-submit'], 'seatreg-booking-submit' ) ) {
+		$resp->setError('Nonce validation failed');
+		$resp->echoData();
 				
-				die();
-		}
+		die();
+	}
 
-		$newBooking = new SubmitBookings( $_POST['c'], $resp );
-
-		if( $newBooking->validateBookingData(
-				$_POST['FirstName'], 
-				$_POST['LastName'], 
-				$_POST['Email'], 
-				$_POST['item-id'], 
-				$_POST['item-nr'], 
-				$_POST['em'], 
-				$_POST['c'], 
-				$_POST['pw'], 
-				$_POST['custom'],
-				$_POST['room-uuid']) 
-		){
-			$newBooking->validateBooking();
-		}	
-	}else{
-	    $r = randomString(10);
+	if($_SESSION['seatreg_captcha'] !== $_POST['capv']) {
+		$r = randomString(10);
 	    $resp->setError('Wrong captcha');
 	    $resp->setData('<img src="php/image.php?dummy='.$r.'" id="captcha-img"/>');
+		$resp->echoData();
+
+		die();
 	}
+
+	if( empty($_POST['FirstName']) || 
+		empty($_POST['LastName']) || 
+		empty($_POST['Email']) || 
+		empty($_POST['item-id']) ||
+		empty($_POST['item-nr']) ||
+		empty($_POST['room-uuid']) ||
+		empty($_POST['em']) ||
+		empty($_POST['c']) ||
+		!isset($_POST['pw']) ||
+		empty($_POST['custom'])) {
+			$resp->setError('Missing data');
+			$resp->echoData();
+			
+			die();
+	}
+
+	$newBooking = new SubmitBookings( $_POST['c'], $resp );
+
+	if( $newBooking->validateBookingData(
+			$_POST['FirstName'], 
+			$_POST['LastName'], 
+			$_POST['Email'], 
+			$_POST['item-id'], 
+			$_POST['item-nr'], 
+			$_POST['em'], 
+			$_POST['c'], 
+			$_POST['pw'], 
+			$_POST['custom'],
+			$_POST['room-uuid']) 
+	){
+		$newBooking->validateBooking();
+	}	
 	
 	$resp->echoData();
+	
 	die();
 }
 

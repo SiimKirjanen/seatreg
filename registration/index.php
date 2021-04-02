@@ -388,6 +388,7 @@
 				</button>
 				<img src="css/ajax_loader.gif" alt="Loading" class="ajax-load">
 				<div id="request-error"></div>
+				<?php seatrag_generate_nonce_field('seatreg-booking-submit'); ?>
 			</form>
 		</div>
 
