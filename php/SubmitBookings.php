@@ -10,7 +10,7 @@ require_once('constants.php');
 require_once('util/registration_time_status.php');
 require_once('util/session_captcha.php');
 
-class NewBookings extends Booking {
+class SubmitBookings extends Booking {
 	public $response; //response object. 
 	protected $_bookerEmail; //confirm email is send to this address
 	protected $_submittedPassword;  //user submitted password

@@ -9,7 +9,7 @@
 	}
 	
 	require_once('./../registration/php/reg_functions.php');
-	require_once('./NewBooking.php');
+	require_once('./ConfirmBooking.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +23,7 @@
 <body>
 	<div>
 		<?php
-			$validator = new NewBooking($_GET['confirmation-code']);
+			$validator = new ConfirmBooking($_GET['confirmation-code']);
 			$validator->startConfirm();
 		?>
 	</div>

@@ -3,7 +3,7 @@
 global $wpdb;
 global $seatreg_db_table_names;
 
-require_once 'NewBookings.php';
+require_once 'SubmitBookings.php';
 require_once 'JsonResponse.php';
 require_once 'constants.php';
 
@@ -1823,7 +1823,7 @@ function seatreg_booking_submit_callback() {
 				die();
 		}
 
-		$newBooking = new NewBookings( $_POST['c'], $resp );
+		$newBooking = new SubmitBookings( $_POST['c'], $resp );
 
 		if( $newBooking->validateBookingData(
 				$_POST['FirstName'], 

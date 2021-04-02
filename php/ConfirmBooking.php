@@ -9,7 +9,7 @@ require_once('emails.php');
 require_once('constants.php');
 require_once('./util/registration_time_status.php');
 
-class NewBooking extends Booking {
+class ConfirmBooking extends Booking {
 	public $reply;
 	protected $_confirmationCode;
 	protected $_bookindId;
