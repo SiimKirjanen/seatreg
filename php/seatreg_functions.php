@@ -1389,22 +1389,22 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 
 	if($searchTerm !== '') {
 		$bookings = array_filter($bookings, function($booking) use($searchTerm) {
-			if( strpos($booking->booking_id, $searchTerm) !== false ) {
+			if( stripos($booking->booking_id, $searchTerm) !== false ) {
 				return true;
 			}
-			if( strpos($booking->room_name, $searchTerm) !== false ) {
+			if( stripos($booking->room_name, $searchTerm) !== false ) {
 				return true;
 			}
-			if( strpos($booking->seat_nr, $searchTerm) !== false ) {
+			if( stripos($booking->seat_nr, $searchTerm) !== false ) {
 				return true;
 			}
-			if( strpos($booking->first_name, $searchTerm) !== false ) {
+			if( stripos($booking->first_name, $searchTerm) !== false ) {
 				return true;
 			}
-			if( strpos($booking->last_name, $searchTerm) !== false ) {
+			if( stripos($booking->last_name, $searchTerm) !== false ) {
 				return true;
 			}
-			if( strpos($booking->email, $searchTerm) !== false ) {
+			if( stripos($booking->email, $searchTerm) !== false ) {
 				return true;
 			}
 
