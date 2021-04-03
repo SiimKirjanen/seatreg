@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; 
+}
+
 //===========
 	/* Data coming from registration. Someone wants to book a seat/seats */
 //===========

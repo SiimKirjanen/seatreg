@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; 
+}
+
 require_once('seatreg_strings.php');
 
 /*

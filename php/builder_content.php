@@ -1,3 +1,9 @@
+<?php
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit; 
+	}	
+?>
+
 <div id="construction-wrapper">
 
 	<div class="build-head">

@@ -7,7 +7,7 @@
 	if( empty($_GET['confirmation-code']) ) {
 		exit();
 	}
-	
+	require_once('./util/load_wp.php');
 	require_once('./../registration/php/reg_functions.php');
 	require_once('./ConfirmBooking.php');
 ?>

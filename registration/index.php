@@ -2,7 +2,7 @@
 	if(empty($_GET['c'])){
 		exit();
 	}
-
+	require_once('../php/util/load_wp.php');
 	require_once('./../php/util/registration_time_status.php');
 	require_once('php/reg_functions.php');
 	require_once('./../php/seatreg_strings.php');

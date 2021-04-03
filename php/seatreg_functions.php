@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; 
+}
+
 global $wpdb;
 global $seatreg_db_table_names;
 
@@ -1856,7 +1860,7 @@ function seatreg_booking_submit_callback() {
 	}	
 	
 	$resp->echoData();
-	
+
 	die();
 }
 

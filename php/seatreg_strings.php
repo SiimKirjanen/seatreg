@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; 
+}
+
 function seatreg_generate_registration_stringes() {
 	$translations = new stdClass();
 	$translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');

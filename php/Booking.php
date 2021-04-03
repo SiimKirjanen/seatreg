@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; 
+}
+
 class Booking {
 	protected $_bookings; //seat bookings 
 	protected $_registrationLayout;

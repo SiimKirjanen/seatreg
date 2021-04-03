@@ -1,12 +1,15 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; 
+}
+
 /*
 ================================
 registration functions
 ================================
 */
 
-require_once('../php/util/load_wp.php');
 require_once('../php/JsonResponse.php');
 
 global $wpdb;

@@ -11,7 +11,9 @@
 	License: GPLv2 or later
 */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; 
+}
 
 if( is_admin() ) {
 	require( plugin_dir_path( __FILE__ ) . 'php/enqueue_admin.php' );
