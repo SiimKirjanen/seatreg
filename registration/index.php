@@ -507,16 +507,17 @@
 		<script src="js/jquery.3.5.1.min.js"></script>
 		<script>
 			try {
-				var seatregTranslations = $.parseJSON('<?php echo json_encode(seatreg_generate_registration_stringes()); ?>');
-				var seatLimit = <?php echo $data->seats_at_once;?>;
-				var gmail = <?php echo $data->gmail_required;?>;
-				var dataReg = $.parseJSON('<?php echo ($data->registration_layout);?>');
-				var roomsInfo = $.parseJSON('<?php echo $seatsInfo;?>');
-				var custF = $.parseJSON('<?php echo $data->custom_fields; ?>');
-				var regTime = <?php echo "'$registrationTime';";?>
-				var registrations = $.parseJSON(<?php echo "'$registrations'";?>);
+				var seatregTranslations = $.parseJSON('<?php echo wp_json_encode( seatreg_generate_registration_strings() ); ?>');
+				var seatLimit = <?php echo esc_js($data->seats_at_once); ?>;
+				var gmail = <?php echo esc_js($data->gmail_required); ?>;
+				var dataReg = $.parseJSON(<?php echo wp_json_encode($data->registration_layout); ?>);
+				var roomsInfo = $.parseJSON(<?php echo wp_json_encode($seatsInfo); ?>);
+				var custF = $.parseJSON(<?php echo wp_json_encode($data->custom_fields); ?>);
+				var regTime = '<?php echo esc_js($registrationTime); ?>';
+				var registrations = $.parseJSON(<?php echo wp_json_encode($registrations); ?>);
 			} catch(err) {
-				alert('Data gathering failed');
+				alert('Data initialization failed');
+				console.log(err);
 			}
 		</script>
 	<!--

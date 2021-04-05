@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
 
-function seatreg_generate_registration_stringes() {
+function seatreg_generate_registration_strings() {
 	$translations = new stdClass();
 	$translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
 	$translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
