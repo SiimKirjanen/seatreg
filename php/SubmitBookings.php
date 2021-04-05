@@ -48,13 +48,13 @@ class SubmitBookings extends Booking {
 
     	foreach ($firstname as $key => $value) {
     		$booking = new stdClass();
-    		$booking->firstname = $value;
-    		$booking->lastname = $lastname[$key];
-    		$booking->email = $email[$key];
-    		$booking->seat_id = $seatID[$key];
-    		$booking->seat_nr = $seatNr[$key];
-			$booking->room_uuid = $roomUUID[$key];
-    		$booking->custom_field = $customFieldData[$key];
+    		$booking->firstname = sanitize_text_field($value);
+    		$booking->lastname = sanitize_text_field($lastname[$key]);
+    		$booking->email = sanitize_email($email[$key]);
+    		$booking->seat_id = sanitize_text_field($seatID[$key]);
+    		$booking->seat_nr = sanitize_text_field($seatNr[$key]);
+			$booking->room_uuid = sanitize_text_field($roomUUID[$key]);
+    		$booking->custom_field = sanitize_text_field($customFieldData[$key]);
 
     		$bookings[] = $booking;
 		}
