@@ -73,7 +73,6 @@ $(function() {
 		this.gmailNeeded = gmail;
 		this.status = regTime;
 		this.spotName = translator.translate('seat');
-		this.demo = false;
 	}
 
 	function CartItem(id,nr,room, roomUUID) {
@@ -756,10 +755,6 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 var seatReg = new SeatReg();
 seatReg.browserInfo();
-
-if (typeof seatregdemo !== 'undefined') {
-    seatReg.demo = true;
-}
 
 if($.isEmptyObject(dataReg)) {
 	$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ translator.translate('_regUnderConstruction') +'</div>');
