@@ -66,7 +66,7 @@ function seatreg_generate_admin_strings() {
     $translations->legendNameTaken = esc_html__('Legend name is taken', 'seatreg');
     $translations->lagendNameMissing = esc_html__('Legend name missing!', 'seatreg');
     $translations->legendColorTaken = esc_html__('Legend color is taken. Choose another', 'seatreg');
-    $translations->legendAddedTo_ = esc_html__('Legend added to ', 'seatreg');
+    $translations->legendAddedTo = esc_html__('Legend added to', 'seatreg');
     $translations->noPermToAddRoom = esc_html__('Dont have permissions to create room', 'seatreg');
     $translations->noPermToDel = esc_html__('Dont have permission do delete', 'seatreg');
     $translations->oneRoomNeeded = esc_html__('You must have at least on room', 'seatreg');
@@ -78,7 +78,7 @@ function seatreg_generate_admin_strings() {
     $translations->_cantDelRoomBecause = esc_html__(' because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg');
     $translations->roomNameMissing = esc_html__('Room name missing', 'seatreg');
     $translations->roomNameExists = esc_html__('Room name already exists. You must choose another', 'seatreg');
-    $translations->liYouHaveSelectedSpan_ = esc_html__('<li>You have selected <span> ', 'seatreg');
+    $translations->youHaveSelected = esc_html__('You have selected', 'seatreg');
     $translations->_boxesSpanLi = esc_html__(' box/boxes</span></li>', 'seatreg');
     $translations->toSelectOneBox_ = esc_html__('To select one box use ', 'seatreg');
     $translations->toSelectMultiBox_ = esc_html__('To select multiply boxes use ', 'seatreg');
@@ -101,7 +101,9 @@ function seatreg_generate_admin_strings() {
     $translations->ok = esc_html__('Ok', 'seatreg');
     $translations->cancel = esc_html__('Cancel', 'seatreg');
     $translations->unsavedChanges = esc_html__('Unsaved Changes', 'seatreg');
-    $translations->_boxes = esc_html__(' boxes', 'seatreg');
+    $translations->boxes = esc_html__('boxes', 'seatreg');
+    $translations->box = esc_html__('box', 'seatreg');
+    $translations->noBoxesSelected = esc_html__('No boxes selected', 'seatreg');
     $translations->pendingSeat = esc_html__('Pending seat', 'seatreg');
     $translations->confirmedSeat = esc_html__('Confirmed seat', 'seatreg');
     $translations->save = esc_html__('Save', 'seatreg');

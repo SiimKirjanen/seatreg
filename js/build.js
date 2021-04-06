@@ -620,35 +620,23 @@
 
 		}
 
-		alertify.success(translator.translate('legendAddedTo_') + arrLength + translator.translate('_boxes'));
+		alertify.success(translator.translate('legendAddedTo') + ' ' + arrLength + ' ' + translator.translate('boxes'));
 		this.afterColorChange(oldLegend);
 		this.createLegendBox();
 
 	};
 
 	//info for legend and color dialogs. 
-	Registration.prototype.activeBoxesInfo = function(targetAction) {
+	Registration.prototype.activeBoxesInfo = function() {
 		var arrLength = this.activeBoxArray.length;
-		var howManyCustom = 0;
-		var howManyReg = 0;
-
-
-		for(var i = 0; i < arrLength; i++) {
-			var index = this.rooms[this.currentRoom].findBox(this.activeBoxArray[i]);
-			
-			if(index !== false) {
-				if(this.rooms[this.currentRoom].boxes[index].canRegister == true) {
-					howManyReg++;
-				}else {
-					howManyCustom++;
-				}
-			}else {
-			}
-		}
 
 		var activeBoxesInfoString = '';
-		if(arrLength > 0) {
-			activeBoxesInfoString = translator.translate('liYouHaveSelectedSpan_') + arrLength + translator.translate('_boxes');
+		if(arrLength === 1) {
+			activeBoxesInfoString = translator.translate('youHaveSelected') + ' ' + arrLength + ' ' + translator.translate('box');
+		}else if (arrLength > 0) {
+			activeBoxesInfoString = translator.translate('youHaveSelected') + ' ' + arrLength + ' ' + translator.translate('boxes');
+		}else {
+			activeBoxesInfoString = translator.translate('noBoxesSelected');
 		}
 
 		return activeBoxesInfoString;
@@ -2247,11 +2235,11 @@
 
 	$('#hover-dialog').on('show.bs.modal', function() {
 		$('#box-hover-text').val('');
-		$('#hover-dialog').find('.hover-dialog-info').html(reg.activeBoxesInfo('värvida'));
+		$('#hover-dialog').find('.hover-dialog-info').html(reg.activeBoxesInfo());
 	});
 
 	$('#color-dialog').on('show.bs.modal', function() {
-		$('#color-dialog .color-dialog-info').html(reg.activeBoxesInfo('värvida'));
+		$('#color-dialog .color-dialog-info').html(reg.activeBoxesInfo());
 	});
 
 	$('#room-name-dialog').on('show.bs.modal', function() {
@@ -2406,7 +2394,7 @@
 	function cahngeLegendDialogMessage() {
 		$('.legend-dialog-info').empty();
 		var showNotify = false;
-		var dialogInfoText = reg.activeBoxesInfo('legendi lisada');
+		var dialogInfoText = reg.activeBoxesInfo();
 
 		if(reg.allLegends.length == 0) {
 			showNotify = true;
