@@ -487,7 +487,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="use-pending"><?php esc_html_e('Pending status', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('By default all bookings will first be in pending state so admin can approve them (booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
+					<?php esc_html_e('By default all bookings will first be in pending state so admin can approve them (with booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
 				</p>
 				<div class="checkbox">
 			    	<label>
@@ -1658,23 +1658,23 @@ function seatreg_update() {
 	global $seatreg_db_table_names;
 
 	if(!isset($_POST['gmail-required'])) {
-		$_POST['gmail-required'] = '0';
+		$_POST['gmail-required'] = 0;
 	}else {
 		$_POST['gmail-required'] = 1;
 	}
 	
 	if(!isset($_POST['registration-status'])) {
-		$_POST['registration-status'] = '0';
+		$_POST['registration-status'] = 0;
 	}
 
 	if(!isset($_POST['use-pending'])) {
-		$_POST['use-pending'] = '0';
+		$_POST['use-pending'] = 0;
 	}else {
 		$_POST['use-pending'] = 1;
 	}
 
 	if(!isset($_POST['show-registration-bookings'])) {
-		$_POST['show-registration-bookings'] = '0';  
+		$_POST['show-registration-bookings'] = 0;  
 	}else {
 		$_POST['show-registration-bookings'] = 1;
 	}
@@ -1682,19 +1682,19 @@ function seatreg_update() {
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
 		array(
-			'registration_start_timestamp' => $_POST['start-timestamp'] == '' ? null : $_POST['start-timestamp'],
-			'registration_end_timestamp' => $_POST['end-timestamp'] == '' ? null : $_POST['end-timestamp'],
-			'seats_at_once' => $_POST['registration-max-seats'],
-			'gmail_required' => $_POST['gmail-required'],
-			'registration_open' => $_POST['registration-status'],
-			'use_pending' => $_POST['use-pending'],
-			'registration_password' => $_POST['registration-password'] == '' ? null : $_POST['registration-password'],
-			'notify_new_bookings' => $_POST['booking-notification'] ? $_POST['booking-notification'] : null,
-			'show_bookings' => $_POST['show-registration-bookings'],
-			'payment_text' => $_POST['payment-instructions'] == '' ? null : $_POST['payment-instructions'],
-			'info' => $_POST['registration-info-text'],
+			'registration_start_timestamp' => $_POST['start-timestamp'] == '' ? null : sanitize_text_field($_POST['start-timestamp']),
+			'registration_end_timestamp' => $_POST['end-timestamp'] == '' ? null : sanitize_text_field($_POST['end-timestamp']),
+			'seats_at_once' => sanitize_text_field($_POST['registration-max-seats']),
+			'gmail_required' => sanitize_text_field($_POST['gmail-required']),
+			'registration_open' => sanitize_text_field($_POST['registration-status']),
+			'use_pending' => sanitize_text_field($_POST['use-pending']),
+			'registration_password' => $_POST['registration-password'] == '' ? null : sanitize_text_field($_POST['registration-password']),
+			'notify_new_bookings' => $_POST['booking-notification'] ? sanitize_text_field($_POST['booking-notification']) : null,
+			'show_bookings' => sanitize_text_field($_POST['show-registration-bookings']),
+			'payment_text' => $_POST['payment-instructions'] == '' ? null : sanitize_text_field($_POST['payment-instructions']),
+			'info' => sanitize_text_field($_POST['registration-info-text']),
 			'custom_fields' => stripslashes_deep( $_POST['custom-fields'] ),
-			'booking_email_confirm' => $_POST['email-confirm']
+			'booking_email_confirm' => sanitize_text_field($_POST['email-confirm'])
 		),
 		array(
 			'registration_code' => $_POST['registration_code']
@@ -1728,9 +1728,9 @@ function seatreg_form_submit_handle() {
 		wp_die('Error updating settings');
 	}else {
 		wp_redirect($_POST['_wp_http_referer']);
+
 		die();
 	}
-
 }
 
 /*
