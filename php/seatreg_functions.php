@@ -455,7 +455,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="payment-instructions"><?php esc_html_e('Payment instruction', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('At the moment this plugin dosn\'t offer any payment systems, but you can leave informative text that instructs how to pay for booked seat/seats', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php esc_html_e('At the moment this plugin dosn\'t offer any payment solutions, but you can leave informative text that instructs how to pay for booking. It will be displayed in booking status page', 'seatreg'); ?>.</p>
 				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="Enter payment instructions here"><?php echo esc_html($options[0]->payment_text); ?></textarea>
 			</div>
 
@@ -467,11 +467,11 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="gmail-required"><?php esc_html_e('Gmail required', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Gmail account is required when making a booking', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php esc_html_e('Gmail address is required when making a booking', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="gmail-required" name="gmail-required" value="1" <?php echo $options[0]->gmail_required == '1' ? 'checked':'' ?> > 
-			      		<?php esc_html_e('Allow only gmail accounts', 'seatreg'); ?>
+			      		<?php esc_html_e('Allow only gmail address', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>

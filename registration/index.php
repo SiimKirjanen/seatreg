@@ -160,12 +160,7 @@
 							<div><?php esc_html_e('seats selected', 'seatreg'); ?></div> 
 							<div class="max-seats">
 								(<?php 
-									esc_html_e('Max', 'seatreg');
-									if($data->seats_at_once > 1) {
-										esc_html_e( $data->seats_at_once ); 
-									}else {
-										esc_html_e( $data->seats_at_once ); 
-									}
+									echo esc_html__('max', 'seatreg') . ' ' . esc_html( $data->seats_at_once );
 								?>)
 							</div>
 						</div>
@@ -506,6 +501,11 @@
 
 		<script src="js/jquery.3.5.1.min.js"></script>
 		<script>
+			function showErrorView(title) {
+				$('body').addClass('error-view').html('<div>An error occured</div><img src="img/monkey.png" /><div>' + title + '</div>');
+			}
+		</script>
+		<script>
 			try {
 				var seatregTranslations = $.parseJSON('<?php echo wp_json_encode( seatreg_generate_registration_strings() ); ?>');
 				var seatLimit = <?php echo esc_js($data->seats_at_once); ?>;
@@ -516,7 +516,7 @@
 				var regTime = '<?php echo esc_js($registrationTime); ?>';
 				var registrations = $.parseJSON(<?php echo wp_json_encode($registrations); ?>);
 			} catch(err) {
-				alert('Data initialization failed');
+				showErrorView('Data initialization failed');
 				console.log(err);
 			}
 		</script>
