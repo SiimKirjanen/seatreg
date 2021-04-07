@@ -441,11 +441,11 @@
 			<div id="bookings-confirmed-inner" class="dialog-box-inner border-box animated zoomIn">
 				<h2 class="booking-confirmed-header">
 					<?php 
-						esc_html_e('You Bookings are confirmed', 'seatreg');
+						esc_html_e('Your Booking is confirmed', 'seatreg');
 					?>		
 				</h2>
 				<p>
-					<?php esc_html_e('You can look your bookings status at the following link'); ?><br>
+					<?php esc_html_e('You can look your booking status at the following link'); ?><br>
 					<a href="" class="booking-check-url" target="_blank"></a>
 				</p>
 				<p>
@@ -502,10 +502,8 @@
 		<script src="js/jquery.3.5.1.min.js"></script>
 		<script>
 			function showErrorView(title) {
-				$('body').addClass('error-view').html('<div>An error occured</div><img src="img/monkey.png" /><div>' + title + '</div>');
+				$('body').addClass('error-view').html('<div>An error occured</div><img src="img/monkey.png" alt="monkey" /><div>' + title + '</div>');
 			}
-		</script>
-		<script>
 			try {
 				var seatregTranslations = $.parseJSON('<?php echo wp_json_encode( seatreg_generate_registration_strings() ); ?>');
 				var seatLimit = <?php echo esc_js($data->seats_at_once); ?>;
