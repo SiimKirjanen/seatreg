@@ -286,6 +286,7 @@
 			if(this.legends[i].text == legend) {
 				this.legends.splice(i, 1);
 				reg.needToSave = true;
+
 				break;
 			}
 		}
@@ -403,6 +404,16 @@
 		for(var i = 0; i < arrLength; i++) {
 			var targetIndex = parseInt(boxes.filter('[data-id="'+ this.boxes[i].id +'"]').css('z-index'));
 			this.boxes[i].changeZIndex(targetIndex);
+		}
+	};
+
+	Room.prototype.removeLegendFromRoomBoxes = function(legendText) {
+		var roomBoxLength = this.boxes.length;
+
+		for(var i = 0; i < roomBoxLength; i++) {
+			if(this.boxes[i].legend === legendText) {
+				this.boxes[i].legend = "noLegend";
+			}
 		}
 	};
 
@@ -688,19 +699,11 @@
 		this.createLegendBox();
 	};
 
-	//removing legend from boxes when delete legend from registration (dialog)
+	//remove legend from all boxes
 	Registration.prototype.removeLegendFromBoxes = function(legendText) {
-		var roomsLength = Object.size(this.rooms);
-
 		for (var property in this.rooms) {
 		    if (this.rooms.hasOwnProperty(property)) {
-		    	var roomBoxLength = this.rooms[property].boxes.length;
-
-		    	for(var j = 0; j < roomBoxLength; j++) {
-					if(this.rooms[property].boxes[j].legend == legendText) {
-						this.rooms[property].boxes[j].legend = "noLegend";
-					}
-				}
+				this.rooms[property].removeLegendFromRoomBoxes(legendText);
 		    }
 		}
 	};
@@ -2703,6 +2706,7 @@
 
 		if(selectedLegend != '') {
 			reg.rooms[reg.currentRoom].removeLegendFromRoom(selectedLegend);
+			reg.rooms[reg.currentRoom].removeLegendFromRoomBoxes(selectedLegend);
 			reg.updateLegendSelect();
 		}
 	});
