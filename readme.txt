@@ -1,6 +1,6 @@
 === SeatReg ===
 Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source=url
-Tags: seat registration, booking, booking seats, seat map, booking manager
+Tags: seat registration, booking, booking seats, booking events, seat map, booking management
 Requires at least: 5.4
 Requires PHP: 7.2.28
 Tested up to: 5.7
@@ -12,19 +12,16 @@ Create and manage seat registrations. Design your own seat maps and manage seat 
  
 == Description ==
  
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+SeatReg is a free plugin that offers the following and more to build and manage your online seat registrations.
  
+* Map builder tool helps you design and later modify your seat map. Create, delete, resize, move around and change color of your seats. You can also add custom legends and hover text to your seats.
+* Each registration can have as many seats and rooms you wish.
+* With manager you keep an eye on your bookings. You can view, search, remove, confirm, download (PDF, XLSX, text) and change them. 
+* Get an overview of your registrations. See how many open, corfirmed or pending bookings you have.
+* Many settings to control the booking flow. For example you can create custom fields that allow customers to enter extra data.
+* Scrollable and resizable registration view.
 
 == Installation ==
  
 1. Install SeatReg either via the WordPress.org plugin directory, or by uploading the files to your server.
 2. Activate the plugin through the ‘Plugins’ menu in WordPress.
-
-  
-== Screenshots ==
- 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot

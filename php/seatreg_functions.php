@@ -1790,7 +1790,7 @@ function seatreg_update_layout() {
 
 }
 
-function randomString($length){
+function seatreg_random_string($length){
 	$chars = "abcdefghijklmnoprstuvwzyx023456789";
 	$str = "";
 	$i = 0;
@@ -1818,7 +1818,7 @@ function seatreg_booking_submit_callback() {
 	}
 
 	if($_SESSION['seatreg_captcha'] !== $_POST['capv']) {
-		$r = randomString(10);
+		$r = seatreg_random_string(10);
 	    $resp->setError('Wrong captcha');
 	    $resp->setData('<img src="php/image.php?dummy='.$r.'" id="captcha-img"/>');
 		$resp->echoData();
@@ -1876,7 +1876,7 @@ function seatreg_get_room_stats_callback() {
 add_action( 'wp_ajax_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
 add_action( 'wp_ajax_nopriv_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
 function seatreg_new_captcha_callback() {
-	$r = randomString(10);
+	$r = seatreg_random_string(10);
 	echo '<img src="php/image.php?dummy='. esc_html($r) .'" id="captcha-img" />';
 
 	die();

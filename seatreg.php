@@ -23,7 +23,7 @@ if( is_admin() ) {
 require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_functions.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'php/JsonResponse.php' );
 
-function seatregPluginActivate() {
+function seatreg_plugin_activate() {
 	seatreg_set_up_db();
 }
 
@@ -33,7 +33,7 @@ if( is_admin() ) {
 }
 
 //hooks
-register_activation_hook(__FILE__, "seatregPluginActivate");
+register_activation_hook(__FILE__, "seatreg_plugin_activate");
 
 //filters
 add_filter( 'admin_body_class', 'seatreg_admin_body_class' );
@@ -49,7 +49,7 @@ function seatreg_admin_body_class($classes) {
 	return $classes;
 }
 
-add_filter('admin_footer_text', 'remove_admin_footer_text');
-function remove_admin_footer_text() {
+add_filter('admin_footer_text', 'seatreg_remove_admin_footer_text');
+function seatreg_remove_admin_footer_text() {
     echo '';
 }
