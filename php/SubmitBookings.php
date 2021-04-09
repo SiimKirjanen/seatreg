@@ -1,18 +1,17 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; 
+	exit(); 
 }
 
 //===========
 	/* Data coming from registration. Someone wants to book a seat/seats */
 //===========
-
-require_once('Booking.php');
-require_once('emails.php');
-require_once('constants.php');
-require_once('util/registration_time_status.php');
-require_once('util/session_captcha.php');
+require_once( 'constants.php');
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/Booking.php');
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php');
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/registration_time_status.php' );
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/session_captcha.php' );
 
 class SubmitBookings extends Booking {
 	public $response; //response object. 
@@ -191,7 +190,7 @@ class SubmitBookings extends Booking {
 			$this->_bookingId = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
 			$registrationConfirmDate = null;
 			$seatsString = $this->generateSeatString();
-			$bookingCheckURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
+			$bookingCheckURL = get_site_url() . '?seatreg=booking-status&registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 
 			if(!$this->_requireBookingEmailConfirm) {
 				$bookingStatus = $this->_insertState;
@@ -221,7 +220,7 @@ class SubmitBookings extends Booking {
 
 			if($this->_requireBookingEmailConfirm) {
 				seatreg_change_captcha(3);
-				$confirmationURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_confirm.php?confirmation-code='. $confCode;
+				$confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
 				$message = esc_html__('Your selected seats are', 'seatreg') . ': <br/><br/>' . $seatsString . '
 							<p>' . esc_html__('Click on the link below to confirm your booking', 'seatreg') . '</p>
 							<a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>

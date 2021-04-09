@@ -10,7 +10,8 @@ registration functions
 ================================
 */
 
-require_once('../php/JsonResponse.php');
+//require_once('../php/JsonResponse.php');
+
 
 global $wpdb;
 global $seatreg_db_table_names;

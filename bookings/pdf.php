@@ -1,17 +1,10 @@
 <?php
-/*
-	ini_set('display_errors',1);
-	ini_set('display_startup_errors',1);
-	error_reporting(-1);
-*/
+    require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
+    require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/tfpdf/tfpdf.php' );
 
-require_once('../php/util/load_wp.php');
-require_once('../php/seatreg_functions.php');
-require_once('../php/libs/tfpdf/tfpdf.php');
+    seatreg_bookings_is_user_logged_in(); 
 
-seatreg_bookings_is_user_logged_in(); 
-
-$showWhat = 'all';
+    $showWhat = 'all';
 
 if(!isset($_GET['s2']) && isset($_GET['s1'])) {
 	$showWhat = 'pending';
@@ -81,7 +74,7 @@ function customFieldWithValuePDF($label, $custom_data) {
 class PDF extends tFPDF {
 	function Header() {
 		$this->SetFont('Arial','B',14);
-		$this->Image('../img/seatreg_logo.png',9,5,30);
+		$this->Image(SEATREG_PLUGIN_FOLDER_DIR. 'img/seatreg_logo.png',9,5,30);
 		
 		// Move to the right
 		$this->Cell(70);

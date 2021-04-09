@@ -190,7 +190,6 @@ $('#registration-end-timestamp').datepicker({
 
 $('.datepicker-altfield').each(function() {
 	if( $(this).val() != '' ) {
-		console.log('hey');
 		var date = new Date(parseInt( $(this).val() ));
 		var formattedDate = date.format("d.m.Y");
 		$(this).prev('.option-datepicker').val(formattedDate);
@@ -198,17 +197,15 @@ $('.datepicker-altfield').each(function() {
 });
 
 //add registration code to href in map builder
-$('#registration-link').on('click', function(e) {
-	var href = $(this).attr('href');
-	href = href.split('?')[0];  
+$('#registration-link').on('click', function() {
+	var href = $(this).attr('href').split('?')[0];
 	
-	$(this).attr('href', href + '?c=' + seatreg.selectedRegistration);
+	$(this).attr('href', href + '?seatreg=registration&c=' + seatreg.selectedRegistration);
 });
 
 $('.tab-container').easytabs({
 	animate: false,
 	animationSpeed: 0
-	//updateHash: false
 }); 
 
 $('#existing-regs-wrap').on('click', '.room-list-item', function() {
@@ -565,8 +562,7 @@ $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e)
 	e.preventDefault();
 
 	var timezone =	jstz.determine();
-	var fileType = $(this).data('file-type');
-	var _href = WP_Seatreg.plugin_dir_url + 'bookings/' + $(this).attr('href');
+	var _href = $(this).attr('href');
 
 	alertify.set({ buttonFocus: "ok" });
 	alertify.set({ labels: {

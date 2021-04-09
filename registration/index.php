@@ -1,11 +1,16 @@
 <?php
-	if(empty($_GET['c'])){
+	if ( !defined( 'ABSPATH' ) ) {
+		exit(); 
+	}
+
+	if( empty($_GET['c'] )){
 		exit();
 	}
-	require_once('../php/util/load_wp.php');
-	require_once('./../php/util/registration_time_status.php');
-	require_once('php/reg_functions.php');
-	require_once('./../php/seatreg_strings.php');
+
+	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/util/registration_time_status.php');
+	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'registration/php/reg_functions.php');
+	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_strings.php');
+	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/JsonResponse.php');
 
 	$data = seatreg_get_options_reg($_GET['c']);
 
@@ -44,7 +49,8 @@
 		$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 	}
 
-	$manifestFileContents = file_get_contents("../rev-manifest.json");
+	$manifestFileContents = file_get_contents(SEATREG_PLUGIN_FOLDER_URL . 'rev-manifest.json');
+
 	$manifest = json_decode($manifestFileContents, true);
 ?>
 <!DOCTYPE html>
@@ -55,10 +61,10 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
 	<link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="css/<?php echo $manifest['registration.min.css']; ?>">
+	<link rel="stylesheet" href="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/css/<?php echo $manifest['registration.min.css']; ?>">
 
 	<?php if($data->registration_open == 1) : ?>	
-		<script src="js/modernizr.custom.89593.min.js"></script>
+		<script src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/js/modernizr.custom.89593.min.js"></script>
 	<?php else : ?>
 		
 		<style>
@@ -368,7 +374,7 @@
 								?>:
 							</span>
 						</label>
-						<img src="php/image.php" id="captcha-img" alt="captcha image"/>
+						<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/php/image.php" id="captcha-img" alt="captcha image"/>
 						<div id="captcha-ref" class="refresh1">
 							<i class="fa fa-refresh"></i>
 						</div><br>
@@ -381,7 +387,7 @@
 						esc_html_e('OK', 'seatreg');
 					?>
 				</button>
-				<img src="css/ajax_loader.gif" alt="Loading" class="ajax-load">
+				<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/css/ajax_loader.gif" alt="Loading" class="ajax-load">
 				<div id="request-error"></div>
 				<?php seatrag_generate_nonce_field('seatreg-booking-submit'); ?>
 			</form>
@@ -498,13 +504,13 @@
 				</div>
 
 		<?php endif; ?>
-
-		<script src="js/jquery.3.5.1.min.js"></script>
+		<script src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/js/jquery.3.5.1.min.js"></script>			
 		<script>
 			function showErrorView(title) {
 				$('body').addClass('error-view').html('<div>An error occured</div><img src="img/monkey.png" alt="monkey" /><div>' + title + '</div>');
 			}
 			try {
+				var seatregPluginFolder = '<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>';
 				var seatregTranslations = $.parseJSON('<?php echo wp_json_encode( seatreg_generate_registration_strings() ); ?>');
 				var seatLimit = <?php echo esc_js($data->seats_at_once); ?>;
 				var gmail = <?php echo esc_js($data->gmail_required); ?>;
@@ -525,7 +531,7 @@
 		<script src="js/registration.js"></script>
 	-->	
 	
-		<script src="js/<?php echo $manifest['registration.min.js']; ?>"></script>
+		<script src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/js/<?php echo $manifest['registration.min.js']; ?>"></script>
 	
 		<?php endif; //end of is registration open ?>  
 

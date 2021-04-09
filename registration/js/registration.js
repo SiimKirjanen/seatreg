@@ -316,7 +316,7 @@ $(function() {
 		document.getElementById("boxes").appendChild(documentFragment);	
 
 		if(this.rooms[this.currentRoom].room.backgroundImage !== null && this.rooms[this.currentRoom].room.backgroundImage.indexOf('.') !== -1) {  //dose room have a background image?
-			$('#boxes').append('<img class="room-image" src="../uploads/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room.backgroundImage + '" />');
+			$('#boxes').append('<img class="room-image" src="' + seatregPluginFolder + 'uploads/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room.backgroundImage + '" />');
 		}
 
 		$('#boxes .bubble-text').powerTip({

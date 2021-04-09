@@ -4,12 +4,16 @@
 	/* Booking confirm */
 	//=================================
 
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit(); 
+	}
+
 	if( empty($_GET['confirmation-code']) ) {
 		exit();
 	}
-	require_once('./util/load_wp.php');
-	require_once('./../registration/php/reg_functions.php');
-	require_once('./ConfirmBooking.php');
+
+	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'registration/php/reg_functions.php' );
+	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/ConfirmBooking.php' );
 ?>
 <!DOCTYPE html>
 <html lang="en">

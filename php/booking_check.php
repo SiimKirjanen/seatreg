@@ -3,8 +3,11 @@
 	/*client may want to check if her booking exists*/
 	//===========
 
-	require_once('./util/load_wp.php');
-	require_once('./seatreg_functions.php');
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit(); 
+	}
+
+	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
 ?>
 
 <!DOCTYPE html>

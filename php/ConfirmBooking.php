@@ -1,17 +1,16 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; 
+	exit(); 
 }
 
 //===========
 	/* For booking confirm */
 //===========
 
-require_once('Booking.php');
-require_once('emails.php');
-require_once('constants.php');
-require_once('./util/registration_time_status.php');
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/Booking.php' );
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/registration_time_status.php' );
 
 class ConfirmBooking extends Booking {
 	public $reply;
@@ -76,7 +75,7 @@ class ConfirmBooking extends Booking {
 			esc_html_e('You booking is now confirmed', 'seatreg');
 			echo '<br><br>';
 		}
-		$bookingCheckURL = SEATREG_PLUGIN_FOLDER_URL . 'php/booking_check.php?registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
+		$bookingCheckURL = get_site_url() . '?seatreg=booking-status&registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 		printf(
 			esc_html__('You can look your booking at %s', 'seatreg'), 
 			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"

@@ -1,7 +1,7 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; 
+	exit(); 
 }
 
 global $wpdb;
@@ -342,9 +342,9 @@ function seatreg_generate_my_registrations_section() {
 	foreach($registrations as $key=>$registration) {
 		?>
 			<div class="col-sm-6 col-md-2">
-				<h4><a class="registration-name-link" href="<?php echo plugins_url('registration/index.php?c=' . esc_html($registration->registration_code), dirname(__FILE__) ); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h4>
+				<h4><a class="registration-name-link" href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h4>
 
-				<a href="<?php echo plugins_url('registration/index.php?c=' . esc_html($registration->registration_code), dirname(__FILE__) ); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
+				<a href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
 
 				<br>
 
@@ -707,9 +707,9 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
             	echo '</div>';
           echo '</div>';
 	
-    echo '<a href="pdf.php?v=', esc_attr($code) , '" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a> ';
-    echo '<a href="xlsx.php?v=', esc_attr($code), '" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a> ';
-    echo '<a href="text.php?v=', esc_attr($code), '"class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a> ';
+    echo '<a href="'. get_site_url() .'?seatreg=pdf&v=', esc_attr($code) , '" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a> ';
+    echo '<a href="' . get_site_url() . '?seatreg=xlsx&v=', esc_attr($code), '" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a> ';
+    echo '<a href="' . get_site_url() . '?seatreg=text&v=', esc_attr($code), '"class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a> ';
 
 	echo '<div class="bg-color">';
 		echo '<div class="tab-container">';
@@ -1877,7 +1877,7 @@ add_action( 'wp_ajax_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
 add_action( 'wp_ajax_nopriv_seatreg_new_captcha', 'seatreg_new_captcha_callback' );
 function seatreg_new_captcha_callback() {
 	$r = seatreg_random_string(10);
-	echo '<img src="php/image.php?dummy='. esc_html($r) .'" id="captcha-img" />';
+	echo '<img src="' . SEATREG_PLUGIN_FOLDER_URL . 'registration/php/image.php?dummy='. esc_html($r) .'" id="captcha-img" />';
 
 	die();
 }

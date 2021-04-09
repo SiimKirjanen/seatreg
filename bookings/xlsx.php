@@ -1,7 +1,6 @@
 <?php
-require_once('../php/util/load_wp.php');
-require_once('../php/seatreg_functions.php');
-require_once("../php/libs/xlsxwriter.class.php");
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/xlsxwriter.class.php' );
 
 seatreg_bookings_is_user_logged_in(); 
 

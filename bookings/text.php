@@ -1,8 +1,7 @@
 <?php
 
-require_once('../php/util/load_wp.php');
-require_once('../php/seatreg_functions.php');
-require_once('../php/libs/tfpdf/tfpdf.php');
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/tfpdf/tfpdf.php' );
 
 seatreg_bookings_is_user_logged_in(); 
 
