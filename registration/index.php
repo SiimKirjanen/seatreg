@@ -10,7 +10,7 @@
 	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/util/registration_time_status.php');
 	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'registration/php/reg_functions.php');
 	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_strings.php');
-	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/JsonResponse.php');
+	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/SeatregJsonResponse.php');
 
 	$data = seatreg_get_options_reg($_GET['c']);
 

@@ -13,7 +13,7 @@
 	}
 
 	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'registration/php/reg_functions.php' );
-	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/ConfirmBooking.php' );
+	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/SeatregConfirmBooking.php' );
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +27,7 @@
 <body>
 	<div>
 		<?php
-			$validator = new ConfirmBooking($_GET['confirmation-code']);
+			$validator = new SeatregConfirmBooking($_GET['confirmation-code']);
 			$validator->startConfirm();
 		?>
 	</div>

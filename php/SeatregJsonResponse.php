@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
 
-class JsonResponse {
+class SeatregJsonResponse {
 	public $_response;
 
     public function __construct(){

@@ -21,7 +21,7 @@ if( is_admin() ) {
 }
 
 require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_functions.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'php/JsonResponse.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'php/SeatregJsonResponse.php' );
 
 function seatreg_plugin_activate() {
 	seatreg_set_up_db();

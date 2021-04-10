@@ -7,8 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $wpdb;
 global $seatreg_db_table_names;
 
-require_once 'SubmitBookings.php';
-require_once 'JsonResponse.php';
+require_once 'SeatregSubmitBookings.php';
+require_once 'SeatregJsonResponse.php';
 require_once 'constants.php';
 
 $seatreg_db_table_names = new stdClass();
@@ -1762,7 +1762,7 @@ function seatreg_get_registration_layout_and_bookings() {
 	$dataToSend->registration = $registration;
 	$dataToSend->bookings = $bookings;
 	$dataToSend->uploadedImages = $uploadedImages;
-	$response = new JsonResponse();
+	$response = new SeatregJsonResponse();
 	$response->setData( $dataToSend);
 	wp_send_json( $response );
 }
@@ -1784,7 +1784,7 @@ function seatreg_update_layout() {
 		array('%s'),
 		array('%s')
 	);
-	$response = new JsonResponse();
+	$response = new SeatregJsonResponse();
 	$response->setData( $status );
 	wp_send_json( $response );
 
@@ -1807,7 +1807,8 @@ function seatreg_random_string($length){
 add_action( 'wp_ajax_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
 add_action( 'wp_ajax_nopriv_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
 function seatreg_booking_submit_callback() {
-	$resp = new JsonResponse();
+	$resp = new SeatregJsonResponse();
+
 	session_start();
 
 	if ( ! wp_verify_nonce( $_POST['seatreg-booking-submit'], 'seatreg-booking-submit' ) ) {
@@ -1842,7 +1843,7 @@ function seatreg_booking_submit_callback() {
 			die();
 	}
 
-	$newBooking = new SubmitBookings( $_POST['c'], $resp );
+	$newBooking = new SeatregSubmitBookings( $_POST['c'], $resp );
 
 	if( $newBooking->validateBookingData(
 			$_POST['FirstName'], 
@@ -2000,7 +2001,7 @@ add_action( 'wp_ajax_seatreg_upload_image', 'seatreg_upload_image_callback' );
 function seatreg_upload_image_callback() {
 	seatreg_ajax_security_check();
 
-	$resp = new JsonResponse();
+	$resp = new SeatregJsonResponse();
 
 	if(empty($_FILES["fileToUpload"]) || empty($_POST['code'])) {
 		$resp->setError('No picture selected');

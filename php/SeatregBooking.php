@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
 
-class Booking {
+class SeatregBooking {
 	protected $_bookings; //seat bookings 
 	protected $_registrationLayout;
 	protected $_registrationCode;

@@ -8,12 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/* Data coming from registration. Someone wants to book a seat/seats */
 //===========
 require_once( 'constants.php');
-require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/Booking.php');
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/SeatregBooking.php');
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php');
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/registration_time_status.php' );
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/session_captcha.php' );
 
-class SubmitBookings extends Booking {
+class SeatregSubmitBookings extends SeatregBooking {
 	public $response; //response object. 
 	protected $_bookerEmail; //confirm email is send to this address
 	protected $_submittedPassword;  //user submitted password
