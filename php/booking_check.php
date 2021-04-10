@@ -7,6 +7,10 @@
 		exit(); 
 	}
 
+	if( empty($_GET['registration']) || empty($_GET['id']) ) {
+		exit('Missing data'); 
+	}
+
 	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
 ?>
 
@@ -21,9 +25,7 @@
 </head>
 <body>
 	<?php
-		if(!empty($_GET['registration']) && !empty($_GET['id'])) {
-			seatreg_echo_booking($_GET['registration'], $_GET['id']);
-		} 
+		seatreg_echo_booking(sanitize_text_field($_GET['registration']), sanitize_text_field($_GET['id']));
 	?>
 </body>
 </html>

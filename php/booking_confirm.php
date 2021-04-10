@@ -9,7 +9,7 @@
 	}
 
 	if( empty($_GET['confirmation-code']) ) {
-		exit();
+		exit('Missing data');
 	}
 
 	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'registration/php/reg_functions.php' );
@@ -27,7 +27,7 @@
 <body>
 	<div>
 		<?php
-			$validator = new SeatregConfirmBooking($_GET['confirmation-code']);
+			$validator = new SeatregConfirmBooking(sanitize_text_field($_GET['confirmation-code']));
 			$validator->startConfirm();
 		?>
 	</div>

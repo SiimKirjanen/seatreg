@@ -91,7 +91,7 @@ function seatreg_generate_overview_section($targetRoom) {
 	$active_tab = null;
 
 	if( isset( $_GET[ 'tab' ] ) ) {
-	    $active_tab = $_GET[ 'tab' ];
+	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
 	} 
 
 	seatreg_generate_overview_section_html($targetRoom, $active_tab);
@@ -390,7 +390,7 @@ function seatreg_generate_settings_form() {
 	 $active_tab = null;
 
 	if( isset( $_GET[ 'tab' ] ) ) {
-	    $active_tab = $_GET[ 'tab' ];
+	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
 	}
 
 	 $options = seatreg_get_options($active_tab);
@@ -663,15 +663,15 @@ function seatreg_generate_booking_manager() {
 	$searchTerm = '';
 
 	if( isset( $_GET[ 'tab' ] ) ) {
-	    $active_tab = $_GET[ 'tab' ];
+	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
 	}
 
 	if( !empty( $_GET[ 'o' ] ) ) {
-		$order = $_GET[ 'o' ];
+		$order = sanitize_text_field($_GET[ 'o' ]);
 	}
 
 	if( !empty( $_GET[ 's' ] ) ) {
-		$searchTerm = $_GET[ 's' ];
+		$searchTerm = sanitize_text_field($_GET[ 's' ]);
 	}
 
 	seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm);
@@ -707,7 +707,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 
 	echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
 	echo '<div class="input-group manager-search-wrap">';
-				echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($registration->registration_code), '"/>';
+				echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
             	echo '<input type="text" class="form-control manager-search" placeholder="Search booking" value="', esc_attr($searchTerm), '"/>';
             	echo '<div class="input-group-btn">';
                 	echo '<button class="btn btn-default search-button" type="submit"><i class="glyphicon glyphicon-search"></i></button>';
@@ -901,7 +901,7 @@ function seatreg_generate_tabs($targetPage) {
 	$registrations = seatreg_get_registrations();
 
 	if( isset( $_GET[ 'tab' ] ) ) {
-	    $active_tab = $_GET[ 'tab' ];
+	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
 	}else {
 		$active_tab = $registrations[0]->registration_code;
 	} 
@@ -1647,7 +1647,7 @@ function seatreg_delete_registration_handler() {
 			'is_deleted' => 1,
 		),
 		array(
-			'registration_code' => $_POST['registration-code']
+			'registration_code' => sanitize_text_field($_POST['registration-code'])
 		),
 		'%s'
 	);
@@ -1762,9 +1762,9 @@ add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_
 function seatreg_get_registration_layout_and_bookings() {
 	seatreg_ajax_security_check();
 
-	$registration = seatreg_get_registration_data($_POST['code']);
-	$bookings = seatreg_get_registration_bookings($_POST['code']);
-	$uploadedImages = seatreg_get_registration_uploaded_images($_POST['code']);
+	$registration = seatreg_get_registration_data(sanitize_text_field($_POST['code']));
+	$bookings = seatreg_get_registration_bookings(sanitize_text_field($_POST['code']));
+	$uploadedImages = seatreg_get_registration_uploaded_images(sanitize_text_field($_POST['code']));
 	$dataToSend = new stdClass();
 	$dataToSend->registration = $registration;
 	$dataToSend->bookings = $bookings;
@@ -1786,7 +1786,7 @@ function seatreg_update_layout() {
 			'registration_layout' => stripslashes_deep($_POST['updatedata'])
 		),
 		array(
-			'registration_code' => $_POST['registration_code']
+			'registration_code' => sanitize_text_field($_POST['registration_code'])
 		),
 		array('%s'),
 		array('%s')
@@ -1876,7 +1876,7 @@ add_action( 'wp_ajax_seatreg_get_room_stats', 'seatreg_get_room_stats_callback' 
 function seatreg_get_room_stats_callback() {
 	seatreg_ajax_security_check();
 
-	seatreg_generate_overview_section_html($_POST['data'], $_POST['code']);
+	seatreg_generate_overview_section_html(sanitize_text_field($_POST['data']), sanitize_text_field($_POST['code']));
 
 	die();
 }
@@ -1893,7 +1893,11 @@ function seatreg_new_captcha_callback() {
 add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_callback' );
 function seatreg_get_booking_manager_callback() {
 	seatreg_ajax_security_check();
-	seatreg_generate_booking_manager_html($_POST['code'], $_POST['data']['orderby'], $_POST['data']['searchTerm'] );
+	seatreg_generate_booking_manager_html(
+		sanitize_text_field($_POST['code']),
+		sanitize_text_field($_POST['data']['orderby']),
+		sanitize_text_field($_POST['data']['searchTerm']) 
+	);
 
 	die();
 }
@@ -1903,7 +1907,7 @@ function seatreg_confirm_del_bookings_callback() {
 	seatreg_ajax_security_check();
 
 	$data = json_decode( stripslashes_deep($_POST['data']['actionData']) );
-	$statusArray = seatreg_validate_del_conf_booking($_POST['code'], $data);
+	$statusArray = seatreg_validate_del_conf_booking( sanitize_text_field($_POST['code']), $data );
 
 	if ( $statusArray['status'] != 'ok' ) {
 		$errorText = '';
@@ -1928,7 +1932,7 @@ function seatreg_confirm_del_bookings_callback() {
 		
 	}else {
 		foreach ($data as $key => $value) {
-			seatreg_confirm_or_delete_booking( $value, $_POST['code']);
+			seatreg_confirm_or_delete_booking( $value, sanitize_text_field($_POST['code']));
 		}
 	}
 
@@ -1936,13 +1940,13 @@ function seatreg_confirm_del_bookings_callback() {
 	$searchTerm = '';
 
 	if( !empty( $_POST['data']['orderby'] ) ) {
-		$order = $_POST['data']['orderby'];
+		$order = sanitize_text_field($_POST['data']['orderby']);
 	}
 
 	if( !empty( $_POST['data']['searchTerm'] ) ) {
-		$searchTerm = $_POST['data']['searchTerm'];
+		$searchTerm = sanitize_text_field($_POST['data']['searchTerm']);
 	}
-	seatreg_generate_booking_manager_html( $_POST['code'] , $order, $searchTerm );
+	seatreg_generate_booking_manager_html( sanitize_text_field($_POST['code']) , $order, $searchTerm );
 
 	die();
 }
@@ -1954,13 +1958,13 @@ function seatreg_search_bookings_callback() {
 	$searchTerm = '';
 
 	if( !empty( $_POST['data']['orderby'] ) ) {
-		$order = $_POST['data']['orderby'];
+		$order = sanitize_text_field($_POST['data']['orderby']);
 	}
 
 	if( !empty( $_POST['data']['searchTerm'] ) ) {
-		$searchTerm = $_POST['data']['searchTerm'];
+		$searchTerm = sanitize_text_field($_POST['data']['searchTerm']);
 	}
-	seatreg_generate_booking_manager_html( $_POST['code'] , $order, $searchTerm );
+	seatreg_generate_booking_manager_html( sanitize_text_field($_POST['code']) , $order, $searchTerm );
 
 	die();
 }
@@ -1970,14 +1974,14 @@ function seatreg_edit_booking_callback() {
 	seatreg_ajax_security_check();
 
 	$bookingEdit = new stdClass();
-	$bookingEdit->firstName = $_POST['fname'];
-	$bookingEdit->lastName = $_POST['lname'];
-	$bookingEdit->seatNr = $_POST['seatnumber'];
-	$bookingEdit->roomName = $_POST['room'];
-	$bookingEdit->seatId = $_POST['seatid'];
-	$bookingEdit->bookingId = $_POST['bookingid'];
+	$bookingEdit->firstName = sanitize_text_field($_POST['fname']);
+	$bookingEdit->lastName = sanitize_text_field($_POST['lname']);
+	$bookingEdit->seatNr = sanitize_text_field($_POST['seatnumber']);
+	$bookingEdit->roomName = sanitize_text_field($_POST['room']);
+	$bookingEdit->seatId = sanitize_text_field($_POST['seatid']);
+	$bookingEdit->bookingId = sanitize_text_field($_POST['bookingid']);
 	$bookingEdit->editCustomField = stripslashes_deep($_POST['customfield']);
-	$statusArray = seatreg_validate_edit_booking($_POST['code'], $bookingEdit );
+	$statusArray = seatreg_validate_edit_booking(sanitize_text_field($_POST['code']), $bookingEdit );
 
 	if ( $statusArray['status'] != 'ok' ) {
 		wp_send_json( array('status'=>$statusArray['status'], 'text'=> $statusArray['text'] ) );
@@ -2017,11 +2021,11 @@ function seatreg_upload_image_callback() {
 		die();
 	}
 
-	$code = $_POST['code'];
+	$code = sanitize_text_field($_POST['code']);
 	$registration_upload_dir = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . $code . '/';
-	$target_file = $registration_upload_dir . basename($_FILES["fileToUpload"]["name"]);
+	$target_file = $registration_upload_dir . basename(sanitize_file_name($_FILES["fileToUpload"]["name"]));
 	$target_dimentsions = null;
-	$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+	$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 	$allowedFileTypes = array('jpg', 'png', 'jpeg', 'gif');
 
 	// Check if image file is a actual image or fake image
@@ -2037,7 +2041,7 @@ function seatreg_upload_image_callback() {
 
 	// Check if file already exists
 	if (file_exists($target_file)) {
-		$resp->setError('Sorry, file already exists');
+		$resp->setError('Sorry, picture already exists');
 		$resp->echoData();
 
 		die();
@@ -2066,8 +2070,8 @@ function seatreg_upload_image_callback() {
 	}
 			
 	if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-		$resp->setText("The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.");
-		$resp->setData(basename( $_FILES["fileToUpload"]["name"]));
+		$resp->setText("The picture ". basename( sanitize_file_name($_FILES["fileToUpload"]["name"]) ). " has been uploaded.");
+		$resp->setData(basename( sanitize_file_name($_FILES["fileToUpload"]["name"]) ));
 		$resp->setExtraData($target_dimentsions);
 		$resp->echoData();
 
@@ -2088,7 +2092,7 @@ function seatreg_remove_img_callback() {
 
 	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {
 		//check if file exists
-		$imgPath = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . $_POST['code'] . '/' . $_POST['imgName'];
+		$imgPath = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . sanitize_text_field($_POST['code']) . '/' . sanitize_text_field($_POST['imgName']);
 		
 		if(file_exists($imgPath)) {
 			unlink($imgPath);
