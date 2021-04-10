@@ -1,4 +1,4 @@
-$(function() {
+(function($) {
 	var ajaxUrl = '../../../../wp-admin/admin-ajax.php';
 
 	var translator = {
@@ -1312,4 +1312,4 @@ function scrollUp(mouseX, mouseY) {
      	}
     }
 }
-});
+})(jQuery);

@@ -60,13 +60,8 @@
 	<title><?php echo htmlspecialchars( $data->registration_name ); ?></title>
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
-	<link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/css/<?php echo $manifest['registration.min.css']; ?>">
 
-	<?php if($data->registration_open == 1) : ?>	
-		<script src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/js/modernizr.custom.89593.min.js"></script>
-	<?php else : ?>
-		
+	<?php if($data->registration_open !== 1) : ?>	
 		<style>
 			html, body {
 				height: 100%;
@@ -85,8 +80,10 @@
 				display: inline-block;
 	  			vertical-align: middle;
 			}
-		</style>
+		</style>		
 	<?php endif; ?>
+	
+	<?php wp_head(); ?>
 </head>
 <body>
 <?php include('noscript.html'); ?>	
@@ -504,35 +501,26 @@
 				</div>
 
 		<?php endif; ?>
-		<script src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/js/jquery.3.5.1.min.js"></script>			
 		<script>
 			function showErrorView(title) {
-				$('body').addClass('error-view').html('<div>An error occured</div><img src="img/monkey.png" alt="monkey" /><div>' + title + '</div>');
+				jQuery('body').addClass('error-view').html('<div>An error occured</div><img src="' + seatregPluginFolder + 'img/monkey.png" alt="monkey" /><div>' + title + '</div>');
 			}
 			try {
 				var seatregPluginFolder = '<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>';
-				var seatregTranslations = $.parseJSON('<?php echo wp_json_encode( seatreg_generate_registration_strings() ); ?>');
+				var seatregTranslations = jQuery.parseJSON('<?php echo wp_json_encode( seatreg_generate_registration_strings() ); ?>');
 				var seatLimit = <?php echo esc_js($data->seats_at_once); ?>;
 				var gmail = <?php echo esc_js($data->gmail_required); ?>;
-				var dataReg = $.parseJSON(<?php echo wp_json_encode($data->registration_layout); ?>);
-				var roomsInfo = $.parseJSON(<?php echo wp_json_encode($seatsInfo); ?>);
-				var custF = $.parseJSON(<?php echo wp_json_encode($data->custom_fields); ?>);
+				var dataReg = jQuery.parseJSON(<?php echo wp_json_encode($data->registration_layout); ?>);
+				var roomsInfo = jQuery.parseJSON(<?php echo wp_json_encode($seatsInfo); ?>);
+				var custF = jQuery.parseJSON(<?php echo wp_json_encode($data->custom_fields); ?>);
 				var regTime = '<?php echo esc_js($registrationTime); ?>';
-				var registrations = $.parseJSON(<?php echo wp_json_encode($registrations); ?>);
+				var registrations = jQuery.parseJSON(<?php echo wp_json_encode($registrations); ?>);
 			} catch(err) {
 				showErrorView('Data initialization failed');
 				console.log(err);
 			}
-		</script>
-	<!--
-		<script src="js/date.format.js"></script>
-		<script src="js/iscroll-zoom-5-1-3.js"></script>
-		<script src="js/jquery.powertip.js"></script>
-		<script src="js/registration.js"></script>
-	-->	
-	
-		<script src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/js/<?php echo $manifest['registration.min.js']; ?>"></script>
-	
+		</script>	
+		<?php wp_footer(); ?>	
 		<?php endif; //end of is registration open ?>  
 
 	<?php else : ?>
