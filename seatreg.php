@@ -35,7 +35,7 @@ if( is_admin() ) {
 //remove queued styles from registration view page
 add_action('wp_print_styles', 'seatreg_remove_all_styles', 100);
 function seatreg_remove_all_styles() {
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'registration' ) {
+	if( seatreg_is_registration_view_page() ) {
 		global $wp_styles;
 		$allowedToLoad = array('seatreg-registration-style', 'google-open-sans');
     	$wp_styles->queue = $allowedToLoad;
@@ -45,7 +45,7 @@ function seatreg_remove_all_styles() {
 //only allow spesific scripts to load on registration view page
 add_action('wp_print_scripts', 'seatreg_remove_all_scripts', 100);
 function seatreg_remove_all_scripts() {
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'registration' ) {
+	if( seatreg_is_registration_view_page() ) {
 		global $wp_scripts;
 		$allowedToLoad = array('jquery', 'seatreg-registration', 'date-format', 'jquery-powertip', 'iscroll-zoom', 'modernizr');
 		$wp_scripts->queue = $allowedToLoad;
@@ -54,7 +54,7 @@ function seatreg_remove_all_scripts() {
 
 add_action( 'wp_enqueue_scripts', 'seatreg_public_scripts_and_styles' );
 function seatreg_public_scripts_and_styles() {
-	if ( isset($_GET['seatreg']) &&  $_GET['seatreg'] === 'registration' ) {
+	if ( seatreg_is_registration_view_page() ) {
 		$manifestFileContents = file_get_contents(SEATREG_PLUGIN_FOLDER_URL . 'rev-manifest.json');
 		$manifest = json_decode($manifestFileContents, true);
 		wp_enqueue_style('google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,700', array(), '1.0.0', 'all');
@@ -70,7 +70,7 @@ function seatreg_public_scripts_and_styles() {
 
 add_action( 'after_setup_theme', 'seatreg_remove_unnecessary_tags' );
 function seatreg_remove_unnecessary_tags(){
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'registration' ) {
+	if( seatreg_is_registration_view_page() ) {
 		 // REMOVE WP EMOJI
 		 remove_action('wp_head', 'print_emoji_detection_script', 7);
 		 remove_action('wp_print_styles', 'print_emoji_styles');
@@ -100,13 +100,13 @@ function seatreg_remove_unnecessary_tags(){
 	}
 }
 
+add_filter( 'show_admin_bar', 'seatreg_hide_admin_bar_from_front_end' );
 function seatreg_hide_admin_bar_from_front_end(){
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'registration' ) {
+	if( seatreg_is_registration_view_page() ) {
 	  return false;
 	}
-	return false;
+	return true;
 }
-add_filter( 'show_admin_bar', 'seatreg_hide_admin_bar_from_front_end' );
 
 //hooks
 register_activation_hook(__FILE__, "seatreg_plugin_activate");
@@ -114,7 +114,7 @@ register_activation_hook(__FILE__, "seatreg_plugin_activate");
 //filters
 add_filter( 'page_template', 'seatreg_page_template' );
 function seatreg_page_template( $page_template ){
-    if ( isset($_GET['seatreg']) &&  $_GET['seatreg'] === 'registration' ) {
+    if ( seatreg_is_registration_view_page() ) {
         $page_template = plugin_dir_path( __FILE__ ) . '/registration/index.php';
     }
 

@@ -71,6 +71,13 @@ function seatreg_check_user_capabilities() {
 	}
 }
 
+function seatreg_is_registration_view_page() {
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'registration' ) {
+		return true;
+	}
+	return false;
+}
+
 /*
 ==================================================================================================================================================================================================================
 Generating HTML stuff
