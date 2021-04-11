@@ -738,6 +738,10 @@ html {
 	color: black;
 }
 
+.seatreg-tabs-content .modal-custom-v {
+	margin-left: 8px;
+}
+
 .seatreg-map-popup-btn, .seatreg-delete-btn {
 	padding: 0;
 }

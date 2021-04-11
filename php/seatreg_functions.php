@@ -829,7 +829,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 }
 
 function seatreg_customfield_with_value($label, $custom_data) {
-	$cust_len = count($custom_data);
+	$cust_len = count(is_array($custom_data) ? $custom_data : []);
 	$foundIt = false;
 
 	echo '<div class="custom-field"><span class="custom-field-l">', esc_html($label), '</span>: ';
