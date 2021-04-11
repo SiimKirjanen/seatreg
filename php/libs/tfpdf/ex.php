@@ -20,7 +20,7 @@ $pdf->Write(8,$txt);
 // Select a standard font (uses windows-1252)
 $pdf->SetFont('Arial','',14);
 $pdf->Ln(10);
-$pdf->Write(5,'The file size of this PDF is only 12 KB.');
+$pdf->Write(5,'The file size of this PDF is only 13 KB.');
 
 $pdf->Output();
 ?>
