@@ -28,7 +28,7 @@ $customFieldsCount = count($customFields);
 $regLen = count($registrations);
 
 function customFieldWithValueXlsx($label, $custom_data) {
-	$cust_len = count($custom_data);
+	$cust_len = count(is_array($custom_data) ? $custom_data : []);
 	$foundIt = false;
 	$string = '';
 

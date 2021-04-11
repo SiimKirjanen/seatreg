@@ -1,10 +1,10 @@
 <?php
-    require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
-    require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/tfpdf/tfpdf.php' );
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/tfpdf/tfpdf.php' );
 
-    seatreg_bookings_is_user_logged_in(); 
+seatreg_bookings_is_user_logged_in(); 
 
-    $showWhat = 'all';
+$showWhat = 'all';
 
 if(!isset($_GET['s2']) && isset($_GET['s1'])) {
 	$showWhat = 'pending';
@@ -45,7 +45,7 @@ $customFieldsCount = count($customFields);
 $regLen = count($registrations);
 
 function customFieldWithValuePDF($label, $custom_data) {
-	$cust_len = count($custom_data);
+	$cust_len = count(is_array($custom_data) ? $custom_data : []);
 	$foundIt = false;
 	$string = $label . ': ';
 	
@@ -72,6 +72,7 @@ function customFieldWithValuePDF($label, $custom_data) {
 }
 
 class PDF extends tFPDF {
+	protected $seatregTitle = '';
 	function Header() {
 		$this->SetFont('Arial','B',14);
 		$this->Image(SEATREG_PLUGIN_FOLDER_DIR. 'img/seatreg_logo.png',9,5,30);
@@ -79,7 +80,7 @@ class PDF extends tFPDF {
 		// Move to the right
 		$this->Cell(70);
 		// Title
-		$this->Cell(30,20,$GLOBALS['projectName'],0,0,'C');
+		$this->Cell(30,20,$this->seatregTitle,0,0,'C');
 
 		$this->Cell(40);
 		$this->SetFont('Arial','',10);
@@ -113,14 +114,19 @@ class PDF extends tFPDF {
 		// Page number
 		$this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
 	}
+
+	function SetSeatregTitle($title) {
+		$this->seatregTitle = $title;
+	}
 }
 
 // Instanciation of inherited class
 $title = esc_html($projectName . ' ' . $currentDate->format('Y-M-d'));
 $pdf = new PDF();
+$pdf->SetSeatregTitle($projectName);
 $pdf->SetTitle( $title );
 $pdf->SetAuthor('SeatReg WordPress');
-$pdf->AddFont('DejaVu','','DejaVuSansCondensed.ttf', true);
+$pdf->AddFont('DejaVu','','DejaVuSans.ttf', true);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('DejaVu','U',12);

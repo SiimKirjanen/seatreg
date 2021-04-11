@@ -48,7 +48,7 @@ header("Content-type: text/plain");
 header('Content-Disposition: attachment; filename="'. esc_html($projectName) .' '.$currentDate->format('Y-M-d').'.txt"');
 
 function customFieldWithValueText($label, $custom_data) {
-	$cust_len = count($custom_data);
+	$cust_len = count(is_array($custom_data) ? $custom_data : []);
 	$foundIt = false;
 	$string = $label . ': ';
 
