@@ -68,12 +68,16 @@ function seatreg_remove_unnecessary_tags(){
 	}
 }
 
-add_filter( 'show_admin_bar', 'seatreg_hide_admin_bar_from_front_end' );
-function seatreg_hide_admin_bar_from_front_end(){
-	if( seatreg_is_registration_view_page() ) {
-	  return false;
+add_filter( 'show_admin_bar', 'seatreg_hide_admin_bar_from_registration_view' );
+function seatreg_hide_admin_bar_from_registration_view(){
+	if( is_user_logged_in() ) {
+		if( seatreg_is_registration_view_page() ) {
+			return false;
+		}
+		return true;
 	}
-	return true;
+
+	return false;
 }
 
 //hooks
