@@ -96,9 +96,12 @@ function seatreg_page_template( $page_template ){
 add_filter('init', 'seatreg_virtual_pages');
 function seatreg_virtual_pages() {
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'pdf') {
-		include SEATREG_PLUGIN_FOLDER_DIR . 'bookings/pdf.php';
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'pdf') {		
+		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsPDF.php');
 
+		$pdf = new SeatregBookingsPDF(isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v']);
+		$pdf->printPDF();
+	
 		die();
 	}
 
