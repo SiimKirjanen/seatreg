@@ -50,9 +50,9 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
         $this->setupPDF();
 	}
     private function setupPDF() {
-        $this->fileName = esc_html($this->_projectName . ' ' . $this->_currentDateTime->format('Y-M-d'));
+        $this->fileName = esc_html($this->_registrationName . ' ' . $this->_currentDateTime->format('Y-M-d'));
 
-        $this->pdf = new SeatregPDF($this->_projectName, $this->_currentDateTime);
+        $this->pdf = new SeatregPDF($this->_registrationName, $this->_currentDateTime);
         $this->pdf->SetTitle( $this->fileName );
         $this->pdf->SetAuthor('SeatReg WordPress');
         $this->pdf->AddFont('DejaVu','','DejaVuSans.ttf', true);
@@ -73,30 +73,30 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
         $registrationsLenght = count($this->_registrations);
         $customFieldsLength = count($this->_customFields);
 
-        for($i=0; $i<$registrationsLenght; $i++) {
-            $registrantCustomData = json_decode($this->_registrations[$i]->custom_field_data, true);
-            $status = ($this->_registrations[$i]->status === "2") ? "Approved" : "Pending";
+        foreach ($this->_registrations as $registration) {
+            $registrantCustomData = json_decode($registration->custom_field_data, true);
+            $status = $this->getStatus($registration->status);
         
-            $this->pdf->Cell(20, 10, esc_html($this->_registrations[$i]->seat_nr), 0, 0, 'C');
+            $this->pdf->Cell(20, 10, esc_html($registration->seat_nr), 0, 0, 'C');
             $this->pdf->Cell(6);
-            $this->pdf->Cell(40, 10, esc_html($this->_registrations[$i]->room_name), 0, 0, 'C');
+            $this->pdf->Cell(40, 10, esc_html($registration->room_name), 0, 0, 'C');
         
-            $date = new DateTime($this->_registrations[$i]->booking_date, $this->_UTCDateTime);
+            $date = new DateTime($registration->booking_date, $this->_UTCDateTime);
             $date->setTimezone($this->_userDateTimeZone);
         
             $this->pdf->Cell(40, 10, $date->format('Y-M-d H:i:s'), 0, 0, 'C');
-            $this->pdf->Cell(40, 10, esc_html($this->_registrations[$i]->email),0,0,'C');
+            $this->pdf->Cell(40, 10, esc_html($registration->email),0,0,'C');
             $this->pdf->Cell(40,10,$status,0,1,'C');
-            $this->pdf->Cell(80, 10, 'Name: ' . esc_html($this->_registrations[$i]->first_name) . ' ' . esc_html($this->_registrations[$i]->last_name), 0, 1);
+            $this->pdf->Cell(80, 10, 'Name: ' . esc_html($registration->first_name) . ' ' . esc_html($registration->last_name), 0, 1);
         
             if($status =='Approved') {
-                $date = new DateTime($this->_registrations[$i]->booking_confirm_date, $this->_UTCDateTime);
+                $date = new DateTime($registration->booking_confirm_date, $this->_UTCDateTime);
                 $date->setTimezone($this->_userDateTimeZone);
                 $this->pdf->Cell(80, 10,'Approve date: ' . $date->format('Y-M-d H:i:s'), 0, 1);
             }
         
-            for($j=0; $j < $customFieldsLength; $j++) {
-                $this->pdf->Cell(40, 10, $this->customFieldsWithValues($this->_customFields[$j]['label'], $registrantCustomData), 0, 1);
+            foreach ($this->_customFields as $customField) {
+                $this->pdf->Cell(40, 10, $this->customFieldsWithValues($customField['label'], $registrantCustomData), 0, 1);
             }
         
             $this->pdf->Ln(10);

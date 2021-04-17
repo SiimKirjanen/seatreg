@@ -10,22 +10,23 @@ class SeatregBookingsFile {
     protected $_currentDateTime = null;
     protected $_registrationInfo = null;
     protected $_registrations = null;
-    protected $_projectName = null;
+    protected $_registrationName = null;
     protected $_customFields = null;
 
     public function __construct($showPending, $showConfirmed, $timeZone, $registrationCode) {
         $this->_registrationCode = $registrationCode;
         $this->_userTimezone = $timeZone;
 
-        if($showPending) {
+        if($showPending && !$showConfirmed) {
             $this->_showWhat = 'pending';
         }
-        if($showConfirmed) {
+        if($showConfirmed && !$showConfirmed) {
             $this->_showWhat = 'confirmed';
         }
         
         $this->setUp();
 	}
+
     protected function setUp() {
         $this->_UTCDateTime = new DateTimeZone("UTC");
 
@@ -39,13 +40,15 @@ class SeatregBookingsFile {
         
             exit();
         }
+
         $this->_currentDateTime = new DateTime(null, $this->_UTCDateTime);
         $this->_currentDateTime->setTimezone($this->_userDateTimeZone);
         $this->_registrationInfo = seatreg_get_options($this->_registrationCode)[0];
         $this->_registrations = seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat);
-        $this->_projectName = esc_html($this->_registrationInfo->registration_name);
+        $this->_registrationName = esc_html($this->_registrationInfo->registration_name);
         $this->_customFields = json_decode($this->_registrationInfo->custom_fields, true);
     }
+
     protected function customFieldsWithValues($label, $customData) {
         $cust_len = count(is_array($customData) ? $customData : []);
         $foundIt = false;
@@ -71,5 +74,16 @@ class SeatregBookingsFile {
         }
     
         return $string;
+    }
+
+    protected function getStatus($status) {
+        return $status === "2" ? "Approved" : "Pending";
+    }
+
+    protected function getBookingDateTime($date) {
+        $dateTime = new DateTime($date, $this->_UTCDateTime);
+        $dateTime->setTimezone($this->_userDateTimeZone);
+
+        return $dateTime;
     }
 }

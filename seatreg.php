@@ -112,7 +112,10 @@ function seatreg_virtual_pages() {
 	}
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'text') {
-		include SEATREG_PLUGIN_FOLDER_DIR  . 'bookings/text.php';
+		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsTxt.php');
+
+		$txt = new SeatregBookingsTxt(isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v']);
+		$txt->printTxt();
 
 		die();
 	}
