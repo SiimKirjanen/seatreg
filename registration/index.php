@@ -469,6 +469,7 @@
 						esc_html_e('Error', 'seatreg');
 					?>
 				</h2>
+				<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . '/img/monkey.png'?>" alt="monkey" />
 				<p id="error-text"></p>
 				<button class="refresh-btn">
 					<?php 

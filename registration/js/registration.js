@@ -448,7 +448,8 @@ SeatReg.prototype.addSeatToCart = function() {
 	this.selectedSeats.push(new CartItem(seatId, seatNr, roomName, roomUUID));
 	
 	$('.seats-in-cart').text(this.selectedSeats.length);
-	$('#boxes .box[data-seat="' + seatId + '"]').attr('data-selectedBox','true');
+	var boxColor = $('#boxes .box[data-seat="' + seatId + '"]').css('background-color');
+	$('#boxes .box[data-seat="' + seatId + '"]').attr('data-selectedBox','true').css("--animationColor", boxColor);
 
 	//add to seat cart popup
 	var cartItem = $('<div class="cart-item" data-cart-id="' + seatId + '" data-room-uuid="'+ roomUUID +'"></div>');

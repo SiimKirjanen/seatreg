@@ -757,76 +757,54 @@ body {
 @-webkit-keyframes selected-seat {
         0%   { 
 
-        	-webkit-box-shadow: 0 0 20px 5px #0033CC;
-			 box-shadow: 0 0 20px 5px #0033CC;	
-			 border: 2px ridge #0033CC;
+        	-webkit-box-shadow: 0 0 20px 5px var(--animationColor);
+			 box-shadow: 0 0 20px 5px var(--animationColor);	
         }
         50%  { 
 			-webkit-box-shadow: none;
 			box-shadow: none;
-			border: 2px ridge black;
         }
         100% { 
-			-webkit-box-shadow: 0 0 20px 5px #0033CC;
-			 box-shadow: 0 0 20px 5px #0033CC;	
-			 border: 2px ridge #0033CC;
+			-webkit-box-shadow: 0 0 20px 5px var(--animationColor);
+			 box-shadow: 0 0 20px 5px var(--animationColor);	
         }
 }
 @-moz-keyframes selected-seat {
         0%   { 
 
-        	-moz-box-shadow: 0 0 20px 5px #0033CC;
-			 box-shadow: 0 0 20px 5px #0033CC;	
-			 border: 2px ridge #0033CC;
+        	-moz-box-shadow: 0 0 20px 5px var(--animationColor);
+			 box-shadow: 0 0 20px 5px var(--animationColor);	
         }
         50%  { 
 			-moz-box-shadow: none;
 			box-shadow: none;
-			border: 2px ridge black;
         }
         100% { 
-			-moz-box-shadow: 0 0 20px 5px #0033CC;
-			 box-shadow: 0 0 20px 5px #0033CC;	
-			 border: 2px ridge #0033CC;
+			-moz-box-shadow: 0 0 20px 5px var(--animationColor);
+			 box-shadow: 0 0 20px 5px var(--animationColor);	
         }
 }
 @-ms-keyframes selected-seat {
         0%   { 
 
-        	-ms-box-shadow: 0 0 20px 5px #0033CC;
-			 box-shadow: 0 0 20px 5px #0033CC;	
-			 border: 2px ridge #0033CC;
+        	-ms-box-shadow: 0 0 20px 5px var(--animationColor);
+			 box-shadow: 0 0 20px 5px var(--animationColor);	
         }
         50%  { 
 			-ms-box-shadow: none;
 			box-shadow: none;
-			border: 2px ridge black;
         }
         100% { 
-			-ms-box-shadow: 0 0 20px 5px #0033CC;
-			 box-shadow: 0 0 20px 5px #0033CC;	
-			 border: 2px ridge #0033CC;
+			-ms-box-shadow: 0 0 20px 5px var(--animationColor);
+			 box-shadow: 0 0 20px 5px var(--animationColor);	
         }
 }
 
-.legend-animation {
-
-	
-}
 .box[data-selectedbox='true'] {
-	
-	border: 2px ridge #0033CC;
-	-webkit-box-shadow: 0 0 20px 5px #0033CC;
-	box-shadow: 0 0 20px 5px #0033CC;
-
 	-webkit-animation: selected-seat 1s infinite;
 	-moz-animation:    selected-seat 1s infinite;
 	-ms-animation:     selected-seat 1s infinite; 
 	animation: 		   selected-seat 1s infinite;
-}
-
-.seat-number {
-	
 }
 
 .comment-icon {

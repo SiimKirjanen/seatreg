@@ -1824,7 +1824,7 @@ add_action( 'wp_ajax_seatreg_booking_submit', 'seatreg_booking_submit_callback' 
 add_action( 'wp_ajax_nopriv_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
 function seatreg_booking_submit_callback() {
 	$resp = new SeatregJsonResponse();
-
+	
 	session_start();
 
 	if ( ! wp_verify_nonce( $_POST['seatreg-booking-submit'], 'seatreg-booking-submit' ) ) {
