@@ -37,7 +37,7 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
             echo esc_html__('Status:', 'seatreg'), ' ', $status, $this->lineBreak();
 
             if($status === "Approved") {
-                $confirmDate = $this->getBookingDateTime($this->_customFields[$i]->booking_confirm_date);
+                $confirmDate = $this->getBookingDateTime($registration->booking_confirm_date);
  
                 echo esc_html__('Confirmation date:', 'seatreg'), ' ', $confirmDate->format('Y-M-d H:i:s'), $this->lineBreak();
             }

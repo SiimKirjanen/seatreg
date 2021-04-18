@@ -55,7 +55,7 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
     public function printPDF() {
         $registrationsLenght = count($this->_registrations);
         $customFieldsLength = count($this->_customFields);
-        
+
         foreach ($this->_registrations as $registration) {
             $registrantCustomData = json_decode($registration->custom_field_data, true);
             $status = $this->getStatus($registration->status);
@@ -69,8 +69,8 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             $this->pdf->Cell(20, 6, esc_html__('Status:', 'seatreg') . ' ' . $status, 0, 1, 'L');
 
             if($status =='Approved') {
-                $confirmDate = $this->getBookingDateTime($this->_customFields[$i]->booking_confirm_date);
-                $this->pdf->Cell(20, 6, 'Approve date: ' . $confirmDate->format('Y-M-d H:i:s'), 0, 1, 'L');
+                $confirmDate = $this->getBookingDateTime($registration->booking_confirm_date);
+                $this->pdf->Cell(20, 6, 'Confirmation date: ' . $confirmDate->format('Y-M-d H:i:s'), 0, 1, 'L');
             }
                         
             foreach ($this->_customFields as $customField) {

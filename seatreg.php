@@ -96,37 +96,40 @@ function seatreg_page_template( $page_template ){
 add_filter('init', 'seatreg_virtual_pages');
 function seatreg_virtual_pages() {
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'pdf') {		
-		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsPDF.php');
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'pdf' ) {		
+		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsPDF.php' );
 
-		$pdf = new SeatregBookingsPDF(isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v']);
+		$pdf = new SeatregBookingsPDF( isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v'] );
 		$pdf->printPDF();
 	
 		die();
 	}
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'xlsx') {
-		include SEATREG_PLUGIN_FOLDER_DIR . 'bookings/xlsx.php';
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'xlsx' ) {
+		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsXlsx.php' );
+
+		$xlsx = new SeatregBookingsXlsx( isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v'] );
+		$xlsx->printXlsx();
 
 		die();
 	}
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'text') {
-		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsTxt.php');
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'text' ) {
+		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsTxt.php' );
 
-		$txt = new SeatregBookingsTxt(isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v']);
+		$txt = new SeatregBookingsTxt( isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v'] );
 		$txt->printTxt();
 
 		die();
 	}
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-confirm') {
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-confirm' ) {
 		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/booking_confirm.php';
 
 		die();
 	}
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-status') {
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-status' ) {
 		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/booking_check.php';
 
 		die();
