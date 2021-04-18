@@ -33,15 +33,15 @@ function seatreg_plugin_activate() {
 
 //actions
 if( is_admin() ) {
-	add_action('admin_menu', 'seatreg_add_plugin_menu');
+	add_action( 'admin_menu', 'seatreg_add_plugin_menu' );
 }
 
 add_action( 'after_setup_theme', 'seatreg_remove_unnecessary_tags' );
 function seatreg_remove_unnecessary_tags(){
 	if( seatreg_is_registration_view_page() ) {
 		 // REMOVE WP EMOJI
-		 remove_action('wp_head', 'print_emoji_detection_script', 7);
-		 remove_action('wp_print_styles', 'print_emoji_styles');
+		 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+		 remove_action( 'wp_print_styles', 'print_emoji_styles' );
 	 
 		 remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 		 remove_action( 'admin_print_styles', 'print_emoji_styles' );
@@ -64,7 +64,7 @@ function seatreg_remove_unnecessary_tags(){
 		 remove_action( 'template_redirect', 'rest_output_link_header', 11 );
 	 
 		 // language
-		 add_filter('multilingualpress.hreflang_type', '__return_false');
+		 add_filter( 'multilingualpress.hreflang_type', '__return_false' );
 	}
 }
 
@@ -96,28 +96,31 @@ function seatreg_page_template( $page_template ){
 add_filter('init', 'seatreg_virtual_pages');
 function seatreg_virtual_pages() {
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'pdf' ) {		
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'pdf' ) {
+		seatreg_validate_bookings_file_input();		
 		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsPDF.php' );
 
-		$pdf = new SeatregBookingsPDF( isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v'] );
+		$pdf = new SeatregBookingsPDF( isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['code'] );
 		$pdf->printPDF();
 	
 		die();
 	}
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'xlsx' ) {
+		seatreg_validate_bookings_file_input();	
 		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsXlsx.php' );
 
-		$xlsx = new SeatregBookingsXlsx( isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v'] );
+		$xlsx = new SeatregBookingsXlsx( isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['code'] );
 		$xlsx->printXlsx();
 
 		die();
 	}
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'text' ) {
+		seatreg_validate_bookings_file_input();	
 		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsTxt.php' );
 
-		$txt = new SeatregBookingsTxt( isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['v'] );
+		$txt = new SeatregBookingsTxt( isset($_GET['s1']), isset($_GET['s2']), $_GET['zone'], $_GET['code'] );
 		$txt->printTxt();
 
 		die();

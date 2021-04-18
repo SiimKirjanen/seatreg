@@ -36,12 +36,12 @@ class SeatregBookingsFile {
         try {
             $this->_userDateTimeZone = new DateTimeZone($this->_userTimezone);
         }catch(Exception $e) {
-            printf(
-                esc_html('Can\'t generate PDF because of Unknown or bad timezone (%s)'),
-                esc_html($this->_userTimezone)
+            wp_die(
+                sprintf(
+                    esc_html('Can\'t generate PDF because of Unknown or bad timezone (%s)'),
+                    esc_html($this->_userTimezone)
+                )
             );
-        
-            exit();
         }
 
         $this->_currentDateTime = new DateTime(null, $this->_UTCDateTime);

@@ -78,6 +78,15 @@ function seatreg_is_registration_view_page() {
 	return false;
 }
 
+function seatreg_validate_bookings_file_input() {
+	if(empty($_GET['zone'])) {
+		wp_die('Missing zone');
+	}
+	if(empty($_GET['code'])) {
+		wp_die('Missing code');
+	}
+}
+
 /*
 ==================================================================================================================================================================================================================
 Generating HTML stuff
@@ -714,9 +723,9 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
             	echo '</div>';
           echo '</div>';
 	
-    echo '<a href="'. get_site_url() .'?seatreg=pdf&v=', esc_attr($code) , '" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a> ';
-    echo '<a href="' . get_site_url() . '?seatreg=xlsx&v=', esc_attr($code), '" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a> ';
-    echo '<a href="' . get_site_url() . '?seatreg=text&v=', esc_attr($code), '"class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a> ';
+    echo '<a href="'. get_site_url() .'?seatreg=pdf&code=', esc_attr($code) , '" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a> ';
+    echo '<a href="' . get_site_url() . '?seatreg=xlsx&code=', esc_attr($code), '" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a> ';
+    echo '<a href="' . get_site_url() . '?seatreg=text&code=', esc_attr($code), '"class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a> ';
 
 	echo '<div class="bg-color">';
 		echo '<div class="tab-container">';
