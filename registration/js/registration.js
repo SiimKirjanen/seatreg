@@ -1,6 +1,4 @@
 (function($) {
-	var ajaxUrl = '../../../../wp-admin/admin-ajax.php';
-
 	var translator = {
 		translate: function(translationKey) {
 			if(seatregTranslations && seatregTranslations.hasOwnProperty(translationKey)) {
