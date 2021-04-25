@@ -343,7 +343,7 @@
 					</div>
 					<div class="checkout-header">
 						<?php
-							esc_html_e('Booking data', 'seatreg');
+							esc_html_e('Contact information', 'seatreg');
 						?>
 					</div>
 					<div id="checkout-input-area"></div>

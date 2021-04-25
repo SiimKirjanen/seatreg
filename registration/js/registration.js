@@ -16,7 +16,6 @@
 		$(this).text(date.format("d.M.Y H:i"));
 	});
 
-
 	var screenWidth = $(window).width();
 	var screenHeight = $(window).height();
 
@@ -184,24 +183,20 @@
 		return roomName;
 	};
 
-	SeatReg.prototype.addRegistration = function(seat_id, room_uuid, status, reg_name) {
-		var roomLocation = this.locationObj[room_uuid];
+	SeatReg.prototype.addRegistration = function(seatId, roomUuid, status, registrantName) {
+		var roomLocation = this.locationObj[roomUuid];
 		var boxesLen = this.rooms[roomLocation].boxes.length;
 
 		for(var j = 0; j < boxesLen; j++) {
-			if(this.rooms[roomLocation].boxes[j].id == seat_id) {
+			if(this.rooms[roomLocation].boxes[j].id == seatId) {
 				if(status == 1) {
 					this.rooms[roomLocation].boxes[j].status = 'bronRegister';
 				}else {
 					this.rooms[roomLocation].boxes[j].status = 'takenRegister';
 				}
 
-				if(reg_name != null) {	//need to show name
-					if(this.rooms[roomLocation].boxes[j].hoverText === "nohover") { //no bubble text
-						this.rooms[roomLocation].boxes[j].hoverText = reg_name;
-					}else {  //need to add name at the beginning of bubble text
-						this.rooms[roomLocation].boxes[j].hoverText = reg_name + '^^' + this.rooms[roomLocation].boxes[j].hoverText;
-					}
+				if(registrantName != null) {	//need to show name
+					this.rooms[roomLocation].boxes[j].registrantName = registrantName;
 				}
 
 				break;
@@ -229,7 +224,8 @@
 		for(var i = 0; i < boxLength; i++) {
 			var box = document.createElement('div');
 			box.className = "box";
-
+			var tooltipContent = '';
+			var legend = loc[i].legend;
 			var clickable = false;
 
 			box.style.top = loc[i].yPosition + 'px';
@@ -239,9 +235,10 @@
 			box.style.width = loc[i].width + 'px';
 			box.style.height = loc[i].height + 'px';
 
-			if(loc[i].legend !== 'noLegend') {
-				box.setAttribute('data-legend',loc[i].legend);
-				box.setAttribute('data-leg',loc[i].legend.replace(/\s+/g, '_').toLowerCase());
+			if(legend !== 'noLegend') {
+				box.setAttribute('data-legend',legend);
+				box.setAttribute('data-leg',legend.replace(/\s+/g, '_').toLowerCase());
+				tooltipContent = '<div class="seatreg-tooltip-row">' + legend + '</div>';
 				clickable = true;
 			}
 
@@ -256,7 +253,7 @@
 			}
 
 			if(loc[i].hoverText !== "nohover") {
-				box.setAttribute('data-powertip',loc[i].hoverText.replace(/\^/g,'<br>'));
+				tooltipContent += '<div class="seatreg-tooltip-row">' + loc[i].hoverText.replace(/\^/g,'<br>') + '</div>';
 				box.className = box.className +' bubble-text';
 				clickable = true;
 
@@ -270,14 +267,24 @@
 					box.setAttribute('data-status','bron');
 					var bronSign = document.createElement('div');
 					bronSign.className = "bron-sign";
+					tooltipContent += '<div class="seatreg-tooltip-row">' + translator.translate('Pending') + '</div>';
 					box.appendChild(bronSign);
 				}else if(loc[i].status == "takenRegister") {
 					box.setAttribute('data-status','tak');
 					var takSign = document.createElement('div');
 					takSign.className = "taken-sign";
+					tooltipContent += '<div class="seatreg-tooltip-row">' + translator.translate('Booked') + '</div>';
 					box.appendChild(takSign);
 				}
 				clickable = true;
+			}
+
+			if(loc[i].hasOwnProperty('registrantName')) {
+				tooltipContent += '<div class="seatreg-tooltip-row">' + loc[i].registrantName + '</div>';
+			}
+
+			if(tooltipContent) {
+				box.setAttribute('data-powertip', tooltipContent);
 			}
 
 			if(clickable) {
@@ -317,11 +324,11 @@
 			$('#boxes').append('<img class="room-image" src="' + seatregPluginFolder + 'uploads/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room.backgroundImage + '" />');
 		}
 
-		$('#boxes .bubble-text').powerTip({
+		$('#boxes .box[data-powertip]').powerTip({
 			followMouse: true,
 			fadeInTime: 0,
 			fadeOutTime:0,
-			intentPollInterval: 10
+			intentPollInterval: 10,
 		});
 	};
 
@@ -715,11 +722,9 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	}
 	
 	if(hover != null) {
-		$('#confirm-dialog-mob-hover').html('<span class="dialog-hover"></span> ' + '<span class="dialog-hover-text">' + hover + '</span>');
+		$('#confirm-dialog-mob-hover').html(hover);
 	}
-	if(legend != null) {
-		$('#confirm-dialog-mob-legend').html('Legend: <div class="dialog-legend-box" style="background-color:' + jClickBox.css('background-color') + '"></div><span class="dialog-legend-text">' + legend + '</span>');
-	}
+
 	if(type != 'box') {
 		if(!isSelected) {
 			if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {

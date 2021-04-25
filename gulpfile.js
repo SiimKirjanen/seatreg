@@ -8,7 +8,7 @@ var gulp  = require("gulp"),
 	reload = browserSync.reload;
 
 function workingOnJSFiles() {
-	return gulp.src(['registration/js/date.format.js', 'registration/js/iscroll-zoom-5-1-3.js', 'registration/js/jquery.powertip.js', 'registration/js/registration.js'])
+	return gulp.src(['registration/js/date.format.js', 'registration/js/iscroll-zoom.js', 'registration/js/jquery.powertip.js', 'registration/js/registration.js'])
 			.on('error', console.error.bind(console))
 			.pipe(concat('registration.min.js'))
 			.pipe(uglify())

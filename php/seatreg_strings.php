@@ -43,7 +43,9 @@ function seatreg_generate_registration_strings() {
     $translations->_seatsSelected = esc_html__(' seats selected', 'seatreg');
     $translations->bookingsConfirmed = esc_html__('You Booking is confirmed', 'seatreg');
     $translations->bookingsConfirmedPending = esc_html__('Your booking is now in pending state. Registration admin needs to confirm it', 'seatreg');
-    $translations->selectingGuide = esc_html__('Select a seat you want to add to booking');
+    $translations->selectingGuide = esc_html__('Select a seat you want to add to booking', 'seatreg');
+    $translations->Booked = esc_html__('Booked', 'seatreg');
+    $translations->Pending = esc_html__('Pending', 'seatreg');
 
 	return $translations;
 }
