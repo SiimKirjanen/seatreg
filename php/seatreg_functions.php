@@ -349,16 +349,16 @@ function seatreg_generate_my_registrations_section() {
 	$registrations = seatreg_get_registrations();
 
 	if(count($registrations)) {
-		echo '<h3>';
+		echo '<h4 class="your-registrations-header">';
 			esc_html_e('Your registrations', 'seatreg');
-		echo '</h3>';
+		echo '</h4>';
 	}
 	echo '<div class="row">';
 
 	foreach($registrations as $key=>$registration) {
 		?>
-			<div class="col-sm-6 col-md-2">
-				<h4><a class="registration-name-link" href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h4>
+			<div class="col-sm-6 col-md-2 mb-4">
+				<h5><a class="registration-name-link" href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h5>
 
 				<a href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
 
@@ -637,9 +637,9 @@ function seatreg_generate_settings_form() {
 function seatreg_create_registration_from() {
 	?>
 	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" id="create-registration-form">
-			<h3 class="new-reg-title">
+			<h4 class="new-reg-title">
 				<?php esc_html_e('Create new registration','seatreg'); ?>
-			</h3>
+			</h4>
 			<label for="new-registration-name">
 				<?php esc_html_e('Enter registration name','seatreg'); ?>
 			</label>
