@@ -2267,7 +2267,7 @@
     	width: 500,
     	//modal: true,
     	position: {my:"top", at:"bottom", of: $('.room-title')},
-    	buttons: [ { text: "Close", click: function() { $( this ).dialog( "close" ); } } ],
+    	buttons: [ { text: "Close", class: 'btn btn-default', tabIndex: -1, click: function() { $( this ).dialog( "close" ); } } ],
     	closeOnEscape: true,
     	show: {
 			effect: "drop",
@@ -2810,6 +2810,7 @@
 				},
 				buttonFocus: "ok"  
 			});
+			alertify.alert(palleteGuide);
 		}
 	});
 

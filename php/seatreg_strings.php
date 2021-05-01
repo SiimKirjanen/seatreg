@@ -83,7 +83,7 @@ function seatreg_generate_admin_strings() {
     $translations->youHaveSelected = esc_html__('You have selected', 'seatreg');
     $translations->_boxesSpanLi = esc_html__(' box/boxes</span></li>', 'seatreg');
     $translations->toSelectOneBox_ = esc_html__('To select one box use ', 'seatreg');
-    $translations->toSelectMultiBox_ = esc_html__('To select multiply boxes use ', 'seatreg');
+    $translations->toSelectMultiBox_ = esc_html__('To select multiple boxes use ', 'seatreg');
     $translations->selectBoxesToAddHover = esc_html__('Select box/boxes to add hover text', 'seatreg');
     $translations->loading = esc_html__('Loading...', 'seatreg');
     $translations->selectBoxesToDelete = esc_html__('Select box/boxes you want to delete', 'seatreg');

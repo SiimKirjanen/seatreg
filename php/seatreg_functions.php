@@ -353,11 +353,11 @@ function seatreg_generate_my_registrations_section() {
 			esc_html_e('Your registrations', 'seatreg');
 		echo '</h4>';
 	}
-	echo '<div class="row seatreg-registrations">';
+	echo '<div class="seatreg-registrations">';
 
 	foreach($registrations as $key=>$registration) {
 		?>
-			<div class="col-sm-6 col-md-1 mb-4">
+			<div class="mb-4" style="margin-right: 52px">
 				<h5><a class="registration-name-link" href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h5>
 
 				<a href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>

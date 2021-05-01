@@ -792,6 +792,10 @@ html {
 .seatreg-wp-admin .registration-name-link {
 	color: rgb(51, 51, 51);
 }
+.seatreg-registrations {
+	display: flex;
+	flex-wrap: wrap;
+}
 .seatreg-registrations a {
 	color: rgb(66, 139, 202);
 }

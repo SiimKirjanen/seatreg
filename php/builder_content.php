@@ -95,8 +95,8 @@
 		<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Color', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Color', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
 			<div class="color-dialog-info"></div>
@@ -113,8 +113,8 @@
 		<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Adding hover text', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Adding hover text', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
 			<div class="hover-dialog-info"></div>
@@ -134,8 +134,8 @@
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Building grid helps you to create boxes', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Building grid helps you to create boxes', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
 			<div>
@@ -178,25 +178,25 @@
 				<div class="legend-dialog-div">
 					<label for="use-select" class="legend-dialog-label"><?php esc_html_e('Existing legends:', 'seatreg');?></label>
 					<select class="legend-select" id="use-select"></select> <br>
-					<div id="apply-legend" class="commands-btn"><?php esc_html_e('Apply legend:', 'seatreg');?></div>
+					<button type="button" id="apply-legend" class="btn btn-secondary d-block btn-sm"><?php esc_html_e('Apply legend', 'seatreg');?></button> 
 				</div>
 
 				<div class="legend-dialog-div">
 					<label for="delete-select" class="legend-dialog-label"><?php esc_html_e('Remove legend from registration:', 'seatreg');?></label>
-					<select class="legend-select" id="delete-select"></select> 
-					<div id="delete-legend" class="commands-btn"><?php esc_html_e('Delete:', 'seatreg');?></div>
+					<select class="legend-select" id="delete-select"></select>
+					<button type="button" id="delete-legend" class="btn btn-secondary d-block btn-sm"><?php esc_html_e('Delete', 'seatreg');?></button> 
 				</div>
 
 				<div class="legend-dialog-div">
 					<label for="legend-delete-select-room" class="legend-dialog-label"><?php esc_html_e('Remove legend from this room:', 'seatreg');?></label>
 					<select class="legend-select-room" id="legend-delete-select-room"></select> 
-					<div id="delete-legend-from-room" class="commands-btn"><?php esc_html_e('Remove:', 'seatreg');?></div>
+					<button type="button" id="delete-legend-from-room" class="btn btn-secondary d-block btn-sm"><?php esc_html_e('Remove', 'seatreg');?></button>
 				</div>
 
 				<div class="legend-dialog-div">
 					<label for="legend-change-select" class="legend-dialog-label"><?php esc_html_e('Change legend:', 'seatreg');?></label>
 					<select id="legend-change-select" class="legend-select"></select> 
-					<div id="change-legend" class="commands-btn"><?php esc_html_e('Change:', 'seatreg');?></div>
+					<button type="button" id="change-legend" class="btn btn-secondary d-block btn-sm"><?php esc_html_e('Change', 'seatreg');?></button>
 				</div>
 
 			</div>
@@ -253,13 +253,14 @@
 		<div id="legend-change-wrap">
 			<div id="legend-change-wrap-inner">
 				<div class="legend-change-name change-wrap-section">
-
 					<label for="old-legend-name"><?php esc_html_e('Enter new name', 'seatreg');?></label>
 					<input type="text" id="new-legend-name" class="form-control" maxlength="20">
 					<input type="hidden" id="old-legend-name">
 					<div id="new-legend-name-info"></div>
-					<div id="apply-new-legend-name" class="legend-dialog-btn green-btn"><?php esc_html_e('Change name', 'seatreg');?></div>
-					<span class="change-btn btn-right" data-slide="1" data-slide-open="2"><?php esc_html_e('Back', 'seatreg');?><span class="glyphicon glyphicon-arrow-right"></span></span>
+					<div class="d-flex justify-content-between align-items-center pr-3">
+						<div id="apply-new-legend-name" class="legend-dialog-btn green-btn"><?php esc_html_e('Change name', 'seatreg');?></div>
+						<span class="change-btn" data-slide="1" data-slide-open="2"><?php esc_html_e('Back', 'seatreg');?><span class="glyphicon glyphicon-arrow-right"></span></span>
+					</div>
 				</div>
 
 				<div class="legend-change-preview change-wrap-section">	
@@ -268,8 +269,10 @@
 						<div class="legend-box-2"></div>
 						<span class="dialog-legend-text-2"></span>
 					</div>
-					<span class="change-btn btn-left" data-slide="2" data-slide-open="1"><span class="glyphicon glyphicon-arrow-left"></span><?php esc_html_e('Change name', 'seatreg');?> </span>
-					<span class="change-btn btn-right" data-slide="2" data-slide-open="3"><?php esc_html_e('Change color', 'seatreg');?> <span class="glyphicon glyphicon-arrow-right"></span></span>
+					<div class="d-flex justify-content-between pr-3">
+						<span class="change-btn" data-slide="2" data-slide-open="1"><span class="glyphicon glyphicon-arrow-left"></span><?php esc_html_e('Change name', 'seatreg');?> </span>
+						<span class="change-btn" data-slide="2" data-slide-open="3"><?php esc_html_e('Change color', 'seatreg');?> <span class="glyphicon glyphicon-arrow-right"></span></span>
+						</div>
 				</div>
 
 				<div class="legend-change-color change-wrap-section">
@@ -295,8 +298,8 @@
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Room name', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Room name', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
 			<label for="room-name-dialog-input"><?php esc_html_e('Enter room name:', 'seatreg');?> </label>
@@ -315,8 +318,8 @@
 		<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Manual', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Manual', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
 			
@@ -414,13 +417,13 @@
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title"><?php esc_html_e('Limited deletion', 'seatreg');?></h4>
+				<h4 class="modal-title"><?php esc_html_e('Limited deletion', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
 
 			<div>
-				<h4><?php esc_html_e('If room contains pending or confirmed seats then seat deletion is limited.', 'seatreg');?></h4>
+				<h5><?php esc_html_e('If room contains pending or confirmed seats then seat deletion is limited.', 'seatreg');?></h5>
 				<p><?php esc_html_e('Example:', 'seatreg');?> <br><?php _e('Lets say you have seats with numbers 1,2,3 and 4.', 'seatreg');?> <br><?php esc_html_e('If someone occupies seat number 2 you won\'t be able to delete seats 1 and 2.', 'seatreg');?> 
 					</p>
 			</div>
@@ -455,8 +458,8 @@
 		<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title"><?php esc_html_e('Room background image', 'seatreg');?></h4>
+				<h4 class="modal-title"><?php esc_html_e('Room background image', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
 

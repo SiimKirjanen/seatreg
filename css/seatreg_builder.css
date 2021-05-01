@@ -891,7 +891,7 @@
 	
 }
 .seatreg-map-builder-page .guide-item-lasso {
-	background-position: 0 -159px;
+	background-position: -209px -160px;
 }	
 .seatreg-map-builder-page .guide-block {
 	line-height: 45px;
@@ -1028,6 +1028,7 @@
 }
 .seatreg-map-builder-page .color-dialog-info {
 	text-align: center;
+	margin-bottom: 8px;
 }
 .seatreg-map-builder-page #build-section-click-controls {
 	border: 1px solid black;
