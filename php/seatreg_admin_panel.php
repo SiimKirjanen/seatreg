@@ -89,7 +89,7 @@ function seatreg_create_welcome() {
 function seatreg_create_options() {
 	?>
 	<div class="seatreg-wp-admin wrap">
-		<h1><span class="glyphicon glyphicon-cog"></span> <?php esc_html_e('Settings', 'seatreg'); ?></h1>
+		<h1><i class="fa fa-cogs" aria-hidden="true"></i> <?php esc_html_e('Settings', 'seatreg'); ?></h1>
 		<p><?php _e('Here you can change your registration settings', 'seatreg'); ?>.</p>
 		<?php
 			seatreg_generate_tabs('seatreg-options');
@@ -106,7 +106,7 @@ function seatreg_create_options() {
 function seatreg_create_overview() {
 	?>
 		<div class="seatreg-wp-admin wrap">
-			<h1><span class="glyphicon glyphicon-stats"></span> <?php esc_html_e('Overview'); ?></h1>
+			<h1><i class="fa fa-bar-chart" aria-hidden="true"></i> <?php esc_html_e('Overview'); ?></h1>
 			<?php
 				seatreg_generate_tabs('seatreg-overview');
 			?>
@@ -122,7 +122,7 @@ function seatreg_create_overview() {
 function seatreg_create_management() {
 	?>
 		<div class="seatreg-wp-admin wrap" id="seatreg-booking-manager">
-			<h1><span class="glyphicon glyphicon-book"></span> <?php esc_html_e('Booking manager'); ?></h1>
+			<h1><i class="fa fa-book" aria-hidden="true"></i> <?php esc_html_e('Booking manager'); ?></h1>
 			<?php
 				seatreg_generate_tabs('seatreg-management');	
 			?>
