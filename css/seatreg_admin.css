@@ -4,6 +4,35 @@ html {
 .index-icon {
     margin-right: 10px;
 }
+.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.btn-default:focus {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #8c8c8c;
+}
+.btn-default:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+.btn-default:active {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+.seatreg-wp-admin .btn-primary {
+	color: #fff;
+    background-color: #428bca;
+    border-color: #357ebd;
+}
+.seatreg-wp-admin .btn-primary:hover, .seatreg-wp-admin .btn-primary:active{
+	background-color: #3276b1;
+    border-color: #285e8e;
+}
 .seatreg-wp-admin input[type=checkbox]:focus {
 	outline: none;
 }
@@ -332,6 +361,7 @@ html {
 
 .seatreg-tabs-content .reg-seat-item {
 	border-bottom: 3px solid #F0F0F0;
+	font-size: 14px;
 	padding: 16px;
 	background-color: #fff;
 	overflow: hidden;
@@ -769,6 +799,11 @@ html {
 .seatreg_page_seatreg-management .booking-status-check-wrap input[type=checkbox] {
 	margin-top: 0;
 	margin-left: 6px;
+}
+
+.seatreg-wp-admin .search-button {
+	border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 @media screen and (max-width: 1199px) {
