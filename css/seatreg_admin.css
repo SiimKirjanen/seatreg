@@ -265,8 +265,7 @@ html {
 	display: inline-block;
 	vertical-align: top;
 	margin-left: 20px;
-	width: 160px;
-
+	min-width: 160px;
 }
 .seatreg-tabs-content .legend-block {
 	margin-top: 10px;
@@ -760,7 +759,7 @@ html {
 .seatreg-wp-admin .registration-name-link {
 	color: rgb(51, 51, 51);
 }
-.seatreg-wp-admin a {
+.seatreg-registrations a {
 	color: rgb(66, 139, 202);
 }
 

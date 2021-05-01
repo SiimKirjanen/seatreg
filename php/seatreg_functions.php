@@ -181,7 +181,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 							$end = $end_date;
 						}
 						
-						echo "<div class='reg-overview-top-date'><span class='time-block'><span class='glyphicon glyphicon-time' style='color:rgb(4, 145, 4); margin-right:3px'></span><span class='time-stamp'>$start</span></span>  <span class='time-block'><span class='glyphicon glyphicon-time' style='color:rgb(250, 38, 38);margin-right:3px'></span><span class='time-stamp'>$end</span></span></div>"; 
+						echo "<div class='reg-overview-top-date'><span class='time-block'><i class='fa fa-clock-o' style='color:rgb(4, 145, 4); margin-right:3px'></i><span class='time-stamp'>$start</span></span>  <span class='time-block'><i class='fa fa-clock-o' style='color:rgb(250, 38, 38); margin-right:3px'></i><span class='time-stamp'>$end</span></span></div>"; 
 					?>
 	  				
 				<?php echo '</div>';?>
@@ -276,7 +276,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					<div class="stats-doughnut-legend">
 						<?php if($regStats['seatsTotal']): ?>
 
-							<div class="legend-block"><span class="doughnut-legend" style="background-color:#61B329"></span><span><?php esc_html_e('Open', 'seatreg'); ?> </span>
+							<div class="legend-block"><span class="doughnut-legend" style="background-color:#61B329"></span><span style="padding-right: 12px"><?php esc_html_e('Open', 'seatreg'); ?> </span>
 								<span class="legend-block-percent" style="color:#61B329">
 									<?php 
 										if($targetRoom == 'overview') {
@@ -292,7 +292,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 									?>
 								</span>
 							</div>
-							<div class="legend-block"><span class="doughnut-legend" style="background-color:red"></span><span><?php esc_html_e('Confirmed', 'seatreg'); ?> </span>
+							<div class="legend-block"><span class="doughnut-legend" style="background-color:red"></span><span style="padding-right: 12px"><?php esc_html_e('Confirmed', 'seatreg'); ?> </span>
 								<span class="legend-block-percent" style="color:red">
 									<?php 
 										if($targetRoom == 'overview') {
@@ -308,7 +308,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 									?>
 								</span>
 							</div>
-							<div class="legend-block"><span class="doughnut-legend" style="background-color:yellow"></span><span><?php esc_html_e('Pending', 'seatreg'); ?> </span>
+							<div class="legend-block"><span class="doughnut-legend" style="background-color:yellow"></span><span style="padding-right: 12px"><?php esc_html_e('Pending', 'seatreg'); ?> </span>
 								<span class="legend-block-percent" style="color:#26a6d1">
 									<?php 
 										if($targetRoom == 'overview') {
@@ -353,7 +353,7 @@ function seatreg_generate_my_registrations_section() {
 			esc_html_e('Your registrations', 'seatreg');
 		echo '</h4>';
 	}
-	echo '<div class="row">';
+	echo '<div class="row seatreg-registrations">';
 
 	foreach($registrations as $key=>$registration) {
 		?>
