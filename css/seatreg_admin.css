@@ -670,6 +670,9 @@ html {
 	margin-top: 10px;
 	margin-left: 10px;
 }
+.seatreg-tabs-content .cust-field-create .btn {
+	margin-bottom: .5rem;
+}
 .seatreg-tabs-content .select-option {
 	margin-bottom: 6px;
 }

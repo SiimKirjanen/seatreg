@@ -439,16 +439,16 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="registration-start-timestamp"><span class="glyphicon glyphicon-time" style="color:rgb(4, 145, 4); margin-right:3px"></span><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
+				<label for="registration-start-timestamp"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:3px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
-				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
+				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
 				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_start_timestamp); ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
 			</div>
 
 			<div class="form-group">
-				<label for="registration-end-timestamp"><span class="glyphicon glyphicon-time" style="color:rgb(250, 38, 38); margin-right:3px"></span><?php _e('Registration end date', 'seatreg'); ?></label>
+				<label for="registration-end-timestamp"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:3px"></i><?php _e('Registration end date', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
-				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" />
+				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
 				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_end_timestamp); ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
 			</div>
 
@@ -615,7 +615,7 @@ function seatreg_generate_settings_form() {
 								<button class="add-select-option"><?php esc_html_e('Add option', 'seatreg'); ?></button>
 								<div class="select-error"></div>
 							</div>
-							<button class="apply-custom-field"><?php esc_html_e('Add custom field', 'seatreg'); ?></button>
+							<button class="btn btn-outline-secondary btn-sm apply-custom-field" type="button"><?php esc_html_e('Add custom field', 'seatreg'); ?></button>
 						</div>
 					</div>
 				</div>	
