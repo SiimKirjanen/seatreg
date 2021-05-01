@@ -49,7 +49,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('alertify', plugins_url('js/alertify.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('easytabs', plugins_url('js/jquery.easytabs.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('colpick', plugins_url('js/colpick.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
-		wp_enqueue_script('powertip', plugins_url('js/jquery.powertip.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
+		wp_enqueue_script('powertip', plugins_url('js/jquery.powertip.js', dirname(__FILE__) ), array('jquery'), '1.2.0', true);
 
 		wp_enqueue_script('date-format', plugins_url('js/date.format.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('seatreg_admin_chart', plugins_url('js/Chart.min.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
