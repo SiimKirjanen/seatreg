@@ -39,9 +39,6 @@ html {
 .seatreg-wp-admin {
 	font-family: 'Open Sans', sans-serif;
 }
-.seatreg-wp-admin label {
-	font-weight: 700;
-}
 .seatreg-wp-admin .jumbotron {
 	background-image: url(../img/chairs_med.jpg);
     background-size: cover;
@@ -461,6 +458,10 @@ html {
 	margin-top: 24px;
 }
 
+.seatreg-settings-form .checkbox label{
+	font-size: 14px;
+}
+
 .seatreg-tabs-content .settings-heading {
 	margin-top: 0;
 	margin-bottom: 24px;
@@ -681,10 +682,11 @@ html {
 	
 }
 .seatreg-tabs-content .custom-container {
-	margin-bottom: 10px;
+	margin-bottom: 4px;
+	margin-left: 24px;
 }
 .seatreg-tabs-content .existing-custom-fields {
-	margin-left: 10px;
+	margin-left: 24px;
 }
 
 .seatreg-tabs-content .custom-container input[type=checkbox] {
@@ -698,8 +700,16 @@ html {
 }
 .seatreg-tabs-content .cust-field-create {
 	margin-top: 10px;
-	margin-left: 10px;
+	margin-left: 24px;
 }
+.seatreg-tabs-content .seatreg-settings-form input[type="text"] {
+	height: 32px;
+	font-size: 14px;
+}
+.seatreg-tabs-content .cust-field-create label {
+	font-size: 14px;
+}
+
 .seatreg-tabs-content .cust-field-create .btn {
 	margin-bottom: .5rem;
 }
@@ -747,6 +757,7 @@ html {
 }
 .seatreg-tabs-content .l-text {
 	margin-right: 10px;
+	font-size: 14px;
 }
 
 .seatreg-tabs-content .option-btn {

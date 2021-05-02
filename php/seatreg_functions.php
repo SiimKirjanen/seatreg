@@ -425,10 +425,10 @@ function seatreg_generate_settings_form() {
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	 $adminEmail = get_option( 'admin_email' );
 	?>
-		<h3 class="settings-heading">
+		<h4 class="settings-heading">
 			<?php echo esc_html($options[0]->registration_name), ' settings'; ?>
-		</h3>
-		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" style="max-width:600px">
+		</h4>
+		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" class="seatreg-settings-form" style="max-width:600px">
 
 			<div class="form-group">
 				<label for="registration-name"><?php esc_html_e('Registration name', 'seatreg'); ?></label>
@@ -568,6 +568,9 @@ function seatreg_generate_settings_form() {
 						<?php if( $custLen > 0 ) : ?>
 							
 							<div style="margin-bottom: 6px"><?php esc_html_e('Existing custom fields', 'seatreg'); ?></div>
+							<p>
+								<?php esc_html_e('Custom fields you have already created', 'seatreg'); ?>
+							</p>
 							<?php
 								for($i = 0; $i < $custLen; $i++) {
 									if($custFields[$i]->type == 'sel') {
@@ -602,8 +605,11 @@ function seatreg_generate_settings_form() {
 					</div>
 
 					<div class="cust-field-create">
-						<div style="margin-bottom: 6px"><?php esc_html_e('Create new custom field', 'seatreg'); ?></div>
-						<div>
+						<div style="margin-bottom: 6px"><?php esc_html_e('New custom field', 'seatreg'); ?></div>
+						<p>
+							<?php esc_html_e('Create a new custom field', 'seatreg'); ?>
+						</p>
+						<div style="margin-left: 24px">
 							<label><?php esc_html_e('Name', 'seatreg'); ?>:
 								<input type="text" class="cust-input-label" maxlenght="30"/>
 							</label>
@@ -1660,11 +1666,22 @@ add_action('admin_post_seatreg_create_submit', 'seatreg_create_submit_handler');
 function seatreg_create_submit_handler() {
 	seatreg_nonce_check();
 
-	if($_POST['new-registration-name'] === '') {
+	if( empty($_POST['new-registration-name']) ) {
+		wp_die('Registration name not provided');
+	}
+
+	if( $_POST['new-registration-name'] === '' ) {
 		wp_die('Please provide registration name');
 	}
 
-	if( seatreg_create_new_registration($_POST['new-registration-name']) ) {
+	$registrationName = sanitize_text_field($_POST['new-registration-name']); 
+	$nameValidation = SeatregDataValidation::validateRegistrationName($registrationName);
+
+	if( !$nameValidation->valid ) {
+		wp_die($nameValidation->errorMessage);
+	}
+
+	if( seatreg_create_new_registration($registrationName) ) {
 		wp_redirect( $_POST['_wp_http_referer'] );
 
 		die();
