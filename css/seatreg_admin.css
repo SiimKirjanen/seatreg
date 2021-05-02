@@ -784,6 +784,7 @@ html {
 }
 .seatreg-map-popup-btn {
 	color: rgb(66, 139, 202);
+	font-size: 14px;
 }
 .seatreg-map-popup-btn, .seatreg-delete-btn {
 	padding: 0;
@@ -791,6 +792,7 @@ html {
 }
 .seatreg-wp-admin .registration-name-link {
 	color: rgb(51, 51, 51);
+	font-size: 18px;
 }
 .seatreg-registrations {
 	display: flex;
@@ -798,6 +800,7 @@ html {
 }
 .seatreg-registrations a {
 	color: rgb(66, 139, 202);
+	font-size: 14px;
 }
 
 .seatreg_page_seatreg-management .booking-status-check-wrap input[type=checkbox] {
