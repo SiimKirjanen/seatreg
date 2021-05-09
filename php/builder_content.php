@@ -11,8 +11,8 @@
 		<h2 class="room-title"><?php esc_html_e('Room:', 'seatreg');?> <span class="room-title-name"></span><span class="change-room-name"><?php esc_html_e('Change name', 'seatreg');?></span></h2>
 		<div id="room-selection-wrapper"></div>
 		<div class="cre-del-room-wrapper">
-			<span id="new-room-create" class="room-action"><span class="glyphicon glyphicon-plus"></span> <?php esc_html_e('Add room', 'seatreg');?> </span>
-			<span id="current-room-delete" class="room-action"><span class="glyphicon glyphicon-minus"></span> <?php esc_html_e('Delete room', 'seatreg');?></span>
+			<span id="new-room-create" class="room-action"><i class="fa fa-plus" aria-hidden="true"></i> <?php esc_html_e('Add room', 'seatreg');?> </span>
+			<span id="current-room-delete" class="room-action"><i class="fa fa-minus" aria-hidden="true"></i> <?php esc_html_e('Delete room', 'seatreg');?></span>
 		</div>
 	</div> <!-- end of build head-->
 	
@@ -35,11 +35,10 @@
 
 				<div class="click-control-right">
 					<div>
-						<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" data-destination="up"></span>
-						<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" data-destination="down"></span>
-
-						<span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true" data-destination="left"></span>
-						<span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true" data-destination="right"></span>
+						<i class="fa fa-arrow-circle-up" aria-hidden="true" data-destination="up"></i>
+						<i class="fa fa-arrow-circle-down" aria-hidden="true" data-destination="down"></i>
+						<i class="fa fa-arrow-circle-left" aria-hidden="true" data-destination="left"></i>
+						<i class="fa fa-arrow-circle-right" aria-hidden="true" data-destination="right"></i>
 					</div>
 				</div>
 			</div>

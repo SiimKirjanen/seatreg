@@ -1044,10 +1044,14 @@
 	top: -22px;
 	display: none;
 }
+.seatreg-map-builder-page #build-section-click-controls input[type="number"] {
+	padding-right: 0;
+
+}
 .seatreg-map-builder-page #click-control-move-nr {
 	display: inline;
 }
-.seatreg-map-builder-page #build-section-click-controls .glyphicon {
+.seatreg-map-builder-page #build-section-click-controls .fa {
 	font-size: 30px;
 	cursor: pointer;
 }
@@ -1065,6 +1069,7 @@
 .seatreg-map-builder-page .click-control-right {
 	float: right;
 	text-align: center;
+	margin-top: 4px;
 }
 .seatreg-map-builder-page #click-controls-head {
 	position: absolute;

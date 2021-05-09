@@ -2935,7 +2935,7 @@
     	}
     });
 
-    $('.click-control-right .glyphicon').on('click', function() {
+    $('.click-control-right .fa').on('click', function() {
     	var destination = $(this).data('destination');
     	var destinationAm = Math.abs($('#click-control-move-nr').val());
 
