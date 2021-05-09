@@ -10,6 +10,7 @@ global $seatreg_db_table_names;
 require_once 'SeatregSubmitBookings.php';
 require_once 'SeatregJsonResponse.php';
 require_once 'constants.php';
+require_once 'SeatregDataValidation.php';
 
 $seatreg_db_table_names = new stdClass();
 $seatreg_db_table_names->table_seatreg = $wpdb->prefix . "seatreg";
@@ -99,8 +100,13 @@ function seatreg_generate_overview_section($targetRoom) {
 
 	$active_tab = null;
 
-	if( isset( $_GET[ 'tab' ] ) ) {
+	if( SeatregDataValidation::tabsDataExists() ) {
 	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
+		$validation = SeatregDataValidation::validateTabData($active_tab);
+
+		if( !$validation->valid ) {
+			wp_die($validation->errorMessage);
+		}
 	} 
 
 	seatreg_generate_overview_section_html($targetRoom, $active_tab);
@@ -398,8 +404,13 @@ function seatreg_no_registration_created_info() {
 function seatreg_generate_settings_form() {
 	 $active_tab = null;
 
-	if( isset( $_GET[ 'tab' ] ) ) {
+	if( SeatregDataValidation::tabsDataExists() ) {
 	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
+		$validation = SeatregDataValidation::validateTabData($active_tab);
+
+		if( !$validation->valid ) {
+			wp_die($validation->errorMessage);
+		}
 	}
 
 	 $options = seatreg_get_options($active_tab);
@@ -414,17 +425,17 @@ function seatreg_generate_settings_form() {
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	 $adminEmail = get_option( 'admin_email' );
 	?>
-		<h3 class="settings-heading">
+		<h4 class="settings-heading">
 			<?php echo esc_html($options[0]->registration_name), ' settings'; ?>
-		</h3>
-		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" style="max-width:600px">
+		</h4>
+		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" class="seatreg-settings-form" style="max-width:600px">
 
 			<div class="form-group">
 				<label for="registration-name"><?php esc_html_e('Registration name', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Change registration name', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-name" name="registration-name" placeholder="Enter registration name" value="<?php echo esc_attr($options[0]->registration_name); ?>">
+				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo SEATREG_REGISTRATION_NAME_MAX_LENGTH; ?>" placeholder="Enter registration name" value="<?php echo esc_attr($options[0]->registration_name); ?>">
 			</div>
 
 			<div class="form-group">
@@ -557,6 +568,9 @@ function seatreg_generate_settings_form() {
 						<?php if( $custLen > 0 ) : ?>
 							
 							<div style="margin-bottom: 6px"><?php esc_html_e('Existing custom fields', 'seatreg'); ?></div>
+							<p>
+								<?php esc_html_e('Custom fields you have already created', 'seatreg'); ?>
+							</p>
 							<?php
 								for($i = 0; $i < $custLen; $i++) {
 									if($custFields[$i]->type == 'sel') {
@@ -591,8 +605,11 @@ function seatreg_generate_settings_form() {
 					</div>
 
 					<div class="cust-field-create">
-						<div style="margin-bottom: 6px"><?php esc_html_e('Create new custom field', 'seatreg'); ?></div>
-						<div>
+						<div style="margin-bottom: 6px"><?php esc_html_e('New custom field', 'seatreg'); ?></div>
+						<p>
+							<?php esc_html_e('Create a new custom field', 'seatreg'); ?>
+						</p>
+						<div style="margin-left: 24px">
 							<label><?php esc_html_e('Name', 'seatreg'); ?>:
 								<input type="text" class="cust-input-label" maxlenght="30"/>
 							</label>
@@ -643,7 +660,7 @@ function seatreg_create_registration_from() {
 			<label for="new-registration-name">
 				<?php esc_html_e('Enter registration name','seatreg'); ?>
 			</label>
-	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px">
+	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px" maxlength="<?php echo SEATREG_REGISTRATION_NAME_MAX_LENGTH; ?>">
 			<input type='hidden' name='action' value='seatreg_create_submit' />
 			<?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
 			<?php
@@ -671,21 +688,35 @@ function seatreg_generate_booking_manager() {
 	$order = 'date';
 	$searchTerm = '';
 
-	if( isset( $_GET[ 'tab' ] ) ) {
+	if( SeatregDataValidation::tabsDataExists() ) {
 	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
+		$validation = SeatregDataValidation::validateTabData($active_tab );
+
+		if( !$validation->valid ) {
+			wp_die($validation->errorMessage);
+		}
 	}
 
-	if( !empty( $_GET[ 'o' ] ) ) {
+	if( SeatregDataValidation::orderDataExists() ) {
 		$order = sanitize_text_field($_GET[ 'o' ]);
+		$validation = SeatregDataValidation::validateOrderData($order);
+
+		if( !$validation->valid ) {
+			wp_die($validation->errorMessage);
+		}
 	}
 
-	if( !empty( $_GET[ 's' ] ) ) {
+	if( SeatregDataValidation::searchDataExists() ) {
 		$searchTerm = sanitize_text_field($_GET[ 's' ]);
+		$validation = SeatregDataValidation::validateSearchData($searchTerm);
+
+		if( !$validation->valid ) {
+			wp_die($validation->errorMessage);
+		}
 	}
 
 	seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm);
 }
-
 
 //generate bookings list for manager
 function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm) {
@@ -717,7 +748,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
 	echo '<div class="input-group manager-search-wrap">';
 				echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
-            	echo '<input type="text" class="form-control manager-search" placeholder="Search booking" value="', esc_attr($searchTerm), '"/>';
+            	echo '<input type="text" class="form-control manager-search" placeholder="Search booking" maxlength="', SEATREG_REGISTRATION_SEARCH_MAX_LENGTH ,'" value="', esc_attr($searchTerm), '"/>';
             	echo '<div class="input-group-btn">';
                 	echo '<button class="btn btn-default search-button" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>';
             	echo '</div>';
@@ -855,7 +886,7 @@ function seatreg_customfield_with_value($label, $custom_data) {
 				echo '<span class="custom-field-v">', esc_html__('No', 'seatreg'), '</span></div>';
 
 			}else {
-				echo '<span class="custom-field-v">', esc_html__($custom_data[$j]['value']), '</span></div>';
+				echo '<span class="custom-field-v">', esc_html($custom_data[$j]['value']), '</span></div>';
 			}
 			
 			$foundIt = true;
@@ -909,8 +940,13 @@ function seatreg_generate_tabs($targetPage) {
 	$active_tab = null;
 	$registrations = seatreg_get_registrations();
 
-	if( isset( $_GET[ 'tab' ] ) ) {
+	if( SeatregDataValidation::tabsDataExists() ) {
 	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
+		$validation = SeatregDataValidation::validateTabData($active_tab );
+
+		if( !$validation->valid ) {
+			wp_die($validation->errorMessage);
+		}
 	}else {
 		$active_tab = $registrations[0]->registration_code;
 	} 
@@ -918,11 +954,11 @@ function seatreg_generate_tabs($targetPage) {
 	?>
 
 	<h2 class="nav-tab-wrapper"> 
-    <?php foreach($registrations as $key=>$value): ?>
-		<a href="?page=<?php echo esc_html($targetPage); ?>&tab=<?php echo esc_html($value->registration_code); ?>" class="nav-tab <?php echo $active_tab == $value->registration_code ? 'nav-tab-active' : ''; ?>">
-			<?php echo esc_html($value->registration_name); ?>
-		</a>
-    <?php endforeach; ?>
+		<?php foreach($registrations as $key=>$value): ?>
+			<a href="?page=<?php echo esc_html($targetPage); ?>&tab=<?php echo esc_html($value->registration_code); ?>" class="nav-tab <?php echo $active_tab == $value->registration_code ? 'nav-tab-active' : ''; ?>">
+				<?php echo esc_html($value->registration_name); ?>
+			</a>
+		<?php endforeach; ?>
 	</h2>
 	
 	<?php
@@ -1630,11 +1666,22 @@ add_action('admin_post_seatreg_create_submit', 'seatreg_create_submit_handler');
 function seatreg_create_submit_handler() {
 	seatreg_nonce_check();
 
-	if($_POST['new-registration-name'] === '') {
+	if( empty($_POST['new-registration-name']) ) {
+		wp_die('Registration name not provided');
+	}
+
+	if( $_POST['new-registration-name'] === '' ) {
 		wp_die('Please provide registration name');
 	}
 
-	if( seatreg_create_new_registration($_POST['new-registration-name']) ) {
+	$registrationName = sanitize_text_field($_POST['new-registration-name']); 
+	$nameValidation = SeatregDataValidation::validateRegistrationName($registrationName);
+
+	if( !$nameValidation->valid ) {
+		wp_die($nameValidation->errorMessage);
+	}
+
+	if( seatreg_create_new_registration($registrationName) ) {
 		wp_redirect( $_POST['_wp_http_referer'] );
 
 		die();
@@ -1672,6 +1719,21 @@ function seatreg_delete_registration_handler() {
 function seatreg_update() {
 	global $wpdb;
 	global $seatreg_db_table_names;
+
+	if( !SeatregDataValidation::registrationCodeDataExists($_POST) ) {
+		wp_die('Missing registration code');
+	}
+
+	if( !SeatregDataValidation::registrationNameDataExists($_POST) ) {
+		wp_die('Missing registration name');
+	}
+
+	$registrationName = sanitize_text_field($_POST['registration-name']);
+	$registrationNameValidation = SeatregDataValidation::validateRegistrationName($registrationName);
+
+	if( !$registrationNameValidation->valid ) {
+		wp_die($registrationNameValidation->errorMessage);
+	}
 
 	if(!isset($_POST['gmail-required'])) {
 		$_POST['gmail-required'] = 0;
@@ -1713,7 +1775,7 @@ function seatreg_update() {
 			'booking_email_confirm' => sanitize_text_field($_POST['email-confirm'])
 		),
 		array(
-			'registration_code' => $_POST['registration_code']
+			'registration_code' => sanitize_text_field($_POST['registration_code'])
 		),
 		'%s',
 		'%s'
@@ -1722,10 +1784,10 @@ function seatreg_update() {
 	$status2 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg",
 		array(
-			'registration_name' => $_POST['registration-name'],
+			'registration_name' => $registrationName,
 		),
 		array(
-			'registration_code' => $_POST['registration_code']
+			'registration_code' => sanitize_text_field($_POST['registration_code'])
 		),
 		'%s',
 		'%s'
@@ -1786,13 +1848,30 @@ function seatreg_get_registration_layout_and_bookings() {
 add_action('wp_ajax_seatreg_update_layout', 'seatreg_update_layout');
 function seatreg_update_layout() {
 	seatreg_ajax_security_check();
+	$response = new SeatregJsonResponse();
+
+	if( !SeatregDataValidation::updateLayoutDataExists() ) {
+		$response->setError('Layout data missing');
+		wp_send_json( $response );
+
+		die();
+	}
+	$updateData = stripslashes_deep($_POST['updatedata']);
+	$layoutValidation = SeatregDataValidation::layoutDataIsCorrect($updateData);
+
+	if( !$layoutValidation->valid ) {
+		$response->setError($layoutValidation->errorMessage);
+		wp_send_json( $response );
+		
+		die();
+	}
 	
 	global $wpdb;
 	global $seatreg_db_table_names;
 	$status = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg",
 		array(
-			'registration_layout' => stripslashes_deep($_POST['updatedata'])
+			'registration_layout' => $updateData
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
@@ -1800,10 +1879,9 @@ function seatreg_update_layout() {
 		array('%s'),
 		array('%s')
 	);
-	$response = new SeatregJsonResponse();
+	
 	$response->setData( $status );
 	wp_send_json( $response );
-
 }
 
 function seatreg_random_string($length){
@@ -1902,10 +1980,30 @@ function seatreg_new_captcha_callback() {
 add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_callback' );
 function seatreg_get_booking_manager_callback() {
 	seatreg_ajax_security_check();
+	if( empty( $_POST[ 'code' ] ) || empty( $_POST['data']['orderby'] ) || !isSet( $_POST['data']['searchTerm'] ) ) {
+		wp_die('Missing data');
+	}
+
+	$order = sanitize_text_field($_POST['data']['orderby']);
+	$code = sanitize_text_field($_POST['code']);
+	$search = sanitize_text_field($_POST['data']['searchTerm']); 
+
+	if( strlen($code) > SEATREG_REGISTRATION_NAME_MAX_LENGTH ) {
+		wp_die('Too long code');
+	}
+
+	if( strlen($search) > SEATREG_REGISTRATION_SEARCH_MAX_LENGTH ) {
+		wp_die('Too long search');
+	}
+
+	if( !in_array($order, SEATREG_MANAGER_ALLOWED_ORDER) ) {
+		wp_die('Too long search');
+	}
+
 	seatreg_generate_booking_manager_html(
-		sanitize_text_field($_POST['code']),
-		sanitize_text_field($_POST['data']['orderby']),
-		sanitize_text_field($_POST['data']['searchTerm']) 
+		$code,
+		$order,
+		$search
 	);
 
 	die();

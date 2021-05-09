@@ -33,24 +33,24 @@ function seatreg_add_plugin_menu() {
 	);
 	add_submenu_page(
 		'seatreg-welcome',   //slug 
-		sprintf(esc_html('%s Overview', 'seatreg'), 'SeatReg'),  //page title
-		esc_html('Overview', 'seatreg'),  //menu title
+		sprintf(esc_html__('%s Overview', 'seatreg'), 'SeatReg'),  //page title
+		esc_html__('Overview', 'seatreg'),  //menu title
 		'manage_options',  //capability
 		'seatreg-overview',   //slug
 		'seatreg_create_overview'  //callback
 	);
 	add_submenu_page(
 		'seatreg-welcome',   //slug 
-		sprintf(esc_html('%s Settings', 'seatreg'), 'SeatReg'),  //page title
-		esc_html('Settings', 'seatreg'),  //menu title
+		sprintf(esc_html__('%s Settings', 'seatreg'), 'SeatReg'),  //page title
+		esc_html__('Settings', 'seatreg'),  //menu title
 		'manage_options',  //capability
 		'seatreg-options',   //slug
 		'seatreg_create_options'
 	);
 	add_submenu_page(
 		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
-		sprintf(esc_html('%s Bookings', 'seatreg'), 'SeatReg'),  //page title
-		esc_html('Bookings', 'seatreg'),  //menu title
+		sprintf(esc_html__('%s Bookings', 'seatreg'), 'SeatReg'),  //page title
+		esc_html__('Bookings', 'seatreg'),  //menu title
 		'manage_options',  //capability
 		'seatreg-management',   //slug
 		'seatreg_create_management'
@@ -90,7 +90,7 @@ function seatreg_create_options() {
 	?>
 	<div class="seatreg-wp-admin wrap">
 		<h1><i class="fa fa-cogs" aria-hidden="true"></i> <?php esc_html_e('Settings', 'seatreg'); ?></h1>
-		<p><?php _e('Here you can change your registration settings', 'seatreg'); ?>.</p>
+		<p><?php esc_html_e('Settings for your registrations', 'seatreg'); ?>.</p>
 		<?php
 			seatreg_generate_tabs('seatreg-options');
 		?>
@@ -107,6 +107,7 @@ function seatreg_create_overview() {
 	?>
 		<div class="seatreg-wp-admin wrap">
 			<h1><i class="fa fa-bar-chart" aria-hidden="true"></i> <?php esc_html_e('Overview'); ?></h1>
+			<p><?php esc_html_e('Statistics for your registrations', 'seatreg'); ?>.</p>
 			<?php
 				seatreg_generate_tabs('seatreg-overview');
 			?>
@@ -123,6 +124,7 @@ function seatreg_create_management() {
 	?>
 		<div class="seatreg-wp-admin wrap" id="seatreg-booking-manager">
 			<h1><i class="fa fa-book" aria-hidden="true"></i> <?php esc_html_e('Booking manager'); ?></h1>
+			<p><?php esc_html_e('Manage seat bookings', 'seatreg'); ?>.</p>
 			<?php
 				seatreg_generate_tabs('seatreg-management');	
 			?>

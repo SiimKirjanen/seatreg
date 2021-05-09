@@ -1944,7 +1944,7 @@
 
 					$('#server-response').empty();
 				}else {
-					$('#server-response').text(data);
+					$('#server-response').text(data._response.text);
 				}
 			}
 		});
