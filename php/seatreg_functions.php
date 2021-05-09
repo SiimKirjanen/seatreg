@@ -1848,13 +1848,30 @@ function seatreg_get_registration_layout_and_bookings() {
 add_action('wp_ajax_seatreg_update_layout', 'seatreg_update_layout');
 function seatreg_update_layout() {
 	seatreg_ajax_security_check();
+	$response = new SeatregJsonResponse();
+
+	if( !SeatregDataValidation::updateLayoutDataExists() ) {
+		$response->setError('Layout data missing');
+		wp_send_json( $response );
+
+		die();
+	}
+	$updateData = stripslashes_deep($_POST['updatedata']);
+	$layoutValidation = SeatregDataValidation::layoutDataIsCorrect($updateData);
+
+	if( !$layoutValidation->valid ) {
+		$response->setError($layoutValidation->errorMessage);
+		wp_send_json( $response );
+		
+		die();
+	}
 	
 	global $wpdb;
 	global $seatreg_db_table_names;
 	$status = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg",
 		array(
-			'registration_layout' => stripslashes_deep($_POST['updatedata'])
+			'registration_layout' => $updateData
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
@@ -1862,10 +1879,9 @@ function seatreg_update_layout() {
 		array('%s'),
 		array('%s')
 	);
-	$response = new SeatregJsonResponse();
+	
 	$response->setData( $status );
 	wp_send_json( $response );
-
 }
 
 function seatreg_random_string($length){

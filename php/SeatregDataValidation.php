@@ -81,4 +81,242 @@ class SeatregDataValidation {
     public static function registrationCodeDataExists($method) {
         return !empty( $method[ 'registration_code' ] );
     }
+
+    public static function updateLayoutDataExists() {
+        return !empty($_POST['updatedata']);
+    }
+
+    public static function layoutDataIsCorrect($data) {
+        $validationStatus = new SeatregValidationStatus();
+        $layout = json_decode($data);
+
+        if( !property_exists($layout, 'global') ) {
+            $validationStatus->setInvalid('global property is missing');
+            return $validationStatus;
+        }
+
+        if( !property_exists($layout->global, 'roomLocator') || !is_int($layout->global->roomLocator) ) {
+            $validationStatus->setInvalid('roomLocator property is missing or invalid');
+            return $validationStatus;
+        }
+
+        if( !property_exists($layout->global, 'boxCounter') || !is_int($layout->global->boxCounter) ) {
+            $validationStatus->setInvalid('boxCounter property is missing or invalid');
+            return $validationStatus;
+        }
+
+        if( !property_exists($layout, 'roomData') || !is_array($layout->roomData) ) {
+            $validationStatus->setInvalid('roomData property is missing or invalid');
+            return $validationStatus;
+        }
+
+        if( property_exists($layout, 'legends') && !is_array($layout->legends) ) {
+            $validationStatus->setInvalid('roomData property legends invalid');
+            return $validationStatus;
+        }
+
+        if( property_exists($layout, 'legends') ) {
+            foreach($layout->legends as $legend) {
+                if( !is_object($legend) ) {
+                    $validationStatus->setInvalid('legend is invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($legend, 'text') || !is_string($legend->text) ) {
+                    $validationStatus->setInvalid('legend text is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($legend, 'color') || !is_string($legend->color) ) {
+                    $validationStatus->setInvalid('legend color is missing or invalid');
+                    return $validationStatus;
+                }
+            }
+        }
+
+        foreach($layout->roomData as $roomData) {
+            if( !property_exists($roomData, 'skeleton') ) {
+                $validationStatus->setInvalid('skeleton missing in room');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->skeleton, 'width') || !is_int($roomData->skeleton->width) ) {
+                $validationStatus->setInvalid('skeleton width missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->skeleton, 'height') || !is_int($roomData->skeleton->height) ) {
+                $validationStatus->setInvalid('skeleton height missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->skeleton, 'countX') || !is_int($roomData->skeleton->countX) ) {
+                $validationStatus->setInvalid('skeleton countX missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->skeleton, 'countY') || !is_int($roomData->skeleton->countY) ) {
+                $validationStatus->setInvalid('skeleton countY missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->skeleton, 'marginX') || !is_int($roomData->skeleton->marginX) ) {
+                $validationStatus->setInvalid('skeleton marginX missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->skeleton, 'marginY') || !is_int($roomData->skeleton->marginY) ) {
+                $validationStatus->setInvalid('skeleton marginY missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->skeleton, 'buildGrid') || !is_int($roomData->skeleton->buildGrid) ) {
+                $validationStatus->setInvalid('skeleton buildGrid missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData, 'room') ) {
+                $validationStatus->setInvalid('room missing in room');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->room, 'id') || !is_int($roomData->room->id) ) {
+                $validationStatus->setInvalid('room id missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->room, 'uuid') || !is_string($roomData->room->uuid) ) {
+                $validationStatus->setInvalid('room uuid missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->room, 'name') || !is_string($roomData->room->name) ) {
+                $validationStatus->setInvalid('room name missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->room, 'text') || !is_string($roomData->room->text) ) {
+                $validationStatus->setInvalid('room text missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->room, 'legends') || !is_array($roomData->room->legends) ) {
+                $validationStatus->setInvalid('room legends missing or invalid');
+                return $validationStatus;
+            }
+
+            if( property_exists($roomData->room, 'legends') ) {
+                foreach($roomData->room->legends as $legend) {
+                    if( !is_object($legend) ) {
+                        $validationStatus->setInvalid('legend is invalid');
+                        return $validationStatus;
+                    }
+    
+                    if( !property_exists($legend, 'text') || !is_string($legend->text) ) {
+                        $validationStatus->setInvalid('legend text is missing or invalid');
+                        return $validationStatus;
+                    }
+    
+                    if( !property_exists($legend, 'color') || !is_string($legend->color) ) {
+                        $validationStatus->setInvalid('legend color is missing or invalid');
+                        return $validationStatus;
+                    }
+                }
+            }
+
+            if( !property_exists($roomData->room, 'width') || !is_int($roomData->room->width) ) {
+                $validationStatus->setInvalid('room width missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->room, 'height') || !is_int($roomData->room->height) ) {
+                $validationStatus->setInvalid('room height missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->room, 'seatCounter') || !is_int($roomData->room->seatCounter) ) {
+                $validationStatus->setInvalid('room seatCounter missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData->room, 'backgroundImage') || !( is_string($roomData->room->backgroundImage) || is_null($roomData->room->backgroundImage) ) ) {
+                $validationStatus->setInvalid('room backgroundImage missing or invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData, 'boxes') || !is_array($roomData->boxes) ) {
+                $validationStatus->setInvalid('room missing boxes');
+                return $validationStatus;
+            }
+
+            foreach($roomData->boxes as $box) {
+                if( !is_object($box) ) {
+                    $validationStatus->setInvalid('roomData box is invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'legend') || !is_string($box->legend) ) {
+                    $validationStatus->setInvalid('box legend is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'xPosition') || !is_int($box->xPosition) ) {
+                    $validationStatus->setInvalid('box xPosition is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'yPosition') || !is_int($box->yPosition) ) {
+                    $validationStatus->setInvalid('box yPosition is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'width') || !is_int($box->width) ) {
+                    $validationStatus->setInvalid('box width is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'height') || !is_int($box->height) ) {
+                    $validationStatus->setInvalid('box height is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'color') || !is_string($box->color) ) {
+                    $validationStatus->setInvalid('box color is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'hoverText') || !is_string($box->hoverText) ) {
+                    $validationStatus->setInvalid('box hoverText is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'id') || !is_string($box->id) ) {
+                    $validationStatus->setInvalid('box id is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'canRegister') || !is_string($box->canRegister) ) {
+                    $validationStatus->setInvalid('box canRegister is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'seat') || !is_int($box->seat) ) {
+                    $validationStatus->setInvalid('box seat is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'status') || !is_string($box->status) ) {
+                    $validationStatus->setInvalid('box status is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'zIndex') || !is_int($box->zIndex) ) {
+                    $validationStatus->setInvalid('box zIndex is missing or invalid');
+                    return $validationStatus;
+                }
+            }
+        }
+
+        return $validationStatus;
+    }
 }
