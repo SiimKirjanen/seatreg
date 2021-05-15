@@ -19,7 +19,7 @@ function seatreg_hide_admin_bar_from_registration_view(){
 add_filter( 'page_template', 'seatreg_page_template' );
 function seatreg_page_template( $page_template ){
     if ( seatreg_is_registration_view_page() ) {
-        $page_template = plugin_dir_path( __FILE__ ) . '/registration/index.php';
+        $page_template = SEATREG_PLUGIN_FOLDER_DIR . '/registration/index.php';
     }
 
     return $page_template;
