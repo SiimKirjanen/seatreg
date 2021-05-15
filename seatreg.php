@@ -97,6 +97,7 @@ add_filter('init', 'seatreg_virtual_pages');
 function seatreg_virtual_pages() {
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'pdf' ) {
+		seatreg_is_user_logged_in_and_has_permissions();
 		seatreg_validate_bookings_file_input();		
 		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsPDF.php' );
 
@@ -107,6 +108,7 @@ function seatreg_virtual_pages() {
 	}
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'xlsx' ) {
+		seatreg_is_user_logged_in_and_has_permissions();
 		seatreg_validate_bookings_file_input();	
 		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsXlsx.php' );
 
@@ -117,6 +119,7 @@ function seatreg_virtual_pages() {
 	}
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'text' ) {
+		seatreg_is_user_logged_in_and_has_permissions();
 		seatreg_validate_bookings_file_input();	
 		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsTxt.php' );
 

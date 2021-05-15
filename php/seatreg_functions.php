@@ -33,7 +33,7 @@ Useful functions
 */
 
 //for bookings pdf, xlsx adn text files. Do view those files you need to be logged in and have permissions
-function seatreg_bookings_is_user_logged_in() {
+function seatreg_is_user_logged_in_and_has_permissions() {
 	if( !is_user_logged_in() ) {
 		esc_html_e('Please log in to view this area', 'seatreg');
 
