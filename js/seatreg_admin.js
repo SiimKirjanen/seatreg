@@ -446,7 +446,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	modal.modal('show');
 });
 
-$('#edit-update-btn').on('click', function() {
+$('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'css/ajax_loader2.gif' + '" alt="Loading..." class="ajax-load" />');
 	var subBtn = $(this);
 	var modal = $('#edit-modal');
