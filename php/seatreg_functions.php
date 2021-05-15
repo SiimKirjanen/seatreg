@@ -1735,6 +1735,13 @@ function seatreg_update() {
 		wp_die($registrationNameValidation->errorMessage);
 	}
 
+	$customFileds = stripslashes_deep( $_POST['custom-fields'] );
+	$customFiledsValidation = SeatregDataValidation::validateCustomFieldCreation($customFileds);
+
+	if( !$customFiledsValidation->valid ) {
+		wp_die($customFiledsValidation->errorMessage);
+	}
+
 	if(!isset($_POST['gmail-required'])) {
 		$_POST['gmail-required'] = 0;
 	}else {
@@ -1771,7 +1778,7 @@ function seatreg_update() {
 			'show_bookings' => sanitize_text_field($_POST['show-registration-bookings']),
 			'payment_text' => $_POST['payment-instructions'] == '' ? null : sanitize_text_field($_POST['payment-instructions']),
 			'info' => sanitize_text_field($_POST['registration-info-text']),
-			'custom_fields' => stripslashes_deep( $_POST['custom-fields'] ),
+			'custom_fields' => $customFileds,
 			'booking_email_confirm' => sanitize_text_field($_POST['email-confirm'])
 		),
 		array(

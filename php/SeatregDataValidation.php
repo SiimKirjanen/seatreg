@@ -319,4 +319,42 @@ class SeatregDataValidation {
 
         return $validationStatus;
     }
+
+    public static function validateCustomFieldCreation($customFields) {
+        $validationStatus = new SeatregValidationStatus();
+
+        try {
+            $customFieldsDecoded = json_decode($customFields);
+
+            if( !is_array($customFieldsDecoded) ) {
+                $validationStatus->setInvalid('Custom fields not array');
+            }
+
+            foreach($customFieldsDecoded as $customFieldDecoded) {
+                if( !property_exists($customFieldDecoded, 'label') || !is_string($customFieldDecoded->label) ) {
+                    $validationStatus->setInvalid('Custom field label is missing or invalid');
+                    return $validationStatus;
+                }
+                if( !property_exists($customFieldDecoded, 'type') || !in_array($customFieldDecoded->type, SEATREG_CUSTOM_FIELD_TYPES) ) {
+                    $validationStatus->setInvalid('Custom field type missing or invalid');
+                    return $validationStatus;
+                }
+                if( !property_exists($customFieldDecoded, 'options') || !is_array($customFieldDecoded->options) ) {
+                    $validationStatus->setInvalid('Custom fields options missing or not an array');
+                    return $validationStatus;
+                }
+                foreach($customFieldDecoded->options as $option) {
+                    if( !is_string($option) ) {
+                        $validationStatus->setInvalid('Custom fields option not a string');
+                        return $validationStatus;
+                    }
+                }
+            }
+
+        } catch (Exception $error) {
+            $validationStatus->setInvalid('Unexpected error occured');
+        }
+        
+        return $validationStatus;
+    }
 }
