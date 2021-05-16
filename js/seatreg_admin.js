@@ -166,8 +166,6 @@ $('.builder-popup-close').on('click', function() {
 
 });
 
-
-
 $('#registration-start-timestamp').datepicker({
 	altField: '#start-timestamp',
 	altFormat: '@',
@@ -297,20 +295,6 @@ $('#seatreg-booking-manager').on('click','.manager-box-link', function() {
 				animationSpeed: 0
 				//updateHash: false
 			});
-
-			wrapper.find('.time-string').each(function() {
-
-				if(translator.translate('language') == 'eng') {
-
-					//$(this).localTimeFromUTC('MM.dd.yyyy HH:mm');
-
-				}else if(translator.translate('language') == 'et') {
-
-					//$(this).localTimeFromUTC('dd.MM.yyyy HH:mm');
-						
-				}
-		
-			});
 		});
 	});
 	
@@ -318,7 +302,7 @@ $('#seatreg-booking-manager').on('click','.manager-box-link', function() {
 });
 
 //remove input check from other option
-$('#seatreg-booking-manager').on('click', '.bron-action', function(e) {
+$('#seatreg-booking-manager').on('click', '.bron-action', function() {
 	var check = $(this);
 	var bookingId = check.closest('.reg-seat-item').find('.booking-identification').val();
 	check.closest('.action-select').find('.bron-action').not(check).prop('checked', false);
@@ -351,19 +335,6 @@ $('#seatreg-booking-manager').on('click', '.search-button', function(e) {
 				animate: false,
 				animationSpeed: 0
 				//updateHash: false
-			});
-			wrapper.find('.time-string').each(function() {
-
-				if(translator.translate('language') == 'eng') {
-
-					//$(this).localTimeFromUTC('MM.dd.yyyy HH:mm');
-
-				}else if(translator.translate('language') == 'et') {
-
-					//$(this).localTimeFromUTC('dd.MM.yyyy HH:mm');
-
-				}
-
 			});
 		});
 	});
@@ -410,14 +381,6 @@ $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
 				animate: false,
 				animationSpeed: 0
 				//updateHash: false
-			});
-			wrapper.find('.time-string').each(function() {
-				if(translator.translate('language') == 'eng') {
-					//$(this).localTimeFromUTC('MM.dd.yyyy HH:mm');
-
-				}else if(translator.translate('language') == 'et') {
-					//$(this).localTimeFromUTC('dd.MM.yyyy HH:mm');
-				}
 			});
 		});
 	});
@@ -624,7 +587,6 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 			seatreg_insert_custom_field(labelElem.val(), selectedSelect, options, existElems);
 			$(this).parent().find('.cust-input-label, .option-name').val('');
 			$(this).parent().find('.existing-options').empty();
-				
 		}
 });
 

@@ -27,14 +27,14 @@ if( !is_admin() ) {
 require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_functions.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'php/SeatregJsonResponse.php' );
 
-function seatreg_plugin_activate() {
-	seatreg_set_up_db();
-}
 
 //Actions
 require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_actions.php' );
 
 //Hooks
+function seatreg_plugin_activate() {
+	seatreg_set_up_db();
+}
 register_activation_hook(__FILE__, "seatreg_plugin_activate");
 
 //Filters

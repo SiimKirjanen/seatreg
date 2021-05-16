@@ -2895,16 +2895,6 @@
 			}
 		}
 	});
-
-	/*
-	$('.build-area-wrapper .box-hover').tipsy({
-		title: 'original-title',
-		gravity: 'n',
-		live: true,
-		html: true
-	});	 
-	*/
-	
 	   
     $('#room-name-dialog-input').keyup(function(e) {		
     	if (e.which == 13) {
