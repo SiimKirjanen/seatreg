@@ -403,6 +403,16 @@ class SeatregDataValidation {
                         $validationStatus->setInvalid('Custom field value is missing');
                         return $validationStatus;
                     }
+
+                    $duplicates = array_filter($personCustomFields, function($cust) use ($personCustomField) {
+                        return $cust->label === $personCustomField->label;
+                    });
+
+                    if( count($duplicates) > 1) {
+                        $validationStatus->setInvalid('Duplicate label detected');
+                        return $validationStatus;
+                    }
+
                     $assosiatedCustomField = SeatregFindCustomField($personCustomField->label, $createdCustomFields);
 
                     if( !$assosiatedCustomField ) {
