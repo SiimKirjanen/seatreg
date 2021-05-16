@@ -341,6 +341,15 @@ class SeatregDataValidation {
             }
 
             foreach($customFieldsDecoded as $customFieldDecoded) {
+                $duplicates = array_filter($customFieldsDecoded, function($cust) use ($customFieldDecoded) {
+                    return $cust->label === $customFieldDecoded->label;
+                });
+
+                if( count($duplicates) > 1) {
+                    $validationStatus->setInvalid('Duplicate label detected');
+                    return $validationStatus;
+                }
+
                 if( !property_exists($customFieldDecoded, 'label') || !is_string($customFieldDecoded->label) ) {
                     $validationStatus->setInvalid('Custom field label is missing or invalid');
                     return $validationStatus;
