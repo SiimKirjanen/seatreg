@@ -558,17 +558,25 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 		e.preventDefault();
 
 		var labelElem = $(this).closest('.cust-field-create').find('.cust-input-label');
+		var label = labelElem.val().trim();
 		var selectedSelect = $(this).closest('.cust-field-create').find('.custom-field-select').find(':selected').attr('data-type');
 		var existElems = $(this).closest('.user-custom-field-options').find('.existing-custom-fields');
 
-		if(labelElem.val() == '') {
+		if(label === '') {
 			alertify.error(translator.translate('pleaseEnterName'));
 			labelElem.focus();
+
+			return;
+		}
+
+		if( existElems.find('[data-label="' + label + '"]').length ) {
+			alertify.error(translator.translate('nameAlreadyUsed'));
+
 			return;
 		}
 
 		if(selectedSelect != 'select') {
-			seatreg_insert_custom_field(labelElem.val(), selectedSelect, [], existElems);
+			seatreg_insert_custom_field(label, selectedSelect, [], existElems);
 			$(this).parent().find('.cust-input-label').val('');			
 		}else {
 			var cusOptions = $(this).closest('.user-custom-field-options').find('.existing-options').find('.option-value');
@@ -576,8 +584,7 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 			if(cusOptions.length == 0) {
 				alertify.error(translator.translate('pleaseAddAtLeastOneOption'));
 				$(this).prev().find('.option-name').focus();
-
-
+				
 				return;
 			}
 
@@ -586,14 +593,14 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 				options.push($(this).text());
 			});
 
-			seatreg_insert_custom_field(labelElem.val(), selectedSelect, options, existElems);
+			seatreg_insert_custom_field(label, selectedSelect, options, existElems);
 			$(this).parent().find('.cust-input-label, .option-name').val('');
 			$(this).parent().find('.existing-options').empty();
 		}
 });
 
 function seatreg_insert_custom_field(label,type,options, placeToPut) {
-		var containerDiv = $('<div class="custom-container"></div>');
+		var containerDiv = $('<div class="custom-container" data-label="'+ label +'"></div>');
 
 		if(type == 'field') {
 			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label><i class="fa fa-times-circle remove-cust-item"></i>'); 

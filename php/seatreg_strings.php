@@ -120,6 +120,7 @@ function seatreg_generate_admin_strings() {
     $translations->pleaseEnterOptionValue = esc_html__('Please enter option value', 'seatreg');
     $translations->areYouSure = esc_html__('Are you sure?', 'seatreg');
     $translations->pleaseAddAtLeastOneOption = esc_html__('Please add at least one option', 'seatreg');
+    $translations->nameAlreadyUsed = esc_html__('Name already used', 'seatreg');
  
     return $translations;
 }

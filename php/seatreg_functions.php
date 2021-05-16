@@ -575,7 +575,7 @@ function seatreg_generate_settings_form() {
 								for($i = 0; $i < $custLen; $i++) {
 									if($custFields[$i]->type == 'sel') {
 										$optLen = count($custFields[$i]->options);
-										echo '<div class="custom-container" data-type="sel">';
+										echo '<div class="custom-container" data-type="sel" data-label="'. $custFields[$i]->label .'">';
 											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>';
 												echo '<select>';
 
@@ -589,12 +589,12 @@ function seatreg_generate_settings_form() {
 										echo '</div>';
 
 									}else if($custFields[$i]->type == 'text'){
-										echo '<div class="custom-container" data-type="text">';
+										echo '<div class="custom-container" data-type="text" data-label="'. $custFields[$i]->label .'">';
 											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>', '<input type="text" /> </label><i class="fa fa-times-circle remove-cust-item"></i>';
 										echo '</div>';
 
 									}else if($custFields[$i]->type == 'check') {
-										echo '<div class="custom-container" data-type="check">';
+										echo '<div class="custom-container" data-type="check" data-label="'. $custFields[$i]->label .'">';
 											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span> <input type="checkbox" /></label><i class="fa fa-times-circle remove-cust-item"></i>';
 										echo '</div>';
 									}
