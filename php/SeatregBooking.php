@@ -19,6 +19,7 @@ class SeatregBooking {
 	protected $_registrationEndTimestamp; //when registration ends
 	protected $_registrationStartTimestamp;
 	protected $_gmailNeeded = false;  //require gmail address from registrants
+	protected $_createdCustomFields;
 	
 
     protected function generateSeatString() {
@@ -154,7 +155,8 @@ class SeatregBooking {
 			b.use_pending, 
 			b.notify_new_bookings,
 			b.booking_email_confirm,
-			b.registration_password 
+			b.registration_password ,
+			b.custom_fields
 			FROM $seatreg_db_table_names->table_seatreg AS a 
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b 
 			ON a.registration_code = b.registration_code WHERE a.registration_code = %s",
@@ -167,6 +169,7 @@ class SeatregBooking {
         $this->_registrationName = $result->registration_name;
 		$this->_maxSeats = $result->seats_at_once;
 		$this->_requireBookingEmailConfirm = $result->booking_email_confirm;
+		$this->_createdCustomFields = json_decode($result->custom_fields);
         
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;

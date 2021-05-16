@@ -12,6 +12,7 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/SeatregBooking.php');
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php');
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/registration_time_status.php' );
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/session_captcha.php' );
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/SeatregDataValidation.php' );
 
 class SeatregSubmitBookings extends SeatregBooking {
 	public $response; //response object. 
@@ -35,9 +36,10 @@ class SeatregSubmitBookings extends SeatregBooking {
         $this->_submittedPassword = $pw;
     
 		$customFields = stripslashes_deep($customFields);
+		$customFieldValidation = SeatregDataValidation::validateCustomFieldSubmit($customFields, $this->_maxSeats, $this->_createdCustomFields);
 		
-		if( !$this->seatreg_validate_custom_fields( $customFields ) ) {
-			$this->response->setValidationError( esc_html__('Custom field validation failed','seatreg') );
+		if( !$customFieldValidation->valid ) {
+			$this->response->setValidationError( $customFieldValidation->errorMessage );
 
 			return false;
 		}
@@ -73,17 +75,6 @@ class SeatregSubmitBookings extends SeatregBooking {
 		
         return true;
     }
-
-    public function seatreg_validate_custom_fields($customFields) {
-		$customFieldsReg = '/^\[(\[({"label":["\s\p{L}]{1,30},"value":["\s\p{L}]{1,50}},?){0,6}\],?){1,' . $this->_maxSeats .'}\]$/u';
-
-		if( !preg_match($customFieldsReg, $customFields) ) {
-
-			return false;
-		}
-
-		return true;
-	}
 
 	public function validateBooking() {
 		//password check if needed

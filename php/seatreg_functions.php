@@ -625,14 +625,14 @@ function seatreg_generate_settings_form() {
 							<div class="select-radio-create">
 								<ul class="existing-options"></ul>
 
-								<label><?php esc_html_e('Insert options (max 10)', 'seatreg'); ?>
-									<input type="text" class="option-name" maxlength="20">
+								<label><?php esc_html_e('Option name', 'seatreg'); ?>
+									<input type="text" class="option-name">
 								</label>
 
-								<button class="add-select-option"><?php esc_html_e('Add option', 'seatreg'); ?></button>
+								<button class="btn btn-default btn-sm add-select-option"><?php esc_html_e('Add option', 'seatreg'); ?></button>
 								<div class="select-error"></div>
 							</div>
-							<button class="btn btn-outline-secondary btn-sm apply-custom-field" type="button"><?php esc_html_e('Add custom field', 'seatreg'); ?></button>
+							<button class="btn btn-default btn-sm apply-custom-field" type="button"><?php esc_html_e('Add custom field', 'seatreg'); ?></button>
 						</div>
 					</div>
 				</div>	
@@ -1922,7 +1922,7 @@ function seatreg_booking_submit_callback() {
 	if($_SESSION['seatreg_captcha'] !== $_POST['capv']) {
 		$r = seatreg_random_string(10);
 	    $resp->setError('Wrong captcha');
-	    $resp->setData('<img src="php/image.php?dummy='.$r.'" id="captcha-img"/>');
+	    $resp->setData('<img src="'. SEATREG_PLUGIN_FOLDER_URL .'registration/php/image.php?dummy='.$r.'" id="captcha-img"/>');
 		$resp->echoData();
 
 		die();

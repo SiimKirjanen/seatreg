@@ -117,6 +117,9 @@ function seatreg_generate_admin_strings() {
     $translations->enterRegistrationName = esc_html__('Please enter registration name', 'seatreg');
     $translations->registrationNameLimit = esc_html__('Name must be between 1-255 characters', 'seatreg');
     $translations->pleaseEnterName = esc_html__('Please enter name', 'seatreg');
-
+    $translations->pleaseEnterOptionValue = esc_html__('Please enter option value', 'seatreg');
+    $translations->areYouSure = esc_html__('Are you sure?', 'seatreg');
+    $translations->pleaseAddAtLeastOneOption = esc_html__('Please add at least one option', 'seatreg');
+ 
     return $translations;
 }

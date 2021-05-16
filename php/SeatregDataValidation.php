@@ -4,6 +4,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit(); 
 }
 
+function SeatregFindCustomField($customFieldLabel, $createdCustomFields) {
+    foreach($createdCustomFields as $createdCustomField) {
+        if($createdCustomField->label === $customFieldLabel) {
+            return $createdCustomField;
+        }
+    }
+
+    return false;
+}
+
 class SeatregValidationStatus {
     public $valid = true;
     public $errorMessage = '';
@@ -355,6 +365,56 @@ class SeatregDataValidation {
             $validationStatus->setInvalid('Unexpected error occured');
         }
         
+        return $validationStatus;
+    }
+
+    public static function validateCustomFieldSubmit($submittedCustomFields, $maxSeats, $createdCustomFields) {
+        $validationStatus = new SeatregValidationStatus();
+
+        try {
+            $customFieldsDecoded = json_decode($submittedCustomFields);
+
+            if( !is_array($customFieldsDecoded) ) {
+                $validationStatus->setInvalid('Custom fields not array');
+                return $validationStatus;
+            }
+
+            if( count($customFieldsDecoded) > $maxSeats ) {
+                $validationStatus->setInvalid('Max seats limit exceeded');
+                return $validationStatus;
+            }
+
+            foreach($customFieldsDecoded as $personCustomFields) {
+                foreach($personCustomFields as $personCustomField) {
+                    if( !property_exists($personCustomField, 'label') || !is_string($personCustomField->label) ) {
+                        $validationStatus->setInvalid('Custom field label is missing or invalid');
+                        return $validationStatus;
+                    }
+                    if( !property_exists($personCustomField, 'value') ) {
+                        $validationStatus->setInvalid('Custom field value is missing');
+                        return $validationStatus;
+                    }
+                    $assosiatedCustomField = SeatregFindCustomField($personCustomField->label, $createdCustomFields);
+
+                    if( !$assosiatedCustomField ) {
+                        $validationStatus->setInvalid('Entered custom field was not found');
+                        return $validationStatus;
+                    }
+
+                    if($assosiatedCustomField->type === 'check') {
+                        if( !is_bool($personCustomField->value) ) {
+                            $validationStatus->setInvalid('Checkbox accepts bool');
+                            return $validationStatus;
+                        }
+                    }
+                }
+            }
+
+
+        } catch(Exception $error) {
+            $validationStatus->setInvalid('Unexpected error occured');
+        }
+
         return $validationStatus;
     }
 }

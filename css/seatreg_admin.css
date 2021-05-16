@@ -702,6 +702,9 @@ html {
 	margin-top: 10px;
 	margin-left: 24px;
 }
+.seatreg-tabs-content .select-radio-create {
+	margin-bottom: 12px;
+}
 .seatreg-tabs-content .seatreg-settings-form input[type="text"] {
 	height: 32px;
 	font-size: 14px;

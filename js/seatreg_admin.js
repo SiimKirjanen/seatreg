@@ -574,7 +574,9 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 			var cusOptions = $(this).closest('.user-custom-field-options').find('.existing-options').find('.option-value');
 
 			if(cusOptions.length == 0) {
+				alertify.error(translator.translate('pleaseAddAtLeastOneOption'));
 				$(this).prev().find('.option-name').focus();
+
 
 				return;
 			}
@@ -631,21 +633,11 @@ $('.seatreg_page_seatreg-options .custom-field-select').on('change', function() 
 
 $('.seatreg_page_seatreg-options .add-select-option').on('click', function(e) {
 		e.preventDefault();
-		var optionReq = /^[0-9a-zA-ZÜÕÖÄüõöä\s-]{1,20}$/;
+        var selectOptionValue = $(this).prev().find('.option-name').val();
 
-		if($(this).prev().find('.option-name').val() == '') {
+		if( selectOptionValue === '' ) {
+			alertify.error(translator.translate('pleaseEnterOptionValue'));
 			$(this).prev().focus();
-
-			return;
-		}
-
-		if(!optionReq.test($(this).prev().find('.option-name').val())) {
-			$(this).prev().focus();
-
-			return;
-		}
-		if($(this).prev().prev().find('.select-option').length >= 10) {
-			$(this).next().text('Cant create more than 10 options per select');
 
 			return;
 		}
@@ -654,12 +646,16 @@ $('.seatreg_page_seatreg-options .add-select-option').on('click', function(e) {
 });
 
 
-$('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.remove-cust-item', function() {		
-	$(this).closest('.custom-container').remove();
+$('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.remove-cust-item', function() {
+	if(window.confirm(translator.translate('areYouSure'))) {
+		$(this).closest('.custom-container').remove();
+	}		
 });
 
 $('.seatreg_page_seatreg-options .cust-field-create').on('click','.remove-cust-item', function() {	
-	$(this).parent().remove();
+	if(window.confirm(translator.translate('areYouSure'))) {
+		$(this).parent().remove();
+	}
 });
 
 function SeatregCustomField(label, type, options) {
