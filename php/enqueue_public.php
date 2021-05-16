@@ -68,5 +68,8 @@ function seatreg_public_scripts_and_styles() {
 		$inlineScript .= '}';
 
 		wp_add_inline_script('seatreg-registration', $inlineScript, 'before');
+		wp_localize_script('seatreg-registration', 'WP_Seatreg', array(
+			'SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH' => SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH,
+		));
 	}
 }

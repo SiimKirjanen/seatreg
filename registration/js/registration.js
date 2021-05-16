@@ -631,7 +631,7 @@ SeatReg.prototype.generateCustomField = function(custom) {
 	var label = $('<label class="field-label custom-input"><span class="l-text">' + custom.label +  '</span></label>');
 
 	if(custom.type == 'text') {
-		var fieldInput = $('<input type="text" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type +'" maxlength="50">');
+		var fieldInput = $('<input type="text" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type +'" maxlength="'+ WP_Seatreg.SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH +'">');
 	}else if(custom.type == 'check') {
 		var fieldInput = $('<input type="checkbox" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type + '" value="'+ custom.label +'">');
 	}else if(custom.type == 'sel') {

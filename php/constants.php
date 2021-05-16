@@ -7,3 +7,4 @@ define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr'
 define('SEATREG_REGISTRATION_NAME_MAX_LENGTH', 255);
 define('SEATREG_REGISTRATION_SEARCH_MAX_LENGTH', 60);
 define('SEATREG_CUSTOM_FIELD_TYPES', array('text', 'check', 'sel'));
+define('SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH', 50);

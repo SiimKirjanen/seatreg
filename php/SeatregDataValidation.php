@@ -407,6 +407,19 @@ class SeatregDataValidation {
                             return $validationStatus;
                         }
                     }
+
+                    if($assosiatedCustomField->type === 'text') {
+                        if( strlen($personCustomField->value) > SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH ) {
+                            $validationStatus->setInvalid('Text field too long');
+                            return $validationStatus;
+                        }
+                    }
+                    if($assosiatedCustomField->type === 'sel') {
+                        if( !in_array($personCustomField->label, $assosiatedCustomField->options) ) {
+                            $validationStatus->setInvalid('Select option does not exist');
+                            return $validationStatus;
+                        }
+                    }
                 }
             }
 
