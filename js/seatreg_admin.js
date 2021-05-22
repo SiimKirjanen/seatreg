@@ -407,9 +407,22 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 		if(type === "check") {
 			var isChecked = $(this).find('.custom-field-value').data('checked') === true ? 'checked' : '';
 
-			modalCutsom.append('<div class="modal-custom" data-type="check"><label class="modal-custom-l">'+ $(this).find('.custom-field-label').text() +'<input type="checkbox" class="modal-custom-v" ' + isChecked +' /></label></div>');
+			modalCutsom.append('<div class="modal-custom" data-type="check"><label class="modal-custom-l"><span>'+ $(this).find('.custom-field-label').text() +'</span><input type="checkbox" class="modal-custom-v" ' + isChecked +' /></label></div>');
+		}else if(type === "sel") {
+			var selectOptions = $(this).find('.custom-field-value').data('options');
+			var selectedOption = $(this).find('.custom-field-value').text().trim();
+
+			if(Array.isArray(selectOptions)) {
+				modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l"><span>'+ $(this).find('.custom-field-label').text() + '</span><select class="modal-custom-v">' +  selectOptions.map((option) => {
+					if(option === selectedOption) {
+						return '<option selected>' + option + '</option>';
+					}
+					return '<option>' + option + '</option>';
+				})  + '</select>' + '</label></div>');
+			}
+
 		}else {
-			modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l">'+ $(this).find('.custom-field-label').text() +'<input type="text" class="modal-custom-v" value="'+ $(this).find('.custom-field-value').text() +'" /></label></div>');
+			modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l"><span>'+ $(this).find('.custom-field-label').text() +'</span><input type="text" class="modal-custom-v" value="'+ $(this).find('.custom-field-value').text() +'" /></label></div>');
 		}
 	});
 
@@ -461,10 +474,12 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		if($(this).find('.modal-custom-v').val() != 'Not set' && $(this).find('.modal-custom-v').val() != '') {
 			var type = $(this).data('type');
 
-			custObj['label'] = $(this).find('.modal-custom-l').text();
+			custObj['label'] = $(this).find('.modal-custom-l span').text();
 			
 			if(type === 'check') {
 				custObj['value'] = $(this).find('.modal-custom-v').is(':checked') ? '1' : '0';
+			}else if(type === 'sel') {
+				$(this).find('.modal-custom-v').find(":selected").text();
 			}else {
 				custObj['value'] = $(this).find('.modal-custom-v').val();
 			}

@@ -803,7 +803,6 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						echo '<div>', esc_html__('Email:', 'seatreg'), ' ', esc_html($row->email), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {
-							
 							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 						}
 					echo '</div>';
@@ -872,7 +871,7 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 	$cust_len = count(is_array($submitted_custom_data) ? $submitted_custom_data : []);
 	$foundIt = false;
 
-	echo '<div class="custom-field" data-type="'. $custom_field['type'] .'"><span class="custom-field-label">', esc_html($custom_field['label']), '</span>: ';
+	echo '<div class="custom-field" data-type="'. $custom_field['type'] .'" ><span class="custom-field-label">', esc_html($custom_field['label']), '</span>: ';
 
 	for($j = 0; $j < $cust_len; $j++) {
 		if( $submitted_custom_data[$j]['label'] === $custom_field['label'] ) {
@@ -888,7 +887,11 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 				echo '<span class="custom-field-value" data-type="text">', esc_html($submitted_custom_data[$j]['value']), '</span></div>';
 			}
 			if( $custom_field['type'] === 'sel' ) {
-				echo '<span class="custom-field-value" data-type="sel">', esc_html($submitted_custom_data[$j]['value']), '</span></div>';
+				?>
+					<span class="custom-field-value" data-type="sel" data-options='<?php echo json_encode($custom_field['options']); ?>'>
+						<?php echo esc_html($submitted_custom_data[$j]['value']) ?>
+					</span></div>
+				<?php
 			}
 	
 			$foundIt = true;
@@ -897,7 +900,9 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 	}
 
 	if(!$foundIt) {
-		echo '<span class="custom-field-value">', esc_html__('Not set', 'seatreg'), '</span></div>';
+		?>
+			<span class="custom-field-value" data-options='<?php echo json_encode($custom_field['options']); ?>'><?php echo esc_html__('Not set', 'seatreg'); ?></span></div>
+		<?php
 	}
 }
 
