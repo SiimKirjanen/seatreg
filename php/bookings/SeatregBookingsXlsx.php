@@ -26,7 +26,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
                     if($custom['value'] === '1') {
                         $string = esc_html__('Checked', 'seatreg');
                     }else if($custom['value'] === '0') {
-                        $string = esc_html__('Uncheckd', 'seatreg');
+                        $string = esc_html__('Unchecked', 'seatreg');
                     }
                 }else {
                     $string .= esc_html($custom['value']);

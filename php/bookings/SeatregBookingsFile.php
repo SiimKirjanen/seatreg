@@ -64,7 +64,7 @@ class SeatregBookingsFile {
                     if($customData[$k]['value'] === '1') {
                         $string .= esc_html__('Checked', 'seatreg');
                     }else if($customData[$k]['value'] === '0') {
-                        $string .= esc_html__('Uncheckd', 'seatreg');
+                        $string .= esc_html__('Unchecked', 'seatreg');
                     }
                 }else {
                     $string .= esc_html($customData[$k]['value']);
