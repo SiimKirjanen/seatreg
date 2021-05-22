@@ -705,8 +705,11 @@ html {
 .seatreg-tabs-content .select-radio-create {
 	margin-bottom: 12px;
 }
-.seatreg-tabs-content .seatreg-settings-form input[type="text"] {
+.seatreg-tabs-content .seatreg-settings-form input[type="text"], .seatreg-tabs-content .seatreg-settings-form input[type="number"] {
 	height: 32px;
+	font-size: 14px;
+}
+.seatreg-tabs-content .seatreg-settings-form textarea {
 	font-size: 14px;
 }
 .seatreg-tabs-content .cust-field-create label {
