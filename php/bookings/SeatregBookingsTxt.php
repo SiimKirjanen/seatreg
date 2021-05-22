@@ -46,7 +46,7 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
             }
         
             foreach ($this->_customFields as $customField) {
-                echo $this->customFieldsWithValues($customField['label'], $registrantCustomData), $this->lineBreak();
+                echo $this->customFieldsWithValues($customField, $registrantCustomData), $this->lineBreak();
             }
         
             echo $this->lineBreak(), $this->lineBreak();

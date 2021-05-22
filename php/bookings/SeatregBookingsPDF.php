@@ -77,7 +77,7 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             }
                         
             foreach ($this->_customFields as $customField) {
-                $this->pdf->Cell(20, 6, $this->customFieldsWithValues($customField['label'], $registrantCustomData), 0, 1);
+                $this->pdf->Cell(20, 6, $this->customFieldsWithValues($customField, $registrantCustomData), 0, 1);
             }
         
             $this->pdf->Ln(10);

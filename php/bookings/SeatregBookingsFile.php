@@ -52,17 +52,20 @@ class SeatregBookingsFile {
         $this->_customFields = json_decode($this->_registrationInfo->custom_fields, true);
     }
 
-    protected function customFieldsWithValues($label, $customData) {
+    protected function customFieldsWithValues($customField, $customData) {
         $cust_len = count(is_array($customData) ? $customData : []);
         $foundIt = false;
-	    $string = $label . ': ';
+	    $string = $customField['label'] . ': ';
 
         for($k = 0; $k < $cust_len; $k++) {
-            if($customData[$k]['label'] == $label) {
-                if($customData[$k]['value'] === true) {
-                    $string .= esc_html__('Yes', 'seatreg');
-                }else if($customData[$k]['value'] === false) {
-                    $string .= esc_html__('No', 'seatreg');
+            if($customData[$k]['label'] == $customField['label'] ) {
+
+                if($customField['type'] === 'check') {
+                    if($customData[$k]['value'] === '1') {
+                        $string .= esc_html__('Checked', 'seatreg');
+                    }else if($customData[$k]['value'] === '0') {
+                        $string .= esc_html__('Uncheckd', 'seatreg');
+                    }
                 }else {
                     $string .= esc_html($customData[$k]['value']);
                 }

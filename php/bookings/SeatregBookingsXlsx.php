@@ -12,7 +12,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
         $this->setupXlsx();
 	}
 
-    private function customFieldWithValueXlsx($label, $customData) {
+    private function customFieldWithValueXlsx($customField, $customData) {
         $customData = is_array($customData) ? $customData : [];
         $foundIt = false;
         $string = '';
@@ -20,13 +20,16 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
         foreach ($customData as $custom) {
             $dataLabel = trim($custom['label']);
 
-            if($dataLabel == $label) {
-                if($dataLabel === true) {
-                    $string = esc_html__('Yes', 'seatreg');
-                }else if($dataLabel === false) {
-                    $string = esc_html__('No', 'seatreg');
+            if($dataLabel == $customField['label']) {
+
+                if($customField['type'] === 'check') {
+                    if($custom['value'] === '1') {
+                        $string = esc_html__('Checked', 'seatreg');
+                    }else if($custom['value'] === '0') {
+                        $string = esc_html__('Uncheckd', 'seatreg');
+                    }
                 }else {
-                    $string = $custom['value'];
+                    $string .= esc_html($custom['value']);
                 }
     
                 $foundIt = true;
@@ -89,7 +92,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
         
             foreach ($this->_customFields as $customField) {
                 $header[$customField['label']] = 'string';
-                $registrationData[] = $this->customFieldWithValueXlsx($customField['label'], $registrantCustomData);
+                $registrationData[] = $this->customFieldWithValueXlsx($customField, $registrantCustomData);
             }
             $data[] = $registrationData;
         }
