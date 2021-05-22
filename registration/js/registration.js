@@ -1028,9 +1028,9 @@ function collectData() {
 			var type = $(this).find('.field-input').attr('data-type');
 
 			if(type == 'text') {
-				customFieldPack.push(new CustomData($(this).find('.l-text').text(),$(this).find('.field-input').val()));
+				customFieldPack.push(new CustomData($(this).find('.l-text').text(), $(this).find('.field-input').val()));
 			}else if(type == 'check') {
-				customFieldPack.push(new CustomData($(this).find('.l-text').text(),$(this).find('.field-input').is(":checked")));
+				customFieldPack.push(new CustomData($(this).find('.l-text').text(), $(this).find('.field-input').is(":checked") ? '1' : '0') );
 			}else if(type == 'sel') {
 				customFieldPack.push(new CustomData($(this).find('.l-text').text(),$(this).find('.field-input').find(":selected").val()));
 			}	

@@ -36,7 +36,7 @@ class SeatregSubmitBookings extends SeatregBooking {
         $this->_submittedPassword = $pw;
     
 		$customFields = stripslashes_deep($customFields);
-		$customFieldValidation = SeatregDataValidation::validateCustomFieldSubmit($customFields, $this->_maxSeats, $this->_createdCustomFields);
+		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFields, $this->_maxSeats, $this->_createdCustomFields);
 		
 		if( !$customFieldValidation->valid ) {
 			$this->response->setValidationError( $customFieldValidation->errorMessage );

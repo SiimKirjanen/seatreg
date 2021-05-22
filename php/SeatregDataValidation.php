@@ -377,7 +377,30 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
-    public static function validateCustomFieldSubmit($submittedCustomFields, $maxSeats, $createdCustomFields) {
+    public static function validateCustomFieldEdit($editCustomFields, $existingCustomFields) {
+        $validationStatus = new SeatregValidationStatus();
+
+        try {
+            $editCustomFieldsDecoded = json_decode($editCustomFields);
+            $existingCustomFieldsDecoded = json_decode($existingCustomFields);
+
+            foreach($editCustomFieldsDecoded as $editCustomFieldDecoded) {
+                $customFieldValidation = self::validateSingleCustomFieldSubmit($editCustomFieldDecoded, $editCustomFieldsDecoded, $existingCustomFieldsDecoded);
+
+                if( !$customFieldValidation->valid ) {
+                    $validationStatus->setInvalid($personCustomFieldValidation->errorMessage);
+                    return $validationStatus;
+                }
+            }
+
+        }catch(Exception $error) {
+            $validationStatus->setInvalid('Unexpected error occured');
+        }
+
+        return $validationStatus;
+    }
+
+    public static function validateBookingCustomFields($submittedCustomFields, $maxSeats, $createdCustomFields) {
         $validationStatus = new SeatregValidationStatus();
 
         try {
@@ -395,57 +418,70 @@ class SeatregDataValidation {
 
             foreach($customFieldsDecoded as $personCustomFields) {
                 foreach($personCustomFields as $personCustomField) {
-                    if( !property_exists($personCustomField, 'label') || !is_string($personCustomField->label) ) {
-                        $validationStatus->setInvalid('Custom field label is missing or invalid');
+                    $personCustomFieldValidation = self::validateSingleCustomFieldSubmit($personCustomField, $personCustomFields,  $createdCustomFields);
+
+                    if( !$personCustomFieldValidation->valid ) {
+                        $validationStatus->setInvalid($personCustomFieldValidation->errorMessage);
                         return $validationStatus;
                     }
-                    if( !property_exists($personCustomField, 'value') ) {
-                        $validationStatus->setInvalid('Custom field value is missing');
-                        return $validationStatus;
-                    }
-
-                    $duplicates = array_filter($personCustomFields, function($cust) use ($personCustomField) {
-                        return $cust->label === $personCustomField->label;
-                    });
-
-                    if( count($duplicates) > 1) {
-                        $validationStatus->setInvalid('Duplicate label detected');
-                        return $validationStatus;
-                    }
-
-                    $assosiatedCustomField = SeatregFindCustomField($personCustomField->label, $createdCustomFields);
-
-                    if( !$assosiatedCustomField ) {
-                        $validationStatus->setInvalid('Entered custom field was not found');
-                        return $validationStatus;
-                    }
-
-                    if($assosiatedCustomField->type === 'check') {
-                        if( !is_bool($personCustomField->value) ) {
-                            $validationStatus->setInvalid('Checkbox accepts bool');
-                            return $validationStatus;
-                        }
-                    }
-
-                    if($assosiatedCustomField->type === 'text') {
-                        if( strlen($personCustomField->value) > SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH ) {
-                            $validationStatus->setInvalid('Text field too long');
-                            return $validationStatus;
-                        }
-                    }
-                    
-                    if($assosiatedCustomField->type === 'sel') {
-                        if( !in_array($personCustomField->label, $assosiatedCustomField->options) ) {
-                            $validationStatus->setInvalid('Select option does not exist');
-                            return $validationStatus;
-                        }
-                    }
+                
                 }
             }
 
-
         } catch(Exception $error) {
             $validationStatus->setInvalid('Unexpected error occured');
+        }
+
+        return $validationStatus;
+    }
+
+    public static function validateSingleCustomFieldSubmit($personCustomField, $personCustomFields, $createdCustomFields) {
+        $validationStatus = new SeatregValidationStatus();
+
+        if( !property_exists($personCustomField, 'label') || !is_string($personCustomField->label) ) {
+            $validationStatus->setInvalid('Custom field label is missing or invalid');
+            return $validationStatus;
+        }
+        if( !property_exists($personCustomField, 'value') ) {
+            $validationStatus->setInvalid('Custom field value is missing');
+            return $validationStatus;
+        }
+
+        $duplicates = array_filter($personCustomFields, function($cust) use ($personCustomField) {
+            return $cust->label === $personCustomField->label;
+        });
+
+        if( count($duplicates) > 1) {
+            $validationStatus->setInvalid('Duplicate label detected');
+            return $validationStatus;
+        }
+
+        $assosiatedCustomField = SeatregFindCustomField($personCustomField->label, $createdCustomFields);
+
+        if( !$assosiatedCustomField ) {
+            $validationStatus->setInvalid('Entered custom field was not found');
+            return $validationStatus;
+        }
+
+        if($assosiatedCustomField->type === 'check') {
+            if( !in_array($personCustomField->value, array('0', '1')) ) {
+                $validationStatus->setInvalid('Checkbox value is invalid');
+                return $validationStatus;
+            }
+        }
+
+        if($assosiatedCustomField->type === 'text') {
+            if( strlen($personCustomField->value) > SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH ) {
+                $validationStatus->setInvalid('Text field too long');
+                return $validationStatus;
+            }
+        }
+
+        if($assosiatedCustomField->type === 'sel') {
+            if( !in_array($personCustomField->label, $assosiatedCustomField->options) ) {
+                $validationStatus->setInvalid('Select option does not exist');
+                return $validationStatus;
+            }
         }
 
         return $validationStatus;

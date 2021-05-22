@@ -435,7 +435,7 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('Change registration name', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo SEATREG_REGISTRATION_NAME_MAX_LENGTH; ?>" placeholder="Enter registration name" value="<?php echo esc_attr($options[0]->registration_name); ?>">
+				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo SEATREG_REGISTRATION_NAME_MAX_LENGTH; ?>" placeholder="Enter registration name" autocomplete="off" value="<?php echo esc_attr($options[0]->registration_name); ?>">
 			</div>
 
 			<div class="form-group">
@@ -508,7 +508,7 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-password" name="registration-password" placeholder="Enter password here" value="<?php echo esc_html($options[0]->registration_password); ?>">
+				<input type="text" class="form-control" id="registration-password" name="registration-password" autocomplete="off" placeholder="Enter password here" value="<?php echo esc_html($options[0]->registration_password); ?>">
 			</div>
 
 			<div class="form-group">
@@ -804,7 +804,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 
 						for($i = 0; $i < $cus_length; $i++) {
 							
-							echo seatreg_customfield_with_value($custom_fields[$i]['label'], $custom_field_data);
+							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 						}
 					echo '</div>';
 					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
@@ -847,7 +847,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						echo '<div>Email: ', esc_html( $row->email ), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {
-							echo seatreg_customfield_with_value($custom_fields[$i]['label'], $custom_field_data);
+							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 						}
 
 					echo '</div>';
@@ -868,34 +868,36 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	seatreg_booking_edit_modal();
 }
 
-function seatreg_customfield_with_value($label, $custom_data) {
-	$cust_len = count(is_array($custom_data) ? $custom_data : []);
+function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
+	$cust_len = count(is_array($submitted_custom_data) ? $submitted_custom_data : []);
 	$foundIt = false;
 
-	echo '<div class="custom-field"><span class="custom-field-l">', esc_html($label), '</span>: ';
+	echo '<div class="custom-field" data-type="'. $custom_field['type'] .'"><span class="custom-field-label">', esc_html($custom_field['label']), '</span>: ';
 
 	for($j = 0; $j < $cust_len; $j++) {
-		if($custom_data[$j]['label'] == $label) {
-
-			if($custom_data[$j]['value'] === true) {
-
-				echo '<span class="custom-field-v">', esc_html__('Yes', 'seatreg'), '</span></div>';
-
-			}else if($custom_data[$j]['value'] === false) {
-
-				echo '<span class="custom-field-v">', esc_html__('No', 'seatreg'), '</span></div>';
-
-			}else {
-				echo '<span class="custom-field-v">', esc_html($custom_data[$j]['value']), '</span></div>';
-			}
+		if( $submitted_custom_data[$j]['label'] === $custom_field['label'] ) {
 			
+			if( $custom_field['type'] === 'check' ) {
+				if($submitted_custom_data[$j]['value'] === '1') {
+					echo '<i class="fa fa-check custom-field-value" data-type="check" data-checked="true" aria-hidden="true"></i></div>';
+				}else if($submitted_custom_data[$j]['value'] === '0') {
+					echo '<i class="fa fa-times custom-field-value" data-type="check" data-checked="false" aria-hidden="true"></i></div>';
+				}
+			}
+			if( $custom_field['type'] === 'text' ) {
+				echo '<span class="custom-field-value" data-type="text">', esc_html($submitted_custom_data[$j]['value']), '</span></div>';
+			}
+			if( $custom_field['type'] === 'sel' ) {
+				echo '<span class="custom-field-value" data-type="sel">', esc_html($submitted_custom_data[$j]['value']), '</span></div>';
+			}
+	
 			$foundIt = true;
 			break;
 		}
 	}
 
 	if(!$foundIt) {
-		echo '<span class="custom-field-v">', esc_html__('Not set', 'seatreg'), '</span></div>';
+		echo '<span class="custom-field-value">', esc_html__('Not set', 'seatreg'), '</span></div>';
 	}
 }
 
@@ -1168,12 +1170,13 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 
 //for booking edit
 function seatreg_validate_edit_booking($code, $data) {
-	$registration = seatreg_get_registration_data($code)[0];
+	$registration = seatreg_get_options($code)[0];
 	$structure = json_decode($registration->registration_layout)->roomData;
 	$allCorrect = true;
     $resp = array();
     $resp['status'] = 'ok';
 	$status = seatreg_check_room_and_seat($structure, $data->roomName, $data->seatNr );
+	$customFieldValidation = SeatregDataValidation::validateCustomFieldEdit($data->editCustomField, $registration->custom_fields);
 
 	if( $status['status'] != 'ok') {
 			$allCorrect = false;
@@ -1181,6 +1184,11 @@ function seatreg_validate_edit_booking($code, $data) {
 			$resp['text'] = $status['text'];
 
 			return $resp;
+	}else if( !$customFieldValidation->valid ) {
+		$allCorrect = false;
+		$resp['status'] = 'custom field validation failed';
+		$resp['text'] = $customFieldValidation->errorMessage;
+
 	}else {
 		$resp['newSeatId'] = $status['newSeatId'];
 		$resp['oldSeatNr'] = $data->seatNr;
@@ -1335,7 +1343,7 @@ function seatreg_get_registrations() {
 	return $registrations;
 }
 
-//return specific registration and its data if registration code provided. Else return
+//return specific registration and its data if registration code provided.
 function seatreg_get_registration_data($code) {
 	global $wpdb;
 	global $seatreg_db_table_names;

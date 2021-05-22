@@ -402,7 +402,15 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	modal.find('#booking-id').val($(this).attr('data-booking'));
 	modal.find('#r-id').val($(this).attr('data-id'));
 	info.find('.custom-field').each(function() {
-		modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l">'+ $(this).find('.custom-field-l').text() +'<input type="text" class="modal-custom-v" value="'+ $(this).find('.custom-field-v').text() +'" /></label></div>');
+		var type = $(this).data('type');
+
+		if(type === "check") {
+			var isChecked = $(this).find('.custom-field-value').data('checked') === true ? 'checked' : '';
+
+			modalCutsom.append('<div class="modal-custom" data-type="check"><label class="modal-custom-l">'+ $(this).find('.custom-field-label').text() +'<input type="checkbox" class="modal-custom-v" ' + isChecked +' /></label></div>');
+		}else {
+			modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l">'+ $(this).find('.custom-field-label').text() +'<input type="text" class="modal-custom-v" value="'+ $(this).find('.custom-field-value').text() +'" /></label></div>');
+		}
 	});
 
 	$('#edit-room-error, #edit-seat-error').text('');
@@ -451,11 +459,18 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		var custObj = {};
 
 		if($(this).find('.modal-custom-v').val() != 'Not set' && $(this).find('.modal-custom-v').val() != '') {
+			var type = $(this).data('type');
+
 			custObj['label'] = $(this).find('.modal-custom-l').text();
-			custObj['value'] = $(this).find('.modal-custom-v').val();
+			
+			if(type === 'check') {
+				custObj['value'] = $(this).find('.modal-custom-v').is(':checked') ? '1' : '0';
+			}else {
+				custObj['value'] = $(this).find('.modal-custom-v').val();
+			}
+			
 			customFields.push(custObj);
 		}
-		
 	});
 
 	editInfo = {
@@ -488,15 +503,25 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 				var found = false;
 
 				for(var i = 0; i < a; i++) {
-					if($(this).find('.custom-field-l').text() == customFields[i]['label']) {
+					if($(this).find('.custom-field-label').text() == customFields[i]['label']) {
 						found = true;
-						$(this).find('.custom-field-v').text(customFields[i]['value']);
+
+						if( $(this).data('type') === 'check') {
+							if(customFields[i]['value'] === '1') {
+								$(this).find('.custom-field-value').replaceWith('<i class="fa fa-check custom-field-v" data-type="check" data-checked="true" aria-hidden="true"></i>')
+							}else {
+								$(this).find('.custom-field-value').replaceWith('<i class="fa fa-times custom-field-v" data-type="check" data-checked="false" aria-hidden="true"></i>')
+							}
+						}else {
+							$(this).find('.custom-field-value').text(customFields[i]['value']);
+						}
+						
 						break;
 					}
 				}
 
 				if(!found) {
-					$(this).find('.custom-field-v').text(translator.translate('notSet'));
+					$(this).find('.custom-field-value').text(translator.translate('notSet'));
 				}
 			});
 			alertify.success(translator.translate('bookingUpdated'));
@@ -513,6 +538,9 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 			}
 			if(data.status == 'update failed') {
 				alert(translator.translate('errorBookingUpdate'));
+			}
+			if(data.status == 'custom field validation failed') {
+				alert('Custom field validation failed');
 			}
 		}
 	});
