@@ -2618,7 +2618,7 @@
 			$('#new-legend-name, #old-legend-name').val($('#legend-change-wrap-inner .dialog-legend-text-2').text());
 			$('#legend-change-wrap-inner').animate({
 				marginLeft: "+=500px",
-				height: "130px"
+				height: "150px"
 			},1000,"easeOutCubic");
 		}else if(targetSlide == 3) {
 			$('#new-legend-color-info').empty();
@@ -2646,37 +2646,31 @@
 			if(currentSlide == 1) {
 				$('#legend-change-wrap-inner').animate({
 					marginLeft: "-=500px",
-					height: "130px"
+					height: "150px"
 				},1000,"easeOutCubic");
 			}else {
 				$('#legend-change-wrap-inner').animate({
 					marginLeft: "+=500px",
-					height: "130px"
+					height: "150px"
 				},1000,"easeOutCubic");
 			}	
 		}
 	});
 
 	$('#apply-new-legend-name').on('click', function() {
-		var reqExprLegendtext = /^[0-9a-zA-ZÜÕÖÄüõöä\s]{1,20}$/;
 		var newLegend = $('#new-legend-name').val();
 		var oldLegend = $('#old-legend-name').val();
 
 		if(newLegend != '') {
-			if(reqExprLegendtext.test(newLegend)) {
-				if(!reg.legendNameExists(newLegend)) {
-					reg.changeLegendTo(oldLegend, newLegend);
-					$('.dialog-legend-text-2').text(newLegend);
-					$('#legend-change-wrap-inner').animate({
-						marginLeft: "-=500px",
-					},1000,"easeOutCubic");
-				}else {
-					$('#new-legend-name-info').html('<span style="color:red">'+ translator.translate('legendNameTaken') +'</span>');
-				}
+			if(!reg.legendNameExists(newLegend)) {
+				reg.changeLegendTo(oldLegend, newLegend);
+				$('.dialog-legend-text-2').text(newLegend);
+				$('#legend-change-wrap-inner').animate({
+					marginLeft: "-=500px",
+				},1000,"easeOutCubic");
 			}else {
-				$('#new-legend-name-info').html('<span style="color:red">'+ translator.translate('illegalCharactersDetec') +'</span>');
-				$('#new-legend-name').focus();
-			}	
+				$('#new-legend-name-info').html('<span style="color:red">'+ translator.translate('legendNameTaken') +'</span>');
+			}
 		}else {
 			$('#new-legend-name-info').html('<span style="color:red">'+ translator.translate('enterLegendName') +'</span>');
 			$('#new-legend-name').focus();
@@ -2839,13 +2833,10 @@
 
 		reg.rooms[reg.currentRoom].skeleton.changeSkeleton(sizeX, sizeY, countX, countY, marginX, marginY, grid);
 		
-		//adds skeleton grid info to reg object. 
-		//reg.addSkeletons(SkeletonStyles.sizeX, SkeletonStyles.sizeY, SkeletonStyles.countX, SkeletonStyles.countY, SkeletonStyles.marginX, SkeletonStyles.marginY);
 		//build skeleton
 		reg.buildSkeleton();
 		reg.needToSave = true;
 		alertify.success(translator.translate('buildingGridUpdated'));
-		//buildSkeleton(50,50,5,5,4,4);
 	});
 
 	$('.delete-skeleton').on('click', function(){
@@ -3035,7 +3026,7 @@
 	
 	$('#file-sub').on('click', function(e) {
 		var picName = $('#img-upload').val().split(/(\\|\/)/g).pop();
-		var re = /^[0-9a-zA-ZÜÕÖÄüõöä\-._]{1,90}$/;
+		var re = /^[0-9a-zA-Z\-._]{1,90}$/;
 		$('#urlCode').val(seatreg.selectedRegistration);
 
 		if(picName == '') {

@@ -433,6 +433,7 @@ class SeatregDataValidation {
                             return $validationStatus;
                         }
                     }
+                    
                     if($assosiatedCustomField->type === 'sel') {
                         if( !in_array($personCustomField->label, $assosiatedCustomField->options) ) {
                             $validationStatus->setInvalid('Select option does not exist');

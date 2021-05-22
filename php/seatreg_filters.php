@@ -25,8 +25,8 @@ function seatreg_page_template( $page_template ){
     return $page_template;
 }
 
-add_filter('init', 'seatreg_virtual_pages');
-function seatreg_virtual_pages() {
+add_filter('init', 'seatreg_custom_pages');
+function seatreg_custom_pages() {
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'pdf' ) {
 		seatreg_is_user_logged_in_and_has_permissions();

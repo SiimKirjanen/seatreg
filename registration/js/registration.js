@@ -966,7 +966,8 @@ function fitFactor(){
 function validateInput(inputField) {
 	var emailReg = /^\S+@\S+$/;
 	var gmailReg = /^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/;
-	var customField = /^[\s\p{L}]{1,50}$/u;
+	var customFieldRegExp = new RegExp("^[\\p{L}]{1," + WP_Seatreg.SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH + "}$", "u");
+
 	var value = inputField.val();
 
 	if(value == '') {
@@ -1001,7 +1002,7 @@ function validateInput(inputField) {
 			break;
 		default:
 			//custom field validation
-			if(customField.test(value)) {				
+			if(customFieldRegExp.test(value)) {				
 				inputField.next().css('display','none');	
 			}else {	
 				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','block');	
