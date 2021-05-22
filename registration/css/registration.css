@@ -576,6 +576,7 @@ body {
 .info-item.open-seats {
 	display: block;
 	font-size: 18px;
+	margin-bottom: 4px;
 }
 .room-nav-extra-info-btn {
 	color: #3E67B1;
