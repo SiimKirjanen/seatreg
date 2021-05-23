@@ -523,9 +523,9 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 
 						if( $(this).data('type') === 'check') {
 							if(customFields[i]['value'] === '1') {
-								$(this).find('.custom-field-value').replaceWith('<i class="fa fa-check custom-field-v" data-type="check" data-checked="true" aria-hidden="true"></i>')
+								$(this).find('.custom-field-value').replaceWith('<i class="fa fa-check custom-field-value" data-type="check" data-checked="true" aria-hidden="true"></i>');
 							}else {
-								$(this).find('.custom-field-value').replaceWith('<i class="fa fa-times custom-field-v" data-type="check" data-checked="false" aria-hidden="true"></i>')
+								$(this).find('.custom-field-value').replaceWith('<i class="fa fa-times custom-field-value" data-type="check" data-checked="false" aria-hidden="true"></i>');
 							}
 						}else {
 							$(this).find('.custom-field-value').text(customFields[i]['value']);
