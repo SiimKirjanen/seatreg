@@ -7,4 +7,4 @@
 WordPress plugin that lets you design your own seat map and manage seat bookings
 
 ## Install
-Create seatreg_wordpress folder to your WordPress plugins directory and copy over all files from this repository.
+Create seatreg folder to your WordPress plugins directory and copy over all files from this repository.
