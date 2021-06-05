@@ -955,7 +955,9 @@ function seatreg_generate_tabs($targetPage) {
 			wp_die($validation->errorMessage);
 		}
 	}else {
-		$active_tab = $registrations[0]->registration_code;
+		if(count($registrations) !== 0) {
+			$active_tab = $registrations[0]->registration_code;
+		}
 	} 
 
 	?>
