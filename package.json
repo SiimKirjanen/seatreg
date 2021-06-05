@@ -1,6 +1,6 @@
 {
   "name": "seatreg",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "gulpfile.js",
   "dependencies": {
     "browser-sync": "~2.2.3",
