@@ -10,6 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
 Create and manage seat registrations. Design your own seat maps and manage seat bookings.
  
+
 == Description ==
  
 SeatReg is a free plugin that offers the following and more to build and manage your online seat registrations.
@@ -25,3 +26,9 @@ SeatReg is a free plugin that offers the following and more to build and manage 
  
 1. Install SeatReg either via the WordPress.org plugin directory, or by uploading the files to your server.
 2. Activate the plugin through the ‘Plugins’ menu in WordPress.
+
+== Screenshots ==
+
+1. Map builder
+2. Registration view
+3. Booking manager
