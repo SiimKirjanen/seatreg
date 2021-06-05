@@ -347,23 +347,6 @@
 						?>
 					</div>
 					<div id="checkout-input-area"></div>
-					<div id="captchaWrap">
-						<div style="justify-content:center">
-							<label for="captcha-val" style="vertical-align:middle">
-								<span id="captcha-text">
-									<?php
-										esc_html_e('Enter code', 'seatreg');
-									?>:
-								</span>
-							</label>
-							<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/php/image.php" id="captcha-img" alt="captcha image"/>
-							<div id="captcha-ref" class="refresh1">
-								<i class="fa fa-refresh"></i>
-							</div><br>
-							
-							<input type="text" id="captcha-val" name="capv" />	
-						</div>
-					</div>
 					<button type="submit" id="checkout-confirm-btn" class="seatreg-btn green-btn">
 						<?php 
 							esc_html_e('OK', 'seatreg');

@@ -1776,6 +1776,12 @@ function seatreg_update() {
 	}else {
 		$_POST['show-registration-bookings'] = 1;
 	}
+
+	if(!isset($_POST['email-confirm'])) {
+		$_POST['email-confirm'] = 0;  
+	}else {
+		$_POST['email-confirm'] = 1;
+	}
 	
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
@@ -1931,7 +1937,7 @@ function seatreg_booking_submit_callback() {
 				
 		die();
 	}
-
+/*
 	if($_SESSION['seatreg_captcha'] !== $_POST['capv']) {
 		$r = seatreg_random_string(10);
 	    $resp->setError('Wrong captcha');
@@ -1940,6 +1946,7 @@ function seatreg_booking_submit_callback() {
 
 		die();
 	}
+*/
 
 	if( empty($_POST['FirstName']) || 
 		empty($_POST['LastName']) || 
