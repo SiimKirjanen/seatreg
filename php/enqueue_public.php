@@ -1,4 +1,6 @@
 <?php
+require_once(SEATREG_PLUGIN_FOLDER_DIR . 'registration/php/reg_functions.php');
+require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_strings.php');
 
 //remove queued styles from registration view page
 add_action('wp_print_styles', 'seatreg_remove_all_styles', 100);
