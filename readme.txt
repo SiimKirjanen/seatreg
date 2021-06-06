@@ -12,7 +12,9 @@ Create and manage seat registrations. Design your own seat maps and manage seat 
  
 
 == Description ==
- 
+
+Create and manage seat registrations. Design your own seat maps and manage seat bookings. 
+
 SeatReg is a free plugin that offers the following and more to build and manage your online seat registrations.
  
 * Map builder tool helps you design and later modify your seat map. Create, delete, resize, move around and change color of your seats. You can also add custom legends and hover text to your seats.
@@ -32,3 +34,16 @@ SeatReg is a free plugin that offers the following and more to build and manage 
 1. Map builder
 2. Registration view
 3. Booking manager
+
+== Changelog ==
+
+= 1.0.3 =
+* PHP warning fixed
+
+= 1.0.2 =
+* Removed captcha 
+
+= 1.0.1 =
+* Using template_include filter instead of page_template
+* Missing includes fix
+
