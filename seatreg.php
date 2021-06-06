@@ -5,7 +5,7 @@
 	Description: Create and manage seat registrations. Design your own seat maps and manage seat bookings
 	Author: Siim Kirjanen
 	Text Domain: seatreg
-	Version: 1.0.3
+	Version: 1.0.4
 	Requires at least: 5.4.4
 	Requires PHP: 7.2.28
 	License: GPLv2 or later
