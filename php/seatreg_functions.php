@@ -1284,7 +1284,7 @@ function seatreg_set_up_db() {
     $sql = "CREATE TABLE IF NOT EXISTS $seatreg_db_table_names->table_seatreg (
       id int(11) NOT NULL AUTO_INCREMENT,
 	  registration_code varchar(40) NOT NULL,
-	  registration_name varchar(255) NOT NULL, 
+	  registration_name varchar(255) NOT NULL,
 	  registration_create_timestamp timestamp DEFAULT CURRENT_TIMESTAMP,
 	  registration_layout mediumtext DEFAULT '{}',
 	  is_deleted tinyint(1) NOT NULL DEFAULT 0,
@@ -1332,7 +1332,7 @@ function seatreg_set_up_db() {
 		booking_id varchar(40) NOT NULL,
 		conf_code char(40) NOT NULL,
 		PRIMARY KEY  (id),
-		FOREIGN KEY  (registration_code) REFERENCES $seatreg_db_table_names->table_seatreg(registration_code)  
+		FOREIGN KEY  (registration_code) REFERENCES $seatreg_db_table_names->table_seatreg(registration_code)
 	) $charset_collate;";
 
 	dbDelta( $sql3 );
