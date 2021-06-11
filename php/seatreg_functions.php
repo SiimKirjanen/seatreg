@@ -1042,7 +1042,7 @@ function seatreg_generate_registration_code() {
 function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrations) {
 	$bronLength = count($bronRegistrations);
 	$takenLength = count($takenRegistrations);
-	$regStructure = json_decode($struct)->roomData;
+	$regStructure = ($struct !== null) ? json_decode($struct)->roomData : null;
 	$roomCount = count(is_array($regStructure) ? $regStructure : []);
 	$howManyRegSeats = 0;
 	$howManyOpenSeats = 0;
@@ -1448,12 +1448,14 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 		$code
 	) );
 
-	$roomData = json_decode($registration->registration_layout)->roomData;
+	if($registration->registration_layout !== null) {
+		$roomData = json_decode($registration->registration_layout)->roomData;
 
-	foreach ($bookings as $booking) {
-		$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+		foreach ($bookings as $booking) {
+			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+		}
 	}
-
+	
 	if($order === 'room_uuid, seat_nr') {
 		usort($bookings, "seatreg_order_bookings_by_room_name");
 	}
@@ -1661,12 +1663,14 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 		$code
 	) );
 
-	$roomData = json_decode($registration->registration_layout)->roomData;
+	if($registration->registration_layout !== null) {
+		$roomData = json_decode($registration->registration_layout)->roomData;
 
-	foreach($bookings as $booking) {
-		$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+		foreach($bookings as $booking) {
+			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+		}
 	}
-
+	
 	return $bookings;
 }
 

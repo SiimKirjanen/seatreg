@@ -54,7 +54,7 @@
 
 
 	function SeatReg() {
-		this.rooms = dataReg.roomData;
+		this.rooms = (dataReg !== null) ? dataReg.roomData : null;
 		this.seatLimit = seatLimit;
 		this.currentRoom = 0;
 		this.css3 = false;
@@ -760,7 +760,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 var seatReg = new SeatReg();
 seatReg.browserInfo();
 
-if($.isEmptyObject(dataReg)) {
+if(dataReg === null) {
 	$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ translator.translate('_regUnderConstruction') +'</div>');
 
 	return false;
@@ -966,7 +966,7 @@ function fitFactor(){
 function validateInput(inputField) {
 	var emailReg = /^\S+@\S+$/;
 	var gmailReg = /^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/;
-	var customFieldRegExp = new RegExp("^[\\p{L}]{1," + WP_Seatreg.SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH + "}$", "u");
+	var customFieldRegExp = new RegExp("^[\\p{L}1234567890]{1," + WP_Seatreg.SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH + "}$", "u");
 
 	var value = inputField.val();
 

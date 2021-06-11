@@ -49,7 +49,7 @@ class SeatregBookingsFile {
         $this->_registrationInfo = seatreg_get_options($this->_registrationCode)[0];
         $this->_registrations = seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat);
         $this->_registrationName = esc_html($this->_registrationInfo->registration_name);
-        $this->_customFields = json_decode($this->_registrationInfo->custom_fields, true);
+        $this->_customFields = ($this->_registrationInfo->custom_fields !== null) ? json_decode($this->_registrationInfo->custom_fields, true) : [];
     }
 
     protected function customFieldsWithValues($customField, $customData) {
