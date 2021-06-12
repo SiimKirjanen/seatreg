@@ -1279,63 +1279,66 @@ function seatreg_set_up_db() {
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	global $seatreg_db_table_names;
 	global $wpdb;
+	$seatreg_db_current_version = get_option( "seatreg_db_current_version" );
+
     $charset_collate = $wpdb->get_charset_collate() . ' ENGINE = innoDB';
 
-    $sql = "CREATE TABLE IF NOT EXISTS $seatreg_db_table_names->table_seatreg (
-      id int(11) NOT NULL AUTO_INCREMENT,
-	  registration_code varchar(40) NOT NULL,
-	  registration_name varchar(255) NOT NULL,
-	  registration_create_timestamp timestamp DEFAULT CURRENT_TIMESTAMP,
-	  registration_layout mediumtext,
-	  is_deleted tinyint(1) NOT NULL DEFAULT 0,
-	  PRIMARY KEY  (id),
-	  UNIQUE KEY  (registration_code)
-    ) $charset_collate;";
-
-	dbDelta( $sql );
-
-	$sql2 = "CREATE TABLE IF NOT EXISTS $seatreg_db_table_names->table_seatreg_options (
-      id int(11) NOT NULL AUTO_INCREMENT,
-	  registration_code varchar(40) NOT NULL,
-	  registration_start_timestamp varchar(13) DEFAULT NULL,
-	  registration_end_timestamp varchar(13) DEFAULT NULL,
-	  custom_fields text,
-	  seats_at_once int(11) NOT NULL DEFAULT 1,
-	  gmail_required tinyint(1) DEFAULT 0,
-	  registration_open tinyint(1) NOT NULL DEFAULT 1,
-	  use_pending tinyint(1) NOT NULL DEFAULT 1,
-	  registration_password varchar(255) DEFAULT NULL,
-	  notify_new_bookings tinyint(1) NOT NULL DEFAULT 1,
-	  show_bookings tinyint(1) NOT NULL DEFAULT 0,
-	  payment_text text,
-	  info text,
-	  booking_email_confirm tinyint(1) NOT NULL DEFAULT 1,
-	  PRIMARY KEY  (id),
-	  FOREIGN KEY  (registration_code) REFERENCES $seatreg_db_table_names->table_seatreg(registration_code)
-    ) $charset_collate;";
-
-	dbDelta( $sql2 );
-
-	$sql3 = "CREATE TABLE IF NOT EXISTS $seatreg_db_table_names->table_seatreg_bookings (
-	    id int(11) NOT NULL AUTO_INCREMENT,
-		registration_code varchar(40) NOT NULL,
-		first_name varchar(255) NOT NULL,
-		last_name varchar(255) NOT NULL,
-		email varchar(255) NOT NULL,
-		seat_id varchar(255) NOT NULL,
-		seat_nr int(11) NOT NULL,
-		room_uuid varchar(255) NOT NULL,
-		booking_date timestamp DEFAULT CURRENT_TIMESTAMP,
-		booking_confirm_date datetime DEFAULT NULL,
-		custom_field_data text,
-		status int(2) NOT NULL DEFAULT 0,
-		booking_id varchar(40) NOT NULL,
-		conf_code char(40) NOT NULL,
-		PRIMARY KEY  (id),
-		FOREIGN KEY  (registration_code) REFERENCES $seatreg_db_table_names->table_seatreg(registration_code)
-	) $charset_collate;";
-
-	dbDelta( $sql3 );
+	if ( SEATREG_DB_VERSION != $seatreg_db_current_version ) {
+		$sql = "CREATE TABLE $seatreg_db_table_names->table_seatreg (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			registration_code varchar(40) NOT NULL,
+			registration_name varchar(255) NOT NULL,
+			registration_create_timestamp timestamp DEFAULT CURRENT_TIMESTAMP,
+			registration_layout mediumtext,
+			is_deleted tinyint(1) NOT NULL DEFAULT 0,
+			PRIMARY KEY  (id),
+			UNIQUE KEY registration_code (registration_code)
+		  ) $charset_collate;";
+	  
+		  dbDelta( $sql );
+	  
+		$sql2 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_options (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			registration_code varchar(40) NOT NULL,
+			registration_start_timestamp varchar(13) DEFAULT NULL,
+			registration_end_timestamp varchar(13) DEFAULT NULL,
+			custom_fields text,
+			seats_at_once int(11) NOT NULL DEFAULT 1,
+			gmail_required tinyint(1) DEFAULT 0,
+			registration_open tinyint(1) NOT NULL DEFAULT 1,
+			use_pending tinyint(1) NOT NULL DEFAULT 1,
+			registration_password varchar(255) DEFAULT NULL,
+			notify_new_bookings tinyint(1) NOT NULL DEFAULT 1,
+			show_bookings tinyint(1) NOT NULL DEFAULT 0,
+			payment_text text,
+			info text,
+			booking_email_confirm tinyint(1) NOT NULL DEFAULT 1,
+			PRIMARY KEY  (id)
+		) $charset_collate;";
+	  
+		  dbDelta( $sql2 );
+	  
+		$sql3 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_bookings (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			registration_code varchar(40) NOT NULL,
+			first_name varchar(255) NOT NULL,
+			last_name varchar(255) NOT NULL,
+			email varchar(255) NOT NULL,
+			seat_id varchar(255) NOT NULL,
+			seat_nr int(11) NOT NULL,
+			room_uuid varchar(255) NOT NULL,
+			booking_date timestamp DEFAULT CURRENT_TIMESTAMP,
+			booking_confirm_date datetime DEFAULT NULL,
+			custom_field_data text,
+			status int(2) NOT NULL DEFAULT 0,
+			booking_id varchar(40) NOT NULL,
+			conf_code char(40) NOT NULL,
+			PRIMARY KEY  (id)
+		) $charset_collate;";
+	  
+		dbDelta( $sql3 );
+		update_option( "seatreg_db_current_version", SEATREG_DB_VERSION );
+	}
 }
 
 //return all registrations and their data
