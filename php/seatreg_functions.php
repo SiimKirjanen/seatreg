@@ -1639,6 +1639,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE registration_code = %s
+			AND status IN (1,2)
 			ORDER BY room_uuid, seat_nr",
 			$code
 		) );
