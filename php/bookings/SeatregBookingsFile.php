@@ -20,7 +20,7 @@ class SeatregBookingsFile {
         if($showPending && !$showConfirmed) {
             $this->_showWhat = 'pending';
         }
-        if($showConfirmed && !$showConfirmed) {
+        if($showConfirmed && !$showPending) {
             $this->_showWhat = 'confirmed';
         }
         

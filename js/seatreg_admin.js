@@ -576,8 +576,8 @@ $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e)
 	} });
 
 	alertify.confirm( 
-	"<div class='booking-status-check-wrap'><label>show pending bookins<input type='checkbox' id='show-pending' checked /></label></div>" +
-	"<div class='booking-status-check-wrap'><label>show approved bookings<input type='checkbox' id='show-confirmed' checked /></label></div>", function (e) {
+	"<div class='booking-status-check-wrap'><label>Show pending bookins<input type='checkbox' id='show-pending' checked /></label></div>" +
+	"<div class='booking-status-check-wrap'><label>Show approved bookings<input type='checkbox' id='show-confirmed' checked /></label></div>", function (e) {
 
 	    if (e) {
 	    	if($('#show-pending').is(':checked')) {
