@@ -10,18 +10,18 @@ class SeatregPDF extends tFPDF {
     private $currentDate = null;
     private $fileName = null;
 
-    public function __construct($title, $currentDate) {
+    public function __construct($title, $currentTimestamp) {
         parent::__construct();
         $this->title = $title;
-        $this->currentDate = $currentDate;
+        $this->currentTimestamp = $currentTimestamp;
     }
     
     function Header() {
         $this->SetFont('Arial','B',14);
-        //$this->Image(SEATREG_PLUGIN_FOLDER_DIR. 'img/seatreg_logo.png',9,5,30);
+        $this->Cell(30, 0, $this->title, 0, 1, 'L');
+        $this->Ln(6);
         $this->SetFont('Arial','',10);   
-        $this->Cell(30, 0, $this->currentDate->format('Y-M-d H:i:s') . ' ' . $this->title, 0, 1, 'L');
-        // Line break
+        $this->Cell(30, 0, date('Y-M-d H:i:s e', $this->currentTimestamp), 0, 1, 'L');
         $this->Ln(10);
     }
 
@@ -39,15 +39,15 @@ class SeatregPDF extends tFPDF {
 class SeatregBookingsPDF extends SeatregBookingsFile {
     private $pdf = null;
 
-    public function __construct($showPending, $showConfirmed, $timeZone, $registrationCode) {
-        parent::__construct($showPending, $showConfirmed, $timeZone, $registrationCode);
+    public function __construct($showPending, $showConfirmed, $registrationCode) {
+        parent::__construct($showPending, $showConfirmed, $registrationCode);
 
         $this->setupPDF();
 	}
     private function setupPDF() {
-        $this->fileName = esc_html($this->_registrationName . ' ' . $this->_currentDateTime->format('Y-M-d'));
+        $this->fileName = esc_html( $this->_registrationName . ' ' . $this->getFileName() );
 
-        $this->pdf = new SeatregPDF($this->_registrationName, $this->_currentDateTime);
+        $this->pdf = new SeatregPDF($this->_registrationName, $this->_currentTimestamp);
         $this->pdf->SetTitle( $this->fileName );
         $this->pdf->SetAuthor('SeatReg WordPress');
         $this->pdf->AddFont('DejaVu','','DejaVuSans.ttf', true);
@@ -62,18 +62,18 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
         foreach ($this->_registrations as $registration) {
             $registrantCustomData = json_decode($registration->custom_field_data, true);
             $status = $this->getStatus($registration->status);
-            $bookingDate = $this->getBookingDateTime($registration->booking_date);
+            $bookingDate = $this->getBookingDate($registration->booking_date);
 
             $this->pdf->Cell(20, 6, esc_html__('Seat number:', 'seatreg') . ' ' . esc_html($registration->seat_nr), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Room name:', 'seatreg') . ' ' . esc_html($registration->room_name), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Name:', 'seatreg') . ' ' . esc_html($registration->first_name) . ' ' . esc_html($registration->last_name), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Email:', 'seatreg') . ' ' . $registration->email, 0, 1, 'L');
-            $this->pdf->Cell(20, 6, esc_html__('Registration date:', 'seatreg') . ' ' . $bookingDate->format('Y-M-d H:i:s'), 0, 1, 'L');
+            $this->pdf->Cell(20, 6, esc_html__('Registration date:', 'seatreg') . ' ' . $bookingDate, 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Status:', 'seatreg') . ' ' . $status, 0, 1, 'L');
 
             if($status =='Approved') {
-                $confirmDate = $this->getBookingDateTime($registration->booking_confirm_date);
-                $this->pdf->Cell(20, 6, 'Confirmation date: ' . $confirmDate->format('Y-M-d H:i:s'), 0, 1, 'L');
+                $confirmDate = $this->getBookingDate($registration->booking_confirm_date);
+                $this->pdf->Cell(20, 6, 'Confirmation date: ' . $confirmDate, 0, 1, 'L');
             }
                         
             foreach ($this->_customFields as $customField) {

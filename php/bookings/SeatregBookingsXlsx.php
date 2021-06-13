@@ -6,8 +6,8 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsFile.php'
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/xlsxwriter.class.php' );
 
 class SeatregBookingsXlsx extends SeatregBookingsFile {
-    public function __construct($showPending, $showConfirmed, $timeZone, $registrationCode) {
-        parent::__construct($showPending, $showConfirmed, $timeZone, $registrationCode);
+    public function __construct($showPending, $showConfirmed, $registrationCode) {
+        parent::__construct($showPending, $showConfirmed, $registrationCode);
 
         $this->setupXlsx();
 	}
@@ -46,7 +46,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
     }
 
     private function setupXlsx() {
-        $filename =  esc_html($this->_registrationName) . ' ' . $this->_currentDateTime->format('Y-M-d') . ".xlsx";
+        $filename =  esc_html($this->_registrationName) . ' ' . $this->getFileName() . ".xlsx";
         header('Content-disposition: attachment; filename="'.XLSXWriter::sanitize_filename($filename).'"');
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         header('Content-Transfer-Encoding: binary');
@@ -72,20 +72,20 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
         foreach ($this->_registrations as $registration) {
             $registrantCustomData = json_decode($registration->custom_field_data, true);
             $status = $this->getStatus($registration->status);
-            $bookingDate = $this->getBookingDateTime($registration->booking_date);
+            $bookingDate = $this->getBookingDate($registration->booking_date);
 
             $registrationData = array(
                 esc_html($registration->seat_nr),
                 esc_html($registration->room_name), 
                 esc_html($registration->first_name) . ' ' . esc_html($registration->last_name),  
                 esc_html($registration->email), 
-                $bookingDate->format('Y-M-d H:i:s'), 
+                $bookingDate, 
                 $status
             );
 
             if($status === "Approved") {
-                $confirmDate = $this->getBookingDateTime($registration->booking_confirm_date);
-                $registrationData[] = $confirmDate->format('Y-M-d H:i:s');
+                $confirmDate = $this->getBookingDate($registration->booking_confirm_date);
+                $registrationData[] = $confirmDate;
             }else {
                 $registrationData[] = '';
             }

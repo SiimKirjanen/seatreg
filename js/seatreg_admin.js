@@ -567,7 +567,6 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e) {
 	e.preventDefault();
 
-	var timezone =	jstz.determine();
 	var _href = $(this).attr('href');
 
 	alertify.set({ buttonFocus: "ok" });
@@ -576,7 +575,7 @@ $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e)
 		cancel : 'cancel'
 	} });
 
-	alertify.confirm("<div>" + 'Current timezone: ' + timezone.name() + "</div><br>" + 
+	alertify.confirm( 
 	"<div class='booking-status-check-wrap'><label>show pending bookins<input type='checkbox' id='show-pending' checked /></label></div>" +
 	"<div class='booking-status-check-wrap'><label>show approved bookings<input type='checkbox' id='show-confirmed' checked /></label></div>", function (e) {
 
@@ -589,8 +588,6 @@ $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e)
 	    		_href += '&s2';
 			}
 			
-			_href += '&zone=' + timezone.name();
-
 	    	window.open(_href,'_blank');
 	    }
 	});

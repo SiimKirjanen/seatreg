@@ -40,9 +40,9 @@ function seatreg_remove_unnecessary_tags(){
 	}
 }
 
+add_action( 'plugins_loaded', 'seatreg_update_db_check' );
 function seatreg_update_db_check() {
     if ( get_site_option( 'seatreg_db_current_version' ) != SEATREG_DB_VERSION ) {
         seatreg_set_up_db();
     }
 }
-add_action( 'plugins_loaded', 'seatreg_update_db_check' );

@@ -80,9 +80,6 @@ function seatreg_is_registration_view_page() {
 }
 
 function seatreg_validate_bookings_file_input() {
-	if(empty($_GET['zone'])) {
-		wp_die('Missing zone');
-	}
 	if(empty($_GET['code'])) {
 		wp_die('Missing code');
 	}
