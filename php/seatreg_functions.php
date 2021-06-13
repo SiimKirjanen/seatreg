@@ -1288,7 +1288,7 @@ function seatreg_set_up_db() {
 			id int(11) NOT NULL AUTO_INCREMENT,
 			registration_code varchar(40) NOT NULL,
 			registration_name varchar(255) NOT NULL,
-			registration_create_timestamp timestamp DEFAULT CURRENT_TIMESTAMP,
+			registration_create_timestamp int(11) DEFAULT UNIX_TIMESTAMP(),
 			registration_layout mediumtext,
 			is_deleted tinyint(1) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id),
