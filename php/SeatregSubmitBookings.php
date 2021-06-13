@@ -226,7 +226,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 				if($mailSent) {
 					$this->response->setText('mail');
 				}else {
-					$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out confirmation email', 'seatreg'));
+					$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out confirmation email. Please notify the site administrator.', 'seatreg'));
 				}
 				
 			}else {

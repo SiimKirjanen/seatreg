@@ -1792,6 +1792,12 @@ function seatreg_update() {
 	}else {
 		$_POST['email-confirm'] = 1;
 	}
+
+	if(!isset($_POST['booking-notification'])) {
+		$_POST['booking-notification'] = 0;  
+	}else {
+		$_POST['booking-notification'] = 1;
+	}
 	
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
