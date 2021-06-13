@@ -179,13 +179,17 @@ class SeatregSubmitBookings extends SeatregBooking {
 			$bookingStatus = 0;
 			$confCode = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
 			$this->_bookingId = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
+			$currentTimeStamp = time();
 			$registrationConfirmDate = null;
 			$seatsString = $this->generateSeatString();
 			$bookingCheckURL = get_site_url() . '?seatreg=booking-status&registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
 
 			if(!$this->_requireBookingEmailConfirm) {
 				$bookingStatus = $this->_insertState;
-				$registrationConfirmDate = current_time( 'mysql' );
+			}
+			
+			if($this->_insertState == 2) {
+				$registrationConfirmDate = $currentTimeStamp;
 			}
 	 
 			for($i = 0; $i < $dataLength; $i++) {
@@ -203,6 +207,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 						'custom_field_data' => json_encode($this->_bookings[$i]->custom_field, JSON_UNESCAPED_UNICODE),
 						'booking_id' => $this->_bookingId,
 						'status' => $bookingStatus,
+						'booking_date' => $currentTimeStamp,
 						'booking_confirm_date' => $registrationConfirmDate
 					), 
 					'%s'	

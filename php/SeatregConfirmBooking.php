@@ -58,12 +58,16 @@ class SeatregConfirmBooking extends SeatregBooking {
 		global $wpdb;
 		global $seatreg_db_table_names;
 
+		$approvedTimestamp = ($this->_insertState == 2) ? time() : null;
+
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array( 
-				'status' => $this->_insertState
+				'status' => $this->_insertState,
+				'booking_confirm_date' => $approvedTimestamp 
 			), 
 			array('booking_id' => $this->_bookingId), 
+			'%d',
 			'%d',
 			'%s'
 		);

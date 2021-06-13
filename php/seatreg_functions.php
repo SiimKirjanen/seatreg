@@ -1286,7 +1286,7 @@ function seatreg_set_up_db() {
 			id int(11) NOT NULL AUTO_INCREMENT,
 			registration_code varchar(40) NOT NULL,
 			registration_name varchar(255) NOT NULL,
-			registration_create_timestamp int(11) DEFAULT UNIX_TIMESTAMP(),
+			registration_create_timestamp int(11) DEFAULT NULL,
 			registration_layout mediumtext,
 			is_deleted tinyint(1) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id),
@@ -1325,7 +1325,7 @@ function seatreg_set_up_db() {
 			seat_id varchar(255) NOT NULL,
 			seat_nr int(11) NOT NULL,
 			room_uuid varchar(255) NOT NULL,
-			booking_date int(11) DEFAULT UNIX_TIMESTAMP(),
+			booking_date int(11) DEFAULT NULL,
 			booking_confirm_date int(11) DEFAULT NULL,
 			custom_field_data text,
 			status int(2) NOT NULL DEFAULT 0,
@@ -1556,7 +1556,8 @@ function seatreg_create_new_registration($newRegistrationName) {
     	$seatreg_db_table_names->table_seatreg,
     	array(
     		'registration_name' => $newRegistrationName,
-    		'registration_code' => $registrationCode
+    		'registration_code' => $registrationCode,
+			'registration_create_timestamp' => time()
     	),
     	'%s'
     );
