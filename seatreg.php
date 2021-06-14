@@ -6,7 +6,7 @@
 	Author: Siim Kirjanen
 	Text Domain: seatreg
 	Version: 1.0.7
-	Requires at least: 5.4.4
+	Requires at least: 5.4
 	Requires PHP: 7.2.28
 	License: GPLv2 or later
 */
