@@ -1605,7 +1605,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 }
 
 //edit booking
-function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_name, $booking_id, $seat_id) {
+function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_name, $booking_id, $seat_id, $id) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
@@ -1620,7 +1620,8 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 			'seat_id' => $seat_id
 		), 
 		array(
-			'booking_id' => $booking_id	
+			'booking_id' => $booking_id,
+			'id' => $id,
 		),
 		'%s'
 	);
@@ -2130,6 +2131,8 @@ function seatreg_edit_booking_callback() {
 	$bookingEdit->seatId = sanitize_text_field($_POST['seatid']);
 	$bookingEdit->bookingId = sanitize_text_field($_POST['bookingid']);
 	$bookingEdit->editCustomField = stripslashes_deep($_POST['customfield']);
+	$bookingEdit->id = sanitize_text_field($_POST['id']);
+
 	$statusArray = seatreg_validate_edit_booking(sanitize_text_field($_POST['code']), $bookingEdit );
 
 	if ( $statusArray['status'] != 'ok' ) {
@@ -2145,7 +2148,8 @@ function seatreg_edit_booking_callback() {
 			$bookingEdit->firstName,
 			$bookingEdit->lastName,
 			$bookingEdit->bookingId, 
-			$statusArray['newSeatId']
+			$statusArray['newSeatId'],
+			$bookingEdit->id
 		) !== false) {
 		wp_send_json( array('status'=>'updated') );
 

@@ -64,7 +64,8 @@
 					seatnumber: editInfo.seatNumber,
 					seatid: editInfo.seatId,
 					bookingid: editInfo.bookingId,
-					customfield: editInfo.customFieldData
+					customfield: editInfo.customFieldData,
+					id: editInfo.id,
 				}
 			});
 	}
@@ -495,7 +496,8 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		'seatId': $('#r-id').val(),
 		'customFieldData': JSON.stringify(customFields),
 		'seatNumber': seat_number,
-		'seatRoom': seat_room
+		'seatRoom': seat_room,
+		'id': $('#r-id').val(),
 	}
 
 	var promise = seatreg_edit_booking('seatreg_edit_booking', code, editInfo);
