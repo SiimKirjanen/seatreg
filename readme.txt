@@ -1,7 +1,7 @@
 === SeatReg ===
 Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source=url
 Tags: seat registration, booking, booking seats, booking events, seat map, booking management, registration
-Requires at least: 5.4
+Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 5.7
 Stable tag: 1.0.8
