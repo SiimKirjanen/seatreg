@@ -70,7 +70,7 @@
 		this.gmailNeeded = gmail;
 		this.status = regTime;
 		this.spotName = translator.translate('seat');
-		this.emailConfirmEnabled = (dataReg !== null) ? dataReg.global.emailConfirm : false;
+		this.emailConfirmEnabled = emailConfirmRequired;
 	}
 
 	function CartItem(id,nr,room, roomUUID) {
@@ -590,7 +590,7 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 		documentFragment.append(checkItem);
 	}
 
-	if(arrLen > 1 && this.emailConfirmEnabled) {
+	if(arrLen > 1 && this.emailConfirmEnabled === '1') {
 		if(this.gmailNeeded == 1) {
 			var primaryMail = $('<div style="text-align:center;margin-top:16px"><label class="field-label">'+ translator.translate('confWillBeSentTogmail') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}else {
@@ -1051,7 +1051,7 @@ function sendData(customFieldBack, regURL) {
 
 	var mailToSend = null;
 
-	if(seatReg.selectedSeats.length > 1  && this.emailConfirmEnabled) {
+	if(seatReg.selectedSeats.length > 1  && this.emailConfirmEnabled === '1') {
 		mailToSend = $('#prim-mail').val();
 	}else {
 		mailToSend = $('#checkout-input-area .check-item').first().find('.field-input[data-field="Email"]').val();

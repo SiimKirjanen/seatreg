@@ -63,6 +63,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var regTime = "' . esc_js($registrationTime) . '";';
 			$inlineScript .= 'var registrations = jQuery.parseJSON(' . wp_json_encode($registrations) . ');';
 			$inlineScript .= 'var ajaxUrl = "'. admin_url('admin-ajax.php') . '";';
+			$inlineScript .= 'var emailConfirmRequired = "'. esc_js($data->booking_email_confirm) . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";
