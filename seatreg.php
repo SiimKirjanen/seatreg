@@ -40,3 +40,6 @@ register_activation_hook(__FILE__, "seatreg_plugin_activate");
 
 //Filters
 require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_filters.php' );
+
+//shortcode
+require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_shortcode.php' );

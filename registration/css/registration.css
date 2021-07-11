@@ -428,8 +428,7 @@ th {
 body {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 16px;
-	/*background-color: #F2F2F2;*/
-	
+	overflow: hidden;
 }
 
 .seatreg-tooltip-row {
