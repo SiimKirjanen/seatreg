@@ -827,6 +827,7 @@
 	background-color: #f37936;
 	color: #fff;
 	cursor: pointer;
+	line-height: 17px;
 }
 
 .seatreg-map-builder-page #update-data:hover {

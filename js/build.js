@@ -1928,7 +1928,7 @@
 					registration_code: window.seatreg.selectedRegistration
 				},
 			success: function(data) {
-				$('#update-data').find('.glyphicon').css({'display':'inline'}).end().find('.fa').css({'display': 'none'}).end().find('.save-text').text(translator.translate('save'));
+				$('#update-data').find('.save-text').text(translator.translate('save'));
 				if(data._response.type == 'ok') {
 					scope.needToSave = false;
 
@@ -2748,7 +2748,7 @@
 
 	$('#update-data').on('click', function() {
 		$(this).prop('disabled', true);
-		$('#update-data').find('.glyphicon').css({'display':'none'}).end().find('.fa').css({'display': 'inline'}).end().find('.save-text').text(translator.translate('saving'));
+		$('#update-data').find('.save-text').text(translator.translate('saving'));
 		
 		if(reg.sendValidation()) {
 			reg.rooms[reg.currentRoom].correctRoomBoxesIndex();
