@@ -24,7 +24,6 @@ function seatreg_generate_registration_strings() {
 	$translations->_isPendingState = esc_html__(' is in pending state', 'seatreg');
 	$translations->regOwnerNotConfirmed = esc_html__('(registration admin has not confirmed it)', 'seatreg');
 	$translations->selectionIsFull = esc_html__('Booking is full', 'seatreg');
-	$translations->_isAlreadyInCart = esc_html__(' is already in cart!', 'seatreg');
     $translations->_isAlreadySelected = esc_html__(' is already selected!', 'seatreg');
 	$translations->_regUnderConstruction = esc_html__('Under construction', 'seatreg');
 	$translations->emptyField = esc_html__('Empty field', 'seatreg');
@@ -58,7 +57,7 @@ function seatreg_generate_admin_strings() {
     $translations->legendColorChanged = esc_html__('Legend color changed', 'seatreg');
     $translations->buildingGridUpdated = esc_html__('Building grid updated', 'seatreg');
     $translations->roomNameChanged = esc_html__('Room name changed', 'seatreg');
-    $translations->roomNameSet = esc_html__('New Room added', 'seatreg');
+    $translations->roomNameSet = esc_html__('New room added', 'seatreg');
     $translations->roomNotExist = esc_html__('Room does not exist', 'seatreg');
     $translations->seatNotExist = esc_html__('Seat dose not exist', 'seatreg');
     $translations->seatAlreadyBookedPending = esc_html__('Seat is already booked/pending', 'seatreg');
@@ -69,14 +68,12 @@ function seatreg_generate_admin_strings() {
     $translations->lagendNameMissing = esc_html__('Legend name missing!', 'seatreg');
     $translations->legendColorTaken = esc_html__('Legend color is taken. Choose another', 'seatreg');
     $translations->legendAddedTo = esc_html__('Legend added to', 'seatreg');
-    $translations->noPermToAddRoom = esc_html__('Dont have permissions to create room', 'seatreg');
-    $translations->noPermToDel = esc_html__('Dont have permission do delete', 'seatreg');
     $translations->oneRoomNeeded = esc_html__('You must have at least on room', 'seatreg');
     $translations->alreadyInRoom = esc_html__('Already in this room', 'seatreg');
     $translations->allRoomsNeedName = esc_html__('All rooms must have name', 'seatreg');
     $translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
     $translations->missingName = esc_html__('Name missing', 'seatreg');
-    $translations->cantDelRoom_ = esc_html__('You cant delete room ', 'seatreg');
+    $translations->cantDelRoom_ = esc_html__('You can\'t delete room ', 'seatreg');
     $translations->_cantDelRoomBecause = esc_html__(' because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg');
     $translations->roomNameMissing = esc_html__('Room name missing', 'seatreg');
     $translations->roomNameExists = esc_html__('Room name already exists. You must choose another', 'seatreg');
@@ -87,9 +84,6 @@ function seatreg_generate_admin_strings() {
     $translations->selectBoxesToAddHover = esc_html__('Select box/boxes to add hover text', 'seatreg');
     $translations->loading = esc_html__('Loading...', 'seatreg');
     $translations->selectBoxesToDelete = esc_html__('Select box/boxes you want to delete', 'seatreg');
-    $translations->onlyPremMembUpImg = esc_html__('Only premium members can upload background-image', 'seatreg');
-    $translations->fixNeededToSave = esc_html__('Fix needed to save!', 'seatreg');
-    $translations->boxLimitExceeded = esc_html__('Box limit exeeded', 'seatreg');
     $translations->colorApplied = esc_html__('Color applied', 'seatreg');
     $translations->noLegendsCreated = esc_html__('You have not made and legends yet', 'seatreg');
     $translations->_noSelectBoxToAddLegend = esc_html__(' You have not selected any box/boxes to add legends', 'seatreg');

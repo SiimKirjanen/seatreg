@@ -324,44 +324,35 @@
 				<div class="help-dialog-row">
 					<div class="guide-item2 guide-item-mouse"></div>
 					<p class="help-dialog-text">
-						<?php esc_html_e('With select tool you can select individual objects in your seat map. This tool is also used to resize and change object location.
-						To change seat/custom object location you need to drag it with mouse cursor.
-						Resizing is done by placing mouse cursor at border of a object and dragging it to desired width or height.', 'seatreg');?>
+						<?php esc_html_e('With select tool you can select individual objects in your seat map. This tool is also used to resize and change object location. To change seat/custom object location you need to drag it with mouse cursor. Resizing is done by placing mouse cursor at border of a object and dragging it to desired width or height.', 'seatreg');?>
 					</p>
 				</div>
 
 				<div class="help-dialog-row">
 					<div class="guide-item2 guide-item-add"></div>
 					<p class="help-dialog-text">
-						<?php esc_html_e('With this tool you can create seats.
-						Simply click on gray dotted box and new seat will be created.
-						You can create multiple seats at once by dragging cursor over gray boxes.', 'seatreg');?>
+						<?php esc_html_e('With this tool you can create seats. Simply click on gray dotted box and new seat will be created. You can create multiple seats at once by dragging cursor over gray boxes.', 'seatreg');?>
 					</p>
 				</div>
 
 				<div class="help-dialog-row">
 					<div class="guide-item2 guide-item-add2"></div>
 					<p class="help-dialog-text">
-						<?php esc_html_e('Custom boxes are used to show special objects in your seat map (exit, trash can, stage and so on).
-						Simply click on gray dotted box and new custom box will be created.
-						You can create multiple boxes at once by dragging cursor over gray boxes.', 'seatreg');?>
+						<?php esc_html_e('Custom boxes are used to show special objects in your seat map (exit, trash can, stage and so on). Simply click on gray dotted box and new custom box will be created. You can create multiple boxes at once by dragging cursor over gray boxes.', 'seatreg');?>
 					</p>
 				</div>
 
 				<div class="help-dialog-row">
 					<div class="guide-item2 guide-item-eraser"></div>
 					<p class="help-dialog-text">
-						<?php esc_html_e('With eraser tool you can remove seats and custom boxes.
-						Simply click on object and it will be removed.
-						You can remove multiple objects at once by holding down left mouse and moving cursor over them.', 'seatreg');?>
+						<?php esc_html_e('With eraser tool you can remove seats and custom boxes. Simply click on object and it will be removed. You can remove multiple objects at once by holding down left mouse and moving cursor over them.', 'seatreg');?>
 					</p>
 				</div>
 				
 				<div class="help-dialog-row">
 					<div class="guide-item2 guide-item-lasso"></div>
 					<p class="help-dialog-text">	
-						<?php esc_html_e('Lasso tool is helpful if you wish to work with multiple objects at the same time (changing color, deleting, adding hover text and legends).
-						Simple hold down left mouse button and move your cursor to select multiple seats/boxes.', 'seatreg');?>						
+						<?php esc_html_e('Lasso tool is helpful if you wish to work with multiple objects at the same time (changing color, deleting, adding hover text and legends). Simple hold down left mouse button and move your cursor to select multiple seats/boxes.', 'seatreg');?>						
 					</p>
 				</div>
 
@@ -375,8 +366,7 @@
 				<div class="help-dialog-row">
 					<div class="guide-item2 guide-item-legend "></div>
 					<p class="help-dialog-text">
-						<?php esc_html_e('Legends are useful if you want to add labels to seats/custom boxes with special meaning. 
-						Example: Lets say you want to show where boys and where girls should sit. In legends dialog you can create, delete, change and apply legends to seats nad custom boxes.', 'seatreg');?>
+						<?php esc_html_e('Legends are useful if you want to add labels to seats/custom boxes with special meaning. Example: Lets say you want to show where boys and where girls should sit. In legends dialog you can create, delete, change and apply legends to seats nad custom boxes.', 'seatreg');?>
 					</p>
 				</div>
 

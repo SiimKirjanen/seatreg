@@ -4,7 +4,7 @@
 	}
 
 	if( empty($_GET['c'] )){
-		wp_die(esc_html__('Mssing parameters', 'seatreg'));
+		wp_die(esc_html__('Missing parameters', 'seatreg'));
 	}
 
 	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/util/registration_time_status.php');
