@@ -353,7 +353,7 @@ function seatreg_generate_my_registrations_section() {
 
 	if(count($registrations)) {
 		echo '<h4 class="your-registrations-header">';
-			esc_html_e('Your registrations', 'seatreg');
+			esc_html_e('Created registrations', 'seatreg');
 		echo '</h4>';
 	}
 	echo '<div class="seatreg-registrations">';
@@ -640,7 +640,7 @@ function seatreg_generate_settings_form() {
 
 			<?php
 				wp_nonce_field( 'seatreg-options-submit', 'seatreg-options-nonce' );
-				submit_button( esc_html('Save changes', 'seatreg'), 'primary', 'seatreg-settings-submit', false );
+				submit_button( esc_html__('Save changes', 'seatreg'), 'primary', 'seatreg-settings-submit', false );
 			?>
 
 		</from>
@@ -661,7 +661,7 @@ function seatreg_create_registration_from() {
 			<input type='hidden' name='action' value='seatreg_create_submit' />
 			<?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
 			<?php
-				submit_button('Create new registration');
+				submit_button(esc_html__('Create new registration', 'seatreg'));
 			?>
 	    </form>
 	<?php
@@ -674,7 +674,7 @@ function seatreg_create_delete_registration_from($registrationCode) {
 			<input type='hidden' name='action' value='seatreg_delete_registration' />
 			<?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
 			<?php
-				submit_button('Delete', 'delete-registration-btn', 'delete-registration', false, array( 'id' => "delete-$registrationCode" ));
+				submit_button(esc_html__('Delete', 'seatreg'), 'delete-registration-btn', 'delete-registration', false, array( 'id' => "delete-$registrationCode" ));
 			?>
 	    </form>
 	<?php
@@ -745,7 +745,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
 	echo '<div class="input-group manager-search-wrap">';
 				echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
-            	echo '<input type="text" class="form-control manager-search" placeholder="Search booking" maxlength="', SEATREG_REGISTRATION_SEARCH_MAX_LENGTH ,'" value="', esc_attr($searchTerm), '"/>';
+            	echo '<input type="text" class="form-control manager-search" placeholder="'.esc_html__('Search booking', 'seatreg').'" maxlength="', SEATREG_REGISTRATION_SEARCH_MAX_LENGTH ,'" value="', esc_attr($searchTerm), '"/>';
             	echo '<div class="input-group-btn">';
                 	echo '<button class="btn btn-default search-button" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>';
             	echo '</div>';
@@ -763,9 +763,9 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 			echo '</ul>';
 		echo '<div class="panel-container differentBgColor">';
 				echo '<div class="registration-manager-labels">
-						<div class="seat-nr-box manager-box manager-box-link" data-order="nr">', esc_html__('SEAT','seatreg'),'</div>
-						<div class="seat-room-box manager-box manager-box-link" data-order="room">', esc_html__('ROOM','seatreg'),'</div>
-						<div class="seat-name-box manager-box manager-box-link" data-order="name">', esc_html__('NAME','seatreg'),'</div>
+						<div class="seat-nr-box manager-box manager-box-link" data-order="nr">', esc_html__('Seat','seatreg'),'</div>
+						<div class="seat-room-box manager-box manager-box-link" data-order="room">', esc_html__('Room','seatreg'),'</div>
+						<div class="seat-name-box manager-box manager-box-link" data-order="name">', esc_html__('Name','seatreg'),'</div>
 						<div class="seat-name-box manager-box manager-box-link" data-order="date">', esc_html__('Date','seatreg'),'</div>
 						<div class="seat-date-box manager-box manager-box-link" data-order="id">', esc_html__('Booking id','seatreg'),'</div>	
 					</div>';
@@ -796,8 +796,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '</div>';
 
 					echo '<div class="more-info">';
-						echo '<div>', esc_html__('Registration date:','seatreg'), ' <span class="time-string">', esc_html(date('M j Y h:i e', $row->booking_date)), '</span></div>';
-						echo '<div>', esc_html__('Email:', 'seatreg'), ' ', esc_html($row->email), '</div>';
+						echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html(date('M j Y h:i e', $row->booking_date)), '</span></div>';
+						echo '<div>', esc_html__('Email', 'seatreg'), ': ', esc_html($row->email), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {
 							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
@@ -839,8 +839,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '</div>';
 
 					echo '<div class="more-info">';
-						echo '<div>', esc_html__('Registration date:','seatreg'), ' <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_date) ), '</span></div>';
-						echo '<div>', esc_html__('Approval date:', 'seatreg'), ' <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_confirm_date ) ), '</span></div>';
+						echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_date) ), '</span></div>';
+						echo '<div>', esc_html__('Approval date', 'seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_confirm_date ) ), '</span></div>';
 						echo '<div>Email: ', esc_html( $row->email ), '</div>';
 
 						for($i = 0; $i < $cus_length; $i++) {
@@ -920,8 +920,8 @@ function seatreg_booking_edit_modal() {
 	        <label><?php esc_html_e('Seat', 'seatreg'); ?> <input type="text" id="edit-seat" name="seat-nr"/></label> <span id="edit-seat-error"></span><br>
 	        <label><?php esc_html_e('Room', 'seatreg'); ?> <input type="text" id="edit-room" name="room"/></label> <span id="edit-room-error"></span><br>
 	        
-	        <label><?php esc_html_e('First Name', 'seatreg'); ?> <input type="text" id="edit-fname" name="first-name"/></label><span id="edit-fname-error"></span><br>
-			<label><?php esc_html_e('Last Name', 'seatreg'); ?> <input type="text" id="edit-lname" name="last-name"/></label><span id="edit-lname-error"></span><br>
+	        <label><?php esc_html_e('First name', 'seatreg'); ?> <input type="text" id="edit-fname" name="first-name"/></label><span id="edit-fname-error"></span><br>
+			<label><?php esc_html_e('Last name', 'seatreg'); ?> <input type="text" id="edit-lname" name="last-name"/></label><span id="edit-lname-error"></span><br>
 			<input type="hidden" id="modal-code">
 			<input type="hidden" id="booking-id">
 			<input type="hidden" id="r-id">

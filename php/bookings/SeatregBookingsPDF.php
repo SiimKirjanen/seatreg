@@ -64,12 +64,12 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             $status = $this->getStatus($registration->status);
             $bookingDate = $this->getBookingDate($registration->booking_date);
 
-            $this->pdf->Cell(20, 6, esc_html__('Seat number:', 'seatreg') . ' ' . esc_html($registration->seat_nr), 0, 1, 'L');
-            $this->pdf->Cell(20, 6, esc_html__('Room name:', 'seatreg') . ' ' . esc_html($registration->room_name), 0, 1, 'L');
-            $this->pdf->Cell(20, 6, esc_html__('Name:', 'seatreg') . ' ' . esc_html($registration->first_name) . ' ' . esc_html($registration->last_name), 0, 1, 'L');
-            $this->pdf->Cell(20, 6, esc_html__('Email:', 'seatreg') . ' ' . $registration->email, 0, 1, 'L');
-            $this->pdf->Cell(20, 6, esc_html__('Registration date:', 'seatreg') . ' ' . $bookingDate, 0, 1, 'L');
-            $this->pdf->Cell(20, 6, esc_html__('Status:', 'seatreg') . ' ' . $status, 0, 1, 'L');
+            $this->pdf->Cell(20, 6, esc_html__('Seat number', 'seatreg') . ': ' . esc_html($registration->seat_nr), 0, 1, 'L');
+            $this->pdf->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($registration->room_name), 0, 1, 'L');
+            $this->pdf->Cell(20, 6, esc_html__('Name', 'seatreg') . ': ' . esc_html($registration->first_name) . ' ' . esc_html($registration->last_name), 0, 1, 'L');
+            $this->pdf->Cell(20, 6, esc_html__('Email', 'seatreg') . ': ' . $registration->email, 0, 1, 'L');
+            $this->pdf->Cell(20, 6, esc_html__('Registration date', 'seatreg') . ': ' . $bookingDate, 0, 1, 'L');
+            $this->pdf->Cell(20, 6, esc_html__('Status', 'seatreg') . ': ' . $status, 0, 1, 'L');
 
             if($status =='Approved') {
                 $confirmDate = $this->getBookingDate($registration->booking_confirm_date);

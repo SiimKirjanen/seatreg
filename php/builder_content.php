@@ -7,8 +7,8 @@
 <div id="construction-wrapper">
 
 	<div class="build-head">
-		<h1 class="reg-title"><?php esc_html_e('Registration name:', 'seatreg'); ?> <span class="reg-title-name"></span></h1>
-		<h2 class="room-title"><?php esc_html_e('Room:', 'seatreg');?> <span class="room-title-name"></span><span class="change-room-name"><?php esc_html_e('Change name', 'seatreg');?></span></h2>
+		<h1 class="reg-title"><?php esc_html_e('Registration name', 'seatreg'); ?>: <span class="reg-title-name"></span></h1>
+		<h2 class="room-title"><?php esc_html_e('Room', 'seatreg');?>: <span class="room-title-name"></span><span class="change-room-name"><?php esc_html_e('Change name', 'seatreg');?></span></h2>
 		<div id="room-selection-wrapper"></div>
 		<div class="cre-del-room-wrapper">
 			<span id="new-room-create" class="room-action"><i class="fa fa-plus" aria-hidden="true"></i> <?php esc_html_e('Add room', 'seatreg');?> </span>
@@ -192,7 +192,7 @@
 				</div>
 
 				<div class="legend-dialog-div">
-					<label for="legend-change-select" class="legend-dialog-label"><?php esc_html_e('Change legend:', 'seatreg');?></label>
+					<label for="legend-change-select" class="legend-dialog-label"><?php esc_html_e('Change legend', 'seatreg');?>:</label>
 					<select id="legend-change-select" class="legend-select"></select> 
 					<button type="button" id="change-legend" class="btn btn-secondary d-block btn-sm"><?php esc_html_e('Change', 'seatreg');?></button>
 				</div>
@@ -204,7 +204,7 @@
 			<div class="legend-dialog-slide">
 				<div>
 					<label for="new-legend-text" class="legend-dialog-label-step"> 
-						<span class="legend-step"><?php esc_html_e('Step 1.', 'seatreg');?> </span> <span><?php _e('Enter legend name:', 'seatreg');?></span>
+						<span class="legend-step"><?php esc_html_e('Step 1.', 'seatreg');?> </span> <span><?php _e('Enter legend name', 'seatreg');?>:</span>
 					</label>
 
 				</div>
@@ -216,7 +216,7 @@
 			<div class="legend-dialog-slide">
 				<div>
 					<label class="legend-dialog-label-step">
-						<span class="legend-step"><?php esc_html_e('Step 2.', 'seatreg');?> </span><span><?php esc_html_e('Choose legend color:', 'seatreg');?></span>
+						<span class="legend-step"><?php esc_html_e('Step 2.', 'seatreg');?> </span><span><?php esc_html_e('Choose legend color', 'seatreg');?>:</span>
 					</label>
 				</div>
 
@@ -456,7 +456,7 @@
 			<div id="activ-room-img-wrap"></div>
 			<br>
 
-			<h4><?php esc_html_e('Upload image (2MB)', 'seatreg');?></h4>
+			<h4><?php esc_html_e('Upload image', 'seatreg');?> (2MB)</h4>
 			<form action="<?php echo '/wp-admin/admin-ajax.php'; ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
 				<input type="file" name="fileToUpload" id="img-upload">
 				<br>

@@ -8,7 +8,6 @@ function seatreg_generate_registration_strings() {
 	$translations = new stdClass();
 	$translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
 	$translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
-	$translations->wrongCaptcha = esc_html__('Wrong code!', 'seatreg');
 	$translations->somethingWentWrong = esc_html__('Something went wrong. Please try again', 'seatreg');
 	$translations->selectionIsEmpty = esc_html__('Seat selection is empty', 'seatreg');
     $translations->youCanAdd_ = esc_html__('You can add ', 'seatreg');
