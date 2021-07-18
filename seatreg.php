@@ -5,6 +5,7 @@
 	Description: Create and manage seat registrations. Design your own seat maps and manage seat bookings
 	Author: Siim Kirjanen
 	Text Domain: seatreg
+	Domain Path: /languages
 	Version: 1.1.0
 	Requires at least: 5.3
 	Requires PHP: 7.2.28
