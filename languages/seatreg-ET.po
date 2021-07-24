@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-24 12:55+0300\n"
-"PO-Revision-Date: 2021-07-24 12:57+0300\n"
+"PO-Revision-Date: 2021-07-24 13:04+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: et\n"
@@ -1398,7 +1398,7 @@ msgstr "NR"
 
 #: registration/index.php:326
 msgid "Next"
-msgstr "Järgmine"
+msgstr "Edasi"
 
 #: registration/index.php:341
 msgid "Contact information"
