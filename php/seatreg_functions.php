@@ -423,7 +423,7 @@ function seatreg_generate_settings_form() {
 	 $adminEmail = get_option( 'admin_email' );
 	?>
 		<h4 class="settings-heading">
-			<?php echo esc_html($options[0]->registration_name), ' settings'; ?>
+			<?php echo sprintf( __('%s settings', 'seatreg'),  $options[0]->registration_name); ?> 
 		</h4>
 		<form action="<?php echo get_admin_url() . 'admin-post.php'  ?>" method="post" id="seatreg-settings-form" class="seatreg-settings-form" style="max-width:600px">
 

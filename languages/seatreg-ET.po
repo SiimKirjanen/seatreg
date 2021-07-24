@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-18 16:24+0300\n"
-"PO-Revision-Date: 2021-07-18 16:34+0300\n"
+"POT-Creation-Date: 2021-07-24 12:37+0300\n"
+"PO-Revision-Date: 2021-07-24 12:40+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: et\n"
@@ -32,7 +32,7 @@ msgstr "Registratsiooni nimi"
 
 #: php/builder_content.php:11 php/seatreg_functions.php:767
 #: php/seatreg_functions.php:921 php/bookings/SeatregBookingsTxt.php:36
-#: php/bookings/SeatregBookingsXlsx.php:62 registration/index.php:322
+#: php/bookings/SeatregBookingsXlsx.php:62 registration/index.php:317
 msgid "Room"
 msgstr "Ruum"
 
@@ -82,7 +82,7 @@ msgstr "Värv"
 #: php/builder_content.php:397 php/builder_content.php:421
 #: php/builder_content.php:438 php/builder_content.php:483
 #: php/seatreg_functions.php:916 php/seatreg_functions.php:932
-#: registration/index.php:286
+#: registration/index.php:281
 msgid "Close"
 msgstr "Sulge"
 
@@ -100,9 +100,9 @@ msgstr "Jäta tühjaks, et eemaldada hõljuktekst"
 
 #: php/builder_content.php:125 php/builder_content.php:309
 #: php/seatreg_functions.php:811 php/seatreg_functions.php:856
-#: registration/index.php:352 registration/index.php:405
-#: registration/index.php:427 registration/index.php:444
-#: registration/index.php:488
+#: registration/index.php:347 registration/index.php:388
+#: registration/index.php:410 registration/index.php:427
+#: registration/index.php:471
 msgid "OK"
 msgstr "OK"
 
@@ -544,7 +544,7 @@ msgid "Seats"
 msgstr "Kohad"
 
 #: php/seatreg_functions.php:229 php/seatreg_functions.php:282
-#: php/seatreg_functions.php:444 registration/index.php:160
+#: php/seatreg_functions.php:444 registration/index.php:155
 msgid "Open"
 msgstr "Avatud"
 
@@ -572,6 +572,11 @@ msgstr "Kujunda plaan"
 #: php/seatreg_functions.php:397
 msgid "No registrations created!"
 msgstr "Ühtegi registratsiooni pole loodud!"
+
+#: php/seatreg_functions.php:426
+#, php-format
+msgid "%s settings"
+msgstr "%s seaded"
 
 #: php/seatreg_functions.php:433
 msgid "Change registration name"
@@ -673,6 +678,10 @@ msgid ""
 "them (with booking manager). If you want bookings automatically to be in "
 "approved state then uncheck below."
 msgstr ""
+"Vaikimisi on kõik broneeringud alguses mitte kinnitatud staatusega, et "
+"administraator saaks need üle vaadata ja kinnitada. Kui tahad, et "
+"broneeringud oleks koha alguses kinnitatud, siis eemalda linnuke "
+"alljärgnevast kastist."
 
 #: php/seatreg_functions.php:519
 msgid "Use pending"
@@ -688,7 +697,7 @@ msgstr "Broneeringud peavad olema kinnitatud maili kaudu"
 
 #: php/seatreg_functions.php:532
 msgid "Email confirm"
-msgstr ""
+msgstr "E-posti kinnitus"
 
 #: php/seatreg_functions.php:538
 msgid "Booking notification"
@@ -714,19 +723,19 @@ msgstr ""
 
 #: php/seatreg_functions.php:567
 msgid "Existing custom fields"
-msgstr ""
+msgstr "Loodud kohandatud väljad"
 
 #: php/seatreg_functions.php:569
 msgid "Custom fields you have already created"
-msgstr ""
+msgstr "Loodud kohandatud väljad"
 
 #: php/seatreg_functions.php:605
 msgid "New custom field"
-msgstr ""
+msgstr "Uus kohandatud väli"
 
 #: php/seatreg_functions.php:607
 msgid "Create a new custom field"
-msgstr ""
+msgstr "Loo uus kohandatud väli"
 
 #: php/seatreg_functions.php:610 php/seatreg_functions.php:768
 #: php/bookings/SeatregBookingsPDF.php:69
@@ -749,23 +758,23 @@ msgstr "Märkeruut"
 
 #: php/seatreg_functions.php:618
 msgid "Select"
-msgstr ""
+msgstr "Selektsioon"
 
 #: php/seatreg_functions.php:625
 msgid "Option name"
-msgstr ""
+msgstr "Valiku nimi"
 
 #: php/seatreg_functions.php:629
 msgid "Add option"
-msgstr ""
+msgstr "Lisa valik"
 
 #: php/seatreg_functions.php:632
 msgid "Add custom field"
-msgstr ""
+msgstr "Lisa kohandatud väli"
 
 #: php/seatreg_functions.php:643 php/seatreg_functions.php:933
 msgid "Save changes"
-msgstr ""
+msgstr "Salvesta muudatused"
 
 #: php/seatreg_functions.php:655 php/seatreg_functions.php:664
 msgid "Create new registration"
@@ -793,15 +802,15 @@ msgstr "Koht"
 
 #: php/seatreg_functions.php:769 php/bookings/SeatregBookingsTxt.php:28
 msgid "Date"
-msgstr ""
+msgstr "Kuupäev"
 
 #: php/seatreg_functions.php:770
 msgid "Booking id"
-msgstr ""
+msgstr "Broneeringu id"
 
 #: php/seatreg_functions.php:775
 msgid "No pending seats"
-msgstr ""
+msgstr "Mitte kinnitatuid kohti pole"
 
 #: php/seatreg_functions.php:791 php/seatreg_functions.php:835
 msgid "More info"
@@ -838,7 +847,7 @@ msgstr "Kinnitus kuupäev"
 
 #: php/seatreg_functions.php:902 php/seatreg_strings.php:109
 msgid "Not set"
-msgstr ""
+msgstr "Pole määratud"
 
 #: php/seatreg_functions.php:915
 msgid "Edit booking"
@@ -928,11 +937,11 @@ msgstr " valikusse neid klõpsates"
 
 #: php/seatreg_strings.php:17
 msgid "Confirmation will be sent to:"
-msgstr ""
+msgstr "Kinnitus saadetakse:"
 
 #: php/seatreg_strings.php:18
 msgid "Confirmation will be sent to (Gmail):"
-msgstr ""
+msgstr "Kinnitus saadetakse (Gmail):"
 
 #: php/seatreg_strings.php:19
 msgid "Email (Gmail required)"
@@ -1335,79 +1344,71 @@ msgstr "Vaheta ruumi"
 msgid "Room is empty"
 msgstr "Ruum on tühi"
 
-#: registration/index.php:148 registration/index.php:368
+#: registration/index.php:148 registration/index.php:363
 msgid "seats selected"
-msgstr ""
+msgstr "koht valitud"
 
-#: registration/index.php:151
-msgid "max"
-msgstr "maksimum"
-
-#: registration/index.php:189
+#: registration/index.php:184
 msgid "Info"
 msgstr "Info"
 
-#: registration/index.php:202 registration/index.php:462
+#: registration/index.php:197 registration/index.php:445
 msgid "Registration starts"
 msgstr "Registratsiooni statistika"
 
-#: registration/index.php:218
+#: registration/index.php:213
 msgid "Registration ends"
 msgstr "Registratsioon lõppeb"
 
-#: registration/index.php:230
+#: registration/index.php:225
 msgid "Total rooms"
 msgstr "Ruumide arv"
 
-#: registration/index.php:233
+#: registration/index.php:228
 msgid "Total open seats"
 msgstr "Vabade kohtade arv"
 
-#: registration/index.php:236
+#: registration/index.php:231
 msgid "Total pending seats"
 msgstr "Kinnitust ootavate kohtade arv"
 
-#: registration/index.php:239
+#: registration/index.php:234
 msgid "Total confirmed seats"
 msgstr "Kinnitatud kohtade arv"
 
-#: registration/index.php:256
+#: registration/index.php:251
 msgid "Legends"
 msgstr "Legendid"
 
-#: registration/index.php:281
+#: registration/index.php:276
 msgid "Add to booking"
 msgstr "Lisa broneeringusse"
 
-#: registration/index.php:310
+#: registration/index.php:305
 msgid "Cart"
 msgstr "Käru"
 
-#: registration/index.php:317
+#: registration/index.php:312
 msgid "NR"
 msgstr "NR"
 
-#: registration/index.php:331
+#: registration/index.php:326
 msgid "Next"
 msgstr "Järgmine"
 
-#: registration/index.php:346
+#: registration/index.php:341
 msgid "Contact information"
 msgstr "Kinnita informatsioon"
 
-#: registration/index.php:372
-msgid "Max"
-msgstr "Maksimum"
-
-#: registration/index.php:386
+#: registration/index.php:369
 msgid "Show legends"
 msgstr "Näita legende"
 
-#: registration/index.php:395
+#: registration/index.php:378
 msgid "Confirm email sent to"
 msgstr "Kinnitus saadeti"
 
-#: registration/index.php:400
+#: registration/index.php:383
 msgid ""
 "You need to confirm your booking by following email instructions. Make sure "
 "you check your junk folders"
@@ -1415,41 +1416,47 @@ msgstr ""
 "Broneeringu peab kinnitama emaili saadetud juhiste järgi. Veendu, et "
 "vaatasid ka rämps kausta"
 
-#: registration/index.php:415
+#: registration/index.php:398
 msgid "Your Booking is confirmed"
 msgstr "Broneering on kinnitatud"
 
-#: registration/index.php:419
+#: registration/index.php:402
 msgid "You can look your booking status at the following link"
 msgstr "Broneeringu staatust võid jälgida järgneva lingi kaudu"
 
-#: registration/index.php:423
+#: registration/index.php:406
 msgid "Save the link for future reference"
 msgstr "Salvesta link hiljemaks vaatamiseks"
 
-#: registration/index.php:437
+#: registration/index.php:420
 msgid "Error"
 msgstr "Viga"
 
-#: registration/index.php:461
+#: registration/index.php:444
 msgid "Not open yet"
 msgstr "Pole veel avatud"
 
-#: registration/index.php:464
+#: registration/index.php:447
 msgid "Closed"
 msgstr "Suletud"
 
-#: registration/index.php:465
+#: registration/index.php:448
 msgid "Registration ended"
 msgstr "Registratsioon on lõppenud"
 
-#: registration/index.php:479
+#: registration/index.php:462
 msgid "Password protected"
 msgstr "Parooliga kaitstud"
 
-#: registration/index.php:484
+#: registration/index.php:467
 msgid "Please enter password"
 msgstr "Palun sisesta parool"
+
+#~ msgid "max"
+#~ msgstr "maksimum"
+
+#~ msgid "Max"
+#~ msgstr "Maksimum"
 
 #~ msgid "Room:"
 #~ msgstr "Ruum:"

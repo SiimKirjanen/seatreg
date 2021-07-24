@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-18 16:24+0300\n"
+"POT-Creation-Date: 2021-07-24 12:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 
 #: php/builder_content.php:11 php/seatreg_functions.php:767
 #: php/seatreg_functions.php:921 php/bookings/SeatregBookingsTxt.php:36
-#: php/bookings/SeatregBookingsXlsx.php:62 registration/index.php:322
+#: php/bookings/SeatregBookingsXlsx.php:62 registration/index.php:317
 msgid "Room"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 #: php/builder_content.php:397 php/builder_content.php:421
 #: php/builder_content.php:438 php/builder_content.php:483
 #: php/seatreg_functions.php:916 php/seatreg_functions.php:932
-#: registration/index.php:286
+#: registration/index.php:281
 msgid "Close"
 msgstr ""
 
@@ -99,9 +99,9 @@ msgstr ""
 
 #: php/builder_content.php:125 php/builder_content.php:309
 #: php/seatreg_functions.php:811 php/seatreg_functions.php:856
-#: registration/index.php:352 registration/index.php:405
-#: registration/index.php:427 registration/index.php:444
-#: registration/index.php:488
+#: registration/index.php:347 registration/index.php:388
+#: registration/index.php:410 registration/index.php:427
+#: registration/index.php:471
 msgid "OK"
 msgstr ""
 
@@ -502,7 +502,7 @@ msgid "Seats"
 msgstr ""
 
 #: php/seatreg_functions.php:229 php/seatreg_functions.php:282
-#: php/seatreg_functions.php:444 registration/index.php:160
+#: php/seatreg_functions.php:444 registration/index.php:155
 msgid "Open"
 msgstr ""
 
@@ -529,6 +529,11 @@ msgstr ""
 
 #: php/seatreg_functions.php:397
 msgid "No registrations created!"
+msgstr ""
+
+#: php/seatreg_functions.php:426
+#, php-format
+msgid "%s settings"
 msgstr ""
 
 #: php/seatreg_functions.php:433
@@ -1283,116 +1288,108 @@ msgstr ""
 msgid "Room is empty"
 msgstr ""
 
-#: registration/index.php:148 registration/index.php:368
+#: registration/index.php:148 registration/index.php:363
 msgid "seats selected"
 msgstr ""
 
-#: registration/index.php:151
-msgid "max"
-msgstr ""
-
-#: registration/index.php:189
+#: registration/index.php:184
 msgid "Info"
 msgstr ""
 
-#: registration/index.php:202 registration/index.php:462
+#: registration/index.php:197 registration/index.php:445
 msgid "Registration starts"
 msgstr ""
 
-#: registration/index.php:218
+#: registration/index.php:213
 msgid "Registration ends"
 msgstr ""
 
-#: registration/index.php:230
+#: registration/index.php:225
 msgid "Total rooms"
 msgstr ""
 
-#: registration/index.php:233
+#: registration/index.php:228
 msgid "Total open seats"
 msgstr ""
 
-#: registration/index.php:236
+#: registration/index.php:231
 msgid "Total pending seats"
 msgstr ""
 
-#: registration/index.php:239
+#: registration/index.php:234
 msgid "Total confirmed seats"
 msgstr ""
 
-#: registration/index.php:256
+#: registration/index.php:251
 msgid "Legends"
 msgstr ""
 
-#: registration/index.php:281
+#: registration/index.php:276
 msgid "Add to booking"
 msgstr ""
 
-#: registration/index.php:310
+#: registration/index.php:305
 msgid "Cart"
 msgstr ""
 
-#: registration/index.php:317
+#: registration/index.php:312
 msgid "NR"
 msgstr ""
 
-#: registration/index.php:331
+#: registration/index.php:326
 msgid "Next"
 msgstr ""
 
-#: registration/index.php:346
+#: registration/index.php:341
 msgid "Contact information"
 msgstr ""
 
-#: registration/index.php:372
-msgid "Max"
-msgstr ""
-
-#: registration/index.php:386
+#: registration/index.php:369
 msgid "Show legends"
 msgstr ""
 
-#: registration/index.php:395
+#: registration/index.php:378
 msgid "Confirm email sent to"
 msgstr ""
 
-#: registration/index.php:400
+#: registration/index.php:383
 msgid ""
 "You need to confirm your booking by following email instructions. Make sure "
 "you check your junk folders"
 msgstr ""
 
-#: registration/index.php:415
+#: registration/index.php:398
 msgid "Your Booking is confirmed"
 msgstr ""
 
-#: registration/index.php:419
+#: registration/index.php:402
 msgid "You can look your booking status at the following link"
 msgstr ""
 
-#: registration/index.php:423
+#: registration/index.php:406
 msgid "Save the link for future reference"
 msgstr ""
 
-#: registration/index.php:437
+#: registration/index.php:420
 msgid "Error"
 msgstr ""
 
-#: registration/index.php:461
+#: registration/index.php:444
 msgid "Not open yet"
 msgstr ""
 
-#: registration/index.php:464
+#: registration/index.php:447
 msgid "Closed"
 msgstr ""
 
-#: registration/index.php:465
+#: registration/index.php:448
 msgid "Registration ended"
 msgstr ""
 
-#: registration/index.php:479
+#: registration/index.php:462
 msgid "Password protected"
 msgstr ""
 
-#: registration/index.php:484
+#: registration/index.php:467
 msgid "Please enter password"
 msgstr ""

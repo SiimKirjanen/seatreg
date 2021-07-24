@@ -146,11 +146,6 @@
 							<div id="cart-text">
 								<div class="seats-in-cart">0</div>
 								<div><?php esc_html_e('seats selected', 'seatreg'); ?></div> 
-								<div class="max-seats">
-									(<?php 
-										echo esc_html__('max', 'seatreg') . ' ' . esc_html( $data->seats_at_once );
-									?>)
-								</div>
 							</div>
 						</div>
 
@@ -367,18 +362,6 @@
 						<?php 
 							esc_html_e('seats selected', 'seatreg');
 						?>
-						<span class="max-seats">
-							(<?php
-								esc_html_e('Max', 'seatreg');
-							?>
-							<?php 
-								if($data->seats_at_once > 1) {
-									echo esc_html($data->seats_at_once),')<br>'; 
-								}else {
-									echo esc_html($data->seats_at_once),')<br>'; 
-								}	
-							?>
-						</span>
 					</div>
 				</div>
 				<div class="mobile-legend">
