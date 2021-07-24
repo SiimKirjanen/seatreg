@@ -44,6 +44,7 @@ function seatreg_generate_registration_strings() {
     $translations->selectingGuide = esc_html__('Select a seat you want to add to booking', 'seatreg');
     $translations->Booked = esc_html__('Booked', 'seatreg');
     $translations->Pending = esc_html__('Pending', 'seatreg');
+    $translations->maxSeatsToAdd = esc_html__('Total seats you can add to booking is ', 'seatreg');
 
 	return $translations;
 }

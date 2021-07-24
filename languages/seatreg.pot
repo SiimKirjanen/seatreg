@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-24 12:37+0300\n"
+"POT-Creation-Date: 2021-07-24 12:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgstr ""
 msgid "pixels to"
 msgstr ""
 
-#: php/builder_content.php:59 php/seatreg_strings.php:84
+#: php/builder_content.php:59 php/seatreg_strings.php:85
 msgid "Loading..."
 msgstr ""
 
@@ -64,7 +64,7 @@ msgstr ""
 msgid "Seat deletion is limited!"
 msgstr ""
 
-#: php/builder_content.php:80 php/seatreg_strings.php:104
+#: php/builder_content.php:80 php/seatreg_strings.php:105
 msgid "Save"
 msgstr ""
 
@@ -170,7 +170,7 @@ msgstr ""
 msgid "Step 1."
 msgstr ""
 
-#: php/builder_content.php:207 php/seatreg_strings.php:95
+#: php/builder_content.php:207 php/seatreg_strings.php:96
 msgid "Enter legend name"
 msgstr ""
 
@@ -192,7 +192,7 @@ msgid "Review new legend"
 msgstr ""
 
 #: php/builder_content.php:240 php/builder_content.php:248
-#: php/seatreg_strings.php:92
+#: php/seatreg_strings.php:93
 msgid "Create new legend"
 msgstr ""
 
@@ -793,7 +793,7 @@ msgstr ""
 msgid "Approval date"
 msgstr ""
 
-#: php/seatreg_functions.php:902 php/seatreg_strings.php:109
+#: php/seatreg_functions.php:902 php/seatreg_strings.php:110
 msgid "Not set"
 msgstr ""
 
@@ -855,7 +855,7 @@ msgstr ""
 msgid "Something went wrong while deleting a registration"
 msgstr ""
 
-#: php/seatreg_strings.php:9 php/seatreg_strings.php:73
+#: php/seatreg_strings.php:9 php/seatreg_strings.php:74
 msgid "Illegal characters detected"
 msgstr ""
 
@@ -988,237 +988,241 @@ msgstr ""
 msgid "Booked"
 msgstr ""
 
-#: php/seatreg_strings.php:53
-msgid "Hover text deleted"
+#: php/seatreg_strings.php:47
+msgid "Total seats you can add to booking is "
 msgstr ""
 
 #: php/seatreg_strings.php:54
-msgid "Hover text added"
+msgid "Hover text deleted"
 msgstr ""
 
 #: php/seatreg_strings.php:55
-msgid "Legend name changed"
+msgid "Hover text added"
 msgstr ""
 
 #: php/seatreg_strings.php:56
-msgid "Legend color changed"
+msgid "Legend name changed"
 msgstr ""
 
 #: php/seatreg_strings.php:57
-msgid "Building grid updated"
+msgid "Legend color changed"
 msgstr ""
 
 #: php/seatreg_strings.php:58
-msgid "Room name changed"
+msgid "Building grid updated"
 msgstr ""
 
 #: php/seatreg_strings.php:59
-msgid "New room added"
+msgid "Room name changed"
 msgstr ""
 
 #: php/seatreg_strings.php:60
-msgid "Room does not exist"
+msgid "New room added"
 msgstr ""
 
 #: php/seatreg_strings.php:61
-msgid "Seat dose not exist"
+msgid "Room does not exist"
 msgstr ""
 
 #: php/seatreg_strings.php:62
-msgid "Seat is already booked/pending"
+msgid "Seat dose not exist"
 msgstr ""
 
 #: php/seatreg_strings.php:63
-msgid "Error updating booking"
+msgid "Seat is already booked/pending"
 msgstr ""
 
 #: php/seatreg_strings.php:64
-msgid "Error while creating hover"
+msgid "Error updating booking"
 msgstr ""
 
 #: php/seatreg_strings.php:65
-msgid "Error while changing legend"
+msgid "Error while creating hover"
 msgstr ""
 
 #: php/seatreg_strings.php:66
-msgid "Legend name is taken"
+msgid "Error while changing legend"
 msgstr ""
 
 #: php/seatreg_strings.php:67
-msgid "Legend name missing!"
+msgid "Legend name is taken"
 msgstr ""
 
 #: php/seatreg_strings.php:68
-msgid "Legend color is taken. Choose another"
+msgid "Legend name missing!"
 msgstr ""
 
 #: php/seatreg_strings.php:69
-msgid "Legend added to"
+msgid "Legend color is taken. Choose another"
 msgstr ""
 
 #: php/seatreg_strings.php:70
-msgid "You must have at least on room"
+msgid "Legend added to"
 msgstr ""
 
 #: php/seatreg_strings.php:71
-msgid "Already in this room"
+msgid "You must have at least on room"
 msgstr ""
 
 #: php/seatreg_strings.php:72
+msgid "Already in this room"
+msgstr ""
+
+#: php/seatreg_strings.php:73
 msgid "All rooms must have name"
 msgstr ""
 
-#: php/seatreg_strings.php:74
+#: php/seatreg_strings.php:75
 msgid "Name missing"
 msgstr ""
 
-#: php/seatreg_strings.php:75
+#: php/seatreg_strings.php:76
 msgid "You can't delete room "
 msgstr ""
 
-#: php/seatreg_strings.php:76
+#: php/seatreg_strings.php:77
 msgid ""
 " because it contains pending or confirmed seats. You must remove them with "
 "manager first."
 msgstr ""
 
-#: php/seatreg_strings.php:77
+#: php/seatreg_strings.php:78
 msgid "Room name missing"
 msgstr ""
 
-#: php/seatreg_strings.php:78
+#: php/seatreg_strings.php:79
 msgid "Room name already exists. You must choose another"
 msgstr ""
 
-#: php/seatreg_strings.php:79
+#: php/seatreg_strings.php:80
 msgid "You have selected"
 msgstr ""
 
-#: php/seatreg_strings.php:80
+#: php/seatreg_strings.php:81
 msgid " box/boxes</span></li>"
 msgstr ""
 
-#: php/seatreg_strings.php:81
+#: php/seatreg_strings.php:82
 msgid "To select one box use "
 msgstr ""
 
-#: php/seatreg_strings.php:82
+#: php/seatreg_strings.php:83
 msgid "To select multiple boxes use "
 msgstr ""
 
-#: php/seatreg_strings.php:83
+#: php/seatreg_strings.php:84
 msgid "Select box/boxes to add hover text"
 msgstr ""
 
-#: php/seatreg_strings.php:85
+#: php/seatreg_strings.php:86
 msgid "Select box/boxes you want to delete"
 msgstr ""
 
-#: php/seatreg_strings.php:86
+#: php/seatreg_strings.php:87
 msgid "Color applied"
 msgstr ""
 
-#: php/seatreg_strings.php:87
+#: php/seatreg_strings.php:88
 msgid "You have not made and legends yet"
 msgstr ""
 
-#: php/seatreg_strings.php:88
+#: php/seatreg_strings.php:89
 msgid " You have not selected any box/boxes to add legends"
 msgstr ""
 
-#: php/seatreg_strings.php:89
+#: php/seatreg_strings.php:90
 msgid " characters remaining"
 msgstr ""
 
-#: php/seatreg_strings.php:90
+#: php/seatreg_strings.php:91
 msgid "Are you sure you want to delete room "
 msgstr ""
 
-#: php/seatreg_strings.php:91
+#: php/seatreg_strings.php:92
 msgid "Unsaved changes. You sure you want to leave?"
 msgstr ""
 
-#: php/seatreg_strings.php:93
+#: php/seatreg_strings.php:94
 msgid "Cancel legend creation"
 msgstr ""
 
-#: php/seatreg_strings.php:94
+#: php/seatreg_strings.php:95
 msgid "Choose legend"
 msgstr ""
 
-#: php/seatreg_strings.php:96
+#: php/seatreg_strings.php:97
 msgid "Ok"
 msgstr ""
 
-#: php/seatreg_strings.php:97
+#: php/seatreg_strings.php:98
 msgid "Cancel"
 msgstr ""
 
-#: php/seatreg_strings.php:98
+#: php/seatreg_strings.php:99
 msgid "Unsaved Changes"
 msgstr ""
 
-#: php/seatreg_strings.php:99
+#: php/seatreg_strings.php:100
 msgid "boxes"
 msgstr ""
 
-#: php/seatreg_strings.php:100
+#: php/seatreg_strings.php:101
 msgid "box"
 msgstr ""
 
-#: php/seatreg_strings.php:101
+#: php/seatreg_strings.php:102
 msgid "No boxes selected"
 msgstr ""
 
-#: php/seatreg_strings.php:102
+#: php/seatreg_strings.php:103
 msgid "Pending seat"
 msgstr ""
 
-#: php/seatreg_strings.php:103
+#: php/seatreg_strings.php:104
 msgid "Confirmed seat"
 msgstr ""
 
-#: php/seatreg_strings.php:105
+#: php/seatreg_strings.php:106
 msgid "Saving..."
 msgstr ""
 
-#: php/seatreg_strings.php:106
+#: php/seatreg_strings.php:107
 msgid "Saved"
 msgstr ""
 
-#: php/seatreg_strings.php:107
+#: php/seatreg_strings.php:108
 msgid "room"
 msgstr ""
 
-#: php/seatreg_strings.php:108
+#: php/seatreg_strings.php:109
 msgid "Booking updated"
 msgstr ""
 
-#: php/seatreg_strings.php:110
+#: php/seatreg_strings.php:111
 msgid "Please enter registration name"
 msgstr ""
 
-#: php/seatreg_strings.php:111
+#: php/seatreg_strings.php:112
 msgid "Name must be between 1-255 characters"
 msgstr ""
 
-#: php/seatreg_strings.php:112
+#: php/seatreg_strings.php:113
 msgid "Please enter name"
 msgstr ""
 
-#: php/seatreg_strings.php:113
+#: php/seatreg_strings.php:114
 msgid "Please enter option value"
 msgstr ""
 
-#: php/seatreg_strings.php:114
+#: php/seatreg_strings.php:115
 msgid "Are you sure?"
 msgstr ""
 
-#: php/seatreg_strings.php:115
+#: php/seatreg_strings.php:116
 msgid "Please add at least one option"
 msgstr ""
 
-#: php/seatreg_strings.php:116
+#: php/seatreg_strings.php:117
 msgid "Name already used"
 msgstr ""
 

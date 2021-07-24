@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-24 12:37+0300\n"
-"PO-Revision-Date: 2021-07-24 12:40+0300\n"
+"POT-Creation-Date: 2021-07-24 12:55+0300\n"
+"PO-Revision-Date: 2021-07-24 12:57+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: et\n"
@@ -57,7 +57,7 @@ msgstr "Liiguta selekteeritud kastid"
 msgid "pixels to"
 msgstr "pikslit"
 
-#: php/builder_content.php:59 php/seatreg_strings.php:84
+#: php/builder_content.php:59 php/seatreg_strings.php:85
 msgid "Loading..."
 msgstr "Laadimine..."
 
@@ -65,7 +65,7 @@ msgstr "Laadimine..."
 msgid "Seat deletion is limited!"
 msgstr "Kohtade kustutamine on limiteeritud!"
 
-#: php/builder_content.php:80 php/seatreg_strings.php:104
+#: php/builder_content.php:80 php/seatreg_strings.php:105
 msgid "Save"
 msgstr "Salvesta"
 
@@ -171,7 +171,7 @@ msgstr "Muuda"
 msgid "Step 1."
 msgstr "Samm 1."
 
-#: php/builder_content.php:207 php/seatreg_strings.php:95
+#: php/builder_content.php:207 php/seatreg_strings.php:96
 msgid "Enter legend name"
 msgstr "Sisesta legendi nimi"
 
@@ -193,7 +193,7 @@ msgid "Review new legend"
 msgstr "Uue legendi ülevaade"
 
 #: php/builder_content.php:240 php/builder_content.php:248
-#: php/seatreg_strings.php:92
+#: php/seatreg_strings.php:93
 msgid "Create new legend"
 msgstr "Loo uus legend"
 
@@ -845,7 +845,7 @@ msgstr "Kinnitatud broneeringud puuduvad"
 msgid "Approval date"
 msgstr "Kinnitus kuupäev"
 
-#: php/seatreg_functions.php:902 php/seatreg_strings.php:109
+#: php/seatreg_functions.php:902 php/seatreg_strings.php:110
 msgid "Not set"
 msgstr "Pole määratud"
 
@@ -907,7 +907,7 @@ msgstr "Uue registratsiooni loomisel esines tõrge"
 msgid "Something went wrong while deleting a registration"
 msgstr "Registratsiooni kustutamisel esines tõrge"
 
-#: php/seatreg_strings.php:9 php/seatreg_strings.php:73
+#: php/seatreg_strings.php:9 php/seatreg_strings.php:74
 msgid "Illegal characters detected"
 msgstr "Keelatud tähemärgid tuvastatud"
 
@@ -1042,95 +1042,99 @@ msgstr "Vali koht mida tahad lisada broneeringusse"
 msgid "Booked"
 msgstr "Broneeritud"
 
-#: php/seatreg_strings.php:53
+#: php/seatreg_strings.php:47
+msgid "Total seats you can add to booking is "
+msgstr "Kokku saad kohti lisada broneeringusse "
+
+#: php/seatreg_strings.php:54
 msgid "Hover text deleted"
 msgstr "Hõljuktekst kustutatud"
 
-#: php/seatreg_strings.php:54
+#: php/seatreg_strings.php:55
 msgid "Hover text added"
 msgstr "Hõljuktekst lisatud"
 
-#: php/seatreg_strings.php:55
+#: php/seatreg_strings.php:56
 msgid "Legend name changed"
 msgstr "Legendi nimi muudetud"
 
-#: php/seatreg_strings.php:56
+#: php/seatreg_strings.php:57
 msgid "Legend color changed"
 msgstr "Legendi värv muudetud"
 
-#: php/seatreg_strings.php:57
+#: php/seatreg_strings.php:58
 msgid "Building grid updated"
 msgstr "Loomise võre uuendatud"
 
-#: php/seatreg_strings.php:58
+#: php/seatreg_strings.php:59
 msgid "Room name changed"
 msgstr "Ruumi nimi vahetatud"
 
-#: php/seatreg_strings.php:59
+#: php/seatreg_strings.php:60
 msgid "New room added"
 msgstr "Uus ruum lisatud"
 
-#: php/seatreg_strings.php:60
+#: php/seatreg_strings.php:61
 msgid "Room does not exist"
 msgstr "Ruum ei eksisteeri"
 
-#: php/seatreg_strings.php:61
+#: php/seatreg_strings.php:62
 msgid "Seat dose not exist"
 msgstr "Koht ei eksisteeri"
 
-#: php/seatreg_strings.php:62
+#: php/seatreg_strings.php:63
 msgid "Seat is already booked/pending"
 msgstr "Koht on juba broneeritud"
 
-#: php/seatreg_strings.php:63
+#: php/seatreg_strings.php:64
 msgid "Error updating booking"
 msgstr "Tekkis viga broneeringu muutmisel"
 
-#: php/seatreg_strings.php:64
+#: php/seatreg_strings.php:65
 msgid "Error while creating hover"
 msgstr "Tekkis viga hõljukteksti loomisel"
 
-#: php/seatreg_strings.php:65
+#: php/seatreg_strings.php:66
 msgid "Error while changing legend"
 msgstr "Tekkis viga legendi muutmisel"
 
-#: php/seatreg_strings.php:66
+#: php/seatreg_strings.php:67
 msgid "Legend name is taken"
 msgstr "Legendi nimi on juba võetud"
 
-#: php/seatreg_strings.php:67
+#: php/seatreg_strings.php:68
 msgid "Legend name missing!"
 msgstr "Legendi nimi on puudu!"
 
-#: php/seatreg_strings.php:68
+#: php/seatreg_strings.php:69
 msgid "Legend color is taken. Choose another"
 msgstr "Legendi värv on võetud. Palun vali midagi muud"
 
-#: php/seatreg_strings.php:69
+#: php/seatreg_strings.php:70
 msgid "Legend added to"
 msgstr "Legend lisati"
 
-#: php/seatreg_strings.php:70
+#: php/seatreg_strings.php:71
 msgid "You must have at least on room"
 msgstr "Vähemalt üks ruum peab olema"
 
-#: php/seatreg_strings.php:71
+#: php/seatreg_strings.php:72
 msgid "Already in this room"
 msgstr "Asud juba selles ruumis"
 
-#: php/seatreg_strings.php:72
+#: php/seatreg_strings.php:73
 msgid "All rooms must have name"
 msgstr "Kõikidel ruumidel peab olema nimi"
 
-#: php/seatreg_strings.php:74
+#: php/seatreg_strings.php:75
 msgid "Name missing"
 msgstr "Nimi on puudu"
 
-#: php/seatreg_strings.php:75
+#: php/seatreg_strings.php:76
 msgid "You can't delete room "
 msgstr "Oled kindel, et soovid ruumi eemaldada "
 
-#: php/seatreg_strings.php:76
+#: php/seatreg_strings.php:77
 msgid ""
 " because it contains pending or confirmed seats. You must remove them with "
 "manager first."
@@ -1138,143 +1142,143 @@ msgstr ""
 " sest ruumi sisaldab endas broneeringuid. Pead need kõigepealt ruumist "
 "eemaldama."
 
-#: php/seatreg_strings.php:77
+#: php/seatreg_strings.php:78
 msgid "Room name missing"
 msgstr "Ruumi nimi on puudu"
 
-#: php/seatreg_strings.php:78
+#: php/seatreg_strings.php:79
 msgid "Room name already exists. You must choose another"
 msgstr "Ruumi nimi juba eksisteerib. Palun vali midagi muud"
 
-#: php/seatreg_strings.php:79
+#: php/seatreg_strings.php:80
 msgid "You have selected"
 msgstr "Oled selekteerinud"
 
-#: php/seatreg_strings.php:80
+#: php/seatreg_strings.php:81
 msgid " box/boxes</span></li>"
 msgstr " kast/kastid</span></li>"
 
-#: php/seatreg_strings.php:81
+#: php/seatreg_strings.php:82
 msgid "To select one box use "
 msgstr "Kasti selekteerimiseks kasuta "
 
-#: php/seatreg_strings.php:82
+#: php/seatreg_strings.php:83
 msgid "To select multiple boxes use "
 msgstr "Mite kasti selekteerimiseks kasuta "
 
-#: php/seatreg_strings.php:83
+#: php/seatreg_strings.php:84
 msgid "Select box/boxes to add hover text"
 msgstr "Selekteeri kastid millele soovid lisada hõljuvat teksti"
 
-#: php/seatreg_strings.php:85
+#: php/seatreg_strings.php:86
 msgid "Select box/boxes you want to delete"
 msgstr "Selekteeri kastid mida soovid kustutada"
 
-#: php/seatreg_strings.php:86
+#: php/seatreg_strings.php:87
 msgid "Color applied"
 msgstr "Värv lisatud"
 
-#: php/seatreg_strings.php:87
+#: php/seatreg_strings.php:88
 msgid "You have not made and legends yet"
 msgstr "Ühtegi legendi pole veel tehtud"
 
-#: php/seatreg_strings.php:88
+#: php/seatreg_strings.php:89
 msgid " You have not selected any box/boxes to add legends"
 msgstr " Ühtegi kasti pole selekteeritud millele legendi lisada"
 
-#: php/seatreg_strings.php:89
+#: php/seatreg_strings.php:90
 msgid " characters remaining"
 msgstr " tähemärki jäänud"
 
-#: php/seatreg_strings.php:90
+#: php/seatreg_strings.php:91
 msgid "Are you sure you want to delete room "
 msgstr "Oled kindel, et soovid ruumi eemaldada "
 
-#: php/seatreg_strings.php:91
+#: php/seatreg_strings.php:92
 msgid "Unsaved changes. You sure you want to leave?"
 msgstr "Salvestamata uuendused. Oled kindel, et soovid lahkuda?"
 
-#: php/seatreg_strings.php:93
+#: php/seatreg_strings.php:94
 msgid "Cancel legend creation"
 msgstr "Tühista legendi loomine"
 
-#: php/seatreg_strings.php:94
+#: php/seatreg_strings.php:95
 msgid "Choose legend"
 msgstr "Vali legend"
 
-#: php/seatreg_strings.php:96
+#: php/seatreg_strings.php:97
 msgid "Ok"
 msgstr "Ok"
 
-#: php/seatreg_strings.php:97
+#: php/seatreg_strings.php:98
 msgid "Cancel"
 msgstr "Tühista"
 
-#: php/seatreg_strings.php:98
+#: php/seatreg_strings.php:99
 msgid "Unsaved Changes"
 msgstr "Salvestamata uuendused"
 
-#: php/seatreg_strings.php:99
+#: php/seatreg_strings.php:100
 msgid "boxes"
 msgstr "kastid"
 
-#: php/seatreg_strings.php:100
+#: php/seatreg_strings.php:101
 msgid "box"
 msgstr "kast"
 
-#: php/seatreg_strings.php:101
+#: php/seatreg_strings.php:102
 msgid "No boxes selected"
 msgstr "Pole ühtegi kasti selekteeritud"
 
-#: php/seatreg_strings.php:102
+#: php/seatreg_strings.php:103
 msgid "Pending seat"
 msgstr "Kinnitust ootavad kohad"
 
-#: php/seatreg_strings.php:103
+#: php/seatreg_strings.php:104
 msgid "Confirmed seat"
 msgstr "Kinnitatud kohad"
 
-#: php/seatreg_strings.php:105
+#: php/seatreg_strings.php:106
 msgid "Saving..."
 msgstr "Salvestan..."
 
-#: php/seatreg_strings.php:106
+#: php/seatreg_strings.php:107
 msgid "Saved"
 msgstr "Salvestatud"
 
-#: php/seatreg_strings.php:107
+#: php/seatreg_strings.php:108
 msgid "room"
 msgstr "ruum"
 
-#: php/seatreg_strings.php:108
+#: php/seatreg_strings.php:109
 msgid "Booking updated"
 msgstr "Broneering uuendatud"
 
-#: php/seatreg_strings.php:110
+#: php/seatreg_strings.php:111
 msgid "Please enter registration name"
 msgstr "Palun sisesta registratsiooni nimi"
 
-#: php/seatreg_strings.php:111
+#: php/seatreg_strings.php:112
 msgid "Name must be between 1-255 characters"
 msgstr "Nimi peab olema 1-255 tähearvu vahemikus"
 
-#: php/seatreg_strings.php:112
+#: php/seatreg_strings.php:113
 msgid "Please enter name"
 msgstr "Palun sisesta nimi"
 
-#: php/seatreg_strings.php:113
+#: php/seatreg_strings.php:114
 msgid "Please enter option value"
 msgstr "Palus sisesta valiku nimi"
 
-#: php/seatreg_strings.php:114
+#: php/seatreg_strings.php:115
 msgid "Are you sure?"
 msgstr "Oled kindel?"
 
-#: php/seatreg_strings.php:115
+#: php/seatreg_strings.php:116
 msgid "Please add at least one option"
 msgstr "Palun lisa vähemalt üks valik"
 
-#: php/seatreg_strings.php:116
+#: php/seatreg_strings.php:117
 msgid "Name already used"
 msgstr "Nimi on juba kasutusel"
 

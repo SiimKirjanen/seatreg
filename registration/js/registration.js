@@ -732,7 +732,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 			if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
 
 				if(this.status == 'run') {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5>' + '</div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ translator.translate('maxSeatsToAdd') + ' ' + this.seatLimit +'</p>' + '</div>');
 					$('#confirm-dialog-mob-ok').css('display','inline-block');
 				}else {
 					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + this.spotName + ' ' + nr + translator.translate('_fromRoom_')  + room + '</h5></div>');
