@@ -8,14 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-24 12:55+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2021-07-24 15:38+0300\n"
+"PO-Revision-Date: 2021-07-24 15:38+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Eazy Po 0.9.5.3\n"
 
 #: php/booking_check.php:23
 msgid "Booking check"
@@ -155,6 +157,7 @@ msgstr ""
 
 #: php/builder_content.php:191 php/seatreg_functions.php:794
 #: php/seatreg_functions.php:838 php/seatreg_strings.php:29
+#: php/seatreg_strings.php:123
 msgid "Remove"
 msgstr ""
 
@@ -336,6 +339,10 @@ msgstr ""
 msgid "Upload image"
 msgstr ""
 
+#: php/builder_content.php:465
+msgid "Upload"
+msgstr ""
+
 #: php/builder_content.php:478
 msgid "Previously uploaded images"
 msgstr ""
@@ -481,7 +488,12 @@ msgstr ""
 msgid "No permissions"
 msgstr ""
 
-#: php/seatreg_functions.php:158 php/seatreg_functions.php:164
+#: php/seatreg_functions.php:158
+#, php-format
+msgid "%s pending seats"
+msgstr ""
+
+#: php/seatreg_functions.php:164
 msgid "pending seats"
 msgstr ""
 
@@ -580,6 +592,10 @@ msgstr ""
 msgid "Set registration info text. Will be displayed in registration page"
 msgstr ""
 
+#: php/seatreg_functions.php:477
+msgid "Enter info text here"
+msgstr ""
+
 #: php/seatreg_functions.php:481
 msgid "Payment instruction"
 msgstr ""
@@ -589,6 +605,10 @@ msgid ""
 "At the moment this plugin dosn't offer any payment solutions, but you can "
 "leave informative text that instructs how to pay for booking. It will be "
 "displayed in booking status page"
+msgstr ""
+
+#: php/seatreg_functions.php:483
+msgid "Enter payment instructions here"
 msgstr ""
 
 #: php/seatreg_functions.php:487
@@ -733,7 +753,8 @@ msgid "Enter registration name"
 msgstr ""
 
 #: php/seatreg_functions.php:740
-msgid " pending bookings!"
+#, php-format
+msgid "%s pending bookings"
 msgstr ""
 
 #: php/seatreg_functions.php:748
@@ -1224,6 +1245,26 @@ msgstr ""
 
 #: php/seatreg_strings.php:117
 msgid "Name already used"
+msgstr ""
+
+#: php/seatreg_strings.php:118
+msgid "Current room does not have background image"
+msgstr ""
+
+#: php/seatreg_strings.php:119
+msgid "Remove from room"
+msgstr ""
+
+#: php/seatreg_strings.php:120
+msgid "Choose a picture to upload"
+msgstr ""
+
+#: php/seatreg_strings.php:121
+msgid "Image name contains illegal characters"
+msgstr ""
+
+#: php/seatreg_strings.php:122
+msgid "Add to room background"
 msgstr ""
 
 #: php/bookings/SeatregBookingsFile.php:47

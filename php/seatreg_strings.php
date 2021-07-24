@@ -115,6 +115,12 @@ function seatreg_generate_admin_strings() {
     $translations->areYouSure = esc_html__('Are you sure?', 'seatreg');
     $translations->pleaseAddAtLeastOneOption = esc_html__('Please add at least one option', 'seatreg');
     $translations->nameAlreadyUsed = esc_html__('Name already used', 'seatreg');
+    $translations->noBgImageInRoom = esc_html__('Current room does not have background image', 'seatreg');
+    $translations->removeFromRoom = esc_html__('Remove from room', 'seatreg');
+    $translations->choosePictureToUpload = esc_html__('Choose a picture to upload', 'seatreg');
+    $translations->imageNameIllegalChar = esc_html__('Image name contains illegal characters', 'seatreg');
+    $translations->addToRoomBackground = esc_html__('Add to room background', 'seatreg');
+    $translations->remove = esc_html__('Remove', 'seatreg');
  
     return $translations;
 }

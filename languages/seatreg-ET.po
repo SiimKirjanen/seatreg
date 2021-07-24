@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-24 12:55+0300\n"
-"PO-Revision-Date: 2021-07-24 13:04+0300\n"
+"POT-Creation-Date: 2021-07-24 15:38+0300\n"
+"PO-Revision-Date: 2021-07-24 15:38+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: et\n"
@@ -128,7 +128,7 @@ msgstr "y-telg"
 
 #: php/builder_content.php:155
 msgid "Distance between boxes"
-msgstr "Kastida vehe"
+msgstr "Kastide vehe"
 
 #: php/builder_content.php:163
 msgid "Update grid"
@@ -156,6 +156,7 @@ msgstr "Eemalda legend selekteeritud ruumist:"
 
 #: php/builder_content.php:191 php/seatreg_functions.php:794
 #: php/seatreg_functions.php:838 php/seatreg_strings.php:29
+#: php/seatreg_strings.php:123
 msgid "Remove"
 msgstr "Eemalda"
 
@@ -372,6 +373,10 @@ msgstr "Selekteeritud ruumi taustapilt"
 msgid "Upload image"
 msgstr "Laadi üles"
 
+#: php/builder_content.php:465
+msgid "Upload"
+msgstr "Laadi üles"
+
 #: php/builder_content.php:478
 msgid "Previously uploaded images"
 msgstr "Eelnevalt ülesse laetud pildid"
@@ -523,13 +528,18 @@ msgstr "Palun logi sisse, et saada juurdepääs siia"
 msgid "No permissions"
 msgstr "Puudub juurdepääsu õigus"
 
-#: php/seatreg_functions.php:158 php/seatreg_functions.php:164
+#: php/seatreg_functions.php:158
+#, php-format
+msgid "%s pending seats"
+msgstr "%s mitte kinnitatud broneeringut"
+
+#: php/seatreg_functions.php:164
 msgid "pending seats"
-msgstr "mitte kinnitatud broneeringu"
+msgstr "mitte kinnitatud broneeringut"
 
 #: php/seatreg_functions.php:176
 msgid "Start date not set"
-msgstr "Algus kuupäev ei ole seadistatud"
+msgstr "Algus kuupäev pole seadistatud"
 
 #: php/seatreg_functions.php:177
 msgid "End date not set"
@@ -537,7 +547,7 @@ msgstr "Lõpp kuupäev pole seadistatud"
 
 #: php/seatreg_functions.php:195
 msgid "Overall"
-msgstr "Üldiselt"
+msgstr "Ühtekokku"
 
 #: php/seatreg_functions.php:214
 msgid "Seats"
@@ -612,7 +622,7 @@ msgstr "Näita broneeringuid"
 
 #: php/seatreg_functions.php:465
 msgid "Let people see who has made a booking in registration page"
-msgstr "Kuva registratsioonis broneeritud kohtade omanikke"
+msgstr "Võimaldab registratsiooni vaates kuvada kes broneeringu tegi"
 
 #: php/seatreg_functions.php:475
 msgid "Registration info text"
@@ -622,6 +632,10 @@ msgstr "Registratsiooni info"
 msgid "Set registration info text. Will be displayed in registration page"
 msgstr ""
 "Seadista registratsiooni info tekst. Seda kuvatakse registratsiooni lehel"
+
+#: php/seatreg_functions.php:477
+msgid "Enter info text here"
+msgstr "Lisa info tekst siia"
 
 #: php/seatreg_functions.php:481
 msgid "Payment instruction"
@@ -633,8 +647,12 @@ msgid ""
 "leave informative text that instructs how to pay for booking. It will be "
 "displayed in booking status page"
 msgstr ""
-"Hetkel ei ole toetatud ükski maksmise teenus aga võid jätta informatiivset "
-"teksti kuidas saaks tasuda broneeringu eest"
+"Hetkel ei ole toetatud ükski maksmise teenus aga võid jätta broneeringule "
+"teksti, mis kirjeldab kuidas tasuda"
+
+#: php/seatreg_functions.php:483
+msgid "Enter payment instructions here"
+msgstr "Sisesta maksmise juhend siia"
 
 #: php/seatreg_functions.php:487
 msgid "Max seats per booking"
@@ -680,7 +698,7 @@ msgid ""
 msgstr ""
 "Vaikimisi on kõik broneeringud alguses mitte kinnitatud staatusega, et "
 "administraator saaks need üle vaadata ja kinnitada. Kui tahad, et "
-"broneeringud oleks koha alguses kinnitatud, siis eemalda linnuke "
+"broneeringud oleks kohe alguses kinnitatud, siis eemalda linnuke "
 "alljärgnevast kastist."
 
 #: php/seatreg_functions.php:519
@@ -785,8 +803,9 @@ msgid "Enter registration name"
 msgstr "Sisesta registratsiooni nimi"
 
 #: php/seatreg_functions.php:740
-msgid " pending bookings!"
-msgstr " mitte kinnitatud broneeringud!"
+#, php-format
+msgid "%s pending bookings"
+msgstr "%s mitte kinnitatud broneeringud"
 
 #: php/seatreg_functions.php:748
 msgid "Search booking"
@@ -1164,7 +1183,7 @@ msgstr "Kasti selekteerimiseks kasuta "
 
 #: php/seatreg_strings.php:83
 msgid "To select multiple boxes use "
-msgstr "Mite kasti selekteerimiseks kasuta "
+msgstr "Mitme kasti selekteerimiseks kasuta "
 
 #: php/seatreg_strings.php:84
 msgid "Select box/boxes to add hover text"
@@ -1281,6 +1300,26 @@ msgstr "Palun lisa vähemalt üks valik"
 #: php/seatreg_strings.php:117
 msgid "Name already used"
 msgstr "Nimi on juba kasutusel"
+
+#: php/seatreg_strings.php:118
+msgid "Current room does not have background image"
+msgstr "Hetkel aktiivses ruumis pole tagataustapilti"
+
+#: php/seatreg_strings.php:119
+msgid "Remove from room"
+msgstr "Eemalda ruumist"
+
+#: php/seatreg_strings.php:120
+msgid "Choose a picture to upload"
+msgstr "Vali ülesse laetav pilt"
+
+#: php/seatreg_strings.php:121
+msgid "Image name contains illegal characters"
+msgstr "Pildi nimi sisaldab keelatud sümboleid"
+
+#: php/seatreg_strings.php:122
+msgid "Add to room background"
+msgstr "Lisa ruumi tagataustaks"
 
 #: php/bookings/SeatregBookingsFile.php:47
 #: php/bookings/SeatregBookingsXlsx.php:27

@@ -502,8 +502,8 @@
 			window.seatreg.uploadedImages.forEach(function(uploaded) {
 				var $imgWrap = $("<div class='uploaded-image-box'></div");
 				$imgWrap.append("<img src='" + window.WP_Seatreg.plugin_dir_url + "uploads/room_images/" + window.seatreg.selectedRegistration + "/" + uploaded.file + "' class='uploaded-image' />");
-				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Add to room background</span>");
-				$imgWrap.append("<span class='up-img-rem' data-img='"+ uploaded.file +"'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Remove</span>");
+				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>"+ translator.translate('addToRoomBackground') +"</span>");
+				$imgWrap.append("<span class='up-img-rem' data-img='"+ uploaded.file +"'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> "+ translator.translate('remove') +"</span>");
 
 				$('#uploaded-images').append($imgWrap);
 			});
@@ -2980,7 +2980,7 @@
 
 					if(reg.rooms[reg.currentRoom].backgroundImage === imgName) {
 						reg.removeCurrentRoomImage();
-						$('#activ-room-img-wrap').empty().text('Room doe/s not have background image');
+						$('#activ-room-img-wrap').empty().text(translator.translate('noBgImageInRoom'));
 					}
 					
 				}else if(response.type == 'error') {
@@ -2995,7 +2995,7 @@
 
 		var curImgWrap = $('<div class="cur-img-wrap"></div>');
 		var bgImg = $('<img class="uploaded-image" src="' + window.WP_Seatreg.plugin_dir_url + 'uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
-		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove from room</span>');
+		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ translator.translate('removeFromRoom') +'</span>');
 
 		curImgWrap.append(bgImg, remImg);
 
@@ -3008,12 +3008,12 @@
 		if(reg.rooms[reg.currentRoom].backgroundImage !== null) {
 			var curImgWrap = $('<div class="cur-img-wrap"></div>');
 			var bgImg = $('<img class="uploaded-image" src="'+ window.WP_Seatreg.plugin_dir_url +'uploads/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
-			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove from room</span>');
+			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ translator.translate('removeFromRoom') +'</span>');
 
 			curImgWrap.append(bgImg, remImg);
 			$('#activ-room-img-wrap').append(curImgWrap);
 		}else {
-			$('#activ-room-img-wrap').html('Current room doe\'s not have background image');
+			$('#activ-room-img-wrap').html(translator.translate('noBgImageInRoom'));
 		}
 	});
 
@@ -3021,7 +3021,7 @@
 		reg.removeCurrentRoomImage();
 		$('.room-image').remove();
 		$(this).closest('.cur-img-wrap').remove();
-		$('#activ-room-img-wrap').html('Current room doe\'s not have background image');
+		$('#activ-room-img-wrap').html(translator.translate('noBgImageInRoom'));
 	});
 	
 	$('#file-sub').on('click', function(e) {
@@ -3031,11 +3031,11 @@
 
 		if(picName == '') {
 			e.preventDefault();
-			$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">Choose a picture to upload</div>');
+			$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">'+ translator.translate('choosePictureToUpload') +'</div>');
 		}else {
 			if(!re.test(picName)) {
 				e.preventDefault();
-				$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">Image name contains illegal characters</div>');
+				$('#img-upload-resp').html('<div class="alert alert-danger" role="alert">'+ translator.translate('imageNameIllegalChar') +'</div>');
 			}
 		}
 	});

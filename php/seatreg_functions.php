@@ -155,7 +155,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					<?php
 						if($targetRoom == 'overview') {
 							echo "<div class='reg-overview-top-bron-notify'>";
-								echo esc_html($regStats['bronSeats']),' ', esc_html__('pending seats', 'seatreg'), '!';
+								echo sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']);
 							echo '</div>';
 						}else {
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
@@ -454,7 +454,7 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="registration-end-timestamp"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:3px"></i><?php _e('Registration end date', 'seatreg'); ?></label>
+				<label for="registration-end-timestamp"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:3px"></i><?php esc_html_e('Registration end date', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
 				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
 				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_end_timestamp); ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
@@ -474,13 +474,13 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="registration-info-text"><?php esc_html_e('Registration info text', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set registration info text. Will be displayed in registration page', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="registration-info-text" name="registration-info-text" placeholder="Enter info text here"><?php echo esc_html($options[0]->info); ?></textarea>
+				<textarea class="form-control" id="registration-info-text" name="registration-info-text" placeholder="<?php esc_html_e('Enter info text here', 'seatreg'); ?>"><?php echo esc_html($options[0]->info); ?></textarea>
 			</div>
 
 			<div class="form-group">
 				<label for="payment-instructions"><?php esc_html_e('Payment instruction', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('At the moment this plugin dosn\'t offer any payment solutions, but you can leave informative text that instructs how to pay for booking. It will be displayed in booking status page', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="Enter payment instructions here"><?php echo esc_html($options[0]->payment_text); ?></textarea>
+				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="<?php esc_html_e('Enter payment instructions here', 'seatreg')?>"><?php echo esc_html($options[0]->payment_text); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -505,7 +505,7 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-password" name="registration-password" autocomplete="off" placeholder="Enter password here" value="<?php echo esc_html($options[0]->registration_password); ?>">
+				<input type="text" class="form-control" id="registration-password" name="registration-password" autocomplete="off" placeholder="<?php echo esc_html('Enter password here', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->registration_password); ?>">
 			</div>
 
 			<div class="form-group">
@@ -737,7 +737,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	$row_count2 = count($bookings2);
 
 	if($row_count > 0) {
-		echo "<div class='bron-count-notify'>", $row_count, esc_html__(' pending bookings!', 'seatreg'), "</div>";
+		echo "<div class='bron-count-notify'>", sprintf(esc_html__('%s pending bookings', 'seatreg'), $row_count),"</div>";
 	}
 	
 	$project_name = str_replace(' ', '_', $project_name);
