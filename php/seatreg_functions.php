@@ -1006,10 +1006,10 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 
 		if(count($bookings) > 0) {
 			echo '<h4>', esc_html($registration->registration_name), '</h4>';
-			echo '<h4>Booking id: ', esc_html($bookingId),'</h4>';
+			echo '<h4>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</h4>';
 
 			foreach($bookings as $booking) {
-				echo 'Name: ', esc_html($booking->first_name), ' ', esc_html($booking->last_name) , '<br>Seat: ', esc_html($booking->seat_nr), '<br>Room: ', esc_html($booking->room_name), '<br>Status: ', ($booking->status === "1") ? 'Pending' : 'Confirmed', '<br><br>';
+				echo esc_html__('Name','seatreg'), ': ' , esc_html($booking->first_name), ' ', esc_html($booking->last_name) , '<br>', esc_html__('Seat', 'seatreg'), ': ' , esc_html($booking->seat_nr), '<br>', esc_html__('Room', 'seatreg') , ': ' , esc_html($booking->room_name), '<br>', esc_html__('Status', 'seatreg'), ': ' , ($booking->status === "1") ? esc_html__('Pending', 'seatreg') : esc_html__('Confirmed', 'seatreg'), '<br><br>';
 			}
 
 			if($options && $options->payment_text) {

@@ -96,6 +96,7 @@ function seatreg_generate_admin_strings() {
     $translations->enterLegendName = esc_html__('Enter legend name', 'seatreg');
     $translations->ok = esc_html__('Ok', 'seatreg');
     $translations->cancel = esc_html__('Cancel', 'seatreg');
+    $translations->open = esc_html__('Open', 'seatreg');
     $translations->unsavedChanges = esc_html__('Unsaved Changes', 'seatreg');
     $translations->boxes = esc_html__('boxes', 'seatreg');
     $translations->box = esc_html__('box', 'seatreg');
@@ -121,6 +122,8 @@ function seatreg_generate_admin_strings() {
     $translations->imageNameIllegalChar = esc_html__('Image name contains illegal characters', 'seatreg');
     $translations->addToRoomBackground = esc_html__('Add to room background', 'seatreg');
     $translations->remove = esc_html__('Remove', 'seatreg');
+    $translations->showPendingBookings = esc_html__('Show pending bookins', 'seatreg');
+    $translations->showApprovedBookings = esc_html__('Show approved bookings', 'seatreg');
  
     return $translations;
 }

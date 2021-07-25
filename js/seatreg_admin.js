@@ -573,13 +573,13 @@ $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e)
 
 	alertify.set({ buttonFocus: "ok" });
 	alertify.set({ labels: {
-		ok     : 'open',
-		cancel : 'cancel'
+		ok     : translator.translate('ok'),
+		cancel : translator.translate('cancel')
 	} });
 
 	alertify.confirm( 
-	"<div class='booking-status-check-wrap'><label>Show pending bookins<input type='checkbox' id='show-pending' checked /></label></div>" +
-	"<div class='booking-status-check-wrap'><label>Show approved bookings<input type='checkbox' id='show-confirmed' checked /></label></div>", function (e) {
+	"<div class='booking-status-check-wrap'><label>" + translator.translate('showPendingBookings') + "<input type='checkbox' id='show-pending' checked /></label></div>" +
+	"<div class='booking-status-check-wrap'><label>" + translator.translate('showApprovedBookings') + "<input type='checkbox' id='show-confirmed' checked /></label></div>", function (e) {
 
 	    if (e) {
 	    	if($('#show-pending').is(':checked')) {

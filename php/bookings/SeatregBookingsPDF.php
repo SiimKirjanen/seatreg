@@ -32,7 +32,7 @@ class SeatregPDF extends tFPDF {
         // Arial italic 8
         $this->SetFont('Arial','I',8);
         // Page number
-        $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
+        $this->Cell(0, 10, esc_html__('Page', 'seatreg') . ' ' . $this->PageNo().'/{nb}', 0, 0, 'C');
     }
 }
 
@@ -73,7 +73,7 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
 
             if($status =='Approved') {
                 $confirmDate = $this->getBookingDate($registration->booking_confirm_date);
-                $this->pdf->Cell(20, 6, 'Confirmation date: ' . $confirmDate, 0, 1, 'L');
+                $this->pdf->Cell(20, 6, esc_html__('Confirmation date', 'seatreg') . ': ' . $confirmDate, 0, 1, 'L');
             }
                         
             foreach ($this->_customFields as $customField) {

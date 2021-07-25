@@ -8,16 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-24 15:38+0300\n"
-"PO-Revision-Date: 2021-07-24 15:38+0200\n"
+"POT-Creation-Date: 2021-07-25 11:49+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: Eazy Po 0.9.5.3\n"
 
 #: php/booking_check.php:23
 msgid "Booking check"
@@ -32,7 +30,8 @@ msgid "Registration name"
 msgstr ""
 
 #: php/builder_content.php:11 php/seatreg_functions.php:767
-#: php/seatreg_functions.php:921 php/bookings/SeatregBookingsTxt.php:36
+#: php/seatreg_functions.php:921 php/seatreg_functions.php:1012
+#: php/bookings/SeatregBookingsTxt.php:36
 #: php/bookings/SeatregBookingsXlsx.php:62 registration/index.php:317
 msgid "Room"
 msgstr ""
@@ -66,7 +65,7 @@ msgstr ""
 msgid "Seat deletion is limited!"
 msgstr ""
 
-#: php/builder_content.php:80 php/seatreg_strings.php:105
+#: php/builder_content.php:80 php/seatreg_strings.php:106
 msgid "Save"
 msgstr ""
 
@@ -157,7 +156,7 @@ msgstr ""
 
 #: php/builder_content.php:191 php/seatreg_functions.php:794
 #: php/seatreg_functions.php:838 php/seatreg_strings.php:29
-#: php/seatreg_strings.php:123
+#: php/seatreg_strings.php:124
 msgid "Remove"
 msgstr ""
 
@@ -347,32 +346,55 @@ msgstr ""
 msgid "Previously uploaded images"
 msgstr ""
 
-#: php/SeatregConfirmBooking.php:44
+#: php/emails.php:8
+msgid "Hello"
+msgstr ""
+
+#: php/emails.php:8
+#, php-format
+msgid "This is a notification email telling you that %s has a new booking"
+msgstr ""
+
+#: php/emails.php:8
+msgid ""
+"You can disable booking notification in options if you don't want to receive "
+"them."
+msgstr ""
+
+#: php/SeatregBooking.php:30 php/bookings/SeatregBookingsXlsx.php:61
+msgid "Seat nr"
+msgstr ""
+
+#: php/SeatregBooking.php:30
+msgid "from room"
+msgstr ""
+
+#: php/SeatregConfirmBooking.php:38
 msgid "This booking is already confirmed/expired/deleted"
 msgstr ""
 
-#: php/SeatregConfirmBooking.php:76
+#: php/SeatregConfirmBooking.php:75
 msgid "You booking is now in pending state. Registration owner must approve it"
 msgstr ""
 
-#: php/SeatregConfirmBooking.php:79
+#: php/SeatregConfirmBooking.php:78
 msgid "You booking is now confirmed"
 msgstr ""
 
-#: php/SeatregConfirmBooking.php:84
+#: php/SeatregConfirmBooking.php:83
 #, php-format
 msgid "You can look your booking at %s"
 msgstr ""
 
-#: php/SeatregConfirmBooking.php:108 php/SeatregSubmitBookings.php:93
+#: php/SeatregConfirmBooking.php:107 php/SeatregSubmitBookings.php:93
 msgid "Error. Seat limit exceeded"
 msgstr ""
 
-#: php/SeatregConfirmBooking.php:122 php/seatreg_strings.php:16
+#: php/SeatregConfirmBooking.php:121 php/seatreg_strings.php:16
 msgid "Registration is closed at the moment"
 msgstr ""
 
-#: php/SeatregConfirmBooking.php:128 php/SeatregSubmitBookings.php:136
+#: php/SeatregConfirmBooking.php:127 php/SeatregSubmitBookings.php:136
 msgid "Registration is not open"
 msgstr ""
 
@@ -514,16 +536,19 @@ msgid "Seats"
 msgstr ""
 
 #: php/seatreg_functions.php:229 php/seatreg_functions.php:282
-#: php/seatreg_functions.php:444 registration/index.php:155
+#: php/seatreg_functions.php:444 php/seatreg_strings.php:99
+#: registration/index.php:155
 msgid "Open"
 msgstr ""
 
 #: php/seatreg_functions.php:245 php/seatreg_functions.php:298
+#: php/seatreg_functions.php:1012
 msgid "Confirmed"
 msgstr ""
 
 #: php/seatreg_functions.php:260 php/seatreg_functions.php:314
-#: php/seatreg_functions.php:761 php/seatreg_strings.php:46
+#: php/seatreg_functions.php:761 php/seatreg_functions.php:1012
+#: php/seatreg_strings.php:46
 msgid "Pending"
 msgstr ""
 
@@ -706,7 +731,7 @@ msgid "Create a new custom field"
 msgstr ""
 
 #: php/seatreg_functions.php:610 php/seatreg_functions.php:768
-#: php/bookings/SeatregBookingsPDF.php:69
+#: php/seatreg_functions.php:1012 php/bookings/SeatregBookingsPDF.php:69
 #: php/bookings/SeatregBookingsTxt.php:37
 #: php/bookings/SeatregBookingsXlsx.php:63
 msgid "Name"
@@ -766,6 +791,7 @@ msgid "Approved"
 msgstr ""
 
 #: php/seatreg_functions.php:766 php/seatreg_functions.php:920
+#: php/seatreg_functions.php:1012
 msgid "Seat"
 msgstr ""
 
@@ -773,7 +799,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: php/seatreg_functions.php:770
+#: php/seatreg_functions.php:770 php/seatreg_functions.php:1009
 msgid "Booking id"
 msgstr ""
 
@@ -814,7 +840,7 @@ msgstr ""
 msgid "Approval date"
 msgstr ""
 
-#: php/seatreg_functions.php:902 php/seatreg_strings.php:110
+#: php/seatreg_functions.php:902 php/seatreg_strings.php:111
 msgid "Not set"
 msgstr ""
 
@@ -828,6 +854,12 @@ msgstr ""
 
 #: php/seatreg_functions.php:924
 msgid "Last name"
+msgstr ""
+
+#: php/seatreg_functions.php:1012 php/bookings/SeatregBookingsPDF.php:72
+#: php/bookings/SeatregBookingsTxt.php:40
+#: php/bookings/SeatregBookingsXlsx.php:66
+msgid "Status"
 msgstr ""
 
 #: php/seatreg_functions.php:1016
@@ -1179,92 +1211,100 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: php/seatreg_strings.php:99
+#: php/seatreg_strings.php:100
 msgid "Unsaved Changes"
 msgstr ""
 
-#: php/seatreg_strings.php:100
+#: php/seatreg_strings.php:101
 msgid "boxes"
 msgstr ""
 
-#: php/seatreg_strings.php:101
+#: php/seatreg_strings.php:102
 msgid "box"
 msgstr ""
 
-#: php/seatreg_strings.php:102
+#: php/seatreg_strings.php:103
 msgid "No boxes selected"
 msgstr ""
 
-#: php/seatreg_strings.php:103
+#: php/seatreg_strings.php:104
 msgid "Pending seat"
 msgstr ""
 
-#: php/seatreg_strings.php:104
+#: php/seatreg_strings.php:105
 msgid "Confirmed seat"
 msgstr ""
 
-#: php/seatreg_strings.php:106
+#: php/seatreg_strings.php:107
 msgid "Saving..."
 msgstr ""
 
-#: php/seatreg_strings.php:107
+#: php/seatreg_strings.php:108
 msgid "Saved"
 msgstr ""
 
-#: php/seatreg_strings.php:108
+#: php/seatreg_strings.php:109
 msgid "room"
 msgstr ""
 
-#: php/seatreg_strings.php:109
+#: php/seatreg_strings.php:110
 msgid "Booking updated"
 msgstr ""
 
-#: php/seatreg_strings.php:111
+#: php/seatreg_strings.php:112
 msgid "Please enter registration name"
 msgstr ""
 
-#: php/seatreg_strings.php:112
+#: php/seatreg_strings.php:113
 msgid "Name must be between 1-255 characters"
 msgstr ""
 
-#: php/seatreg_strings.php:113
+#: php/seatreg_strings.php:114
 msgid "Please enter name"
 msgstr ""
 
-#: php/seatreg_strings.php:114
+#: php/seatreg_strings.php:115
 msgid "Please enter option value"
 msgstr ""
 
-#: php/seatreg_strings.php:115
+#: php/seatreg_strings.php:116
 msgid "Are you sure?"
 msgstr ""
 
-#: php/seatreg_strings.php:116
+#: php/seatreg_strings.php:117
 msgid "Please add at least one option"
 msgstr ""
 
-#: php/seatreg_strings.php:117
+#: php/seatreg_strings.php:118
 msgid "Name already used"
 msgstr ""
 
-#: php/seatreg_strings.php:118
+#: php/seatreg_strings.php:119
 msgid "Current room does not have background image"
 msgstr ""
 
-#: php/seatreg_strings.php:119
+#: php/seatreg_strings.php:120
 msgid "Remove from room"
 msgstr ""
 
-#: php/seatreg_strings.php:120
+#: php/seatreg_strings.php:121
 msgid "Choose a picture to upload"
 msgstr ""
 
-#: php/seatreg_strings.php:121
+#: php/seatreg_strings.php:122
 msgid "Image name contains illegal characters"
 msgstr ""
 
-#: php/seatreg_strings.php:122
+#: php/seatreg_strings.php:123
 msgid "Add to room background"
+msgstr ""
+
+#: php/seatreg_strings.php:125
+msgid "Show pending bookins"
+msgstr ""
+
+#: php/seatreg_strings.php:126
+msgid "Show approved bookings"
 msgstr ""
 
 #: php/bookings/SeatregBookingsFile.php:47
@@ -1281,31 +1321,26 @@ msgstr ""
 msgid " not set"
 msgstr ""
 
+#: php/bookings/SeatregBookingsPDF.php:35
+msgid "Page"
+msgstr ""
+
 #: php/bookings/SeatregBookingsPDF.php:67
 msgid "Seat number"
 msgstr ""
 
-#: php/bookings/SeatregBookingsPDF.php:72
-#: php/bookings/SeatregBookingsTxt.php:40
-#: php/bookings/SeatregBookingsXlsx.php:66
-msgid "Status"
+#: php/bookings/SeatregBookingsPDF.php:76
+#: php/bookings/SeatregBookingsTxt.php:45
+#: php/bookings/SeatregBookingsXlsx.php:67
+msgid "Confirmation date"
 msgstr ""
 
 #: php/bookings/SeatregBookingsTxt.php:35
 msgid "Seat nr:"
 msgstr ""
 
-#: php/bookings/SeatregBookingsTxt.php:45
-#: php/bookings/SeatregBookingsXlsx.php:67
-msgid "Confirmation date"
-msgstr ""
-
 #: php/bookings/SeatregBookingsXlsx.php:42
 msgid "not set"
-msgstr ""
-
-#: php/bookings/SeatregBookingsXlsx.php:61
-msgid "Seat nr"
 msgstr ""
 
 #: php/bookings/SeatregBookingsXlsx.php:65

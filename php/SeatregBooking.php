@@ -27,7 +27,7 @@ class SeatregBooking {
     	$seatsString = '';
 
     	for($i = 0; $i < $dataLen; $i++) {
-    		$seatsString .= 'Seat nr: <b>' . esc_html($this->_bookings[$i]->seat_nr) . '</b> from room: <b>' . esc_html($this->_bookings[$i]->room_name) . '</b><br/>'; 
+    		$seatsString .= esc_html__('Seat nr', 'seatreg') . ': <b>' . esc_html($this->_bookings[$i]->seat_nr) . '</b> ' . esc_html__('from room', 'seatreg') . ': <b>' . esc_html($this->_bookings[$i]->room_name) . '</b><br/>'; 
 		}
 		
     	return $seatsString;
