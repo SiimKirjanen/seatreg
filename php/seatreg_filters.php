@@ -91,3 +91,12 @@ add_filter('admin_footer_text', 'seatreg_remove_admin_footer_text');
 function seatreg_remove_admin_footer_text() {
     echo '';
 }
+
+add_filter( 'load_textdomain_mofile', 'seatreg_load_my_own_textdomain', 10, 2 );
+function seatreg_load_my_own_textdomain( $mofile, $domain ) {
+    if ( 'seatreg' === $domain && false !== strpos( $mofile, WP_LANG_DIR . '/plugins/' ) ) {
+        $locale = apply_filters( 'plugin_locale', determine_locale(), $domain );
+        $mofile = WP_PLUGIN_DIR . '/' . dirname( plugin_basename( __FILE__ ), 2 ) . '/languages/' . $domain . '-' . strtoupper($locale) . '.mo';
+    }
+    return $mofile;
+}
