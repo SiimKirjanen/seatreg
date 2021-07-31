@@ -34,6 +34,7 @@ SeatReg is a free plugin that offers the following and more to build and manage 
 1. Map builder
 2. Registration view
 3. Booking manager
+4. Custom fields
 
 == Changelog ==
 
