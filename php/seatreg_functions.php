@@ -2241,7 +2241,7 @@ add_action( 'wp_ajax_seatreg_remove_img', 'seatreg_remove_img_callback' );
 function seatreg_remove_img_callback() {
 	seatreg_ajax_security_check();
 
-	$resp = new JsonResponse();
+	$resp = new SeatregJsonResponse();
 
 	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {
 		//check if file exists
