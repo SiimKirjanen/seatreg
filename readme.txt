@@ -42,6 +42,7 @@ SeatReg is a free plugin that offers the following and more to build and manage 
 * Added pot file for translations
 * Added Estonian translations
 * Text fixes and changes
+* Fixed bug when trying to remove image from room
 
 = 1.1.0 =
 * Added shortcode
