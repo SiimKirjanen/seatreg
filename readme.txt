@@ -22,8 +22,8 @@ SeatReg is a free plugin that offers the following and more to build and manage 
 * With manager you keep an eye on your bookings. You can view, search, remove, confirm, download (PDF, XLSX, text) and change them. 
 * Get an overview of your registrations. See how many open, corfirmed or pending bookings you have.
 * Many settings to control the booking flow. For example you can create custom fields that allow customers to enter extra data.
-* Scrollable and resizable registration view.
-
+* Scrollable and resizable registration view that can be provided to people via direct link or by inserting it to your website pages via shortcode (example of shortcode: [seatreg code=d0ca254995]).
+  
 == Installation ==
  
 1. Install SeatReg either via the WordPress.org plugin directory, or by uploading the files to your server.
