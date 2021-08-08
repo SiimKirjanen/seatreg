@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-25 11:49+0300\n"
-"PO-Revision-Date: 2021-07-25 11:51+0300\n"
+"PO-Revision-Date: 2021-07-31 17:44+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: et\n"
@@ -834,7 +834,7 @@ msgstr "Sisesta registratsiooni nimi"
 #: php/seatreg_functions.php:740
 #, php-format
 msgid "%s pending bookings"
-msgstr "%s mitte kinnitatud broneeringud"
+msgstr "%s mitte kinnitatud broneeringut"
 
 #: php/seatreg_functions.php:748
 msgid "Search booking"
