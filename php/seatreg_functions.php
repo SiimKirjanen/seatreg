@@ -24,6 +24,7 @@ $seatreg_db_table_names->table_seatreg_bookings = $wpdb->prefix . "seatreg_booki
    Database stuff
    Admin form submit stuff
    Ajax stuff
+   Paypal
  */
 
 /*
@@ -551,6 +552,38 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Send notifications', 'seatreg'); ?>
 			    	</label>
 			  	</div>
+			</div>
+
+			<div class="form-group">
+				<label for="paypal"><?php esc_html_e('PayPal payments', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Allow and configure PayPal payments', 'seatreg'); ?>.
+				</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="paypal" name="paypal-payments" value="0" <?php echo $options[0]->paypal_payments == '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Allow payments', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+				<div class="paypal-configuration">
+					<label for="paypal-business-email"><?php esc_html_e('PayPal business email', 'seatreg'); ?></label>
+					<p class="help-block">
+						<?php esc_html_e('Pease enter your PayPal business email', 'seatreg'); ?>.
+					</p>
+					<input type="text" class="form-control" id="paypal-business-email" name="paypal-business-email" autocomplete="off" placeholder="<?php echo esc_html('PayPal business email', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_business_email); ?>"> 
+					<br>
+					<label for="paypal-button-id"><?php esc_html_e('PayPal button id', 'seatreg'); ?></label>
+					<p class="help-block">
+						<?php esc_html_e('Pease enter PayPal button id', 'seatreg'); ?>.
+					</p>
+					<input type="text" class="form-control" id="paypal-button-id" name="paypal-button-id" autocomplete="off" placeholder="<?php echo esc_html('PayPal button id', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_button_id); ?>"> 
+					<br>
+					<label for="paypal-currency-code"><?php esc_html_e('PayPal currency', 'seatreg'); ?></label>
+					<p class="help-block">
+						<?php esc_html_e('Pease enter PayPal currency', 'seatreg'); ?>.
+					</p>
+					<input type="text" class="form-control" id="paypal-currency-code" name="paypal-currency-code" autocomplete="off" placeholder="<?php echo esc_html('PayPal currency code', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_currency_code); ?>"> 
+				</div>
 			</div>
 
 			<div class="form-group">
@@ -1311,6 +1344,10 @@ function seatreg_set_up_db() {
 			payment_text text,
 			info text,
 			booking_email_confirm tinyint(1) NOT NULL DEFAULT 1,
+			paypal_payments tinyint(1) NOT NULL DEFAULT 0,
+			paypal_business_email varchar(255) DEFAULT NULL,
+			paypal_button_id varchar(255) DEFAULT NULL,
+			paypal_currency_code varchar(3) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -1798,6 +1835,12 @@ function seatreg_update() {
 	}else {
 		$_POST['booking-notification'] = 1;
 	}
+
+	if(!isset($_POST['paypal-payments'])) {
+		$_POST['paypal-payments'] = 0;  
+	}else {
+		$_POST['paypal-payments'] = 1;
+	}
 	
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
@@ -1814,7 +1857,11 @@ function seatreg_update() {
 			'payment_text' => $_POST['payment-instructions'] == '' ? null : sanitize_text_field($_POST['payment-instructions']),
 			'info' => sanitize_text_field($_POST['registration-info-text']),
 			'custom_fields' => $customFileds,
-			'booking_email_confirm' => sanitize_text_field($_POST['email-confirm'])
+			'booking_email_confirm' => sanitize_text_field($_POST['email-confirm']),
+			'paypal_payments' => $_POST['paypal-payments'],
+			'paypal_business_email' => sanitize_text_field($_POST['paypal-business-email']),
+			'paypal_button_id' => sanitize_text_field($_POST['paypal-button-id']),
+			'paypal_currency_code' => sanitize_text_field($_POST['paypal-currency-code']),
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
@@ -2257,4 +2304,28 @@ function seatreg_remove_img_callback() {
 		
 		die();
 	}
+}
+
+/*
+==================================================================================================================================================================================================================
+Paypal functions
+==================================================================================================================================================================================================================
+*/
+
+function generatePayPalPayNowForm($formAction, $businessEmail, $buttonId, $amount, $currencyCode, $bookingStatusPage) {
+	?>
+		<form method="post" action="https://www.sandbox.paypal.com/cgi-bin/webscr">
+			<input type="hidden" name="cmd" value="_xclick">
+			<input type="hidden" name="business" value="sb-rcb4772629866@business.example.com">
+			<input type="hidden" name="item_name" value="booking">
+			<input type="hidden" name="notify_url" value="http://XXXXXXX.com/ipn.php" />
+			<input type="hidden" name="hosted_button_id" value="7P7TRLKCANBQ8" />
+			<input type="hidden" name="amount" value="100">
+			<input type="hidden" name="currency_code" value="USD"/>
+			<input type="hidden" name="no_shipping" value="1">
+			<input type='hidden' name="cancel_return" value='http://seatreg/?seatreg=booking-status&registration=abd01058ed&id=86b4f48f40ab97553ca6bc0d2dff4d82234630d0' />
+			<input type="hidden" name="return" value="http://seatreg/?seatreg=booking-status&registration=abd01058ed&id=86b4f48f40ab97553ca6bc0d2dff4d82234630d0">
+			<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+		</form>
+	<?php
 }

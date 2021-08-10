@@ -685,7 +685,11 @@ html {
 	margin-bottom: 4px;
 	margin-left: 24px;
 }
-.seatreg-tabs-content .existing-custom-fields {
+.seatreg-tabs-content .existing-custom-fields{
+	margin-left: 24px;
+}
+.seatreg-tabs-content .paypal-configuration {
+	margin-top: 12px;
 	margin-left: 24px;
 }
 
