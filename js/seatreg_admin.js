@@ -717,6 +717,27 @@ function SeatregCustomField(label, type, options) {
 $('#seatreg-settings-submit').on('click', function(e) {
 	var customFieldArray = [];  //array to store custom inputs
 
+	if($('#paypal').is(":checked")) {
+		if($('#paypal-business-email').val() === "") {
+			e.preventDefault();
+			alertify.error(translator.translate('pleaseEnterPayPalBusinessEmail'));
+
+			return true;
+		}
+		if($('#paypal-button-id').val() === "") {
+			e.preventDefault();
+			alertify.error(translator.translate('pleaseEnterPayPalButtonId'));
+
+			return true;
+		}
+		if($('#paypal-currency-code').val() === "") {
+			e.preventDefault();
+			alertify.error(translator.translate('pleaseEnterPayPalCurrencyCode'));
+			
+			return true;
+		}
+	}
+
 	$('#seatreg-settings-form .custom-container').each(function() {
  			if($(this).attr('data-type') != 'sel') {
  				customFieldArray.push(new SeatregCustomField($(this).find('.l-text').text(), $(this).attr('data-type'), []));

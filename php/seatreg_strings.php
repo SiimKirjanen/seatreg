@@ -124,6 +124,9 @@ function seatreg_generate_admin_strings() {
     $translations->remove = esc_html__('Remove', 'seatreg');
     $translations->showPendingBookings = esc_html__('Show pending bookins', 'seatreg');
     $translations->showApprovedBookings = esc_html__('Show approved bookings', 'seatreg');
+    $translations->pleaseEnterPayPalBusinessEmail = esc_html__('Please enter PayPal business email', 'seatreg');
+    $translations->pleaseEnterPayPalButtonId = esc_html__('Please enter PayPal button id', 'seatreg');
+    $translations->pleaseEnterPayPalCurrencyCode = esc_html__('Please enter PayPal currency code', 'seatreg');
  
     return $translations;
 }
