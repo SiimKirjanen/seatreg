@@ -1144,9 +1144,28 @@
 	margin-bottom: 10px;
 }
 
+.seatreg-map-builder-page #selected-seats-for-pricing {
+	display: flex;
+	flex-wrap: wrap;
+}
 
+#selected-seats-for-pricing .price-item {
+	width: 160px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 6px;
+	margin: 6px;
+	text-align: center;
+}
 
+#selected-seats-for-pricing .price-item-seat {
+	font-weight: 700;
+}
 
+#selected-seats-for-pricing .price-item input {
+	width: 100%;
+	box-sizing: border-box;
+}
 
 .seatreg-map-builder-page .clear-fix:before,
 .seatreg-map-builder-page .clear-fix:after {

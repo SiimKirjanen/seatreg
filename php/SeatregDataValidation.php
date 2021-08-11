@@ -324,6 +324,11 @@ class SeatregDataValidation {
                     $validationStatus->setInvalid('box zIndex is missing or invalid');
                     return $validationStatus;
                 }
+
+                if( !property_exists($box, 'price') || !is_int($box->price) || $box->price < 0 ) {
+                    $validationStatus->setInvalid('box price is missing or invalid');
+                    return $validationStatus;
+                }
             }
         }
 

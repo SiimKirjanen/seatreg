@@ -45,12 +45,13 @@
 		</div>
 
 		<div class="build-area-side">
-			<div class="side-option hey delete-box" data-action="1" title="Delete selected"></div>
-			<div class="side-option hey legend-option" data-action="2" title="Legends" data-toggle="modal" data-target="#legends-dialog"></div>
-			<div class="side-option hey bubble-text" data-action="4" title="Hover text"></div>
-			<div class="side-option hey palette-call" data-action="5" title="Color"></div>
-			<div class="side-option hey background-image" data-action="7" title="Background image" data-toggle="modal" data-target="#background-image-modal"></div>
-			<div class="side-option hey grid-stats" data-action="6" title="Grid settings" data-toggle="modal" data-target="#skeleton-dialog"></div>
+			<div class="side-option delete-box" data-action="1" title="Delete selected"></div>
+			<div class="side-option legend-option" data-action="2" title="Legends" data-toggle="modal" data-target="#legends-dialog"></div>
+			<div class="side-option bubble-text" data-action="4" title="Hover text"></div>
+			<div class="side-option palette-call" data-action="5" title="Color"></div>
+			<div class="side-option background-image" data-action="7" title="Background image" data-toggle="modal" data-target="#background-image-modal"></div>
+			<div class="side-option grid-stats" data-action="6" title="Grid settings" data-toggle="modal" data-target="#skeleton-dialog"></div>
+			<div class="side-option grid-stats" data-action="8" title="Seat price" data-toggle="modal" data-target="#price-dialog"></div>
 		</div>
 	
 		<div class="build-area-wrapper" data-cursor="1">
@@ -161,6 +162,27 @@
 			<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
 			<button type="button" class="btn btn-primary build-skeleton"><?php esc_html_e('Update grid', 'seatreg');?></button>
+			</div>
+		</div>
+		</div>
+	</div>
+
+	<div class="modal vert-modal fade" id="price-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog vert-modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Seat pricing', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<p>You can set prices to individual seats. Note that you need to enable PayPal in settings.</p>
+				<div id="selected-seats-for-pricing">
+
+				</div>
+			</div>
+			<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+			<button type="button" class="btn btn-primary" id="set-prices"><?php esc_html_e('Set price', 'seatreg');?></button>
 			</div>
 		</div>
 		</div>

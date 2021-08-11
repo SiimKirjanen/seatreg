@@ -75,7 +75,7 @@
 	*/
 
 	//box class 12 construct
-	function Box(legend, xPos, yPos, xSize, ySize, id, color, hoverText, canIRegister, seat, status, zIndex) {
+	function Box(legend, xPos, yPos, xSize, ySize, id, color, hoverText, canIRegister, seat, status, zIndex, price = 0) {
 		this.legend = legend;
 		this.xPosition = xPos;
 		this.yPosition = yPos;
@@ -88,6 +88,7 @@
 		this.seat = seat;
 		this.status = status;
 		this.zIndex = zIndex;
+		this.price = price;
 	}
 
 	//Change box values. position and size
@@ -132,6 +133,11 @@
 			this.legend = "custom";
 		}
 	}
+
+	Box.prototype.changePrice = function(price) {
+		this.price = price;
+	}
+
 	/*
 
 		*-------Legend class and methods----------
@@ -196,7 +202,7 @@
 			width: this.roomWidth + 10,
 			height: this.roomHeight + 10,
 			seatCounter: this.roomSeatCounter,
-			backgroundImage: this.backgroundImage
+			backgroundImage: this.backgroundImage,
 		}
 
 		roomData['boxes'] = [];
@@ -221,7 +227,8 @@
 				canRegister: canReg,
 				seat: this.boxes[i].seat,
 				status: 'noStatus',
-				zIndex: this.boxes[i].zIndex
+				zIndex: this.boxes[i].zIndex,
+				price: this.boxes[i].price
 			});
 		}
 
@@ -255,11 +262,11 @@
 	};
 
 	//add box to room from server data
-	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex) {
+	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
-		this.boxes.push(new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,this.roomSeatCounter,status,boxZIndex));
+		this.boxes.push(new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,this.roomSeatCounter,status,boxZIndex, price));
 		this.boxCounter++;
 	};
 
@@ -1867,36 +1874,6 @@
 		return data;
 	};
 
-	//get data from server
-	Registration.prototype.getData = function() {
-		var thisScope = this;
-
-		$.ajax({
-			type:'POST',
-			url:'php/receiver.php',
-			//contentType: "application/json; charset=utf-8",
-			data: 'getdata=getData',
-			success: function(data) {
-				var is_JSON = true;
-
-				try {
-					var response = $.parseJSON(data);
-				} catch(err) {
-					is_JSON = false;
-				}
-				if(is_JSON) {
-					if(response.type == 'ok'){
-						thisScope.syncData($.parseJSON(response.data));
-					}else if(response.type == 'error') {
-						$('#server-response').text(response.text);
-					}
-				} else {
-					alert(data);
-				}
-			}
-		});
-	};
-
 	//overrite existing registration data on server
 	Registration.prototype.updateData = function() {
 		var dataToSend = JSON.stringify(this.collectData());
@@ -2052,7 +2029,8 @@
 							arr[i].hoverText.replace(/\^/g,'<br>'), 
 							canReg, 
 							arr[i].status, 
-							arr[i].zIndex
+							arr[i].zIndex,
+							arr[i].price,
 						);
 			    	}
 			    }
@@ -2260,6 +2238,44 @@
 
 		$('#margin-x').val(reg.rooms[reg.currentRoom].skeleton.marginX);
 		$('#margin-y').val(reg.rooms[reg.currentRoom].skeleton.marginY);
+	});
+
+	$('#price-dialog').on('show.bs.modal', function() {
+		var $pricingWrap = $('#selected-seats-for-pricing');
+		var currentRoom = reg.rooms[reg.currentRoom];
+
+		$pricingWrap.empty();
+
+		reg.activeBoxArray.forEach(function(selectedBoxId) {
+			var boxLocation = currentRoom.findBox(selectedBoxId);
+			var box = currentRoom.boxes[boxLocation];
+
+			if(box.canRegister) {
+				$pricingWrap.append(
+					'<div class="price-item" data-box-location="' + boxLocation + '">' + 
+						'<div class="price-item-seat">'  + box.seat  + '</div>' +
+						'<input type="number" min="0" oninput="this.value = Math.abs(this.value)" value="' + box.price + '" />' + 
+					'</div>'
+				);
+			}
+		});
+	});
+
+	$('#set-prices').on('click', function() {
+		var currentRoom = reg.rooms[reg.currentRoom];
+
+		$('#selected-seats-for-pricing .price-item').each(function() {
+			var $this = $(this);
+			var boxLocation = $this.data('box-location');
+			var price = parseInt($this.find('input').val());
+			var box = currentRoom.boxes[boxLocation];
+
+			box.changePrice(price);
+		});
+		$('#price-dialog').modal('hide');
+		if(reg.activeBoxArray.length) {
+			alertify.success(translator.translate('pricesAdded'));
+		}
 	});
 
     $('#legend-dialog').dialog({

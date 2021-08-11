@@ -127,6 +127,7 @@ function seatreg_generate_admin_strings() {
     $translations->pleaseEnterPayPalBusinessEmail = esc_html__('Please enter PayPal business email', 'seatreg');
     $translations->pleaseEnterPayPalButtonId = esc_html__('Please enter PayPal button id', 'seatreg');
     $translations->pleaseEnterPayPalCurrencyCode = esc_html__('Please enter PayPal currency code', 'seatreg');
+    $translations->pricesAdded = esc_html__('Prices added', 'seatreg');
  
     return $translations;
 }
