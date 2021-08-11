@@ -1788,6 +1788,10 @@ function seatreg_update() {
 		wp_die('Missing registration name');
 	}
 
+	if( isset($_POST['paypal-payments']) && ($_POST['paypal-business-email'] === "" || $_POST['paypal-button-id'] === "" || $_POST['paypal-currency-code'] === "" ) ) {
+		wp_die('Missing PayPal configuration');
+	}
+
 	$registrationName = sanitize_text_field($_POST['registration-name']);
 	$registrationNameValidation = SeatregDataValidation::validateRegistrationName($registrationName);
 

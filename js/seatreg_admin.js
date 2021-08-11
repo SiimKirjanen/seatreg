@@ -733,7 +733,7 @@ $('#seatreg-settings-submit').on('click', function(e) {
 		if($('#paypal-currency-code').val() === "") {
 			e.preventDefault();
 			alertify.error(translator.translate('pleaseEnterPayPalCurrencyCode'));
-			
+
 			return true;
 		}
 	}
