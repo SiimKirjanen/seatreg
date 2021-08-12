@@ -289,6 +289,7 @@
 					<input type="hidden" id="selected-seat-room">
 					<input type="hidden" id="selected-seat-nr">
 					<input type="hidden" id="selected-room-uuid">
+					<input type="hidden" id="selected-seat-price">
 				</div>
 			</div>
 
@@ -321,6 +322,10 @@
 						
 						<div id="seat-cart-items"></div>
 						
+						<?php if($data->paypal_payments === '1') : ?>
+							<div id="booking-total-price"></div>
+						<?php endif; ?>
+
 						<div id="checkout" class="seatreg-btn green-btn">
 							<?php
 								esc_html_e('Next', 'seatreg');

@@ -1080,6 +1080,10 @@ body {
 	padding: 10px;
 }
 
+#booking-total-price {
+	margin-bottom: 12px;
+}
+
 
 
 /*end of seat cart rules*/

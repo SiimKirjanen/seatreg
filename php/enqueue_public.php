@@ -47,12 +47,12 @@ function seatreg_public_scripts_and_styles() {
 		}
 
 		$inlineScript = 'function showErrorView(title) {';
-			$inlineScript .= "jQuery('body').addClass('error-view').html(";
+			$inlineScript .= "jQuery('body').addClass('error-view').html('";
 				$inlineScript .= '<div>An error occured</div><img src="' . SEATREG_PLUGIN_FOLDER_URL . 'img/monkey.png" alt="monkey" /><div>title</div>';
-			$inlineScript .= ');';
+			$inlineScript .= "');";
 		$inlineScript .= '}';
 		
-		$inlineScript = 'try {';
+		$inlineScript .= 'try {';
 			$inlineScript .= 'var seatregPluginFolder = "' . SEATREG_PLUGIN_FOLDER_URL . '";';
 			$inlineScript .= "var seatregTranslations = jQuery.parseJSON('" .  wp_json_encode( seatreg_generate_registration_strings() ) . "');";
 			$inlineScript .= 'var seatLimit = ' . esc_js($data->seats_at_once) . ';';
@@ -64,6 +64,8 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var registrations = jQuery.parseJSON(' . wp_json_encode($registrations) . ');';
 			$inlineScript .= 'var ajaxUrl = "'. admin_url('admin-ajax.php') . '";';
 			$inlineScript .= 'var emailConfirmRequired = "'. esc_js($data->booking_email_confirm) . '";';
+			$inlineScript .= 'var payPalEnabled = "'. esc_js($data->paypal_payments) . '";';
+			$inlineScript .= 'var payPalCurrencyCode = "'. esc_js( $data->paypal_payments === '1' ? $data->paypal_currency_code : '') . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";
