@@ -12,6 +12,9 @@
 	}
 
 	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
+
+	$bookingId = sanitize_text_field($_GET['id']);
+	$bookingData = seatreg_get_data_related_to_booking($bookingId);
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +28,20 @@
 </head>
 <body>
 	<?php
-		seatreg_echo_booking(sanitize_text_field($_GET['registration']), sanitize_text_field($_GET['id']));
+		seatreg_echo_booking(sanitize_text_field($_GET['registration']), $bookingId);
+
+		if($bookingData->paypal_payments === '1') {
+			$bookingTotalCost = seatreg_get_booking_total_cost($bookingId, $bookingData->registration_layout);
+			$payPalFromAction = SEATREG_PAYPAL_FORM_ACTION_SANDBOX;
+
+			echo seatreg_generate_paypal_paynow_form(
+				$payPalFromAction, 
+				$bookingData->paypal_business_email, 
+				$bookingData->paypal_button_id,
+				$bookingTotalCost,
+				$bookingData->paypal_currency_code
+			);
+		}
 	?>
 </body>
 </html>

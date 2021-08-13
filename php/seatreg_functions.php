@@ -1412,7 +1412,6 @@ function seatreg_get_registration_data($code) {
 
 //return bookings(status 2 and 3) belonging to specific registration
 function seatreg_get_registration_bookings($code) {
-
 	global $wpdb;
 	global $seatreg_db_table_names;
 
@@ -1424,6 +1423,37 @@ function seatreg_get_registration_bookings($code) {
 	) );
 
 	return $bookings;
+}
+
+function seatreg_get_bookings_by_booking_id($bookingId) {
+	global $wpdb;
+	global $seatreg_db_table_names;
+
+	$bookings = $wpdb->get_results( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+		WHERE booking_id = %s
+		AND status != 0",
+		$bookingId
+	) );
+
+	return $bookings;
+}
+
+// return data related to booking
+function seatreg_get_data_related_to_booking($bookingId) {
+	global $wpdb;
+	global $seatreg_db_table_names;
+
+	$data = $wpdb->get_row( $wpdb->prepare(
+		"SELECT a.*, b.*
+		FROM $seatreg_db_table_names->table_seatreg AS a
+		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
+		ON a.registration_code = b.registration_code
+		WHERE a.registration_code = (SELECT registration_code FROM $seatreg_db_table_names->table_seatreg_bookings WHERE booking_id = %s LIMIT 1)",
+		$bookingId
+	) );
+
+	return $data;
 }
 
 //return uploaded images
@@ -2004,16 +2034,6 @@ function seatreg_booking_submit_callback() {
 				
 		die();
 	}
-/*
-	if($_SESSION['seatreg_captcha'] !== $_POST['capv']) {
-		$r = seatreg_random_string(10);
-	    $resp->setError('Wrong captcha');
-	    $resp->setData('<img src="'. SEATREG_PLUGIN_FOLDER_URL .'registration/php/image.php?dummy='.$r.'" id="captcha-img"/>');
-		$resp->echoData();
-
-		die();
-	}
-*/
 
 	if( empty($_POST['FirstName']) || 
 		empty($_POST['LastName']) || 
@@ -2312,24 +2332,54 @@ function seatreg_remove_img_callback() {
 
 /*
 ==================================================================================================================================================================================================================
-Paypal functions
+Payment functions
 ==================================================================================================================================================================================================================
 */
 
-function generatePayPalPayNowForm($formAction, $businessEmail, $buttonId, $amount, $currencyCode, $bookingStatusPage) {
+function seatreg_generate_paypal_paynow_form($formAction, $businessEmail, $buttonId, $amount, $currencyCode) {
 	?>
 		<form method="post" action="https://www.sandbox.paypal.com/cgi-bin/webscr">
 			<input type="hidden" name="cmd" value="_xclick">
-			<input type="hidden" name="business" value="sb-rcb4772629866@business.example.com">
+			<input type="hidden" name="business" value="<?php echo $businessEmail; ?>">
 			<input type="hidden" name="item_name" value="booking">
 			<input type="hidden" name="notify_url" value="http://XXXXXXX.com/ipn.php" />
-			<input type="hidden" name="hosted_button_id" value="7P7TRLKCANBQ8" />
-			<input type="hidden" name="amount" value="100">
-			<input type="hidden" name="currency_code" value="USD"/>
+			<input type="hidden" name="hosted_button_id" value="<?php echo $buttonId; ?>" />
+			<input type="hidden" name="amount" value="<?php echo $amount; ?>">
+			<input type="hidden" name="currency_code" value="<?php echo $currencyCode; ?>"/>
 			<input type="hidden" name="no_shipping" value="1">
 			<input type='hidden' name="cancel_return" value='http://seatreg/?seatreg=booking-status&registration=abd01058ed&id=86b4f48f40ab97553ca6bc0d2dff4d82234630d0' />
 			<input type="hidden" name="return" value="http://seatreg/?seatreg=booking-status&registration=abd01058ed&id=86b4f48f40ab97553ca6bc0d2dff4d82234630d0">
 			<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 		</form>
 	<?php
+}
+
+function seatreg_get_seat_price_from_layout($seatID, $roomUUID, $roomsData) {
+	$price = 0;
+
+	foreach($roomsData as $roomData) {
+		if($roomData->room->uuid === $roomUUID) {
+			foreach($roomData->boxes as $box) {
+				if($box->id === $seatID) {
+					$price = $box->price;
+					break 2;
+				}
+			}
+		}
+	}
+
+	return $price;
+}
+
+function seatreg_get_booking_total_cost($bookingId, $registrationLayout) {
+	$bookings = seatreg_get_bookings_by_booking_id($bookingId);
+	$roomsData = json_decode($registrationLayout)->roomData;
+	$totalConst = 0;
+
+	foreach($bookings as $booking) {
+		$seatPrice = seatreg_get_seat_price_from_layout($booking->seat_id, $booking->room_uuid, $roomsData);
+		$totalConst += $seatPrice;
+	}
+
+	return $totalConst;
 }
