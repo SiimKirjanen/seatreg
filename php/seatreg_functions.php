@@ -16,6 +16,7 @@ $seatreg_db_table_names = new stdClass();
 $seatreg_db_table_names->table_seatreg = $wpdb->prefix . "seatreg";
 $seatreg_db_table_names->table_seatreg_options = $wpdb->prefix . "seatreg_options";
 $seatreg_db_table_names->table_seatreg_bookings = $wpdb->prefix . "seatreg_bookings";
+$seatreg_db_table_names->table_seatreg_payments = $wpdb->prefix . "seatreg_payments";
 
 /*
    Useful functions
@@ -1383,8 +1384,20 @@ function seatreg_set_up_db() {
 			conf_code char(40) NOT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
-	  
+
 		dbDelta( $sql3 );
+
+		$sql4 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_payments (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			booking_id varchar(40) NOT NULL,
+			payment_start int(11) DEFAULT NULL,
+			payment_update int(11) DEFAULT NULL,
+			payment_status varchar(255) NOT NULL,
+			payment_txn_id varchar(20), 
+			PRIMARY KEY  (id)
+		) $charset_collate;";
+
+		dbDelta( $sql4 );
 		update_option( "seatreg_db_current_version", SEATREG_DB_VERSION );
 	}
 }
@@ -2356,20 +2369,20 @@ Payment functions
 ==================================================================================================================================================================================================================
 */
 
-function seatreg_generate_paypal_paynow_form($formAction, $businessEmail, $buttonId, $amount, $currencyCode) {
+function seatreg_generate_paypal_paynow_form($formAction, $businessEmail, $buttonId, $amount, $currencyCode, $returnUrl, $cancelUrl, $notifyUrl) {
 	?>
-		<form method="post" action="https://www.sandbox.paypal.com/cgi-bin/webscr">
-			<input type="hidden" name="cmd" value="_xclick">
-			<input type="hidden" name="business" value="<?php echo $businessEmail; ?>">
-			<input type="hidden" name="item_name" value="booking">
-			<input type="hidden" name="notify_url" value="http://XXXXXXX.com/ipn.php" />
+		<form method="post" action="<?php echo $formAction; ?>">
+			<input type="hidden" name="cmd" value="_xclick" />
+			<input type="hidden" name="business" value="<?php echo $businessEmail; ?>" />
+			<input type="hidden" name="item_name" value="booking" />
+			<input type="hidden" name="notify_url" value="<?php $notifyUrl; ?>" />
 			<input type="hidden" name="hosted_button_id" value="<?php echo $buttonId; ?>" />
 			<input type="hidden" name="amount" value="<?php echo $amount; ?>">
 			<input type="hidden" name="currency_code" value="<?php echo $currencyCode; ?>"/>
-			<input type="hidden" name="no_shipping" value="1">
-			<input type='hidden' name="cancel_return" value='http://seatreg/?seatreg=booking-status&registration=abd01058ed&id=86b4f48f40ab97553ca6bc0d2dff4d82234630d0' />
-			<input type="hidden" name="return" value="http://seatreg/?seatreg=booking-status&registration=abd01058ed&id=86b4f48f40ab97553ca6bc0d2dff4d82234630d0">
-			<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+			<input type="hidden" name="no_shipping" value="1" />
+			<input type='hidden' name="cancel_return" value="<?php echo $cancelUrl; ?>" />
+			<input type="hidden" name="return" value="<?php echo $returnUrl; ?>" />
+			<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
 		</form>
 	<?php
 }

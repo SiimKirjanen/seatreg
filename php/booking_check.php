@@ -33,13 +33,19 @@
 		if($bookingData->paypal_payments === '1') {
 			$bookingTotalCost = seatreg_get_booking_total_cost($bookingId, $bookingData->registration_layout);
 			$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
+			$returnUrl = get_site_url() . '?seatreg=payment-return&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
+			$cancelUrl = get_site_url() . '?seatreg=booking-status&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
+			$notifyUrl = get_site_url() . '?seatreg=paypal-ipn&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
 
 			echo seatreg_generate_paypal_paynow_form(
 				$payPalFromAction, 
 				$bookingData->paypal_business_email, 
 				$bookingData->paypal_button_id,
 				$bookingTotalCost,
-				$bookingData->paypal_currency_code
+				$bookingData->paypal_currency_code,
+				$returnUrl,
+				$cancelUrl,
+				$notifyUrl
 			);
 		}
 	?>
