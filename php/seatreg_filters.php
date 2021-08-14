@@ -72,6 +72,12 @@ function seatreg_custom_pages() {
 
 		die();
 	}
+
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'payment-process' ) {
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/paypal_return_to_merchant.php';
+
+		die();
+	}
 }
 
 add_filter( 'admin_body_class', 'seatreg_admin_body_class' );

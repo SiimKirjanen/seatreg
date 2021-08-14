@@ -583,6 +583,18 @@ function seatreg_generate_settings_form() {
 						<?php esc_html_e('Pease enter PayPal currency', 'seatreg'); ?>.
 					</p>
 					<input type="text" class="form-control" id="paypal-currency-code" name="paypal-currency-code" autocomplete="off" placeholder="<?php echo esc_html('PayPal currency code', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_currency_code); ?>"> 
+					<br>
+					<label for="paypal-sandbox-mode"><?php esc_html_e('PayPal sandbox mode', 'seatreg'); ?></label>
+					<p class="help-block">
+						<?php esc_html_e('Turn on sandbox mode', 'seatreg'); ?>.
+					</p>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="paypal-sandbox-mode" name="paypal-sandbox-mode" value="0" <?php echo $options[0]->paypal_sandbox_mode == '1' ? 'checked':'' ?> >
+							<?php esc_html_e('PayPal sandbox', 'seatreg'); ?>
+						</label>
+					</div>
+
 				</div>
 			</div>
 
@@ -1348,6 +1360,7 @@ function seatreg_set_up_db() {
 			paypal_business_email varchar(255) DEFAULT NULL,
 			paypal_button_id varchar(255) DEFAULT NULL,
 			paypal_currency_code varchar(3) DEFAULT NULL,
+			paypal_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -1875,6 +1888,12 @@ function seatreg_update() {
 	}else {
 		$_POST['paypal-payments'] = 1;
 	}
+
+	if(!isset($_POST['paypal-sandbox-mode'])) {
+		$_POST['paypal-sandbox-mode'] = 0;  
+	}else {
+		$_POST['paypal-sandbox-mode'] = 1;
+	}
 	
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
@@ -1896,6 +1915,7 @@ function seatreg_update() {
 			'paypal_business_email' => sanitize_text_field($_POST['paypal-business-email']),
 			'paypal_button_id' => sanitize_text_field($_POST['paypal-button-id']),
 			'paypal_currency_code' => sanitize_text_field($_POST['paypal-currency-code']),
+			'paypal_sandbox_mode' => $_POST['paypal-sandbox-mode']
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
