@@ -4,28 +4,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit(); 
 }
 
- class SeatregPayPal {
+ class SeatregPayPalIpn {
 	private $_url;
 	private $_businessEmail;
 	private $_currency;
 	private $_price;
+	private $_bookingId;
 
-	public function __construct($isSandbox, $businessEmail, $currency, $price) {
+	public function __construct($isSandbox, $businessEmail, $currency, $price, $bookingId) {
 		if ( !$isSandbox ) {
-			$this->_url = SEATREG_PAYPAL_FORM_ACTION;
+			$this->_url = SEATREG_PAYPAL_IPN;
 		} else {
-			$this->_url = SEATREG_PAYPAL_FORM_ACTION_SANDBOX;
+			$this->_url = SEATREG_PAYPAL_IPN_SANDBOX;
 		}
         $this->_businessEmail = $businessEmail;
         $this->_currency = $currency;
 		$this->_price = $price;
+		$this->_bookingId = $bookingId;
 	}
 
 	public function run() {
 		$postFields = 'cmd=_notify-validate';
 		
 		foreach($_POST as $key => $value) {
-			$postFields .= "&$key=" . urlencode(stripslashes($value));
+			$postFields .= "&$key=" . urlencode($value);
 		}
 	
 		$ch = curl_init();
@@ -33,9 +35,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		curl_setopt_array($ch, array(
 			CURLOPT_URL => $this->_url,
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSLVERSION => 6,
+			CURLOPT_SSL_VERIFYPEER => 1,
+			CURLOPT_SSL_VERIFYHOST => 2,
 			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => $postFields
+			CURLOPT_POSTFIELDS => $postFields,
+			CURLOPT_HTTPHEADER => array(
+				'User-Agent: PHP-IPN-Verification-Script',
+           		'Connection: Close',
+			),
+			CURLOPT_FORBID_REUSE => 1,
+			CURLOPT_CONNECTTIMEOUT => 30,
+
 		));
 		
 		$result = curl_exec($ch);
@@ -55,23 +66,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		} else if (strcmp ($result , "INVALID") == 0) {
 		    // IPN invalid, log for manual investigation
-
 			$this->sendError('IPN invalid error');
 		    exit();
 		}
 	}
 
 	private function insertPayment() {
+		seatreg_insert_update_payment($this->_bookingId, SEATREG_PAYMENT_COMPLETED, $_POST['txn_id']);
 	}
 
 	private function txn_idCheck() {
 		// check that txn_id has not been previously processed
-		global $db;
+		$payment = seatreg_get_processed_payment($bookingId);
 
-		$stmt = $db -> prepare('SELECT * FROM paypal_payments WHERE txn_id = :id');
-		$stmt->execute(array(':id'=>$_POST['txn_id']));
-
-		if($stmt ->rowCount() == 0) {
+		if( !$payment ) {
 			return true;
 		}else {
 			$this->sendError('txn_id has been previously processed error');

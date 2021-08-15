@@ -46,7 +46,8 @@
 					$bookingData->paypal_currency_code,
 					$returnUrl,
 					$cancelUrl,
-					$notifyUrl
+					$notifyUrl,
+					$bookingId
 				);
 			}
 		}

@@ -15,6 +15,7 @@
 
 	$bookingId = sanitize_text_field($_GET['id']);
 	$bookingData = seatreg_get_data_related_to_booking($bookingId);
+	seatreg_insert_processing_payment($bookingId);
 ?>
 
 <!DOCTYPE html>

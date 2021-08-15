@@ -3,7 +3,7 @@ define('SEATREG_PLUGIN_FOLDER_DIR', plugin_dir_path( dirname( __FILE__ ) ));
 define('SEATREG_PLUGIN_FOLDER_URL', plugin_dir_url( dirname( __FILE__ ) ));
 
 // DB
-define('SEATREG_DB_VERSION', '1.1');
+define('SEATREG_DB_VERSION', '1.2');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr'));
@@ -15,3 +15,7 @@ define('SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH', 50);
 // PayPal
 define('SEATREG_PAYPAL_FORM_ACTION', "https://www.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_FORM_ACTION_SANDBOX', "https://www.sandbox.paypal.com/cgi-bin/webscr");
+define('SEATREG_PAYPAL_IPN', "https://ipnpb.paypal.com/cgi-bin/webscr");
+define('SEATREG_PAYPAL_IPN_SANDBOX', "https://ipnpb.sandbox.paypal.com/cgi-bin/webscr");
+define('SEATREG_PAYMENT_PROCESSING', 'processing');
+define('SEATREG_PAYMENT_COMPLETED', 'completed');

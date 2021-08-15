@@ -1390,8 +1390,8 @@ function seatreg_set_up_db() {
 		$sql4 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_payments (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			booking_id varchar(40) NOT NULL,
-			payment_start int(11) DEFAULT NULL,
-			payment_update int(11) DEFAULT NULL,
+			payment_start_date TIMESTAMP DEFAULT NOW(),
+			payment_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			payment_status varchar(255) NOT NULL,
 			payment_txn_id varchar(20), 
 			PRIMARY KEY  (id)
@@ -2369,19 +2369,20 @@ Payment functions
 ==================================================================================================================================================================================================================
 */
 
-function seatreg_generate_paypal_paynow_form($formAction, $businessEmail, $buttonId, $amount, $currencyCode, $returnUrl, $cancelUrl, $notifyUrl) {
+function seatreg_generate_paypal_paynow_form($formAction, $businessEmail, $buttonId, $amount, $currencyCode, $returnUrl, $cancelUrl, $notifyUrl, $bookingId) {
 	?>
 		<form method="post" action="<?php echo $formAction; ?>">
 			<input type="hidden" name="cmd" value="_xclick" />
 			<input type="hidden" name="business" value="<?php echo $businessEmail; ?>" />
 			<input type="hidden" name="item_name" value="booking" />
-			<input type="hidden" name="notify_url" value="<?php $notifyUrl; ?>" />
+			<input type="hidden" name="notify_url" value="<?php echo $notifyUrl; ?>" />
 			<input type="hidden" name="hosted_button_id" value="<?php echo $buttonId; ?>" />
 			<input type="hidden" name="amount" value="<?php echo $amount; ?>">
 			<input type="hidden" name="currency_code" value="<?php echo $currencyCode; ?>"/>
 			<input type="hidden" name="no_shipping" value="1" />
 			<input type='hidden' name="cancel_return" value="<?php echo $cancelUrl; ?>" />
 			<input type="hidden" name="return" value="<?php echo $returnUrl; ?>" />
+			<input type="hidden" name="custom" value="<?php echo $bookingId; ?>">
 			<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
 		</form>
 	<?php
@@ -2415,4 +2416,80 @@ function seatreg_get_booking_total_cost($bookingId, $registrationLayout) {
 	}
 
 	return $totalConst;
+}
+
+function seatreg_get_payment($bookingId) {
+	global $seatreg_db_table_names;
+	global $wpdb;
+
+	$payment = $wpdb->get_row( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg_payments
+		WHERE booking_id = %s",
+		$bookingId
+	) );
+
+	return $payment;
+}
+
+function seatreg_get_processed_payment($bookingId) {
+	global $seatreg_db_table_names;
+	global $wpdb;
+
+	$payment = $wpdb->get_row( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg_payments
+		WHERE booking_id = %s
+		AND payment_status = SEATREG_PAYMENT_COMPLETED",
+		$bookingId
+	) );
+
+	return $payment;
+}
+
+function seatreg_insert_processing_payment($bookingId) {
+	global $seatreg_db_table_names;
+	global $wpdb;
+
+	$alreadyInserted = seatreg_get_payment($bookingId);
+
+	if( !$alreadyInserted ) {
+		$wpdb->insert(
+			$seatreg_db_table_names->table_seatreg_payments,
+			array(
+				'booking_id' => $bookingId,
+				'payment_status' => SEATREG_PAYMENT_PROCESSING
+			),
+			'%s'
+		);
+	}
+}
+
+function seatreg_insert_update_payment($bookingId, $status, $txnId = null) {
+	global $seatreg_db_table_names;
+	global $wpdb;
+
+	$alreadyInserted = seatreg_get_payment($bookingId);
+
+	if( $alreadyInserted ) {
+		$wpdb->update( 
+			$seatreg_db_table_names->table_seatreg_payments,
+			array( 
+				'payment_status' => $status,
+				'payment_txn_id' => $txnId
+			), 
+			array(
+				'booking_id' => $bookingId
+			),
+			'%s'
+		);
+	}else {
+		$wpdb->insert(
+			$seatreg_db_table_names->table_seatreg_payments,
+			array(
+				'booking_id' => $bookingId,
+				'payment_status' => $status,
+				'payment_txn_id' => $txnId
+			),
+			'%s'
+		);
+	}
 }
