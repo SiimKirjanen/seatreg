@@ -37,16 +37,18 @@
 			$cancelUrl = get_site_url() . '?seatreg=booking-status&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
 			$notifyUrl = get_site_url() . '?seatreg=paypal-ipn&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
 
-			echo seatreg_generate_paypal_paynow_form(
-				$payPalFromAction, 
-				$bookingData->paypal_business_email, 
-				$bookingData->paypal_button_id,
-				$bookingTotalCost,
-				$bookingData->paypal_currency_code,
-				$returnUrl,
-				$cancelUrl,
-				$notifyUrl
-			);
+			if($bookingTotalCost > 0) {
+				echo seatreg_generate_paypal_paynow_form(
+					$payPalFromAction, 
+					$bookingData->paypal_business_email, 
+					$bookingData->paypal_button_id,
+					$bookingTotalCost,
+					$bookingData->paypal_currency_code,
+					$returnUrl,
+					$cancelUrl,
+					$notifyUrl
+				);
+			}
 		}
 	?>
 </body>
