@@ -72,7 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	private function insertPayment() {
-		seatreg_insert_update_payment($this->_bookingId, SEATREG_PAYMENT_COMPLETED, $_POST['txn_id']);
+		seatreg_insert_update_payment($this->_bookingId, SEATREG_PAYMENT_COMPLETED, $_POST['txn_id'], $_POST['mc_currency'], $_POST['mc_gross']);
 	}
 
 	private function txn_idCheck() {
@@ -86,7 +86,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			return false;
 		}
-		
 	}
 
 	private function statusCheck() {
@@ -98,7 +97,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			return false;
 		}
-
 	}
 
 	private function currencyAndAmountCheck() {

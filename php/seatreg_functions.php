@@ -1393,6 +1393,8 @@ function seatreg_set_up_db() {
 			payment_start_date TIMESTAMP DEFAULT NOW(),
 			payment_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			payment_status varchar(255) NOT NULL,
+			payment_currency varchar(3) DEFAULT NULL,
+			payment_total_price int(11) DEFAULT NULL,
 			payment_txn_id varchar(20), 
 			PRIMARY KEY  (id)
 		) $charset_collate;";
@@ -2463,7 +2465,7 @@ function seatreg_insert_processing_payment($bookingId) {
 	}
 }
 
-function seatreg_insert_update_payment($bookingId, $status, $txnId = null) {
+function seatreg_insert_update_payment($bookingId, $status, $txnId, $paymentCurrency, $paymentTotalPrice) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
@@ -2474,7 +2476,9 @@ function seatreg_insert_update_payment($bookingId, $status, $txnId = null) {
 			$seatreg_db_table_names->table_seatreg_payments,
 			array( 
 				'payment_status' => $status,
-				'payment_txn_id' => $txnId
+				'payment_txn_id' => $txnId,
+				'payment_currency' => $paymentCurrency,
+				'payment_total_price' => $paymentTotalPrice
 			), 
 			array(
 				'booking_id' => $bookingId
@@ -2487,7 +2491,9 @@ function seatreg_insert_update_payment($bookingId, $status, $txnId = null) {
 			array(
 				'booking_id' => $bookingId,
 				'payment_status' => $status,
-				'payment_txn_id' => $txnId
+				'payment_txn_id' => $txnId,
+				'payment_currency' => $paymentCurrency,
+				'payment_total_price' => $paymentTotalPrice
 			),
 			'%s'
 		);
