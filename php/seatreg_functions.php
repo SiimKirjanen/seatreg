@@ -17,6 +17,7 @@ $seatreg_db_table_names->table_seatreg = $wpdb->prefix . "seatreg";
 $seatreg_db_table_names->table_seatreg_options = $wpdb->prefix . "seatreg_options";
 $seatreg_db_table_names->table_seatreg_bookings = $wpdb->prefix . "seatreg_bookings";
 $seatreg_db_table_names->table_seatreg_payments = $wpdb->prefix . "seatreg_payments";
+$seatreg_db_table_names->table_seatreg_payments_log = $wpdb->prefix . "seatreg_payments_log";
 
 /*
    Useful functions
@@ -1400,6 +1401,18 @@ function seatreg_set_up_db() {
 		) $charset_collate;";
 
 		dbDelta( $sql4 );
+
+		$sql5 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_payments_log (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			booking_id varchar(40) NOT NULL,
+			log_date TIMESTAMP DEFAULT NOW(),
+			log_message text,
+			log_status enum('ok', 'error') NOT NULL,
+			PRIMARY KEY  (id)
+		) $charset_collate;";
+
+		dbDelta( $sql5 );
+
 		update_option( "seatreg_db_current_version", SEATREG_DB_VERSION );
 	}
 }
@@ -2459,6 +2472,15 @@ function seatreg_insert_processing_payment($bookingId) {
 			array(
 				'booking_id' => $bookingId,
 				'payment_status' => SEATREG_PAYMENT_PROCESSING
+			),
+			'%s'
+		);
+		$wpdb->insert(
+			$seatreg_db_table_names->table_seatreg_payments_log,
+			array(
+				'booking_id' => $bookingId,
+				'log_message' => 'PayPal return to merchant',
+				'log_status' => 'ok'
 			),
 			'%s'
 		);
