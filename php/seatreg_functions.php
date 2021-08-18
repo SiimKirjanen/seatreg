@@ -1535,6 +1535,20 @@ function seatreg_get_data_related_to_booking($bookingId) {
 		$bookingId
 	) );
 
+	if($data) {
+		$payment = $wpdb->get_row( $wpdb->prepare(
+			"SELECT * FROM $seatreg_db_table_names->table_seatreg_payments
+			 WHERE booking_id = %s",
+			$bookingId
+		) );
+
+		if($payment) {
+			$data->payment_status = $payment->payment_status;
+		}else {
+			$data->payment_status = null;
+		}
+	}
+
 	return $data;
 }
 

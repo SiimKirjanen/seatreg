@@ -134,7 +134,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if($_POST['mc_currency'] == $this->_currency && $_POST['mc_gross'] == $this->_price) {
 			return true;
 		}else {
-			$this->log($this->_bookingId, sprintf(esc_html__('Payment %s in not correct. Expecting %s', 'seatreg'), $_POST['mc_gross'] . ' ' . $_POST['mc_currency'], $this->_price . ' ' . $this->_currency ), SEATREG_PAYMENT_LOG_ERROR);
+			$this->log($this->_bookingId, sprintf(esc_html__('Payment %s is not correct. Expecting %s', 'seatreg'), $_POST['mc_gross'] . ' ' . $_POST['mc_currency'], $this->_price . ' ' . $this->_currency ), SEATREG_PAYMENT_LOG_ERROR);
+			$this->markPaymentValidationFailure();
 
 			return false;
 		}
@@ -147,6 +148,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			return true;
 		}else {
 			$this->log($this->_bookingId, sprintf(esc_html__("Receiver_email %s is not my Primary PayPal email %s", 'seatreg'), $_POST['receiver_email'], $this->_businessEmail), SEATREG_PAYMENT_LOG_ERROR);
+			$this->markPaymentValidationFailure();
 
 			return false;
 		}
@@ -162,6 +164,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'booking_id' => $bookingId,
 				'log_message' => $logMessage,
 				'log_status' => $logStatus
+			),
+			'%s'
+		);
+	}
+
+	private function markPaymentValidationFailure() {
+		global $seatreg_db_table_names;
+		global $wpdb;
+
+		$wpdb->update( 
+			$seatreg_db_table_names->table_seatreg_payments,
+			array( 
+				'payment_status' => SEATREG_PAYMENT_VALIDATION_FAILED,
+			), 
+			array(
+				'booking_id' => $this->_bookingId
 			),
 			'%s'
 		);
