@@ -845,9 +845,13 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '<div class="more-info">';
 						echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html(date('M j Y h:i e', $row->booking_date)), '</span></div>';
 						echo '<div>', esc_html__('Email', 'seatreg'), ': ', esc_html($row->email), '</div>';
-
+					
 						for($i = 0; $i < $cus_length; $i++) {
 							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
+						}
+
+						if($row->payment_status != null) {
+							echo seatreg_generate_payment_section($row);
 						}
 					echo '</div>';
 					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
@@ -892,6 +896,10 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 
 						for($i = 0; $i < $cus_length; $i++) {
 							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
+						}
+
+						if($row->payment_status != null) {
+							echo seatreg_generate_payment_section($row);
 						}
 
 					echo '</div>';
@@ -949,6 +957,40 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 			<span class="custom-field-value" data-options='<?php echo json_encode($custom_field['options']); ?>'><?php echo esc_html__('Not set', 'seatreg'); ?></span></div>
 		<?php
 	}
+}
+
+function seatreg_generate_payment_logs($paymentLogs) {
+	echo '<div class="payment-log-wrap">';
+		foreach ($paymentLogs as $paymentLog) {
+			$logClassName = $paymentLog->log_status === 'error' ? 'error-log' : '';
+
+			?>
+				<div class="<?php echo $logClassName; ?>">
+					<?php esc_html_e($paymentLog->log_status); ?>
+				</div>
+				<div class="<?php echo $logClassName; ?>">
+					<?php esc_html_e($paymentLog->log_date); ?>
+				</div>
+				<div class="<?php echo $logClassName; ?>">
+					<?php esc_html_e($paymentLog->log_message); ?>
+				</div>
+			<?php
+		}
+	echo '</div>';
+}
+
+function seatreg_generate_payment_section($booking) {
+	echo '<br>';
+	echo '<div><strong>', sprintf(esc_html__('Payment is %s', 'seatreg'), esc_html($booking->payment_status)), '</strong></div>';
+	if($booking->payment_status === SEATREG_PAYMENT_COMPLETED) {
+		echo '<div>', sprintf(esc_html__('Received payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency")), '</div>';
+		echo '<div>', sprintf(esc_html__('Payment txn is %s', 'seatreg'), esc_html($booking->payment_txn_id)), '</div>';
+		echo '<div>', sprintf(esc_html__('Payment date is %s', 'seatreg'), esc_html($booking->payment_update_date)), '</div>';
+	}
+	echo '<br>';
+	echo '<div><strong>', esc_html__('Payment logs', 'seatreg') ,'</strong></div><br>';
+	
+	echo seatreg_generate_payment_logs(seatreg_get_payment_logs($booking->booking_id));
 }
 
 function seatreg_booking_edit_modal() {
@@ -1544,13 +1586,16 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 	}
 
 	$bookings = $wpdb->get_results( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-		WHERE registration_code = %s
+		"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_update_date, b.payment_txn_id
+		FROM $seatreg_db_table_names->table_seatreg_bookings AS a
+		LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+		ON a.booking_id = b.booking_id
+		WHERE a.registration_code = %s
 		AND status = $bookingStatus
 		ORDER BY $order",
 		$code
 	));
-	
+
 	$registration = $wpdb->get_row( $wpdb->prepare(
 		"SELECT * FROM $seatreg_db_table_names->table_seatreg
 		WHERE registration_code = %s",
@@ -2520,4 +2565,17 @@ function seatreg_insert_update_payment($bookingId, $status, $txnId, $paymentCurr
 			'%s'
 		);
 	}
+}
+
+function seatreg_get_payment_logs($bookingId) {
+	global $seatreg_db_table_names;
+	global $wpdb;
+
+	$paymentLogs = $wpdb->get_results( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg_payments_log
+		WHERE booking_id = %s",
+		$bookingId
+	) );
+
+	return $paymentLogs;
 }

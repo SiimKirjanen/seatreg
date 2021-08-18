@@ -36,7 +36,7 @@
 			$returnUrl = get_site_url() . '?seatreg=payment-return&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
 			$cancelUrl = get_site_url() . '?seatreg=booking-status&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
 			$notifyUrl = get_site_url() . '?seatreg=paypal-ipn&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
-
+			
 			if($bookingTotalCost > 0) {
 				echo seatreg_generate_paypal_paynow_form(
 					$payPalFromAction, 
