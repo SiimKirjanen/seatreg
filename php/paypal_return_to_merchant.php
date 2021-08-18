@@ -1,13 +1,13 @@
 <?php
 	//===========
-	/* Return to Merchant PayPal page */
+	/* Return to Merchant page from PayPal */
 	//===========
 
 	if ( ! defined( 'ABSPATH' ) ) {
 		exit(); 
 	}
 
-	if( empty($_GET['registration']) || empty($_GET['id']) ) {
+	if( empty($_GET['id']) ) {
 		exit('Missing data'); 
 	}
 
@@ -15,7 +15,12 @@
 
 	$bookingId = sanitize_text_field($_GET['id']);
 	$bookingData = seatreg_get_data_related_to_booking($bookingId);
-	seatreg_insert_processing_payment($bookingId);
+	$paymentStatus = $bookingData->payment_status;
+
+	if($paymentStatus === null) {
+		seatreg_insert_processing_payment($bookingId);
+	}
+	
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +33,13 @@
 	</title>
 </head>
 <body>
-	<?php esc_html_e('Your payment is being processed', 'seatreg'); ?>
+
+	<?php 
+		if($paymentStatus === null || $paymentStatus === SEATREG_PAYMENT_PROCESSING)  {
+			esc_html_e('Your payment is being processed', 'seatreg'); 
+		}else{
+			esc_html_e('Payment is already processed or does not exist', 'seatreg'); 
+		}
+	?>
 </body>
 </html>
