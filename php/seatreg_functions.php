@@ -849,10 +849,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						for($i = 0; $i < $cus_length; $i++) {
 							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 						}
-
-						if($row->payment_status != null) {
-							echo seatreg_generate_payment_section($row);
-						}
+						echo seatreg_generate_payment_section($row);
 					echo '</div>';
 					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
 				echo '</div>'; 
@@ -897,11 +894,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						for($i = 0; $i < $cus_length; $i++) {
 							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 						}
-
-						if($row->payment_status != null) {
-							echo seatreg_generate_payment_section($row);
-						}
-
+						echo seatreg_generate_payment_section($row);
 					echo '</div>';
 					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
 				echo '</div>'; 
@@ -980,6 +973,12 @@ function seatreg_generate_payment_logs($paymentLogs) {
 }
 
 function seatreg_generate_payment_section($booking) {
+	if($booking->payment_status == null) {
+		echo '<br>';
+		esc_html_e('No payment info recorded. This means that this booking has no price or user has not started the payment process.', 'seatreg'); 
+
+		return;
+	}
 	echo '<br>';
 	echo '<div><strong>', sprintf(esc_html__('Payment is %s', 'seatreg'), esc_html($booking->payment_status)), '</strong></div>';
 	if($booking->payment_status === SEATREG_PAYMENT_COMPLETED) {
@@ -1586,12 +1585,14 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 	}
 
 	$bookings = $wpdb->get_results( $wpdb->prepare(
-		"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_update_date, b.payment_txn_id
+		"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_update_date, b.payment_txn_id, c.paypal_payments
 		FROM $seatreg_db_table_names->table_seatreg_bookings AS a
 		LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
 		ON a.booking_id = b.booking_id
+		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS c
+		ON a.registration_code = c.registration_code
 		WHERE a.registration_code = %s
-		AND status = $bookingStatus
+		AND a.status = $bookingStatus
 		ORDER BY $order",
 		$code
 	));
