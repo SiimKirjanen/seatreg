@@ -7,7 +7,7 @@
 		exit(); 
 	}
 
-	if( empty($_GET['registration']) || empty($_GET['id']) ) {
+	if( empty($_GET['id']) ) {
 		exit('Missing data'); 
 	}
 

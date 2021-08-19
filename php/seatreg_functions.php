@@ -559,7 +559,8 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="paypal"><?php esc_html_e('PayPal payments', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Allow and configure PayPal payments', 'seatreg'); ?>.
+					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. Before enabeling this feature you need to create a Buy Now button in Paypal.
+						When creating a button only fill item name. Don\'t add price, shipping etc.', 'seatreg'); ?>
 				</p>
 				<div class="checkbox">
 			    	<label>
@@ -582,13 +583,13 @@ function seatreg_generate_settings_form() {
 					<br>
 					<label for="paypal-currency-code"><?php esc_html_e('PayPal currency', 'seatreg'); ?></label>
 					<p class="help-block">
-						<?php esc_html_e('Pease enter PayPal currency', 'seatreg'); ?>.
+						<?php esc_html_e('Pease enter PayPal currency code (ISO 4217)', 'seatreg'); ?>.
 					</p>
-					<input type="text" class="form-control" id="paypal-currency-code" name="paypal-currency-code" autocomplete="off" placeholder="<?php echo esc_html('PayPal currency code', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_currency_code); ?>"> 
+					<input type="text" class="form-control" id="paypal-currency-code" name="paypal-currency-code" autocomplete="off" maxlength="3" oninput="this.value = this.value.toUpperCase()" placeholder="<?php echo esc_html('PayPal currency code', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_currency_code); ?>"> 
 					<br>
 					<label for="paypal-sandbox-mode"><?php esc_html_e('PayPal sandbox mode', 'seatreg'); ?></label>
 					<p class="help-block">
-						<?php esc_html_e('Turn on sandbox mode', 'seatreg'); ?>.
+						<?php esc_html_e('Turn on sandbox mode. This lets you test payments with your sandbox accounts. When enabeling it you need to change business email and button id', 'seatreg'); ?>.
 					</p>
 					<div class="checkbox">
 						<label>
@@ -2002,7 +2003,7 @@ function seatreg_update() {
 			'paypal_payments' => $_POST['paypal-payments'],
 			'paypal_business_email' => sanitize_text_field($_POST['paypal-business-email']),
 			'paypal_button_id' => sanitize_text_field($_POST['paypal-button-id']),
-			'paypal_currency_code' => sanitize_text_field($_POST['paypal-currency-code']),
+			'paypal_currency_code' => sanitize_text_field(strtoupper($_POST['paypal-currency-code'])),
 			'paypal_sandbox_mode' => $_POST['paypal-sandbox-mode']
 		),
 		array(
