@@ -22,7 +22,8 @@
 		$bookingData->paypal_business_email,
 		$bookingData->paypal_currency_code,
 		$bookingTotalCost,
-		$bookingId
+		$bookingId,
+		$bookingData->payment_completed_set_booking_confirmed
 	);
 	$payPalIPN->run();
 

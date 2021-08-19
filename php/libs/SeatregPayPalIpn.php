@@ -10,8 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	private $_currency;
 	private $_price;
 	private $_bookingId;
+	private $_setBookingConfirmed;
 
-	public function __construct($isSandbox, $businessEmail, $currency, $price, $bookingId) {
+	public function __construct($isSandbox, $businessEmail, $currency, $price, $bookingId, $setBookingConfirmed) {
 		if ( !$isSandbox ) {
 			$this->_url = SEATREG_PAYPAL_IPN;
 		} else {
@@ -21,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         $this->_currency = $currency;
 		$this->_price = $price;
 		$this->_bookingId = $bookingId;
+		$this->_setBookingConfirmed = $setBookingConfirmed;
 	}
 
 	public function run() {
@@ -104,6 +106,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	private function insertPayment() {
 		seatreg_insert_update_payment($this->_bookingId, SEATREG_PAYMENT_COMPLETED, $_POST['txn_id'], $_POST['mc_currency'], $_POST['mc_gross']);
 		$this->log($this->_bookingId, sprintf(esc_html__('Payment for %s is completed', 'seatreg'), "$this->_price $this->_currency"));
+
+		if($this->_setBookingConfirmed === '1') {
+			$this->setBookingConfirmed();
+		}
 	}
 
 	private function txn_idCheck() {
@@ -165,6 +171,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'booking_id' => $bookingId,
 				'log_message' => $logMessage,
 				'log_status' => $logStatus
+			),
+			'%s'
+		);
+	}
+
+	private function setBookingConfirmed() {
+		global $seatreg_db_table_names;
+		global $wpdb;
+
+		$wpdb->update( 
+			$seatreg_db_table_names->table_seatreg_bookings,
+			array( 
+				'status' => 2,
+			), 
+			array(
+				'booking_id' => $this->_bookingId
 			),
 			'%s'
 		);
