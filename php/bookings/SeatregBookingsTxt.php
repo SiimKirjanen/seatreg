@@ -37,12 +37,22 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
             echo esc_html__('Name', 'seatreg'), ': ', esc_html($registration->first_name), ' ', esc_html($registration->last_name), $this->lineBreak();
             echo esc_html__('Email', 'seatreg'), ': ', esc_html($registration->email), $this->lineBreak();
             echo esc_html__('Registration date', 'seatreg'), ': ', $bookingDate, $this->lineBreak();
-            echo esc_html__('Status', 'seatreg'), ': ', $status, $this->lineBreak();
+            echo esc_html__('Booking id', 'seatreg'), ': ', esc_html($registration->booking_id), $this->lineBreak();
+            echo esc_html__('Booking status', 'seatreg'), ': ', $status, $this->lineBreak();
 
             if($status === "Approved") {
                 $confirmDate = $this->getBookingDate($registration->booking_confirm_date);
  
-                echo esc_html__('Confirmation date', 'seatreg'), ': ', $confirmDate, $this->lineBreak();
+                echo esc_html__('Booking approval date', 'seatreg'), ': ', $confirmDate, $this->lineBreak();
+            }
+
+            if($registration->payment_status != null) {
+                echo esc_html__('Payment status', 'seatreg'), ': ', $registration->payment_status, $this->lineBreak();
+  
+                if($registration->payment_status == SEATREG_PAYMENT_COMPLETED) {
+                    echo esc_html__('Payment txn id', 'seatreg'), ': ', $registration->payment_txn_id, $this->lineBreak();
+                    echo esc_html__('Payment received', 'seatreg'), ': ', $registration->payment_total_price . ' ' . $registration->payment_currency, $this->lineBreak();
+                }
             }
         
             foreach ($this->_customFields as $customField) {

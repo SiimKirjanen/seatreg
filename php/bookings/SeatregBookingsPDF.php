@@ -69,13 +69,23 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             $this->pdf->Cell(20, 6, esc_html__('Name', 'seatreg') . ': ' . esc_html($registration->first_name) . ' ' . esc_html($registration->last_name), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Email', 'seatreg') . ': ' . $registration->email, 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Registration date', 'seatreg') . ': ' . $bookingDate, 0, 1, 'L');
-            $this->pdf->Cell(20, 6, esc_html__('Status', 'seatreg') . ': ' . $status, 0, 1, 'L');
+            $this->pdf->Cell(20, 6, esc_html__('Booking id', 'seatreg') . ': ' . esc_html($registration->booking_id), 0, 1, 'L');
+            $this->pdf->Cell(20, 6, esc_html__('Booking status', 'seatreg') . ': ' . $status, 0, 1, 'L');
 
             if($status =='Approved') {
                 $confirmDate = $this->getBookingDate($registration->booking_confirm_date);
-                $this->pdf->Cell(20, 6, esc_html__('Confirmation date', 'seatreg') . ': ' . $confirmDate, 0, 1, 'L');
+                $this->pdf->Cell(20, 6, esc_html__('Booking approval date', 'seatreg') . ': ' . $confirmDate, 0, 1, 'L');
             }
-                        
+            
+            if($registration->payment_status != null) {
+                $this->pdf->Cell(20, 6, esc_html__('Payment status', 'seatreg') . ': ' . $registration->payment_status, 0, 1, 'L');
+
+                if($registration->payment_status == SEATREG_PAYMENT_COMPLETED) {
+                    $this->pdf->Cell(20, 6, esc_html__('Payment txn id', 'seatreg') . ': ' . $registration->payment_txn_id, 0, 1, 'L');
+                    $this->pdf->Cell(20, 6, esc_html__('Payment received', 'seatreg') . ': ' . $registration->payment_total_price . ' ' . $registration->payment_currency, 0, 1, 'L');
+                }
+            }
+
             foreach ($this->_customFields as $customField) {
                 $this->pdf->Cell(20, 6, $this->customFieldsWithValues($customField, $registrantCustomData), 0, 1);
             }

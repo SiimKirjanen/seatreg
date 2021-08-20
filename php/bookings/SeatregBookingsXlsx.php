@@ -63,8 +63,11 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
             esc_html__('Name', 'seatreg') => 'string',
             esc_html__('Email', 'seatreg') => 'string',
             esc_html__('Registration data', 'seatreg') => 'string',
-            esc_html__('Status', 'seatreg') => 'string',
-            esc_html__('Confirmation date', 'seatreg') => 'string'
+            esc_html__('Booking status', 'seatreg') => 'string',
+            esc_html__('Booking approval date', 'seatreg') => 'string',
+            esc_html__('Payment status', 'seatreg') => 'string',
+            esc_html__('Payment txn id', 'seatreg') => 'string',
+            esc_html__('Payment received', 'seatreg') => 'string',
         );
         $customFieldsLength = count($this->_customFields);
         $data = array();
@@ -88,6 +91,15 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
                 $registrationData[] = $confirmDate;
             }else {
                 $registrationData[] = '';
+            }
+
+            if($registration->payment_status != null) {
+                $registrationData[] = $registration->payment_status;
+
+                if($registration->payment_status == SEATREG_PAYMENT_COMPLETED) {
+                    $registrationData[] = $registration->payment_txn_id;
+                    $registrationData[] = $registration->payment_total_price . ' ' . $registration->payment_currency;
+                }
             }
         
             foreach ($this->_customFields as $customField) {

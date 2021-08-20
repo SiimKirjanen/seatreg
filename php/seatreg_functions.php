@@ -1822,25 +1822,34 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 
 	if($whatToShow == 'all') {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE registration_code = %s
-			AND status IN (1,2)
+			"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
+			FROM $seatreg_db_table_names->table_seatreg_bookings AS a 
+			LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+			ON a.booking_id = b.booking_id
+			WHERE a.registration_code = %s
+			AND a.status IN (1,2)
 			ORDER BY room_uuid, seat_nr",
 			$code
 		) );
 	}else if($whatToShow == 'pending') {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE registration_code = %s
-			AND status = 1
+			"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
+			FROM $seatreg_db_table_names->table_seatreg_bookings AS a 
+			LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+			ON a.booking_id = b.booking_id
+			WHERE a.registration_code = %s
+			AND a.status = 1
 			ORDER BY room_uuid, seat_nr",
 			$code
 		) );
 	}else {
 		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE registration_code = %s
-			AND status = 2
+			"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
+			FROM $seatreg_db_table_names->table_seatreg_bookings AS a
+			LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+			ON a.booking_id = b.booking_id
+			WHERE a.registration_code = %s
+			AND a.status = 2
 			ORDER BY room_uuid, seat_nr",
 			$code
 		) );
