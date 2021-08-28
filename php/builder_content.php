@@ -51,7 +51,7 @@
 			<div class="side-option palette-call" data-action="5" title="Color"></div>
 			<div class="side-option background-image" data-action="7" title="Background image" data-toggle="modal" data-target="#background-image-modal"></div>
 			<div class="side-option grid-stats" data-action="6" title="Grid settings" data-toggle="modal" data-target="#skeleton-dialog"></div>
-			<div class="side-option grid-stats" data-action="8" title="Seat price" data-toggle="modal" data-target="#price-dialog"></div>
+			<div class="side-option price-option" data-action="8" title="Seat price" data-toggle="modal" data-target="#price-dialog"></div>
 		</div>
 	
 		<div class="build-area-wrapper" data-cursor="1">
@@ -411,6 +411,13 @@
 					<div class="guide-item2 guide-item-grid"></div>
 					<p class="help-dialog-text">
 						<?php esc_html_e('In seat map builder you can see lot of gray dotted boxes. These boxes are used to creat seats and custom boxes. In grid settings you can change size, distance and count of those grid boxes. That way you can change how new seats and boxes are created.', 'seatreg');?>
+					</p>
+				</div>
+
+				<div class="help-dialog-row">
+					<div class="guide-item2 guide-item-price"></div>
+					<p class="help-dialog-text">
+						<?php esc_html_e('Lets you add prices to seats. You also need to configure paypal in settings to enable payments.', 'seatreg');?>
 					</p>
 				</div>
 

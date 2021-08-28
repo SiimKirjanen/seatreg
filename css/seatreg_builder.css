@@ -421,7 +421,16 @@
 	width: 41px;
 	height: 41px;
 }
-
+.seatreg-map-builder-page .build-area-side .price-option {
+	background-position: -257px -161px;
+	width: 41px;
+	height: 41px;
+}
+.seatreg-map-builder-page .build-area-side .price-option:hover {
+	background-position: -257px -217px;
+	width: 41px;
+	height: 41px;
+}
 
 
 .seatreg-map-builder-page .legend-dialog-div {
@@ -925,6 +934,10 @@
 
 .seatreg-map-builder-page .guide-item-grid {
 	background-position: -103px -268px;
+}
+
+.seatreg-map-builder-page .guide-item-price {
+	background-position: -257px -161px;
 }
 
 .seatreg-map-builder-page #build-section .build-area-wrapper[data-cursor="4"] {
