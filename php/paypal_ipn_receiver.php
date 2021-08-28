@@ -7,14 +7,19 @@
 		exit(); 
 	}
 
-	if( empty($_GET['id']) ) {
+	if( empty($_POST['custom']) ) {
 		exit('Missing data'); 
 	}
 
 	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
     require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/SeatregPayPalIpn.php' );
 
-	$bookingId = sanitize_text_field($_GET['id']);
+	$bookingId = sanitize_text_field($_POST['custom']);
+
+	if( !seatreg_get_bookings_by_booking_id( $bookingId )) {
+		exit('Booking not found'); 
+	}
+
 	$bookingData = seatreg_get_data_related_to_booking($bookingId);
 	$bookingTotalCost = seatreg_get_booking_total_cost($bookingId, $bookingData->registration_layout);
     $payPalIPN = new SeatregPayPalIpn(

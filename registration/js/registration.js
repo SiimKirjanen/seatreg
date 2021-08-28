@@ -753,7 +753,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ translator.translate('maxSeatsToAdd') + ' ' + this.seatLimit +'</p>' + '</div>');
 
 					if(this.payPalEnabled  && this.payPalCurrencyCode && price > 0) {
-						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + translator.translate('seatCosts_') + price + ' ' + this.payPalCurrencyCode + '</p>');
+						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + translator.translate('seatCosts_') + '<strong>' + price + ' ' + this.payPalCurrencyCode + '</strong></p>');
 					}
 					$('#confirm-dialog-mob-ok').css('display','inline-block');
 				}else {

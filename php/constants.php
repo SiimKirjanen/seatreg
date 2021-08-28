@@ -16,7 +16,7 @@ define('SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH', 50);
 define('SEATREG_PAYPAL_FORM_ACTION', "https://www.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_FORM_ACTION_SANDBOX', "https://www.sandbox.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_IPN', "https://ipnpb.paypal.com/cgi-bin/webscr");
-define('SEATREG_PAYPAL_IPN_SANDBOX', "https://ipnpb.sandbox.paypal.com/cgi-bin/webscr");
+define('SEATREG_PAYPAL_IPN_SANDBOX', "https://www.sandbox.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYMENT_PROCESSING', 'processing');
 define('SEATREG_PAYMENT_COMPLETED', 'completed');
 define('SEATREG_PAYMENT_VALIDATION_FAILED', 'validation_failure');
