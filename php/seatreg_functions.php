@@ -1494,8 +1494,11 @@ function seatreg_get_registration_data($code) {
 
 	if($code != null) {
 		$registration = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg
-			WHERE registration_code = %s",
+			"SELECT a.*, b.paypal_payments
+			FROM $seatreg_db_table_names->table_seatreg AS a
+			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
+			ON a.registration_code = b.registration_code
+			WHERE a.registration_code = %s",
 			$code
 		) );
 	}else {

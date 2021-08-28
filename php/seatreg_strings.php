@@ -130,6 +130,7 @@ function seatreg_generate_admin_strings() {
     $translations->pleaseEnterPayPalButtonId = esc_html__('Please enter PayPal button id', 'seatreg');
     $translations->pleaseEnterPayPalCurrencyCode = esc_html__('Please enter PayPal currency code', 'seatreg');
     $translations->pricesAdded = esc_html__('Prices added', 'seatreg');
+    $translations->noSeatsSelected = esc_html__('No seats selected', 'seatreg');
  
     return $translations;
 }

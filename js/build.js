@@ -449,6 +449,7 @@
 		this.needToChangeStructure = false;
 		this.needToSave = false;  //if user makes changes this will be true. when saved this will be false
 		this.roomNameChange = {};  //if room name got changed. store old and new here
+		this.settings = {};
 	}
 
 	Registration.prototype.clearRegistrationData = function() {
@@ -1969,6 +1970,7 @@
 			$('#room-name-dialog').modal("toggle");
 			this.setBuilderHeight();
 		}else {
+			this.settings =  window.seatreg.settings;
 			var roomData = responseObj.roomData;
 			this.regBoxCounter = responseObj.global.boxCounter;
 			var globalLegendsLength = responseObj.global.legends.length;
@@ -2245,6 +2247,18 @@
 		var currentRoom = reg.rooms[reg.currentRoom];
 
 		$pricingWrap.empty();
+		$('#set-prices').removeClass('d-none');
+
+		if(reg.settings.paypal_payments === '1') {
+			$('#enable-paypal-alert').css('display', 'none');
+		}
+
+		if(!reg.activeBoxArray.length) {
+			$('#set-prices').addClass('d-none');
+			$pricingWrap.append(
+				'<p>'+ translator.translate('noSeatsSelected') +'</p>'
+			);
+		}
 
 		reg.activeBoxArray.forEach(function(selectedBoxId) {
 			var boxLocation = currentRoom.findBox(selectedBoxId);

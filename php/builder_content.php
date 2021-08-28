@@ -175,10 +175,11 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
-				<p>You can set prices to individual seats. Note that you need to enable PayPal in settings.</p>
-				<div id="selected-seats-for-pricing">
-
+				<div class="alert alert-primary" role="alert" id="enable-paypal-alert">
+					<?php esc_html_e('You need to enable PayPal in settings to turn on pricing functionality.', 'seatreg'); ?>
 				</div>
+				<p><?php esc_html_e('Set prices to seats', 'seatreg');?></p>
+				<div id="selected-seats-for-pricing"></div>
 			</div>
 			<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>

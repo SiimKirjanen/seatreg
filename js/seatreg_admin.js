@@ -133,6 +133,9 @@
 					window.seatreg.builder.syncData(null);
 				}else {
 					window.seatreg.selectedRegistration = code;
+					window.seatreg.settings = {
+						paypal_payments: data._response.data.registration[0].paypal_payments
+					};
 					$('.reg-title-name').text(data._response.data.registration[0].registration_name);
 				
 					$('.seatreg-builder-popup').css({'display': 'block'});
