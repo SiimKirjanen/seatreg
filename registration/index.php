@@ -228,10 +228,10 @@
 							<?php esc_html_e('Total open seats', 'seatreg'); ?>: <span class="total-open"></span>
 						</div>
 						<div>
-							<?php esc_html_e('Total pending seats', 'seatreg'); ?>: <span class="total-bron"></span>
+							<?php esc_html_e('Total pending bookings', 'seatreg'); ?>: <span class="total-bron"></span>
 						</div>
 						<div>
-							<?php esc_html_e('Total confirmed seats', 'seatreg'); ?>: <span class="total-tak"></span>
+							<?php esc_html_e('Total approved bookings', 'seatreg'); ?>: <span class="total-tak"></span>
 						</div>
 					</div>
 				</div>

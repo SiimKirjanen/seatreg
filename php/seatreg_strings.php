@@ -29,8 +29,8 @@ function seatreg_generate_registration_strings() {
 	$translations->remove = esc_html__('Remove', 'seatreg');
 	$translations->add_ = esc_html__('Add ', 'seatreg');
 	$translations->openSeatsInRoom_ = esc_html__('Open seats in the room: ', 'seatreg');
-	$translations->pendingSeatInRoom_ = esc_html__('Pending seats in the room: ', 'seatreg');
-	$translations->confirmedSeatInRoom_ = esc_html__('Confirmed seats in the room: ', 'seatreg');
+	$translations->pendingSeatInRoom_ = esc_html__('Pending bookings in the room: ', 'seatreg');
+	$translations->confirmedSeatInRoom_ = esc_html__('Approved bookings in the room: ', 'seatreg');
 	$translations->seat = esc_html__('seat', 'seatreg');
 	$translations->firstName = esc_html__('Firstname', 'seatreg');
 	$translations->lastName = esc_html__('Lastname', 'seatreg');
@@ -130,7 +130,7 @@ function seatreg_generate_admin_strings() {
     $translations->pleaseEnterPayPalButtonId = esc_html__('Please enter PayPal button id', 'seatreg');
     $translations->pleaseEnterPayPalCurrencyCode = esc_html__('Please enter PayPal currency code', 'seatreg');
     $translations->pricesAdded = esc_html__('Prices added', 'seatreg');
-    $translations->noSeatsSelected = esc_html__('No seats selected', 'seatreg');
+    $translations->noSeatsSelected = esc_html__('No seats selected!', 'seatreg');
  
     return $translations;
 }

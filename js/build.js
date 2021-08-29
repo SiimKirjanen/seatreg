@@ -2254,12 +2254,17 @@
 		}
 
 		if(!reg.activeBoxArray.length) {
+			$('.set-price-wrap').addClass('d-none');
 			$('#set-prices').addClass('d-none');
 			$pricingWrap.append(
-				'<p>'+ translator.translate('noSeatsSelected') +'</p>'
+				'<div class="alert alert-primary">'+ translator.translate('noSeatsSelected') +'</div>'
 			);
+		}else if(reg.activeBoxArray.length == 1) {
+			$('.set-price-wrap').addClass('d-none');
+		}else {
+			$('.set-price-wrap').removeClass('d-none');
 		}
-
+		
 		reg.activeBoxArray.forEach(function(selectedBoxId) {
 			var boxLocation = currentRoom.findBox(selectedBoxId);
 			var box = currentRoom.boxes[boxLocation];
@@ -2272,6 +2277,14 @@
 					'</div>'
 				);
 			}
+		});
+	});
+
+	$("#fill-price-for-all-selected").on('click', function() {
+		var priceForAllSelected = $('#price-for-all-selected').val();
+
+		$("#selected-seats-for-pricing .price-item").each(function() {
+			$(this).find('input').val(priceForAllSelected);
 		});
 	});
 

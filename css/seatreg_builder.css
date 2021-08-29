@@ -1160,6 +1160,14 @@
 .seatreg-map-builder-page #selected-seats-for-pricing {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
+}
+.seatreg-map-builder-page .set-price-wrap {
+	text-align: center;
+	margin-bottom: 8px;
+}
+.seatreg-map-builder-page #price-for-all-selected {
+	width: 80px;
 }
 
 #selected-seats-for-pricing .price-item {

@@ -592,7 +592,7 @@ function seatreg_generate_settings_form() {
 
 					<label for="payment-mark-confirmed"><?php esc_html_e('Set paid booking approved', 'seatreg'); ?></label>
 					<p class="help-block">
-						<?php esc_html_e('Set booking approved automatically when payment has been made', 'seatreg'); ?>.
+						<?php esc_html_e('Set booking approved automatically when payment has been completed', 'seatreg'); ?>.
 					</p>
 					<div class="checkbox">
 						<label>
@@ -604,7 +604,7 @@ function seatreg_generate_settings_form() {
 
 					<label for="paypal-sandbox-mode"><?php esc_html_e('PayPal sandbox mode', 'seatreg'); ?></label>
 					<p class="help-block">
-						<?php esc_html_e('Turn on sandbox mode. This lets you test payments with your sandbox accounts. When enabeling it you need to change business email and button id', 'seatreg'); ?>.
+						<?php esc_html_e('Turn on sandbox mode. Lets you test payments with your sandbox account. Don\'t forget to change business email and button id.', 'seatreg'); ?>.
 					</p>
 					<div class="checkbox">
 						<label>
