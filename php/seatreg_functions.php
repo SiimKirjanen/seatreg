@@ -559,7 +559,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="paypal"><?php esc_html_e('PayPal payments', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. Before enabeling this feature you need to create a Buy Now button in Paypal.
+					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create a Buy Now button in Paypal.
 						When creating a button only fill item name. Don\'t add price, shipping etc.', 'seatreg'); ?>
 				</p>
 				<div class="checkbox">
@@ -2480,16 +2480,16 @@ Payment functions
 ==================================================================================================================================================================================================================
 */
 
-function seatreg_generate_paypal_paynow_form($formAction, $businessEmail, $buttonId, $amount, $currencyCode, $returnUrl, $cancelUrl, $notifyUrl, $bookingId) {
+function seatreg_generate_paypal_paynow_form($formAction, $bookingData, $amount, $returnUrl, $cancelUrl, $notifyUrl, $bookingId) {
 	?>
 		<form method="post" action="<?php echo $formAction; ?>">
 			<input type="hidden" name="cmd" value="_xclick" />
-			<input type="hidden" name="business" value="<?php echo $businessEmail; ?>" />
-			<input type="hidden" name="item_name" value="booking" />
+			<input type="hidden" name="business" value="<?php echo esc_html($bookingData->paypal_business_email); ?>" />
+			<input type="hidden" name="item_name" value="<?php echo esc_html($bookingData->registration_name) . " booking"; ?>" />
 			<input type="hidden" name="notify_url" value="<?php echo $notifyUrl; ?>" />
-			<input type="hidden" name="hosted_button_id" value="<?php echo $buttonId; ?>" />
+			<input type="hidden" name="hosted_button_id" value="<?php echo esc_html($bookingData->paypal_button_id); ?>" />
 			<input type="hidden" name="amount" value="<?php echo $amount; ?>">
-			<input type="hidden" name="currency_code" value="<?php echo $currencyCode; ?>"/>
+			<input type="hidden" name="currency_code" value="<?php echo esc_html($bookingData->paypal_currency_code); ?>"/>
 			<input type="hidden" name="no_shipping" value="1" />
 			<input type='hidden' name="cancel_return" value="<?php echo $cancelUrl; ?>" />
 			<input type="hidden" name="return" value="<?php echo $returnUrl; ?>" />

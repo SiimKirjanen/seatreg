@@ -33,18 +33,16 @@
 		if($bookingData->paypal_payments === '1' && $bookingData->payment_status === null) {
 			$bookingTotalCost = seatreg_get_booking_total_cost($bookingId, $bookingData->registration_layout);
 			$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
-			$returnUrl = get_site_url() . '?seatreg=payment-return&id=' . $_GET['id'];
-			$cancelUrl = get_site_url() . '?seatreg=booking-status&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
-			//$notifyUrl = get_site_url() . '?seatreg=paypal-ipn';
-			$notifyUrl = 'https://1802-88-196-42-114.ngrok.io' . '?seatreg=paypal-ipn';
+			$siteUrl = get_site_url(); 
+			$returnUrl = $siteUrl . '?seatreg=payment-return&id=' . $_GET['id'];
+			$cancelUrl = $siteUrl . '?seatreg=booking-status&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
+			$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
 			
 			if($bookingTotalCost > 0) {
 				echo seatreg_generate_paypal_paynow_form(
 					$payPalFromAction, 
-					$bookingData->paypal_business_email, 
-					$bookingData->paypal_button_id,
+					$bookingData,
 					$bookingTotalCost,
-					$bookingData->paypal_currency_code,
 					$returnUrl,
 					$cancelUrl,
 					$notifyUrl,
