@@ -562,58 +562,63 @@ function seatreg_generate_settings_form() {
 					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create a Buy Now button in Paypal.
 						When creating a button only fill item name. Don\'t add price, shipping etc.', 'seatreg'); ?>
 				</p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="paypal" name="paypal-payments" value="0" <?php echo $options[0]->paypal_payments == '1' ? 'checked':'' ?> >
-			      		<?php esc_html_e('Allow payments', 'seatreg'); ?>
-			    	</label>
-			  	</div>
-				<div class="paypal-configuration">
-					<label for="paypal-business-email"><?php esc_html_e('PayPal business email', 'seatreg'); ?></label>
-					<p class="help-block">
-						<?php esc_html_e('Pease enter your PayPal business email', 'seatreg'); ?>.
-					</p>
-					<input type="text" class="form-control" id="paypal-business-email" name="paypal-business-email" autocomplete="off" placeholder="<?php echo esc_html('PayPal business email', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_business_email); ?>"> 
-					<br>
-
-					<label for="paypal-button-id"><?php esc_html_e('PayPal button id', 'seatreg'); ?></label>
-					<p class="help-block">
-						<?php esc_html_e('Pease enter PayPal button id', 'seatreg'); ?>.
-					</p>
-					<input type="text" class="form-control" id="paypal-button-id" name="paypal-button-id" autocomplete="off" placeholder="<?php echo esc_html('PayPal button id', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_button_id); ?>"> 
-					<br>
-
-					<label for="paypal-currency-code"><?php esc_html_e('PayPal currency', 'seatreg'); ?></label>
-					<p class="help-block">
-						<?php esc_html_e('Pease enter PayPal currency code (ISO 4217)', 'seatreg'); ?>.
-					</p>
-					<input type="text" class="form-control" id="paypal-currency-code" name="paypal-currency-code" autocomplete="off" maxlength="3" oninput="this.value = this.value.toUpperCase()" placeholder="<?php echo esc_html('PayPal currency code', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_currency_code); ?>"> 
-					<br>
-
-					<label for="payment-mark-confirmed"><?php esc_html_e('Set paid booking approved', 'seatreg'); ?></label>
-					<p class="help-block">
-						<?php esc_html_e('Set booking approved automatically when payment has been completed', 'seatreg'); ?>.
-					</p>
+				<?php if(extension_loaded('curl')): ?>
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" id="payment-mark-confirmed" name="payment-mark-confirmed" value="0" <?php echo $options[0]->payment_completed_set_booking_confirmed == '1' ? 'checked': ''; ?> >
-							<?php esc_html_e('Set approved', 'seatreg'); ?>
-						</label>
-			  		</div>
-					<br>
-
-					<label for="paypal-sandbox-mode"><?php esc_html_e('PayPal sandbox mode', 'seatreg'); ?></label>
-					<p class="help-block">
-						<?php esc_html_e('Turn on sandbox mode. Lets you test payments with your sandbox account. Don\'t forget to change business email and button id.', 'seatreg'); ?>.
-					</p>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" id="paypal-sandbox-mode" name="paypal-sandbox-mode" value="0" <?php echo $options[0]->paypal_sandbox_mode == '1' ? 'checked':'' ?> >
-							<?php esc_html_e('PayPal sandbox', 'seatreg'); ?>
+							<input type="checkbox" id="paypal" name="paypal-payments" value="0" <?php echo $options[0]->paypal_payments == '1' ? 'checked':'' ?> >
+							<?php esc_html_e('Allow payments', 'seatreg'); ?>
 						</label>
 					</div>
+					<div class="paypal-configuration">
+						<label for="paypal-business-email"><?php esc_html_e('PayPal business email', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Pease enter your PayPal business email', 'seatreg'); ?>.
+						</p>
+						<input type="text" class="form-control" id="paypal-business-email" name="paypal-business-email" autocomplete="off" placeholder="<?php echo esc_html('PayPal business email', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_business_email); ?>"> 
+						<br>
 
-				</div>
+						<label for="paypal-button-id"><?php esc_html_e('PayPal button id', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Pease enter PayPal button id', 'seatreg'); ?>.
+						</p>
+						<input type="text" class="form-control" id="paypal-button-id" name="paypal-button-id" autocomplete="off" placeholder="<?php echo esc_html('PayPal button id', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_button_id); ?>"> 
+						<br>
+
+						<label for="paypal-currency-code"><?php esc_html_e('PayPal currency', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Pease enter PayPal currency code (ISO 4217)', 'seatreg'); ?>.
+						</p>
+						<input type="text" class="form-control" id="paypal-currency-code" name="paypal-currency-code" autocomplete="off" maxlength="3" oninput="this.value = this.value.toUpperCase()" placeholder="<?php echo esc_html('PayPal currency code', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_currency_code); ?>"> 
+						<br>
+
+						<label for="payment-mark-confirmed"><?php esc_html_e('Set paid booking approved', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Set booking approved automatically when payment has been completed', 'seatreg'); ?>.
+						</p>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="payment-mark-confirmed" name="payment-mark-confirmed" value="0" <?php echo $options[0]->payment_completed_set_booking_confirmed == '1' ? 'checked': ''; ?> >
+								<?php esc_html_e('Set approved', 'seatreg'); ?>
+							</label>
+						</div>
+						<br>
+
+						<label for="paypal-sandbox-mode"><?php esc_html_e('PayPal sandbox mode', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Turn on sandbox mode. Lets you test payments with your sandbox account. Don\'t forget to change business email and button id.', 'seatreg'); ?>.
+						</p>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="paypal-sandbox-mode" name="paypal-sandbox-mode" value="0" <?php echo $options[0]->paypal_sandbox_mode == '1' ? 'checked':'' ?> >
+								<?php esc_html_e('PayPal sandbox', 'seatreg'); ?>
+							</label>
+						</div>
+					</div>
+				<?php else: ?>
+					<div class="alert alert-primary" role="alert">
+						<?php esc_html_e('Curl extension is required for Paypal to work', 'seatreg'); ?>
+					</div>
+				<?php endif; ?>
 			</div>
 
 			<div class="form-group">
