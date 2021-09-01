@@ -30,19 +30,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		if($isIpnVerified) {
 			if($this->emailCheck()) {
-				if($this->currencyAndAmountCheck()) {
-					if($this->statusCheck()) {
+				if($this->statusCheck()) {
+					if($this->currencyAndAmountCheck()) {
 						if($this->txn_idCheck()) {
 							$this->insertPayment();
 						}
 					}
 				}
-			}
+			}	
 		}
+
 	}
 
 	private function ipnVerification() {
-		$this->log($this->_bookingId, esc_html__('Starting payment verification (IPN)', 'seatreg'));
+		$this->log($this->_bookingId, esc_html__('Starting IPN verification', 'seatreg'));
 		$postFields = 'cmd=_notify-validate';
 		$retryCounter = 0;
 		$gotCurlIpnResponse = false;
@@ -126,14 +127,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	private function statusCheck() {
-		// check whether the payment_status is Completed
-		if($_POST['payment_status'] == 'Completed') {
+		// check whether the payment_status is Completed or something else happened
+		if( isset($_POST['payment_status']) && $_POST['payment_status'] == 'Completed' ) {
 			return true;
-		}else {
-			$this->log($this->_bookingId, sprintf(esc_html__('Payment_status %s received', 'seatreg'), $_POST['payment_status']), SEATREG_PAYMENT_LOG_ERROR);
+		}elseif( isset($_POST['payment_status']) && $_POST['payment_status'] == 'Reversed' ) {
+			$this->log($this->_bookingId, sprintf(esc_html__('Payment is reversed', 'seatreg'), $_POST['payment_status']), SEATREG_PAYMENT_LOG_INFO);
+
+			return false;
+		}elseif( isset($_POST['payment_status']) && $_POST['payment_status'] == 'Refunded' ) {
+			$this->log($this->_bookingId, sprintf(esc_html__('Payment was refunded', 'seatreg')));
+
+			return false;
+		}elseif( isset($_POST['case_type']) ) {
+			$this->log($this->_bookingId, sprintf(esc_html__('Got a %s case', 'seatreg'), $_POST['case_type']), SEATREG_PAYMENT_LOG_INFO);
 
 			return false;
 		}
+
+		return false;
 	}
 
 	private function currencyAndAmountCheck() {

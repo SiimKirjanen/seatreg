@@ -845,6 +845,10 @@ html {
 	color: red;
 }
 
+.seatreg-wp-admin .payment-log-wrap .info-log {
+	color: blue;
+}
+
 @media screen and (max-width: 1199px) {
 	.seatreg-tabs-content #my-regs {
 		width: 970px;

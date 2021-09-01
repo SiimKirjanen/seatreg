@@ -36,8 +36,9 @@
 			$siteUrl = get_site_url(); 
 			$returnUrl = $siteUrl . '?seatreg=payment-return&id=' . $_GET['id'];
 			$cancelUrl = $siteUrl . '?seatreg=booking-status&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
-			$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
-			
+			//$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
+			$notifyUrl = 'https://9779-2001-7d0-8407-6e80-4d4f-38-d843-12a2.ngrok.io' . '?seatreg=paypal-ipn';
+
 			if($bookingTotalCost > 0) {
 				echo seatreg_generate_paypal_paynow_form(
 					$payPalFromAction, 

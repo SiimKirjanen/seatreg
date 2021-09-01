@@ -976,7 +976,13 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 function seatreg_generate_payment_logs($paymentLogs) {
 	echo '<div class="payment-log-wrap">';
 		foreach ($paymentLogs as $paymentLog) {
-			$logClassName = $paymentLog->log_status === 'error' ? 'error-log' : '';
+			$logClassName = '';
+			
+			if($paymentLog->log_status === SEATREG_PAYMENT_LOG_ERROR) {
+				$logClassName = 'error-log';
+			}else if($paymentLog->log_status === SEATREG_PAYMENT_LOG_INFO) {
+				$logClassName = 'info-log';
+			}
 
 			?>
 				<div class="<?php echo $logClassName; ?>">
@@ -1470,7 +1476,7 @@ function seatreg_set_up_db() {
 			booking_id varchar(40) NOT NULL,
 			log_date TIMESTAMP DEFAULT NOW(),
 			log_message text,
-			log_status enum('ok', 'error') NOT NULL,
+			log_status enum('ok', 'error', 'info') NOT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
