@@ -145,7 +145,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			
 			return false;
 		}elseif( isset($_POST['case_type']) ) {
-			$this->log($this->_bookingId, sprintf(esc_html__('Got a %s case', 'seatreg'), $_POST['case_type']), SEATREG_PAYMENT_LOG_INFO);
+			$this->log($this->_bookingId, sprintf(esc_html__('Got a %s case. Reason is %s. Case id: %s', 'seatreg'), $_POST['case_type'], $_POST['reason_code'], $_POST['case_id']), SEATREG_PAYMENT_LOG_INFO);
 
 			return false;
 		}
