@@ -19,6 +19,8 @@ define('SEATREG_PAYPAL_IPN', "https://ipnpb.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_IPN_SANDBOX', "https://ipnpb.sandbox.paypal.com/cgi-bin/webscr"); //https://ipnpb.sandbox.paypal.com/cgi-bin/webscr
 define('SEATREG_PAYMENT_PROCESSING', 'processing');
 define('SEATREG_PAYMENT_COMPLETED', 'completed');
+define('SEATREG_PAYMENT_REVERSED', 'reversed');
+define('SEATREG_PAYMENT_REFUNDED', 'refunded');
 define('SEATREG_PAYMENT_VALIDATION_FAILED', 'validation_failure');
 define('SEATREG_PAYMENT_LOG_ERROR', 'error');
 define('SEATREG_PAYMENT_LOG_OK', 'ok');

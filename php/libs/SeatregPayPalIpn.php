@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	private $_price;
 	private $_bookingId;
 	private $_setBookingConfirmed;
+	private $_ipnVerificationRetry = 5;
 
 	public function __construct($isSandbox, $businessEmail, $currency, $price, $bookingId, $setBookingConfirmed) {
 		if ( !$isSandbox ) {
@@ -53,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$postFields .= "&$key=" . urlencode($value);
 		}
 
-		while( $retryCounter < 3 ) {
+		while( $retryCounter < $this->_ipnVerificationRetry ) {
 			$retryCounter++;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(
@@ -86,6 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			} else if (strcmp ($result , "INVALID") == 0) {
 				// IPN invalid, log for manual investigation
 				$this->log($this->_bookingId, esc_html__('The IPN is invalid', 'seatreg'), SEATREG_PAYMENT_LOG_ERROR);
+				$this->changePaymentStatus(SEATREG_PAYMENT_VALIDATION_FAILED);
 				$gotCurlIpnResponse = true;
 				$retryCounter = 999;
 			}else {
@@ -93,7 +95,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 		}
 
-		if($retryCounter >= 3 && !$gotCurlIpnResponse) {
+		if($retryCounter >= $this->_ipnVerificationRetry && !$gotCurlIpnResponse) {
 			//something unexpected happened. Did not got response from IPN. Return non 200 so IPN will try again later
 			$this->log($this->_bookingId, esc_html__('IPN retry logic failed. Will try again later', 'seatreg'), SEATREG_PAYMENT_LOG_ERROR);
 			header("HTTP/1.1 500");  
@@ -109,7 +111,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$this->log($this->_bookingId, sprintf(esc_html__('Payment for %s is completed', 'seatreg'), "$this->_price $this->_currency"));
 
 		if($this->_setBookingConfirmed === '1') {
-			$this->setBookingConfirmed();
+			$this->changeBookingStatus(2);
 		}
 	}
 
@@ -131,12 +133,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if( isset($_POST['payment_status']) && $_POST['payment_status'] == 'Completed' ) {
 			return true;
 		}elseif( isset($_POST['payment_status']) && $_POST['payment_status'] == 'Reversed' ) {
-			$this->log($this->_bookingId, sprintf(esc_html__('Payment is reversed', 'seatreg'), $_POST['payment_status']), SEATREG_PAYMENT_LOG_INFO);
-
+			$this->changePaymentStatus(SEATREG_PAYMENT_REVERSED);
+			$this->changeBookingStatus(1);
+			$this->log($this->_bookingId, esc_html__('Payment is reversed', 'seatreg'), SEATREG_PAYMENT_LOG_INFO);
+			
 			return false;
 		}elseif( isset($_POST['payment_status']) && $_POST['payment_status'] == 'Refunded' ) {
-			$this->log($this->_bookingId, sprintf(esc_html__('Payment was refunded', 'seatreg')));
-
+			$this->changePaymentStatus(SEATREG_PAYMENT_REFUNDED);
+			$this->changeBookingStatus(1);
+			$this->log($this->_bookingId, esc_html__('Payment was refunded', 'seatreg'), SEATREG_PAYMENT_LOG_INFO);
+			
 			return false;
 		}elseif( isset($_POST['case_type']) ) {
 			$this->log($this->_bookingId, sprintf(esc_html__('Got a %s case', 'seatreg'), $_POST['case_type']), SEATREG_PAYMENT_LOG_INFO);
@@ -153,7 +159,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			return true;
 		}else {
 			$this->log($this->_bookingId, sprintf(esc_html__('Payment %s is not correct. Expecting %s', 'seatreg'), $_POST['mc_gross'] . ' ' . $_POST['mc_currency'], $this->_price . ' ' . $this->_currency ), SEATREG_PAYMENT_LOG_ERROR);
-			$this->markPaymentValidationFailure();
+			$this->changePaymentStatus(SEATREG_PAYMENT_VALIDATION_FAILED);
 
 			return false;
 		}
@@ -166,7 +172,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			return true;
 		}else {
 			$this->log($this->_bookingId, sprintf(esc_html__("Receiver_email %s is not my Primary PayPal email %s", 'seatreg'), $_POST['receiver_email'], $this->_businessEmail), SEATREG_PAYMENT_LOG_ERROR);
-			$this->markPaymentValidationFailure();
+			$this->changePaymentStatus(SEATREG_PAYMENT_VALIDATION_FAILED);
 
 			return false;
 		}
@@ -187,14 +193,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 	}
 
-	private function setBookingConfirmed() {
+	private function changeBookingStatus($status = 2) {
 		global $seatreg_db_table_names;
 		global $wpdb;
 
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array( 
-				'status' => 2,
+				'status' => $status,
 			), 
 			array(
 				'booking_id' => $this->_bookingId
@@ -203,14 +209,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 	}
 
-	private function markPaymentValidationFailure() {
+	private function changePaymentStatus($status = SEATREG_PAYMENT_COMPLETED) {
 		global $seatreg_db_table_names;
 		global $wpdb;
 
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_payments,
 			array( 
-				'payment_status' => SEATREG_PAYMENT_VALIDATION_FAILED,
+				'payment_status' => $status,
 			), 
 			array(
 				'booking_id' => $this->_bookingId

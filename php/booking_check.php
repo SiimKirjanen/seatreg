@@ -36,9 +36,8 @@
 			$siteUrl = get_site_url(); 
 			$returnUrl = $siteUrl . '?seatreg=payment-return&id=' . $_GET['id'];
 			$cancelUrl = $siteUrl . '?seatreg=booking-status&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
-			//$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
-			$notifyUrl = 'https://9779-2001-7d0-8407-6e80-4d4f-38-d843-12a2.ngrok.io' . '?seatreg=paypal-ipn';
-
+			$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
+			
 			if($bookingTotalCost > 0) {
 				echo seatreg_generate_paypal_paynow_form(
 					$payPalFromAction, 
@@ -56,6 +55,10 @@
 			esc_html_e('Your payment is completed', 'seatreg');
 		}else if($bookingData->payment_status === SEATREG_PAYMENT_VALIDATION_FAILED){
 			esc_html_e('There seems to be a problem with your payment. Please notify site administrator.', 'seatreg');
+		}else if($bookingData->payment_status === SEATREG_PAYMENT_REFUNDED) {
+			esc_html_e('You payment has been refunded', 'seatreg');
+		}else if($bookingData->payment_status === SEATREG_PAYMENT_REVERSED) {
+			esc_html_e('You payment has been reversed', 'seatreg');
 		}
 	?>
 </body>
