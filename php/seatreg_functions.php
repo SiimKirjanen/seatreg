@@ -2496,7 +2496,7 @@ function seatreg_generate_paypal_paynow_form($formAction, $bookingData, $amount,
 		<form method="post" action="<?php echo $formAction; ?>">
 			<input type="hidden" name="cmd" value="_xclick" />
 			<input type="hidden" name="business" value="<?php echo esc_html($bookingData->paypal_business_email); ?>" />
-			<input type="hidden" name="item_name" value="<?php echo esc_html($bookingData->registration_name) . " booking"; ?>" />
+			<input type="hidden" name="item_name" value="<?php echo esc_html($bookingData->registration_name) . " booking " . $bookingId; ?>" />
 			<input type="hidden" name="notify_url" value="<?php echo $notifyUrl; ?>" />
 			<input type="hidden" name="hosted_button_id" value="<?php echo esc_html($bookingData->paypal_button_id); ?>" />
 			<input type="hidden" name="amount" value="<?php echo $amount; ?>">
