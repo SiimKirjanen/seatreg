@@ -1008,7 +1008,7 @@ function seatreg_generate_payment_section($booking) {
 	}
 	echo '<br>';
 	echo '<div><strong>', sprintf(esc_html__('Payment is %s', 'seatreg'), esc_html($booking->payment_status)), '</strong></div>';
-	if($booking->payment_status === SEATREG_PAYMENT_COMPLETED) {
+	if($booking->payment_status === SEATREG_PAYMENT_COMPLETED || $booking->payment_status === SEATREG_PAYMENT_REVERSED || $booking->payment_status === SEATREG_PAYMENT_REFUNDED) {
 		echo '<div>', sprintf(esc_html__('Received payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency")), '</div>';
 		echo '<div>', sprintf(esc_html__('Payment txn is %s', 'seatreg'), esc_html($booking->payment_txn_id)), '</div>';
 		echo '<div>', sprintf(esc_html__('Payment date is %s', 'seatreg'), esc_html($booking->payment_update_date)), '</div>';
