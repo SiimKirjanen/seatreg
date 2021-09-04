@@ -481,12 +481,6 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="payment-instructions"><?php esc_html_e('Payment instruction', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('At the moment this plugin dosn\'t offer any payment solutions, but you can leave informative text that instructs how to pay for booking. It will be displayed in booking status page', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="<?php esc_html_e('Enter payment instructions here', 'seatreg')?>"><?php echo esc_html($options[0]->payment_text); ?></textarea>
-			</div>
-
-			<div class="form-group">
 				<label for="registration-max-seats"><?php esc_html_e('Max seats per booking', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set how many seats can be added to the booking', 'seatreg'); ?>.</p>
 				<input type="number" class="form-control" id="registration-max-seats" name="registration-max-seats" value="<?php echo esc_html($options[0]->seats_at_once); ?>">
@@ -557,10 +551,15 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="payment-instructions"><?php esc_html_e('Payment instruction', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('You can leave informative text that instructs how to pay for a booking. It will be displayed in booking status page', 'seatreg'); ?>.</p>
+				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="<?php esc_html_e('Enter payment instructions here', 'seatreg')?>"><?php echo esc_html($options[0]->payment_text); ?></textarea>
+			</div>
+
+			<div class="form-group">
 				<label for="paypal"><?php esc_html_e('PayPal payments', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create a Buy Now button in Paypal.
-						When creating a button only fill item name. Don\'t add price, shipping etc.', 'seatreg'); ?>
+					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create a Buy Now button in Paypal. When creating a button only fill item name. Don\'t add price, shipping etc.', 'seatreg'); ?>
 				</p>
 				<?php if(extension_loaded('curl')): ?>
 					<div class="checkbox">
@@ -1009,7 +1008,7 @@ function seatreg_generate_payment_section($booking) {
 	echo '<br>';
 	echo '<div><strong>', sprintf(esc_html__('Payment is %s', 'seatreg'), esc_html($booking->payment_status)), '</strong></div>';
 	if($booking->payment_status === SEATREG_PAYMENT_COMPLETED || $booking->payment_status === SEATREG_PAYMENT_REVERSED || $booking->payment_status === SEATREG_PAYMENT_REFUNDED) {
-		echo '<div>', sprintf(esc_html__('Received payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency")), '</div>';
+		echo '<div>', sprintf(esc_html__('Payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency")), '</div>';
 		echo '<div>', sprintf(esc_html__('Payment txn is %s', 'seatreg'), esc_html($booking->payment_txn_id)), '</div>';
 		echo '<div>', sprintf(esc_html__('Payment date is %s', 'seatreg'), esc_html($booking->payment_update_date)), '</div>';
 	}
@@ -1128,7 +1127,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			}
 
 			if($options && $options->payment_text) {
-				echo '<h1>', esc_html__('Payment info', 'seatreg'), '</h1>';
+				echo '<h3>', esc_html__('Payment info', 'seatreg'), '</h3>';
 				echo '<p>', esc_html($options->payment_text) ,'</p>';
 			}
 		}else {

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-25 11:49+0300\n"
-"PO-Revision-Date: 2021-07-31 17:44+0300\n"
+"POT-Creation-Date: 2021-09-04 16:52+0300\n"
+"PO-Revision-Date: 2021-09-04 16:56+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: et\n"
@@ -18,27 +18,49 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0\n"
 
-#: php/booking_check.php:23
+#: php/booking_check.php:26
 msgid "Booking check"
 msgstr "Broneeringu kontroll"
+
+#: php/booking_check.php:53 php/paypal_return_to_merchant.php:38
+msgid "Your payment is being processed"
+msgstr "Teie makset töödeldakse"
+
+#: php/booking_check.php:55
+msgid "Your payment is completed"
+msgstr "Teie makse on kinnitatud"
+
+#: php/booking_check.php:57
+msgid ""
+"There seems to be a problem with your payment. Please notify site "
+"administrator."
+msgstr "Tekkis probleem maksega. Palun teavita administraatorit."
+
+#: php/booking_check.php:59
+msgid "You payment has been refunded"
+msgstr "Teie makse on hüvitatud"
+
+#: php/booking_check.php:61
+msgid "You payment has been reversed"
+msgstr "Teie makse on tagastatud"
 
 #: php/booking_confirm.php:24
 msgid "Booking confirm"
 msgstr "Broneeringu kinnitus"
 
-#: php/builder_content.php:10 php/seatreg_functions.php:431
+#: php/builder_content.php:10 php/seatreg_functions.php:434
 msgid "Registration name"
 msgstr "Registratsiooni nimi"
 
-#: php/builder_content.php:11 php/seatreg_functions.php:767
-#: php/seatreg_functions.php:921 php/seatreg_functions.php:1012
+#: php/builder_content.php:11 php/seatreg_functions.php:834
+#: php/seatreg_functions.php:1035 php/seatreg_functions.php:1126
 #: php/bookings/SeatregBookingsTxt.php:36
-#: php/bookings/SeatregBookingsXlsx.php:62 registration/index.php:317
+#: php/bookings/SeatregBookingsXlsx.php:62 registration/index.php:318
 msgid "Room"
 msgstr "Ruum"
 
-#: php/builder_content.php:11 php/builder_content.php:259
-#: php/builder_content.php:271
+#: php/builder_content.php:11 php/builder_content.php:286
+#: php/builder_content.php:298
 msgid "Change name"
 msgstr "Muuda nime"
 
@@ -58,176 +80,196 @@ msgstr "Liiguta selekteeritud kastid"
 msgid "pixels to"
 msgstr "pikslit"
 
-#: php/builder_content.php:59 php/seatreg_strings.php:85
+#: php/builder_content.php:60 php/seatreg_strings.php:87
 msgid "Loading..."
 msgstr "Laadimine..."
 
-#: php/builder_content.php:70
+#: php/builder_content.php:71
 msgid "Seat deletion is limited!"
 msgstr "Kohtade kustutamine on limiteeritud!"
 
-#: php/builder_content.php:80 php/seatreg_strings.php:106
+#: php/builder_content.php:81 php/seatreg_strings.php:108
 msgid "Save"
 msgstr "Salvesta"
 
-#: php/builder_content.php:83
+#: php/builder_content.php:84
 msgid "View registration"
 msgstr "Vaata registratsiooni"
 
-#: php/builder_content.php:96
+#: php/builder_content.php:97
 msgid "Color"
 msgstr "Värv"
 
-#: php/builder_content.php:104 php/builder_content.php:124
-#: php/builder_content.php:162 php/builder_content.php:308
-#: php/builder_content.php:397 php/builder_content.php:421
-#: php/builder_content.php:438 php/builder_content.php:483
-#: php/seatreg_functions.php:916 php/seatreg_functions.php:932
-#: registration/index.php:281
+#: php/builder_content.php:105 php/builder_content.php:125
+#: php/builder_content.php:163 php/builder_content.php:189
+#: php/builder_content.php:335 php/builder_content.php:431
+#: php/builder_content.php:455 php/builder_content.php:472
+#: php/builder_content.php:517 php/seatreg_functions.php:1030
+#: php/seatreg_functions.php:1046 registration/index.php:281
 msgid "Close"
 msgstr "Sulge"
 
-#: php/builder_content.php:114
+#: php/builder_content.php:115
 msgid "Adding hover text"
 msgstr "Lisa hõljuktekst"
 
-#: php/builder_content.php:119
+#: php/builder_content.php:120
 msgid "Enter text"
 msgstr "Lisa tekst"
 
-#: php/builder_content.php:121
+#: php/builder_content.php:122
 msgid "Leave field empty to remove existing hover text"
 msgstr "Jäta tühjaks, et eemaldada hõljuktekst"
 
-#: php/builder_content.php:125 php/builder_content.php:309
-#: php/seatreg_functions.php:811 php/seatreg_functions.php:856
-#: registration/index.php:347 registration/index.php:388
-#: registration/index.php:410 registration/index.php:427
-#: registration/index.php:471
+#: php/builder_content.php:126 php/builder_content.php:336
+#: php/seatreg_functions.php:879 php/seatreg_functions.php:924
+#: registration/index.php:352 registration/index.php:393
+#: registration/index.php:415 registration/index.php:432
+#: registration/index.php:476
 msgid "OK"
 msgstr "OK"
 
-#: php/builder_content.php:135
+#: php/builder_content.php:136
 msgid "Building grid helps you to create boxes"
 msgstr "Ehitus võrk aitab luua kaste"
 
-#: php/builder_content.php:141
+#: php/builder_content.php:142
 msgid "Box size"
 msgstr "Kasti suurus"
 
-#: php/builder_content.php:148
+#: php/builder_content.php:149
 msgid "Box count"
 msgstr "Kastide arv"
 
-#: php/builder_content.php:149
+#: php/builder_content.php:150
 msgid "x-axis"
 msgstr "x-telg"
 
-#: php/builder_content.php:150
+#: php/builder_content.php:151
 msgid "y-axis"
 msgstr "y-telg"
 
-#: php/builder_content.php:155
+#: php/builder_content.php:156
 msgid "Distance between boxes"
 msgstr "Kastide vehe"
 
-#: php/builder_content.php:163
+#: php/builder_content.php:164
 msgid "Update grid"
 msgstr "Uuenda võrku"
 
-#: php/builder_content.php:177
+#: php/builder_content.php:174
+msgid "Seat pricing"
+msgstr "Koha hind"
+
+#: php/builder_content.php:179
+msgid "You need to enable PayPal in settings to turn on pricing functionality."
+msgstr "PayPal tuleb seadistada seadete alt."
+
+#: php/builder_content.php:182
+msgid "Fill price to all selected seats"
+msgstr "Lisa hind kõikidele selekteeritud kohtadele."
+
+#: php/builder_content.php:184
+msgid "Fill prices"
+msgstr "Täida hinnad"
+
+#: php/builder_content.php:190
+msgid "Set price"
+msgstr "Lisa hind"
+
+#: php/builder_content.php:204
 msgid "Existing legends:"
 msgstr "Olemasolevad legendid:"
 
-#: php/builder_content.php:179
+#: php/builder_content.php:206
 msgid "Apply legend"
 msgstr "Lisa lehend"
 
-#: php/builder_content.php:183
+#: php/builder_content.php:210
 msgid "Remove legend from registration:"
 msgstr "Eemalda legend registratsioonist:"
 
-#: php/builder_content.php:185 php/seatreg_functions.php:677
+#: php/builder_content.php:212 php/seatreg_functions.php:744
 msgid "Delete"
 msgstr "Kustuta"
 
-#: php/builder_content.php:189
+#: php/builder_content.php:216
 msgid "Remove legend from this room:"
 msgstr "Eemalda legend selekteeritud ruumist:"
 
-#: php/builder_content.php:191 php/seatreg_functions.php:794
-#: php/seatreg_functions.php:838 php/seatreg_strings.php:29
-#: php/seatreg_strings.php:124
+#: php/builder_content.php:218 php/seatreg_functions.php:861
+#: php/seatreg_functions.php:906 php/seatreg_strings.php:29
+#: php/seatreg_strings.php:126
 msgid "Remove"
 msgstr "Eemalda"
 
-#: php/builder_content.php:195 php/builder_content.php:265
+#: php/builder_content.php:222 php/builder_content.php:292
 msgid "Change legend"
 msgstr "Muuda legendi"
 
-#: php/builder_content.php:197
+#: php/builder_content.php:224
 msgid "Change"
 msgstr "Muuda"
 
-#: php/builder_content.php:207 php/builder_content.php:224
+#: php/builder_content.php:234 php/builder_content.php:251
 msgid "Step 1."
 msgstr "Samm 1."
 
-#: php/builder_content.php:207 php/seatreg_strings.php:96
+#: php/builder_content.php:234 php/seatreg_strings.php:98
 msgid "Enter legend name"
 msgstr "Sisesta legendi nimi"
 
-#: php/builder_content.php:213 php/builder_content.php:219
-#: php/builder_content.php:242
+#: php/builder_content.php:240 php/builder_content.php:246
+#: php/builder_content.php:269
 msgid "Step 2."
 msgstr "Samm 2."
 
-#: php/builder_content.php:219
+#: php/builder_content.php:246
 msgid "Choose legend color"
 msgstr "Vali legendi värv"
 
-#: php/builder_content.php:225 php/builder_content.php:230
+#: php/builder_content.php:252 php/builder_content.php:257
 msgid "Step 3."
 msgstr "Samm 3."
 
-#: php/builder_content.php:230
+#: php/builder_content.php:257
 msgid "Review new legend"
 msgstr "Uue legendi ülevaade"
 
-#: php/builder_content.php:240 php/builder_content.php:248
-#: php/seatreg_strings.php:93
+#: php/builder_content.php:267 php/builder_content.php:275
+#: php/seatreg_strings.php:95
 msgid "Create new legend"
 msgstr "Loo uus legend"
 
-#: php/builder_content.php:254
+#: php/builder_content.php:281
 msgid "Enter new name"
 msgstr "Sisesta uus nimi"
 
-#: php/builder_content.php:260 php/builder_content.php:280
+#: php/builder_content.php:287 php/builder_content.php:307
 msgid "Back"
 msgstr "Tagasi"
 
-#: php/builder_content.php:272 php/builder_content.php:281
+#: php/builder_content.php:299 php/builder_content.php:308
 msgid "Change color"
 msgstr "Muuda värvi"
 
-#: php/builder_content.php:286
+#: php/builder_content.php:313
 msgid "Close legend change"
 msgstr "Sulge legendi muutmine"
 
-#: php/builder_content.php:299 php/bookings/SeatregBookingsPDF.php:68
+#: php/builder_content.php:326 php/bookings/SeatregBookingsPDF.php:68
 msgid "Room name"
 msgstr "Ruumi nimi"
 
-#: php/builder_content.php:303
+#: php/builder_content.php:330
 msgid "Enter room name:"
 msgstr "Sisesta ruumi nimi:"
 
-#: php/builder_content.php:319
+#: php/builder_content.php:346
 msgid "Manual"
 msgstr "Juhend"
 
-#: php/builder_content.php:327
+#: php/builder_content.php:354
 msgid ""
 "With select tool you can select individual objects in your seat map. This "
 "tool is also used to resize and change object location. To change seat/"
@@ -241,7 +283,7 @@ msgstr ""
 "Suuruse muutmiseks tuleb hiirekursor asetada koha/objekti nurgale või äärele "
 "ning vasakut hiirenuppu all hoides lohistada soovitud suuruseni."
 
-#: php/builder_content.php:334
+#: php/builder_content.php:361
 msgid ""
 "With this tool you can create seats. Simply click on gray dotted box and new "
 "seat will be created. You can create multiple seats at once by dragging "
@@ -253,7 +295,7 @@ msgstr ""
 "halli punktiirjoonega kastide lohistades on võimalik luua mitmeid kohti "
 "kiiremini."
 
-#: php/builder_content.php:341
+#: php/builder_content.php:368
 msgid ""
 "Custom boxes are used to show special objects in your seat map (exit, trash "
 "can, stage and so on). Simply click on gray dotted box and new custom box "
@@ -266,7 +308,7 @@ msgstr ""
 "hoides ja hiirekursorit üle halli punktiirjoonega kastide lohistades on "
 "võimalik luua mitmeid objekte kiiremini."
 
-#: php/builder_content.php:348
+#: php/builder_content.php:375
 msgid ""
 "With eraser tool you can remove seats and custom boxes. Simply click on "
 "object and it will be removed. You can remove multiple objects at once by "
@@ -275,7 +317,7 @@ msgstr ""
 "Kustukumm võimaldab olemasolevaid kohti ja objekte eemaldada. Kustutamiseks "
 "tuleb vasakut hiirenuppu all hoida ja kursorit lohistada."
 
-#: php/builder_content.php:355
+#: php/builder_content.php:382
 msgid ""
 "Lasso tool is helpful if you wish to work with multiple objects at the same "
 "time (changing color, deleting, adding hover text and legends). Simple hold "
@@ -284,7 +326,7 @@ msgstr ""
 "Lasso tööriist võimaldab mitut kohta/objekti korraga selekteerida värvi "
 "muutmiseks, kustutamiseks, hõljumiskirja ja legendi lisamiseks."
 
-#: php/builder_content.php:362
+#: php/builder_content.php:389
 msgid ""
 "Once you have selected seats/boxes with either select or lasso tool you can "
 "delete them with clicking on garbage can button. "
@@ -292,7 +334,7 @@ msgstr ""
 "Selekteerimise ja lasso tööriista abil valitud kohtade ja objektide "
 "eemaldamine. "
 
-#: php/builder_content.php:369
+#: php/builder_content.php:396
 msgid ""
 "Legends are useful if you want to add labels to seats/custom boxes with "
 "special meaning. Example: Lets say you want to show where boys and where "
@@ -303,7 +345,7 @@ msgstr ""
 "dialoogboksis on võimalik luua, muuta, kustutada ja paigutada legende "
 "selekteeritud kohtadele ja objektidele."
 
-#: php/builder_content.php:376
+#: php/builder_content.php:403
 msgid ""
 "Hover text is shown when user clicks or moves mouse cursor over a seat/"
 "custom box. Simply select seats or custom boxes and add text via hover text "
@@ -313,14 +355,14 @@ msgstr ""
 "liigub hiirekursoriga koha või objekti peale. Selekteeritud kohtadele ja "
 "objektidele saab hõljumiskirja dialoogboksis lisada ja kustutada teksti."
 
-#: php/builder_content.php:384
+#: php/builder_content.php:411
 msgid ""
 "Opens up color dialog where you can apply colors to selected seats/custom "
 "boxes."
 msgstr ""
 "Avanenud dialoogboks võimaldab selekteerituid kohti ja objekte värvida."
 
-#: php/builder_content.php:391
+#: php/builder_content.php:418
 msgid ""
 "In seat map builder you can see lot of gray dotted boxes. These boxes are "
 "used to creat seats and custom boxes. In grid settings you can change size, "
@@ -332,25 +374,33 @@ msgstr ""
 "loomiseks. Ehitusvõre dialoogboksis saab muuta nende suurust, vahemaad ja "
 "arvu."
 
-#: php/builder_content.php:408
+#: php/builder_content.php:425
+msgid ""
+"Lets you add prices to seats. You also need to configure paypal in settings "
+"to enable payments."
+msgstr ""
+"Võimaldab lisada hindu kohtadele. Maksete sisse lülitamiseks peab Paypali "
+"seadistama seadmete alt."
+
+#: php/builder_content.php:442
 msgid "Limited deletion"
 msgstr "Limiteeritud kustutamine"
 
-#: php/builder_content.php:414
+#: php/builder_content.php:448
 msgid ""
 "If room contains pending or confirmed seats then seat deletion is limited."
 msgstr ""
 "Kui ruum sisaldab broneeringuid, siis kohtade kustutamine on limiteeritud."
 
-#: php/builder_content.php:415
+#: php/builder_content.php:449
 msgid "Example:"
 msgstr "Näide:"
 
-#: php/builder_content.php:415
+#: php/builder_content.php:449
 msgid "Lets say you have seats with numbers 1,2,3 and 4."
 msgstr "Ütleme, et on kohad numbritega 1,2,3 ja 4."
 
-#: php/builder_content.php:415
+#: php/builder_content.php:449
 msgid ""
 "If someone occupies seat number 2 then you won't be able to delete seats 1 "
 "and 2."
@@ -358,27 +408,27 @@ msgstr ""
 "Kui keegi broneerib koha numbriga 2, siis ei ole võimalik kustutada kohtasid "
 "1 ja 2."
 
-#: php/builder_content.php:432
+#: php/builder_content.php:466
 msgid "Saving is not allowed"
 msgstr "Salvestamine ei ole lubatud"
 
-#: php/builder_content.php:449
+#: php/builder_content.php:483
 msgid "Room background image"
 msgstr "Ruumi taustapilt"
 
-#: php/builder_content.php:454
+#: php/builder_content.php:488
 msgid "Current room image"
 msgstr "Selekteeritud ruumi taustapilt"
 
-#: php/builder_content.php:459
+#: php/builder_content.php:493
 msgid "Upload image"
 msgstr "Laadi üles"
 
-#: php/builder_content.php:465
+#: php/builder_content.php:499
 msgid "Upload"
 msgstr "Laadi üles"
 
-#: php/builder_content.php:478
+#: php/builder_content.php:512
 msgid "Previously uploaded images"
 msgstr "Eelnevalt ülesse laetud pildid"
 
@@ -398,6 +448,18 @@ msgid ""
 msgstr ""
 "Kui ei soovi seda teadet saada, siis seadmete kaudu on võimalik see välja "
 "lülitada."
+
+#: php/paypal_return_to_merchant.php:31
+msgid "Payment processing"
+msgstr "Makset teostatakse"
+
+#: php/paypal_return_to_merchant.php:40
+msgid ""
+"Payment is already processed or doe's not exist. For more information check "
+"your booking status page."
+msgstr ""
+"Makse on juba teostatud või seda pole olemas. Rohkema info saamiseks vaata "
+"broneeringu staatuse lehte."
 
 #: php/SeatregBooking.php:30 php/bookings/SeatregBookingsXlsx.php:61
 msgid "Seat nr"
@@ -499,7 +561,7 @@ msgid "%s Overview"
 msgstr "%s Ülevaade"
 
 #: php/seatreg_admin_panel.php:38 php/seatreg_admin_panel.php:110
-#: php/seatreg_functions.php:374
+#: php/seatreg_functions.php:377
 msgid "Overview"
 msgstr "Ülevaade"
 
@@ -509,7 +571,7 @@ msgid "%s Settings"
 msgstr "%s Seaded"
 
 #: php/seatreg_admin_panel.php:46 php/seatreg_admin_panel.php:93
-#: php/seatreg_functions.php:378
+#: php/seatreg_functions.php:381
 msgid "Settings"
 msgstr "Seaded"
 
@@ -518,7 +580,7 @@ msgstr "Seaded"
 msgid "%s Bookings"
 msgstr "%s Broneeringud"
 
-#: php/seatreg_admin_panel.php:54 php/seatreg_functions.php:382
+#: php/seatreg_admin_panel.php:54 php/seatreg_functions.php:385
 msgid "Bookings"
 msgstr "Broneeringud"
 
@@ -546,168 +608,150 @@ msgstr "Broneeringute haldus"
 msgid "Manage seat bookings"
 msgstr "Halda registratsiooni broneeringuid"
 
-#: php/seatreg_functions.php:38
+#: php/seatreg_functions.php:41
 msgid "Please log in to view this area"
 msgstr "Palun logi sisse, et saada juurdepääs siia"
 
-#: php/seatreg_functions.php:44
+#: php/seatreg_functions.php:47
 msgid "No permissions"
 msgstr "Puudub juurdepääsu õigus"
 
-#: php/seatreg_functions.php:158
+#: php/seatreg_functions.php:161
 #, php-format
 msgid "%s pending seats"
 msgstr "%s mitte kinnitatud broneeringut"
 
-#: php/seatreg_functions.php:164
+#: php/seatreg_functions.php:167
 msgid "pending seats"
 msgstr "mitte kinnitatud broneeringut"
 
-#: php/seatreg_functions.php:176
+#: php/seatreg_functions.php:179
 msgid "Start date not set"
 msgstr "Algus kuupäev pole seadistatud"
 
-#: php/seatreg_functions.php:177
+#: php/seatreg_functions.php:180
 msgid "End date not set"
 msgstr "Lõpp kuupäev pole seadistatud"
 
-#: php/seatreg_functions.php:195
+#: php/seatreg_functions.php:198
 msgid "Overall"
 msgstr "Ühtekokku"
 
-#: php/seatreg_functions.php:214
+#: php/seatreg_functions.php:217
 msgid "Seats"
 msgstr "Kohad"
 
-#: php/seatreg_functions.php:229 php/seatreg_functions.php:282
-#: php/seatreg_functions.php:444 php/seatreg_strings.php:99
+#: php/seatreg_functions.php:232 php/seatreg_functions.php:285
+#: php/seatreg_functions.php:447 php/seatreg_strings.php:101
 #: registration/index.php:155
 msgid "Open"
 msgstr "Vaba"
 
-#: php/seatreg_functions.php:245 php/seatreg_functions.php:298
-#: php/seatreg_functions.php:1012
+#: php/seatreg_functions.php:248 php/seatreg_functions.php:301
 msgid "Confirmed"
 msgstr "Kinnitatud"
 
-#: php/seatreg_functions.php:260 php/seatreg_functions.php:314
-#: php/seatreg_functions.php:761 php/seatreg_functions.php:1012
+#: php/seatreg_functions.php:263 php/seatreg_functions.php:317
+#: php/seatreg_functions.php:828 php/seatreg_functions.php:1126
 #: php/seatreg_strings.php:46
 msgid "Pending"
 msgstr "Mitte kinnitatud"
 
-#: php/seatreg_functions.php:356
+#: php/seatreg_functions.php:359
 msgid "Created registrations"
 msgstr "Loodud registratsioonid"
 
-#: php/seatreg_functions.php:366
+#: php/seatreg_functions.php:369
 msgid "Registration"
 msgstr "Registratsioon"
 
-#: php/seatreg_functions.php:370
+#: php/seatreg_functions.php:373
 msgid "Edit map"
 msgstr "Kujunda plaan"
 
-#: php/seatreg_functions.php:397
+#: php/seatreg_functions.php:400
 msgid "No registrations created!"
 msgstr "Ühtegi registratsiooni pole loodud!"
 
-#: php/seatreg_functions.php:426
+#: php/seatreg_functions.php:429
 #, php-format
 msgid "%s settings"
 msgstr "%s seaded"
 
-#: php/seatreg_functions.php:433
+#: php/seatreg_functions.php:436
 msgid "Change registration name"
 msgstr "Muuda registratsiooni nime"
 
-#: php/seatreg_functions.php:439
+#: php/seatreg_functions.php:442
 msgid "Registration status"
 msgstr "Registratsiooni staatus"
 
-#: php/seatreg_functions.php:440
+#: php/seatreg_functions.php:443
 msgid "Close and open registration"
 msgstr "Sulge ja ava registratsiooni"
 
-#: php/seatreg_functions.php:450
+#: php/seatreg_functions.php:453
 msgid "Registration start date"
 msgstr "Registratsiooni algus kuupäev"
 
-#: php/seatreg_functions.php:451
+#: php/seatreg_functions.php:454
 msgid "Set registration start date (dd.mm.yyyy)"
 msgstr "Seadista registratsiooni algus kuupäev (dd.mm.yyyy)"
 
-#: php/seatreg_functions.php:457
+#: php/seatreg_functions.php:460
 msgid "Registration end date"
 msgstr "Registratsiooni lõppkuupäev"
 
-#: php/seatreg_functions.php:458
+#: php/seatreg_functions.php:461
 msgid "Set registration end date (dd.mm.yyyy)"
 msgstr "Seadista registratsiooni lõppkuupäev (dd.mm.yyyy)"
 
-#: php/seatreg_functions.php:464 php/seatreg_functions.php:469
+#: php/seatreg_functions.php:467 php/seatreg_functions.php:472
 msgid "Show bookings"
 msgstr "Näita broneeringuid"
 
-#: php/seatreg_functions.php:465
+#: php/seatreg_functions.php:468
 msgid "Let people see who has made a booking in registration page"
 msgstr "Võimaldab registratsiooni vaates kuvada kes broneeringu tegi"
 
-#: php/seatreg_functions.php:475
+#: php/seatreg_functions.php:478
 msgid "Registration info text"
 msgstr "Registratsiooni info"
 
-#: php/seatreg_functions.php:476
+#: php/seatreg_functions.php:479
 msgid "Set registration info text. Will be displayed in registration page"
 msgstr ""
 "Seadista registratsiooni info tekst. Seda kuvatakse registratsiooni lehel"
 
-#: php/seatreg_functions.php:477
+#: php/seatreg_functions.php:480
 msgid "Enter info text here"
 msgstr "Lisa info tekst siia"
 
-#: php/seatreg_functions.php:481
-msgid "Payment instruction"
-msgstr "Maksmise juhend"
-
-#: php/seatreg_functions.php:482
-msgid ""
-"At the moment this plugin dosn't offer any payment solutions, but you can "
-"leave informative text that instructs how to pay for booking. It will be "
-"displayed in booking status page"
-msgstr ""
-"Hetkel ei ole toetatud ükski maksmise teenus aga võid jätta broneeringule "
-"teksti, mis kirjeldab kuidas tasuda"
-
-#: php/seatreg_functions.php:483
-msgid "Enter payment instructions here"
-msgstr "Sisesta maksmise juhend siia"
-
-#: php/seatreg_functions.php:487
+#: php/seatreg_functions.php:484
 msgid "Max seats per booking"
 msgstr "Maksimum kohti broneeringus"
 
-#: php/seatreg_functions.php:488
+#: php/seatreg_functions.php:485
 msgid "Set how many seats can be added to the booking"
 msgstr "Seadistab mitut kohta saab korraga broneerida"
 
-#: php/seatreg_functions.php:493
+#: php/seatreg_functions.php:490
 msgid "Gmail required"
 msgstr "Gmail on nõutud"
 
-#: php/seatreg_functions.php:494
+#: php/seatreg_functions.php:491
 msgid "Gmail address is required when making a booking"
 msgstr "Gmail on kohustuslik broneeringu tegemiseks"
 
-#: php/seatreg_functions.php:498
+#: php/seatreg_functions.php:495
 msgid "Allow only gmail address"
 msgstr "Luba vaid Gmail broneeringuid"
 
-#: php/seatreg_functions.php:504
+#: php/seatreg_functions.php:501
 msgid "Password"
 msgstr "Parool"
 
-#: php/seatreg_functions.php:506
+#: php/seatreg_functions.php:503
 msgid ""
 "You can set a password. Only people who know it can view your registration "
 "and make a booking. Leave it empty for no password"
@@ -715,11 +759,11 @@ msgstr ""
 "Registratsioonile on võimalik seadistada parool. Ainult need kes parooli "
 "teavad saavad registratsiooni vaadata ja teha broneeringuid"
 
-#: php/seatreg_functions.php:512
+#: php/seatreg_functions.php:509
 msgid "Pending status"
 msgstr "Mitte kinnitatud staatus"
 
-#: php/seatreg_functions.php:514
+#: php/seatreg_functions.php:511
 msgid ""
 "By default all bookings will first be in pending state so admin can approve "
 "them (with booking manager). If you want bookings automatically to be in "
@@ -730,239 +774,363 @@ msgstr ""
 "broneeringud oleks kohe alguses kinnitatud, siis eemalda linnuke "
 "alljärgnevast kastist."
 
-#: php/seatreg_functions.php:519
+#: php/seatreg_functions.php:516
 msgid "Use pending"
 msgstr "Kasuta mitte kinnitatuid"
 
-#: php/seatreg_functions.php:525
+#: php/seatreg_functions.php:522
 msgid "Booking email confirm"
 msgstr "Broneeringu kinnitamine maili teel"
 
-#: php/seatreg_functions.php:527
+#: php/seatreg_functions.php:524
 msgid "Bookings must be confirmed with email"
 msgstr "Broneeringud peavad olema kinnitatud maili kaudu"
 
-#: php/seatreg_functions.php:532
+#: php/seatreg_functions.php:529
 msgid "Email confirm"
 msgstr "E-posti kinnitus"
 
-#: php/seatreg_functions.php:538
+#: php/seatreg_functions.php:535
 msgid "Booking notification"
 msgstr "Broneeringu teade"
 
-#: php/seatreg_functions.php:543
+#: php/seatreg_functions.php:540
 #, php-format
 msgid "Send a notification to %s when you got a new booking."
 msgstr "Saada teade %s kui on toimunud uus broneering."
 
-#: php/seatreg_functions.php:551
+#: php/seatreg_functions.php:548
 msgid "Send notifications"
 msgstr "Saada teade"
 
-#: php/seatreg_functions.php:558
+#: php/seatreg_functions.php:554
+msgid "Payment instruction"
+msgstr "Maksmise juhend"
+
+#: php/seatreg_functions.php:555
+msgid ""
+"You can leave informative text that instructs how to pay for a booking. It "
+"will be displayed in booking status page"
+msgstr ""
+"Võid jätta maksmist seletava teksti, mida kuvatakse broneeringu staatuse "
+"lehel"
+
+#: php/seatreg_functions.php:556
+msgid "Enter payment instructions here"
+msgstr "Sisesta maksmise juhend siia"
+
+#: php/seatreg_functions.php:560
+msgid "PayPal payments"
+msgstr "PayPal maksed"
+
+#: php/seatreg_functions.php:562
+msgid ""
+"Allow and configure PayPal payments. Enables you to ask money for bookings. "
+"To enable this feature you need to create a Buy Now button in Paypal. When "
+"creating a button only fill item name. Don't add price, shipping etc."
+msgstr ""
+"Luba ja seadista PayPal makseid. Võimaldab küsida raha broneeringute eest. "
+"Aktiveerimiseks pead looma PayPalis uue Buy Now Button. Loomisel täida "
+"ainult nimi. Ära lisa hinda, transpordi hind jne."
+
+#: php/seatreg_functions.php:568
+msgid "Allow payments"
+msgstr "Luba makseid"
+
+#: php/seatreg_functions.php:572
+msgid "PayPal business email"
+msgstr "Paypal business email"
+
+#: php/seatreg_functions.php:574
+msgid "Pease enter your PayPal business email"
+msgstr "Palus lisa PayPal business email"
+
+#: php/seatreg_functions.php:579
+msgid "PayPal button id"
+msgstr "PayPal nupu id"
+
+#: php/seatreg_functions.php:581
+msgid "Pease enter PayPal button id"
+msgstr "Palun sisesta PayPal nupu id"
+
+#: php/seatreg_functions.php:586
+msgid "PayPal currency"
+msgstr "PayPal valuuta"
+
+#: php/seatreg_functions.php:588
+msgid "Pease enter PayPal currency code (ISO 4217)"
+msgstr "Palus sisesta PayPal valuuta kood (ISO 4217)"
+
+#: php/seatreg_functions.php:593
+msgid "Set paid booking approved"
+msgstr "Määra makstud broneeringutele kinnitatud staatus"
+
+#: php/seatreg_functions.php:595
+msgid "Set booking approved automatically when payment has been completed"
+msgstr "Määra broneerinud kinnitatuks kui makse on kinnitatud"
+
+#: php/seatreg_functions.php:600
+msgid "Set approved"
+msgstr "Määra kinnitatuks"
+
+#: php/seatreg_functions.php:605
+msgid "PayPal sandbox mode"
+msgstr "PayPal liivakast"
+
+#: php/seatreg_functions.php:607
+msgid ""
+"Turn on sandbox mode. Lets you test payments with your sandbox account. "
+"Don't forget to change business email and button id."
+msgstr ""
+"Aktiveeri liivakasti režiim. Võimaldab testida makseid kasutades liivakasti "
+"kontosi. Ära unusta emaili ja nupu id vahetamist."
+
+#: php/seatreg_functions.php:612
+msgid "PayPal sandbox"
+msgstr "PayPal liivakast"
+
+#: php/seatreg_functions.php:618
+msgid "Curl extension is required for Paypal to work"
+msgstr "Curl laiendus on vajalik, et PayPal maksed töötaksis"
+
+#: php/seatreg_functions.php:625
 msgid "Custom fields"
 msgstr "Kohandatud väljad"
 
-#: php/seatreg_functions.php:560
+#: php/seatreg_functions.php:627
 msgid "Custom fields allow you to ask extra information in bookings."
 msgstr ""
 "Kohandatud väljad võimaldavad küsida rohkem informatsiooni broneeringutel."
 
-#: php/seatreg_functions.php:567
+#: php/seatreg_functions.php:634
 msgid "Existing custom fields"
 msgstr "Loodud kohandatud väljad"
 
-#: php/seatreg_functions.php:569
+#: php/seatreg_functions.php:636
 msgid "Custom fields you have already created"
 msgstr "Loodud kohandatud väljad"
 
-#: php/seatreg_functions.php:605
+#: php/seatreg_functions.php:672
 msgid "New custom field"
 msgstr "Uus kohandatud väli"
 
-#: php/seatreg_functions.php:607
+#: php/seatreg_functions.php:674
 msgid "Create a new custom field"
 msgstr "Loo uus kohandatud väli"
 
-#: php/seatreg_functions.php:610 php/seatreg_functions.php:768
-#: php/seatreg_functions.php:1012 php/bookings/SeatregBookingsPDF.php:69
+#: php/seatreg_functions.php:677 php/seatreg_functions.php:835
+#: php/seatreg_functions.php:1126 php/bookings/SeatregBookingsPDF.php:69
 #: php/bookings/SeatregBookingsTxt.php:37
 #: php/bookings/SeatregBookingsXlsx.php:63
 msgid "Name"
 msgstr "Nimi"
 
-#: php/seatreg_functions.php:614
+#: php/seatreg_functions.php:681
 msgid "Type"
 msgstr "Tüüp"
 
-#: php/seatreg_functions.php:616
+#: php/seatreg_functions.php:683
 msgid "Text"
 msgstr "Tekst"
 
-#: php/seatreg_functions.php:617
+#: php/seatreg_functions.php:684
 msgid "Checkbox"
 msgstr "Märkeruut"
 
-#: php/seatreg_functions.php:618
+#: php/seatreg_functions.php:685
 msgid "Select"
 msgstr "Selektsioon"
 
-#: php/seatreg_functions.php:625
+#: php/seatreg_functions.php:692
 msgid "Option name"
 msgstr "Valiku nimi"
 
-#: php/seatreg_functions.php:629
+#: php/seatreg_functions.php:696
 msgid "Add option"
 msgstr "Lisa valik"
 
-#: php/seatreg_functions.php:632
+#: php/seatreg_functions.php:699
 msgid "Add custom field"
 msgstr "Lisa kohandatud väli"
 
-#: php/seatreg_functions.php:643 php/seatreg_functions.php:933
+#: php/seatreg_functions.php:710 php/seatreg_functions.php:1047
 msgid "Save changes"
 msgstr "Salvesta muudatused"
 
-#: php/seatreg_functions.php:655 php/seatreg_functions.php:664
+#: php/seatreg_functions.php:722 php/seatreg_functions.php:731
 msgid "Create new registration"
 msgstr "Loo uus registratsioon"
 
-#: php/seatreg_functions.php:658
+#: php/seatreg_functions.php:725
 msgid "Enter registration name"
 msgstr "Sisesta registratsiooni nimi"
 
-#: php/seatreg_functions.php:740
+#: php/seatreg_functions.php:807
 #, php-format
 msgid "%s pending bookings"
 msgstr "%s mitte kinnitatud broneeringut"
 
-#: php/seatreg_functions.php:748
+#: php/seatreg_functions.php:815
 msgid "Search booking"
 msgstr "Otsi broneeringut"
 
-#: php/seatreg_functions.php:762
+#: php/seatreg_functions.php:829 php/seatreg_functions.php:1126
 msgid "Approved"
 msgstr "Kinnitatud"
 
-#: php/seatreg_functions.php:766 php/seatreg_functions.php:920
-#: php/seatreg_functions.php:1012
+#: php/seatreg_functions.php:833 php/seatreg_functions.php:1034
+#: php/seatreg_functions.php:1126
 msgid "Seat"
 msgstr "Koht"
 
-#: php/seatreg_functions.php:769 php/bookings/SeatregBookingsTxt.php:28
+#: php/seatreg_functions.php:836 php/bookings/SeatregBookingsTxt.php:28
 msgid "Date"
 msgstr "Kuupäev"
 
-#: php/seatreg_functions.php:770 php/seatreg_functions.php:1009
+#: php/seatreg_functions.php:837 php/seatreg_functions.php:1123
+#: php/bookings/SeatregBookingsPDF.php:72
+#: php/bookings/SeatregBookingsTxt.php:40
 msgid "Booking id"
 msgstr "Broneeringu id"
 
-#: php/seatreg_functions.php:775
+#: php/seatreg_functions.php:842
 msgid "No pending seats"
 msgstr "Mitte kinnitatuid kohti pole"
 
-#: php/seatreg_functions.php:791 php/seatreg_functions.php:835
+#: php/seatreg_functions.php:858 php/seatreg_functions.php:903
 msgid "More info"
 msgstr "Rohkem infot"
 
-#: php/seatreg_functions.php:792 php/seatreg_functions.php:836
+#: php/seatreg_functions.php:859 php/seatreg_functions.php:904
 msgid "Edit"
 msgstr "Muuda"
 
-#: php/seatreg_functions.php:795
+#: php/seatreg_functions.php:862
 msgid "Approve"
 msgstr "Kinnita"
 
-#: php/seatreg_functions.php:799 php/seatreg_functions.php:842
+#: php/seatreg_functions.php:866 php/seatreg_functions.php:910
 #: php/bookings/SeatregBookingsPDF.php:71
 #: php/bookings/SeatregBookingsTxt.php:39
 msgid "Registration date"
 msgstr "Registratsiooni kuupäev"
 
-#: php/seatreg_functions.php:800 php/seatreg_strings.php:37
+#: php/seatreg_functions.php:867 php/seatreg_strings.php:37
 #: php/bookings/SeatregBookingsPDF.php:70
 #: php/bookings/SeatregBookingsTxt.php:38
 #: php/bookings/SeatregBookingsXlsx.php:64
 msgid "Email"
 msgstr "E-post"
 
-#: php/seatreg_functions.php:819
+#: php/seatreg_functions.php:887
 msgid "No approved seats"
 msgstr "Kinnitatud broneeringud puuduvad"
 
-#: php/seatreg_functions.php:843
+#: php/seatreg_functions.php:911
 msgid "Approval date"
 msgstr "Kinnitus kuupäev"
 
-#: php/seatreg_functions.php:902 php/seatreg_strings.php:111
+#: php/seatreg_functions.php:970 php/seatreg_strings.php:113
 msgid "Not set"
 msgstr "Pole määratud"
 
-#: php/seatreg_functions.php:915
+#: php/seatreg_functions.php:1004
+msgid ""
+"No payment info recorded. This means that this booking has no price or user "
+"has not started the payment process."
+msgstr ""
+"Makse info puudub. See tähendab seda, et broneeringule pole määratad hinda "
+"või makset pole veel töödeldud."
+
+#: php/seatreg_functions.php:1009
+#, php-format
+msgid "Payment is %s"
+msgstr "Makse on %s"
+
+#: php/seatreg_functions.php:1011
+#, php-format
+msgid "Payment of %s"
+msgstr "Makse %s"
+
+#: php/seatreg_functions.php:1012
+#, php-format
+msgid "Payment txn is %s"
+msgstr "Makse txn on %s"
+
+#: php/seatreg_functions.php:1013
+#, php-format
+msgid "Payment date is %s"
+msgstr "Makse puupäev on %s"
+
+#: php/seatreg_functions.php:1016
+msgid "Payment logs"
+msgstr "Makse logid"
+
+#: php/seatreg_functions.php:1029
 msgid "Edit booking"
 msgstr "Muuda broneeringut"
 
-#: php/seatreg_functions.php:923
+#: php/seatreg_functions.php:1037
 msgid "First name"
 msgstr "Eesnimi"
 
-#: php/seatreg_functions.php:924
+#: php/seatreg_functions.php:1038
 msgid "Last name"
 msgstr "Perekonnanimi"
 
-#: php/seatreg_functions.php:1012 php/bookings/SeatregBookingsPDF.php:72
-#: php/bookings/SeatregBookingsTxt.php:40
+#: php/seatreg_functions.php:1126 php/bookings/SeatregBookingsPDF.php:73
+#: php/bookings/SeatregBookingsTxt.php:41
 #: php/bookings/SeatregBookingsXlsx.php:66
-msgid "Status"
-msgstr "Staatus"
+msgid "Booking status"
+msgstr "Broneeringu staatus"
 
-#: php/seatreg_functions.php:1016
+#: php/seatreg_functions.php:1130
 msgid "Payment info"
 msgstr "Maksmise info"
 
-#: php/seatreg_functions.php:1020
+#: php/seatreg_functions.php:1134
 msgid "Booking not found."
 msgstr "Broneeringut ei leitud."
 
-#: php/seatreg_functions.php:1023
+#: php/seatreg_functions.php:1137
 msgid "Registration does not exist"
 msgstr "Registratsiooni ei eksisteeri"
 
-#: php/seatreg_functions.php:1158 php/seatreg_functions.php:1215
-#: php/seatreg_functions.php:1238
+#: php/seatreg_functions.php:1272 php/seatreg_functions.php:1329
+#: php/seatreg_functions.php:1352
 msgid "Seat "
 msgstr "Koht "
 
-#: php/seatreg_functions.php:1158 php/seatreg_functions.php:1215
+#: php/seatreg_functions.php:1272 php/seatreg_functions.php:1329
 #: php/seatreg_strings.php:20
 msgid " from room "
 msgstr " ruumist "
 
-#: php/seatreg_functions.php:1158 php/seatreg_functions.php:1215
+#: php/seatreg_functions.php:1272 php/seatreg_functions.php:1329
 msgid " is already booked"
 msgstr " on juba broneeritud"
 
-#: php/seatreg_functions.php:1234
+#: php/seatreg_functions.php:1348
 msgid "Room "
 msgstr "Ruum "
 
-#: php/seatreg_functions.php:1234
+#: php/seatreg_functions.php:1348
 msgid " dose not exist!"
 msgstr " ei eksisteeri!"
 
-#: php/seatreg_functions.php:1238
+#: php/seatreg_functions.php:1352
 msgid " dose not exist in "
 msgstr " ei eksisteeri "
 
-#: php/seatreg_functions.php:1712
+#: php/seatreg_functions.php:1919
 msgid "Something went wrong while creating a new registration"
 msgstr "Uue registratsiooni loomisel esines tõrge"
 
-#: php/seatreg_functions.php:1738
+#: php/seatreg_functions.php:1945
 msgid "Something went wrong while deleting a registration"
 msgstr "Registratsiooni kustutamisel esines tõrge"
 
-#: php/seatreg_strings.php:9 php/seatreg_strings.php:74
+#: php/seatreg_strings.php:9 php/seatreg_strings.php:76
 msgid "Illegal characters detected"
 msgstr "Keelatud tähemärgid tuvastatud"
 
@@ -1043,11 +1211,11 @@ msgid "Open seats in the room: "
 msgstr "Vabad kohad ruumis: "
 
 #: php/seatreg_strings.php:32
-msgid "Pending seats in the room: "
-msgstr "Mitte kinnitatud kohad ruumis: "
+msgid "Pending bookings in the room: "
+msgstr "Mitte kinnitatud kohad ruumis:"
 
 #: php/seatreg_strings.php:33
-msgid "Confirmed seats in the room: "
+msgid "Approved bookings in the room: "
 msgstr "Kinnitatud kohad ruumis: "
 
 #: php/seatreg_strings.php:34
@@ -1101,95 +1269,103 @@ msgstr "Broneeritud"
 msgid "Total seats you can add to booking is "
 msgstr "Kokku saad kohti lisada broneeringusse "
 
-#: php/seatreg_strings.php:54
+#: php/seatreg_strings.php:48
+msgid "Booking this seat costs "
+msgstr "Koha broneerimine maksab "
+
+#: php/seatreg_strings.php:49
+msgid "Booking total cost is "
+msgstr "Broneeringu hind on "
+
+#: php/seatreg_strings.php:56
 msgid "Hover text deleted"
 msgstr "Hõljuktekst kustutatud"
 
-#: php/seatreg_strings.php:55
+#: php/seatreg_strings.php:57
 msgid "Hover text added"
 msgstr "Hõljuktekst lisatud"
 
-#: php/seatreg_strings.php:56
+#: php/seatreg_strings.php:58
 msgid "Legend name changed"
 msgstr "Legendi nimi muudetud"
 
-#: php/seatreg_strings.php:57
+#: php/seatreg_strings.php:59
 msgid "Legend color changed"
 msgstr "Legendi värv muudetud"
 
-#: php/seatreg_strings.php:58
+#: php/seatreg_strings.php:60
 msgid "Building grid updated"
 msgstr "Loomise võre uuendatud"
 
-#: php/seatreg_strings.php:59
+#: php/seatreg_strings.php:61
 msgid "Room name changed"
 msgstr "Ruumi nimi vahetatud"
 
-#: php/seatreg_strings.php:60
+#: php/seatreg_strings.php:62
 msgid "New room added"
 msgstr "Uus ruum lisatud"
 
-#: php/seatreg_strings.php:61
+#: php/seatreg_strings.php:63
 msgid "Room does not exist"
 msgstr "Ruum ei eksisteeri"
 
-#: php/seatreg_strings.php:62
+#: php/seatreg_strings.php:64
 msgid "Seat dose not exist"
 msgstr "Koht ei eksisteeri"
 
-#: php/seatreg_strings.php:63
+#: php/seatreg_strings.php:65
 msgid "Seat is already booked/pending"
 msgstr "Koht on juba broneeritud"
 
-#: php/seatreg_strings.php:64
+#: php/seatreg_strings.php:66
 msgid "Error updating booking"
 msgstr "Tekkis viga broneeringu muutmisel"
 
-#: php/seatreg_strings.php:65
+#: php/seatreg_strings.php:67
 msgid "Error while creating hover"
 msgstr "Tekkis viga hõljukteksti loomisel"
 
-#: php/seatreg_strings.php:66
+#: php/seatreg_strings.php:68
 msgid "Error while changing legend"
 msgstr "Tekkis viga legendi muutmisel"
 
-#: php/seatreg_strings.php:67
+#: php/seatreg_strings.php:69
 msgid "Legend name is taken"
 msgstr "Legendi nimi on juba võetud"
 
-#: php/seatreg_strings.php:68
+#: php/seatreg_strings.php:70
 msgid "Legend name missing!"
 msgstr "Legendi nimi on puudu!"
 
-#: php/seatreg_strings.php:69
+#: php/seatreg_strings.php:71
 msgid "Legend color is taken. Choose another"
 msgstr "Legendi värv on võetud. Palun vali midagi muud"
 
-#: php/seatreg_strings.php:70
+#: php/seatreg_strings.php:72
 msgid "Legend added to"
 msgstr "Legend lisati"
 
-#: php/seatreg_strings.php:71
+#: php/seatreg_strings.php:73
 msgid "You must have at least on room"
 msgstr "Vähemalt üks ruum peab olema"
 
-#: php/seatreg_strings.php:72
+#: php/seatreg_strings.php:74
 msgid "Already in this room"
 msgstr "Asud juba selles ruumis"
 
-#: php/seatreg_strings.php:73
+#: php/seatreg_strings.php:75
 msgid "All rooms must have name"
 msgstr "Kõikidel ruumidel peab olema nimi"
 
-#: php/seatreg_strings.php:75
+#: php/seatreg_strings.php:77
 msgid "Name missing"
 msgstr "Nimi on puudu"
 
-#: php/seatreg_strings.php:76
+#: php/seatreg_strings.php:78
 msgid "You can't delete room "
 msgstr "Oled kindel, et soovid ruumi eemaldada "
 
-#: php/seatreg_strings.php:77
+#: php/seatreg_strings.php:79
 msgid ""
 " because it contains pending or confirmed seats. You must remove them with "
 "manager first."
@@ -1197,173 +1373,193 @@ msgstr ""
 " sest ruumi sisaldab endas broneeringuid. Pead need kõigepealt ruumist "
 "eemaldama."
 
-#: php/seatreg_strings.php:78
+#: php/seatreg_strings.php:80
 msgid "Room name missing"
 msgstr "Ruumi nimi on puudu"
 
-#: php/seatreg_strings.php:79
+#: php/seatreg_strings.php:81
 msgid "Room name already exists. You must choose another"
 msgstr "Ruumi nimi juba eksisteerib. Palun vali midagi muud"
 
-#: php/seatreg_strings.php:80
+#: php/seatreg_strings.php:82
 msgid "You have selected"
 msgstr "Oled selekteerinud"
 
-#: php/seatreg_strings.php:81
+#: php/seatreg_strings.php:83
 msgid " box/boxes</span></li>"
 msgstr " kast/kastid</span></li>"
 
-#: php/seatreg_strings.php:82
+#: php/seatreg_strings.php:84
 msgid "To select one box use "
 msgstr "Kasti selekteerimiseks kasuta "
 
-#: php/seatreg_strings.php:83
+#: php/seatreg_strings.php:85
 msgid "To select multiple boxes use "
 msgstr "Mitme kasti selekteerimiseks kasuta "
 
-#: php/seatreg_strings.php:84
+#: php/seatreg_strings.php:86
 msgid "Select box/boxes to add hover text"
 msgstr "Selekteeri kastid millele soovid lisada hõljuvat teksti"
 
-#: php/seatreg_strings.php:86
+#: php/seatreg_strings.php:88
 msgid "Select box/boxes you want to delete"
 msgstr "Selekteeri kastid mida soovid kustutada"
 
-#: php/seatreg_strings.php:87
+#: php/seatreg_strings.php:89
 msgid "Color applied"
 msgstr "Värv lisatud"
 
-#: php/seatreg_strings.php:88
+#: php/seatreg_strings.php:90
 msgid "You have not made and legends yet"
 msgstr "Ühtegi legendi pole veel tehtud"
 
-#: php/seatreg_strings.php:89
+#: php/seatreg_strings.php:91
 msgid " You have not selected any box/boxes to add legends"
 msgstr " Ühtegi kasti pole selekteeritud millele legendi lisada"
 
-#: php/seatreg_strings.php:90
+#: php/seatreg_strings.php:92
 msgid " characters remaining"
 msgstr " tähemärki jäänud"
 
-#: php/seatreg_strings.php:91
+#: php/seatreg_strings.php:93
 msgid "Are you sure you want to delete room "
 msgstr "Oled kindel, et soovid ruumi eemaldada "
 
-#: php/seatreg_strings.php:92
+#: php/seatreg_strings.php:94
 msgid "Unsaved changes. You sure you want to leave?"
 msgstr "Salvestamata uuendused. Oled kindel, et soovid lahkuda?"
 
-#: php/seatreg_strings.php:94
+#: php/seatreg_strings.php:96
 msgid "Cancel legend creation"
 msgstr "Tühista legendi loomine"
 
-#: php/seatreg_strings.php:95
+#: php/seatreg_strings.php:97
 msgid "Choose legend"
 msgstr "Vali legend"
 
-#: php/seatreg_strings.php:97
+#: php/seatreg_strings.php:99
 msgid "Ok"
 msgstr "Ok"
 
-#: php/seatreg_strings.php:98
+#: php/seatreg_strings.php:100
 msgid "Cancel"
 msgstr "Tühista"
 
-#: php/seatreg_strings.php:100
+#: php/seatreg_strings.php:102
 msgid "Unsaved Changes"
 msgstr "Salvestamata uuendused"
 
-#: php/seatreg_strings.php:101
+#: php/seatreg_strings.php:103
 msgid "boxes"
 msgstr "kastid"
 
-#: php/seatreg_strings.php:102
+#: php/seatreg_strings.php:104
 msgid "box"
 msgstr "kast"
 
-#: php/seatreg_strings.php:103
+#: php/seatreg_strings.php:105
 msgid "No boxes selected"
 msgstr "Pole ühtegi kasti selekteeritud"
 
-#: php/seatreg_strings.php:104
+#: php/seatreg_strings.php:106
 msgid "Pending seat"
 msgstr "Kinnitust ootavad kohad"
 
-#: php/seatreg_strings.php:105
+#: php/seatreg_strings.php:107
 msgid "Confirmed seat"
 msgstr "Kinnitatud kohad"
 
-#: php/seatreg_strings.php:107
+#: php/seatreg_strings.php:109
 msgid "Saving..."
 msgstr "Salvestan..."
 
-#: php/seatreg_strings.php:108
+#: php/seatreg_strings.php:110
 msgid "Saved"
 msgstr "Salvestatud"
 
-#: php/seatreg_strings.php:109
+#: php/seatreg_strings.php:111
 msgid "room"
 msgstr "ruum"
 
-#: php/seatreg_strings.php:110
+#: php/seatreg_strings.php:112
 msgid "Booking updated"
 msgstr "Broneering uuendatud"
 
-#: php/seatreg_strings.php:112
+#: php/seatreg_strings.php:114
 msgid "Please enter registration name"
 msgstr "Palun sisesta registratsiooni nimi"
 
-#: php/seatreg_strings.php:113
+#: php/seatreg_strings.php:115
 msgid "Name must be between 1-255 characters"
 msgstr "Nimi peab olema 1-255 tähearvu vahemikus"
 
-#: php/seatreg_strings.php:114
+#: php/seatreg_strings.php:116
 msgid "Please enter name"
 msgstr "Palun sisesta nimi"
 
-#: php/seatreg_strings.php:115
+#: php/seatreg_strings.php:117
 msgid "Please enter option value"
 msgstr "Palus sisesta valiku nimi"
 
-#: php/seatreg_strings.php:116
+#: php/seatreg_strings.php:118
 msgid "Are you sure?"
 msgstr "Oled kindel?"
 
-#: php/seatreg_strings.php:117
+#: php/seatreg_strings.php:119
 msgid "Please add at least one option"
 msgstr "Palun lisa vähemalt üks valik"
 
-#: php/seatreg_strings.php:118
+#: php/seatreg_strings.php:120
 msgid "Name already used"
 msgstr "Nimi on juba kasutusel"
 
-#: php/seatreg_strings.php:119
+#: php/seatreg_strings.php:121
 msgid "Current room does not have background image"
 msgstr "Hetkel aktiivses ruumis pole tagataustapilti"
 
-#: php/seatreg_strings.php:120
+#: php/seatreg_strings.php:122
 msgid "Remove from room"
 msgstr "Eemalda ruumist"
 
-#: php/seatreg_strings.php:121
+#: php/seatreg_strings.php:123
 msgid "Choose a picture to upload"
 msgstr "Vali ülesse laetav pilt"
 
-#: php/seatreg_strings.php:122
+#: php/seatreg_strings.php:124
 msgid "Image name contains illegal characters"
 msgstr "Pildi nimi sisaldab keelatud sümboleid"
 
-#: php/seatreg_strings.php:123
+#: php/seatreg_strings.php:125
 msgid "Add to room background"
 msgstr "Lisa ruumi tagataustaks"
 
-#: php/seatreg_strings.php:125
+#: php/seatreg_strings.php:127
 msgid "Show pending bookins"
 msgstr "Kuva mitte kinnitatud broneeringuid"
 
-#: php/seatreg_strings.php:126
+#: php/seatreg_strings.php:128
 msgid "Show approved bookings"
 msgstr "Kuva kinnitatud broneeringuid"
+
+#: php/seatreg_strings.php:129
+msgid "Please enter PayPal business email"
+msgstr "Palun sisesta PayPal business email"
+
+#: php/seatreg_strings.php:130
+msgid "Please enter PayPal button id"
+msgstr "Palun sisesta Paypal nupu id"
+
+#: php/seatreg_strings.php:131
+msgid "Please enter PayPal currency code"
+msgstr "Palun sisesta PayPal valuuta kood"
+
+#: php/seatreg_strings.php:132
+msgid "Prices added"
+msgstr "Hinnad lisatud"
+
+#: php/seatreg_strings.php:133
+msgid "No seats selected!"
+msgstr "Ühtegi kohta pole selekteeritud"
 
 #: php/bookings/SeatregBookingsFile.php:47
 #: php/bookings/SeatregBookingsXlsx.php:27
@@ -1387,11 +1583,29 @@ msgstr "Leht"
 msgid "Seat number"
 msgstr "Koha number"
 
-#: php/bookings/SeatregBookingsPDF.php:76
-#: php/bookings/SeatregBookingsTxt.php:45
+#: php/bookings/SeatregBookingsPDF.php:77
+#: php/bookings/SeatregBookingsTxt.php:46
 #: php/bookings/SeatregBookingsXlsx.php:67
-msgid "Confirmation date"
-msgstr "Kinnituse kuupäev"
+msgid "Booking approval date"
+msgstr "Broneering kinnitus kuupäev"
+
+#: php/bookings/SeatregBookingsPDF.php:81
+#: php/bookings/SeatregBookingsTxt.php:50
+#: php/bookings/SeatregBookingsXlsx.php:68
+msgid "Payment status"
+msgstr "Makse staatus"
+
+#: php/bookings/SeatregBookingsPDF.php:84
+#: php/bookings/SeatregBookingsTxt.php:53
+#: php/bookings/SeatregBookingsXlsx.php:69
+msgid "Payment txn id"
+msgstr "Makse txn id"
+
+#: php/bookings/SeatregBookingsPDF.php:85
+#: php/bookings/SeatregBookingsTxt.php:54
+#: php/bookings/SeatregBookingsXlsx.php:70
+msgid "Payment received"
+msgstr "Makse saadud"
 
 #: php/bookings/SeatregBookingsTxt.php:35
 msgid "Seat nr:"
@@ -1404,6 +1618,59 @@ msgstr "pole sisestatud"
 #: php/bookings/SeatregBookingsXlsx.php:65
 msgid "Registration data"
 msgstr "Registratsiooni andmed"
+
+#: php/libs/SeatregPayPalIpn.php:47
+msgid "Starting IPN verification"
+msgstr "Alustan IPN kontrolliga"
+
+#: php/libs/SeatregPayPalIpn.php:82
+msgid "The IPN is verified"
+msgstr "IPN on kontrollitud"
+
+#: php/libs/SeatregPayPalIpn.php:89
+msgid "The IPN is invalid"
+msgstr "IPN on kehtetu"
+
+#: php/libs/SeatregPayPalIpn.php:94
+#, php-format
+msgid "Unknown response from IPN. Will try again %s"
+msgstr "Tundmatu vastus IPN poolt. Proovin uuesti %s"
+
+#: php/libs/SeatregPayPalIpn.php:100
+msgid "IPN retry logic failed. Will try again later"
+msgstr "IPN uuesti proovimis loogika ebaõnnestus. Proovin hiljem uuesti"
+
+#: php/libs/SeatregPayPalIpn.php:111
+#, php-format
+msgid "Payment for %s is completed"
+msgstr "Makse %s on lõpetatud"
+
+#: php/libs/SeatregPayPalIpn.php:125
+msgid "txn_id has been previously processed"
+msgstr "txn id on eelnevalt töödeldud"
+
+#: php/libs/SeatregPayPalIpn.php:138
+msgid "Payment is reversed"
+msgstr "Makse on tagastatud"
+
+#: php/libs/SeatregPayPalIpn.php:144
+msgid "Payment was refunded"
+msgstr "Makse on hüvitatud"
+
+#: php/libs/SeatregPayPalIpn.php:148
+#, php-format
+msgid "Got a %s case. Reason is %s. Case id: %s"
+msgstr "Saabus %s juhtum. Põhjus on %s. Juhtumi id on %s"
+
+#: php/libs/SeatregPayPalIpn.php:161
+#, php-format
+msgid "Payment %s is not correct. Expecting %s"
+msgstr "Makse %s ei ole õige. Peaks olema %s"
+
+#: php/libs/SeatregPayPalIpn.php:174
+#, php-format
+msgid "Receiver_email %s is not my Primary PayPal email %s"
+msgstr "Receiver_email %s ei ole sinu Primary PayPal email %s"
 
 #: registration/index.php:7
 msgid "Missing parameters"
@@ -1426,7 +1693,7 @@ msgstr "Vaheta ruumi"
 msgid "Room is empty"
 msgstr "Ruum on tühi"
 
-#: registration/index.php:148 registration/index.php:363
+#: registration/index.php:148 registration/index.php:368
 msgid "seats selected"
 msgstr "koht valitud"
 
@@ -1434,7 +1701,7 @@ msgstr "koht valitud"
 msgid "Info"
 msgstr "Info"
 
-#: registration/index.php:197 registration/index.php:445
+#: registration/index.php:197 registration/index.php:450
 msgid "Registration starts"
 msgstr "Registratsiooni statistika"
 
@@ -1451,12 +1718,12 @@ msgid "Total open seats"
 msgstr "Vabade kohtade arv"
 
 #: registration/index.php:231
-msgid "Total pending seats"
-msgstr "Kinnitust ootavate kohtade arv"
+msgid "Total pending bookings"
+msgstr "Mitte kinnitatud broneeringute arv"
 
 #: registration/index.php:234
-msgid "Total confirmed seats"
-msgstr "Kinnitatud kohtade arv"
+msgid "Total approved bookings"
+msgstr "Kinnitatud broneeringute arv"
 
 #: registration/index.php:251
 msgid "Legends"
@@ -1466,31 +1733,31 @@ msgstr "Legendid"
 msgid "Add to booking"
 msgstr "Lisa broneeringusse"
 
-#: registration/index.php:305
+#: registration/index.php:306
 msgid "Cart"
 msgstr "Käru"
 
-#: registration/index.php:312
+#: registration/index.php:313
 msgid "NR"
 msgstr "NR"
 
-#: registration/index.php:326
+#: registration/index.php:331
 msgid "Next"
 msgstr "Edasi"
 
-#: registration/index.php:341
+#: registration/index.php:346
 msgid "Contact information"
 msgstr "Kinnita informatsioon"
 
-#: registration/index.php:369
+#: registration/index.php:374
 msgid "Show legends"
 msgstr "Näita legende"
 
-#: registration/index.php:378
+#: registration/index.php:383
 msgid "Confirm email sent to"
 msgstr "Kinnitus saadeti"
 
-#: registration/index.php:383
+#: registration/index.php:388
 msgid ""
 "You need to confirm your booking by following email instructions. Make sure "
 "you check your junk folders"
@@ -1498,41 +1765,56 @@ msgstr ""
 "Broneeringu peab kinnitama emaili saadetud juhiste järgi. Veendu, et "
 "vaatasid ka rämpsposti kausta"
 
-#: registration/index.php:398
+#: registration/index.php:403
 msgid "Your Booking is confirmed"
 msgstr "Broneering on kinnitatud"
 
-#: registration/index.php:402
+#: registration/index.php:407
 msgid "You can look your booking status at the following link"
 msgstr "Broneeringu staatust võid jälgida järgneva lingi kaudu"
 
-#: registration/index.php:406
+#: registration/index.php:411
 msgid "Save the link for future reference"
 msgstr "Salvesta link hiljemaks vaatamiseks"
 
-#: registration/index.php:420
+#: registration/index.php:425
 msgid "Error"
 msgstr "Viga"
 
-#: registration/index.php:444
+#: registration/index.php:449
 msgid "Not open yet"
 msgstr "Pole veel avatud"
 
-#: registration/index.php:447
+#: registration/index.php:452
 msgid "Closed"
 msgstr "Suletud"
 
-#: registration/index.php:448
+#: registration/index.php:453
 msgid "Registration ended"
 msgstr "Registratsioon on lõppenud"
 
-#: registration/index.php:462
+#: registration/index.php:467
 msgid "Password protected"
 msgstr "Parooliga kaitstud"
 
-#: registration/index.php:467
+#: registration/index.php:472
 msgid "Please enter password"
 msgstr "Palun sisesta parool"
+
+#~ msgid "Status"
+#~ msgstr "Staatus"
+
+#~ msgid "Confirmed seats in the room: "
+#~ msgstr "Kinnitatud kohad ruumis: "
+
+#~ msgid "Confirmation date"
+#~ msgstr "Kinnituse kuupäev"
+
+#~ msgid "Total pending seats"
+#~ msgstr "Kinnitust ootavate kohtade arv"
+
+#~ msgid "Total confirmed seats"
+#~ msgstr "Kinnitatud kohtade arv"
 
 #~ msgid "max"
 #~ msgstr "maksimum"
