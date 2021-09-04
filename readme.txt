@@ -39,7 +39,7 @@ SeatReg is a free plugin that offers the following and more to build and manage 
 
 == Changelog ==
 
-= 1.3.0
+= 1.3.0 =
 * Added support for PayPal payments
 * With map builder you can now add prices to seats
 * In settings you can turn on and configure PayPal
