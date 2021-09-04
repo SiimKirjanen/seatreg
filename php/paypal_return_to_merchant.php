@@ -19,8 +19,7 @@
 
 	if($paymentStatus === null) {
 		seatreg_insert_processing_payment($bookingId);
-	}
-	
+	}	
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +37,7 @@
 		if($paymentStatus === null || $paymentStatus === SEATREG_PAYMENT_PROCESSING)  {
 			esc_html_e('Your payment is being processed', 'seatreg'); 
 		}else{
-			esc_html_e('Payment is already processed or does not exist', 'seatreg'); 
+			esc_html_e('Payment is already processed or doe\'s not exist. For more information check your booking status page.', 'seatreg'); 
 		}
 	?>
 </body>
