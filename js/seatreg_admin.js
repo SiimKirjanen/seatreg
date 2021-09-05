@@ -214,7 +214,7 @@ $('#existing-regs-wrap').on('click', '.room-list-item', function() {
 	var code = $('#seatreg-reg-code').val();
 	var target = $(this).attr('data-stats-target');
 	var overViewContainer = $(this).closest('.reg-overview');
-	overViewContainer.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
+	overViewContainer.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
 
 	var promise = seaterg_admin_ajax2('seatreg_get_room_stats', code, target);
 
@@ -288,7 +288,7 @@ $('#seatreg-booking-manager').on('click','.manager-box-link', function() {
 	var orderBy = $(this).attr('data-order');
 	bookingOrderInManager = orderBy;
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
-	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
+	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
 
 	var promise = seaterg_admin_ajax2('seatreg_get_booking_manager', code, {searchTerm: searchTerm, orderby: orderBy});
 
@@ -330,7 +330,7 @@ $('#seatreg-booking-manager').on('click', '.search-button', function(e) {
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
-	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
+	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
 	var promise = seaterg_admin_ajax2('seatreg_search_bookings', code, {searchTerm: searchTerm ,orderby: bookingOrderInManager});
 
 	promise.done(function(data) {
@@ -354,7 +354,7 @@ $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
 	var searchTerm = $('.manager-search').val();
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
 	
-	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'css/ajax_loader.gif').addClass('ajax_loader'));
+	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
 	button.parent().find('.reg-seat-item').each(function() {
 		$(this).find('.bron-action').each(function() {
 			if($(this).prop('checked')) {
@@ -435,7 +435,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 });
 
 $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
-	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'css/ajax_loader2.gif' + '" alt="Loading..." class="ajax-load" />');
+	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader2.gif' + '" alt="Loading..." class="ajax-load" />');
 	var subBtn = $(this);
 	var modal = $('#edit-modal');
 	var customFields = [];

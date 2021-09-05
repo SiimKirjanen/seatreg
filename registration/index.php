@@ -352,7 +352,7 @@
 							esc_html_e('OK', 'seatreg');
 						?>
 					</button>
-					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>registration/css/ajax_loader.gif" alt="Loading" class="ajax-load">
+					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader.gif" alt="Loading" class="ajax-load">
 					<div id="request-error"></div>
 					<?php seatrag_generate_nonce_field('seatreg-booking-submit'); ?>
 				</form>

@@ -36,7 +36,7 @@ function workingOnRegistrationCSSFiles() {
 }
 
 function workingOnAdminStyles() {
-	return gulp.src(['css/seatreg_admin.scss'])
+	return gulp.src(['css/scss/admin/seatreg_admin.scss'])
 		.on('error', console.error.bind(console))
 		.pipe(sass())
 		.pipe(concat('seatreg_admin.min.css'))
@@ -45,7 +45,7 @@ function workingOnAdminStyles() {
 }
 
 function workingOnBuilderStyles() {
-	return gulp.src(['css/seatreg_builder.scss'])
+	return gulp.src(['css/scss/builder/seatreg_builder.scss'])
 		.on('error', console.error.bind(console))
 		.pipe(sass())
 		.pipe(concat('seatreg_builder.min.css'))
