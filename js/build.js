@@ -2356,7 +2356,7 @@
     $('#picker').colpick({
 		flat:true,
 		layout:'hex',
-		color:'#cccccc',
+		color:'0072CE',
 
 		onSubmit: function(hsb,hex,rgb,el,bySetColor) {
 			reg.changeBoxColor(hex);
@@ -2369,7 +2369,7 @@
 	$('#picker2').colpick({
 		flat:true,
 		layout:'hex',
-		color:'#61B329',
+		color:'61B329',
 		submit:false,
 		onChange: function(hsb,hex,rgb,el,bySetColor) {
 			$('#dummy-legend .legend-box').css("background-color",'#' + hex);

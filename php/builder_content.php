@@ -91,7 +91,7 @@
 	<div class="build-footer"></div>
 
 	<div class="modal fade" id="color-dialog" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Color', 'seatreg');?></h4>
@@ -109,7 +109,7 @@
 	</div>
 
 	<div class="modal fade" id="hover-dialog" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Adding hover text', 'seatreg');?></h4>
