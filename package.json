@@ -17,11 +17,15 @@
     "gulp": "^4.0.2",
     "gulp-minify-css": "^1.0.0",
     "gulp-rename": "^1.2.2",
-    "gulp-rev": "^9.0.0"
+    "gulp-rev": "^9.0.0",
+    "gulp-sass": "^5.0.0",
+    "sass": "^1.39.0"
   },
   "scripts": {
     "registration-scripts": "gulp registration-scripts",
     "registration-styles": "gulp registration-styles",
+    "admin-styles": "gulp admin-styles",
+    "builder-styles": "gulp builder-styles",
     "watch": "gulp watch"
   },
   "author": "Siim Kirjanen",

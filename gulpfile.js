@@ -5,9 +5,10 @@ var gulp  = require("gulp"),
 	minifyCSS = require('gulp-minify-css'),
 	gulpRev = require('gulp-rev'),
 	del = require('del'),
+	sass = require('gulp-sass')(require('sass')),
 	reload = browserSync.reload;
 
-function workingOnJSFiles() {
+function workingOnRegistrationJSFiles() {
 	return gulp.src(['registration/js/date.format.js', 'registration/js/iscroll-zoom.js', 'js/jquery.powertip.js', 'registration/js/registration.js'])
 			.on('error', console.error.bind(console))
 			.pipe(concat('registration.min.js'))
@@ -20,9 +21,10 @@ function workingOnJSFiles() {
 			.pipe(gulp.dest('./'));
 }
 
-function workingOnCSSFiles() {
-	return gulp.src(['registration/css/font-awesome.min.css', 'registration/css/registration.css', 'registration/css/jquery.powertip.css'])
+function workingOnRegistrationCSSFiles() {
+	return gulp.src(['registration/css/font-awesome.min.css',  'registration/css/index.scss', 'registration/css/jquery.powertip.css'])
 		.on('error', console.error.bind(console))
+		.pipe(sass())
 		.pipe(concat('registration.min.css'))
 		.pipe(minifyCSS())
 		.pipe(gulpRev())
@@ -33,21 +35,41 @@ function workingOnCSSFiles() {
 		.pipe(gulp.dest('./'));
 }
 
-gulp.task('clean:css:cache', function () {
+function workingOnAdminStyles() {
+	return gulp.src(['css/seatreg_admin.scss'])
+		.on('error', console.error.bind(console))
+		.pipe(sass())
+		.pipe(concat('seatreg_admin.min.css'))
+		.pipe(minifyCSS())
+		.pipe(gulp.dest('css'))
+}
+
+function workingOnBuilderStyles() {
+	return gulp.src(['css/seatreg_builder.scss'])
+		.on('error', console.error.bind(console))
+		.pipe(sass())
+		.pipe(concat('seatreg_builder.min.css'))
+		.pipe(minifyCSS())
+		.pipe(gulp.dest('css'))
+}
+
+gulp.task('clean:registration:css:cache', function () {
 	return del([
 		'registration/css/registration-*.min.css',
 	]);
 });
 
-gulp.task('clean:js:cache', function () {
+gulp.task('clean:registration:js:cache', function () {
 	return del([
 		'registration/js/registration-*.min.js',
 	]);
 });
 	
-gulp.task('registration-scripts', gulp.series('clean:js:cache', workingOnJSFiles)); 
+gulp.task('registration-scripts', gulp.series('clean:registration:js:cache', workingOnRegistrationJSFiles)); 
+gulp.task('registration-styles', gulp.series('clean:registration:css:cache', workingOnRegistrationCSSFiles));
+gulp.task('builder-styles', gulp.series(workingOnBuilderStyles));
+gulp.task('admin-styles', gulp.series(workingOnAdminStyles));
 
-gulp.task('registration-styles', gulp.series('clean:css:cache', workingOnCSSFiles));
 
 gulp.task('watch', function() {
 	gulp.watch(['registration/js/*.js', '!registration/js/registration-*.min.js','registration/css/*.css', '!registration/css/registration-*.min.css'], 

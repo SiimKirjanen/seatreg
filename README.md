@@ -20,3 +20,9 @@ Compiles registration view scripts (currently not used)
 
 ### watch
 Watches and compiles registration view styles and scripts
+
+### builder-styles
+Compiles map builder styles
+
+### admin-styles
+Compiles admin styles

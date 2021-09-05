@@ -565,6 +565,12 @@
 
 }
 
+@keyframes box-got-active {
+	0% {border: 1px solid red;}
+	50% {border: 1px solid black;}
+	100% {border: 1px solid red;}
+}
+
 @-webkit-keyframes box-got-active {
 	0% {border: 1px solid red;}
 	50% {border: 1px solid black;}
@@ -582,13 +588,6 @@
 	50% {border: 1px solid black;}
 	100% {border: 1px solid red;}
 }
-
-@-keyframes box-got-active {
-	0% {border: 1px solid red;}
-	50% {border: 1px solid black;}
-	100% {border: 1px solid red;}
-}
-
 
 .seatreg-map-builder-page .drag-box {
     z-index: 1;
@@ -1476,6 +1475,12 @@
 	animation: btn-to-red 1s ease 0 1 none;	
 }
 
+
+@keyframes btn-to-red {
+	0% {background-color: rgb(97, 179, 41);}
+	100% {background-color: rgb(255, 0, 0);}
+}
+
 @-webkit-keyframes btn-to-red {
 	0% {background-color: rgb(97, 179, 41);}
 	100% {background-color: rgb(255, 0, 0);}
@@ -1490,12 +1495,6 @@
 	0% {background-color: rgb(97, 179, 41);}
 	100% {background-color: rgb(255, 0, 0);}
 }
-
-@-keyframes btn-to-red {
-	0% {background-color: rgb(97, 179, 41);}
-	100% {background-color: rgb(255, 0, 0);}
-}
-
 
 .seatreg-map-builder-page .change-btn-to-green {
 	background-color: rgb(97, 179, 41);
@@ -1520,11 +1519,10 @@
 	100% {background-color: rgb(97, 179, 41);}
 }
 
-@-keyframes btn-to-green {
+@keyframes btn-to-green {
 	0% {background-color: rgb(255, 0, 0);}
 	100% {background-color: rgb(97, 179, 41);}
 }
-
 
 .seatreg-map-builder-page .vert-modal {
 	text-align: center;
