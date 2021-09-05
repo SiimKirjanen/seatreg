@@ -13,7 +13,7 @@ function workingOnJSFiles() {
 			.pipe(concat('registration.min.js'))
 			.pipe(uglify())
 			.pipe(gulpRev())
-			.pipe(gulp.dest('registration/js/build'))
+			.pipe(gulp.dest('registration/js'))
 			.pipe(gulpRev.manifest({
 				merge: true
 			}))
