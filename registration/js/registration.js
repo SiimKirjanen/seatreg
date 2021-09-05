@@ -75,7 +75,7 @@
 		this.payPalCurrencyCode = this.payPalEnabled ? payPalCurrencyCode : '';
 	}
 
-	function CartItem(id, nr, room, roomUUID, price = 0) {
+	function CartItem(id, nr, room, roomUUID, price) {
 		this.id = id;
 		this.nr = nr;
 		this.room = room;

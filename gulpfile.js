@@ -8,12 +8,12 @@ var gulp  = require("gulp"),
 	reload = browserSync.reload;
 
 function workingOnJSFiles() {
-	return gulp.src(['registration/js/date.format.js', 'registration/js/iscroll-zoom.js', 'registration/js/jquery.powertip.js', 'registration/js/registration.js'])
+	return gulp.src(['registration/js/date.format.js', 'registration/js/iscroll-zoom.js', 'js/jquery.powertip.js', 'registration/js/registration.js'])
 			.on('error', console.error.bind(console))
 			.pipe(concat('registration.min.js'))
 			.pipe(uglify())
 			.pipe(gulpRev())
-			.pipe(gulp.dest('registration/js'))
+			.pipe(gulp.dest('registration/js/build'))
 			.pipe(gulpRev.manifest({
 				merge: true
 			}))
