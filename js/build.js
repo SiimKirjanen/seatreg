@@ -856,7 +856,7 @@
 			'data-room-location': regScope.roomLocator
 		}).text(regScope.rooms[regScope.roomLocator].title).on('click', function() {
 			var loadingImg = $('<img>', {
-				"src": window.WP_Seatreg.plugin_dir_url + "css/loading.png",
+				"src": window.WP_Seatreg.plugin_dir_url + "img/loading.png",
 				"id": "loading-img"
 			});
 

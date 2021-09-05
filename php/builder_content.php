@@ -56,7 +56,7 @@
 	
 		<div class="build-area-wrapper" data-cursor="1">
 			<div id="build-area-loading-wrap">
-				<img src="<?php echo plugins_url( 'css/loading.png', dirname(__FILE__) ) ?>" id="loading-img" alt="Loading...">
+				<img src="<?php echo plugins_url( 'img/loading.png', dirname(__FILE__) ) ?>" id="loading-img" alt="Loading...">
 				<span class='loading-text'><?php esc_html_e('Loading...', 'seatreg');?></span>
 			</div>
 			<div class="build-area dragger" draggable="false">
