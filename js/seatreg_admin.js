@@ -70,6 +70,18 @@
 			});
 	}
 
+	function seatreg_send_test_email(email) {
+		return $.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'seatreg_send_test_email',
+				security: WP_Seatreg.nonce,
+				email: email
+			}
+		});
+	}
+
 	function seatreg_admin_ajax_error(jqXHR, textStatus, errorThrown) {
 		console.log('error');
 		console.log(textStatus);
@@ -755,6 +767,35 @@ $('#seatreg-settings-submit').on('click', function(e) {
  			}	
  	}); 
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
+});
+
+$('#seatreg-send-test-email').on('click', function(e) {
+	e.preventDefault();
+	var enteredEmail = $('#test-email-address').val();
+	var emailReg = /^\S+@\S+$/;
+
+	if(!emailReg.test(enteredEmail)) {
+		alertify.error(translator.translate('emailNotCorrect'));
+		$('#test-email-address').focus();
+
+		return false;
+	}else {
+		var $sendTestEmailBtn = $('#seatreg-send-test-email');
+		var btnText = $sendTestEmailBtn.val();	
+		var enteredEmail = $('#test-email-address').val();
+		var promise = seatreg_send_test_email(enteredEmail);
+		$sendTestEmailBtn.val(translator.translate('pealseWait'));
+
+		promise.done(function(data) {
+			$sendTestEmailBtn.val(btnText);
+
+			if(data._response.type === 'error') {
+				alertify.error(translator.translate('emailSendingFailed'));
+			}else {
+				alertify.success(translator.translate('checkEmailAddress'));
+			}
+		});
+	}
 });
 
 })(jQuery);

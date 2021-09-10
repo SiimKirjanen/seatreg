@@ -56,6 +56,14 @@ function seatreg_add_plugin_menu() {
 		'seatreg-management',   //slug
 		'seatreg_create_management'
 	);
+	add_submenu_page(
+		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
+		esc_html__('SeatReg tools', 'seatreg'),  //page title
+		esc_html__('Tools', 'seatreg'),  //menu title
+		'manage_options',  //capability
+		'seatreg-tools',   //slug
+		'seatreg_create_tools'
+	);
 }
 
 function seatreg_create_welcome() {
@@ -134,6 +142,31 @@ function seatreg_create_management() {
 					seatreg_generate_booking_manager();
 				?>
 			</div>
+		</div>
+	<?php
+}
+
+function seatreg_create_tools() {
+	?>
+		<div class="seatreg-wp-admin wrap">
+			<h1><i class="fa fa-wrench" aria-hidden="true"></i> <?php esc_html_e('Tools'); ?></h1>
+			<p><?php esc_html_e('Useful tools', 'seatreg'); ?>.</p>
+
+			<form id="email-tester-form">
+				<h4>
+					<?php esc_html_e('Email testing','seatreg'); ?>
+				</h4>
+				<p>
+					<?php esc_html_e('Send a test email to verify that email sending works. If it doesn\'t then most likely your WordPress hosting is not configured to send out emails. In that case you can use some WordPress SMTP email plugin like WP Mail SMTP by WPForms','seatreg'); ?>
+				</p>
+				<label for="test-email-address">
+					<?php esc_html_e('Enter your email address','seatreg'); ?>
+				</label>
+				<input type="text" id="test-email-address" style="margin-left: 12px">
+				<?php
+					submit_button(esc_html__('Send test mail', 'seatreg'), 'primary', 'seatreg-send-test-email');
+				?>
+	    </form>
 		</div>
 	<?php
 }

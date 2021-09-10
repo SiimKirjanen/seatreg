@@ -20,7 +20,8 @@ function seatreg_load_admin_scripts($hook) {
 		'seatreg_page_seatreg-overview',
 		'seatreg_page_seatreg-builder',
 		'seatreg_page_seatreg-options',
-		'seatreg_page_seatreg-management'
+		'seatreg_page_seatreg-management',
+		'seatreg_page_seatreg-tools',
 	);
 
 	if(in_array($screen->id, $allowedToLoadStylesAndScripts)) {

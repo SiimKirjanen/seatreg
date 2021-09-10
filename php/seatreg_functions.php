@@ -2484,6 +2484,30 @@ function seatreg_remove_img_callback() {
 	}
 }
 
+add_action( 'wp_ajax_seatreg_send_test_email', 'seatreg_send_test_email');
+function seatreg_send_test_email() {
+	seatreg_ajax_security_check();
+
+	if(empty($_POST['email'])) {
+		exit('Missing data');
+	}
+	
+	$email = sanitize_email($_POST['email']);
+	$response = new SeatregJsonResponse();
+	$adminEmail = get_option( 'admin_email' );
+
+	$mailSent = wp_mail($email, esc_html__('Seatreg test email', 'seatreg'), esc_html__('This is a test email', 'seatreg'), array(
+		"Content-type: text/html",
+		"FROM: $adminEmail"
+	));
+
+	if(!$mailSent) {
+		$response->setError('Email sending error');
+	}
+
+	wp_send_json( $response );
+}
+
 /*
 ==================================================================================================================================================================================================================
 Payment functions
