@@ -292,6 +292,25 @@ Booking manager
 ==================================================================================================================================================================================================================
 */
 
+function managerSearch() {
+	var code = $('#seatreg-reg-code').val();
+	var searchTerm = $('.manager-search').val();
+	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
+	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
+	var promise = seaterg_admin_ajax2('seatreg_search_bookings', code, {searchTerm: searchTerm ,orderby: bookingOrderInManager});
+
+	promise.done(function(data) {
+		wrapper.empty().html(data).promise().done(function() {
+			wrapper.find('.tab-container').easytabs({
+				animate: false,
+				animationSpeed: 0
+			});
+		});
+	});
+
+	promise.fail = seatreg_admin_ajax_error;
+}
+
 $('#seatreg-booking-manager').on('click','.manager-box-link', function() {
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
@@ -336,25 +355,16 @@ $('#seatreg-booking-manager').on('click', '.show-more-info', function() {
 });
 
 //when search bookings
-$('#seatreg-booking-manager').on('click', '.search-button', function(e) {
-	var code = $('#seatreg-reg-code').val();
-	var searchTerm = $('.manager-search').val();
-	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
-	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
-	var promise = seaterg_admin_ajax2('seatreg_search_bookings', code, {searchTerm: searchTerm ,orderby: bookingOrderInManager});
-
-	promise.done(function(data) {
-		wrapper.empty().html(data).promise().done(function() {
-			wrapper.find('.tab-container').easytabs({
-				animate: false,
-				animationSpeed: 0
-				//updateHash: false
-			});
-		});
-	});
-
-	promise.fail = seatreg_admin_ajax_error;
+$('#seatreg-booking-manager').on('click', '.search-button', function() {
+	managerSearch();
 });
+
+$('#seatreg-booking-manager').on('keydown', '.manager-search', function(e) {
+	if(e.key === "Enter") {
+		managerSearch();
+	}
+});
+
 
 //chen confirm or del bookings
 $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
