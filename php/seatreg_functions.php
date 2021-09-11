@@ -797,17 +797,28 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	$custom_fields = json_decode($seatregData->custom_fields, true);
 	$cus_length = count(is_array($custom_fields) ? $custom_fields : []);
 	$regId = $seatregData->id;
-	$project_name = $seatregData->registration_name;
+	$project_name_original = $seatregData->registration_name;
 	$bookings1 = seatreg_get_specific_bookings($code, $order, $searchTerm, '1');
 	$bookings2 = seatreg_get_specific_bookings($code, $order, $searchTerm, '2');
 	$row_count = count($bookings1);
 	$row_count2 = count($bookings2);
 
-	if($row_count > 0) {
-		echo "<div class='bron-count-notify'>", sprintf(esc_html__('%s pending bookings', 'seatreg'), $row_count),"</div>";
-	}
+
+	?>
+		<div class='management-header'>
+			<div class='registration-name'>
+				<?php echo $project_name_original; ?>
+			</div>
+			<?php if($row_count > 0): ?>
+				<div class="pending-bookings-count">
+					<?php echo sprintf(esc_html__('%s pending bookings', 'seatreg'), $row_count); ?>
+				</div>
+			<?php endif; ?>
+
+		</div>	
+	<?php
 	
-	$project_name = str_replace(' ', '_', $project_name);
+	$project_name = str_replace(' ', '_', $project_name_original);
 
 	echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
 	echo '<div class="input-group manager-search-wrap">';
