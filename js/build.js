@@ -2244,6 +2244,14 @@
 	$('#price-dialog').on('show.bs.modal', function() {
 		var $pricingWrap = $('#selected-seats-for-pricing');
 		var currentRoom = reg.rooms[reg.currentRoom];
+		var selectedBoxes = reg.activeBoxArray.map(function(selectedBoxId) {
+			var boxLocation = currentRoom.findBox(selectedBoxId);
+			
+			return currentRoom.boxes[boxLocation];
+		});
+		var hasSeatSelected = selectedBoxes.some(function(box) {
+			return box.canRegister === true;
+		});
 
 		$pricingWrap.empty();
 		$('#set-prices').removeClass('d-none');
@@ -2251,24 +2259,22 @@
 		if(reg.settings.paypal_payments === '1') {
 			$('#enable-paypal-alert').css('display', 'none');
 		}
-
-		if(!reg.activeBoxArray.length) {
+		if(!hasSeatSelected) {
 			$('.set-price-wrap').addClass('d-none');
 			$('#set-prices').addClass('d-none');
 			$pricingWrap.append(
 				'<div class="alert alert-primary">'+ translator.translate('noSeatsSelected') +'</div>'
 			);
-		}else if(reg.activeBoxArray.length == 1) {
+		}else if(selectedBoxes.length == 1) {
 			$('.set-price-wrap').addClass('d-none');
 		}else {
 			$('.set-price-wrap').removeClass('d-none');
 		}
 		
-		reg.activeBoxArray.forEach(function(selectedBoxId) {
-			var boxLocation = currentRoom.findBox(selectedBoxId);
-			var box = currentRoom.boxes[boxLocation];
-
+		selectedBoxes.forEach(function(box) {
 			if(box.canRegister) {
+				var boxLocation = currentRoom.findBox(box.id);
+
 				$pricingWrap.append(
 					'<div class="price-item" data-box-location="' + boxLocation + '">' + 
 						'<div class="price-item-seat">'  + box.seat  + '</div>' +

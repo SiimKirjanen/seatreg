@@ -104,7 +104,7 @@ function seatreg_generate_admin_strings() {
     $translations->box = esc_html__('box', 'seatreg');
     $translations->noBoxesSelected = esc_html__('No boxes selected', 'seatreg');
     $translations->pendingSeat = esc_html__('Pending seat', 'seatreg');
-    $translations->confirmedSeat = esc_html__('Confirmed seat', 'seatreg');
+    $translations->confirmedSeat = esc_html__('Approved seat', 'seatreg');
     $translations->save = esc_html__('Save', 'seatreg');
     $translations->saving = esc_html__('Saving...', 'seatreg');
     $translations->saved = esc_html__('Saved', 'seatreg');
