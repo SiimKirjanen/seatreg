@@ -2315,7 +2315,7 @@
     	autoOpen: false,
     	width: 500,
     	//modal: true,
-    	position: {my:"top", at:"bottom", of: $('.room-title')},
+    	position: {my:"center", at:"center", of: window},
     	buttons: [ { text: "Close", class: 'btn btn-default', tabIndex: -1, click: function() { $( this ).dialog( "close" ); } } ],
     	closeOnEscape: true,
     	show: {
