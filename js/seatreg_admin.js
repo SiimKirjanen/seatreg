@@ -159,12 +159,11 @@
 	});
 
 $('.builder-popup-close').on('click', function() {
-
 	if( window.seatreg.builder.needToSave == true) {
 		alertify.set({ 
 			labels: {
-		    	ok     : translator.translate('ok'),
-		    	cancel: translator.translate('cancel')
+		    	ok     : translator.translate('yes'),
+		    	cancel: translator.translate('no')
 			},
 			buttonFocus: "cancel"  
 		});
@@ -179,7 +178,6 @@ $('.builder-popup-close').on('click', function() {
 		$('.seatreg-builder-popup').css({'display':'none'});
 		seatreg_clear_builder_data();
 	}
-
 });
 
 $('#registration-start-timestamp').datepicker({

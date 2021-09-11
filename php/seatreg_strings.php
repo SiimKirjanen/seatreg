@@ -84,6 +84,7 @@ function seatreg_generate_admin_strings() {
     $translations->toSelectOneBox_ = esc_html__('To select one box use ', 'seatreg');
     $translations->toSelectMultiBox_ = esc_html__('To select multiple boxes use ', 'seatreg');
     $translations->selectBoxesToAddHover = esc_html__('Select box/boxes to add hover text', 'seatreg');
+    $translations->selectBoxesToAddColor = esc_html__('Select box/boxes to add color', 'seatreg');
     $translations->loading = esc_html__('Loading...', 'seatreg');
     $translations->selectBoxesToDelete = esc_html__('Select box/boxes you want to delete', 'seatreg');
     $translations->colorApplied = esc_html__('Color applied', 'seatreg');
@@ -99,7 +100,6 @@ function seatreg_generate_admin_strings() {
     $translations->ok = esc_html__('Ok', 'seatreg');
     $translations->cancel = esc_html__('Cancel', 'seatreg');
     $translations->open = esc_html__('Open', 'seatreg');
-    $translations->unsavedChanges = esc_html__('Unsaved Changes', 'seatreg');
     $translations->boxes = esc_html__('boxes', 'seatreg');
     $translations->box = esc_html__('box', 'seatreg');
     $translations->noBoxesSelected = esc_html__('No boxes selected', 'seatreg');
@@ -135,6 +135,8 @@ function seatreg_generate_admin_strings() {
     $translations->checkEmailAddress = esc_html__('Check your email address', 'seatreg');
     $translations->emailSendingFailed= esc_html__('Email sending failed', 'seatreg');
     $translations->pealseWait= esc_html__('Please wait', 'seatreg');
+    $translations->yes = esc_html__('Yes', 'seatreg');
+    $translations->no = esc_html__('No', 'seatreg');
  
     return $translations;
 }

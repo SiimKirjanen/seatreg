@@ -792,12 +792,11 @@
 			alertify.set({ 
 				labels: {
 			    	ok     : translator.translate('ok'),
-			    	cancel: translator.translate('cancel')
 				},
 				buttonFocus: "ok"  
 			});
 			var hoverGuide = '<div><div class="guide-block">'+ translator.translate('toSelectOneBox_') +'<div class="guide-item guide-item-mouse"></div></div><br><div class="guide-block"> '+ translator.translate('toSelectMultiBox_') +' <div class="guide-item guide-item-lasso"></div></div>';
-			alertify.alert('<span class="bold-text">' + translator.translate('selectBoxesToAddHover') + hoverGuide);
+			alertify.alert(translator.translate('selectBoxesToAddHover') + hoverGuide);
 
 			return;
 		}
@@ -2298,6 +2297,7 @@
 			var box = currentRoom.boxes[boxLocation];
 
 			box.changePrice(price);
+			reg.needToSave = true;
 		});
 		$('#price-dialog').modal('hide');
 		if(reg.activeBoxArray.length) {
@@ -2843,11 +2843,10 @@
 			alertify.set({ 
 				labels: {
 			    	ok     : translator.translate('ok'),
-			    	cancel: translator.translate('cancel')
 				},
 				buttonFocus: "ok"  
 			});
-			alertify.alert(palleteGuide);
+			alertify.alert(translator.translate('selectBoxesToAddColor') + palleteGuide);
 		}
 	});
 
@@ -2945,8 +2944,8 @@
 
     		alertify.set({ 
 				labels: {
-			    	ok     : translator.translate('ok'),
-			    	cancel: translator.translate('cancel')
+			    	ok     : translator.translate('yes'),
+			    	cancel: translator.translate('no')
 				},
 				buttonFocus: "cancel"  
 			});
