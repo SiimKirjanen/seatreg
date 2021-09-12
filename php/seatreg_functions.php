@@ -1033,7 +1033,7 @@ function seatreg_booking_edit_modal() {
 
 ?>
 
-<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade edit-modal" id="edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -1042,11 +1042,26 @@ function seatreg_booking_edit_modal() {
       </div>
       <div class="modal-body">
 		<form id="booking-edit-form">
-	        <label><?php esc_html_e('Seat', 'seatreg'); ?> <input type="text" id="edit-seat" name="seat-nr"/></label> <span id="edit-seat-error"></span><br>
-	        <label><?php esc_html_e('Room', 'seatreg'); ?> <input type="text" id="edit-room" name="room"/></label> <span id="edit-room-error"></span><br>
+			<div class="edit-modal-input-wrap">
+				<label for="edit-seat"><h5><?php esc_html_e('Seat', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="edit-seat" name="seat-nr"/></label> <span id="edit-seat-error"></span>
+			</div>
+			
+			<div class="edit-modal-input-wrap">
+				<label for="edit-room"><h5><?php esc_html_e('Room', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="edit-room" name="room"/> <span id="edit-room-error"></span>
+			</div>
+
+			<div class="edit-modal-input-wrap">
+				<label for="edit-fname"><h5><?php esc_html_e('First name', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="edit-fname" name="first-name"/> <span id="edit-fname-error"></span>
+			</div>
+
+			<div class="edit-modal-input-wrap">
+				<label for="edit-lname"><h5><?php esc_html_e('Last name', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="edit-lname" name="last-name"/></label> <span id="edit-lname-error"></span>
+			</div>
 	        
-	        <label><?php esc_html_e('First name', 'seatreg'); ?> <input type="text" id="edit-fname" name="first-name"/></label><span id="edit-fname-error"></span><br>
-			<label><?php esc_html_e('Last name', 'seatreg'); ?> <input type="text" id="edit-lname" name="last-name"/></label><span id="edit-lname-error"></span><br>
 			<input type="hidden" id="modal-code">
 			<input type="hidden" id="booking-id">
 			<input type="hidden" id="r-id">

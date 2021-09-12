@@ -431,22 +431,22 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 		if(type === "check") {
 			var isChecked = $(this).find('.custom-field-value').data('checked') === true ? 'checked' : '';
 
-			modalCutsom.append('<div class="modal-custom" data-type="check"><label class="modal-custom-l"><span>'+ $(this).find('.custom-field-label').text() +'</span><input type="checkbox" class="modal-custom-v" ' + isChecked +' /></label></div>');
+			modalCutsom.append('<div class="modal-custom" data-type="check"><label for="'+ $(this).find('.custom-field-label').text() +'" class="modal-custom-l"><h5>'+ $(this).find('.custom-field-label').text() +'</h5></label><br><input type="checkbox" id="'+ $(this).find('.custom-field-label').text() +'" class="modal-custom-v" ' + isChecked +' /></div>');
 		}else if(type === "sel") {
 			var selectOptions = $(this).find('.custom-field-value').data('options');
 			var selectedOption = $(this).find('.custom-field-value').text().trim();
 
 			if(Array.isArray(selectOptions)) {
-				modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l"><span>'+ $(this).find('.custom-field-label').text() + '</span><select class="modal-custom-v">' +  selectOptions.map((option) => {
+				modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l" for="'+ $(this).find('.custom-field-label').text() +'"><h5>'+ $(this).find('.custom-field-label').text() + '</h5></label><br><select id="'+ $(this).find('.custom-field-label').text() +'" class="modal-custom-v">' +  selectOptions.map((option) => {
 					if(option === selectedOption) {
 						return '<option selected>' + option + '</option>';
 					}
 					return '<option>' + option + '</option>';
-				})  + '</select>' + '</label></div>');
+				})  + '</select>' + '</div>');
 			}
 
 		}else {
-			modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l"><span>'+ $(this).find('.custom-field-label').text() +'</span><input type="text" class="modal-custom-v" value="'+ $(this).find('.custom-field-value').text() +'" /></label></div>');
+			modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l" for="'+ $(this).find('.custom-field-label').text() +'"><h5>'+ $(this).find('.custom-field-label').text() +'</h5></label><br><input type="text" id="'+ $(this).find('.custom-field-label').text() +'" class="modal-custom-v" value="'+ $(this).find('.custom-field-value').text() +'" /></div>');
 		}
 	});
 
@@ -455,7 +455,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 });
 
 $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
-	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader2.gif' + '" alt="Loading..." class="ajax-load" />');
+	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' + '" alt="Loading..." class="ajax-load" />');
 	var subBtn = $(this);
 	var modal = $('#edit-modal');
 	var customFields = [];
@@ -498,12 +498,12 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		if($(this).find('.modal-custom-v').val() != 'Not set' && $(this).find('.modal-custom-v').val() != '') {
 			var type = $(this).data('type');
 
-			custObj['label'] = $(this).find('.modal-custom-l span').text();
+			custObj['label'] = $(this).find('.modal-custom-l h5').text();
 			
 			if(type === 'check') {
 				custObj['value'] = $(this).find('.modal-custom-v').is(':checked') ? '1' : '0';
 			}else if(type === 'sel') {
-				$(this).find('.modal-custom-v').find(":selected").text();
+				custObj['value'] = $(this).find('.modal-custom-v').find(":selected").text();
 			}else {
 				custObj['value'] = $(this).find('.modal-custom-v').val();
 			}
@@ -569,12 +569,15 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		}else {
 			if(data.status == 'room-searching') {
 				$('#edit-room-error').text(translator.translate('roomNotExist'));
+				alertify.error(translator.translate('roomNotExist'));
 			}
 			if(data.status == 'seat-nr-searching') {
 				$('#edit-seat-error').text(translator.translate('seatNotExist'));
+				alertify.error(translator.translate('seatNotExist'));
 			}
 			if(data.status == 'seat-booked') {
 				$('#edit-seat-error').text(translator.translate('seatAlreadyBookedPending'));
+				alertify.error(translator.translate('seatAlreadyBookedPending'));
 			}
 			if(data.status == 'update failed') {
 				alert(translator.translate('errorBookingUpdate'));
