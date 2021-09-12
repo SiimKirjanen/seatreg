@@ -2221,7 +2221,7 @@
 	});
 
 	$('#color-dialog').on('show.bs.modal', function() {
-		$('#color-dialog .color-dialog-info').html(reg.activeBoxesInfo());
+		$('#color-dialog .color-dialog-info').html('<h5>' + reg.activeBoxesInfo() + '</h5>');
 	});
 
 	$('#room-name-dialog').on('show.bs.modal', function() {

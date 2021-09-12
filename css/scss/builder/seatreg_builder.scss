@@ -1,3 +1,7 @@
+@import 'modal/bg-image';
+@import 'modal/skeleton';
+@import 'modal/color';
+
 .seatreg-map-builder-page .seatreg-builder-popup .fa-times-circle {
 	color: red;
 	position: absolute;
@@ -1038,13 +1042,6 @@
 }
 .seatreg-map-builder-page .loading-text {
 	font-weight: bold;
-}
-.seatreg-map-builder-page {
-	.color-dialog-info {
-		font-size: 16px;
-		text-align: center;
-		margin-bottom: 12px;
-	}
 }
 .seatreg-map-builder-page #build-section-click-controls {
 	border: 1px solid black;

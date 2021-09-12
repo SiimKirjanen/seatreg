@@ -129,7 +129,7 @@
 		</div>
 	</div>
 
-	<div class="modal vert-modal fade" id="skeleton-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal vert-modal fade skeleton-dialog" id="skeleton-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -137,27 +137,26 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
-			<div>
+				<div>
+					<h5><?php esc_html_e('Box size', 'seatreg');?></h5>
+					<label>x<input type="number" class="skeleton-input" id="size-x" value="36"/></label> <br>
+					<label>y<input type="number" class="skeleton-input" id="size-y" value="36"/></label>
+					<br><br>
+				</div>
 
-				<?php esc_html_e('Box size', 'seatreg');?><br>
-				<label>x<input type="text" class="skeleton-input" id="size-x" value="36"/></label> <br>
-				<label>y<input type="text" class="skeleton-input" id="size-y" value="36"/></label> <br>
+				<div>
+					<h5><?php esc_html_e('Box count', 'seatreg');?></h5>
+					<label><?php esc_html_e('x-axis', 'seatreg');?><input type="number" class="skeleton-input" id="count-x" value="22"/></label> <br>
+					<label><?php esc_html_e('y-axis', 'seatreg');?><input type="number" class="skeleton-input" id="count-y" value="20"/></label> 
+					<br><br>
+				</div>
 
-			</div>
-
-			<div>
-				<?php esc_html_e('Box count', 'seatreg');?><br>
-				<label><?php esc_html_e('x-axis', 'seatreg');?><input type="text" class="skeleton-input" id="count-x" value="22"/></label> <br>
-				<label><?php esc_html_e('y-axis', 'seatreg');?><input type="text" class="skeleton-input" id="count-y" value="20"/></label> 
-				<br><br>
-			</div>
-
-			<div>
-				<?php esc_html_e('Distance between boxes', 'seatreg');?> <br>
-				<label>x<input type="text" class="skeleton-input" id="margin-x" value="10"/></label> <br>
-				<label>y<input type="text" class="skeleton-input" id="margin-y" value="10"/></label> <br><br>					
-			</div>
-
+				<div>
+					<h5><?php esc_html_e('Distance between boxes', 'seatreg');?></h5>
+					<label>x<input type="number" class="skeleton-input" id="margin-x" value="10"/></label> <br>
+					<label>y<input type="number" class="skeleton-input" id="margin-y" value="10"/></label> 
+					<br><br>					
+				</div>
 			</div>
 			<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
@@ -476,7 +475,7 @@
 	</div><!-- /.modal -->
 
 
-	<div class="modal fade" id="background-image-modal" role="dialog" aria-hidden="true">
+	<div class="modal fade background-image-modal" id="background-image-modal" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -485,32 +484,31 @@
 			</div>
 			<div class="modal-body">
 
-			<h4><?php esc_html_e('Current room image', 'seatreg');?></h4>
+				<h4><?php esc_html_e('Current room image', 'seatreg');?></h4>
 
-			<div id="activ-room-img-wrap"></div>
-			<br>
-
-			<h4><?php esc_html_e('Upload image', 'seatreg');?> (2MB)</h4>
-			<form action="<?php echo '/wp-admin/admin-ajax.php'; ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
-				<input type="file" name="fileToUpload" id="img-upload">
+				<div id="activ-room-img-wrap"></div>
 				<br>
-				<input type="hidden" name="code" id="urlCode"  value="">
-				<input type="hidden" name="action" value="seatreg_upload_image">
-				<input type="submit" class="btn btn-success" name="submit" id="file-sub" value="<?php esc_html_e('Upload'); ?>">
-				<input type="reset" class="btn btn-danger" value="Clear" id="reset-btn">
-			</form>
-			<br>
-			<div class="progress">
-				<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-					<span class="sr-only">0% Complete</span>
+
+				<h4><?php esc_html_e('Upload image', 'seatreg');?> (2MB)</h4>
+				<form action="<?php echo '/wp-admin/admin-ajax.php'; ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
+					<input type="file" name="fileToUpload" id="img-upload" class="file-select"><br>
+					<input type="hidden" name="code" id="urlCode"  value="">
+					<input type="hidden" name="action" value="seatreg_upload_image">
+					<input type="submit" class="btn btn-success" name="submit" id="file-sub" value="<?php esc_html_e('Upload'); ?>">
+					<input type="reset" class="btn btn-danger" value="Clear" id="reset-btn">
+				</form>
+				<br>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+						<span class="sr-only">0% Complete</span>
+					</div>
 				</div>
-			</div>
-			<br>
-			<div id="img-upload-resp"></div>
-			<br><br>
+				<br>
+				<div id="img-upload-resp"></div>
+				<br><br>
 			
-			<h4><?php esc_html_e('Previously uploaded images', 'seatreg');?></h4>
-			<div id="uploaded-images"></div>
+				<h4><?php esc_html_e('Previously uploaded images', 'seatreg');?></h4>
+				<div id="uploaded-images"></div>
 
 			</div>
 			<div class="modal-footer">
