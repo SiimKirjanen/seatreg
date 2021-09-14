@@ -349,7 +349,7 @@
 					<div id="checkout-input-area"></div>
 					<button type="submit" id="checkout-confirm-btn" class="seatreg-btn green-btn">
 						<?php 
-							esc_html_e('OK', 'seatreg');
+							esc_html_e('Book', 'seatreg');
 						?>
 					</button>
 					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader.gif" alt="Loading" class="ajax-load">

@@ -1150,6 +1150,7 @@ body {
 .field-error {
 	display: none;
 	color: red;
+	font-size: 14px;
 }
 .checkout-header {
 	margin-bottom: 16px;
@@ -1367,11 +1368,9 @@ body {
 	text-align: center;
 }
 .field-input[data-type="check"] {
-	display: inline;
+	display: block;
 	width: auto;
-	vertical-align: middle;
-	margin-left: 4px;
-	margin-top: 0;
+	margin-top: 5px;
 }
 .under-construction-notify {
 	display: flex;
