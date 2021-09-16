@@ -3,7 +3,7 @@ Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source
 Tags: seat registration, booking, booking seats, booking events, seat map, booking management, registration
 Requires at least: 5.3
 Requires PHP: 7.2.28
-Tested up to: 5.7
+Tested up to: 5.8.1
 Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
