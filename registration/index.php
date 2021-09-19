@@ -50,17 +50,12 @@
 			}
 			#center-wrap {
 				text-align: center;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
 				height: 100%;
-			}
-			#center-wrap:before {
-				 content: '';
-				 display: inline-block;
-				 height: 100%;
-				 vertical-align: middle;
-			}
-			#center-wrap .center-header {
-				display: inline-block;
-	  			vertical-align: middle;
+				padding: 40px;
 			}
 		</style>		
 	<?php endif; ?>
@@ -74,7 +69,7 @@
 
 		<?php if($data->registration_open == 0) : ?>
 	    	<div id="center-wrap">
-				<h2 class="center-header">
+				<h2>
 					<?php
 						printf(
 							/* translators: %s: Name of the registration */
@@ -83,6 +78,11 @@
 						);
 					?>
 				</h2>
+				<?php if($data->registration_close_reason): ?>
+					<p>
+						<?php esc_html_e($data->registration_close_reason); ?>
+					</p>	
+				<?php endif; ?>
 	    	</div>
 		<?php else : ?>
 

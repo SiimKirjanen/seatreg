@@ -435,7 +435,7 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('Change registration name', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo SEATREG_REGISTRATION_NAME_MAX_LENGTH; ?>" placeholder="Enter registration name" autocomplete="off" value="<?php echo esc_attr($options[0]->registration_name); ?>">
+				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo SEATREG_REGISTRATION_NAME_MAX_LENGTH; ?>" placeholder="<?php esc_html_e('Enter registration name', 'seatreg'); ?>" autocomplete="off" value="<?php echo esc_attr($options[0]->registration_name); ?>">
 			</div>
 
 			<div class="form-group">
@@ -447,6 +447,14 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Open', 'seatreg'); ?>
 			    	</label>
 			  	</div>
+			</div>
+
+			<div class="form-group">
+				<label for="registration-close-reason"><?php esc_html_e('Close reason', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('You can leave text explaining why registration is closed. Will be displayed on registration view.', 'seatreg'); ?>
+				</p>
+				<textarea class="form-control" id="registration-close-reason" name="registration-close-reason" placeholder="<?php esc_html_e('Enter reason', 'seatreg'); ?>"><?php echo esc_attr($options[0]->registration_close_reason); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -1450,6 +1458,7 @@ function seatreg_set_up_db() {
 			show_bookings tinyint(1) NOT NULL DEFAULT 0,
 			payment_text text,
 			info text,
+			registration_close_reason text,
 			booking_email_confirm tinyint(1) NOT NULL DEFAULT 1,
 			paypal_payments tinyint(1) NOT NULL DEFAULT 0,
 			paypal_business_email varchar(255) DEFAULT NULL,
@@ -2053,7 +2062,7 @@ function seatreg_update() {
 	}else {
 		$_POST['payment-mark-confirmed'] = 1;
 	}
-	
+
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
 		array(
@@ -2068,6 +2077,7 @@ function seatreg_update() {
 			'show_bookings' => sanitize_text_field($_POST['show-registration-bookings']),
 			'payment_text' => $_POST['payment-instructions'] == '' ? null : sanitize_text_field($_POST['payment-instructions']),
 			'info' => sanitize_text_field($_POST['registration-info-text']),
+			'registration_close_reason' => sanitize_text_field($_POST['registration-close-reason']),
 			'custom_fields' => $customFileds,
 			'booking_email_confirm' => sanitize_text_field($_POST['email-confirm']),
 			'paypal_payments' => $_POST['paypal-payments'],
