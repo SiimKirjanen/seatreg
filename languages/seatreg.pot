@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-04 16:52+0300\n"
+"POT-Creation-Date: 2021-10-02 10:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,15 +51,15 @@ msgstr ""
 msgid "Registration name"
 msgstr ""
 
-#: php/builder_content.php:11 php/seatreg_functions.php:834
-#: php/seatreg_functions.php:1035 php/seatreg_functions.php:1126
+#: php/builder_content.php:11 php/seatreg_functions.php:853
+#: php/seatreg_functions.php:1059 php/seatreg_functions.php:1160
 #: php/bookings/SeatregBookingsTxt.php:36
 #: php/bookings/SeatregBookingsXlsx.php:62 registration/index.php:318
 msgid "Room"
 msgstr ""
 
-#: php/builder_content.php:11 php/builder_content.php:286
-#: php/builder_content.php:298
+#: php/builder_content.php:11 php/builder_content.php:285
+#: php/builder_content.php:297
 msgid "Change name"
 msgstr ""
 
@@ -79,7 +79,7 @@ msgstr ""
 msgid "pixels to"
 msgstr ""
 
-#: php/builder_content.php:60 php/seatreg_strings.php:87
+#: php/builder_content.php:60 php/seatreg_strings.php:88
 msgid "Loading..."
 msgstr ""
 
@@ -100,11 +100,11 @@ msgid "Color"
 msgstr ""
 
 #: php/builder_content.php:105 php/builder_content.php:125
-#: php/builder_content.php:163 php/builder_content.php:189
-#: php/builder_content.php:335 php/builder_content.php:431
-#: php/builder_content.php:455 php/builder_content.php:472
-#: php/builder_content.php:517 php/seatreg_functions.php:1030
-#: php/seatreg_functions.php:1046 registration/index.php:281
+#: php/builder_content.php:162 php/builder_content.php:188
+#: php/builder_content.php:334 php/builder_content.php:430
+#: php/builder_content.php:454 php/builder_content.php:471
+#: php/builder_content.php:515 php/seatreg_functions.php:1049
+#: php/seatreg_functions.php:1080 registration/index.php:281
 msgid "Close"
 msgstr ""
 
@@ -120,11 +120,10 @@ msgstr ""
 msgid "Leave field empty to remove existing hover text"
 msgstr ""
 
-#: php/builder_content.php:126 php/builder_content.php:336
-#: php/seatreg_functions.php:879 php/seatreg_functions.php:924
-#: registration/index.php:352 registration/index.php:393
-#: registration/index.php:415 registration/index.php:432
-#: registration/index.php:476
+#: php/builder_content.php:126 php/builder_content.php:335
+#: php/seatreg_functions.php:898 php/seatreg_functions.php:943
+#: registration/index.php:393 registration/index.php:415
+#: registration/index.php:432 registration/index.php:476
 msgid "OK"
 msgstr ""
 
@@ -132,143 +131,143 @@ msgstr ""
 msgid "Building grid helps you to create boxes"
 msgstr ""
 
-#: php/builder_content.php:142
+#: php/builder_content.php:141
 msgid "Box size"
 msgstr ""
 
-#: php/builder_content.php:149
+#: php/builder_content.php:148
 msgid "Box count"
 msgstr ""
 
-#: php/builder_content.php:150
+#: php/builder_content.php:149
 msgid "x-axis"
 msgstr ""
 
-#: php/builder_content.php:151
+#: php/builder_content.php:150
 msgid "y-axis"
 msgstr ""
 
-#: php/builder_content.php:156
+#: php/builder_content.php:155
 msgid "Distance between boxes"
 msgstr ""
 
-#: php/builder_content.php:164
+#: php/builder_content.php:163
 msgid "Update grid"
 msgstr ""
 
-#: php/builder_content.php:174
+#: php/builder_content.php:173
 msgid "Seat pricing"
 msgstr ""
 
-#: php/builder_content.php:179
+#: php/builder_content.php:178
 msgid "You need to enable PayPal in settings to turn on pricing functionality."
 msgstr ""
 
-#: php/builder_content.php:182
+#: php/builder_content.php:181
 msgid "Fill price to all selected seats"
 msgstr ""
 
-#: php/builder_content.php:184
+#: php/builder_content.php:183
 msgid "Fill prices"
 msgstr ""
 
-#: php/builder_content.php:190
+#: php/builder_content.php:189
 msgid "Set price"
 msgstr ""
 
-#: php/builder_content.php:204
+#: php/builder_content.php:203
 msgid "Existing legends:"
 msgstr ""
 
-#: php/builder_content.php:206
+#: php/builder_content.php:205
 msgid "Apply legend"
 msgstr ""
 
-#: php/builder_content.php:210
+#: php/builder_content.php:209
 msgid "Remove legend from registration:"
 msgstr ""
 
-#: php/builder_content.php:212 php/seatreg_functions.php:744
+#: php/builder_content.php:211 php/seatreg_functions.php:752
 msgid "Delete"
 msgstr ""
 
-#: php/builder_content.php:216
+#: php/builder_content.php:215
 msgid "Remove legend from this room:"
 msgstr ""
 
-#: php/builder_content.php:218 php/seatreg_functions.php:861
-#: php/seatreg_functions.php:906 php/seatreg_strings.php:29
+#: php/builder_content.php:217 php/seatreg_functions.php:880
+#: php/seatreg_functions.php:925 php/seatreg_strings.php:29
 #: php/seatreg_strings.php:126
 msgid "Remove"
 msgstr ""
 
-#: php/builder_content.php:222 php/builder_content.php:292
+#: php/builder_content.php:221 php/builder_content.php:291
 msgid "Change legend"
 msgstr ""
 
-#: php/builder_content.php:224
+#: php/builder_content.php:223
 msgid "Change"
 msgstr ""
 
-#: php/builder_content.php:234 php/builder_content.php:251
+#: php/builder_content.php:233 php/builder_content.php:250
 msgid "Step 1."
 msgstr ""
 
-#: php/builder_content.php:234 php/seatreg_strings.php:98
+#: php/builder_content.php:233 php/seatreg_strings.php:99
 msgid "Enter legend name"
 msgstr ""
 
-#: php/builder_content.php:240 php/builder_content.php:246
-#: php/builder_content.php:269
+#: php/builder_content.php:239 php/builder_content.php:245
+#: php/builder_content.php:268
 msgid "Step 2."
 msgstr ""
 
-#: php/builder_content.php:246
+#: php/builder_content.php:245
 msgid "Choose legend color"
 msgstr ""
 
-#: php/builder_content.php:252 php/builder_content.php:257
+#: php/builder_content.php:251 php/builder_content.php:256
 msgid "Step 3."
 msgstr ""
 
-#: php/builder_content.php:257
+#: php/builder_content.php:256
 msgid "Review new legend"
 msgstr ""
 
-#: php/builder_content.php:267 php/builder_content.php:275
-#: php/seatreg_strings.php:95
+#: php/builder_content.php:266 php/builder_content.php:274
+#: php/seatreg_strings.php:96
 msgid "Create new legend"
 msgstr ""
 
-#: php/builder_content.php:281
+#: php/builder_content.php:280
 msgid "Enter new name"
 msgstr ""
 
-#: php/builder_content.php:287 php/builder_content.php:307
+#: php/builder_content.php:286 php/builder_content.php:306
 msgid "Back"
 msgstr ""
 
-#: php/builder_content.php:299 php/builder_content.php:308
+#: php/builder_content.php:298 php/builder_content.php:307
 msgid "Change color"
 msgstr ""
 
-#: php/builder_content.php:313
+#: php/builder_content.php:312
 msgid "Close legend change"
 msgstr ""
 
-#: php/builder_content.php:326 php/bookings/SeatregBookingsPDF.php:68
+#: php/builder_content.php:325 php/bookings/SeatregBookingsPDF.php:68
 msgid "Room name"
 msgstr ""
 
-#: php/builder_content.php:330
+#: php/builder_content.php:329
 msgid "Enter room name:"
 msgstr ""
 
-#: php/builder_content.php:346
+#: php/builder_content.php:345
 msgid "Manual"
 msgstr ""
 
-#: php/builder_content.php:354
+#: php/builder_content.php:353
 msgid ""
 "With select tool you can select individual objects in your seat map. This "
 "tool is also used to resize and change object location. To change seat/"
@@ -277,14 +276,14 @@ msgid ""
 "desired width or height."
 msgstr ""
 
-#: php/builder_content.php:361
+#: php/builder_content.php:360
 msgid ""
 "With this tool you can create seats. Simply click on gray dotted box and new "
 "seat will be created. You can create multiple seats at once by dragging "
 "cursor over gray boxes."
 msgstr ""
 
-#: php/builder_content.php:368
+#: php/builder_content.php:367
 msgid ""
 "Custom boxes are used to show special objects in your seat map (exit, trash "
 "can, stage and so on). Simply click on gray dotted box and new custom box "
@@ -292,27 +291,27 @@ msgid ""
 "over gray boxes."
 msgstr ""
 
-#: php/builder_content.php:375
+#: php/builder_content.php:374
 msgid ""
 "With eraser tool you can remove seats and custom boxes. Simply click on "
 "object and it will be removed. You can remove multiple objects at once by "
 "holding down left mouse and moving cursor over them."
 msgstr ""
 
-#: php/builder_content.php:382
+#: php/builder_content.php:381
 msgid ""
 "Lasso tool is helpful if you wish to work with multiple objects at the same "
 "time (changing color, deleting, adding hover text and legends). Simple hold "
 "down left mouse button and move your cursor to select multiple seats/boxes."
 msgstr ""
 
-#: php/builder_content.php:389
+#: php/builder_content.php:388
 msgid ""
 "Once you have selected seats/boxes with either select or lasso tool you can "
 "delete them with clicking on garbage can button. "
 msgstr ""
 
-#: php/builder_content.php:396
+#: php/builder_content.php:395
 msgid ""
 "Legends are useful if you want to add labels to seats/custom boxes with "
 "special meaning. Example: Lets say you want to show where boys and where "
@@ -320,20 +319,20 @@ msgid ""
 "legends to seats nad custom boxes."
 msgstr ""
 
-#: php/builder_content.php:403
+#: php/builder_content.php:402
 msgid ""
 "Hover text is shown when user clicks or moves mouse cursor over a seat/"
 "custom box. Simply select seats or custom boxes and add text via hover text "
 "dialog."
 msgstr ""
 
-#: php/builder_content.php:411
+#: php/builder_content.php:410
 msgid ""
 "Opens up color dialog where you can apply colors to selected seats/custom "
 "boxes."
 msgstr ""
 
-#: php/builder_content.php:418
+#: php/builder_content.php:417
 msgid ""
 "In seat map builder you can see lot of gray dotted boxes. These boxes are "
 "used to creat seats and custom boxes. In grid settings you can change size, "
@@ -341,56 +340,56 @@ msgid ""
 "seats and boxes are created."
 msgstr ""
 
-#: php/builder_content.php:425
+#: php/builder_content.php:424
 msgid ""
 "Lets you add prices to seats. You also need to configure paypal in settings "
 "to enable payments."
 msgstr ""
 
-#: php/builder_content.php:442
+#: php/builder_content.php:441
 msgid "Limited deletion"
 msgstr ""
 
-#: php/builder_content.php:448
+#: php/builder_content.php:447
 msgid ""
-"If room contains pending or confirmed seats then seat deletion is limited."
+"If room contains pending or approved seats then seat deletion is limited."
 msgstr ""
 
-#: php/builder_content.php:449
+#: php/builder_content.php:448
 msgid "Example:"
 msgstr ""
 
-#: php/builder_content.php:449
+#: php/builder_content.php:448
 msgid "Lets say you have seats with numbers 1,2,3 and 4."
 msgstr ""
 
-#: php/builder_content.php:449
+#: php/builder_content.php:448
 msgid ""
 "If someone occupies seat number 2 then you won't be able to delete seats 1 "
 "and 2."
 msgstr ""
 
-#: php/builder_content.php:466
+#: php/builder_content.php:465
 msgid "Saving is not allowed"
 msgstr ""
 
-#: php/builder_content.php:483
+#: php/builder_content.php:482
 msgid "Room background image"
 msgstr ""
 
-#: php/builder_content.php:488
+#: php/builder_content.php:487
 msgid "Current room image"
 msgstr ""
 
-#: php/builder_content.php:493
+#: php/builder_content.php:492
 msgid "Upload image"
 msgstr ""
 
-#: php/builder_content.php:499
+#: php/builder_content.php:497
 msgid "Upload"
 msgstr ""
 
-#: php/builder_content.php:512
+#: php/builder_content.php:510
 msgid "Previously uploaded images"
 msgstr ""
 
@@ -512,7 +511,7 @@ msgstr ""
 msgid "%s Overview"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:38 php/seatreg_admin_panel.php:110
+#: php/seatreg_admin_panel.php:38 php/seatreg_admin_panel.php:118
 #: php/seatreg_functions.php:377
 msgid "Overview"
 msgstr ""
@@ -522,7 +521,7 @@ msgstr ""
 msgid "%s Settings"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:46 php/seatreg_admin_panel.php:93
+#: php/seatreg_admin_panel.php:46 php/seatreg_admin_panel.php:101
 #: php/seatreg_functions.php:381
 msgid "Settings"
 msgstr ""
@@ -536,28 +535,60 @@ msgstr ""
 msgid "Bookings"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:65
+#: php/seatreg_admin_panel.php:61
+msgid "SeatReg tools"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:62 php/seatreg_admin_panel.php:152
+msgid "Tools"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:73
 msgid "Create and manage seat registrations"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:66
+#: php/seatreg_admin_panel.php:74
 msgid "Design your own seat map and manage seat bookings"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:94
+#: php/seatreg_admin_panel.php:102
 msgid "Settings for your registrations"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:111
+#: php/seatreg_admin_panel.php:119
 msgid "Statistics for your registrations"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:127
+#: php/seatreg_admin_panel.php:135
 msgid "Booking manager"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:128
+#: php/seatreg_admin_panel.php:136
 msgid "Manage seat bookings"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:153
+msgid "Useful tools"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:157
+msgid "Email testing"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:160
+msgid ""
+"Send a test email to verify that email sending works. If it doesn't then "
+"most likely your WordPress hosting is not configured to send out emails. In "
+"that case you can use some WordPress SMTP email plugin like WP Mail SMTP by "
+"WPForms"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:163
+msgid "Enter your email address"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:167
+msgid "Send test mail"
 msgstr ""
 
 #: php/seatreg_functions.php:41
@@ -594,7 +625,7 @@ msgid "Seats"
 msgstr ""
 
 #: php/seatreg_functions.php:232 php/seatreg_functions.php:285
-#: php/seatreg_functions.php:447 php/seatreg_strings.php:101
+#: php/seatreg_functions.php:447 php/seatreg_strings.php:102
 #: registration/index.php:155
 msgid "Open"
 msgstr ""
@@ -604,7 +635,7 @@ msgid "Confirmed"
 msgstr ""
 
 #: php/seatreg_functions.php:263 php/seatreg_functions.php:317
-#: php/seatreg_functions.php:828 php/seatreg_functions.php:1126
+#: php/seatreg_functions.php:847 php/seatreg_functions.php:1160
 #: php/seatreg_strings.php:46
 msgid "Pending"
 msgstr ""
@@ -634,6 +665,10 @@ msgstr ""
 msgid "Change registration name"
 msgstr ""
 
+#: php/seatreg_functions.php:438 php/seatreg_functions.php:733
+msgid "Enter registration name"
+msgstr ""
+
 #: php/seatreg_functions.php:442
 msgid "Registration status"
 msgstr ""
@@ -643,433 +678,451 @@ msgid "Close and open registration"
 msgstr ""
 
 #: php/seatreg_functions.php:453
-msgid "Registration start date"
+msgid "Close reason"
 msgstr ""
 
-#: php/seatreg_functions.php:454
-msgid "Set registration start date (dd.mm.yyyy)"
+#: php/seatreg_functions.php:455
+msgid ""
+"You can leave text explaining why registration is closed. Will be displayed "
+"on registration view."
 msgstr ""
 
-#: php/seatreg_functions.php:460
-msgid "Registration end date"
+#: php/seatreg_functions.php:457
+msgid "Enter reason"
 msgstr ""
 
 #: php/seatreg_functions.php:461
-msgid "Set registration end date (dd.mm.yyyy)"
+msgid "Registration start date"
 msgstr ""
 
-#: php/seatreg_functions.php:467 php/seatreg_functions.php:472
-msgid "Show bookings"
+#: php/seatreg_functions.php:462
+msgid "Set registration start date (dd.mm.yyyy)"
 msgstr ""
 
 #: php/seatreg_functions.php:468
+msgid "Registration end date"
+msgstr ""
+
+#: php/seatreg_functions.php:469
+msgid "Set registration end date (dd.mm.yyyy)"
+msgstr ""
+
+#: php/seatreg_functions.php:475 php/seatreg_functions.php:480
+msgid "Show bookings"
+msgstr ""
+
+#: php/seatreg_functions.php:476
 msgid "Let people see who has made a booking in registration page"
 msgstr ""
 
-#: php/seatreg_functions.php:478
+#: php/seatreg_functions.php:486
 msgid "Registration info text"
 msgstr ""
 
-#: php/seatreg_functions.php:479
+#: php/seatreg_functions.php:487
 msgid "Set registration info text. Will be displayed in registration page"
 msgstr ""
 
-#: php/seatreg_functions.php:480
+#: php/seatreg_functions.php:488
 msgid "Enter info text here"
 msgstr ""
 
-#: php/seatreg_functions.php:484
+#: php/seatreg_functions.php:492
 msgid "Max seats per booking"
 msgstr ""
 
-#: php/seatreg_functions.php:485
+#: php/seatreg_functions.php:493
 msgid "Set how many seats can be added to the booking"
 msgstr ""
 
-#: php/seatreg_functions.php:490
+#: php/seatreg_functions.php:498
 msgid "Gmail required"
 msgstr ""
 
-#: php/seatreg_functions.php:491
+#: php/seatreg_functions.php:499
 msgid "Gmail address is required when making a booking"
 msgstr ""
 
-#: php/seatreg_functions.php:495
+#: php/seatreg_functions.php:503
 msgid "Allow only gmail address"
 msgstr ""
 
-#: php/seatreg_functions.php:501
+#: php/seatreg_functions.php:509
 msgid "Password"
 msgstr ""
 
-#: php/seatreg_functions.php:503
+#: php/seatreg_functions.php:511
 msgid ""
 "You can set a password. Only people who know it can view your registration "
 "and make a booking. Leave it empty for no password"
 msgstr ""
 
-#: php/seatreg_functions.php:509
+#: php/seatreg_functions.php:517
 msgid "Pending status"
 msgstr ""
 
-#: php/seatreg_functions.php:511
+#: php/seatreg_functions.php:519
 msgid ""
 "By default all bookings will first be in pending state so admin can approve "
 "them (with booking manager). If you want bookings automatically to be in "
 "approved state then uncheck below."
 msgstr ""
 
-#: php/seatreg_functions.php:516
+#: php/seatreg_functions.php:524
 msgid "Use pending"
 msgstr ""
 
-#: php/seatreg_functions.php:522
+#: php/seatreg_functions.php:530
 msgid "Booking email confirm"
 msgstr ""
 
-#: php/seatreg_functions.php:524
+#: php/seatreg_functions.php:532
 msgid "Bookings must be confirmed with email"
 msgstr ""
 
-#: php/seatreg_functions.php:529
+#: php/seatreg_functions.php:537
 msgid "Email confirm"
 msgstr ""
 
-#: php/seatreg_functions.php:535
+#: php/seatreg_functions.php:543
 msgid "Booking notification"
 msgstr ""
 
-#: php/seatreg_functions.php:540
+#: php/seatreg_functions.php:548
 #, php-format
 msgid "Send a notification to %s when you got a new booking."
 msgstr ""
 
-#: php/seatreg_functions.php:548
+#: php/seatreg_functions.php:556
 msgid "Send notifications"
 msgstr ""
 
-#: php/seatreg_functions.php:554
+#: php/seatreg_functions.php:562
 msgid "Payment instruction"
 msgstr ""
 
-#: php/seatreg_functions.php:555
+#: php/seatreg_functions.php:563
 msgid ""
 "You can leave informative text that instructs how to pay for a booking. It "
 "will be displayed in booking status page"
 msgstr ""
 
-#: php/seatreg_functions.php:556
+#: php/seatreg_functions.php:564
 msgid "Enter payment instructions here"
 msgstr ""
 
-#: php/seatreg_functions.php:560
+#: php/seatreg_functions.php:568
 msgid "PayPal payments"
 msgstr ""
 
-#: php/seatreg_functions.php:562
+#: php/seatreg_functions.php:570
 msgid ""
 "Allow and configure PayPal payments. Enables you to ask money for bookings. "
 "To enable this feature you need to create a Buy Now button in Paypal. When "
 "creating a button only fill item name. Don't add price, shipping etc."
 msgstr ""
 
-#: php/seatreg_functions.php:568
+#: php/seatreg_functions.php:576
 msgid "Allow payments"
 msgstr ""
 
-#: php/seatreg_functions.php:572
+#: php/seatreg_functions.php:580
 msgid "PayPal business email"
 msgstr ""
 
-#: php/seatreg_functions.php:574
+#: php/seatreg_functions.php:582
 msgid "Pease enter your PayPal business email"
 msgstr ""
 
-#: php/seatreg_functions.php:579
+#: php/seatreg_functions.php:587
 msgid "PayPal button id"
 msgstr ""
 
-#: php/seatreg_functions.php:581
+#: php/seatreg_functions.php:589
 msgid "Pease enter PayPal button id"
 msgstr ""
 
-#: php/seatreg_functions.php:586
+#: php/seatreg_functions.php:594
 msgid "PayPal currency"
 msgstr ""
 
-#: php/seatreg_functions.php:588
+#: php/seatreg_functions.php:596
 msgid "Pease enter PayPal currency code (ISO 4217)"
 msgstr ""
 
-#: php/seatreg_functions.php:593
+#: php/seatreg_functions.php:601
 msgid "Set paid booking approved"
 msgstr ""
 
-#: php/seatreg_functions.php:595
+#: php/seatreg_functions.php:603
 msgid "Set booking approved automatically when payment has been completed"
 msgstr ""
 
-#: php/seatreg_functions.php:600
+#: php/seatreg_functions.php:608
 msgid "Set approved"
 msgstr ""
 
-#: php/seatreg_functions.php:605
+#: php/seatreg_functions.php:613
 msgid "PayPal sandbox mode"
 msgstr ""
 
-#: php/seatreg_functions.php:607
+#: php/seatreg_functions.php:615
 msgid ""
 "Turn on sandbox mode. Lets you test payments with your sandbox account. "
 "Don't forget to change business email and button id."
 msgstr ""
 
-#: php/seatreg_functions.php:612
+#: php/seatreg_functions.php:620
 msgid "PayPal sandbox"
 msgstr ""
 
-#: php/seatreg_functions.php:618
+#: php/seatreg_functions.php:626
 msgid "Curl extension is required for Paypal to work"
 msgstr ""
 
-#: php/seatreg_functions.php:625
+#: php/seatreg_functions.php:633
 msgid "Custom fields"
 msgstr ""
 
-#: php/seatreg_functions.php:627
+#: php/seatreg_functions.php:635
 msgid "Custom fields allow you to ask extra information in bookings."
 msgstr ""
 
-#: php/seatreg_functions.php:634
+#: php/seatreg_functions.php:642
 msgid "Existing custom fields"
 msgstr ""
 
-#: php/seatreg_functions.php:636
+#: php/seatreg_functions.php:644
 msgid "Custom fields you have already created"
 msgstr ""
 
-#: php/seatreg_functions.php:672
+#: php/seatreg_functions.php:680
 msgid "New custom field"
 msgstr ""
 
-#: php/seatreg_functions.php:674
+#: php/seatreg_functions.php:682
 msgid "Create a new custom field"
 msgstr ""
 
-#: php/seatreg_functions.php:677 php/seatreg_functions.php:835
-#: php/seatreg_functions.php:1126 php/bookings/SeatregBookingsPDF.php:69
+#: php/seatreg_functions.php:685 php/seatreg_functions.php:854
+#: php/seatreg_functions.php:1160 php/bookings/SeatregBookingsPDF.php:69
 #: php/bookings/SeatregBookingsTxt.php:37
 #: php/bookings/SeatregBookingsXlsx.php:63
 msgid "Name"
 msgstr ""
 
-#: php/seatreg_functions.php:681
+#: php/seatreg_functions.php:689
 msgid "Type"
 msgstr ""
 
-#: php/seatreg_functions.php:683
+#: php/seatreg_functions.php:691
 msgid "Text"
 msgstr ""
 
-#: php/seatreg_functions.php:684
+#: php/seatreg_functions.php:692
 msgid "Checkbox"
 msgstr ""
 
-#: php/seatreg_functions.php:685
+#: php/seatreg_functions.php:693
 msgid "Select"
 msgstr ""
 
-#: php/seatreg_functions.php:692
+#: php/seatreg_functions.php:700
 msgid "Option name"
 msgstr ""
 
-#: php/seatreg_functions.php:696
+#: php/seatreg_functions.php:704
 msgid "Add option"
 msgstr ""
 
-#: php/seatreg_functions.php:699
+#: php/seatreg_functions.php:707
 msgid "Add custom field"
 msgstr ""
 
-#: php/seatreg_functions.php:710 php/seatreg_functions.php:1047
+#: php/seatreg_functions.php:718 php/seatreg_functions.php:1081
 msgid "Save changes"
 msgstr ""
 
-#: php/seatreg_functions.php:722 php/seatreg_functions.php:731
+#: php/seatreg_functions.php:730 php/seatreg_functions.php:739
 msgid "Create new registration"
 msgstr ""
 
-#: php/seatreg_functions.php:725
-msgid "Enter registration name"
-msgstr ""
-
-#: php/seatreg_functions.php:807
+#: php/seatreg_functions.php:822
 #, php-format
 msgid "%s pending bookings"
 msgstr ""
 
-#: php/seatreg_functions.php:815
+#: php/seatreg_functions.php:834
 msgid "Search booking"
 msgstr ""
 
-#: php/seatreg_functions.php:829 php/seatreg_functions.php:1126
+#: php/seatreg_functions.php:848 php/seatreg_functions.php:1160
 msgid "Approved"
 msgstr ""
 
-#: php/seatreg_functions.php:833 php/seatreg_functions.php:1034
-#: php/seatreg_functions.php:1126
+#: php/seatreg_functions.php:852 php/seatreg_functions.php:1054
+#: php/seatreg_functions.php:1160
 msgid "Seat"
 msgstr ""
 
-#: php/seatreg_functions.php:836 php/bookings/SeatregBookingsTxt.php:28
+#: php/seatreg_functions.php:855 php/bookings/SeatregBookingsTxt.php:28
 msgid "Date"
 msgstr ""
 
-#: php/seatreg_functions.php:837 php/seatreg_functions.php:1123
+#: php/seatreg_functions.php:856 php/seatreg_functions.php:1157
 #: php/bookings/SeatregBookingsPDF.php:72
 #: php/bookings/SeatregBookingsTxt.php:40
 msgid "Booking id"
 msgstr ""
 
-#: php/seatreg_functions.php:842
+#: php/seatreg_functions.php:861
 msgid "No pending seats"
 msgstr ""
 
-#: php/seatreg_functions.php:858 php/seatreg_functions.php:903
+#: php/seatreg_functions.php:877 php/seatreg_functions.php:922
 msgid "More info"
 msgstr ""
 
-#: php/seatreg_functions.php:859 php/seatreg_functions.php:904
+#: php/seatreg_functions.php:878 php/seatreg_functions.php:923
 msgid "Edit"
 msgstr ""
 
-#: php/seatreg_functions.php:862
+#: php/seatreg_functions.php:881
 msgid "Approve"
 msgstr ""
 
-#: php/seatreg_functions.php:866 php/seatreg_functions.php:910
+#: php/seatreg_functions.php:885 php/seatreg_functions.php:929
 #: php/bookings/SeatregBookingsPDF.php:71
 #: php/bookings/SeatregBookingsTxt.php:39
 msgid "Registration date"
 msgstr ""
 
-#: php/seatreg_functions.php:867 php/seatreg_strings.php:37
+#: php/seatreg_functions.php:886 php/seatreg_strings.php:37
 #: php/bookings/SeatregBookingsPDF.php:70
 #: php/bookings/SeatregBookingsTxt.php:38
 #: php/bookings/SeatregBookingsXlsx.php:64
 msgid "Email"
 msgstr ""
 
-#: php/seatreg_functions.php:887
+#: php/seatreg_functions.php:906
 msgid "No approved seats"
 msgstr ""
 
-#: php/seatreg_functions.php:911
+#: php/seatreg_functions.php:930
 msgid "Approval date"
 msgstr ""
 
-#: php/seatreg_functions.php:970 php/seatreg_strings.php:113
+#: php/seatreg_functions.php:989 php/seatreg_strings.php:113
 msgid "Not set"
 msgstr ""
 
-#: php/seatreg_functions.php:1004
+#: php/seatreg_functions.php:1023
 msgid ""
 "No payment info recorded. This means that this booking has no price or user "
 "has not started the payment process."
 msgstr ""
 
-#: php/seatreg_functions.php:1009
+#: php/seatreg_functions.php:1028
 #, php-format
 msgid "Payment is %s"
 msgstr ""
 
-#: php/seatreg_functions.php:1011
+#: php/seatreg_functions.php:1030
 #, php-format
 msgid "Payment of %s"
 msgstr ""
 
-#: php/seatreg_functions.php:1012
+#: php/seatreg_functions.php:1031
 #, php-format
 msgid "Payment txn is %s"
 msgstr ""
 
-#: php/seatreg_functions.php:1013
+#: php/seatreg_functions.php:1032
 #, php-format
 msgid "Payment date is %s"
 msgstr ""
 
-#: php/seatreg_functions.php:1016
+#: php/seatreg_functions.php:1035
 msgid "Payment logs"
 msgstr ""
 
-#: php/seatreg_functions.php:1029
+#: php/seatreg_functions.php:1048
 msgid "Edit booking"
 msgstr ""
 
-#: php/seatreg_functions.php:1037
+#: php/seatreg_functions.php:1064
 msgid "First name"
 msgstr ""
 
-#: php/seatreg_functions.php:1038
+#: php/seatreg_functions.php:1069
 msgid "Last name"
 msgstr ""
 
-#: php/seatreg_functions.php:1126 php/bookings/SeatregBookingsPDF.php:73
+#: php/seatreg_functions.php:1160 php/bookings/SeatregBookingsPDF.php:73
 #: php/bookings/SeatregBookingsTxt.php:41
 #: php/bookings/SeatregBookingsXlsx.php:66
 msgid "Booking status"
 msgstr ""
 
-#: php/seatreg_functions.php:1130
+#: php/seatreg_functions.php:1164
 msgid "Payment info"
 msgstr ""
 
-#: php/seatreg_functions.php:1134
+#: php/seatreg_functions.php:1168
 msgid "Booking not found."
 msgstr ""
 
-#: php/seatreg_functions.php:1137
+#: php/seatreg_functions.php:1171
 msgid "Registration does not exist"
 msgstr ""
 
-#: php/seatreg_functions.php:1272 php/seatreg_functions.php:1329
-#: php/seatreg_functions.php:1352
+#: php/seatreg_functions.php:1306 php/seatreg_functions.php:1363
+#: php/seatreg_functions.php:1386
 msgid "Seat "
 msgstr ""
 
-#: php/seatreg_functions.php:1272 php/seatreg_functions.php:1329
+#: php/seatreg_functions.php:1306 php/seatreg_functions.php:1363
 #: php/seatreg_strings.php:20
 msgid " from room "
 msgstr ""
 
-#: php/seatreg_functions.php:1272 php/seatreg_functions.php:1329
+#: php/seatreg_functions.php:1306 php/seatreg_functions.php:1363
 msgid " is already booked"
 msgstr ""
 
-#: php/seatreg_functions.php:1348
+#: php/seatreg_functions.php:1382
 msgid "Room "
 msgstr ""
 
-#: php/seatreg_functions.php:1348
+#: php/seatreg_functions.php:1382
 msgid " dose not exist!"
 msgstr ""
 
-#: php/seatreg_functions.php:1352
+#: php/seatreg_functions.php:1386
 msgid " dose not exist in "
 msgstr ""
 
-#: php/seatreg_functions.php:1919
+#: php/seatreg_functions.php:1954
 msgid "Something went wrong while creating a new registration"
 msgstr ""
 
-#: php/seatreg_functions.php:1945
+#: php/seatreg_functions.php:1980
 msgid "Something went wrong while deleting a registration"
+msgstr ""
+
+#: php/seatreg_functions.php:2535
+msgid "Seatreg test email"
+msgstr ""
+
+#: php/seatreg_functions.php:2535
+msgid "This is a test email"
 msgstr ""
 
 #: php/seatreg_strings.php:9 php/seatreg_strings.php:76
 msgid "Illegal characters detected"
 msgstr ""
 
-#: php/seatreg_strings.php:10
+#: php/seatreg_strings.php:10 php/seatreg_strings.php:134
 msgid "Email address is not correct"
 msgstr ""
 
@@ -1332,52 +1385,52 @@ msgstr ""
 msgid "Select box/boxes to add hover text"
 msgstr ""
 
-#: php/seatreg_strings.php:88
-msgid "Select box/boxes you want to delete"
+#: php/seatreg_strings.php:87
+msgid "Select box/boxes to add color"
 msgstr ""
 
 #: php/seatreg_strings.php:89
-msgid "Color applied"
+msgid "Select box/boxes you want to delete"
 msgstr ""
 
 #: php/seatreg_strings.php:90
-msgid "You have not made and legends yet"
+msgid "Color applied"
 msgstr ""
 
 #: php/seatreg_strings.php:91
-msgid " You have not selected any box/boxes to add legends"
+msgid "You have not made and legends yet"
 msgstr ""
 
 #: php/seatreg_strings.php:92
-msgid " characters remaining"
+msgid " You have not selected any box/boxes to add legends"
 msgstr ""
 
 #: php/seatreg_strings.php:93
-msgid "Are you sure you want to delete room "
+msgid " characters remaining"
 msgstr ""
 
 #: php/seatreg_strings.php:94
+msgid "Are you sure you want to delete room "
+msgstr ""
+
+#: php/seatreg_strings.php:95
 msgid "Unsaved changes. You sure you want to leave?"
 msgstr ""
 
-#: php/seatreg_strings.php:96
+#: php/seatreg_strings.php:97
 msgid "Cancel legend creation"
 msgstr ""
 
-#: php/seatreg_strings.php:97
+#: php/seatreg_strings.php:98
 msgid "Choose legend"
 msgstr ""
 
-#: php/seatreg_strings.php:99
+#: php/seatreg_strings.php:100
 msgid "Ok"
 msgstr ""
 
-#: php/seatreg_strings.php:100
+#: php/seatreg_strings.php:101
 msgid "Cancel"
-msgstr ""
-
-#: php/seatreg_strings.php:102
-msgid "Unsaved Changes"
 msgstr ""
 
 #: php/seatreg_strings.php:103
@@ -1397,7 +1450,7 @@ msgid "Pending seat"
 msgstr ""
 
 #: php/seatreg_strings.php:107
-msgid "Confirmed seat"
+msgid "Approved seat"
 msgstr ""
 
 #: php/seatreg_strings.php:109
@@ -1490,6 +1543,26 @@ msgstr ""
 
 #: php/seatreg_strings.php:133
 msgid "No seats selected!"
+msgstr ""
+
+#: php/seatreg_strings.php:135
+msgid "Check your email address"
+msgstr ""
+
+#: php/seatreg_strings.php:136
+msgid "Email sending failed"
+msgstr ""
+
+#: php/seatreg_strings.php:137
+msgid "Please wait"
+msgstr ""
+
+#: php/seatreg_strings.php:138
+msgid "Yes"
+msgstr ""
+
+#: php/seatreg_strings.php:139
+msgid "No"
 msgstr ""
 
 #: php/bookings/SeatregBookingsFile.php:47
@@ -1611,7 +1684,7 @@ msgstr ""
 msgid "Registration not found"
 msgstr ""
 
-#: registration/index.php:81
+#: registration/index.php:76
 #, php-format
 msgid "%s is closed at the moment"
 msgstr ""
@@ -1678,6 +1751,10 @@ msgstr ""
 
 #: registration/index.php:346
 msgid "Contact information"
+msgstr ""
+
+#: registration/index.php:352
+msgid "Book"
 msgstr ""
 
 #: registration/index.php:374
