@@ -4,7 +4,7 @@ Tags: seat registration, booking, booking seats, booking events, seat map, booki
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 5.8.1
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -15,7 +15,7 @@ Create and manage seat registrations. Design your own seat maps and manage seat 
 
 Create and manage seat registrations. Design your own seat maps and manage seat bookings. 
 
-SeatReg is a free plugin that offers the following and more to build and manage your online seat registrations.
+SeatReg is a plugin that offers the following and more to build and manage your online seat registrations.
  
 * Map builder tool helps you design your seat maps. Create, delete, resize, move around and change color of your seats. You can also add price, custom legends and hover text to your seats.
 * Each registration can have as many seats and rooms you wish.
@@ -38,6 +38,11 @@ SeatReg is a free plugin that offers the following and more to build and manage 
 4. Custom fields
 
 == Changelog ==
+
+= 1.5.0 =
+* Added support for WordPress 5.8
+* You can now set registration close reason.
+* Minor UI and style improvements.
 
 = 1.4.0 =
 * Added tools submenu page with email testing
