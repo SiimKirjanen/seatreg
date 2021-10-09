@@ -18,6 +18,7 @@ $seatreg_db_table_names->table_seatreg_options = $wpdb->prefix . "seatreg_option
 $seatreg_db_table_names->table_seatreg_bookings = $wpdb->prefix . "seatreg_bookings";
 $seatreg_db_table_names->table_seatreg_payments = $wpdb->prefix . "seatreg_payments";
 $seatreg_db_table_names->table_seatreg_payments_log = $wpdb->prefix . "seatreg_payments_log";
+$seatreg_db_table_names->table_seatreg_activity_log= $wpdb->prefix . "seatreg_activity_log";
 
 /*
    Useful functions
@@ -1517,6 +1518,17 @@ function seatreg_set_up_db() {
 
 		dbDelta( $sql5 );
 
+		$sql6 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_activity_log (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			log_type enum('booking', 'map', 'settings') NOT NULL,
+			relation_id varchar(40) NOT NULL,
+			log_date TIMESTAMP DEFAULT NOW(),
+			log_message text,
+			PRIMARY KEY  (id)
+		) $charset_collate;";
+
+		dbDelta( $sql6 );
+
 		update_option( "seatreg_db_current_version", SEATREG_DB_VERSION );
 	}
 }
@@ -1930,6 +1942,22 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 	}
 	
 	return $bookings;
+}
+
+function seatreg_add_activity_log($type, $relation_id, $message) {
+	global $seatreg_db_table_names;
+	global $wpdb;
+
+	$wpdb->insert(
+		$seatreg_db_table_names->table_seatreg_activity_log,
+		array(
+			'log_type' => $type,
+			'relation_id' => $relation_id,
+			'payment_txn_id' => $txnId,
+			'log_message' => $message
+		),
+		'%s'
+	);
 }
 
 /*
