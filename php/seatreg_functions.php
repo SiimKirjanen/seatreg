@@ -922,7 +922,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
 					echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
 					echo '<div class="action-select">';
-						echo "<label>", esc_html__('Remove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
+					    echo "<label>", esc_html__('Remove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
+					    echo "<label>", esc_html__('Unapprove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='unapprove'/></label>";
 					echo '</div>';
 
 					echo '<div class="more-info">';
@@ -1301,7 +1302,7 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 
 	foreach ($bookings as $booking) {
 		foreach ($bookingActions as $bookingAction) {
-			if($booking->seat_nr == $bookingAction->seat_nr && $booking->room_name == $bookingAction->room_name && $booking->status === "2" && $bookingAction->action != 'del') {
+			if($booking->seat_nr == $bookingAction->seat_nr && $booking->room_name == $bookingAction->room_name && $booking->status === "2" && $bookingAction->action != 'del' && $bookingAction->action != 'unapprove') {
 				$notBooked = false;
 				$resp['text'] = esc_html__('Seat ', 'seatreg') . esc_html($bookingAction->seat_nr) . esc_html__(' from room ', 'seatreg') . esc_html($bookingAction->room_name) . esc_html__(' is already booked', 'seatreg');
 
@@ -1821,7 +1822,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array( 
-				'status' => 2,
+				'status' => SEATREG_BOOKING_APPROVED,
 				'booking_confirm_date' => time()
 			), 
 			array('booking_id' => $action->booking_id), 
@@ -1832,6 +1833,17 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 		$wpdb->delete( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array('booking_id' => $action->booking_id), 
+			'%s'
+		);
+	}else if($action->action == 'unapprove') {
+		$wpdb->update( 
+			$seatreg_db_table_names->table_seatreg_bookings,
+			array( 
+				'status' => SEATREG_BOOKING_PENDING,
+				'booking_confirm_date' => null
+			), 
+			array('booking_id' => $action->booking_id), 
+			'%s',
 			'%s'
 		);
 	}
@@ -2336,7 +2348,6 @@ function seatreg_confirm_del_bookings_callback() {
 				$errorText = $statusArray['text'];
 
 				break;
-
 		}
 
 		echo '<div class="alert alert-danger" role="alert">', $errorText ,'</div>';

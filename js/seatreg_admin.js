@@ -334,18 +334,20 @@ $('#seatreg-booking-manager').on('click','.manager-box-link', function() {
 	promise.fail = seatreg_admin_ajax_error;
 });
 
-//remove input check from other option
+//remove input check from other bookings. Mark same bookings checked
 $('#seatreg-booking-manager').on('click', '.bron-action', function() {
 	var check = $(this);
 	var bookingId = check.closest('.reg-seat-item').find('.booking-identification').val();
 	check.closest('.action-select').find('.bron-action').not(check).prop('checked', false);
 	var confirmCheck = check.closest('.reg-seat-item').find('.bron-action[data-action=confirm]').is(':checked');
 	var delCheck = check.closest('.reg-seat-item').find('.bron-action[data-action=del]').is(':checked');
+	var unapproveCheck = check.closest('.reg-seat-item').find('.bron-action[data-action=unapprove]').is(':checked');
 		
 	$(this).closest('.tab_container').find('.bron-action').not(check).each(function() {
 		if( $(this).closest('.reg-seat-item').find('.booking-identification').val() == bookingId ) {
 			$(this).closest('.reg-seat-item').find('.bron-action[data-action=del]').prop('checked', delCheck);
 			$(this).closest('.reg-seat-item').find('.bron-action[data-action=confirm]').prop('checked', confirmCheck);
+			$(this).closest('.reg-seat-item').find('.bron-action[data-action=unapprove]').prop('checked', unapproveCheck);
 		}
 	});
 });
@@ -378,6 +380,7 @@ $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
 	button.parent().find('.reg-seat-item').each(function() {
 		$(this).find('.bron-action').each(function() {
 			if($(this).prop('checked')) {
+				var a = $(this).attr('data-action');
 				if($(this).attr('data-action') == 'del') {
 					data.push({
 						booking_id: $(this).val(),
@@ -389,6 +392,13 @@ $('#seatreg-booking-manager').on('click', '.action-control', function(e) {
 					data.push({
 						booking_id: $(this).val(),
 						action: 'conf',
+						room_name: $(this).closest('.reg-seat-item').find('.seat-room-box').text(),
+						seat_nr: $(this).closest('.reg-seat-item').find('.seat-nr-box').text()
+					});
+				}else if($(this).attr('data-action') == 'unapprove') {
+					data.push({
+						booking_id: $(this).val(),
+						action: 'unapprove',
 						room_name: $(this).closest('.reg-seat-item').find('.seat-room-box').text(),
 						seat_nr: $(this).closest('.reg-seat-item').find('.seat-nr-box').text()
 					});

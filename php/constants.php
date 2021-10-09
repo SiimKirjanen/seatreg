@@ -25,3 +25,7 @@ define('SEATREG_PAYMENT_VALIDATION_FAILED', 'validation_failure');
 define('SEATREG_PAYMENT_LOG_ERROR', 'error');
 define('SEATREG_PAYMENT_LOG_OK', 'ok');
 define('SEATREG_PAYMENT_LOG_INFO', 'info');
+
+// Status
+define('SEATREG_BOOKING_PENDING', 1);
+define('SEATREG_BOOKING_APPROVED', 2);
