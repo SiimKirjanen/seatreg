@@ -2204,6 +2204,7 @@ function seatreg_form_submit_handle() {
 	if( seatreg_update() === false) {
 		wp_die('Error updating settings');
 	}else {
+		seatreg_add_activity_log('settings', sanitize_text_field($_POST['registration_code']), 'Settings changed');
 		wp_redirect($_POST['_wp_http_referer']);
 
 		die();
@@ -2278,6 +2279,10 @@ function seatreg_update_layout() {
 		array('%s'),
 		array('%s')
 	);
+
+	if($status) {
+		seatreg_add_activity_log('map',sanitize_text_field($_POST['registration_code']), 'Registration layout updated');
+	}
 	
 	$response->setData( $status );
 	wp_send_json( $response );
