@@ -1984,20 +1984,23 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 	return $bookings;
 }
 
-function seatreg_add_activity_log($type, $relation_id, $message) {
+function seatreg_add_activity_log($type, $relation_id, $message, $includeCurrentUser = true) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
-	$current_user = wp_get_current_user();
-	$current_user_displayname = $current_user->data->display_name;
-	$current_user_id = $current_user->data->ID;
+	if($includeCurrentUser) {
+		$current_user = wp_get_current_user();
+		$current_user_displayname = $current_user->data->display_name;
+		$current_user_id = $current_user->data->ID;
+		$message .= " by $current_user_displayname (id $current_user_id)";
+	}
 
 	$wpdb->insert(
 		$seatreg_db_table_names->table_seatreg_activity_log,
 		array(
 			'log_type' => $type,
 			'relation_id' => $relation_id,
-			'log_message' => $message . " by $current_user_displayname (ID $current_user_id)"
+			'log_message' => $message
 		),
 		'%s'
 	);

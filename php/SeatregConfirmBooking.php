@@ -72,9 +72,11 @@ class SeatregConfirmBooking extends SeatregBooking {
 		);
 
 		if($this->_insertState == 1) {
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system', false);
 			esc_html_e('You booking is now in pending state. Registration owner must approve it', 'seatreg');
 			echo '.<br><br>';
 		}else {
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system', false);
 			esc_html_e('You booking is now confirmed', 'seatreg');
 			echo '<br><br>';
 		}

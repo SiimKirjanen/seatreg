@@ -238,10 +238,12 @@ class SeatregSubmitBookings extends SeatregBooking {
 				if($this->_sendNewBookingNotificationEmail) {
 					seatreg_send_booking_notification_email($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
 				}
-				if($this->_insertState === 1) {
+				if($this->_insertState === SEATREG_BOOKING_PENDING) {
+					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system', false);
 					$this->response->setText('bookings-confirmed-status-1');
 					$this->response->setData($bookingCheckURL);
-				}else if($this->_insertState === 2) {
+				}else if($this->_insertState === SEATREG_BOOKING_APPROVED) {
+					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system', false);
 					$this->response->setText('bookings-confirmed-status-2');
 					$this->response->setData($bookingCheckURL);
 				}
