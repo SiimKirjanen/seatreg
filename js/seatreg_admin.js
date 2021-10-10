@@ -94,6 +94,18 @@
 		});
 	}
 
+	function seatreg_get_registration_logs($registrationId) {
+		return $.ajax({
+			url: ajaxurl,
+			type: 'GET',
+			data: {
+				action: 'seatreg_get_registration_logs',
+				security: WP_Seatreg.nonce,
+				registrationId: $registrationId
+			}
+		});
+	}
+
 	function seatreg_admin_ajax_error(jqXHR, textStatus, errorThrown) {
 		console.log('error');
 		console.log(textStatus);
@@ -374,6 +386,14 @@ $('#seatreg-booking-manager').on('click', 'button[data-action=view-booking-activ
 	$('#booking-activity-modal').attr('data-booking-id', $bookingId).modal('show');
 });
 
+$('.seatreg-registrations [data-action=view-registration-activity').on('click', function(e) {
+	e.preventDefault();
+	$registrationId = $(this).data('registration-id');
+	$('#registration-activity-modal').find('.activity-modal__logs').empty();
+	$('#registration-activity-modal').attr('data-registration-id', $registrationId).modal('show');
+});
+
+
 $('#booking-activity-modal').on('shown.bs.modal', function () {
 	var modalBody = $(this).find('.modal-body');
 	var loading = modalBody.find('.activity-modal__loading');
@@ -385,6 +405,34 @@ $('#booking-activity-modal').on('shown.bs.modal', function () {
 	);
 
 	var promise = seatreg_get_booking_logs($(this).data('booking-id'));
+
+	promise.done(function(data) {
+		loading.empty();
+		var logs = data._response.data;
+
+		if(Array.isArray(logs) && logs.length > 0) {
+			logs.forEach(function(log) {
+				logsWrap.append('<div>'+ log.log_date +'</div>').append('<div>'+ log.log_message +'</div>');
+			});
+		}else {
+			logsWrap.append(translator.translate('noActivityLogged'));
+		}
+	});
+	
+	promise.fail = seatreg_admin_ajax_error;
+});
+
+$('#registration-activity-modal').on('shown.bs.modal', function () {
+	var modalBody = $(this).find('.modal-body');
+	var loading = modalBody.find('.activity-modal__loading');
+	var logsWrap = modalBody.find('.activity-modal__logs');
+    
+	logsWrap.empty();
+	loading.html(
+		$('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif')
+	);
+
+	var promise = seatreg_get_registration_logs($(this).data('registration-id'));
 
 	promise.done(function(data) {
 		loading.empty();

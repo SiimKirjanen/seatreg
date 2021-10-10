@@ -83,7 +83,8 @@ function seatreg_create_welcome() {
 	   		echo "<div class='container-fluid' style='margin-top:-12px'>";
 				seatreg_create_registration_from(); 
 				seatreg_generate_my_registrations_section();
-			echo "</div>";   
+			echo "</div>";
+			echo seatreg_registration_logs_modal();  
 	   	?>
 	   <div class="seatreg-builder-popup">
 			<i class="fa fa-times-circle builder-popup-close"></i>

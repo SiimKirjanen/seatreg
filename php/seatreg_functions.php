@@ -387,6 +387,10 @@ function seatreg_generate_my_registrations_section() {
 
 				<br>
 
+				<a href="#" data-action="view-registration-activity" data-registration-id="<?php echo $registration->registration_code; ?>"><?php esc_html_e('Logs', 'seatreg'); ?></a>
+
+				<br>
+
 				<?php
 					seatreg_create_delete_registration_from($registration->registration_code);
 				?>
@@ -1103,6 +1107,28 @@ function seatreg_booking_edit_modal() {
 
 <?php
 
+}
+
+function seatreg_registration_logs_modal() {
+	?>
+		<div class="modal fade activity-modal" id="registration-activity-modal" tabindex="-1" role="dialog" aria-hidden="true" data-registration-id="">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Registration logs', 'seatreg'); ?></h4>
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
+				</div>
+				<div class="modal-body">
+					<div class="activity-modal__loading"></div>
+					<div class="activity-modal__logs"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>
+				</div>
+				</div>
+			</div>
+		</div>
+	<?php
 }
 
 function seatreg_booking_activity_modal() {
@@ -2649,8 +2675,34 @@ function seatreg_get_booking_logs() {
 	$activityLogs = $wpdb->get_results( $wpdb->prepare(
 		"SELECT * FROM $seatreg_db_table_names->table_seatreg_activity_log
 		WHERE log_type = 'booking'
-		AND relation_id = %s",
+		AND relation_id = %s
+		ORDER BY log_date DESC",
 		$_GET['bookingId']
+	) );
+
+	$response = new SeatregJsonResponse();
+	$response->setData($activityLogs);
+
+	wp_send_json( $response );
+}
+
+add_action( 'wp_ajax_seatreg_get_registration_logs', 'seatreg_get_registration_logs');
+function seatreg_get_registration_logs() {
+	seatreg_ajax_security_check();
+
+	if(empty($_GET['registrationId'])) {
+		exit('Missing data');
+	}
+
+	global $wpdb;
+	global $seatreg_db_table_names;
+
+	$activityLogs = $wpdb->get_results( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg_activity_log
+		WHERE log_type IN ('map', 'settings')
+		AND relation_id = %s
+		ORDER BY log_date DESC",
+		$_GET['registrationId']
 	) );
 
 	$response = new SeatregJsonResponse();
