@@ -82,6 +82,18 @@
 		});
 	}
 
+	function seatreg_get_booking_logs($bookingId) {
+		return $.ajax({
+			url: ajaxurl,
+			type: 'GET',
+			data: {
+				action: 'seatreg_get_booking_logs',
+				security: WP_Seatreg.nonce,
+				bookingId: $bookingId
+			}
+		});
+	}
+
 	function seatreg_admin_ajax_error(jqXHR, textStatus, errorThrown) {
 		console.log('error');
 		console.log(textStatus);
@@ -354,6 +366,38 @@ $('#seatreg-booking-manager').on('click', '.bron-action', function() {
 
 $('#seatreg-booking-manager').on('click', '.show-more-info', function() {
 	$(this).parent().find('.more-info').slideToggle();
+});
+
+$('#seatreg-booking-manager').on('click', 'button[data-action=view-booking-activity]', function() {
+	$bookingId = $(this).data('booking-id');
+	$('#booking-activity-modal').attr('data-booking-id', $bookingId).modal('show');
+});
+
+$('#booking-activity-modal').on('shown.bs.modal', function () {
+	var modalBody = $(this).find('.modal-body');
+	var loading = modalBody.find('.activity-modal__loading');
+	var logsWrap = modalBody.find('.activity-modal__logs');
+
+	loading.html(
+		$('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif')
+	);
+
+	var promise = seatreg_get_booking_logs($(this).data('booking-id'));
+
+	promise.done(function(data) {
+		loading.empty();
+		var logs = data._response.data;
+
+		if(Array.isArray(logs) && logs.length > 0) {
+			logs.forEach(function(log) {
+				logsWrap.append('<div>'+ log.log_date +'</div>').append('<div>'+ log.log_message +'</div>');
+			});
+		}else {
+			logsWrap.append(translator.translate('noActivityLogged'));
+		}
+	});
+	
+	promise.fail = seatreg_admin_ajax_error;
 });
 
 //when search bookings

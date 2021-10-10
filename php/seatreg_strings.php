@@ -137,6 +137,7 @@ function seatreg_generate_admin_strings() {
     $translations->pealseWait= esc_html__('Please wait', 'seatreg');
     $translations->yes = esc_html__('Yes', 'seatreg');
     $translations->no = esc_html__('No', 'seatreg');
+    $translations->noActivityLogged = esc_html__('No activity logged', 'seatreg');
  
     return $translations;
 }

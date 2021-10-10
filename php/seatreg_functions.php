@@ -889,6 +889,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						for($i = 0; $i < $cus_length; $i++) {
 							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 						}
+						echo seatreg_view_booking_activity_btn($row);
 						echo seatreg_generate_payment_section($row);
 					echo '</div>';
 					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
@@ -935,6 +936,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						for($i = 0; $i < $cus_length; $i++) {
 							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 						}
+						echo seatreg_view_booking_activity_btn($row);
 						echo seatreg_generate_payment_section($row);
 					echo '</div>';
 					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
@@ -952,6 +954,19 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	echo '</div>'; 
 		
 	seatreg_booking_edit_modal();
+	seatreg_booking_activity_modal();
+}
+
+function seatreg_view_booking_activity_btn($booking) {
+	?>
+		<div>
+			<br>
+			<button class="btn btn-outline-info btn-sm" data-action="view-booking-activity" data-booking-id="<?php echo esc_attr($booking->booking_id); ?>">
+				<i class="fa fa-history" aria-hidden="true"></i>
+				<?php esc_html_e('View booking activity', 'seatreg'); ?>
+			</button>
+		</div>
+	<?php
 }
 
 function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
@@ -1088,6 +1103,28 @@ function seatreg_booking_edit_modal() {
 
 <?php
 
+}
+
+function seatreg_booking_activity_modal() {
+	?>
+		<div class="modal fade activity-modal" id="booking-activity-modal" tabindex="-1" role="dialog" aria-hidden="true" data-booking-id="">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Booking activity', 'seatreg'); ?></h4>
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
+				</div>
+				<div class="modal-body">
+					<div class="activity-modal__loading"></div>
+					<div class="activity-modal__logs"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>
+				</div>
+				</div>
+			</div>
+		</div>
+	<?php
 }
 
 //generate tabs
@@ -1841,6 +1878,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s',
 			'%s'
 		);
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved');
 	}else if($action->action == 'del') {
 		$wpdb->delete( 
 			$seatreg_db_table_names->table_seatreg_bookings,
@@ -1953,7 +1991,6 @@ function seatreg_add_activity_log($type, $relation_id, $message) {
 		array(
 			'log_type' => $type,
 			'relation_id' => $relation_id,
-			'payment_txn_id' => $txnId,
 			'log_message' => $message
 		),
 		'%s'
@@ -2579,6 +2616,30 @@ function seatreg_send_test_email() {
 	if(!$mailSent) {
 		$response->setError('Email sending error');
 	}
+
+	wp_send_json( $response );
+}
+
+add_action( 'wp_ajax_seatreg_get_booking_logs', 'seatreg_get_booking_logs');
+function seatreg_get_booking_logs() {
+	seatreg_ajax_security_check();
+
+	if(empty($_GET['bookingId'])) {
+		exit('Missing data');
+	}
+
+	global $wpdb;
+	global $seatreg_db_table_names;
+
+	$activityLogs = $wpdb->get_results( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg_activity_log
+		WHERE log_type = 'booking'
+		AND relation_id = %s",
+		$_GET['bookingId']
+	) );
+
+	$response = new SeatregJsonResponse();
+	$response->setData($activityLogs);
 
 	wp_send_json( $response );
 }

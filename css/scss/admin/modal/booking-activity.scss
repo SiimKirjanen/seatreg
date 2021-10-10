@@ -1,0 +1,11 @@
+.seatreg-tabs-content {
+    .activity-modal {
+        &__loading {
+            text-align: center;
+        }
+        &__logs {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+        }
+    }
+}
