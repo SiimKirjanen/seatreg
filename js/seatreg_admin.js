@@ -380,21 +380,7 @@ $('#seatreg-booking-manager').on('click', '.show-more-info', function() {
 	$(this).parent().find('.more-info').slideToggle();
 });
 
-$('#seatreg-booking-manager').on('click', 'button[data-action=view-booking-activity]', function() {
-	$bookingId = $(this).data('booking-id');
-	$('#booking-activity-modal').find('.activity-modal__logs').empty();
-	$('#booking-activity-modal').attr('data-booking-id', $bookingId).modal('show');
-});
-
-$('.seatreg-registrations [data-action=view-registration-activity').on('click', function(e) {
-	e.preventDefault();
-	$registrationId = $(this).data('registration-id');
-	$('#registration-activity-modal').find('.activity-modal__logs').empty();
-	$('#registration-activity-modal').attr('data-registration-id', $registrationId).modal('show');
-});
-
-
-$('#booking-activity-modal').on('shown.bs.modal', function () {
+$(document).on('shown.bs.modal', '#booking-activity-modal', function () {
 	var modalBody = $(this).find('.modal-body');
 	var loading = modalBody.find('.activity-modal__loading');
 	var logsWrap = modalBody.find('.activity-modal__logs');
@@ -450,6 +436,19 @@ $('#registration-activity-modal').on('shown.bs.modal', function () {
 	});
 	
 	promise.fail = seatreg_admin_ajax_error;
+});
+
+$('#seatreg-booking-manager').on('click', 'button[data-action=view-booking-activity]', function() {
+	$bookingId = $(this).data('booking-id');
+	$('#booking-activity-modal').find('.activity-modal__logs').empty();
+	$('#booking-activity-modal').attr('data-booking-id', $bookingId).modal('show');
+});
+
+$('.seatreg-registrations [data-action=view-registration-activity').on('click', function(e) {
+	e.preventDefault();
+	$registrationId = $(this).data('registration-id');
+	$('#registration-activity-modal').find('.activity-modal__logs').empty();
+	$('#registration-activity-modal').attr('data-registration-id', $registrationId).modal('show');
 });
 
 //when search bookings
