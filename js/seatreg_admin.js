@@ -370,6 +370,7 @@ $('#seatreg-booking-manager').on('click', '.show-more-info', function() {
 
 $('#seatreg-booking-manager').on('click', 'button[data-action=view-booking-activity]', function() {
 	$bookingId = $(this).data('booking-id');
+	$('#booking-activity-modal').find('.activity-modal__logs').empty();
 	$('#booking-activity-modal').attr('data-booking-id', $bookingId).modal('show');
 });
 
@@ -377,7 +378,8 @@ $('#booking-activity-modal').on('shown.bs.modal', function () {
 	var modalBody = $(this).find('.modal-body');
 	var loading = modalBody.find('.activity-modal__loading');
 	var logsWrap = modalBody.find('.activity-modal__logs');
-
+    
+	logsWrap.empty();
 	loading.html(
 		$('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif')
 	);

@@ -1885,6 +1885,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			array('booking_id' => $action->booking_id), 
 			'%s'
 		);
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking deleted');
 	}else if($action->action == 'unapprove') {
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
@@ -1896,6 +1897,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s',
 			'%s'
 		);
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking unapproved');
 	}
 }
 
@@ -1986,12 +1988,16 @@ function seatreg_add_activity_log($type, $relation_id, $message) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
+	$current_user = wp_get_current_user();
+	$current_user_displayname = $current_user->data->display_name;
+	$current_user_id = $current_user->data->ID;
+
 	$wpdb->insert(
 		$seatreg_db_table_names->table_seatreg_activity_log,
 		array(
 			'log_type' => $type,
 			'relation_id' => $relation_id,
-			'log_message' => $message
+			'log_message' => $message . " by $current_user_displayname (ID $current_user_id)"
 		),
 		'%s'
 	);
@@ -2488,6 +2494,7 @@ function seatreg_edit_booking_callback() {
 			$statusArray['newSeatId'],
 			$bookingEdit->id
 		) !== false) {
+		seatreg_add_activity_log('booking', $bookingEdit->bookingId, 'Booking edited');
 		wp_send_json( array('status'=>'updated') );
 
 		die();
