@@ -398,13 +398,14 @@ $('#booking-activity-modal').on('shown.bs.modal', function () {
 	var modalBody = $(this).find('.modal-body');
 	var loading = modalBody.find('.activity-modal__loading');
 	var logsWrap = modalBody.find('.activity-modal__logs');
+	var bookingId = $(this).attr('data-booking-id');
     
 	logsWrap.empty();
 	loading.html(
 		$('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif')
 	);
 
-	var promise = seatreg_get_booking_logs($(this).data('booking-id'));
+	var promise = seatreg_get_booking_logs(bookingId);
 
 	promise.done(function(data) {
 		loading.empty();
@@ -426,13 +427,14 @@ $('#registration-activity-modal').on('shown.bs.modal', function () {
 	var modalBody = $(this).find('.modal-body');
 	var loading = modalBody.find('.activity-modal__loading');
 	var logsWrap = modalBody.find('.activity-modal__logs');
-    
+	var registrationId = $(this).attr('data-registration-id');
+
 	logsWrap.empty();
 	loading.html(
 		$('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif')
 	);
 
-	var promise = seatreg_get_registration_logs($(this).data('registration-id'));
+	var promise = seatreg_get_registration_logs(registrationId);
 
 	promise.done(function(data) {
 		loading.empty();
