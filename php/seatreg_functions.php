@@ -1879,6 +1879,7 @@ function seatreg_create_new_registration($newRegistrationName) {
     		),
     		'%s'
     	);
+		seatreg_add_activity_log('map', $registrationCode, 'Registration created');
     }
 
     if($status === 1) {
@@ -2086,6 +2087,7 @@ function seatreg_delete_registration_handler() {
 	);
 
 	if( $status ) {
+		seatreg_add_activity_log('map', sanitize_text_field($_POST['registration-code']), 'Registration deleted');
 		wp_redirect( $_POST['_wp_http_referer'] );
 		die();
 	}else {
