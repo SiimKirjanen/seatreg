@@ -1044,13 +1044,18 @@ function validateInput(inputField) {
 			break;
 		default:
 			//custom field validation
-			if(customFieldRegExp.test(value)) {				
-				inputField.next().css('display','none');	
-			}else {	
-				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','block');	
+			var customFieldType = inputField.attr('data-type');
 
-				return false;	
+			if(customFieldType === 'text' || customFieldType === 'sel') {
+				if( customFieldRegExp.test(value)) {				
+					inputField.next().css('display','none');	
+				}else {	
+					inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','block');	
+	
+					return false;	
+				}
 			}
+			
 	}
 	return true;
 }
