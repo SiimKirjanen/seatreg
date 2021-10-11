@@ -388,7 +388,7 @@
 						esc_html_e('You need to confirm your booking by following email instructions. Make sure you check your junk folders', 'seatreg');
 					?>.
 					</p>
-					<button class="refresh-btn">
+					<button class="seatreg-btn green-btn refresh-btn">
 						<?php 
 							esc_html_e('OK', 'seatreg');
 						?>
@@ -410,7 +410,7 @@
 					<p>
 						<?php esc_html_e('Save the link for future reference', 'seatreg'); ?>
 					</p>
-					<button class="refresh-btn">
+					<button class="seatreg-btn green-btn refresh-btn">
 						<?php 
 							esc_html_e('OK', 'seatreg');
 						?>
