@@ -43,6 +43,7 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 * Danish translations added. Thank you Kim Soenderup.
 * You can now set approved bookings back to pending.
 * You can now view booking and registration activity logs.
+* Fixed an issue with custom field labels.
 
 = 1.5.0 =
 * Added support for WordPress 5.8
