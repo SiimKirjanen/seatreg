@@ -1089,7 +1089,7 @@ function sendData(customFieldBack, regURL) {
 	$.ajax({
 		type: 'POST',
 		url: ajaxUrl,
-		data: $('#checkoput-area-inner').serialize() + '&custom=' + customFieldBack +'&action=' + 'seatreg_booking_submit' + '&c=' + regURL + '&em=' + mailToSend + '&pw=' + $('#sub-pwd').val(),
+		data: $('#checkoput-area-inner').serialize() + '&custom=' + encodeURIComponent(customFieldBack) +'&action=' + 'seatreg_booking_submit' + '&c=' + regURL + '&em=' + mailToSend + '&pw=' + $('#sub-pwd').val(),
 
 		success: function(data) {
 			$('#checkoput-area-inner .ajax-load').css('display','none');
