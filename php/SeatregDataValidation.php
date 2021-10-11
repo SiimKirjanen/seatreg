@@ -491,4 +491,25 @@ class SeatregDataValidation {
 
         return $validationStatus;
     }
+
+    public static function validateDefaultInputOnBookingSubmit($firstName, $lastname, $email) {
+        $validationStatus = new SeatregValidationStatus();
+
+        if(strlen($firstName) > SEATREG_DEFAULT_INPUT_MAX_LENGHT || strlen($lastname) > SEATREG_DEFAULT_INPUT_MAX_LENGHT || strlen($email) > SEATREG_DEFAULT_INPUT_MAX_LENGHT ) {
+            $validationStatus->setInvalid('Default input too long');
+            return $validationStatus;
+        }
+
+        if(!preg_match('/^[\p{L}\p{N}]+$/u', $firstName) || !preg_match('/^[\p{L}\p{N}]+$/u', $lastname)) {
+            $validationStatus->setInvalid('Illegal characters in default inputs');
+            return $validationStatus;
+        }
+
+        if(!is_email($email)) {
+            $validationStatus->setInvalid('Email is not correct');
+            return $validationStatus;
+        }
+
+        return $validationStatus;
+    }
 }

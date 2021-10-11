@@ -996,6 +996,7 @@ function validateInput(inputField) {
 	var emailReg = /^\S+@\S+$/;
 	var gmailReg = /^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/;
 	var customFieldRegExp = new RegExp("^[\\p{L}1234567890]{1," + WP_Seatreg.SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH + "}$", "u");
+	var inputReg = new RegExp("^[\\p{L}1234567890]{1,100}$", "u");
 
 	var value = inputField.val();
 
@@ -1008,10 +1009,22 @@ function validateInput(inputField) {
 	switch(inputField.attr('data-field')) {
 		case 'FirstName':
 			inputField.next().text('').css('display','inline');
+
+			if(!inputReg.test(value)) {
+				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','block');	
+
+				return false;
+			}
 	
 			break;
 		case 'LastName':
 			inputField.next().css('display','none');
+
+			if(!inputReg.test(value)) {
+				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','block');	
+
+				return false;
+			}
 		
 			break;
 		case 'Email':

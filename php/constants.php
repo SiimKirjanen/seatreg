@@ -11,6 +11,7 @@ define('SEATREG_REGISTRATION_NAME_MAX_LENGTH', 255);
 define('SEATREG_REGISTRATION_SEARCH_MAX_LENGTH', 60);
 define('SEATREG_CUSTOM_FIELD_TYPES', array('text', 'check', 'sel'));
 define('SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH', 50);
+define('SEATREG_DEFAULT_INPUT_MAX_LENGHT', 100);
 
 // PayPal
 define('SEATREG_PAYPAL_FORM_ACTION', "https://www.paypal.com/cgi-bin/webscr");

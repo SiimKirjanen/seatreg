@@ -36,6 +36,8 @@ class SeatregSubmitBookings extends SeatregBooking {
         $this->_submittedPassword = $pw;
     
 		$customFields = stripslashes_deep($customFields);
+
+		//custom fields validation
 		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFields, $this->_maxSeats, $this->_createdCustomFields);
 		
 		if( !$customFieldValidation->valid ) {
@@ -48,6 +50,16 @@ class SeatregSubmitBookings extends SeatregBooking {
 		$customFieldData = json_decode( $customFields );
 
     	foreach ($firstname as $key => $value) {
+
+			//default field validation
+			$defaultFieldValidation = SeatregDataValidation::validateDefaultInputOnBookingSubmit($value, $lastname[$key], $email[$key]);
+
+			if( !$defaultFieldValidation->valid ) {
+				$this->response->setValidationError( $defaultFieldValidation->errorMessage );
+	
+				return false;
+			}
+
     		$booking = new stdClass();
     		$booking->firstname = sanitize_text_field($value);
     		$booking->lastname = sanitize_text_field($lastname[$key]);
