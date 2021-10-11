@@ -2,351 +2,1701 @@
 # This file is distributed under the same license as the Plugins - SeatReg - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-10-11 19:16+0300\n"
+"Project-Id-Version: Plugins - SeatReg - Stable (latest release)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-10-11 20:43+0300\n"
+"PO-Revision-Date: 2021-10-11 20:47+0300\n"
+"Last-Translator: Kim Soenderup <kds@frb-internet.dk>\n"
+"Language-Team: \n"
+"Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Poedit 3.0\n"
-"Language: da_DK\n"
-"Project-Id-Version: Plugins - SeatReg - Stable (latest release)\n"
-"POT-Creation-Date: \n"
-"Last-Translator: Kim Soenderup <kds@frb-internet.dk>\n"
-"Language-Team: \n"
 
-#: registration/index.php:352
-msgid "Book"
-msgstr "Book"
-
-#: php/seatreg_strings.php:139
-msgid "No"
-msgstr "Nej"
-
-#: php/seatreg_strings.php:138
-msgid "Yes"
-msgstr "Ja"
-
-#: php/seatreg_strings.php:107
-msgid "Approved seat"
-msgstr "Godkendt sæde"
-
-#: php/seatreg_strings.php:87
-msgid "Select box/boxes to add color"
-msgstr "Vælg boks/bokse for at tilføje farve"
-
-#: php/seatreg_functions.php:457
-msgid "Enter reason"
-msgstr "Angiv årsag"
-
-#: php/seatreg_functions.php:455
-msgid "You can leave text explaining why registration is closed. Will be displayed on registration view."
-msgstr "Du kan efterlade tekst, der forklarer, hvorfor registreringen er lukket. Vises i registreringsvisning."
-
-#: php/seatreg_functions.php:453
-msgid "Close reason"
-msgstr "Luk årsag"
-
-#: php/seatreg_strings.php:137
-msgid "Please wait"
-msgstr "Vent venligst"
-
-#: php/seatreg_strings.php:136
-msgid "Email sending failed"
-msgstr "Afsendelse af e-mail mislykkedes"
-
-#: php/seatreg_strings.php:135
-msgid "Check your email address"
-msgstr "Tjek din e-mailadresse"
-
-#: php/seatreg_functions.php:2535
-msgid "This is a test email"
-msgstr "Dette er en test e-mail"
-
-#: php/seatreg_functions.php:2535
-msgid "Seatreg test email"
-msgstr "E-mail med Seatreg-test"
-
-#: php/seatreg_admin_panel.php:167
-msgid "Send test mail"
-msgstr "Send testmail"
-
-#: php/seatreg_admin_panel.php:163
-msgid "Enter your email address"
-msgstr "Indtast din e-mail adresse"
-
-#: php/seatreg_admin_panel.php:160
-msgid "Send a test email to verify that email sending works. If it doesn't then most likely your WordPress hosting is not configured to send out emails. In that case you can use some WordPress SMTP email plugin like WP Mail SMTP by WPForms"
-msgstr "Send en testmail for at bekræfte, at afsendelse af e-mail fungerer. Hvis det ikke gør det, er din WordPress-hosting sandsynligvis ikke konfigureret til at sende e-mails. I så fald kan du bruge nogle WordPress SMTP e-mail plugin som WP Mail SMTP af WPForms"
-
-#: php/seatreg_admin_panel.php:157
-msgid "Email testing"
-msgstr "Test af e-mail"
-
-#: php/seatreg_admin_panel.php:153
-msgid "Useful tools"
-msgstr "Nyttige værktøjer"
-
-#: php/seatreg_admin_panel.php:62 php/seatreg_admin_panel.php:152
-msgid "Tools"
-msgstr "Værktøjer"
-
-#: php/seatreg_admin_panel.php:61
-msgid "SeatReg tools"
-msgstr "SeatReg-værktøjer"
-
-#: registration/index.php:234
-msgid "Total approved bookings"
-msgstr "Samlet antal godkendte bookinger"
-
-#: registration/index.php:231
-msgid "Total pending bookings"
-msgstr "Samlet antal afventende reservationer"
-
-#: php/seatreg_strings.php:133
-msgid "No seats selected!"
-msgstr "Ingen pladser valgt!"
-
-#: php/seatreg_strings.php:132
-msgid "Prices added"
-msgstr "Tilføjede priser"
-
-#: php/seatreg_strings.php:131
-msgid "Please enter PayPal currency code"
-msgstr "Angiv PayPal valutakode"
-
-#: php/seatreg_strings.php:130
-msgid "Please enter PayPal button id"
-msgstr "Angiv PayPal knap-id"
-
-#: php/seatreg_strings.php:129
-msgid "Please enter PayPal business email"
-msgstr "Angiv PayPal virksomhedsmail"
-
-#: php/seatreg_strings.php:49
-msgid "Booking total cost is "
-msgstr "Booking samlede omkostninger er "
-
-#: php/seatreg_strings.php:48
-msgid "Booking this seat costs "
-msgstr "Booking af dette sæde koster "
-
-#: php/seatreg_strings.php:33
-msgid "Approved bookings in the room: "
-msgstr "Godkendte bookinger i dette rum: "
-
-#: php/seatreg_strings.php:32
-msgid "Pending bookings in the room: "
-msgstr "Afventende bookinger i dette rum: "
-
-#: php/seatreg_functions.php:1035
-msgid "Payment logs"
-msgstr "Betalingslogfiler"
-
-#: php/seatreg_functions.php:1032
-msgid "Payment date is %s"
-msgstr "Betalingsdatoen er %s"
-
-#: php/seatreg_functions.php:1031
-msgid "Payment txn is %s"
-msgstr "Betaling txn er %s"
-
-#: php/seatreg_functions.php:1030
-msgid "Payment of %s"
-msgstr "Betaling af %s"
-
-#: php/seatreg_functions.php:1028
-msgid "Payment is %s"
-msgstr "Betalingen er %s"
-
-#: php/seatreg_functions.php:1023
-msgid "No payment info recorded. This means that this booking has no price or user has not started the payment process."
-msgstr "Ingen betalingsoplysninger registreret. Det betyder, at denne booking ikke har nogen pris, eller at brugeren ikke har startet betalingsprocessen."
-
-#: php/seatreg_functions.php:626
-msgid "Curl extension is required for Paypal to work"
-msgstr "Curl udvidelse er nødvendig for PayPal til at arbejde"
-
-#: php/seatreg_functions.php:620
-msgid "PayPal sandbox"
-msgstr "PayPal sandbox"
-
-#: php/seatreg_functions.php:615
-msgid "Turn on sandbox mode. Lets you test payments with your sandbox account. Don't forget to change business email and button id."
-msgstr "Slå sandkassetilstand til. Giver dig mulighed for at teste betalinger med din sandkassekonto. Glem ikke at ændre virksomhedens e-mail og knap-id."
-
-#: php/seatreg_functions.php:613
-msgid "PayPal sandbox mode"
-msgstr "PayPal sandbox mode"
-
-#: php/seatreg_functions.php:608
-msgid "Set approved"
-msgstr "Sæt godkendt"
-
-#: php/seatreg_functions.php:603
-msgid "Set booking approved automatically when payment has been completed"
-msgstr "Indstil booking godkendt automatisk, når betalingen er gennemført"
-
-#: php/seatreg_functions.php:601
-msgid "Set paid booking approved"
-msgstr "Angiv godkendt betalt reservation"
-
-#: php/seatreg_functions.php:596
-msgid "Pease enter PayPal currency code (ISO 4217)"
-msgstr "Venligst indtaster PayPal valutakode (ISO 4217)"
-
-#: php/seatreg_functions.php:594
-msgid "PayPal currency"
-msgstr "PayPal valuta"
-
-#: php/seatreg_functions.php:589
-msgid "Pease enter PayPal button id"
-msgstr "Venligst indtaste PayPal knap-id"
-
-#: php/seatreg_functions.php:587
-msgid "PayPal button id"
-msgstr "PayPal knap-id"
-
-#: php/seatreg_functions.php:582
-msgid "Pease enter your PayPal business email"
-msgstr "Venligst indtaste din PayPal virksomhed e-mail"
-
-#: php/seatreg_functions.php:580
-msgid "PayPal business email"
-msgstr "PayPal e-mail til virksomheden"
-
-#: php/seatreg_functions.php:576
-msgid "Allow payments"
-msgstr "Tillad betalinger"
-
-#: php/seatreg_functions.php:570
-msgid "Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create a Buy Now button in Paypal. When creating a button only fill item name. Don't add price, shipping etc."
-msgstr "Tillad og konfigurer PayPal betalinger. Giver dig mulighed for at bede om penge til bookinger. Hvis du vil aktivere denne funktion, skal du oprette knappen Køb nu i PayPal. Når du opretter en knap, skal du kun udfylde varenavnet. Må ikke tilføje pris, forsendelse osv."
-
-#: php/seatreg_functions.php:568
-msgid "PayPal payments"
-msgstr "PayPal betalinger"
-
-#: php/seatreg_functions.php:563
-msgid "You can leave informative text that instructs how to pay for a booking. It will be displayed in booking status page"
-msgstr "Du kan efterlade informativ tekst, der instruerer, hvordan du betaler for en reservation. Det vil blive vist på bookingstatus -siden"
-
-#: php/paypal_return_to_merchant.php:40
-msgid "Payment is already processed or doe's not exist. For more information check your booking status page."
-msgstr "Betalingen er allerede behandlet eller findes ikke. For mere information, tjek din bookingstatusside."
-
-#: php/paypal_return_to_merchant.php:31
-msgid "Payment processing"
-msgstr "Betalingsbehandling"
-
-#: php/libs/SeatregPayPalIpn.php:174
-msgid "Receiver_email %s is not my Primary PayPal email %s"
-msgstr "Receiver_email %s er ikke min primære PayPal -e -mail %s"
-
-#: php/libs/SeatregPayPalIpn.php:161
-msgid "Payment %s is not correct. Expecting %s"
-msgstr "Betaling %s er ikke korrekt. Forventer %s"
-
-#: php/libs/SeatregPayPalIpn.php:148
-msgid "Got a %s case. Reason is %s. Case id: %s"
-msgstr "Har en %s sag. Årsagen er %s. Sag -id: %s"
-
-#: php/libs/SeatregPayPalIpn.php:144
-msgid "Payment was refunded"
-msgstr "Betalingen blev refunderet"
-
-#: php/libs/SeatregPayPalIpn.php:138
-msgid "Payment is reversed"
-msgstr "Betalingen tilbageføres"
-
-#: php/libs/SeatregPayPalIpn.php:125
-msgid "txn_id has been previously processed"
-msgstr "txn_id er tidligere blevet behandlet"
-
-#: php/libs/SeatregPayPalIpn.php:111
-msgid "Payment for %s is completed"
-msgstr "Betalingen for %s er afsluttet"
-
-#: php/libs/SeatregPayPalIpn.php:100
-msgid "IPN retry logic failed. Will try again later"
-msgstr "IPN -forsøgslogik mislykkedes. Vil prøve igen senere"
-
-#: php/libs/SeatregPayPalIpn.php:94
-msgid "Unknown response from IPN. Will try again %s"
-msgstr "Ukendt svar fra IPN. Vil prøve igen %s"
-
-#: php/libs/SeatregPayPalIpn.php:89
-msgid "The IPN is invalid"
-msgstr "IPN er ugyldigt"
-
-#: php/libs/SeatregPayPalIpn.php:82
-msgid "The IPN is verified"
-msgstr "IPN er verificeret"
-
-#: php/libs/SeatregPayPalIpn.php:47
-msgid "Starting IPN verification"
-msgstr "Starter IPN -verifikation"
-
-#: php/builder_content.php:424
-msgid "Lets you add prices to seats. You also need to configure paypal in settings to enable payments."
-msgstr "Giver dig mulighed for at tilføje priser til sæder. Du skal også konfigurere paypal i indstillinger for at aktivere betalinger."
-
-#: php/builder_content.php:189
-msgid "Set price"
-msgstr "Sæt pris"
-
-#: php/builder_content.php:183
-msgid "Fill prices"
-msgstr "Udfyld priser"
-
-#: php/builder_content.php:181
-msgid "Fill price to all selected seats"
-msgstr "Fyld pris til alle udvalgte pladser"
-
-#: php/builder_content.php:178
-msgid "You need to enable PayPal in settings to turn on pricing functionality."
-msgstr "Du skal aktivere PayPal i indstillinger for at aktivere prisfunktionalitet."
-
-#: php/builder_content.php:173
-msgid "Seat pricing"
-msgstr "Sæde priser"
-
-#: php/booking_check.php:61
-msgid "You payment has been reversed"
-msgstr "Din betaling er blevet tilbageført"
-
-#: php/booking_check.php:59
-msgid "You payment has been refunded"
-msgstr "Din betaling er blevet refunderet"
-
-#: php/booking_check.php:57
-msgid "There seems to be a problem with your payment. Please notify site administrator."
-msgstr "Der ser ud til at være et problem med din betaling. Giv venligst webstedsadministrator besked."
-
-#: php/booking_check.php:55
-msgid "Your payment is completed"
-msgstr "Din betaling er gennemført"
+#: php/booking_check.php:26
+msgid "Booking check"
+msgstr "Booking check"
 
 #: php/booking_check.php:53 php/paypal_return_to_merchant.php:38
 msgid "Your payment is being processed"
 msgstr "Din betaling er gennemført"
 
-#: php/bookings/SeatregBookingsPDF.php:85
-#: php/bookings/SeatregBookingsTxt.php:54
-#: php/bookings/SeatregBookingsXlsx.php:70
-msgid "Payment received"
-msgstr "Betalingen tilbageføres"
+#: php/booking_check.php:55
+msgid "Your payment is completed"
+msgstr "Din betaling er gennemført"
 
-#: php/bookings/SeatregBookingsPDF.php:84
-#: php/bookings/SeatregBookingsTxt.php:53
-#: php/bookings/SeatregBookingsXlsx.php:69
-msgid "Payment txn id"
-msgstr "Betaling txn id"
+#: php/booking_check.php:57
+msgid ""
+"There seems to be a problem with your payment. Please notify site "
+"administrator."
+msgstr ""
+"Der ser ud til at være et problem med din betaling. Giv venligst "
+"webstedsadministrator besked."
 
-#: php/bookings/SeatregBookingsPDF.php:81
-#: php/bookings/SeatregBookingsTxt.php:50
-#: php/bookings/SeatregBookingsXlsx.php:68
-msgid "Payment status"
-msgstr "Betalings status"
+#: php/booking_check.php:59
+msgid "You payment has been refunded"
+msgstr "Din betaling er blevet refunderet"
+
+#: php/booking_check.php:61
+msgid "You payment has been reversed"
+msgstr "Din betaling er blevet tilbageført"
+
+#: php/booking_confirm.php:24
+msgid "Booking confirm"
+msgstr "Booking bekræfter"
+
+#: php/builder_content.php:10 php/seatreg_functions.php:439
+msgid "Registration name"
+msgstr "Registreringsnavn"
+
+#: php/builder_content.php:11 php/seatreg_functions.php:858
+#: php/seatreg_functions.php:1080 php/seatreg_functions.php:1225
+#: php/bookings/SeatregBookingsTxt.php:36
+#: php/bookings/SeatregBookingsXlsx.php:62 registration/index.php:318
+msgid "Room"
+msgstr "Rum"
+
+#: php/builder_content.php:11 php/builder_content.php:285
+#: php/builder_content.php:297
+msgid "Change name"
+msgstr "Ændre navn"
+
+#: php/builder_content.php:14
+msgid "Add room"
+msgstr "Tilføj rum"
+
+#: php/builder_content.php:15
+msgid "Delete room"
+msgstr "Slet rum"
+
+#: php/builder_content.php:33
+msgid "Move selected boxes"
+msgstr "Flyt markerede felter"
+
+#: php/builder_content.php:33
+msgid "pixels to"
+msgstr "pixels til"
+
+#: php/builder_content.php:60 php/seatreg_strings.php:88
+msgid "Loading..."
+msgstr "Indlæser..."
+
+#: php/builder_content.php:71
+msgid "Seat deletion is limited!"
+msgstr "Sletning af sæder er begrænset!"
+
+#: php/builder_content.php:81 php/seatreg_strings.php:108
+msgid "Save"
+msgstr "Gem"
+
+#: php/builder_content.php:84
+msgid "View registration"
+msgstr "Se registrering"
+
+#: php/builder_content.php:97
+msgid "Color"
+msgstr "Farve"
+
+#: php/builder_content.php:105 php/builder_content.php:125
+#: php/builder_content.php:162 php/builder_content.php:188
+#: php/builder_content.php:334 php/builder_content.php:430
+#: php/builder_content.php:454 php/builder_content.php:471
+#: php/builder_content.php:515 php/seatreg_functions.php:1070
+#: php/seatreg_functions.php:1101 php/seatreg_functions.php:1119
+#: php/seatreg_functions.php:1126 php/seatreg_functions.php:1141
+#: php/seatreg_functions.php:1148 registration/index.php:281
+msgid "Close"
+msgstr "Luk"
+
+#: php/builder_content.php:115
+msgid "Adding hover text"
+msgstr "Tilføjelse af svævertekst"
+
+#: php/builder_content.php:120
+msgid "Enter text"
+msgstr "Indtast tekst"
+
+#: php/builder_content.php:122
+msgid "Leave field empty to remove existing hover text"
+msgstr "Lad feltet være tomt for at fjerne eksisterende svævetekst"
+
+#: php/builder_content.php:126 php/builder_content.php:335
+#: php/seatreg_functions.php:904 php/seatreg_functions.php:951
+#: registration/index.php:393 registration/index.php:415
+#: registration/index.php:432 registration/index.php:476
+msgid "OK"
+msgstr "OK"
+
+#: php/builder_content.php:136
+msgid "Building grid helps you to create boxes"
+msgstr "Bygnings gitter hjælper dig med at oprette bokse"
+
+#: php/builder_content.php:141
+msgid "Box size"
+msgstr "Boks størrelse"
+
+#: php/builder_content.php:148
+msgid "Box count"
+msgstr "Boks antal"
+
+#: php/builder_content.php:149
+msgid "x-axis"
+msgstr "x-axis"
+
+#: php/builder_content.php:150
+msgid "y-axis"
+msgstr "y-axis"
+
+#: php/builder_content.php:155
+msgid "Distance between boxes"
+msgstr "Afstand mellem bokse"
+
+#: php/builder_content.php:163
+msgid "Update grid"
+msgstr "Opdater gitter"
+
+#: php/builder_content.php:173
+msgid "Seat pricing"
+msgstr "Sæde priser"
+
+#: php/builder_content.php:178
+msgid "You need to enable PayPal in settings to turn on pricing functionality."
+msgstr ""
+"Du skal aktivere PayPal i indstillinger for at aktivere prisfunktionalitet."
+
+#: php/builder_content.php:181
+msgid "Fill price to all selected seats"
+msgstr "Fyld pris til alle udvalgte pladser"
+
+#: php/builder_content.php:183
+msgid "Fill prices"
+msgstr "Udfyld priser"
+
+#: php/builder_content.php:189
+msgid "Set price"
+msgstr "Sæt pris"
+
+#: php/builder_content.php:203
+msgid "Existing legends:"
+msgstr "Eksisterende forklaringer:"
+
+#: php/builder_content.php:205
+msgid "Apply legend"
+msgstr "Tilføj forklaring"
+
+#: php/builder_content.php:209
+msgid "Remove legend from registration:"
+msgstr "Fjern forklaring fra registrering:"
+
+#: php/builder_content.php:211 php/seatreg_functions.php:757
+msgid "Delete"
+msgstr "Slet"
+
+#: php/builder_content.php:215
+msgid "Remove legend from this room:"
+msgstr "Fjern forklaring fra rum:"
+
+#: php/builder_content.php:217 php/seatreg_functions.php:885
+#: php/seatreg_functions.php:931 php/seatreg_strings.php:29
+#: php/seatreg_strings.php:126
+msgid "Remove"
+msgstr "Fjern"
+
+#: php/builder_content.php:221 php/builder_content.php:291
+msgid "Change legend"
+msgstr "Ærndre forklaring"
+
+#: php/builder_content.php:223
+msgid "Change"
+msgstr "Ændre"
+
+#: php/builder_content.php:233 php/builder_content.php:250
+msgid "Step 1."
+msgstr "Step 1."
+
+#: php/builder_content.php:233 php/seatreg_strings.php:99
+msgid "Enter legend name"
+msgstr "Indtast forklarings navn"
+
+#: php/builder_content.php:239 php/builder_content.php:245
+#: php/builder_content.php:268
+msgid "Step 2."
+msgstr "Step 2."
+
+#: php/builder_content.php:245
+msgid "Choose legend color"
+msgstr "Vælge forklarings farve"
+
+#: php/builder_content.php:251 php/builder_content.php:256
+msgid "Step 3."
+msgstr "Step 3."
+
+#: php/builder_content.php:256
+msgid "Review new legend"
+msgstr "Gennemgå ny forklaring"
+
+#: php/builder_content.php:266 php/builder_content.php:274
+#: php/seatreg_strings.php:96
+msgid "Create new legend"
+msgstr "Opret ny forklaring"
+
+#: php/builder_content.php:280
+msgid "Enter new name"
+msgstr "Indtast nyt navn"
+
+#: php/builder_content.php:286 php/builder_content.php:306
+msgid "Back"
+msgstr "Tilbage"
+
+#: php/builder_content.php:298 php/builder_content.php:307
+msgid "Change color"
+msgstr "Ændre farve"
+
+#: php/builder_content.php:312
+msgid "Close legend change"
+msgstr "Luk forklarings ændring"
+
+#: php/builder_content.php:325 php/bookings/SeatregBookingsPDF.php:68
+msgid "Room name"
+msgstr "Rum navn"
+
+#: php/builder_content.php:329
+msgid "Enter room name:"
+msgstr "Indtast rum navn:"
+
+#: php/builder_content.php:345
+msgid "Manual"
+msgstr "Brugervejledning"
+
+#: php/builder_content.php:353
+msgid ""
+"With select tool you can select individual objects in your seat map. This "
+"tool is also used to resize and change object location. To change seat/"
+"custom object location you need to drag it with mouse cursor. Resizing is "
+"done by placing mouse cursor at border of a object and dragging it to "
+"desired width or height."
+msgstr ""
+"Med udvalgte værktøjer kan du vælge individuelle objekter på dit sædekort. "
+"Dette værktøj bruges også til at ændre størrelse og ændre objektets "
+"placering. For at ændre placering af sæde/tilpasset objekt skal du trække "
+"det med musemarkøren. Tilpasning foretages ved at placere musemarkøren ved "
+"kanten af et objekt og trække det til ønsket bredde eller højde."
+
+#: php/builder_content.php:360
+msgid ""
+"With this tool you can create seats. Simply click on gray dotted box and new "
+"seat will be created. You can create multiple seats at once by dragging "
+"cursor over gray boxes."
+msgstr ""
+"Med dette værktøj kan du oprette sæder. Du skal blot klikke på den grå "
+"prikboks og der vil blive oprettet et nyt sæde. Du kan oprette flere sæder "
+"på én gang ved at trække markøren over grå bokse."
+
+#: php/builder_content.php:367
+msgid ""
+"Custom boxes are used to show special objects in your seat map (exit, trash "
+"can, stage and so on). Simply click on gray dotted box and new custom box "
+"will be created. You can create multiple boxes at once by dragging cursor "
+"over gray boxes."
+msgstr ""
+"Brugerdefinerede kasser bruges til at vise særlige objekter på dit sædekort "
+"(udgang, skraldespand, scene og så videre). Du skal blot klikke på den grå "
+"prikboks, og der vil blive oprettet en ny tilpasset boks. Du kan oprette "
+"flere bokse på én gang ved at trække markøren over grå bokse."
+
+#: php/builder_content.php:374
+msgid ""
+"With eraser tool you can remove seats and custom boxes. Simply click on "
+"object and it will be removed. You can remove multiple objects at once by "
+"holding down left mouse and moving cursor over them."
+msgstr ""
+"Med viskelæder kan du fjerne sæder og tilpassede kasser. Bare klik på "
+"objektet, og det vil blive fjernet. Du kan fjerne flere objekter på én gang "
+"ved at holde venstre mus nede og flytte markøren hen over dem."
+
+#: php/builder_content.php:381
+msgid ""
+"Lasso tool is helpful if you wish to work with multiple objects at the same "
+"time (changing color, deleting, adding hover text and legends). Simple hold "
+"down left mouse button and move your cursor to select multiple seats/boxes."
+msgstr ""
+"Lasso værktøj er nyttigt, hvis du ønsker at arbejde med flere objekter på "
+"samme tid (ændring af farve, sletning, tilføjelse af svævertekst og "
+"forklaringer). Hold den venstre museknap nede, og flyt markøren for at vælge "
+"flere sæder/kasser."
+
+#: php/builder_content.php:388
+msgid ""
+"Once you have selected seats/boxes with either select or lasso tool you can "
+"delete them with clicking on garbage can button. "
+msgstr ""
+"Når du har valgt sæder/kasser med enten select eller lasso værktøj kan du "
+"slette dem ved at klikke på skraldespandsknappen. "
+
+#: php/builder_content.php:395
+msgid ""
+"Legends are useful if you want to add labels to seats/custom boxes with "
+"special meaning. Example: Lets say you want to show where boys and where "
+"girls should sit. In legends dialog you can create, delete, change and apply "
+"legends to seats nad custom boxes."
+msgstr ""
+"Forklaring er nyttige, hvis du vil tilføje etiketter til sæder/tilpassede "
+"kasser med særlig betydning. Eksempel: Lad os sige, at du vil vise, hvor "
+"drenge og hvor piger skal sidde. I forklaringsdialogboksen kan du oprette, "
+"slette, ændre og anvende forklaringer på sæder og tilpassede bokse."
+
+#: php/builder_content.php:402
+msgid ""
+"Hover text is shown when user clicks or moves mouse cursor over a seat/"
+"custom box. Simply select seats or custom boxes and add text via hover text "
+"dialog."
+msgstr ""
+"Svæve -tekst vises, når brugeren klikker eller flytter musemarkøren hen over "
+"et sæde/en tilpasset boks. Vælg blot sæder eller tilpassede bokse, og tilføj "
+"tekst via dialogboksen med svævertekst."
+
+#: php/builder_content.php:410
+msgid ""
+"Opens up color dialog where you can apply colors to selected seats/custom "
+"boxes."
+msgstr ""
+"Åbner farvedialog, hvor du kan anvende farver på udvalgte sæder/"
+"brugerdefinerede bokse."
+
+#: php/builder_content.php:417
+msgid ""
+"In seat map builder you can see lot of gray dotted boxes. These boxes are "
+"used to creat seats and custom boxes. In grid settings you can change size, "
+"distance and count of those grid boxes. That way you can change how new "
+"seats and boxes are created."
+msgstr ""
+"I sædekortbyggeren kan du se mange grå prikkede kasser. Disse kasser bruges "
+"til at oprette sæder og tilpassede kasser. I gitterindstillinger kan du "
+"ændre størrelse, afstand og tælling af disse gitterkasser. På den måde kan "
+"du ændre, hvordan nye sæder og kasser skabes."
+
+#: php/builder_content.php:424
+msgid ""
+"Lets you add prices to seats. You also need to configure paypal in settings "
+"to enable payments."
+msgstr ""
+"Giver dig mulighed for at tilføje priser til sæder. Du skal også konfigurere "
+"paypal i indstillinger for at aktivere betalinger."
+
+#: php/builder_content.php:441
+msgid "Limited deletion"
+msgstr "Begrænset sletning"
+
+#: php/builder_content.php:447
+msgid ""
+"If room contains pending or approved seats then seat deletion is limited."
+msgstr ""
+"Hvis rummet indeholder ventende eller godkendte pladser, er sletning af "
+"pladser begrænset."
+
+#: php/builder_content.php:448
+msgid "Example:"
+msgstr "Eksempel:"
+
+#: php/builder_content.php:448
+msgid "Lets say you have seats with numbers 1,2,3 and 4."
+msgstr "Lad os sige, at du har sæder med numrene 1,2,3 og 4."
+
+#: php/builder_content.php:448
+msgid ""
+"If someone occupies seat number 2 then you won't be able to delete seats 1 "
+"and 2."
+msgstr "Hvis nogen indtager sæde nummer 2, kan du ikke slette sæde 1 og 2."
+
+#: php/builder_content.php:465
+msgid "Saving is not allowed"
+msgstr "Det er ikke tilladt at gemme"
+
+#: php/builder_content.php:482
+msgid "Room background image"
+msgstr "Rum baggrunds billede"
+
+#: php/builder_content.php:487
+msgid "Current room image"
+msgstr "Nuværende rum billede"
+
+#: php/builder_content.php:492
+msgid "Upload image"
+msgstr "Upload billede"
+
+#: php/builder_content.php:497
+msgid "Upload"
+msgstr "Upload"
+
+#: php/builder_content.php:510
+msgid "Previously uploaded images"
+msgstr "Tidligere uploadede billeder"
+
+#: php/emails.php:8
+msgid "Hello"
+msgstr "Hej"
+
+#: php/emails.php:8
+#, php-format
+msgid "This is a notification email telling you that %s has a new booking"
+msgstr "Dette er en e-mail med besked om, at %s har en ny reservation"
+
+#: php/emails.php:8
+msgid ""
+"You can disable booking notification in options if you don't want to receive "
+"them."
+msgstr ""
+"Du kan deaktivere bookingmeddelelse i indstillinger, hvis du ikke vil "
+"modtage dem."
+
+#: php/paypal_return_to_merchant.php:31
+msgid "Payment processing"
+msgstr "Betalingsbehandling"
+
+#: php/paypal_return_to_merchant.php:40
+msgid ""
+"Payment is already processed or doe's not exist. For more information check "
+"your booking status page."
+msgstr ""
+"Betalingen er allerede behandlet eller findes ikke. For mere information, "
+"tjek din bookingstatusside."
+
+#: php/SeatregBooking.php:30 php/bookings/SeatregBookingsXlsx.php:61
+msgid "Seat nr"
+msgstr "Sæde nr"
+
+#: php/SeatregBooking.php:30
+msgid "from room"
+msgstr "fra rum"
+
+#: php/SeatregConfirmBooking.php:38
+msgid "This booking is already confirmed/expired/deleted"
+msgstr "Denne booking er allerede bekræftet/udløbet/slettet"
+
+#: php/SeatregConfirmBooking.php:76
+msgid "You booking is now in pending state. Registration owner must approve it"
+msgstr ""
+"Din reservation er nu i ventende tilstand. Registreringsejer skal godkende "
+"det"
+
+#: php/SeatregConfirmBooking.php:80
+msgid "You booking is now confirmed"
+msgstr "Din reservation er nu bekræftet"
+
+#: php/SeatregConfirmBooking.php:85
+#, php-format
+msgid "You can look your booking at %s"
+msgstr "Du kan se din reservation på %s"
+
+#: php/SeatregConfirmBooking.php:109 php/SeatregSubmitBookings.php:93
+msgid "Error. Seat limit exceeded"
+msgstr "Fejl. Sædegrænse overskredet"
+
+#: php/SeatregConfirmBooking.php:123 php/seatreg_strings.php:16
+msgid "Registration is closed at the moment"
+msgstr "Registreringen er lukket i øjeblikket"
+
+#: php/SeatregConfirmBooking.php:129 php/SeatregSubmitBookings.php:136
+msgid "Registration is not open"
+msgstr "Tilmelding er ikke åben"
+
+#: php/SeatregSubmitBookings.php:84
+msgid "Error. Password mismatch!"
+msgstr "Fejl. Adgangskode mismatch!"
+
+#: php/SeatregSubmitBookings.php:102
+msgid "Error. Dublicated seats"
+msgstr "Fejl. Dobbelt sæder"
+
+#: php/SeatregSubmitBookings.php:121
+msgid "Gmail needed!"
+msgstr "Gmail påkrævet!"
+
+#: php/SeatregSubmitBookings.php:129
+msgid "Registration is closed"
+msgstr "Tilmelding er lukket"
+
+#: php/SeatregSubmitBookings.php:220
+msgid "Your selected seats are"
+msgstr "Dine valgte sæder er"
+
+#: php/SeatregSubmitBookings.php:221
+msgid "Click on the link below to confirm your booking"
+msgstr "Klik på linket herunder for at bekræfte din reservation"
+
+#: php/SeatregSubmitBookings.php:223
+msgid "If you can't click then copy and paste it into your web browser"
+msgstr ""
+"Hvis du ikke kan klikke, skal du kopiere og indsætte det i din webbrowser"
+
+#: php/SeatregSubmitBookings.php:224
+msgid "After confirmation you can look your booking at"
+msgstr "Efter bekræftelse kan du se din reservation på"
+
+#: php/SeatregSubmitBookings.php:226
+msgid "Booking confirmation"
+msgstr "Reservationsbekræftelse"
+
+#: php/SeatregSubmitBookings.php:234
+msgid ""
+"Oops.. the system encountered a problem while sending out confirmation "
+"email. Please notify the site administrator."
+msgstr ""
+"Ups.. systemet stødte på et problem under afsendelse af bekræftelses-e-mail. "
+"Giv webstedets administrator besked."
+
+#: php/seatreg_admin_panel.php:28
+#, php-format
+msgid "%s Home"
+msgstr "%s Hjem"
+
+#: php/seatreg_admin_panel.php:29
+msgid "Home"
+msgstr "Hjem"
+
+#: php/seatreg_admin_panel.php:37
+#, php-format
+msgid "%s Overview"
+msgstr "%s Oversigt"
+
+#: php/seatreg_admin_panel.php:38 php/seatreg_admin_panel.php:119
+#: php/seatreg_functions.php:378
+msgid "Overview"
+msgstr "Oversigt"
+
+#: php/seatreg_admin_panel.php:45
+#, php-format
+msgid "%s Settings"
+msgstr "%s Indstillinger"
+
+#: php/seatreg_admin_panel.php:46 php/seatreg_admin_panel.php:102
+#: php/seatreg_functions.php:382
+msgid "Settings"
+msgstr "Indstillinger"
+
+#: php/seatreg_admin_panel.php:53
+#, php-format
+msgid "%s Bookings"
+msgstr "%s Bookinger"
+
+#: php/seatreg_admin_panel.php:54 php/seatreg_functions.php:386
+msgid "Bookings"
+msgstr "Bookinger"
+
+#: php/seatreg_admin_panel.php:61
+msgid "SeatReg tools"
+msgstr "SeatReg-værktøjer"
+
+#: php/seatreg_admin_panel.php:62 php/seatreg_admin_panel.php:153
+msgid "Tools"
+msgstr "Værktøjer"
+
+#: php/seatreg_admin_panel.php:73
+msgid "Create and manage seat registrations"
+msgstr "Opret og administrer sæderegistreringer"
+
+#: php/seatreg_admin_panel.php:74
+msgid "Design your own seat map and manage seat bookings"
+msgstr "Design dit eget sæde kort og administrer sædebookinger"
+
+#: php/seatreg_admin_panel.php:103
+msgid "Settings for your registrations"
+msgstr "Indstillinger for dine registreringer"
+
+#: php/seatreg_admin_panel.php:120
+msgid "Statistics for your registrations"
+msgstr "Statistik for dine registreringer"
+
+#: php/seatreg_admin_panel.php:136
+msgid "Booking manager"
+msgstr "Booking manager"
+
+#: php/seatreg_admin_panel.php:137
+msgid "Manage seat bookings"
+msgstr "Administrer sædebestillinger"
+
+#: php/seatreg_admin_panel.php:154
+msgid "Useful tools"
+msgstr "Nyttige værktøjer"
+
+#: php/seatreg_admin_panel.php:158
+msgid "Email testing"
+msgstr "Test af e-mail"
+
+#: php/seatreg_admin_panel.php:161
+msgid ""
+"Send a test email to verify that email sending works. If it doesn't then "
+"most likely your WordPress hosting is not configured to send out emails. In "
+"that case you can use some WordPress SMTP email plugin like WP Mail SMTP by "
+"WPForms"
+msgstr ""
+"Send en testmail for at bekræfte, at afsendelse af e-mail fungerer. Hvis det "
+"ikke gør det, er din WordPress-hosting sandsynligvis ikke konfigureret til "
+"at sende e-mails. I så fald kan du bruge nogle WordPress SMTP e-mail plugin "
+"som WP Mail SMTP af WPForms"
+
+#: php/seatreg_admin_panel.php:164
+msgid "Enter your email address"
+msgstr "Indtast din e-mail adresse"
+
+#: php/seatreg_admin_panel.php:168
+msgid "Send test mail"
+msgstr "Send testmail"
+
+#: php/seatreg_functions.php:42
+msgid "Please log in to view this area"
+msgstr "Log venligst ind for at se dette område"
+
+#: php/seatreg_functions.php:48
+msgid "No permissions"
+msgstr "Ingen tilladelser"
+
+#: php/seatreg_functions.php:162
+#, php-format
+msgid "%s pending seats"
+msgstr "%s ventende pladser"
+
+#: php/seatreg_functions.php:168
+msgid "pending seats"
+msgstr "ventende sæder"
+
+#: php/seatreg_functions.php:180
+msgid "Start date not set"
+msgstr "Startdato ikke angivet"
+
+#: php/seatreg_functions.php:181
+msgid "End date not set"
+msgstr "Slutdato ikke angivet"
+
+#: php/seatreg_functions.php:199
+msgid "Overall"
+msgstr "Samlet set"
+
+#: php/seatreg_functions.php:218
+msgid "Seats"
+msgstr "Sæder"
+
+#: php/seatreg_functions.php:233 php/seatreg_functions.php:286
+#: php/seatreg_functions.php:452 php/seatreg_strings.php:102
+#: registration/index.php:155
+msgid "Open"
+msgstr "Åben"
+
+#: php/seatreg_functions.php:249 php/seatreg_functions.php:302
+msgid "Confirmed"
+msgstr "Bekræftet"
+
+#: php/seatreg_functions.php:264 php/seatreg_functions.php:318
+#: php/seatreg_functions.php:852 php/seatreg_functions.php:1225
+#: php/seatreg_strings.php:46
+msgid "Pending"
+msgstr "Afventer"
+
+#: php/seatreg_functions.php:360
+msgid "Created registrations"
+msgstr "Oprettede registreringer"
+
+#: php/seatreg_functions.php:370
+msgid "Registration"
+msgstr "Registrering"
+
+#: php/seatreg_functions.php:374
+msgid "Edit map"
+msgstr "Rediger kort"
+
+#: php/seatreg_functions.php:390
+msgid "Logs"
+msgstr ""
+
+#: php/seatreg_functions.php:405
+msgid "No registrations created!"
+msgstr "Ingen registreringer oprettet!"
+
+#: php/seatreg_functions.php:434
+#, php-format
+msgid "%s settings"
+msgstr "%s indstillinger"
+
+#: php/seatreg_functions.php:441
+msgid "Change registration name"
+msgstr "Skift registreringsnavn"
+
+#: php/seatreg_functions.php:443 php/seatreg_functions.php:738
+msgid "Enter registration name"
+msgstr "Indtast registrerings navn"
+
+#: php/seatreg_functions.php:447
+msgid "Registration status"
+msgstr "Registreringsstatus"
+
+#: php/seatreg_functions.php:448
+msgid "Close and open registration"
+msgstr "Luk og åbn registrering"
+
+#: php/seatreg_functions.php:458
+msgid "Close reason"
+msgstr "Luk årsag"
+
+#: php/seatreg_functions.php:460
+msgid ""
+"You can leave text explaining why registration is closed. Will be displayed "
+"on registration view."
+msgstr ""
+"Du kan efterlade tekst, der forklarer, hvorfor registreringen er lukket. "
+"Vises i registreringsvisning."
+
+#: php/seatreg_functions.php:462
+msgid "Enter reason"
+msgstr "Angiv årsag"
+
+#: php/seatreg_functions.php:466
+msgid "Registration start date"
+msgstr "Startdato for registrering"
+
+#: php/seatreg_functions.php:467
+msgid "Set registration start date (dd.mm.yyyy)"
+msgstr "Angiv startdato for registrering (dd.mm.åååå)"
+
+#: php/seatreg_functions.php:473
+msgid "Registration end date"
+msgstr "Slutdato for registrering"
+
+#: php/seatreg_functions.php:474
+msgid "Set registration end date (dd.mm.yyyy)"
+msgstr "Angiv slutdato for registrering (dd.mm.åååå)"
+
+#: php/seatreg_functions.php:480 php/seatreg_functions.php:485
+msgid "Show bookings"
+msgstr "Vis bookinger"
+
+#: php/seatreg_functions.php:481
+msgid "Let people see who has made a booking in registration page"
+msgstr ""
+"Lad folk se, hvem der har foretaget en reservation på registreringssiden"
+
+#: php/seatreg_functions.php:491
+msgid "Registration info text"
+msgstr "Registrering info tekst"
+
+#: php/seatreg_functions.php:492
+msgid "Set registration info text. Will be displayed in registration page"
+msgstr ""
+"Indstil tekst til registrering af oplysninger. Vil blive vist på "
+"registreringssiden"
+
+#: php/seatreg_functions.php:493
+msgid "Enter info text here"
+msgstr "Skriv infotekst her"
+
+#: php/seatreg_functions.php:497
+msgid "Max seats per booking"
+msgstr "Max pladser pr. Booking"
+
+#: php/seatreg_functions.php:498
+msgid "Set how many seats can be added to the booking"
+msgstr "Angiv, hvor mange pladser der kan føjes til reservationen"
+
+#: php/seatreg_functions.php:503
+msgid "Gmail required"
+msgstr "Gmail påkrævet"
+
+#: php/seatreg_functions.php:504
+msgid "Gmail address is required when making a booking"
+msgstr "Gmail adresse er påkrævet, når du foretager en reservation"
+
+#: php/seatreg_functions.php:508
+msgid "Allow only gmail address"
+msgstr "Tillad kun gmail adresse"
+
+#: php/seatreg_functions.php:514
+msgid "Password"
+msgstr "Password"
+
+#: php/seatreg_functions.php:516
+msgid ""
+"You can set a password. Only people who know it can view your registration "
+"and make a booking. Leave it empty for no password"
+msgstr ""
+"Du kan angive en adgangskode. Kun folk, der kender det, kan se din "
+"registrering og foretage en reservation. Lad det stå tomt uden adgangskode"
+
+#: php/seatreg_functions.php:522
+msgid "Pending status"
+msgstr "Afventer status"
+
+#: php/seatreg_functions.php:524
+msgid ""
+"By default all bookings will first be in pending state so admin can approve "
+"them (with booking manager). If you want bookings automatically to be in "
+"approved state then uncheck below."
+msgstr ""
+"Som standard vil alle bookinger først være i ventende tilstand, så admin kan "
+"godkende dem (med booking manager). Hvis du vil have, at bookinger "
+"automatisk skal være i godkendt tilstand, skal du fjerne markeringen "
+"nedenfor."
+
+#: php/seatreg_functions.php:529
+msgid "Use pending"
+msgstr "Brug afventende"
+
+#: php/seatreg_functions.php:535
+msgid "Booking email confirm"
+msgstr "Booking email bekræfter"
+
+#: php/seatreg_functions.php:537
+msgid "Bookings must be confirmed with email"
+msgstr "Reservationer skal bekræftes med email"
+
+#: php/seatreg_functions.php:542
+msgid "Email confirm"
+msgstr "Email bekræft"
+
+#: php/seatreg_functions.php:548
+msgid "Booking notification"
+msgstr "Booking meddelelser"
+
+#: php/seatreg_functions.php:553
+#, php-format
+msgid "Send a notification to %s when you got a new booking."
+msgstr "Send en meddelelse til %s, når du får en ny reservation."
+
+#: php/seatreg_functions.php:561
+msgid "Send notifications"
+msgstr "Send meddelelse"
+
+#: php/seatreg_functions.php:567
+msgid "Payment instruction"
+msgstr "Betalingsinstruktion"
+
+#: php/seatreg_functions.php:568
+msgid ""
+"You can leave informative text that instructs how to pay for a booking. It "
+"will be displayed in booking status page"
+msgstr ""
+"Du kan efterlade informativ tekst, der instruerer, hvordan du betaler for en "
+"reservation. Det vil blive vist på bookingstatus -siden"
+
+#: php/seatreg_functions.php:569
+msgid "Enter payment instructions here"
+msgstr "Angiv betalingsinstruktioner her"
+
+#: php/seatreg_functions.php:573
+msgid "PayPal payments"
+msgstr "PayPal betalinger"
+
+#: php/seatreg_functions.php:575
+msgid ""
+"Allow and configure PayPal payments. Enables you to ask money for bookings. "
+"To enable this feature you need to create a Buy Now button in Paypal. When "
+"creating a button only fill item name. Don't add price, shipping etc."
+msgstr ""
+"Tillad og konfigurer PayPal betalinger. Giver dig mulighed for at bede om "
+"penge til bookinger. Hvis du vil aktivere denne funktion, skal du oprette "
+"knappen Køb nu i PayPal. Når du opretter en knap, skal du kun udfylde "
+"varenavnet. Må ikke tilføje pris, forsendelse osv."
+
+#: php/seatreg_functions.php:581
+msgid "Allow payments"
+msgstr "Tillad betalinger"
+
+#: php/seatreg_functions.php:585
+msgid "PayPal business email"
+msgstr "PayPal e-mail til virksomheden"
+
+#: php/seatreg_functions.php:587
+msgid "Pease enter your PayPal business email"
+msgstr "Venligst indtaste din PayPal virksomhed e-mail"
+
+#: php/seatreg_functions.php:592
+msgid "PayPal button id"
+msgstr "PayPal knap-id"
+
+#: php/seatreg_functions.php:594
+msgid "Pease enter PayPal button id"
+msgstr "Venligst indtaste PayPal knap-id"
+
+#: php/seatreg_functions.php:599
+msgid "PayPal currency"
+msgstr "PayPal valuta"
+
+#: php/seatreg_functions.php:601
+msgid "Pease enter PayPal currency code (ISO 4217)"
+msgstr "Venligst indtaster PayPal valutakode (ISO 4217)"
+
+#: php/seatreg_functions.php:606
+msgid "Set paid booking approved"
+msgstr "Angiv godkendt betalt reservation"
+
+#: php/seatreg_functions.php:608
+msgid "Set booking approved automatically when payment has been completed"
+msgstr "Indstil booking godkendt automatisk, når betalingen er gennemført"
+
+#: php/seatreg_functions.php:613
+msgid "Set approved"
+msgstr "Sæt godkendt"
+
+#: php/seatreg_functions.php:618
+msgid "PayPal sandbox mode"
+msgstr "PayPal sandbox mode"
+
+#: php/seatreg_functions.php:620
+msgid ""
+"Turn on sandbox mode. Lets you test payments with your sandbox account. "
+"Don't forget to change business email and button id."
+msgstr ""
+"Slå sandkassetilstand til. Giver dig mulighed for at teste betalinger med "
+"din sandkassekonto. Glem ikke at ændre virksomhedens e-mail og knap-id."
+
+#: php/seatreg_functions.php:625
+msgid "PayPal sandbox"
+msgstr "PayPal sandbox"
+
+#: php/seatreg_functions.php:631
+msgid "Curl extension is required for Paypal to work"
+msgstr "Curl udvidelse er nødvendig for PayPal til at arbejde"
+
+#: php/seatreg_functions.php:638
+msgid "Custom fields"
+msgstr "Tilpassede felter"
+
+#: php/seatreg_functions.php:640
+msgid "Custom fields allow you to ask extra information in bookings."
+msgstr ""
+"Tilpassede felter giver dig mulighed for at bede om ekstra oplysninger i "
+"bookinger."
+
+#: php/seatreg_functions.php:647
+msgid "Existing custom fields"
+msgstr "Eksisterende tilpassede felter"
+
+#: php/seatreg_functions.php:649
+msgid "Custom fields you have already created"
+msgstr "Tilpassede felter, du allerede har oprettet"
+
+#: php/seatreg_functions.php:685
+msgid "New custom field"
+msgstr "Nyt tilpasset felt"
+
+#: php/seatreg_functions.php:687
+msgid "Create a new custom field"
+msgstr "Opret et nyt brugerdefineret felt"
+
+#: php/seatreg_functions.php:690 php/seatreg_functions.php:859
+#: php/seatreg_functions.php:1225 php/bookings/SeatregBookingsPDF.php:69
+#: php/bookings/SeatregBookingsTxt.php:37
+#: php/bookings/SeatregBookingsXlsx.php:63
+msgid "Name"
+msgstr "Navn"
+
+#: php/seatreg_functions.php:694
+msgid "Type"
+msgstr "Type"
+
+#: php/seatreg_functions.php:696
+msgid "Text"
+msgstr "Tekst"
+
+#: php/seatreg_functions.php:697
+msgid "Checkbox"
+msgstr "Checkboks"
+
+#: php/seatreg_functions.php:698
+msgid "Select"
+msgstr "Vælge"
+
+#: php/seatreg_functions.php:705
+msgid "Option name"
+msgstr "Valg navn"
+
+#: php/seatreg_functions.php:709
+msgid "Add option"
+msgstr "Tilføj mulighed"
+
+#: php/seatreg_functions.php:712
+msgid "Add custom field"
+msgstr "Tilføj tilpasset felt"
+
+#: php/seatreg_functions.php:723 php/seatreg_functions.php:1102
+msgid "Save changes"
+msgstr "Gem ændring"
+
+#: php/seatreg_functions.php:735 php/seatreg_functions.php:744
+msgid "Create new registration"
+msgstr "Opret ny registrering"
+
+#: php/seatreg_functions.php:827
+#, php-format
+msgid "%s pending bookings"
+msgstr "%s afventende bookings"
+
+#: php/seatreg_functions.php:839
+msgid "Search booking"
+msgstr "Søg i booking"
+
+#: php/seatreg_functions.php:853 php/seatreg_functions.php:1225
+msgid "Approved"
+msgstr "Godkendt"
+
+#: php/seatreg_functions.php:857 php/seatreg_functions.php:1075
+#: php/seatreg_functions.php:1225
+msgid "Seat"
+msgstr "Sæde"
+
+#: php/seatreg_functions.php:860 php/bookings/SeatregBookingsTxt.php:28
+msgid "Date"
+msgstr "Dato"
+
+#: php/seatreg_functions.php:861 php/seatreg_functions.php:1222
+#: php/bookings/SeatregBookingsPDF.php:72
+#: php/bookings/SeatregBookingsTxt.php:40
+msgid "Booking id"
+msgstr "Booking id"
+
+#: php/seatreg_functions.php:866
+msgid "No pending seats"
+msgstr "Ingen afventende sæder"
+
+#: php/seatreg_functions.php:882 php/seatreg_functions.php:928
+msgid "More info"
+msgstr "Mere Info"
+
+#: php/seatreg_functions.php:883 php/seatreg_functions.php:929
+msgid "Edit"
+msgstr "Redigere"
+
+#: php/seatreg_functions.php:886
+msgid "Approve"
+msgstr "Godkendt"
+
+#: php/seatreg_functions.php:890 php/seatreg_functions.php:936
+#: php/bookings/SeatregBookingsPDF.php:71
+#: php/bookings/SeatregBookingsTxt.php:39
+msgid "Registration date"
+msgstr "Registrerings dato"
+
+#: php/seatreg_functions.php:891 php/seatreg_strings.php:37
+#: php/bookings/SeatregBookingsPDF.php:70
+#: php/bookings/SeatregBookingsTxt.php:38
+#: php/bookings/SeatregBookingsXlsx.php:64
+msgid "Email"
+msgstr "Email"
+
+#: php/seatreg_functions.php:912
+msgid "No approved seats"
+msgstr "Ingen godkendte sæder"
+
+#: php/seatreg_functions.php:932
+#, fuzzy
+#| msgid "Approve"
+msgid "Unapprove"
+msgstr "Godkendt"
+
+#: php/seatreg_functions.php:937
+msgid "Approval date"
+msgstr "Dato for godkendelse"
+
+#: php/seatreg_functions.php:970
+msgid "View booking activity"
+msgstr ""
+
+#: php/seatreg_functions.php:1010 php/seatreg_strings.php:113
+msgid "Not set"
+msgstr "Ikke indstillet"
+
+#: php/seatreg_functions.php:1044
+msgid ""
+"No payment info recorded. This means that this booking has no price or user "
+"has not started the payment process."
+msgstr ""
+"Ingen betalingsoplysninger registreret. Det betyder, at denne booking ikke "
+"har nogen pris, eller at brugeren ikke har startet betalingsprocessen."
+
+#: php/seatreg_functions.php:1049
+#, php-format
+msgid "Payment is %s"
+msgstr "Betalingen er %s"
+
+#: php/seatreg_functions.php:1051
+#, php-format
+msgid "Payment of %s"
+msgstr "Betaling af %s"
+
+#: php/seatreg_functions.php:1052
+#, php-format
+msgid "Payment txn is %s"
+msgstr "Betaling txn er %s"
+
+#: php/seatreg_functions.php:1053
+#, php-format
+msgid "Payment date is %s"
+msgstr "Betalingsdatoen er %s"
+
+#: php/seatreg_functions.php:1056
+msgid "Payment logs"
+msgstr "Betalingslogfiler"
+
+#: php/seatreg_functions.php:1069
+msgid "Edit booking"
+msgstr "Redigere booking"
+
+#: php/seatreg_functions.php:1085
+msgid "First name"
+msgstr "Fornavn"
+
+#: php/seatreg_functions.php:1090
+msgid "Last name"
+msgstr "Efternavn"
+
+#: php/seatreg_functions.php:1118
+#, fuzzy
+#| msgid "Registration"
+msgid "Registration logs"
+msgstr "Registrering"
+
+#: php/seatreg_functions.php:1140
+#, fuzzy
+#| msgid "Booking id"
+msgid "Booking activity"
+msgstr "Booking id"
+
+#: php/seatreg_functions.php:1225 php/bookings/SeatregBookingsPDF.php:73
+#: php/bookings/SeatregBookingsTxt.php:41
+#: php/bookings/SeatregBookingsXlsx.php:66
+msgid "Booking status"
+msgstr "Booking status"
+
+#: php/seatreg_functions.php:1229
+msgid "Payment info"
+msgstr "Betalings Info"
+
+#: php/seatreg_functions.php:1233
+msgid "Booking not found."
+msgstr "Booking ikke fundet."
+
+#: php/seatreg_functions.php:1236
+msgid "Registration does not exist"
+msgstr "Registreringen findes ikke"
+
+#: php/seatreg_functions.php:1371 php/seatreg_functions.php:1428
+#: php/seatreg_functions.php:1451
+msgid "Seat "
+msgstr "Sæde "
+
+#: php/seatreg_functions.php:1371 php/seatreg_functions.php:1428
+#: php/seatreg_strings.php:20
+msgid " from room "
+msgstr " fra rum "
+
+#: php/seatreg_functions.php:1371 php/seatreg_functions.php:1428
+msgid " is already booked"
+msgstr " er allerede booket"
+
+#: php/seatreg_functions.php:1447
+msgid "Room "
+msgstr "Rum "
+
+#: php/seatreg_functions.php:1447
+msgid " dose not exist!"
+msgstr " findes ikke!"
+
+#: php/seatreg_functions.php:1451
+msgid " dose not exist in "
+msgstr " findes ikke i "
+
+#: php/seatreg_functions.php:2067
+msgid "Something went wrong while creating a new registration"
+msgstr "Noget gik galt, mens du opretter en ny registrering"
+
+#: php/seatreg_functions.php:2094
+msgid "Something went wrong while deleting a registration"
+msgstr "Noget gik galt, da du slettede en registrering"
+
+#: php/seatreg_functions.php:2654
+msgid "Seatreg test email"
+msgstr "E-mail med Seatreg-test"
+
+#: php/seatreg_functions.php:2654
+msgid "This is a test email"
+msgstr "Dette er en test e-mail"
+
+#: php/seatreg_strings.php:9 php/seatreg_strings.php:76
+msgid "Illegal characters detected"
+msgstr "Ulovlige tegn blev registreret"
+
+#: php/seatreg_strings.php:10 php/seatreg_strings.php:134
+msgid "Email address is not correct"
+msgstr "Email adressen er ikke korrekt"
+
+#: php/seatreg_strings.php:11
+msgid "Something went wrong. Please try again"
+msgstr "Noget gik galt. Prøv igen"
+
+#: php/seatreg_strings.php:12
+msgid "Seat selection is empty"
+msgstr "Sædevalg er tomt"
+
+#: php/seatreg_strings.php:13
+msgid "You can add "
+msgstr "Du kan tilføje "
+
+#: php/seatreg_strings.php:14
+msgid " to selection by selecting boxes"
+msgstr " til markering ved at markere felter"
+
+#: php/seatreg_strings.php:15
+msgid " to selection by clicking/tabbing them"
+msgstr " til markering ved at klikke/tabbe dem"
+
+#: php/seatreg_strings.php:17
+msgid "Confirmation will be sent to:"
+msgstr "Bekræftelse sendes til:"
+
+#: php/seatreg_strings.php:18
+msgid "Confirmation will be sent to (Gmail):"
+msgstr "Bekræftelse sendes til (Gmail):"
+
+#: php/seatreg_strings.php:19
+msgid "Email (Gmail required)"
+msgstr "Email (påkrævet Gmail)"
+
+#: php/seatreg_strings.php:21
+msgid " to booking?"
+msgstr " til booking?"
+
+#: php/seatreg_strings.php:22
+msgid " is occupied"
+msgstr " er besat"
+
+#: php/seatreg_strings.php:23
+msgid " is in pending state"
+msgstr " er i ventende tilstand"
+
+#: php/seatreg_strings.php:24
+msgid "(registration admin has not confirmed it)"
+msgstr "(registreringsadministrator har ikke bekræftet det)"
+
+#: php/seatreg_strings.php:25
+msgid "Booking is full"
+msgstr "Booking er fuld"
+
+#: php/seatreg_strings.php:26
+msgid " is already selected!"
+msgstr " er allerede valgt!"
+
+#: php/seatreg_strings.php:27
+msgid "Under construction"
+msgstr "Under opbygning"
+
+#: php/seatreg_strings.php:28
+msgid "Empty field"
+msgstr "Tomt felt"
+
+#: php/seatreg_strings.php:30
+msgid "Add "
+msgstr "Tilføj "
+
+#: php/seatreg_strings.php:31
+msgid "Open seats in the room: "
+msgstr "Åbne sæder i rummet: "
+
+#: php/seatreg_strings.php:32
+msgid "Pending bookings in the room: "
+msgstr "Afventende bookinger i dette rum: "
+
+#: php/seatreg_strings.php:33
+msgid "Approved bookings in the room: "
+msgstr "Godkendte bookinger i dette rum: "
+
+#: php/seatreg_strings.php:34
+msgid "seat"
+msgstr "sæde"
+
+#: php/seatreg_strings.php:35
+msgid "Firstname"
+msgstr "Fornavn"
+
+#: php/seatreg_strings.php:36
+msgid "Lastname"
+msgstr "Efternavn"
+
+#: php/seatreg_strings.php:38
+msgid "This "
+msgstr "Det her "
+
+#: php/seatreg_strings.php:39
+msgid " selected"
+msgstr " valgt"
+
+#: php/seatreg_strings.php:40
+msgid " seat selected"
+msgstr " sæder valgt"
+
+#: php/seatreg_strings.php:41
+msgid " seats selected"
+msgstr " sæder valgt"
+
+#: php/seatreg_strings.php:42
+msgid "You Booking is confirmed"
+msgstr "Din booking er bekræftet"
+
+#: php/seatreg_strings.php:43
+msgid ""
+"Your booking is now in pending state. Registration admin needs to confirm it"
+msgstr ""
+"Din reservation er nu i ventende tilstand. Registreringsadministratoren skal "
+"bekræfte det"
+
+#: php/seatreg_strings.php:44
+msgid "Select a seat you want to add to booking"
+msgstr "Vælg et sæde, du vil tilføje til booking"
+
+#: php/seatreg_strings.php:45
+msgid "Booked"
+msgstr "Reserveret"
+
+#: php/seatreg_strings.php:47
+msgid "Total seats you can add to booking is "
+msgstr "Det samlede antal pladser, du kan tilføje til booking, er "
+
+#: php/seatreg_strings.php:48
+msgid "Booking this seat costs "
+msgstr "Booking af dette sæde koster "
+
+#: php/seatreg_strings.php:49
+msgid "Booking total cost is "
+msgstr "Booking samlede omkostninger er "
+
+#: php/seatreg_strings.php:56
+msgid "Hover text deleted"
+msgstr "Svævetekst slettet"
+
+#: php/seatreg_strings.php:57
+msgid "Hover text added"
+msgstr "Svævetekst tilføjet"
+
+#: php/seatreg_strings.php:58
+msgid "Legend name changed"
+msgstr "Forklaringens navn ændret"
+
+#: php/seatreg_strings.php:59
+msgid "Legend color changed"
+msgstr "Forklaringens farve ændret"
+
+#: php/seatreg_strings.php:60
+msgid "Building grid updated"
+msgstr "Bygningsnet opdateret"
+
+#: php/seatreg_strings.php:61
+msgid "Room name changed"
+msgstr "Rum navn ændret"
+
+#: php/seatreg_strings.php:62
+msgid "New room added"
+msgstr "Nyt rum tilføjet"
+
+#: php/seatreg_strings.php:63
+msgid "Room does not exist"
+msgstr "Rum findes ikke"
+
+#: php/seatreg_strings.php:64
+msgid "Seat dose not exist"
+msgstr "Sæde findes ikke"
+
+#: php/seatreg_strings.php:65
+msgid "Seat is already booked/pending"
+msgstr "Pladsen er allerede reserveret/afventende"
+
+#: php/seatreg_strings.php:66
+msgid "Error updating booking"
+msgstr "Fejl ved opdatering af booking"
+
+#: php/seatreg_strings.php:67
+msgid "Error while creating hover"
+msgstr "Fejl under oprettelse af svæve"
+
+#: php/seatreg_strings.php:68
+msgid "Error while changing legend"
+msgstr "Fejl under ændring af forklaring"
+
+#: php/seatreg_strings.php:69
+msgid "Legend name is taken"
+msgstr "Forklaringsnavn er taget"
+
+#: php/seatreg_strings.php:70
+msgid "Legend name missing!"
+msgstr "Forklaringsnavn mangler!"
+
+#: php/seatreg_strings.php:71
+msgid "Legend color is taken. Choose another"
+msgstr "Forklarende farve er taget. Vælg en anden"
+
+#: php/seatreg_strings.php:72
+msgid "Legend added to"
+msgstr "Forklaring tilføjet til"
+
+#: php/seatreg_strings.php:73
+msgid "You must have at least on room"
+msgstr "Du skal have mindst et rum"
+
+#: php/seatreg_strings.php:74
+msgid "Already in this room"
+msgstr "Allerede i dette rum"
+
+#: php/seatreg_strings.php:75
+msgid "All rooms must have name"
+msgstr "Alle rum skal have navn"
+
+#: php/seatreg_strings.php:77
+msgid "Name missing"
+msgstr "Navn mangler"
+
+#: php/seatreg_strings.php:78
+msgid "You can't delete room "
+msgstr "Du kan ikke slette rum "
+
+#: php/seatreg_strings.php:79
+msgid ""
+" because it contains pending or confirmed seats. You must remove them with "
+"manager first."
+msgstr ""
+" fordi den indeholder ventende eller bekræftede sæder. Du skal fjerne dem "
+"med manager først."
+
+#: php/seatreg_strings.php:80
+msgid "Room name missing"
+msgstr "Rum navn mangler"
+
+#: php/seatreg_strings.php:81
+msgid "Room name already exists. You must choose another"
+msgstr "Rum navn findes allerede. Du skal vælge en anden"
+
+#: php/seatreg_strings.php:82
+msgid "You have selected"
+msgstr "Du har valgt"
+
+#: php/seatreg_strings.php:83
+msgid " box/boxes</span></li>"
+msgstr " boks/bokse </span></li>"
+
+#: php/seatreg_strings.php:84
+msgid "To select one box use "
+msgstr "For at vælge en boks, brug "
+
+#: php/seatreg_strings.php:85
+msgid "To select multiple boxes use "
+msgstr "For at vælge flere bokse, brug "
+
+#: php/seatreg_strings.php:86
+msgid "Select box/boxes to add hover text"
+msgstr "Vælg boks/bokse for at tilføje svævertekst"
+
+#: php/seatreg_strings.php:87
+msgid "Select box/boxes to add color"
+msgstr "Vælg boks/bokse for at tilføje farve"
+
+#: php/seatreg_strings.php:89
+msgid "Select box/boxes you want to delete"
+msgstr "Vælg den boks/bokse, du vil slette"
+
+#: php/seatreg_strings.php:90
+msgid "Color applied"
+msgstr "Farve påført"
+
+#: php/seatreg_strings.php:91
+msgid "You have not made and legends yet"
+msgstr "Du har ikke lavet forklaring endnu"
+
+#: php/seatreg_strings.php:92
+msgid " You have not selected any box/boxes to add legends"
+msgstr " Du har ikke valgt nogen bokse/bokse for at tilføje forklaringer"
+
+#: php/seatreg_strings.php:93
+msgid " characters remaining"
+msgstr " tegn tilbage"
+
+#: php/seatreg_strings.php:94
+msgid "Are you sure you want to delete room "
+msgstr "Er du sikker på, at du vil slette rum "
+
+#: php/seatreg_strings.php:95
+msgid "Unsaved changes. You sure you want to leave?"
+msgstr "Ugemte ændringer. Er du sikker på, at du vil forlade?"
+
+#: php/seatreg_strings.php:97
+msgid "Cancel legend creation"
+msgstr "Annuller oprettelse af forklaring"
+
+#: php/seatreg_strings.php:98
+msgid "Choose legend"
+msgstr "Vælge forklaring"
+
+#: php/seatreg_strings.php:100
+msgid "Ok"
+msgstr "Ok"
+
+#: php/seatreg_strings.php:101
+msgid "Cancel"
+msgstr "Afbestille"
+
+#: php/seatreg_strings.php:103
+msgid "boxes"
+msgstr "bokse"
+
+#: php/seatreg_strings.php:104
+msgid "box"
+msgstr "boks"
+
+#: php/seatreg_strings.php:105
+msgid "No boxes selected"
+msgstr "Ingen bokse valgt"
+
+#: php/seatreg_strings.php:106
+msgid "Pending seat"
+msgstr "Afventende sæde"
+
+#: php/seatreg_strings.php:107
+msgid "Approved seat"
+msgstr "Godkendt sæde"
+
+#: php/seatreg_strings.php:109
+msgid "Saving..."
+msgstr "Gemmer..."
+
+#: php/seatreg_strings.php:110
+msgid "Saved"
+msgstr "Gemt"
+
+#: php/seatreg_strings.php:111
+msgid "room"
+msgstr "rum"
+
+#: php/seatreg_strings.php:112
+msgid "Booking updated"
+msgstr "Booking opdateret"
+
+#: php/seatreg_strings.php:114
+msgid "Please enter registration name"
+msgstr "Indtast venligst registreringsnavn"
+
+#: php/seatreg_strings.php:115
+msgid "Name must be between 1-255 characters"
+msgstr "Navnet skal være mellem 1-255 tegn"
+
+#: php/seatreg_strings.php:116
+msgid "Please enter name"
+msgstr "Indtast venligst navn"
+
+#: php/seatreg_strings.php:117
+msgid "Please enter option value"
+msgstr "Indtast optionens værdi"
+
+#: php/seatreg_strings.php:118
+msgid "Are you sure?"
+msgstr "Er du sikker?"
+
+#: php/seatreg_strings.php:119
+msgid "Please add at least one option"
+msgstr "Tilføj mindst én mulighed"
+
+#: php/seatreg_strings.php:120
+msgid "Name already used"
+msgstr "Navn allerede brugt"
+
+#: php/seatreg_strings.php:121
+msgid "Current room does not have background image"
+msgstr "Det aktuelle rum har ikke baggrundsbillede"
+
+#: php/seatreg_strings.php:122
+msgid "Remove from room"
+msgstr "Fjern fra rummet"
+
+#: php/seatreg_strings.php:123
+msgid "Choose a picture to upload"
+msgstr "Vælg et billede, der skal overføres"
+
+#: php/seatreg_strings.php:124
+msgid "Image name contains illegal characters"
+msgstr "Billednavnet indeholder ugyldige tegn"
+
+#: php/seatreg_strings.php:125
+msgid "Add to room background"
+msgstr "Føj til rumbaggrund"
+
+#: php/seatreg_strings.php:127
+msgid "Show pending bookins"
+msgstr "Vis ventende bookiner"
+
+#: php/seatreg_strings.php:128
+msgid "Show approved bookings"
+msgstr "Vis godkendte bookinger"
+
+#: php/seatreg_strings.php:129
+msgid "Please enter PayPal business email"
+msgstr "Angiv PayPal virksomhedsmail"
+
+#: php/seatreg_strings.php:130
+msgid "Please enter PayPal button id"
+msgstr "Angiv PayPal knap-id"
+
+#: php/seatreg_strings.php:131
+msgid "Please enter PayPal currency code"
+msgstr "Angiv PayPal valutakode"
+
+#: php/seatreg_strings.php:132
+msgid "Prices added"
+msgstr "Tilføjede priser"
+
+#: php/seatreg_strings.php:133
+msgid "No seats selected!"
+msgstr "Ingen pladser valgt!"
+
+#: php/seatreg_strings.php:135
+msgid "Check your email address"
+msgstr "Tjek din e-mailadresse"
+
+#: php/seatreg_strings.php:136
+msgid "Email sending failed"
+msgstr "Afsendelse af e-mail mislykkedes"
+
+#: php/seatreg_strings.php:137
+msgid "Please wait"
+msgstr "Vent venligst"
+
+#: php/seatreg_strings.php:138
+msgid "Yes"
+msgstr "Ja"
+
+#: php/seatreg_strings.php:139
+msgid "No"
+msgstr "Nej"
+
+#: php/seatreg_strings.php:140
+msgid "No activity logged"
+msgstr ""
+
+#: php/bookings/SeatregBookingsFile.php:47
+#: php/bookings/SeatregBookingsXlsx.php:27
+msgid "Checked"
+msgstr "Kontrolleret"
+
+#: php/bookings/SeatregBookingsFile.php:49
+#: php/bookings/SeatregBookingsXlsx.php:29
+msgid "Unchecked"
+msgstr "Ukontrolleret"
+
+#: php/bookings/SeatregBookingsFile.php:61
+msgid " not set"
+msgstr " ikke indstillet"
+
+#: php/bookings/SeatregBookingsPDF.php:35
+msgid "Page"
+msgstr "Side"
+
+#: php/bookings/SeatregBookingsPDF.php:67
+msgid "Seat number"
+msgstr "Sæde nummer"
 
 #: php/bookings/SeatregBookingsPDF.php:77
 #: php/bookings/SeatregBookingsTxt.php:46
@@ -354,1384 +1704,237 @@ msgstr "Betalings status"
 msgid "Booking approval date"
 msgstr "Dato for godkendelse af reservation"
 
-#: php/bookings/SeatregBookingsPDF.php:73
-#: php/bookings/SeatregBookingsTxt.php:41
-#: php/bookings/SeatregBookingsXlsx.php:66 php/seatreg_functions.php:1160
-msgid "Booking status"
-msgstr "Booking status"
-
-#: php/seatreg_strings.php:128
-msgid "Show approved bookings"
-msgstr "Vis godkendte bookinger"
-
-#: php/seatreg_strings.php:127
-msgid "Show pending bookins"
-msgstr "Vis ventende bookiner"
-
-#: php/seatreg_strings.php:125
-msgid "Add to room background"
-msgstr "Føj til rumbaggrund"
-
-#: php/seatreg_strings.php:124
-msgid "Image name contains illegal characters"
-msgstr "Billednavnet indeholder ugyldige tegn"
-
-#: php/seatreg_strings.php:123
-msgid "Choose a picture to upload"
-msgstr "Vælg et billede, der skal overføres"
-
-#: php/seatreg_strings.php:122
-msgid "Remove from room"
-msgstr "Fjern fra rummet"
-
-#: php/seatreg_strings.php:121
-msgid "Current room does not have background image"
-msgstr "Det aktuelle rum har ikke baggrundsbillede"
-
-#: php/seatreg_strings.php:47
-msgid "Total seats you can add to booking is "
-msgstr "Det samlede antal pladser, du kan tilføje til booking, er "
-
-#: php/seatreg_functions.php:834
-msgid "Search booking"
-msgstr "Søg i booking"
-
-#: php/seatreg_functions.php:564
-msgid "Enter payment instructions here"
-msgstr "Angiv betalingsinstruktioner her"
-
-#: php/seatreg_functions.php:488
-msgid "Enter info text here"
-msgstr "Skriv infotekst her"
-
-#: php/seatreg_functions.php:429
-msgid "%s settings"
-msgstr "%s indstillinger"
-
-#: php/seatreg_functions.php:359
-msgid "Created registrations"
-msgstr "Oprettede registreringer"
-
-#: php/seatreg_functions.php:161
-msgid "%s pending seats"
-msgstr "%s ventende pladser"
-
-#: php/SeatregBooking.php:30
-msgid "from room"
-msgstr "fra rum"
-
-#: php/emails.php:8
-msgid "You can disable booking notification in options if you don't want to receive them."
-msgstr "Du kan deaktivere bookingmeddelelse i indstillinger, hvis du ikke vil modtage dem."
-
-#: php/emails.php:8
-msgid "This is a notification email telling you that %s has a new booking"
-msgstr "Dette er en e-mail med besked om, at %s har en ny reservation"
-
-#: php/emails.php:8
-msgid "Hello"
-msgstr "Hej"
-
-#: php/builder_content.php:497
-msgid "Upload"
-msgstr "Upload"
-
-#: php/builder_content.php:492
-msgid "Upload image"
-msgstr "Upload billede"
-
-#: php/bookings/SeatregBookingsPDF.php:35
-msgid "Page"
-msgstr "Side"
-
-#. Author URI of the plugin
-msgid "https://github.com/SiimKirjanen"
-msgstr "https://github.com/SiimKirjanen"
-
-#: php/SeatregSubmitBookings.php:234
-msgid "Oops.. the system encountered a problem while sending out confirmation email. Please notify the site administrator."
-msgstr "Ups.. systemet stødte på et problem under afsendelse af bekræftelses-e-mail. Giv webstedets administrator besked."
-
-#: php/seatreg_functions.php:930
-msgid "Approval date"
-msgstr "Dato for godkendelse"
-
-#. Plugin URI of the plugin
-msgid "https://github.com/SiimKirjanen/seatreg"
-msgstr "https://github.com/SiimKirjanen/seatreg"
-
-#: registration/index.php:472
-msgid "Please enter password"
-msgstr "Indtast venligst password"
-
-#: registration/index.php:467
-msgid "Password protected"
-msgstr "Password beskyttet"
-
-#: registration/index.php:453
-msgid "Registration ended"
-msgstr "Registreringen sluttede"
-
-#: registration/index.php:452
-msgid "Closed"
-msgstr "Lukket"
-
-#: registration/index.php:449
-msgid "Not open yet"
-msgstr "Ikke åben endnu"
-
-#: registration/index.php:425
-msgid "Error"
-msgstr "Fejl"
-
-#: registration/index.php:411
-msgid "Save the link for future reference"
-msgstr "Gem linket til fremtidig reference"
-
-#: registration/index.php:407
-msgid "You can look your booking status at the following link"
-msgstr "Du kan se din bookingstatus på følgende link"
-
-#: registration/index.php:403
-msgid "Your Booking is confirmed"
-msgstr "Din reservation er bekræftet"
-
-#: registration/index.php:388
-msgid "You need to confirm your booking by following email instructions. Make sure you check your junk folders"
-msgstr "Du skal bekræfte din reservation ved at følge e -mailinstruktionerne. Sørg for at tjekke dine uønskede/spam mapper"
-
-#: registration/index.php:383
-msgid "Confirm email sent to"
-msgstr "Bekræft e -mail sendt til"
-
-#: registration/index.php:374
-msgid "Show legends"
-msgstr "Vis beskrivelse"
-
-#: registration/index.php:346
-msgid "Contact information"
-msgstr "Kontakt information"
-
-#: registration/index.php:331
-msgid "Next"
-msgstr "Næste"
-
-#: registration/index.php:313
-msgid "NR"
-msgstr "NR"
-
-#: registration/index.php:306
-msgid "Cart"
-msgstr "Kort"
-
-#: registration/index.php:276
-msgid "Add to booking"
-msgstr "Tilføj til booking"
-
-#: registration/index.php:251
-msgid "Legends"
-msgstr "Beskrivelse"
-
-#: registration/index.php:228
-msgid "Total open seats"
-msgstr "Total åbne sæder"
-
-#: registration/index.php:225
-msgid "Total rooms"
-msgstr "Total rum"
-
-#: registration/index.php:213
-msgid "Registration ends"
-msgstr "Registreringen sluttede"
-
-#: registration/index.php:197 registration/index.php:450
-msgid "Registration starts"
-msgstr "Registreringen starter"
-
-#: registration/index.php:184
-msgid "Info"
-msgstr "Info"
-
-#: registration/index.php:148 registration/index.php:368
-msgid "seats selected"
-msgstr "valgte sæder"
-
-#: registration/index.php:135
-msgid "Room is empty"
-msgstr "Rum er tom"
-
-#: registration/index.php:110
-msgid "Change room"
-msgstr "Skift rum"
-
-#. translators: %s: Name of the registration
-#: registration/index.php:76
-msgid "%s is closed at the moment"
-msgstr "%s er lukket i øjeblikket"
-
-#: registration/index.php:18
-msgid "Registration not found"
-msgstr "Registreringen blev ikke fundet"
-
-#: registration/index.php:7
-msgid "Missing parameters"
-msgstr "Manglende parametre"
-
-#: php/seatreg_functions.php:1980
-msgid "Something went wrong while deleting a registration"
-msgstr "Noget gik galt, da du slettede en registrering"
-
-#: php/seatreg_functions.php:1954
-msgid "Something went wrong while creating a new registration"
-msgstr "Noget gik galt, mens du opretter en ny registrering"
-
-#: php/seatreg_functions.php:1386
-msgid " dose not exist in "
-msgstr " findes ikke i "
-
-#: php/seatreg_functions.php:1382
-msgid " dose not exist!"
-msgstr " findes ikke!"
-
-#: php/seatreg_functions.php:1382
-msgid "Room "
-msgstr "Rum "
-
-#: php/seatreg_functions.php:1306 php/seatreg_functions.php:1363
-msgid " is already booked"
-msgstr " er allerede booket"
-
-#: php/seatreg_functions.php:1306 php/seatreg_functions.php:1363
-#: php/seatreg_functions.php:1386
-msgid "Seat "
-msgstr "Sæde "
-
-#: php/seatreg_functions.php:1171
-msgid "Registration does not exist"
-msgstr "Registreringen findes ikke"
-
-#: php/seatreg_functions.php:1168
-msgid "Booking not found."
-msgstr "Booking ikke fundet."
-
-#: php/seatreg_functions.php:1164
-msgid "Payment info"
-msgstr "Betalings Info"
-
-#: php/seatreg_functions.php:718 php/seatreg_functions.php:1081
-msgid "Save changes"
-msgstr "Gem ændring"
-
-#: php/seatreg_functions.php:1069
-msgid "Last name"
-msgstr "Efternavn"
-
-#: php/seatreg_functions.php:1064
-msgid "First name"
-msgstr "Fornavn"
-
-#: php/seatreg_functions.php:852 php/seatreg_functions.php:1054
-#: php/seatreg_functions.php:1160
-msgid "Seat"
-msgstr "Sæde"
-
-#: php/seatreg_functions.php:1048
-msgid "Edit booking"
-msgstr "Redigere booking"
-
-#: php/seatreg_functions.php:906
-msgid "No approved seats"
-msgstr "Ingen godkendte sæder"
-
-#: php/seatreg_functions.php:881
-msgid "Approve"
-msgstr "Godkendt"
-
-#: php/seatreg_functions.php:878 php/seatreg_functions.php:923
-msgid "Edit"
-msgstr "Redigere"
-
-#: php/seatreg_functions.php:877 php/seatreg_functions.php:922
-msgid "More info"
-msgstr "Mere Info"
-
-#: php/seatreg_functions.php:861
-msgid "No pending seats"
-msgstr "Ingen afventende sæder"
-
-#: php/bookings/SeatregBookingsPDF.php:72
-#: php/bookings/SeatregBookingsTxt.php:40 php/seatreg_functions.php:856
-#: php/seatreg_functions.php:1157
-msgid "Booking id"
-msgstr "Booking id"
-
-#: php/bookings/SeatregBookingsTxt.php:28 php/seatreg_functions.php:855
-msgid "Date"
-msgstr "Dato"
-
-#: php/seatreg_functions.php:848 php/seatreg_functions.php:1160
-msgid "Approved"
-msgstr "Godkendt"
-
-#: php/seatreg_functions.php:822
-msgid "%s pending bookings"
-msgstr "%s afventende bookings"
-
-#: php/seatreg_functions.php:438 php/seatreg_functions.php:733
-msgid "Enter registration name"
-msgstr "Indtast registrerings navn"
-
-#: php/seatreg_functions.php:730 php/seatreg_functions.php:739
-msgid "Create new registration"
-msgstr "Opret ny registrering"
-
-#: php/seatreg_functions.php:707
-msgid "Add custom field"
-msgstr "Tilføj tilpasset felt"
-
-#: php/seatreg_functions.php:704
-msgid "Add option"
-msgstr "Tilføj mulighed"
-
-#: php/seatreg_functions.php:700
-msgid "Option name"
-msgstr "Valg navn"
-
-#: php/seatreg_functions.php:693
-msgid "Select"
-msgstr "Vælge"
-
-#: php/seatreg_functions.php:692
-msgid "Checkbox"
-msgstr "Checkboks"
-
-#: php/seatreg_functions.php:691
-msgid "Text"
-msgstr "Tekst"
-
-#: php/seatreg_functions.php:689
-msgid "Type"
-msgstr "Type"
-
-#: php/seatreg_functions.php:682
-msgid "Create a new custom field"
-msgstr "Opret et nyt brugerdefineret felt"
-
-#: php/seatreg_functions.php:680
-msgid "New custom field"
-msgstr "Nyt tilpasset felt"
-
-#: php/seatreg_functions.php:644
-msgid "Custom fields you have already created"
-msgstr "Tilpassede felter, du allerede har oprettet"
-
-#: php/seatreg_functions.php:642
-msgid "Existing custom fields"
-msgstr "Eksisterende tilpassede felter"
-
-#: php/seatreg_functions.php:635
-msgid "Custom fields allow you to ask extra information in bookings."
-msgstr "Tilpassede felter giver dig mulighed for at bede om ekstra oplysninger i bookinger."
-
-#: php/seatreg_functions.php:633
-msgid "Custom fields"
-msgstr "Tilpassede felter"
-
-#: php/seatreg_functions.php:556
-msgid "Send notifications"
-msgstr "Send meddelelse"
-
-#. translators: %s: email address
-#: php/seatreg_functions.php:548
-msgid "Send a notification to %s when you got a new booking."
-msgstr "Send en meddelelse til %s, når du får en ny reservation."
-
-#: php/seatreg_functions.php:543
-msgid "Booking notification"
-msgstr "Booking meddelelser"
-
-#: php/seatreg_functions.php:537
-msgid "Email confirm"
-msgstr "Email bekræft"
-
-#: php/seatreg_functions.php:532
-msgid "Bookings must be confirmed with email"
-msgstr "Reservationer skal bekræftes med email"
-
-#: php/seatreg_functions.php:530
-msgid "Booking email confirm"
-msgstr "Booking email bekræfter"
-
-#: php/seatreg_functions.php:524
-msgid "Use pending"
-msgstr "Brug afventende"
-
-#: php/seatreg_functions.php:519
-msgid "By default all bookings will first be in pending state so admin can approve them (with booking manager). If you want bookings automatically to be in approved state then uncheck below."
-msgstr "Som standard vil alle bookinger først være i ventende tilstand, så admin kan godkende dem (med booking manager). Hvis du vil have, at bookinger automatisk skal være i godkendt tilstand, skal du fjerne markeringen nedenfor."
-
-#: php/seatreg_functions.php:517
-msgid "Pending status"
-msgstr "Afventer status"
-
-#: php/seatreg_functions.php:511
-msgid "You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password"
-msgstr "Du kan angive en adgangskode. Kun folk, der kender det, kan se din registrering og foretage en reservation. Lad det stå tomt uden adgangskode"
-
-#: php/seatreg_functions.php:509
-msgid "Password"
-msgstr "Password"
-
-#: php/seatreg_functions.php:503
-msgid "Allow only gmail address"
-msgstr "Tillad kun gmail adresse"
-
-#: php/seatreg_functions.php:499
-msgid "Gmail address is required when making a booking"
-msgstr "Gmail adresse er påkrævet, når du foretager en reservation"
-
-#: php/seatreg_functions.php:498
-msgid "Gmail required"
-msgstr "Gmail påkrævet"
-
-#: php/seatreg_functions.php:493
-msgid "Set how many seats can be added to the booking"
-msgstr "Angiv, hvor mange pladser der kan føjes til reservationen"
-
-#: php/seatreg_functions.php:492
-msgid "Max seats per booking"
-msgstr "Max pladser pr. Booking"
-
-#: php/seatreg_functions.php:562
-msgid "Payment instruction"
-msgstr "Betalingsinstruktion"
-
-#: php/seatreg_functions.php:487
-msgid "Set registration info text. Will be displayed in registration page"
-msgstr "Indstil tekst til registrering af oplysninger. Vil blive vist på registreringssiden"
-
-#: php/seatreg_functions.php:486
-msgid "Registration info text"
-msgstr "Registrering info tekst"
-
-#: php/seatreg_functions.php:476
-msgid "Let people see who has made a booking in registration page"
-msgstr "Lad folk se, hvem der har foretaget en reservation på registreringssiden"
-
-#: php/seatreg_functions.php:475 php/seatreg_functions.php:480
-msgid "Show bookings"
-msgstr "Vis bookinger"
-
-#: php/seatreg_functions.php:469
-msgid "Set registration end date (dd.mm.yyyy)"
-msgstr "Angiv slutdato for registrering (dd.mm.åååå)"
-
-#: php/seatreg_functions.php:468
-msgid "Registration end date"
-msgstr "Slutdato for registrering"
-
-#: php/seatreg_functions.php:462
-msgid "Set registration start date (dd.mm.yyyy)"
-msgstr "Angiv startdato for registrering (dd.mm.åååå)"
-
-#: php/seatreg_functions.php:461
-msgid "Registration start date"
-msgstr "Startdato for registrering"
-
-#: php/seatreg_functions.php:443
-msgid "Close and open registration"
-msgstr "Luk og åbn registrering"
-
-#: php/seatreg_functions.php:442
-msgid "Registration status"
-msgstr "Registreringsstatus"
-
-#: php/seatreg_functions.php:436
-msgid "Change registration name"
-msgstr "Skift registreringsnavn"
-
-#: php/builder_content.php:10 php/seatreg_functions.php:434
-msgid "Registration name"
-msgstr "Registreringsnavn"
-
-#: php/seatreg_functions.php:400
-msgid "No registrations created!"
-msgstr "Ingen registreringer oprettet!"
-
-#: php/seatreg_functions.php:373
-msgid "Edit map"
-msgstr "Rediger kort"
-
-#: php/seatreg_functions.php:369
-msgid "Registration"
-msgstr "Registrering"
-
-#: php/seatreg_functions.php:248 php/seatreg_functions.php:301
-msgid "Confirmed"
-msgstr "Bekræftet"
-
-#: php/seatreg_functions.php:232 php/seatreg_functions.php:285
-#: php/seatreg_functions.php:447 php/seatreg_strings.php:102
-#: registration/index.php:155
-msgid "Open"
-msgstr "Åben"
-
-#: php/seatreg_functions.php:217
-msgid "Seats"
-msgstr "Sæder"
-
-#: php/seatreg_functions.php:198
-msgid "Overall"
-msgstr "Samlet set"
-
-#: php/seatreg_functions.php:180
-msgid "End date not set"
-msgstr "Slutdato ikke angivet"
-
-#: php/seatreg_functions.php:179
-msgid "Start date not set"
-msgstr "Startdato ikke angivet"
-
-#: php/seatreg_functions.php:167
-msgid "pending seats"
-msgstr "ventende sæder"
-
-#: php/seatreg_functions.php:47
-msgid "No permissions"
-msgstr "Ingen tilladelser"
-
-#: php/seatreg_functions.php:41
-msgid "Please log in to view this area"
-msgstr "Log venligst ind for at se dette område"
-
-#: php/SeatregSubmitBookings.php:226
-msgid "Booking confirmation"
-msgstr "Reservationsbekræftelse"
-
-#: php/SeatregSubmitBookings.php:224
-msgid "After confirmation you can look your booking at"
-msgstr "Efter bekræftelse kan du se din reservation på"
-
-#: php/SeatregSubmitBookings.php:223
-msgid "If you can't click then copy and paste it into your web browser"
-msgstr "Hvis du ikke kan klikke, skal du kopiere og indsætte det i din webbrowser"
-
-#: php/SeatregSubmitBookings.php:221
-msgid "Click on the link below to confirm your booking"
-msgstr "Klik på linket herunder for at bekræfte din reservation"
-
-#: php/SeatregSubmitBookings.php:220
-msgid "Your selected seats are"
-msgstr "Dine valgte sæder er"
-
-#: php/SeatregSubmitBookings.php:129
-msgid "Registration is closed"
-msgstr "Tilmelding er lukket"
-
-#: php/SeatregSubmitBookings.php:121
-msgid "Gmail needed!"
-msgstr "Gmail påkrævet!"
-
-#: php/SeatregSubmitBookings.php:102
-msgid "Error. Dublicated seats"
-msgstr "Fejl. Dobbelt sæder"
-
-#: php/SeatregSubmitBookings.php:84
-msgid "Error. Password mismatch!"
-msgstr "Fejl. Adgangskode mismatch!"
-
-#: php/builder_content.php:510
-msgid "Previously uploaded images"
-msgstr "Tidligere uploadede billeder"
-
-#: php/builder_content.php:487
-msgid "Current room image"
-msgstr "Nuværende rum billede"
-
-#: php/builder_content.php:482
-msgid "Room background image"
-msgstr "Rum baggrunds billede"
-
-#: php/builder_content.php:465
-msgid "Saving is not allowed"
-msgstr "Det er ikke tilladt at gemme"
-
-#: php/builder_content.php:448
-msgid "If someone occupies seat number 2 then you won't be able to delete seats 1 and 2."
-msgstr "Hvis nogen indtager sæde nummer 2, kan du ikke slette sæde 1 og 2."
-
-#: php/builder_content.php:448
-msgid "Lets say you have seats with numbers 1,2,3 and 4."
-msgstr "Lad os sige, at du har sæder med numrene 1,2,3 og 4."
-
-#: php/builder_content.php:448
-msgid "Example:"
-msgstr "Eksempel:"
-
-#: php/builder_content.php:447
-msgid "If room contains pending or approved seats then seat deletion is limited."
-msgstr "Hvis rummet indeholder ventende eller godkendte pladser, er sletning af pladser begrænset."
-
-#: php/builder_content.php:441
-msgid "Limited deletion"
-msgstr "Begrænset sletning"
-
-#: php/builder_content.php:417
-msgid "In seat map builder you can see lot of gray dotted boxes. These boxes are used to creat seats and custom boxes. In grid settings you can change size, distance and count of those grid boxes. That way you can change how new seats and boxes are created."
-msgstr "I sædekortbyggeren kan du se mange grå prikkede kasser. Disse kasser bruges til at oprette sæder og tilpassede kasser. I gitterindstillinger kan du ændre størrelse, afstand og tælling af disse gitterkasser. På den måde kan du ændre, hvordan nye sæder og kasser skabes."
-
-#: php/builder_content.php:410
-msgid "Opens up color dialog where you can apply colors to selected seats/custom boxes."
-msgstr "Åbner farvedialog, hvor du kan anvende farver på udvalgte sæder/brugerdefinerede bokse."
-
-#: php/builder_content.php:402
-msgid "Hover text is shown when user clicks or moves mouse cursor over a seat/custom box. Simply select seats or custom boxes and add text via hover text dialog."
-msgstr "Svæve -tekst vises, når brugeren klikker eller flytter musemarkøren hen over et sæde/en tilpasset boks. Vælg blot sæder eller tilpassede bokse, og tilføj tekst via dialogboksen med svævertekst."
-
-#: php/builder_content.php:395
-msgid "Legends are useful if you want to add labels to seats/custom boxes with special meaning. Example: Lets say you want to show where boys and where girls should sit. In legends dialog you can create, delete, change and apply legends to seats nad custom boxes."
-msgstr "Forklaring er nyttige, hvis du vil tilføje etiketter til sæder/tilpassede kasser med særlig betydning. Eksempel: Lad os sige, at du vil vise, hvor drenge og hvor piger skal sidde. I forklaringsdialogboksen kan du oprette, slette, ændre og anvende forklaringer på sæder og tilpassede bokse."
-
-#: php/builder_content.php:388
-msgid "Once you have selected seats/boxes with either select or lasso tool you can delete them with clicking on garbage can button. "
-msgstr "Når du har valgt sæder/kasser med enten select eller lasso værktøj kan du slette dem ved at klikke på skraldespandsknappen. "
-
-#: php/builder_content.php:381
-msgid "Lasso tool is helpful if you wish to work with multiple objects at the same time (changing color, deleting, adding hover text and legends). Simple hold down left mouse button and move your cursor to select multiple seats/boxes."
-msgstr "Lasso værktøj er nyttigt, hvis du ønsker at arbejde med flere objekter på samme tid (ændring af farve, sletning, tilføjelse af svævertekst og forklaringer). Hold den venstre museknap nede, og flyt markøren for at vælge flere sæder/kasser."
-
-#: php/builder_content.php:374
-msgid "With eraser tool you can remove seats and custom boxes. Simply click on object and it will be removed. You can remove multiple objects at once by holding down left mouse and moving cursor over them."
-msgstr "Med viskelæder kan du fjerne sæder og tilpassede kasser. Bare klik på objektet, og det vil blive fjernet. Du kan fjerne flere objekter på én gang ved at holde venstre mus nede og flytte markøren hen over dem."
-
-#: php/builder_content.php:367
-msgid "Custom boxes are used to show special objects in your seat map (exit, trash can, stage and so on). Simply click on gray dotted box and new custom box will be created. You can create multiple boxes at once by dragging cursor over gray boxes."
-msgstr "Brugerdefinerede kasser bruges til at vise særlige objekter på dit sædekort (udgang, skraldespand, scene og så videre). Du skal blot klikke på den grå prikboks, og der vil blive oprettet en ny tilpasset boks. Du kan oprette flere bokse på én gang ved at trække markøren over grå bokse."
-
-#: php/builder_content.php:360
-msgid "With this tool you can create seats. Simply click on gray dotted box and new seat will be created. You can create multiple seats at once by dragging cursor over gray boxes."
-msgstr "Med dette værktøj kan du oprette sæder. Du skal blot klikke på den grå prikboks og der vil blive oprettet et nyt sæde. Du kan oprette flere sæder på én gang ved at trække markøren over grå bokse."
-
-#: php/builder_content.php:353
-msgid "With select tool you can select individual objects in your seat map. This tool is also used to resize and change object location. To change seat/custom object location you need to drag it with mouse cursor. Resizing is done by placing mouse cursor at border of a object and dragging it to desired width or height."
-msgstr "Med udvalgte værktøjer kan du vælge individuelle objekter på dit sædekort. Dette værktøj bruges også til at ændre størrelse og ændre objektets placering. For at ændre placering af sæde/tilpasset objekt skal du trække det med musemarkøren. Tilpasning foretages ved at placere musemarkøren ved kanten af et objekt og trække det til ønsket bredde eller højde."
-
-#: php/builder_content.php:345
-msgid "Manual"
-msgstr "Brugervejledning"
-
-#: php/builder_content.php:329
-msgid "Enter room name:"
-msgstr "Indtast rum navn:"
-
-#: php/bookings/SeatregBookingsPDF.php:68 php/builder_content.php:325
-msgid "Room name"
-msgstr "Rum navn"
-
-#: php/builder_content.php:312
-msgid "Close legend change"
-msgstr "Luk forklarings ændring"
-
-#: php/builder_content.php:298 php/builder_content.php:307
-msgid "Change color"
-msgstr "Ændre farve"
-
-#: php/builder_content.php:221 php/builder_content.php:291
-msgid "Change legend"
-msgstr "Ærndre forklaring"
-
-#: php/builder_content.php:286 php/builder_content.php:306
-msgid "Back"
-msgstr "Tilbage"
-
-#: php/builder_content.php:280
-msgid "Enter new name"
-msgstr "Indtast nyt navn"
-
-#: php/builder_content.php:256
-msgid "Review new legend"
-msgstr "Gennemgå ny forklaring"
-
-#: php/builder_content.php:251 php/builder_content.php:256
-msgid "Step 3."
-msgstr "Step 3."
-
-#: php/builder_content.php:245
-msgid "Choose legend color"
-msgstr "Vælge forklarings farve"
-
-#: php/builder_content.php:239 php/builder_content.php:245
-#: php/builder_content.php:268
-msgid "Step 2."
-msgstr "Step 2."
-
-#: php/builder_content.php:233 php/builder_content.php:250
-msgid "Step 1."
-msgstr "Step 1."
-
-#: php/builder_content.php:223
-msgid "Change"
-msgstr "Ændre"
-
-#: php/builder_content.php:215
-msgid "Remove legend from this room:"
-msgstr "Fjern forklaring fra rum:"
-
-#: php/builder_content.php:211 php/seatreg_functions.php:752
-msgid "Delete"
-msgstr "Slet"
-
-#: php/builder_content.php:209
-msgid "Remove legend from registration:"
-msgstr "Fjern forklaring fra registrering:"
-
-#: php/builder_content.php:205
-msgid "Apply legend"
-msgstr "Tilføj forklaring"
-
-#: php/builder_content.php:203
-msgid "Existing legends:"
-msgstr "Eksisterende forklaringer:"
-
-#: php/builder_content.php:163
-msgid "Update grid"
-msgstr "Opdater gitter"
-
-#: php/builder_content.php:155
-msgid "Distance between boxes"
-msgstr "Afstand mellem bokse"
-
-#: php/builder_content.php:150
-msgid "y-axis"
-msgstr "y-axis"
-
-#: php/builder_content.php:149
-msgid "x-axis"
-msgstr "x-axis"
-
-#: php/builder_content.php:148
-msgid "Box count"
-msgstr "Boks antal"
-
-#: php/builder_content.php:141
-msgid "Box size"
-msgstr "Boks størrelse"
-
-#: php/builder_content.php:136
-msgid "Building grid helps you to create boxes"
-msgstr "Bygnings gitter hjælper dig med at oprette bokse"
-
-#: php/builder_content.php:126 php/builder_content.php:335
-#: php/seatreg_functions.php:898 php/seatreg_functions.php:943
-#: registration/index.php:393 registration/index.php:415
-#: registration/index.php:432 registration/index.php:476
-msgid "OK"
-msgstr "OK"
-
-#: php/builder_content.php:122
-msgid "Leave field empty to remove existing hover text"
-msgstr "Lad feltet være tomt for at fjerne eksisterende svævetekst"
-
-#: php/builder_content.php:120
-msgid "Enter text"
-msgstr "Indtast tekst"
-
-#: php/builder_content.php:115
-msgid "Adding hover text"
-msgstr "Tilføjelse af svævertekst"
-
-#: php/builder_content.php:105 php/builder_content.php:125
-#: php/builder_content.php:162 php/builder_content.php:188
-#: php/builder_content.php:334 php/builder_content.php:430
-#: php/builder_content.php:454 php/builder_content.php:471
-#: php/builder_content.php:515 php/seatreg_functions.php:1049
-#: php/seatreg_functions.php:1080 registration/index.php:281
-msgid "Close"
-msgstr "Luk"
-
-#: php/builder_content.php:97
-msgid "Color"
-msgstr "Farve"
-
-#: php/builder_content.php:84
-msgid "View registration"
-msgstr "Se registrering"
-
-#: php/builder_content.php:71
-msgid "Seat deletion is limited!"
-msgstr "Sletning af sæder er begrænset!"
-
-#: php/builder_content.php:33
-msgid "pixels to"
-msgstr "pixels til"
-
-#: php/builder_content.php:33
-msgid "Move selected boxes"
-msgstr "Flyt markerede felter"
-
-#: php/builder_content.php:15
-msgid "Delete room"
-msgstr "Slet rum"
-
-#: php/builder_content.php:14
-msgid "Add room"
-msgstr "Tilføj rum"
-
-#: php/builder_content.php:11 php/builder_content.php:285
-#: php/builder_content.php:297
-msgid "Change name"
-msgstr "Ændre navn"
-
-#: php/booking_check.php:26
-msgid "Booking check"
-msgstr "Booking check"
-
-#: php/seatreg_strings.php:120
-msgid "Name already used"
-msgstr "Navn allerede brugt"
-
-#: php/seatreg_strings.php:119
-msgid "Please add at least one option"
-msgstr "Tilføj mindst én mulighed"
-
-#: php/seatreg_strings.php:118
-msgid "Are you sure?"
-msgstr "Er du sikker?"
-
-#: php/seatreg_strings.php:117
-msgid "Please enter option value"
-msgstr "Indtast optionens værdi"
-
-#: php/seatreg_strings.php:116
-msgid "Please enter name"
-msgstr "Indtast venligst navn"
-
-#: php/seatreg_strings.php:115
-msgid "Name must be between 1-255 characters"
-msgstr "Navnet skal være mellem 1-255 tegn"
-
-#: php/seatreg_strings.php:114
-msgid "Please enter registration name"
-msgstr "Indtast venligst registreringsnavn"
-
-#: php/seatreg_functions.php:989 php/seatreg_strings.php:113
-msgid "Not set"
-msgstr "Ikke indstillet"
-
-#: php/seatreg_strings.php:112
-msgid "Booking updated"
-msgstr "Booking opdateret"
-
-#: php/seatreg_strings.php:111
-msgid "room"
-msgstr "rum"
-
-#: php/seatreg_strings.php:110
-msgid "Saved"
-msgstr "Gemt"
-
-#: php/seatreg_strings.php:109
-msgid "Saving..."
-msgstr "Gemmer..."
-
-#: php/builder_content.php:81 php/seatreg_strings.php:108
-msgid "Save"
-msgstr "Gem"
-
-#: php/seatreg_strings.php:106
-msgid "Pending seat"
-msgstr "Afventende sæde"
-
-#: php/seatreg_strings.php:105
-msgid "No boxes selected"
-msgstr "Ingen bokse valgt"
-
-#: php/seatreg_strings.php:104
-msgid "box"
-msgstr "boks"
-
-#: php/seatreg_strings.php:103
-msgid "boxes"
-msgstr "bokse"
-
-#: php/seatreg_strings.php:101
-msgid "Cancel"
-msgstr "Afbestille"
-
-#: php/seatreg_strings.php:100
-msgid "Ok"
-msgstr "Ok"
-
-#: php/builder_content.php:233 php/seatreg_strings.php:99
-msgid "Enter legend name"
-msgstr "Indtast forklarings navn"
-
-#: php/seatreg_strings.php:98
-msgid "Choose legend"
-msgstr "Vælge forklaring"
-
-#: php/seatreg_strings.php:97
-msgid "Cancel legend creation"
-msgstr "Annuller oprettelse af forklaring"
-
-#: php/builder_content.php:266 php/builder_content.php:274
-#: php/seatreg_strings.php:96
-msgid "Create new legend"
-msgstr "Opret ny forklaring"
-
-#: php/seatreg_strings.php:95
-msgid "Unsaved changes. You sure you want to leave?"
-msgstr "Ugemte ændringer. Er du sikker på, at du vil forlade?"
-
-#: php/seatreg_strings.php:94
-msgid "Are you sure you want to delete room "
-msgstr "Er du sikker på, at du vil slette rum "
-
-#: php/seatreg_strings.php:93
-msgid " characters remaining"
-msgstr " tegn tilbage"
-
-#: php/seatreg_strings.php:92
-msgid " You have not selected any box/boxes to add legends"
-msgstr " Du har ikke valgt nogen bokse/bokse for at tilføje forklaringer"
-
-#: php/seatreg_strings.php:91
-msgid "You have not made and legends yet"
-msgstr "Du har ikke lavet forklaring endnu"
-
-#: php/seatreg_strings.php:90
-msgid "Color applied"
-msgstr "Farve påført"
-
-#: php/seatreg_strings.php:89
-msgid "Select box/boxes you want to delete"
-msgstr "Vælg den boks/bokse, du vil slette"
-
-#: php/builder_content.php:60 php/seatreg_strings.php:88
-msgid "Loading..."
-msgstr "Indlæser..."
-
-#: php/seatreg_strings.php:86
-msgid "Select box/boxes to add hover text"
-msgstr "Vælg boks/bokse for at tilføje svævertekst"
-
-#: php/seatreg_strings.php:85
-msgid "To select multiple boxes use "
-msgstr "For at vælge flere bokse, brug "
-
-#: php/seatreg_strings.php:84
-msgid "To select one box use "
-msgstr "For at vælge en boks, brug "
-
-#: php/seatreg_strings.php:83
-msgid " box/boxes</span></li>"
-msgstr " boks/bokse </span></li>"
-
-#: php/seatreg_strings.php:82
-msgid "You have selected"
-msgstr "Du har valgt"
-
-#: php/seatreg_strings.php:81
-msgid "Room name already exists. You must choose another"
-msgstr "Rum navn findes allerede. Du skal vælge en anden"
-
-#: php/seatreg_strings.php:80
-msgid "Room name missing"
-msgstr "Rum navn mangler"
-
-#: php/seatreg_strings.php:79
-msgid " because it contains pending or confirmed seats. You must remove them with manager first."
-msgstr " fordi den indeholder ventende eller bekræftede sæder. Du skal fjerne dem med manager først."
-
-#: php/seatreg_strings.php:78
-msgid "You can't delete room "
-msgstr "Du kan ikke slette rum "
-
-#: php/seatreg_strings.php:77
-msgid "Name missing"
-msgstr "Navn mangler"
-
-#: php/seatreg_strings.php:75
-msgid "All rooms must have name"
-msgstr "Alle rum skal have navn"
-
-#: php/seatreg_strings.php:74
-msgid "Already in this room"
-msgstr "Allerede i dette rum"
-
-#: php/seatreg_strings.php:73
-msgid "You must have at least on room"
-msgstr "Du skal have mindst et rum"
-
-#: php/seatreg_strings.php:72
-msgid "Legend added to"
-msgstr "Forklaring tilføjet til"
-
-#: php/seatreg_strings.php:71
-msgid "Legend color is taken. Choose another"
-msgstr "Forklarende farve er taget. Vælg en anden"
-
-#: php/seatreg_strings.php:70
-msgid "Legend name missing!"
-msgstr "Forklaringsnavn mangler!"
-
-#: php/seatreg_strings.php:69
-msgid "Legend name is taken"
-msgstr "Forklaringsnavn er taget"
-
-#: php/seatreg_strings.php:68
-msgid "Error while changing legend"
-msgstr "Fejl under ændring af forklaring"
-
-#: php/seatreg_strings.php:67
-msgid "Error while creating hover"
-msgstr "Fejl under oprettelse af svæve"
-
-#: php/seatreg_strings.php:66
-msgid "Error updating booking"
-msgstr "Fejl ved opdatering af booking"
-
-#: php/seatreg_strings.php:65
-msgid "Seat is already booked/pending"
-msgstr "Pladsen er allerede reserveret/afventende"
-
-#: php/seatreg_strings.php:64
-msgid "Seat dose not exist"
-msgstr "Sæde findes ikke"
-
-#: php/seatreg_strings.php:63
-msgid "Room does not exist"
-msgstr "Rum findes ikke"
-
-#: php/seatreg_strings.php:62
-msgid "New room added"
-msgstr "Nyt rum tilføjet"
-
-#: php/seatreg_strings.php:61
-msgid "Room name changed"
-msgstr "Rum navn ændret"
-
-#: php/seatreg_strings.php:60
-msgid "Building grid updated"
-msgstr "Bygningsnet opdateret"
-
-#: php/seatreg_strings.php:59
-msgid "Legend color changed"
-msgstr "Forklaringens farve ændret"
-
-#: php/seatreg_strings.php:58
-msgid "Legend name changed"
-msgstr "Forklaringens navn ændret"
-
-#: php/seatreg_strings.php:57
-msgid "Hover text added"
-msgstr "Svævetekst tilføjet"
-
-#: php/seatreg_strings.php:56
-msgid "Hover text deleted"
-msgstr "Svævetekst slettet"
-
-#: php/seatreg_functions.php:263 php/seatreg_functions.php:317
-#: php/seatreg_functions.php:847 php/seatreg_functions.php:1160
-#: php/seatreg_strings.php:46
-msgid "Pending"
-msgstr "Afventer"
-
-#: php/seatreg_strings.php:45
-msgid "Booked"
-msgstr "Reserveret"
-
-#: php/seatreg_strings.php:44
-msgid "Select a seat you want to add to booking"
-msgstr "Vælg et sæde, du vil tilføje til booking"
-
-#: php/seatreg_strings.php:43
-msgid "Your booking is now in pending state. Registration admin needs to confirm it"
-msgstr "Din reservation er nu i ventende tilstand. Registreringsadministratoren skal bekræfte det"
-
-#: php/seatreg_strings.php:42
-msgid "You Booking is confirmed"
-msgstr "Din booking er bekræftet"
-
-#: php/seatreg_strings.php:41
-msgid " seats selected"
-msgstr " sæder valgt"
-
-#: php/seatreg_strings.php:40
-msgid " seat selected"
-msgstr " sæder valgt"
-
-#: php/seatreg_strings.php:39
-msgid " selected"
-msgstr " valgt"
-
-#: php/seatreg_strings.php:38
-msgid "This "
-msgstr "Det her "
-
-#: php/seatreg_strings.php:36
-msgid "Lastname"
-msgstr "Efternavn"
-
-#: php/seatreg_strings.php:35
-msgid "Firstname"
-msgstr "Fornavn"
-
-#: php/seatreg_strings.php:34
-msgid "seat"
-msgstr "sæde"
-
-#: php/seatreg_strings.php:31
-msgid "Open seats in the room: "
-msgstr "Åbne sæder i rummet: "
-
-#: php/seatreg_strings.php:30
-msgid "Add "
-msgstr "Tilføj "
-
-#: php/builder_content.php:217 php/seatreg_functions.php:880
-#: php/seatreg_functions.php:925 php/seatreg_strings.php:29
-#: php/seatreg_strings.php:126
-msgid "Remove"
-msgstr "Fjern"
-
-#: php/seatreg_strings.php:28
-msgid "Empty field"
-msgstr "Tomt felt"
-
-#: php/seatreg_strings.php:27
-msgid "Under construction"
-msgstr "Under opbygning"
-
-#: php/seatreg_strings.php:26
-msgid " is already selected!"
-msgstr " er allerede valgt!"
-
-#: php/seatreg_strings.php:25
-msgid "Booking is full"
-msgstr "Booking er fuld"
-
-#: php/seatreg_strings.php:24
-msgid "(registration admin has not confirmed it)"
-msgstr "(registreringsadministrator har ikke bekræftet det)"
-
-#: php/seatreg_strings.php:23
-msgid " is in pending state"
-msgstr " er i ventende tilstand"
-
-#: php/seatreg_strings.php:22
-msgid " is occupied"
-msgstr " er besat"
-
-#: php/seatreg_strings.php:21
-msgid " to booking?"
-msgstr " til booking?"
-
-#: php/seatreg_functions.php:1306 php/seatreg_functions.php:1363
-#: php/seatreg_strings.php:20
-msgid " from room "
-msgstr " fra rum "
-
-#: php/seatreg_strings.php:19
-msgid "Email (Gmail required)"
-msgstr "Email (påkrævet Gmail)"
-
-#: php/seatreg_strings.php:18
-msgid "Confirmation will be sent to (Gmail):"
-msgstr "Bekræftelse sendes til (Gmail):"
-
-#: php/seatreg_strings.php:17
-msgid "Confirmation will be sent to:"
-msgstr "Bekræftelse sendes til:"
-
-#: php/seatreg_strings.php:15
-msgid " to selection by clicking/tabbing them"
-msgstr " til markering ved at klikke/tabbe dem"
-
-#: php/seatreg_strings.php:14
-msgid " to selection by selecting boxes"
-msgstr " til markering ved at markere felter"
-
-#: php/seatreg_strings.php:13
-msgid "You can add "
-msgstr "Du kan tilføje "
-
-#: php/seatreg_strings.php:12
-msgid "Seat selection is empty"
-msgstr "Sædevalg er tomt"
-
-#: php/seatreg_strings.php:11
-msgid "Something went wrong. Please try again"
-msgstr "Noget gik galt. Prøv igen"
-
-#: php/seatreg_strings.php:10 php/seatreg_strings.php:134
-msgid "Email address is not correct"
-msgstr "Email adressen er ikke korrekt"
-
-#: php/seatreg_strings.php:9 php/seatreg_strings.php:76
-msgid "Illegal characters detected"
-msgstr "Ulovlige tegn blev registreret"
-
-#: php/seatreg_admin_panel.php:136
-msgid "Manage seat bookings"
-msgstr "Administrer sædebestillinger"
-
-#: php/seatreg_admin_panel.php:135
-msgid "Booking manager"
-msgstr "Booking manager"
-
-#: php/seatreg_admin_panel.php:119
-msgid "Statistics for your registrations"
-msgstr "Statistik for dine registreringer"
-
-#: php/seatreg_admin_panel.php:102
-msgid "Settings for your registrations"
-msgstr "Indstillinger for dine registreringer"
-
-#: php/seatreg_admin_panel.php:74
-msgid "Design your own seat map and manage seat bookings"
-msgstr "Design dit eget sæde kort og administrer sædebookinger"
-
-#: php/seatreg_admin_panel.php:73
-msgid "Create and manage seat registrations"
-msgstr "Opret og administrer sæderegistreringer"
-
-#: php/seatreg_admin_panel.php:54 php/seatreg_functions.php:385
-msgid "Bookings"
-msgstr "Bookinger"
-
-#: php/seatreg_admin_panel.php:53
-msgid "%s Bookings"
-msgstr "%s Bookinger"
-
-#: php/seatreg_admin_panel.php:46 php/seatreg_admin_panel.php:101
-#: php/seatreg_functions.php:381
-msgid "Settings"
-msgstr "Indstillinger"
-
-#: php/seatreg_admin_panel.php:45
-msgid "%s Settings"
-msgstr "%s Indstillinger"
-
-#: php/seatreg_admin_panel.php:38 php/seatreg_admin_panel.php:118
-#: php/seatreg_functions.php:377
-msgid "Overview"
-msgstr "Oversigt"
-
-#. translators: %s: Name of the registration
-#: php/seatreg_admin_panel.php:37
-msgid "%s Overview"
-msgstr "%s Oversigt"
-
-#: php/seatreg_admin_panel.php:29
-msgid "Home"
-msgstr "Hjem"
-
-#: php/seatreg_admin_panel.php:28
-msgid "%s Home"
-msgstr "%s Hjem"
-
-#: php/bookings/SeatregBookingsPDF.php:67
-msgid "Seat number"
-msgstr "Sæde nummer"
-
-#: php/bookings/SeatregBookingsXlsx.php:65
-msgid "Registration data"
-msgstr "Registreringsdata"
-
-#: php/bookings/SeatregBookingsPDF.php:70
-#: php/bookings/SeatregBookingsTxt.php:38
-#: php/bookings/SeatregBookingsXlsx.php:64 php/seatreg_functions.php:886
-#: php/seatreg_strings.php:37
-msgid "Email"
-msgstr "Email"
-
-#: php/bookings/SeatregBookingsPDF.php:69
-#: php/bookings/SeatregBookingsTxt.php:37
-#: php/bookings/SeatregBookingsXlsx.php:63 php/seatreg_functions.php:685
-#: php/seatreg_functions.php:854 php/seatreg_functions.php:1160
-msgid "Name"
-msgstr "Navn"
-
-#: php/bookings/SeatregBookingsTxt.php:36
-#: php/bookings/SeatregBookingsXlsx.php:62 php/builder_content.php:11
-#: php/seatreg_functions.php:853 php/seatreg_functions.php:1059
-#: php/seatreg_functions.php:1160 registration/index.php:318
-msgid "Room"
-msgstr "Rum"
-
-#: php/bookings/SeatregBookingsXlsx.php:61 php/SeatregBooking.php:30
-msgid "Seat nr"
-msgstr "Sæde nr"
-
-#: php/bookings/SeatregBookingsXlsx.php:42
-msgid "not set"
-msgstr "ikke indstillet"
-
-#: php/bookings/SeatregBookingsFile.php:61
-msgid " not set"
-msgstr " ikke indstillet"
-
-#: php/bookings/SeatregBookingsFile.php:49
-#: php/bookings/SeatregBookingsXlsx.php:29
-msgid "Unchecked"
-msgstr "Ukontrolleret"
-
-#: php/bookings/SeatregBookingsFile.php:47
-#: php/bookings/SeatregBookingsXlsx.php:27
-msgid "Checked"
-msgstr "Kontrolleret"
-
-#: php/bookings/SeatregBookingsPDF.php:71
-#: php/bookings/SeatregBookingsTxt.php:39 php/seatreg_functions.php:885
-#: php/seatreg_functions.php:929
-msgid "Registration date"
-msgstr "Registrerings dato"
+#: php/bookings/SeatregBookingsPDF.php:81
+#: php/bookings/SeatregBookingsTxt.php:50
+#: php/bookings/SeatregBookingsXlsx.php:68
+msgid "Payment status"
+msgstr "Betalings status"
+
+#: php/bookings/SeatregBookingsPDF.php:84
+#: php/bookings/SeatregBookingsTxt.php:53
+#: php/bookings/SeatregBookingsXlsx.php:69
+msgid "Payment txn id"
+msgstr "Betaling txn id"
+
+#: php/bookings/SeatregBookingsPDF.php:85
+#: php/bookings/SeatregBookingsTxt.php:54
+#: php/bookings/SeatregBookingsXlsx.php:70
+msgid "Payment received"
+msgstr "Betalingen tilbageføres"
 
 #: php/bookings/SeatregBookingsTxt.php:35
 msgid "Seat nr:"
 msgstr "Sæde nr:"
 
-#: php/booking_confirm.php:24
-msgid "Booking confirm"
-msgstr "Booking bekræfter"
+#: php/bookings/SeatregBookingsXlsx.php:42
+msgid "not set"
+msgstr "ikke indstillet"
 
-#: php/SeatregConfirmBooking.php:127 php/SeatregSubmitBookings.php:136
-msgid "Registration is not open"
-msgstr "Tilmelding er ikke åben"
+#: php/bookings/SeatregBookingsXlsx.php:65
+msgid "Registration data"
+msgstr "Registreringsdata"
 
-#: php/SeatregConfirmBooking.php:121 php/seatreg_strings.php:16
-msgid "Registration is closed at the moment"
-msgstr "Registreringen er lukket i øjeblikket"
+#: php/libs/SeatregPayPalIpn.php:47
+msgid "Starting IPN verification"
+msgstr "Starter IPN -verifikation"
 
-#: php/SeatregConfirmBooking.php:107 php/SeatregSubmitBookings.php:93
-msgid "Error. Seat limit exceeded"
-msgstr "Fejl. Sædegrænse overskredet"
+#: php/libs/SeatregPayPalIpn.php:82
+msgid "The IPN is verified"
+msgstr "IPN er verificeret"
 
-#: php/SeatregConfirmBooking.php:83
-msgid "You can look your booking at %s"
-msgstr "Du kan se din reservation på %s"
+#: php/libs/SeatregPayPalIpn.php:89
+msgid "The IPN is invalid"
+msgstr "IPN er ugyldigt"
 
-#: php/SeatregConfirmBooking.php:78
-msgid "You booking is now confirmed"
-msgstr "Din reservation er nu bekræftet"
+#: php/libs/SeatregPayPalIpn.php:94
+#, php-format
+msgid "Unknown response from IPN. Will try again %s"
+msgstr "Ukendt svar fra IPN. Vil prøve igen %s"
 
-#: php/SeatregConfirmBooking.php:75
-msgid "You booking is now in pending state. Registration owner must approve it"
-msgstr "Din reservation er nu i ventende tilstand. Registreringsejer skal godkende det"
+#: php/libs/SeatregPayPalIpn.php:100
+msgid "IPN retry logic failed. Will try again later"
+msgstr "IPN -forsøgslogik mislykkedes. Vil prøve igen senere"
 
-#: php/SeatregConfirmBooking.php:38
-msgid "This booking is already confirmed/expired/deleted"
-msgstr "Denne booking er allerede bekræftet/udløbet/slettet"
+#: php/libs/SeatregPayPalIpn.php:111
+#, php-format
+msgid "Payment for %s is completed"
+msgstr "Betalingen for %s er afsluttet"
 
-#. Author of the plugin
-msgid "Siim Kirjanen"
-msgstr "Siim Kirjanen"
+#: php/libs/SeatregPayPalIpn.php:125
+msgid "txn_id has been previously processed"
+msgstr "txn_id er tidligere blevet behandlet"
 
-#. Description of the plugin
-msgid "Create and manage seat registrations. Design your own seat maps and manage seat bookings"
-msgstr "Opret og administrer sæderegistreringer. Design dine egne sædekort og administrer sædebookinger"
+#: php/libs/SeatregPayPalIpn.php:138
+msgid "Payment is reversed"
+msgstr "Betalingen tilbageføres"
 
-#. Plugin Name of the plugin
-msgid "SeatReg"
-msgstr "SeatReg"
+#: php/libs/SeatregPayPalIpn.php:144
+msgid "Payment was refunded"
+msgstr "Betalingen blev refunderet"
+
+#: php/libs/SeatregPayPalIpn.php:148
+#, php-format
+msgid "Got a %s case. Reason is %s. Case id: %s"
+msgstr "Har en %s sag. Årsagen er %s. Sag -id: %s"
+
+#: php/libs/SeatregPayPalIpn.php:161
+#, php-format
+msgid "Payment %s is not correct. Expecting %s"
+msgstr "Betaling %s er ikke korrekt. Forventer %s"
+
+#: php/libs/SeatregPayPalIpn.php:174
+#, php-format
+msgid "Receiver_email %s is not my Primary PayPal email %s"
+msgstr "Receiver_email %s er ikke min primære PayPal -e -mail %s"
+
+#: registration/index.php:7
+msgid "Missing parameters"
+msgstr "Manglende parametre"
+
+#: registration/index.php:18
+msgid "Registration not found"
+msgstr "Registreringen blev ikke fundet"
+
+#: registration/index.php:76
+#, php-format
+msgid "%s is closed at the moment"
+msgstr "%s er lukket i øjeblikket"
+
+#: registration/index.php:110
+msgid "Change room"
+msgstr "Skift rum"
+
+#: registration/index.php:135
+msgid "Room is empty"
+msgstr "Rum er tom"
+
+#: registration/index.php:148 registration/index.php:368
+msgid "seats selected"
+msgstr "valgte sæder"
+
+#: registration/index.php:184
+msgid "Info"
+msgstr "Info"
+
+#: registration/index.php:197 registration/index.php:450
+msgid "Registration starts"
+msgstr "Registreringen starter"
+
+#: registration/index.php:213
+msgid "Registration ends"
+msgstr "Registreringen sluttede"
+
+#: registration/index.php:225
+msgid "Total rooms"
+msgstr "Total rum"
+
+#: registration/index.php:228
+msgid "Total open seats"
+msgstr "Total åbne sæder"
+
+#: registration/index.php:231
+msgid "Total pending bookings"
+msgstr "Samlet antal afventende reservationer"
+
+#: registration/index.php:234
+msgid "Total approved bookings"
+msgstr "Samlet antal godkendte bookinger"
+
+#: registration/index.php:251
+msgid "Legends"
+msgstr "Beskrivelse"
+
+#: registration/index.php:276
+msgid "Add to booking"
+msgstr "Tilføj til booking"
+
+#: registration/index.php:306
+msgid "Cart"
+msgstr "Kort"
+
+#: registration/index.php:313
+msgid "NR"
+msgstr "NR"
+
+#: registration/index.php:331
+msgid "Next"
+msgstr "Næste"
+
+#: registration/index.php:346
+msgid "Contact information"
+msgstr "Kontakt information"
+
+#: registration/index.php:352
+msgid "Book"
+msgstr "Book"
+
+#: registration/index.php:374
+msgid "Show legends"
+msgstr "Vis beskrivelse"
+
+#: registration/index.php:383
+msgid "Confirm email sent to"
+msgstr "Bekræft e -mail sendt til"
+
+#: registration/index.php:388
+msgid ""
+"You need to confirm your booking by following email instructions. Make sure "
+"you check your junk folders"
+msgstr ""
+"Du skal bekræfte din reservation ved at følge e -mailinstruktionerne. Sørg "
+"for at tjekke dine uønskede/spam mapper"
+
+#: registration/index.php:403
+msgid "Your Booking is confirmed"
+msgstr "Din reservation er bekræftet"
+
+#: registration/index.php:407
+msgid "You can look your booking status at the following link"
+msgstr "Du kan se din bookingstatus på følgende link"
+
+#: registration/index.php:411
+msgid "Save the link for future reference"
+msgstr "Gem linket til fremtidig reference"
+
+#: registration/index.php:425
+msgid "Error"
+msgstr "Fejl"
+
+#: registration/index.php:449
+msgid "Not open yet"
+msgstr "Ikke åben endnu"
+
+#: registration/index.php:452
+msgid "Closed"
+msgstr "Lukket"
+
+#: registration/index.php:453
+msgid "Registration ended"
+msgstr "Registreringen sluttede"
+
+#: registration/index.php:467
+msgid "Password protected"
+msgstr "Password beskyttet"
+
+#: registration/index.php:472
+msgid "Please enter password"
+msgstr "Indtast venligst password"
+
+#~ msgid "https://github.com/SiimKirjanen"
+#~ msgstr "https://github.com/SiimKirjanen"
+
+#~ msgid "https://github.com/SiimKirjanen/seatreg"
+#~ msgstr "https://github.com/SiimKirjanen/seatreg"
+
+#~ msgid "Siim Kirjanen"
+#~ msgstr "Siim Kirjanen"
+
+#~ msgid ""
+#~ "Create and manage seat registrations. Design your own seat maps and "
+#~ "manage seat bookings"
+#~ msgstr ""
+#~ "Opret og administrer sæderegistreringer. Design dine egne sædekort og "
+#~ "administrer sædebookinger"
+
+#~ msgid "SeatReg"
+#~ msgstr "SeatReg"
