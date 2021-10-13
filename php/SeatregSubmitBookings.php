@@ -60,6 +60,16 @@ class SeatregSubmitBookings extends SeatregBooking {
 				return false;
 			}
 
+			//booking data validation
+			$bookingDataValidation = SeatregDataValidation::validateBookingData($seatID[$key], $seatNr[$key], $roomUUID[$key]);
+
+			if( !$bookingDataValidation->valid ) {
+				$this->response->setValidationError( $bookingDataValidation->errorMessage );
+	
+				return false;
+			}
+
+
     		$booking = new stdClass();
     		$booking->firstname = sanitize_text_field($value);
     		$booking->lastname = sanitize_text_field($lastname[$key]);
