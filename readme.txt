@@ -37,6 +37,7 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 3. Booking manager
 4. Custom fields
 5. Overview
+6. Legends and background image
 
 == Changelog ==
 
