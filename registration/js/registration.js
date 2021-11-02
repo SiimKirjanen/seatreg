@@ -1096,7 +1096,7 @@ function sendData(customFieldBack, regURL) {
 
 	var mailToSend = null;
 
-	if(seatReg.selectedSeats.length > 1  && this.emailConfirmEnabled === '1') {
+	if(seatReg.selectedSeats.length > 1) {
 		mailToSend = $('#prim-mail').val();
 	}else {
 		mailToSend = $('#checkout-input-area .check-item').first().find('.field-input[data-field="Email"]').val();
