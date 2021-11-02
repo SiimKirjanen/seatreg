@@ -230,7 +230,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 						'booking_id' => $this->_bookingId,
 						'status' => $bookingStatus,
 						'booking_date' => $currentTimeStamp,
-						'booking_confirm_date' => $registrationConfirmDate
+						'booking_confirm_date' => $registrationConfirmDate,
+						'booker_email' => $this->_bookerEmail
 					), 
 					'%s'	
 				);

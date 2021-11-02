@@ -1567,6 +1567,7 @@ function seatreg_set_up_db() {
 			status int(2) NOT NULL DEFAULT 0,
 			booking_id varchar(40) NOT NULL,
 			conf_code char(40) NOT NULL,
+			booker_email varchar(255) NOT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 

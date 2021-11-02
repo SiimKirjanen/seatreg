@@ -13,3 +13,19 @@ function seatreg_send_booking_notification_email($registrationName, $bookedSeats
         "FROM: $adminEmail"
     ));
 }
+
+function seatreg_send_approved_booking_email($bookingId) {
+    global $seatreg_db_table_names;
+	global $wpdb;
+
+    $booking = $wpdb->get_results( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+		WHERE booking_id = %s",
+		$bookingId
+	) );
+
+    wp_mail($adminEmail, "$registrationName has a new booking", $message, array(
+        "Content-type: text/html",
+        "FROM: $adminEmail"
+    ));
+}
