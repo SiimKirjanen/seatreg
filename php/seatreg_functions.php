@@ -564,6 +564,21 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="approved-booking-email"><?php esc_html_e('Approved booking email', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php
+						esc_html_e('Send out email to booker when booking is approved. This email will contain info about the booking.', 'seatreg');
+					?>
+				</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="approved-booking-email" name="approved-booking-email" value="1" <?php echo $options[0]->send_approved_booking_email == '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Send approved booking email', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
 				<label for="payment-instructions"><?php esc_html_e('Payment instruction', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('You can leave informative text that instructs how to pay for a booking. It will be displayed in booking status page', 'seatreg'); ?>.</p>
 				<textarea class="form-control" id="payment-instructions" name="payment-instructions" placeholder="<?php esc_html_e('Enter payment instructions here', 'seatreg')?>"><?php echo esc_html($options[0]->payment_text); ?></textarea>
@@ -1520,7 +1535,7 @@ function seatreg_set_up_db() {
 			use_pending tinyint(1) NOT NULL DEFAULT 1,
 			registration_password varchar(255) DEFAULT NULL,
 			notify_new_bookings tinyint(1) NOT NULL DEFAULT 1,
-			send_booking_email tinyint(1) NOT NULL DEFAULT 1,
+			send_approved_booking_email tinyint(1) NOT NULL DEFAULT 1,
 			show_bookings tinyint(1) NOT NULL DEFAULT 0,
 			payment_text text,
 			info text,
@@ -2178,6 +2193,12 @@ function seatreg_update() {
 		$_POST['payment-mark-confirmed'] = 1;
 	}
 
+	if(!isset($_POST['approved-booking-email'])) {
+		$_POST['approved-booking-email'] = 0;  
+	}else {
+		$_POST['approved-booking-email'] = 1;
+	}
+
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
 		array(
@@ -2200,7 +2221,8 @@ function seatreg_update() {
 			'paypal_button_id' => sanitize_text_field($_POST['paypal-button-id']),
 			'paypal_currency_code' => sanitize_text_field(strtoupper($_POST['paypal-currency-code'])),
 			'paypal_sandbox_mode' => $_POST['paypal-sandbox-mode'],
-			'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed']
+			'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
+			'send_approved_booking_email' => $_POST['approved-booking-email'] 
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
