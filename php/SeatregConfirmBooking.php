@@ -77,6 +77,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			echo '.<br><br>';
 		}else {
 			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system', false);
+			seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode);
 			esc_html_e('You booking is now confirmed', 'seatreg');
 			echo '<br><br>';
 		}

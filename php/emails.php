@@ -14,18 +14,31 @@ function seatreg_send_booking_notification_email($registrationName, $bookedSeats
     ));
 }
 
-function seatreg_send_approved_booking_email($bookingId) {
+function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     global $seatreg_db_table_names;
 	global $wpdb;
 
-    $booking = $wpdb->get_results( $wpdb->prepare(
+    $bookings = $wpdb->get_results( $wpdb->prepare(
 		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 		WHERE booking_id = %s",
 		$bookingId
 	) );
+    $registration = $wpdb->get_row( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg
+		WHERE registration_code = %s",
+		$registrationCode
+	) );
+    $registrationName = $registration->registration_name;
+    $bookerEmail = $bookings[0]->booker_email;
+    $adminEmail = get_option( 'admin_email' );
+    $message = "<h2>" . sprintf(esc_html__("Thank you for booking at %s", "seatreg"), esc_html($registrationName) ) . "</h2>";
 
-    wp_mail($adminEmail, "$registrationName has a new booking", $message, array(
+    $isSent = wp_mail($bookerEmail, "Your booking at $registrationName is approved", $message, array(
         "Content-type: text/html",
         "FROM: $adminEmail"
     ));
+
+    if($isSent) {
+        seatreg_add_activity_log('booking', $bookingId, "Approved booking email sent to $bookerEmail", false);
+    }
 }
