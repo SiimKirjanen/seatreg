@@ -1520,6 +1520,7 @@ function seatreg_set_up_db() {
 			use_pending tinyint(1) NOT NULL DEFAULT 1,
 			registration_password varchar(255) DEFAULT NULL,
 			notify_new_bookings tinyint(1) NOT NULL DEFAULT 1,
+			send_booking_email tinyint(1) NOT NULL DEFAULT 1,
 			show_bookings tinyint(1) NOT NULL DEFAULT 0,
 			payment_text text,
 			info text,
