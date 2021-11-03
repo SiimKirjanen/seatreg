@@ -1924,17 +1924,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s'
 		);
 		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved');
-
-		$bookerEmail = $wpdb->get_var( $wpdb->prepare(
-			"SELECT booker_email FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE booking_id = %s",
-			$action->booking_id
-		) );
-
-		if($bookerEmail) {
-			seatreg_send_approved_booking_email($action->booking_id, $regCode);
-		}
-
+		seatreg_send_approved_booking_email($action->booking_id, $regCode);
 	}else if($action->action == 'del') {
 		$wpdb->delete( 
 			$seatreg_db_table_names->table_seatreg_bookings,
