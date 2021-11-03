@@ -26,11 +26,20 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 		WHERE booking_id = %s",
 		$bookingId
 	) );
+
     $registration = $wpdb->get_row( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg
-		WHERE registration_code = %s",
+		"SELECT a.*, b.send_approved_booking_email, b.send_approved_booking_email_qr_code
+        FROM $seatreg_db_table_names->table_seatreg AS a
+		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
+        ON a.registration_code = b.registration_code
+		WHERE a.registration_code = %s",
 		$registrationCode
 	) );
+
+    if( $registration->send_approved_booking_email === '0' ) {
+        return true;
+    }
+
     $roomData = json_decode($registration->registration_layout)->roomData;
     foreach ($bookings as $booking) {
         $booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
@@ -73,14 +82,15 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     $message .= $bookingTable;
     $tempDir = get_temp_dir();
 
-    QRcode::png($bookingId, $tempDir.$bookingId.'.png', QR_ECLEVEL_L, 4);
+    if( extension_loaded('gd') && $registration->send_approved_booking_email_qr_code === '1' ) {
+        QRcode::png($bookingId, $tempDir.$bookingId.'.png', QR_ECLEVEL_L, 4);
 
-    add_action( 'phpmailer_init', function(&$phpmailer)use($uid,$name,$bookingId,$tempDir){
-        $phpmailer->AddEmbeddedImage( $tempDir.$bookingId.'.png', 'qrcode', 'qrcode.png');
-    });
-
-    $message .= '<img src="cid:qrcode" />';
-
+        add_action( 'phpmailer_init', function(&$phpmailer)use($uid,$name,$bookingId,$tempDir){
+            $phpmailer->AddEmbeddedImage( $tempDir.$bookingId.'.png', 'qrcode', 'qrcode.png');
+        });
+        $message .= '<img src="cid:qrcode" />';
+    }
+    
     $isSent = wp_mail($bookerEmail, "Your booking at $registrationName is approved", $message, array(
         "Content-type: text/html",
         "FROM: $adminEmail"
