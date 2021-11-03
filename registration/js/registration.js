@@ -609,7 +609,7 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 		documentFragment.append(checkItem);
 	}
 
-	if(arrLen > 1 && this.emailConfirmEnabled === '1') {
+	if(arrLen > 1) {
 		if(this.gmailNeeded == 1) {
 			var primaryMail = $('<div style="text-align:center;margin-top:16px"><label class="field-label">'+ translator.translate('confWillBeSentTogmail') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}else {
