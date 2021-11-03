@@ -583,16 +583,20 @@ function seatreg_generate_settings_form() {
 				<label for="approved-booking-email-qr-code"><?php esc_html_e('Approved booking email QR code', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
-						esc_html_e('You can set so that approved booking emails will have QR code in the email. QR code will display booking ID.', 'seatreg');
+						esc_html_e('You can set so that approved booking emails will have QR code in the email. You can select what should the QR code include.', 'seatreg');
 					?>
 				</p>
 				<?php if(extension_loaded('gd')): ?>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" id="approved-booking-email-qr-code" name="approved-booking-email-qr-code" value="1" <?php echo $options[0]->send_approved_booking_email_qr_code == '1' ? 'checked':'' ?> >
-							<?php esc_html_e('Enable QR codes', 'seatreg'); ?>
-						</label>
-					</div>
+					<?php
+						$selectedBookingQrCode = $options[0]->send_approved_booking_email_qr_code;
+					?>
+
+					<select class="form-control" name="approved-booking-email-qr-code">
+						<option value="booking-id" <?php echo $selectedBookingQrCode === 'booking-id' ? 'selected' : ''; ?>><?php esc_html_e('Booking ID'); ?></option>
+						<option value="booking-url" <?php echo $selectedBookingQrCode === 'booking-url' ? 'selected' : ''; ?>><?php esc_html_e('URl to booking check page'); ?></option>
+						<option value="" <?php echo $selectedBookingQrCode === null ? 'selected' : ''; ?>><?php esc_html_e('Don\'t display QR code'); ?></option>
+					</select>
+
 				<?php else: ?>
 					<div class="alert alert-primary" role="alert">
 						<?php esc_html_e('PHP gd extension is required to generate QR codes.', 'seatreg'); ?>
@@ -1558,7 +1562,7 @@ function seatreg_set_up_db() {
 			registration_password varchar(255) DEFAULT NULL,
 			notify_new_bookings tinyint(1) NOT NULL DEFAULT 1,
 			send_approved_booking_email tinyint(1) NOT NULL DEFAULT 1,
-			send_approved_booking_email_qr_code tinyint(1) NOT NULL DEFAULT 0,
+			send_approved_booking_email_qr_code varchar(255) DEFAULT NULL,
 			show_bookings tinyint(1) NOT NULL DEFAULT 0,
 			payment_text text,
 			info text,
@@ -2224,12 +2228,6 @@ function seatreg_update() {
 		$_POST['approved-booking-email'] = 1;
 	}
 
-	if(!isset($_POST['approved-booking-email-qr-code'])) {
-		$_POST['approved-booking-email-qr-code'] = 0;  
-	}else {
-		$_POST['approved-booking-email-qr-code'] = 1;
-	}
-
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
 		array(
@@ -2254,7 +2252,7 @@ function seatreg_update() {
 			'paypal_sandbox_mode' => $_POST['paypal-sandbox-mode'],
 			'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
 			'send_approved_booking_email' => $_POST['approved-booking-email'],
-			'send_approved_booking_email_qr_code' => $_POST['approved-booking-email-qr-code'],
+			'send_approved_booking_email_qr_code' => $_POST['approved-booking-email-qr-code'] === '' ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])

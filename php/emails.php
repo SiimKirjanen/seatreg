@@ -80,15 +80,20 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 
     $bookingTable .= '</table>';
     $message .= $bookingTable;
-    $tempDir = get_temp_dir();
+    $qrType = $registration->send_approved_booking_email_qr_code;
+    
+    if( extension_loaded('gd') && $qrType !== null ) {
+        $tempDir = get_temp_dir();
+        
+        $bookingCheckURL = get_site_url() . '?seatreg=booking-status&registration=' . $registration->registration_code . '&id=' . $bookingId;
+        $qrContent = $qrType === 'booking-id' ? $bookingId : $bookingCheckURL;
 
-    if( extension_loaded('gd') && $registration->send_approved_booking_email_qr_code === '1' ) {
-        QRcode::png($bookingId, $tempDir.$bookingId.'.png', QR_ECLEVEL_L, 4);
+        QRcode::png($qrContent, $tempDir.$bookingId.'.png', QR_ECLEVEL_L, 4);
 
         add_action( 'phpmailer_init', function(&$phpmailer)use($uid,$name,$bookingId,$tempDir){
             $phpmailer->AddEmbeddedImage( $tempDir.$bookingId.'.png', 'qrcode', 'qrcode.png');
         });
-        $message .= '<img src="cid:qrcode" />';
+        $message .= '<br><img src="cid:qrcode" />';
     }
     
     $isSent = wp_mail($bookerEmail, "Your booking at $registrationName is approved", $message, array(
