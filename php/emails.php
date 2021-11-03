@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
 
+require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/phpqrcode/qrlib.php');
+
 function seatreg_send_booking_notification_email($registrationName, $bookedSeatsString, $emailAddress) {
     $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), esc_html($registrationName) ) . "<br><br> $bookedSeatsString <br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg");
     $adminEmail = get_option( 'admin_email' );
@@ -17,6 +19,7 @@ function seatreg_send_booking_notification_email($registrationName, $bookedSeats
 function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     global $seatreg_db_table_names;
 	global $wpdb;
+    global $phpmailer;
 
     $bookings = $wpdb->get_results( $wpdb->prepare(
 		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
@@ -68,6 +71,15 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 
     $bookingTable .= '</table>';
     $message .= $bookingTable;
+    $tempDir = get_temp_dir();
+
+    QRcode::png($bookingId, $tempDir.$bookingId.'.png', QR_ECLEVEL_L, 4);
+
+    add_action( 'phpmailer_init', function(&$phpmailer)use($uid,$name,$bookingId,$tempDir){
+        $phpmailer->AddEmbeddedImage( $tempDir.$bookingId.'.png', 'qrcode', 'qrcode.png');
+    });
+
+    $message .= '<img src="cid:qrcode" />';
 
     $isSent = wp_mail($bookerEmail, "Your booking at $registrationName is approved", $message, array(
         "Content-type: text/html",
