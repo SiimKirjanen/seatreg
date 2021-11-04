@@ -14,6 +14,7 @@
 	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
 
 	$bookingId = sanitize_text_field($_GET['id']);
+	$registrationId = sanitize_text_field($_GET['registration']);
 	$bookingData = seatreg_get_data_related_to_booking($bookingId);
 ?>
 
@@ -25,17 +26,23 @@
 	<title>
 		<?php esc_html_e('Booking check', 'seatreg'); ?>
 	</title>
+	<?php wp_head(); ?>
 </head>
 <body>
 	<?php
-		seatreg_echo_booking(sanitize_text_field($_GET['registration']), $bookingId);
+		seatreg_echo_booking($registrationId, $bookingId);
+
+		if($bookingData->send_approved_booking_email === '1') {
+			esc_html_e('Did not receive booking receipt? Click the button to send it again.', 'seatreg');
+			echo ' <button id="send-receipt" data-booking-id="'. $bookingId .'" data-registration-id="'. $registrationId .'">'. __('Send again', 'seatreg') .'</button>';
+		}
 
 		if($bookingData->paypal_payments === '1' && $bookingData->payment_status === null) {
 			$bookingTotalCost = seatreg_get_booking_total_cost($bookingId, $bookingData->registration_layout);
 			$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
 			$siteUrl = get_site_url(); 
-			$returnUrl = $siteUrl . '?seatreg=payment-return&id=' . $_GET['id'];
-			$cancelUrl = $siteUrl . '?seatreg=booking-status&registration=' . $_GET['registration'] . '&id=' . $_GET['id'];
+			$returnUrl = $siteUrl . '?seatreg=payment-return&id=' . $bookingId;
+			$cancelUrl = $siteUrl . '?seatreg=booking-status&registration=' . $registrationId . '&id=' . $bookingId;
 			$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
 			
 			if($bookingTotalCost > 0) {
@@ -61,5 +68,6 @@
 			esc_html_e('You payment has been reversed', 'seatreg');
 		}
 	?>
+	<?php wp_footer(); ?>	
 </body>
 </html>

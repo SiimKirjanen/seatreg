@@ -10,6 +10,11 @@ function seatreg_remove_all_styles() {
 		$allowedToLoad = array('seatreg-registration-style', 'google-open-sans');
     	$wp_styles->queue = $allowedToLoad;
 	}
+	if( seatreg_is_booking_check_page() ) {
+		global $wp_styles;
+		$allowedToLoad = array('alertify-core', 'alertify-default');
+    	$wp_styles->queue = $allowedToLoad;
+	}
 }
 
 //only allow spesific scripts to load on registration view page
@@ -18,6 +23,11 @@ function seatreg_remove_all_scripts() {
 	if( seatreg_is_registration_view_page() ) {
 		global $wp_scripts;
 		$allowedToLoad = array('jquery', 'seatreg-registration', 'date-format', 'jquery-powertip', 'iscroll-zoom', 'modernizr');
+		$wp_scripts->queue = $allowedToLoad;
+	}
+	if( seatreg_is_booking_check_page() ) {
+		global $wp_scripts;
+		$allowedToLoad = array('jquery', 'alertify', 'seatreg-booking-check');
 		$wp_scripts->queue = $allowedToLoad;
 	}
 }
@@ -75,6 +85,19 @@ function seatreg_public_scripts_and_styles() {
 		wp_add_inline_script('seatreg-registration', $inlineScript, 'before');
 		wp_localize_script('seatreg-registration', 'WP_Seatreg', array(
 			'SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH' => SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH,
+		));
+	}
+
+	if( seatreg_is_booking_check_page() && !empty($_GET['registration']) && !empty($_GET['id']) ) {
+		wp_enqueue_style('alertify-core', plugins_url('css/alertify.core.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
+		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
+		wp_enqueue_script("jquery");
+		wp_enqueue_script('alertify', plugins_url('js/alertify.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
+		wp_enqueue_script('seatreg-booking-check', SEATREG_PLUGIN_FOLDER_URL . 'js/seatreg_booking_check.js' , array('jquery'), '1.0.0', true);
+		wp_localize_script('seatreg-booking-check', 'WP_Seatreg', array(
+			'ajaxUrl' => admin_url('admin-ajax.php'),
+			'successMessage' => __('Receipt sent', 'seatreg'),
+			'errorMessage' => __('Something went wrong!', 'seatreg'),
 		));
 	}
 }

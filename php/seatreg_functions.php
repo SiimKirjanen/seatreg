@@ -84,6 +84,13 @@ function seatreg_is_registration_view_page() {
 	return false;
 }
 
+function seatreg_is_booking_check_page() {
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-status' ) {
+		return true;
+	}
+	return false;
+}
+
 function seatreg_validate_bookings_file_input() {
 	if(empty($_GET['code'])) {
 		wp_die('Missing code');
@@ -2434,6 +2441,25 @@ function seatreg_booking_submit_callback() {
 
 	die();
 }
+
+add_action( 'wp_ajax_seatreg_resend_receipt', 'seatreg_resend_receipt_callback' );
+add_action( 'wp_ajax_nopriv_seatreg_resend_receipt', 'seatreg_resend_receipt_callback' );
+function seatreg_resend_receipt_callback() {
+	$resp = new SeatregJsonResponse();
+
+	if( empty($_POST['bookingId']) || empty($_POST['registrationCode'])) {
+			$resp->setError('Missing data');
+			$resp->echoData();
+			
+			die();
+	}
+	seatreg_send_approved_booking_email( sanitize_text_field($_POST['bookingId']), sanitize_text_field($_POST['registrationCode']) );
+
+	$resp->echoData();
+
+	die();
+}
+
 
 add_action( 'wp_ajax_seatreg_get_room_stats', 'seatreg_get_room_stats_callback' );
 function seatreg_get_room_stats_callback() {
