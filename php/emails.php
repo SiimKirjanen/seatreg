@@ -28,7 +28,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 	) );
 
     $registration = $wpdb->get_row( $wpdb->prepare(
-		"SELECT a.*, b.send_approved_booking_email, b.send_approved_booking_email_qr_code
+		"SELECT a.*, b.send_approved_booking_email, b.send_approved_booking_email_qr_code, b.custom_fields
         FROM $seatreg_db_table_names->table_seatreg AS a
 		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
         ON a.registration_code = b.registration_code
@@ -61,21 +61,47 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     }
 
     $adminEmail = get_option( 'admin_email' );
-    $message = "<p>" . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html($registrationName) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . "</p>";
-    $message .= "<p>" . esc_html__('Booking ID is: ', 'seatreg') . ' <strong>'. $bookingId .'</strong>' . "</p>";
+    $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html($registrationName) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
+    $message .= '<p>' . esc_html__('Booking ID is: ', 'seatreg') . ' <strong>'. esc_html($bookingId) .'</strong>' . '</p>';
+    $registrationCustomFields = json_decode($registration->custom_fields);
+    $customFieldLabels = array_map(function($customField) {
+        return $customField->label;
+    }, json_decode($bookings[0]->custom_field_data));
+
     $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;">
         <tr>
             <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Name', 'seatreg') . '</th>
             <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Seat', 'seatreg') . '</th>
             <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Room', 'seatreg') . '</th>
-        </tr>';
+            <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Email', 'seatreg') . '</th>';
+    foreach($customFieldLabels as $customFieldLabel) {
+        $bookingTable .= '<th style=";border:1px solid black;text-align: left;padding: 6px;">' . esc_html($customFieldLabel) . '</th>';
+    }
+
+    $bookingTable .= '</tr>';
+ 
 
     foreach ($bookings as $booking) {
+        $bookingCustomFields = json_decode($booking->custom_field_data);
         $bookingTable .= '<tr>
-            <td style=";border:1px solid black;padding: 6px;"">'. $booking->first_name . ' ' .  $booking->last_name .'</td>
-            <td style=";border:1px solid black;padding: 6px;"">'. $booking->seat_nr . '</td>
-            <td style=";border:1px solid black;padding: 6px;"">'. $booking->room_name . '</td>
-        </tr>';
+            <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->first_name . ' ' .  $booking->last_name) .'</td>
+            <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->seat_nr) . '</td>
+            <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->room_name) . '</td>
+            <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->email) . '</td>';
+
+            foreach($bookingCustomFields as $bookingCustomField) {
+                $valueToDisplay = $bookingCustomField->value;
+                $customFieldObject = array_filter($registrationCustomFields, function($custField) use($bookingCustomField) {
+                    return $custField->label === $bookingCustomField->label;
+                });
+
+                if($customFieldObject[0] && $customFieldObject[0]->type = 'check') {
+                    $valueToDisplay = $bookingCustomField->value === '1' ? esc_html__('Yes', 'seatreg') : esc_html__('No', 'seatreg');
+                }
+                $bookingTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($valueToDisplay) . '</td>';
+            }
+        
+        $bookingTable .= '</tr>';
     }
 
     $bookingTable .= '</table>';
