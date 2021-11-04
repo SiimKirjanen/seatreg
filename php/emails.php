@@ -80,7 +80,6 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 
     $bookingTable .= '</tr>';
  
-
     foreach ($bookings as $booking) {
         $bookingCustomFields = json_decode($booking->custom_field_data);
         $bookingTable .= '<tr>
@@ -95,7 +94,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
                     return $custField->label === $bookingCustomField->label;
                 });
 
-                if($customFieldObject[0] && $customFieldObject[0]->type = 'check') {
+                if($customFieldObject && $customFieldObject[0]->type = 'check') {
                     $valueToDisplay = $bookingCustomField->value === '1' ? esc_html__('Yes', 'seatreg') : esc_html__('No', 'seatreg');
                 }
                 $bookingTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($valueToDisplay) . '</td>';
@@ -116,7 +115,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 
         QRcode::png($qrContent, $tempDir.$bookingId.'.png', QR_ECLEVEL_L, 4);
 
-        add_action( 'phpmailer_init', function(&$phpmailer)use($uid,$name,$bookingId,$tempDir){
+        add_action( 'phpmailer_init', function(&$phpmailer) use($bookingId,$tempDir){
             $phpmailer->AddEmbeddedImage( $tempDir.$bookingId.'.png', 'qrcode', 'qrcode.png');
         });
         $message .= '<br><img src="cid:qrcode" />';
