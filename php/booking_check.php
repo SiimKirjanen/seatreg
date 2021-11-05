@@ -1,6 +1,6 @@
 <?php
 	//===========
-	/* client may want to check if her booking exists */
+	/* client may want to check booking status */
 	//===========
 
 	if ( ! defined( 'ABSPATH' ) ) {
@@ -12,9 +12,11 @@
 	}
 
 	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
+	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/services/SeatregBookingService.php' );
 
 	$bookingId = sanitize_text_field($_GET['id']);
 	$registrationId = sanitize_text_field($_GET['registration']);
+	$bookings = SeatregBookingService::getBookings($bookingId);
 	$bookingData = seatreg_get_data_related_to_booking($bookingId);
 ?>
 
@@ -32,7 +34,7 @@
 	<?php
 		seatreg_echo_booking($registrationId, $bookingId);
 
-		if($bookingData->send_approved_booking_email === '1') {
+		if($bookingData->send_approved_booking_email === '1' && $bookings[0]->status === '2' ) {
 			esc_html_e('Did not receive booking receipt? Click the button to send it again.', 'seatreg');
 			echo ' <button id="send-receipt" data-booking-id="'. $bookingId .'" data-registration-id="'. $registrationId .'">'. __('Send again', 'seatreg') .'</button>';
 		}

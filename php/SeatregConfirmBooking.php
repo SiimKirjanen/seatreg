@@ -59,7 +59,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 		$approvedTimestamp = ($this->_insertState == 2) ? time() : null;
 
-		$wpdb->update( 
+		$rowsUpdated = $wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array( 
 				'status' => $this->_insertState,
@@ -70,6 +70,11 @@ class SeatregConfirmBooking extends SeatregBooking {
 			'%d',
 			'%s'
 		);
+
+		if(!$rowsUpdated) {
+			esc_html_e('Something went wrong while confirming your booking', 'seatreg');
+			die();
+		}
 
 		if($this->_insertState == 1) {
 			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system', false);
@@ -135,7 +140,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		//4 step. Check if all selected seats are ok
 		$seatsStatusCheck = $this->doSeatsExistInRegistrationLayoutCheck();
 		if($seatsStatusCheck != 'ok') {
-			esc_html_e($seatsStatusCheck);
+			echo $seatsStatusCheck;
 
 			return;
 		}
@@ -143,7 +148,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		//5 step. Check if seat/seats is already bron or taken
 		$seatsOpenCheck = $this->isAllSelectedSeatsOpen(); 
 		if($seatsOpenCheck != 'ok') {
-			esc_html_e($seatsOpenCheck);
+			echo $seatsOpenCheck;
 
 			exit();
 		}	

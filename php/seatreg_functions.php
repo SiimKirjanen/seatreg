@@ -1279,9 +1279,11 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			}
 		}else {
 			esc_html_e('Booking not found.', 'seatreg');
+			die();
 		}
 	}else {
 		esc_html_e('Registration does not exist', 'seatreg');
+		die();
 	}
 }
 
