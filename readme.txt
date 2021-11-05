@@ -42,7 +42,7 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 == Changelog ==
 
 = 1.7.0 =
-* Booking receipt email is now set to booker when booking is approved (enabled by default).
+* Booking receipt email is now sent to booker when booking is approved (enabled by default).
 * You can enable QR code for receipt email in settings (not enabled by default).
 
 = 1.6.0 =
