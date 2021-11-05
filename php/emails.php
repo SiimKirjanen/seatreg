@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/phpqrcode/qrlib.php');
+require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/services/SeatregBookingService.php');
 
 function seatreg_send_booking_notification_email($registrationName, $bookedSeatsString, $emailAddress) {
     $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), esc_html($registrationName) ) . "<br><br> $bookedSeatsString <br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg");
@@ -21,12 +22,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 	global $wpdb;
     global $phpmailer;
 
-    $bookings = $wpdb->get_results( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-		WHERE booking_id = %s",
-		$bookingId
-	) );
-
+    $bookings = SeatregBookingService::getBookings($bookingId);
     $registration = $wpdb->get_row( $wpdb->prepare(
 		"SELECT a.*, b.send_approved_booking_email, b.send_approved_booking_email_qr_code, b.custom_fields
         FROM $seatreg_db_table_names->table_seatreg AS a
@@ -37,7 +33,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 	) );
 
     if( $registration->send_approved_booking_email === '0' ) {
-        return true;
+        return false;
     }
 
     $roomData = json_decode($registration->registration_layout)->roomData;
@@ -56,7 +52,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
         }else {
             seatreg_add_activity_log('booking', $bookingId, "Not able to send out approved booking email. Booker email not specified", false);
 
-            return true;
+            return false;
         }
     }
 
@@ -128,5 +124,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 
     if($isSent) {
         seatreg_add_activity_log('booking', $bookingId, "Approved booking email sent to $bookerEmail", false);
+        return true;
     }
+    return false;
 }

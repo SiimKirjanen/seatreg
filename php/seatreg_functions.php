@@ -1960,7 +1960,6 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s'
 		);
 		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved');
-		seatreg_send_approved_booking_email($action->booking_id, $regCode);
 	}else if($action->action == 'del') {
 		$wpdb->delete( 
 			$seatreg_db_table_names->table_seatreg_bookings,
@@ -2526,7 +2525,8 @@ function seatreg_confirm_del_bookings_callback() {
 	seatreg_ajax_security_check();
 
 	$data = json_decode( stripslashes_deep($_POST['data']['actionData']) );
-	$statusArray = seatreg_validate_del_conf_booking( sanitize_text_field($_POST['code']), $data );
+	$code = sanitize_text_field( $_POST['code'] );
+	$statusArray = seatreg_validate_del_conf_booking( $code, $data );
 
 	if ( $statusArray['status'] != 'ok' ) {
 		$errorText = '';
@@ -2549,8 +2549,17 @@ function seatreg_confirm_del_bookings_callback() {
 		echo '<div class="alert alert-danger" role="alert">', $errorText ,'</div>';
 		
 	}else {
+		$approvalBookingEmailProcessed = [];
+
 		foreach ($data as $key => $value) {
-			seatreg_confirm_or_delete_booking( $value, sanitize_text_field($_POST['code']));
+			seatreg_confirm_or_delete_booking( $value, $code);
+
+			if($value->action == 'conf' && !in_array($value->booking_id, $approvalBookingEmailProcessed)) {
+				$mailSent = seatreg_send_approved_booking_email( $value->booking_id, $code );
+				if($mailSent) {
+					$approvalBookingEmailProcessed[] = $value->booking_id;
+				}
+			}
 		}
 	}
 
