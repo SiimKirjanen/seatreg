@@ -572,7 +572,7 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="approved-booking-email"><?php esc_html_e('Approved booking email', 'seatreg'); ?></label>
+				<label for="approved-booking-email"><?php esc_html_e('Approved booking receipt email', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
 						esc_html_e('Send out email to booker when booking is approved. This email will contain info about the booking.', 'seatreg');
@@ -587,7 +587,7 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="approved-booking-email-qr-code"><?php esc_html_e('Approved booking email QR code', 'seatreg'); ?></label>
+				<label for="approved-booking-email-qr-code"><?php esc_html_e('Approved booking receipt email QR code', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
 						esc_html_e('You can set so that approved booking emails will have QR code in the email. You can select what should the QR code include.', 'seatreg');

@@ -1185,7 +1185,11 @@ function bookingsConfirmedInfo(data, status) {
 	if(status === 1) {
 		$('.booking-confirmed-header').text(translator.translate('bookingsConfirmedPending'));
 	}else if (status === 2) {
-		$('.booking-confirmed-header').text(translator.translate('bookingsConfirmed'));
+		if(window.receiptEnabled === '1') {
+			$('.booking-confirmed-header').html(translator.translate('bookingsConfirmed') + '<br>' + translator.translate('receiptSent'));
+		}else {
+			$('.booking-confirmed-header').text(translator.translate('bookingsConfirmed'));
+		}
 	}
 }
 
