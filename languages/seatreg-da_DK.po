@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Plugins - SeatReg - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-12 21:57+0200\n"
-"PO-Revision-Date: 2021-11-12 21:58+0200\n"
+"PO-Revision-Date: 2021-11-12 23:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -712,19 +712,20 @@ msgstr "Send test mail"
 
 #: php/seatreg_admin_panel.php:175
 msgid "QR Code testing"
-msgstr ""
+msgstr "QR kode test"
 
 #: php/seatreg_admin_panel.php:178
 msgid ""
 "QR codes can be sent with booking receipt email. You should see test QR code "
 "below. If not then you should see error message that can help with debugging."
 msgstr ""
+"QR-koder kan sendes med email med reservationskvittering. Du skal se test QR "
+"koden nedenfor. Hvis ikke, bør du se fejl meddelelse, der kan hjælpe med "
+"fejlretning."
 
 #: php/seatreg_admin_panel.php:191
-#, fuzzy
-#| msgid "Something went wrong!"
 msgid "Something went terribly wrong."
-msgstr "Noget gik galt!"
+msgstr "Noget gik galt."
 
 #: php/seatreg_admin_panel.php:200 php/seatreg_functions.php:610
 msgid "PHP gd extension is required to generate QR codes."
