@@ -104,15 +104,17 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     $qrType = $registration->send_approved_booking_email_qr_code;
     
     if( extension_loaded('gd') && $qrType !== null ) {
-        $tempDir = get_temp_dir();
-        
+        if (!file_exists(SEATREG_TEMP_FOLDER_DIR)) {
+            mkdir(SEATREG_TEMP_FOLDER_DIR, 0775, true);
+        }
+
         $bookingCheckURL = get_site_url() . '?seatreg=booking-status&registration=' . $registration->registration_code . '&id=' . $bookingId;
         $qrContent = $qrType === 'booking-id' ? $bookingId : $bookingCheckURL;
 
-        QRcode::png($qrContent, $tempDir.$bookingId.'.png', QR_ECLEVEL_L, 4);
+        QRcode::png($qrContent, SEATREG_TEMP_FOLDER_DIR. '/'.$bookingId.'.png', QR_ECLEVEL_L, 4);
 
-        add_action( 'phpmailer_init', function(&$phpmailer) use($bookingId,$tempDir){
-            $phpmailer->AddEmbeddedImage( $tempDir.$bookingId.'.png', 'qrcode', 'qrcode.png');
+        add_action( 'phpmailer_init', function(&$phpmailer) use($bookingId){
+            $phpmailer->AddEmbeddedImage( SEATREG_TEMP_FOLDER_DIR. '/' .$bookingId.'.png', 'qrcode', 'qrcode.png');
         });
         $message .= '<br><img src="cid:qrcode" />';
     }

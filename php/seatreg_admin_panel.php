@@ -175,20 +175,16 @@ function seatreg_create_tools() {
 					<?php esc_html_e('QR Code testing','seatreg'); ?>
 				</h4>
 				<p>
-					<?php esc_html_e('QR codes can be sent with booking receipt email. You should see test QR code below. If not then you should see error message that can help debugging.'); ?>
+					<?php esc_html_e('QR codes can be sent with booking receipt email. You should see test QR code below. If not then you should see error message that can help with debugging.'); ?>
 				</p>
 
 				<?php if( extension_loaded('gd') ) : ?>
 					<?php 
-						try {
-							$up_dir = wp_upload_dir();
-							$tempSeatregFolderDir = $up_dir['basedir'].'/seatreg';
-							$tempSeatregFolderUrl = $up_dir['baseurl'].'/seatreg';
-	
-							if (!file_exists($up_dir['basedir'].'/seatreg')) {
-								mkdir($tempSeatregFolderDir, 0775, true);
+						try {	
+							if (!file_exists(SEATREG_TEMP_FOLDER_DIR)) {
+								mkdir(SEATREG_TEMP_FOLDER_DIR, 0775, true);
 							}
-							QRcode::png('https://wordpress.org/plugins/seatreg/', $tempSeatregFolderDir.'/seatreg-qr-code-test.png', QR_ECLEVEL_L, 4); 
+							QRcode::png('https://wordpress.org/plugins/seatreg/', SEATREG_TEMP_FOLDER_DIR.'/seatreg-qr-code-test.png', QR_ECLEVEL_L, 4); 
 						} catch(Exception $err) {
 							?>
 								<div class="alert alert-primary" role="alert">
@@ -198,8 +194,7 @@ function seatreg_create_tools() {
 							<?php
 						}
 					?>
-
-					<img src="<?php echo $tempSeatregFolderUrl .'/seatreg-qr-code-test.png'; ?>" />
+					<img src="<?php echo SEATREG_TEMP_FOLDER_URL .'/seatreg-qr-code-test.png'; ?>" />
 				<?php else : ?>
 					<div class="alert alert-primary" role="alert">
 						<?php esc_html_e('PHP gd extension is required to generate QR codes.', 'seatreg'); ?>	

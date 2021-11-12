@@ -30,3 +30,8 @@ define('SEATREG_PAYMENT_LOG_INFO', 'info');
 // Status
 define('SEATREG_BOOKING_PENDING', 1);
 define('SEATREG_BOOKING_APPROVED', 2);
+
+//Directory
+$up_dir = wp_upload_dir();
+define('SEATREG_TEMP_FOLDER_DIR', $up_dir['basedir'].'/seatreg');
+define('SEATREG_TEMP_FOLDER_URL', $up_dir['baseurl'].'/seatreg');
