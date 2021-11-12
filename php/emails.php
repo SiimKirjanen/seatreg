@@ -90,7 +90,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
                     return $custField->label === $bookingCustomField->label;
                 });
 
-                if($customFieldObject && $customFieldObject[0]->type = 'check') {
+                if($customFieldObject && $customFieldObject[0]->type === 'check') {
                     $valueToDisplay = $bookingCustomField->value === '1' ? esc_html__('Yes', 'seatreg') : esc_html__('No', 'seatreg');
                 }
                 $bookingTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($valueToDisplay) . '</td>';
