@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 11:16+0200\n"
+"POT-Creation-Date: 2021-11-12 21:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -602,7 +602,7 @@ msgstr ""
 msgid "SeatReg tools"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:62 php/seatreg_admin_panel.php:153
+#: php/seatreg_admin_panel.php:62 php/seatreg_admin_panel.php:154
 msgid "Tools"
 msgstr ""
 
@@ -630,15 +630,15 @@ msgstr ""
 msgid "Manage seat bookings"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:154
+#: php/seatreg_admin_panel.php:155
 msgid "Useful tools"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:158
+#: php/seatreg_admin_panel.php:159
 msgid "Email testing"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:161
+#: php/seatreg_admin_panel.php:162
 msgid ""
 "Send a test email to verify that email sending works. If it doesn't then "
 "most likely your WordPress hosting is not configured to send out emails. In "
@@ -646,12 +646,30 @@ msgid ""
 "WPForms"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:164
+#: php/seatreg_admin_panel.php:165
 msgid "Enter your email address"
 msgstr ""
 
-#: php/seatreg_admin_panel.php:168
+#: php/seatreg_admin_panel.php:169
 msgid "Send test mail"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:175
+msgid "QR Code testing"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:178
+msgid ""
+"QR codes can be sent with booking receipt email. You should see test QR code "
+"below. If not then you should see error message that can help with debugging."
+msgstr ""
+
+#: php/seatreg_admin_panel.php:191
+msgid "Something went terribly wrong."
+msgstr ""
+
+#: php/seatreg_admin_panel.php:200 php/seatreg_functions.php:610
+msgid "PHP gd extension is required to generate QR codes."
 msgstr ""
 
 #: php/seatreg_functions.php:44
@@ -898,10 +916,6 @@ msgstr ""
 
 #: php/seatreg_functions.php:605
 msgid "Don't display QR code"
-msgstr ""
-
-#: php/seatreg_functions.php:610
-msgid "PHP gd extension is required to generate QR codes."
 msgstr ""
 
 #: php/seatreg_functions.php:616
@@ -1727,55 +1741,55 @@ msgstr ""
 msgid "Registration data"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:47
+#: php/libs/SeatregPayPalIpn.php:52
 msgid "Starting IPN verification"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:82
+#: php/libs/SeatregPayPalIpn.php:87
 msgid "The IPN is verified"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:89
+#: php/libs/SeatregPayPalIpn.php:94
 msgid "The IPN is invalid"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:94
+#: php/libs/SeatregPayPalIpn.php:99
 #, php-format
 msgid "Unknown response from IPN. Will try again %s"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:100
+#: php/libs/SeatregPayPalIpn.php:105
 msgid "IPN retry logic failed. Will try again later"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:111
+#: php/libs/SeatregPayPalIpn.php:116
 #, php-format
 msgid "Payment for %s is completed"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:125
+#: php/libs/SeatregPayPalIpn.php:132
 msgid "txn_id has been previously processed"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:138
+#: php/libs/SeatregPayPalIpn.php:145
 msgid "Payment is reversed"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:144
+#: php/libs/SeatregPayPalIpn.php:151
 msgid "Payment was refunded"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:148
+#: php/libs/SeatregPayPalIpn.php:155
 #, php-format
 msgid "Got a %s case. Reason is %s. Case id: %s"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:161
+#: php/libs/SeatregPayPalIpn.php:168
 #, php-format
 msgid "Payment %s is not correct. Expecting %s"
 msgstr ""
 
-#: php/libs/SeatregPayPalIpn.php:174
+#: php/libs/SeatregPayPalIpn.php:181
 #, php-format
 msgid "Receiver_email %s is not my Primary PayPal email %s"
 msgstr ""

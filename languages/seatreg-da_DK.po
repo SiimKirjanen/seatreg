@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - SeatReg - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 11:16+0200\n"
-"PO-Revision-Date: 2021-11-07 21:08+0200\n"
+"POT-Creation-Date: 2021-11-12 21:57+0200\n"
+"PO-Revision-Date: 2021-11-12 21:58+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -654,7 +654,7 @@ msgstr "Bookinger"
 msgid "SeatReg tools"
 msgstr "SeatReg Værktøjer"
 
-#: php/seatreg_admin_panel.php:62 php/seatreg_admin_panel.php:153
+#: php/seatreg_admin_panel.php:62 php/seatreg_admin_panel.php:154
 msgid "Tools"
 msgstr "Værktøjer"
 
@@ -682,15 +682,15 @@ msgstr "Booking manager"
 msgid "Manage seat bookings"
 msgstr "Administrer sædebestillinger"
 
-#: php/seatreg_admin_panel.php:154
+#: php/seatreg_admin_panel.php:155
 msgid "Useful tools"
 msgstr "Nyttige værktøjer"
 
-#: php/seatreg_admin_panel.php:158
+#: php/seatreg_admin_panel.php:159
 msgid "Email testing"
 msgstr "Email test"
 
-#: php/seatreg_admin_panel.php:161
+#: php/seatreg_admin_panel.php:162
 msgid ""
 "Send a test email to verify that email sending works. If it doesn't then "
 "most likely your WordPress hosting is not configured to send out emails. In "
@@ -702,13 +702,33 @@ msgstr ""
 "til at sende emails. I så fald kan du bruge noget WordPress SMTP email -"
 "plugin som WP Mail SMTP af WPForms"
 
-#: php/seatreg_admin_panel.php:164
+#: php/seatreg_admin_panel.php:165
 msgid "Enter your email address"
 msgstr "Indtast din email adresse"
 
-#: php/seatreg_admin_panel.php:168
+#: php/seatreg_admin_panel.php:169
 msgid "Send test mail"
 msgstr "Send test mail"
+
+#: php/seatreg_admin_panel.php:175
+msgid "QR Code testing"
+msgstr ""
+
+#: php/seatreg_admin_panel.php:178
+msgid ""
+"QR codes can be sent with booking receipt email. You should see test QR code "
+"below. If not then you should see error message that can help with debugging."
+msgstr ""
+
+#: php/seatreg_admin_panel.php:191
+#, fuzzy
+#| msgid "Something went wrong!"
+msgid "Something went terribly wrong."
+msgstr "Noget gik galt!"
+
+#: php/seatreg_admin_panel.php:200 php/seatreg_functions.php:610
+msgid "PHP gd extension is required to generate QR codes."
+msgstr "PHP gd extension er påkrævet for at generere QR-koder."
 
 #: php/seatreg_functions.php:44
 msgid "Please log in to view this area"
@@ -968,10 +988,6 @@ msgstr "URL til bookingkontrolside"
 #: php/seatreg_functions.php:605
 msgid "Don't display QR code"
 msgstr "Vis ikke QR-kode"
-
-#: php/seatreg_functions.php:610
-msgid "PHP gd extension is required to generate QR codes."
-msgstr "PHP gd extension er påkrævet for at generere QR-koder."
 
 #: php/seatreg_functions.php:616
 msgid "Payment instruction"
@@ -1812,55 +1828,55 @@ msgstr "ikke sat"
 msgid "Registration data"
 msgstr "Registreringsdato"
 
-#: php/libs/SeatregPayPalIpn.php:47
+#: php/libs/SeatregPayPalIpn.php:52
 msgid "Starting IPN verification"
 msgstr "Starter IPN verifikation"
 
-#: php/libs/SeatregPayPalIpn.php:82
+#: php/libs/SeatregPayPalIpn.php:87
 msgid "The IPN is verified"
 msgstr "IPN er verificeret"
 
-#: php/libs/SeatregPayPalIpn.php:89
+#: php/libs/SeatregPayPalIpn.php:94
 msgid "The IPN is invalid"
 msgstr "IPN er ugyldigt"
 
-#: php/libs/SeatregPayPalIpn.php:94
+#: php/libs/SeatregPayPalIpn.php:99
 #, php-format
 msgid "Unknown response from IPN. Will try again %s"
 msgstr "Ukendt svar fra IPN. Vil prøve igen %s"
 
-#: php/libs/SeatregPayPalIpn.php:100
+#: php/libs/SeatregPayPalIpn.php:105
 msgid "IPN retry logic failed. Will try again later"
 msgstr "IPN -forsøgslogik mislykkedes. Vil prøve igen senere"
 
-#: php/libs/SeatregPayPalIpn.php:111
+#: php/libs/SeatregPayPalIpn.php:116
 #, php-format
 msgid "Payment for %s is completed"
 msgstr "Betalingen for %s er afsluttet"
 
-#: php/libs/SeatregPayPalIpn.php:125
+#: php/libs/SeatregPayPalIpn.php:132
 msgid "txn_id has been previously processed"
 msgstr "txn_id er tidligere blevet behandlet"
 
-#: php/libs/SeatregPayPalIpn.php:138
+#: php/libs/SeatregPayPalIpn.php:145
 msgid "Payment is reversed"
 msgstr "Betalingen tilbageføres"
 
-#: php/libs/SeatregPayPalIpn.php:144
+#: php/libs/SeatregPayPalIpn.php:151
 msgid "Payment was refunded"
 msgstr "Betalingen blev refunderet"
 
-#: php/libs/SeatregPayPalIpn.php:148
+#: php/libs/SeatregPayPalIpn.php:155
 #, php-format
 msgid "Got a %s case. Reason is %s. Case id: %s"
 msgstr "Har en %s sag. Årsagen er %s. Sag -id: %s"
 
-#: php/libs/SeatregPayPalIpn.php:161
+#: php/libs/SeatregPayPalIpn.php:168
 #, php-format
 msgid "Payment %s is not correct. Expecting %s"
 msgstr "Betaling %s er ikke korrekt. Forventer %s"
 
-#: php/libs/SeatregPayPalIpn.php:174
+#: php/libs/SeatregPayPalIpn.php:181
 #, php-format
 msgid "Receiver_email %s is not my Primary PayPal email %s"
 msgstr "Modtager email %s er ikke min primære PayPal email %s"
