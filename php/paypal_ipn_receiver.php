@@ -28,7 +28,8 @@
 		$bookingData->paypal_currency_code,
 		$bookingTotalCost,
 		$bookingId,
-		$bookingData->payment_completed_set_booking_confirmed
+		$bookingData->payment_completed_set_booking_confirmed,
+		$bookingData->registration_code
 	);
 	$payPalIPN->run();
 

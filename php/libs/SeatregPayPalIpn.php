@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit(); 
 }
 
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
+require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
+
  class SeatregPayPalIpn {
 	private $_url;
 	private $_businessEmail;
@@ -12,8 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	private $_bookingId;
 	private $_setBookingConfirmed;
 	private $_ipnVerificationRetry = 5;
+	private $_registrationCode;
 
-	public function __construct($isSandbox, $businessEmail, $currency, $price, $bookingId, $setBookingConfirmed) {
+	public function __construct($isSandbox, $businessEmail, $currency, $price, $bookingId, $setBookingConfirmed, $registrationCode) {
 		if ( !$isSandbox ) {
 			$this->_url = SEATREG_PAYPAL_IPN;
 		} else {
@@ -24,6 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$this->_price = $price;
 		$this->_bookingId = $bookingId;
 		$this->_setBookingConfirmed = $setBookingConfirmed;
+		$this->_registrationCode = $registrationCode;
 	}
 
 	public function run() {
@@ -112,6 +117,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		if($this->_setBookingConfirmed === '1') {
 			$this->changeBookingStatus(2);
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system', false);
+			seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode);
 		}
 	}
 
