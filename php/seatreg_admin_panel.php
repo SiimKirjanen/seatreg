@@ -148,6 +148,7 @@ function seatreg_create_management() {
 }
 
 function seatreg_create_tools() {
+	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/phpqrcode/qrlib.php');
 	?>
 		<div class="seatreg-wp-admin wrap">
 			<h1><i class="fa fa-wrench" aria-hidden="true"></i> <?php esc_html_e('Tools'); ?></h1>
@@ -167,7 +168,44 @@ function seatreg_create_tools() {
 				<?php
 					submit_button(esc_html__('Send test mail', 'seatreg'), 'primary', 'seatreg-send-test-email');
 				?>
-	    </form>
+	    	</form>
+
+			<div>
+				<h4>
+					<?php esc_html_e('QR Code testing','seatreg'); ?>
+				</h4>
+				<p>
+					<?php esc_html_e('QR codes can be sent with booking receipt email. You should see test QR code below. If not then you should see error message that can help debugging.'); ?>
+				</p>
+
+				<?php if( extension_loaded('gd') ) : ?>
+					<?php 
+						try {
+							$up_dir = wp_upload_dir();
+							$tempSeatregFolderDir = $up_dir['basedir'].'/seatreg';
+							$tempSeatregFolderUrl = $up_dir['baseurl'].'/seatreg';
+	
+							if (!file_exists($up_dir['basedir'].'/seatreg')) {
+								mkdir($tempSeatregFolderDir, 0775, true);
+							}
+							QRcode::png('https://wordpress.org/plugins/seatreg/', $tempSeatregFolderDir.'/seatreg-qr-code-test.png', QR_ECLEVEL_L, 4); 
+						} catch(Exception $err) {
+							?>
+								<div class="alert alert-primary" role="alert">
+									<?php esc_html_e('Something went terribly wrong.', 'seatreg'); ?><br />
+									<?php $err->getMessage(); ?>
+								</div>
+							<?php
+						}
+					?>
+
+					<img src="<?php echo $tempSeatregFolderUrl .'/seatreg-qr-code-test.png'; ?>" />
+				<?php else : ?>
+					<div class="alert alert-primary" role="alert">
+						<?php esc_html_e('PHP gd extension is required to generate QR codes.', 'seatreg'); ?>	
+					</div>
+				<?php endif; ?>
+			</div>
 		</div>
 	<?php
 }
