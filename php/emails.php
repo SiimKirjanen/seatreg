@@ -103,7 +103,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     $message .= $bookingTable;
     $qrType = $registration->send_approved_booking_email_qr_code;
     
-    if( extension_loaded('gd') && $qrType !== null ) {
+    if( extension_loaded('gd') && $qrType ) {
         if (!file_exists(SEATREG_TEMP_FOLDER_DIR)) {
             mkdir(SEATREG_TEMP_FOLDER_DIR, 0775, true);
         }
@@ -125,7 +125,8 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     ));
 
     if($isSent) {
-        seatreg_add_activity_log('booking', $bookingId, "Approved booking email sent to $bookerEmail", false);
+        $activityMessage = $qrType ? "Approved booking email with QR Code sent to $bookerEmail": "Approved booking email sent to $bookerEmail";
+        seatreg_add_activity_log('booking', $bookingId, $activityMessage, false);
         return true;
     }
     return false;
