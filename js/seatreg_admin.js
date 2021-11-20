@@ -468,12 +468,11 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
-	
+
 	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
 	button.parent().find('.reg-seat-item').each(function() {
 		$(this).find('.bron-action').each(function() {
 			if($(this).prop('checked')) {
-				var a = $(this).attr('data-action');
 				if($(this).attr('data-action') == 'del') {
 					data.push({
 						booking_id: $(this).val(),
@@ -507,8 +506,8 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 			wrapper.find('.tab-container').easytabs({
 				animate: false,
 				animationSpeed: 0
-				//updateHash: false
 			});
+			alertify.success(translator.translate('bookingStatusUpdated'));
 		});
 	});
 
