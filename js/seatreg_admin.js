@@ -462,9 +462,7 @@ $('#seatreg-booking-manager').on('keydown', '.manager-search', function(e) {
 	}
 });
 
-
-//chen confirm or del bookings
-$('#seatreg-booking-manager').on('click', '.action-control', function(e) {
+$('#seatreg-booking-manager').on('click', '.action-control', function() {
 	var button = $(this);
 	var data = [];
 	var code = $('#seatreg-reg-code').val();

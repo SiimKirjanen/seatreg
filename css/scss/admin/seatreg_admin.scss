@@ -1,5 +1,6 @@
 @import "modal/edit-booking";
 @import "modal/booking-activity";
+@import "loaders/booking-manager";
 
 html {
 	font-size: 100%;
@@ -499,14 +500,7 @@ html {
 	width: 160px;
 	float: left;
 }
-.seatreg-tabs-content .ajax_loader {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin-left: -32px;
-	margin-top: -32px;
-	z-index: 9999;
-}
+
 .seatreg-tabs-content .admin-right-side {
 	width: 900px;
 	margin-right: 5px;
@@ -1062,16 +1056,6 @@ html {
 	.seatreg-tabs-content .stats-doughnut-legend {
 		margin-left: 0;
 	}
-	.seatreg-tabs-content .ajax_loader {
-
-		top: 20%;
-		left: 50%;
-		margin-left: -32px;
-		margin-top: -32px;
-	}
-
-
-
  }
     
 @media screen and (max-width: 776px) {

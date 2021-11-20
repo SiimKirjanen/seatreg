@@ -1,0 +1,17 @@
+.seatreg-tabs-content  {
+    .ajax_loader {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        margin-left: -32px;
+        margin-top: -32px;
+        z-index: 9999;
+
+        @media screen and (max-width: 992px) {
+            top: 20%;
+            left: 50%;
+            margin-left: -32px;
+            margin-top: -32px;
+        }
+    }
+}
