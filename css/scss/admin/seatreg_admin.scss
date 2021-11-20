@@ -341,8 +341,9 @@ html {
 }
 
 .seatreg-tabs-content .management-header {
-	text-align: center;
 	position: relative;
+	display: flex;
+	justify-content: space-between;
 	background-color: #F2F2F2;
 	text-transform: uppercase;
 	font-size: 20px;
@@ -353,12 +354,21 @@ html {
 	.pending-bookings-count{
 		color: #E0635D;
 	}
-	.registration-name {
-		position: absolute;
-		left: 0;
-		top: 0;
-	}
-	
+	.management-extra-actions {
+		text-transform: none;
+
+		.add-booking {
+			cursor: pointer;
+			.fa-plus-circle {
+				color: #61B329;
+			}
+			&:hover {
+				span {
+					text-decoration: underline;
+				}
+			}
+		}
+	}	
 }
 
 .seatreg-tabs-content .time-block {

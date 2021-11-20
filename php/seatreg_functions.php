@@ -876,6 +876,12 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					<?php echo sprintf(esc_html__('%s pending bookings', 'seatreg'), $row_count); ?>
 				</div>
 			<?php endif; ?>
+			<div class="management-extra-actions">
+				<div class="add-booking">
+					<span><?php esc_html_e('Add booking', 'seatreg'); ?></span>
+					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+				</div>
+			</div>
 
 		</div>	
 	<?php
