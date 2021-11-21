@@ -1182,6 +1182,19 @@ function seatreg_add_booking_modal() {
 					<?php esc_html_e('Add seat', 'seatreg'); ?>
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 				</div>
+				<div class="bottom-action-item">
+					<div>
+						<?php esc_html_e('Booking status', 'seatreg'); ?>
+					</div>
+					<label>
+						<?php esc_html_e('Pending'); ?>
+						<input type="radio" name="booking-status" value="1" checked>
+					</label>
+					<label>
+						<?php esc_html_e('Approved'); ?>
+						<input type="radio" name="booking-status" value="2">
+					</label>
+				</div>
 			</div>
 			<input type="hidden" name="registration-code" id="add-booking-registration-id" />
 			<input type="hidden" name="action" value="seatreg_add_booking_with_manager" />
@@ -2773,6 +2786,7 @@ function seatreg_add_booking_with_manager_callback() {
 		empty( $_POST['seat-nr'] ) ||
 		empty( $_POST['room'] ) ||
 		empty( $_POST['registration-code'] ) ||
+		empty( $_POST['booking-status'] ) ||
 		empty( $_POST['custom-fields'] ) ) {
 			wp_send_json_error( array('message'=> 'Missing parameters') );
 	}
@@ -2788,6 +2802,7 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingToAdd->roomName = sanitize_text_field($_POST['room'][$key]);
 		$bookingToAdd->customfield = stripslashes_deep($_POST['custom-fields'][$key]);
 		$bookingToAdd->email = sanitize_text_field($_POST['email'][$key]);
+		$bookingToAdd->status = sanitize_text_field($_POST['booking-status']);
 
 		$bookingsToAdd[] = $bookingToAdd;
 	}
@@ -2817,7 +2832,7 @@ function seatreg_add_booking_with_manager_callback() {
 			$booking->seatId,
 			$booking->roomUUID,
 			$registrationCode,
-			"1",
+			$booking->status,
 			$bookingId,
 			$confCode
 		);

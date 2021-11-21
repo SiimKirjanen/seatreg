@@ -615,28 +615,28 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 
 		booking.find('.input-error').text('');
 
-		if(booking.find('[name="seat-nr"]').val() === '') {
-			booking.find('[name="seat-nr"]').closest('.add-modal-input-wrap').find('.input-error').text('No seat');
+		if(booking.find('[name="seat-nr[]"]').val() === '') {
+			booking.find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text('No seat');
 			subBtn.css('display','inline').next().css('display','none');
 			allFieldsValid = false;
 		}
-		if(booking.find('[name="room"]').val() === ''){
-			booking.find('[name="room"]').closest('.add-modal-input-wrap').find('.input-error').text('No room');
+		if(booking.find('[name="room[]"]').val() === ''){
+			booking.find('[name="room[]"]').closest('.add-modal-input-wrap').find('.input-error').text('No room');
 			subBtn.css('display','inline').next().css('display','none');
 			allFieldsValid = false;
 		}
-		if(booking.find('[name="first-name"]').val() === ''){
-			booking.find('[name="first-name"]').closest('.add-modal-input-wrap').find('.input-error').text('First name empty');
+		if(booking.find('[name="first-name[]"]').val() === ''){
+			booking.find('[name="first-name[]"]').closest('.add-modal-input-wrap').find('.input-error').text('First name empty');
 			subBtn.css('display','inline').next().css('display','none');
 			allFieldsValid = false;
 		}
-		if(booking.find('[name="last-name"]').val() === ''){
-			booking.find('[name="last-name"]').closest('.add-modal-input-wrap').find('.input-error').text('Last name empty');
+		if(booking.find('[name="last-name[]"]').val() === ''){
+			booking.find('[name="last-name[]"]').closest('.add-modal-input-wrap').find('.input-error').text('Last name empty');
 			subBtn.css('display','inline').next().css('display','none');
 			allFieldsValid = false;
 		}
-		if(booking.find('[name="email"]').val() === ''){
-			booking.find('[name="email"]').closest('.add-modal-input-wrap').find('.input-error').text('Email is empty');
+		if(booking.find('[name="email[]"]').val() === ''){
+			booking.find('[name="email[]"]').closest('.add-modal-input-wrap').find('.input-error').text('Email is empty');
 			subBtn.css('display','inline').next().css('display','none');
 			allFieldsValid = false;
 		}
