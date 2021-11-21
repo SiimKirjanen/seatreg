@@ -60,9 +60,10 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html($registrationName) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
     $message .= '<p>' . esc_html__('Booking ID is: ', 'seatreg') . ' <strong>'. esc_html($bookingId) .'</strong>' . '</p>';
     $registrationCustomFields = json_decode($registration->custom_fields);
+    $enteredCustomFieldData = json_decode($bookings[0]->custom_field_data);
     $customFieldLabels = array_map(function($customField) {
         return $customField->label;
-    }, json_decode($bookings[0]->custom_field_data));
+    }, is_array( $enteredCustomFieldData) ? $enteredCustomFieldData : [] );
 
     $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;">
         <tr>

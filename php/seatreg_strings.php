@@ -141,6 +141,7 @@ function seatreg_generate_admin_strings() {
     $translations->noActivityLogged = esc_html__('No activity logged', 'seatreg');
     $translations->bookingStatusUpdated = esc_html__('Booking status updated', 'seatreg');
     $translations->newBookingWasAddedRefreshingThaPage = esc_html__('Booking was added. Page will refresh in a second', 'seatreg');
-    
+    $translations->duplicateSeatDetected = esc_html__('Duplicate seat detected!', 'seatreg');
+
     return $translations;
 }

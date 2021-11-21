@@ -605,8 +605,6 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' + '" alt="Loading..." class="ajax-load" />');
 	var subBtn = $(this);
 	var modal = $('#add-booking-modal');
-	
-	var registrationCode = $('#add-booking-registration-id').val();
 	var allFieldsValid = true;
 
 	modal.find('.modal-body-item').each(function() {
@@ -681,23 +679,26 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 		}else {
 			var data = resp.data;
 
-			if(data.status == 'room-searching') {
+			if(data.status === 'room-searching') {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="room[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('roomNotExist'));
 				alertify.error(translator.translate('roomNotExist'));
 			}
-			if(data.status == 'seat-nr-searching') {
+			if(data.status === 'seat-nr-searching') {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatNotExist'));
 				alertify.error(translator.translate('seatNotExist'));
 			}
-			if(data.status == 'seat-booked') {
+			if(data.status === 'seat-booked') {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatAlreadyBookedPending'));
 				alertify.error(translator.translate('seatAlreadyBookedPending'));
 			}
-			if(data.status == 'create failed') {
+			if(data.status === 'create failed') {
 				alert(translator.translate('errorBookingUpdate'));
 			}
-			if(data.status == 'custom field validation failed') {
+			if(data.status === 'custom field validation failed') {
 				alert('Custom field validation failed');
+			}
+			if(data.status === 'duplicate-seat') {
+				alertify.error(translator.translate('duplicateSeatDetected'));
 			}
 		}
 	});

@@ -2818,6 +2818,17 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingsToAdd[$key]->roomUUID = $statusArray['roomUUID'];
 	}
 
+	$seatIds = [];
+	// Are separate seats?
+	foreach( $bookingsToAdd as $key => $bookingToAdd ) {
+		if(!in_array($bookingToAdd->seatId, $seatIds)) {
+			array_push($seatIds, $bookingToAdd->seatId);
+		}else {
+			wp_send_json_error( array('status' => 'duplicate-seat') );
+		}
+	}
+
+
 	$bookingId = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
 	$confCode = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
 	$addingStatus = [];
