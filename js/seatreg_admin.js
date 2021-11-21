@@ -668,10 +668,10 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 
 	var promise = seatreg_add_booking_with_manager();
 
-	promise.done(function(data) {
+	promise.done(function(resp) {
 		subBtn.css('display','inline').next().css('display','none');
 		
-		if(data.status == 'created') {
+		if(resp.success === true) {
 			alertify.success(translator.translate('newBookingWasAddedRefreshingThaPage'));
 
 			setTimeout(function() {
@@ -679,16 +679,18 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			}, 2000);
 
 		}else {
+			var data = resp.data;
+
 			if(data.status == 'room-searching') {
-				$('#add-room-error').text(translator.translate('roomNotExist'));
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="room[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('roomNotExist'));
 				alertify.error(translator.translate('roomNotExist'));
 			}
 			if(data.status == 'seat-nr-searching') {
-				$('#add-seat-error').text(translator.translate('seatNotExist'));
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatNotExist'));
 				alertify.error(translator.translate('seatNotExist'));
 			}
 			if(data.status == 'seat-booked') {
-				$('#add-seat-error').text(translator.translate('seatAlreadyBookedPending'));
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatAlreadyBookedPending'));
 				alertify.error(translator.translate('seatAlreadyBookedPending'));
 			}
 			if(data.status == 'create failed') {

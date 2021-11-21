@@ -2766,23 +2766,21 @@ function seatreg_search_bookings_callback() {
 add_action( 'wp_ajax_seatreg_add_booking_with_manager', 'seatreg_add_booking_with_manager_callback' );
 function seatreg_add_booking_with_manager_callback() {
 	seatreg_ajax_security_check();
-	$resp = new SeatregJsonResponse();
-	$registrationCode = sanitize_text_field($_POST['registration-code']);
-	$bookingsToAdd = [];
 
-	if( empty($_POST['first-name']) || 
-		empty($_POST['last-name']) || 
-		empty($_POST['email']) || 
-		empty($_POST['seat-nr']) ||
-		empty($_POST['room']) ||
-		empty($_POST['custom-fields'])) {
-			$resp->setError('Missing data');
-			$resp->echoData();
-			
-			die();
+	if( empty( $_POST['first-name'] ) || 
+		empty( $_POST['last-name'] ) || 
+		empty( $_POST['email'] ) || 
+		empty( $_POST['seat-nr'] ) ||
+		empty( $_POST['room'] ) ||
+		empty( $_POST['registration-code'] ) ||
+		empty( $_POST['custom-fields'] ) ) {
+			wp_send_json_error( array('message'=> 'Missing parameters') );
 	}
 
-	foreach ($_POST['first-name'] as $key => $value) {
+	$registrationCode = sanitize_text_field( $_POST['registration-code'] );
+	$bookingsToAdd = [];
+
+	foreach ( $_POST['first-name'] as $key => $value ) {
 		$bookingToAdd = new stdClass();
 		$bookingToAdd->firstName = sanitize_text_field($_POST['first-name'][$key]);
 		$bookingToAdd->lastName = sanitize_text_field($_POST['last-name'][$key]);
@@ -2794,23 +2792,22 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingsToAdd[] = $bookingToAdd;
 	}
 
-	foreach($bookingsToAdd as &$bookingToAdd) {
-		$statusArray = seatreg_valdiate_add_booking_with_manager($registrationCode, $bookingToAdd );
+	foreach( $bookingsToAdd as $key => $bookingToAdd ) {
+		$statusArray = seatreg_valdiate_add_booking_with_manager( $registrationCode, $bookingToAdd );
 
-		if ( $statusArray['status'] != 'ok' ) {
-			wp_send_json( array('status'=> $statusArray['status'], 'text'=> $statusArray['text'] ) );
-	
-			die();
+		if ( $statusArray['status'] !== 'ok' ) {
+			wp_send_json_error( array('message' => $statusArray['text'], 'status' => $statusArray['status'], 'index' => $key) );
 		}
-		$bookingToAdd->seatId = $statusArray['seatId'];
-		$bookingToAdd->roomUUID = $statusArray['roomUUID'];
+
+		$bookingsToAdd[$key]->seatId = $statusArray['seatId'];
+		$bookingsToAdd[$key]->roomUUID = $statusArray['roomUUID'];
 	}
 
 	$bookingId = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
 	$confCode = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
 	$addingStatus = [];
 
-	foreach($bookingsToAdd as $booking) {
+	foreach( $bookingsToAdd as $booking ) {
 		$addingStatus[] = seatreg_add_booking( 
 			$booking->firstName,
 			$booking->lastName,
@@ -2834,19 +2831,13 @@ function seatreg_add_booking_with_manager_callback() {
 	$addingStatusCount = count($addingStatus);
 	
 	if( $successStatusCount === $addingStatusCount ) {
-		seatreg_add_activity_log('booking', $bookingId, 'Booking with '. $addingStatusCount .' seats added with booking manager', true);
-		wp_send_json( array('status'=>'created') );
-
-		die();
+		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount .' seats added with booking manager', true );
+		wp_send_json_success( array('status' => 'created') );
 	}else if( $successStatusCount !== $addingStatusCount ) {
-		seatreg_add_activity_log('booking', $bookingId, 'There was a problem adding booking. '. $successStatusCount .' seat/seats was booked but '. $failStatusCount .' seat/seats failed', true);
-		wp_send_json( array('status'=>'created') );
-
-		die();
-	}else if ($successStatusCount === 0){
-		wp_send_json( array('status'=>'create failed') );
-
-		die();
+		seatreg_add_activity_log( 'booking', $bookingId, 'There was a problem adding booking. '. $successStatusCount .' seat/seats was booked but '. $failStatusCount .' seat/seats failed', true );
+		wp_send_json_success( array('status' => 'created') );
+	}else if ( $successStatusCount === 0 ){
+		wp_send_json_error( array('status' => 'create failed') );
 	}
 }
 
