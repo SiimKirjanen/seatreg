@@ -1125,34 +1125,56 @@ function seatreg_add_booking_modal() {
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
       </div>
       <div class="modal-body">
-		<form>
+		<form id="add-booking-modal-form">
 			<div class="modal-body-items">
 				<div class="modal-body-item">
 					<div class="add-modal-input-wrap">
-						<label for="add-seat"><h5><?php esc_html_e('Seat', 'seatreg'); ?></h5></label><br>
-						<input type="text" id="add-seat" name="seat-nr"/></label> <span id="add-seat-error"></span>
+						<label>
+							<h5>
+								<?php esc_html_e('Seat', 'seatreg'); ?>
+							</h5>
+							<input type="text" name="seat-nr[]"/>
+							<div class="input-error"></div>
+						</label>
 					</div>
-					
 					<div class="add-modal-input-wrap">
-						<label for="add-room"><h5><?php esc_html_e('Room', 'seatreg'); ?></h5></label><br>
-						<input type="text" id="add-room" name="room"/> <span id="add-room-error"></span>
+						<label>
+							<h5>
+								<?php esc_html_e('Room', 'seatreg'); ?>
+							</h5>
+							<input type="text" name="room[]"/>
+							<div class="input-error"></div>
+						</label>
 					</div>
-
 					<div class="add-modal-input-wrap">
-						<label for="add-fname"><h5><?php esc_html_e('First name', 'seatreg'); ?></h5></label><br>
-						<input type="text" id="add-fname" name="first-name"/> <span id="add-fname-error"></span>
+						<label>
+							<h5>
+								<?php esc_html_e('First name', 'seatreg'); ?>
+							</h5>
+							<input type="text" name="first-name[]"/>
+							<div class="input-error"></div>
+						</label>
 					</div>
-
 					<div class="add-modal-input-wrap">
-						<label for="add-lname"><h5><?php esc_html_e('Last name', 'seatreg'); ?></h5></label><br>
-						<input type="text" id="add-lname" name="last-name"/></label> <span id="add-lname-error"></span>
+						<label>
+							<h5>
+								<?php esc_html_e('Last name', 'seatreg'); ?>
+							</h5>
+							<input type="text" name="last-name[]"/>
+							<div class="input-error"></div>
+						</label>
 					</div>
-
 					<div class="add-modal-input-wrap">
-						<label for="add-email"><h5><?php esc_html_e('Email', 'seatreg'); ?></h5></label><br>
-						<input type="text" id="add-email" name="last-name"/></label> <span id="add-email-error"></span>
+						<label>
+							<h5>
+								<?php esc_html_e('Email', 'seatreg'); ?>
+							</h5>
+							<input type="text" name="email[]"/>
+							<div class="input-error"></div>
+						</label>
 					</div>
 					<div class="modal-body-custom"></div>
+					<input type="hidden" name="custom-fields[]" />
 				</div>
 			</div>
 			<div class="bottom-action">
@@ -1161,7 +1183,8 @@ function seatreg_add_booking_modal() {
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 				</div>
 			</div>
-			<input type="hidden" id="add-booking-registration-id">
+			<input type="hidden" name="registration-code" id="add-booking-registration-id" />
+			<input type="hidden" name="action" value="seatreg_add_booking_with_manager" />
 	     </form>
       </div>
       <div class="modal-footer">
@@ -2116,11 +2139,9 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 	return $status;
 }
 
-function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus) {
+function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode) {
 	global $wpdb;
 	global $seatreg_db_table_names;
-	$bookingId = sha1(mt_rand(10000,99999).time().$email);
-	$confCode = sha1(mt_rand(10000,99999).time().$email);
 	$currentTimeStamp = time();
 
 	$inserted = $wpdb->insert( 
@@ -2147,7 +2168,7 @@ function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seat
 	);
 
 	if($inserted) {
-		return $bookingId;
+		return true;
 	}
 
 	return false;
@@ -2745,42 +2766,84 @@ function seatreg_search_bookings_callback() {
 add_action( 'wp_ajax_seatreg_add_booking_with_manager', 'seatreg_add_booking_with_manager_callback' );
 function seatreg_add_booking_with_manager_callback() {
 	seatreg_ajax_security_check();
-	$registrationCode = sanitize_text_field($_POST['code']);
+	$resp = new SeatregJsonResponse();
+	$registrationCode = sanitize_text_field($_POST['registration-code']);
+	$bookingsToAdd = [];
 
-	$bookingToAdd = new stdClass();
-	$bookingToAdd->firstName = sanitize_text_field($_POST['fname']);
-	$bookingToAdd->lastName = sanitize_text_field($_POST['lname']);
-	$bookingToAdd->seatNr = sanitize_text_field($_POST['seatnumber']);
-	$bookingToAdd->roomName = sanitize_text_field($_POST['room']);
-	$bookingToAdd->customfield = stripslashes_deep($_POST['customfield']);
-	$bookingToAdd->email = sanitize_text_field($_POST['email']);
-
-	$statusArray = seatreg_valdiate_add_booking_with_manager(sanitize_text_field($registrationCode), $bookingToAdd );
-
-	if ( $statusArray['status'] != 'ok' ) {
-		wp_send_json( array('status'=>$statusArray['status'], 'text'=> $statusArray['text'] ) );
-
-		die();
+	if( empty($_POST['first-name']) || 
+		empty($_POST['last-name']) || 
+		empty($_POST['email']) || 
+		empty($_POST['seat-nr']) ||
+		empty($_POST['room']) ||
+		empty($_POST['custom-fields'])) {
+			$resp->setError('Missing data');
+			$resp->echoData();
+			
+			die();
 	}
 
-	$bookingId = seatreg_add_booking( 
-		$bookingToAdd->firstName,
-		$bookingToAdd->lastName,
-		$bookingToAdd->email,
-		$bookingToAdd->customfield, 
-		$bookingToAdd->seatNr, 
-		$statusArray['seatId'],
-		$statusArray['roomUUID'],
-		$registrationCode,
-		"1"
-	);
+	foreach ($_POST['first-name'] as $key => $value) {
+		$bookingToAdd = new stdClass();
+		$bookingToAdd->firstName = sanitize_text_field($_POST['first-name'][$key]);
+		$bookingToAdd->lastName = sanitize_text_field($_POST['last-name'][$key]);
+		$bookingToAdd->seatNr = sanitize_text_field($_POST['seat-nr'][$key]);
+		$bookingToAdd->roomName = sanitize_text_field($_POST['room'][$key]);
+		$bookingToAdd->customfield = stripslashes_deep($_POST['custom-fields'][$key]);
+		$bookingToAdd->email = sanitize_text_field($_POST['email'][$key]);
 
-	if( $bookingId ) {
-		seatreg_add_activity_log('booking', $bookingId, 'Booking added with booking manager', true);
+		$bookingsToAdd[] = $bookingToAdd;
+	}
+
+	foreach($bookingsToAdd as &$bookingToAdd) {
+		$statusArray = seatreg_valdiate_add_booking_with_manager($registrationCode, $bookingToAdd );
+
+		if ( $statusArray['status'] != 'ok' ) {
+			wp_send_json( array('status'=> $statusArray['status'], 'text'=> $statusArray['text'] ) );
+	
+			die();
+		}
+		$bookingToAdd->seatId = $statusArray['seatId'];
+		$bookingToAdd->roomUUID = $statusArray['roomUUID'];
+	}
+
+	$bookingId = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
+	$confCode = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
+	$addingStatus = [];
+
+	foreach($bookingsToAdd as $booking) {
+		$addingStatus[] = seatreg_add_booking( 
+			$booking->firstName,
+			$booking->lastName,
+			$booking->email,
+			$booking->customfield, 
+			$booking->seatNr, 
+			$booking->seatId,
+			$booking->roomUUID,
+			$registrationCode,
+			"1",
+			$bookingId,
+			$confCode
+		);
+	}
+	$successStatusCount = count(array_filter($addingStatus, function($status) {
+		return $status === true;
+	}));
+	$failStatusCount = count(array_filter($addingStatus, function($status) {
+		return $status === false;
+	}));
+	$addingStatusCount = count($addingStatus);
+	
+	if( $successStatusCount === $addingStatusCount ) {
+		seatreg_add_activity_log('booking', $bookingId, 'Booking with '. $addingStatusCount .' seats added with booking manager', true);
 		wp_send_json( array('status'=>'created') );
 
 		die();
-	}else {
+	}else if( $successStatusCount !== $addingStatusCount ) {
+		seatreg_add_activity_log('booking', $bookingId, 'There was a problem adding booking. '. $successStatusCount .' seat/seats was booked but '. $failStatusCount .' seat/seats failed', true);
+		wp_send_json( array('status'=>'created') );
+
+		die();
+	}else if ($successStatusCount === 0){
 		wp_send_json( array('status'=>'create failed') );
 
 		die();

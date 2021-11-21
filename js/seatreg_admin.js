@@ -70,21 +70,11 @@
 			});
 	}
 
-	function seatreg_add_booking_with_manager(action, code, data) {
+	function seatreg_add_booking_with_manager() {
 		return $.ajax({
 				url: ajaxurl,
 				type: 'POST',
-				data: {
-					action: action,
-					security: WP_Seatreg.nonce,
-					code: code,
-					fname: data.firstName,
-					lname: data.lastName,
-					room: data.seatRoom,
-					seatnumber: data.seatNumber,
-					customfield: data.customFieldData,
-					email: data.email,
-				}
+				data: $('#add-booking-modal-form').serialize() + '&security=' + WP_Seatreg.nonce	
 			});
 	}
 
@@ -533,9 +523,11 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 });
 
 $('#seatreg-booking-manager').on('click', '#add-modal-add-seat', function() {
-	var bookingItems = $(this).closest('form').find('.modal-body-items');
-	var newItem = bookingItems.find('.modal-body-item').first().clone();
-	bookingItems.append(newItem);
+	var bookingItemsWrap = $(this).closest('form').find('.modal-body-items');
+	var bookingItems = bookingItemsWrap.find('.modal-body-item');
+	var bookingItemsLength = bookingItems.length;
+	var newItem = bookingItems.first().clone();
+	bookingItemsWrap .append(newItem);
 });
 
 $('#seatreg-booking-manager').on('click', '.add-booking', function() {
@@ -613,74 +605,68 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' + '" alt="Loading..." class="ajax-load" />');
 	var subBtn = $(this);
 	var modal = $('#add-booking-modal');
-	var customFields = [];
+	
 	var registrationCode = $('#add-booking-registration-id').val();
-	var seatNumber = modal.find('#add-seat').val();
-	var seatRoom = modal.find('#add-room').val(); 
-	var firstName = modal.find('#add-fname').val();
-	var lastName = modal.find('#add-lname').val();
-	var email = modal.find('#add-email').val();
+	var allFieldsValid = true;
 
-	$('#add-room-error, #add-seat-error').text('');
-	if(seatNumber === '') {
-		$('#add-seat-error').text('No seat');
-		subBtn.css('display','inline').next().css('display','none');
+	modal.find('.modal-body-item').each(function() {
+		var booking = $(this);
+		var customFields = [];
 
-		return;
-	}
-	if(seatRoom === ''){
-		$('#add-room-error').text('No room');
-		subBtn.css('display','inline').next().css('display','none');
+		booking.find('.input-error').text('');
 
-		return;
-	}
-	if(firstName === ''){
-		$('#add-fname-error').text('First name empty');
-		subBtn.css('display','inline').next().css('display','none');
-
-		return;
-	}
-	if(lastName === ''){
-		$('#add-lname-error').text('Last name empty');
-		subBtn.css('display','inline').next().css('display','none');
-
-		return;
-	}
-	if(email === ''){
-		$('#add-email-error').text('Email is empty');
-		subBtn.css('display','inline').next().css('display','none');
-
-		return;
-	}
-
-	modal.find('.modal-custom').each(function() {
-		var custObj = {};
-		var type = $(this).data('type');
-
-		custObj['label'] = $(this).find('.modal-custom-l h5').text();
-		
-		if(type === 'check') {
-			custObj['value'] = $(this).find('.modal-custom-v').is(':checked') ? '1' : '0';
-		}else if(type === 'sel') {
-			custObj['value'] = $(this).find('.modal-custom-v').find(":selected").text();
-		}else {
-			custObj['value'] = $(this).find('.modal-custom-v').val();
+		if(booking.find('[name="seat-nr"]').val() === '') {
+			booking.find('[name="seat-nr"]').closest('.add-modal-input-wrap').find('.input-error').text('No seat');
+			subBtn.css('display','inline').next().css('display','none');
+			allFieldsValid = false;
 		}
+		if(booking.find('[name="room"]').val() === ''){
+			booking.find('[name="room"]').closest('.add-modal-input-wrap').find('.input-error').text('No room');
+			subBtn.css('display','inline').next().css('display','none');
+			allFieldsValid = false;
+		}
+		if(booking.find('[name="first-name"]').val() === ''){
+			booking.find('[name="first-name"]').closest('.add-modal-input-wrap').find('.input-error').text('First name empty');
+			subBtn.css('display','inline').next().css('display','none');
+			allFieldsValid = false;
+		}
+		if(booking.find('[name="last-name"]').val() === ''){
+			booking.find('[name="last-name"]').closest('.add-modal-input-wrap').find('.input-error').text('Last name empty');
+			subBtn.css('display','inline').next().css('display','none');
+			allFieldsValid = false;
+		}
+		if(booking.find('[name="email"]').val() === ''){
+			booking.find('[name="email"]').closest('.add-modal-input-wrap').find('.input-error').text('Email is empty');
+			subBtn.css('display','inline').next().css('display','none');
+			allFieldsValid = false;
+		}
+
+		booking.find('.modal-body-custom').each(function() {
+			var custObj = {};
+			var type = $(this).data('type');
+
+			custObj['label'] = $(this).find('.modal-custom-l h5').text();
 		
-		customFields.push(custObj);
+			if(type === 'check') {
+				custObj['value'] = $(this).find('.modal-custom-v').is(':checked') ? '1' : '0';
+			}else if(type === 'sel') {
+				custObj['value'] = $(this).find('.modal-custom-v').find(":selected").text();
+			}else {
+				custObj['value'] = $(this).find('.modal-custom-v').val();
+			}
+		
+			customFields.push(custObj);
+		});
+
+		booking.find('[name="custom-fields"]').val(JSON.stringify(customFields));
+
 	});
 
-	addData = {
-		'firstName': firstName,
-		'lastName': lastName,
-		'customFieldData': JSON.stringify(customFields),
-		'seatNumber': seatNumber,
-		'seatRoom': seatRoom,
-		'registrationCode': registrationCode,
-		'email': email,
-	};
+	if(!allFieldsValid) {
+		return;
+	}
 
-	var promise = seatreg_add_booking_with_manager('seatreg_add_booking_with_manager', registrationCode, addData);
+	var promise = seatreg_add_booking_with_manager();
 
 	promise.done(function(data) {
 		subBtn.css('display','inline').next().css('display','none');
@@ -713,6 +699,7 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			}
 		}
 	});
+	promise.fail = seatreg_admin_ajax_error;
 });
 
 $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {

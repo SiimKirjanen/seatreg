@@ -1,7 +1,7 @@
 .seatreg-tabs-content {
     .add-modal {
         h5 {
-            margin-bottom: 0;
+            margin-bottom: 0.5rem;
         }
         .add-modal-input-wrap {
             margin-bottom: 12px;
@@ -12,9 +12,14 @@
         .modal-body-items {
             display: flex;
             overflow-x: auto;
-
+    
             .modal-body-item:not(:last-child) {
                 margin-right: 24px;
+            }
+            .modal-body-item {
+                .input-error {
+                    color: red;
+                }
             }
         }
         .bottom-action {
