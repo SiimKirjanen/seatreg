@@ -2,6 +2,7 @@
 @import "modal/add-booking";
 @import "modal/booking-activity";
 @import "loaders/booking-manager";
+@import "headers/management-header";
 
 html {
 	font-size: 100%;
@@ -339,37 +340,6 @@ html {
 	margin-top: -170px; 
 	height: 170px; 
 	visibility: hidden; 
-}
-
-.seatreg-tabs-content .management-header {
-	position: relative;
-	display: flex;
-	justify-content: space-between;
-	background-color: #F2F2F2;
-	text-transform: uppercase;
-	font-size: 20px;
-	min-height: 42px;
-	
-	padding: 6px;
-
-	.pending-bookings-count{
-		color: #E0635D;
-	}
-	.management-extra-actions {
-		text-transform: none;
-
-		.add-booking {
-			cursor: pointer;
-			.fa-plus-circle {
-				color: #61B329;
-			}
-			&:hover {
-				span {
-					text-decoration: underline;
-				}
-			}
-		}
-	}	
 }
 
 .seatreg-tabs-content .time-block {
