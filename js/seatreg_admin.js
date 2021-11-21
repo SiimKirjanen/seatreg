@@ -50,7 +50,7 @@
 			});
 	}
 
-	function seatreg_edit_booking(action, code, editInfo ) {
+	function seatreg_edit_booking(action, code, editInfo) {
 		return $.ajax({
 				url: ajaxurl,
 				type: 'POST',
@@ -66,6 +66,24 @@
 					bookingid: editInfo.bookingId,
 					customfield: editInfo.customFieldData,
 					id: editInfo.id,
+				}
+			});
+	}
+
+	function seatreg_add_booking_with_manager(action, code, data) {
+		return $.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: action,
+					security: WP_Seatreg.nonce,
+					code: code,
+					fname: data.firstName,
+					lname: data.lastName,
+					room: data.seatRoom,
+					seatnumber: data.seatNumber,
+					customfield: data.customFieldData,
+					email: data.email,
 				}
 			});
 	}
@@ -514,11 +532,40 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 	promise.fail = seatreg_admin_ajax_error;
 });
 
+$('#seatreg-booking-manager').on('click', '.add-booking', function() {
+	var customFields = $(this).data('custom-fields');
+	var registrationCode = $(this).data('registration-code');
+	var modal = $('#add-booking-modal');
+	var modalCutsom = modal.find('.modal-body-custom');
+
+	modalCutsom.empty();
+	modal.find('#add-booking-registration-id').val(registrationCode);
+	customFields.forEach(function(customField) {
+		var type = customField.type;
+		var label = customField.label;
+
+		if(type === "check") {
+			modalCutsom.append('<div class="modal-custom" data-type="check"><label for="'+ label +'" class="modal-custom-l"><h5>'+ label +'</h5></label><br><input type="checkbox" id="'+ label +'" class="modal-custom-v" /></div>');
+		}else if(type === "sel") {
+			var selectOptions = customField.options;
+
+			if(Array.isArray(selectOptions)) {
+				modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l" for="'+ label +'"><h5>'+ label+ '</h5></label><br><select id="'+ label +'" class="modal-custom-v">' +  selectOptions.map((option) => {
+					return '<option>' + option + '</option>';
+				})  + '</select>' + '</div>');
+			}
+		}else {
+			modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l" for="'+ label +'"><h5>'+ label +'</h5></label><br><input type="text" id="'+ label +'" class="modal-custom-v" /></div>');
+		}
+	});
+	modal.modal('show');
+});
+
 //booking edit click. Show edit modal
 $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	var info = $(this).parent();
 	var modal = $('#edit-modal');
-	var modalCutsom = $('#modal-body-custom');
+	var modalCutsom = modal.find('.modal-body-custom');
 	modalCutsom.empty();
 	modal.find('#edit-seat').val(info.find('.seat-nr-box').text());
 	modal.find('#edit-room').val(info.find('.seat-room-box').text());
@@ -554,6 +601,112 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 
 	$('#edit-room-error, #edit-seat-error').text('');
 	modal.modal('show');
+});
+
+$('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
+	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' + '" alt="Loading..." class="ajax-load" />');
+	var subBtn = $(this);
+	var modal = $('#add-booking-modal');
+	var customFields = [];
+	var registrationCode = $('#add-booking-registration-id').val();
+	var seatNumber = modal.find('#add-seat').val();
+	var seatRoom = modal.find('#add-room').val(); 
+	var firstName = modal.find('#add-fname').val();
+	var lastName = modal.find('#add-lname').val();
+	var email = modal.find('#add-email').val();
+
+	$('#add-room-error, #add-seat-error').text('');
+	if(seatNumber === '') {
+		$('#add-seat-error').text('No seat');
+		subBtn.css('display','inline').next().css('display','none');
+
+		return;
+	}
+	if(seatRoom === ''){
+		$('#add-room-error').text('No room');
+		subBtn.css('display','inline').next().css('display','none');
+
+		return;
+	}
+	if(firstName === ''){
+		$('#add-fname-error').text('First name empty');
+		subBtn.css('display','inline').next().css('display','none');
+
+		return;
+	}
+	if(lastName === ''){
+		$('#add-lname-error').text('Last name empty');
+		subBtn.css('display','inline').next().css('display','none');
+
+		return;
+	}
+	if(email === ''){
+		$('#add-email-error').text('Email is empty');
+		subBtn.css('display','inline').next().css('display','none');
+
+		return;
+	}
+
+	modal.find('.modal-custom').each(function() {
+		var custObj = {};
+		var type = $(this).data('type');
+
+		custObj['label'] = $(this).find('.modal-custom-l h5').text();
+		
+		if(type === 'check') {
+			custObj['value'] = $(this).find('.modal-custom-v').is(':checked') ? '1' : '0';
+		}else if(type === 'sel') {
+			custObj['value'] = $(this).find('.modal-custom-v').find(":selected").text();
+		}else {
+			custObj['value'] = $(this).find('.modal-custom-v').val();
+		}
+		
+		customFields.push(custObj);
+	});
+
+	addData = {
+		'firstName': firstName,
+		'lastName': lastName,
+		'customFieldData': JSON.stringify(customFields),
+		'seatNumber': seatNumber,
+		'seatRoom': seatRoom,
+		'registrationCode': registrationCode,
+		'email': email,
+	};
+
+	var promise = seatreg_add_booking_with_manager('seatreg_add_booking_with_manager', registrationCode, addData);
+
+	promise.done(function(data) {
+		subBtn.css('display','inline').next().css('display','none');
+		
+		if(data.status == 'created') {
+			alertify.success(translator.translate('newBookingWasAddedRefreshingThaPage'));
+
+			setTimeout(function() {
+				window.location.reload();
+			}, 2000);
+
+		}else {
+			if(data.status == 'room-searching') {
+				$('#add-room-error').text(translator.translate('roomNotExist'));
+				alertify.error(translator.translate('roomNotExist'));
+			}
+			if(data.status == 'seat-nr-searching') {
+				$('#add-seat-error').text(translator.translate('seatNotExist'));
+				alertify.error(translator.translate('seatNotExist'));
+			}
+			if(data.status == 'seat-booked') {
+				$('#add-seat-error').text(translator.translate('seatAlreadyBookedPending'));
+				alertify.error(translator.translate('seatAlreadyBookedPending'));
+			}
+			if(data.status == 'create failed') {
+				alert(translator.translate('errorBookingUpdate'));
+			}
+			if(data.status == 'custom field validation failed') {
+				alert('Custom field validation failed');
+			}
+		}
+	});
 });
 
 $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {

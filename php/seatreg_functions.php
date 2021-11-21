@@ -877,7 +877,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 				</div>
 			<?php endif; ?>
 			<div class="management-extra-actions">
-				<div class="add-booking">
+				<div class="add-booking" data-custom-fields='<?php echo json_encode($custom_fields); ?>' data-registration-code="<?php echo $code; ?>">
 					<span><?php esc_html_e('Add booking', 'seatreg'); ?></span>
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 				</div>
@@ -1013,6 +1013,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	echo '</div>'; 
 		
 	seatreg_booking_edit_modal();
+	seatreg_add_booking_modal();
 	seatreg_booking_activity_modal();
 }
 
@@ -1113,6 +1114,57 @@ function seatreg_generate_payment_section($booking) {
 	echo seatreg_generate_payment_logs(seatreg_get_payment_logs($booking->booking_id));
 }
 
+function seatreg_add_booking_modal() {
+?>
+	
+<div class="modal fade edit-modal" id="add-booking-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+	  	<h4 class="modal-title"><?php esc_html_e('Add booking', 'seatreg'); ?></h4>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
+      </div>
+      <div class="modal-body">
+		<form>
+			<div class="edit-modal-input-wrap">
+				<label for="add-seat"><h5><?php esc_html_e('Seat', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="add-seat" name="seat-nr"/></label> <span id="add-seat-error"></span>
+			</div>
+			
+			<div class="edit-modal-input-wrap">
+				<label for="add-room"><h5><?php esc_html_e('Room', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="add-room" name="room"/> <span id="add-room-error"></span>
+			</div>
+
+			<div class="edit-modal-input-wrap">
+				<label for="add-fname"><h5><?php esc_html_e('First name', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="add-fname" name="first-name"/> <span id="add-fname-error"></span>
+			</div>
+
+			<div class="edit-modal-input-wrap">
+				<label for="add-lname"><h5><?php esc_html_e('Last name', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="add-lname" name="last-name"/></label> <span id="add-lname-error"></span>
+			</div>
+
+			<div class="edit-modal-input-wrap">
+				<label for="add-email"><h5><?php esc_html_e('Email', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="add-email" name="last-name"/></label> <span id="add-email-error"></span>
+			</div>
+	        <div class="modal-body-custom"></div>
+			<input type="hidden" id="add-booking-registration-id">
+	     </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>
+        <button type="button" class="btn btn-primary" id="add-booking-btn"><?php esc_html_e('Add booking', 'seatreg'); ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php
+}
+
 function seatreg_booking_edit_modal() {
 
 ?>
@@ -1145,11 +1197,10 @@ function seatreg_booking_edit_modal() {
 				<label for="edit-lname"><h5><?php esc_html_e('Last name', 'seatreg'); ?></h5></label><br>
 				<input type="text" id="edit-lname" name="last-name"/></label> <span id="edit-lname-error"></span>
 			</div>
-	        
+	        <div class="modal-body-custom"></div>
 			<input type="hidden" id="modal-code">
 			<input type="hidden" id="booking-id">
 			<input type="hidden" id="r-id">
-	        <div id="modal-body-custom"></div>
 	     </form>
       </div>
       <div class="modal-footer">
@@ -1443,6 +1494,48 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 	}
 }
 
+function seatreg_valdiate_add_booking_with_manager($code, $data) {
+	$registration = seatreg_get_options($code)[0];
+	$structure = json_decode($registration->registration_layout)->roomData;
+	$allCorrect = true;
+	$resp = array();
+    $resp['status'] = 'ok';
+	$status = seatreg_check_room_and_seat($structure, $data->roomName, $data->seatNr );
+	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->customfield, $registration->custom_fields);
+
+	if( $status['status'] != 'ok') {
+		$allCorrect = false;
+		$resp['status'] = $status['status'];
+		$resp['text'] = $status['text'];
+
+		return $resp;
+	}else if( !$customFieldValidation->valid ) {
+		$allCorrect = false;
+		$resp['status'] = 'custom field validation failed';
+		$resp['text'] = $customFieldValidation->errorMessage;
+	}else {
+		$resp['seatId'] = $status['newSeatId'];
+		$resp['roomUUID'] = $status['roomUUID'];
+	}
+
+	$bookings = seatreg_get_registration_bookings($code);
+	$notBooked = true;
+
+	foreach ($bookings as $booking) {
+		$booking->room_name = seatreg_get_room_name_from_layout($structure, $booking->room_uuid);
+
+		if($booking->seat_nr === $data->seatNr && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
+			$notBooked = false;
+			$resp['status'] = 'seat-booked';
+			$resp['text'] = esc_html__('Seat ', 'seatreg') . esc_html($data->roomName) . esc_html__(' from room ', 'seatreg') . esc_html($booking->room_name) . esc_html__(' is already booked', 'seatreg');
+
+			break;
+		}
+	}
+	
+	return $resp;
+}
+
 //for booking edit
 function seatreg_validate_edit_booking($code, $data) {
 	$registration = seatreg_get_options($code)[0];
@@ -1451,7 +1544,7 @@ function seatreg_validate_edit_booking($code, $data) {
     $resp = array();
     $resp['status'] = 'ok';
 	$status = seatreg_check_room_and_seat($structure, $data->roomName, $data->seatNr );
-	$customFieldValidation = SeatregDataValidation::validateCustomFieldEdit($data->editCustomField, $registration->custom_fields);
+	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->editCustomField, $registration->custom_fields);
 
 	if( $status['status'] != 'ok') {
 			$allCorrect = false;
@@ -2011,6 +2104,43 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 	);
 	
 	return $status;
+}
+
+function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus) {
+	global $wpdb;
+	global $seatreg_db_table_names;
+	$bookingId = sha1(mt_rand(10000,99999).time().$email);
+	$confCode = sha1(mt_rand(10000,99999).time().$email);
+	$currentTimeStamp = time();
+
+	$inserted = $wpdb->insert( 
+		$seatreg_db_table_names->table_seatreg_bookings, 
+		array(
+			'registration_code' => $registrationCode, 
+			'first_name' => $firstName, 
+			'last_name' => $lastName,
+			'email' => $email,
+			'seat_id' => $seatId,
+			'seat_nr' => $seatNr,
+			'room_uuid' => $roomUuid,
+			'conf_code' => $confCode, 
+			'custom_field_data' => json_encode($customFields, JSON_UNESCAPED_UNICODE),
+			'booking_id' => $bookingId,
+			'status' => $bookingStatus,
+			'booking_date' => $currentTimeStamp,
+			'booking_confirm_date' => $registrationConfirmDate,
+			'booker_email' => $email,
+			'conf_code' => $confCode, 
+			'status' => $bookingStatus,
+		), 
+		'%s'	
+	);
+
+	if($inserted) {
+		return $bookingId;
+	}
+
+	return false;
 }
 
 
@@ -2600,6 +2730,51 @@ function seatreg_search_bookings_callback() {
 	seatreg_generate_booking_manager_html( sanitize_text_field($_POST['code']) , $order, $searchTerm );
 
 	die();
+}
+
+add_action( 'wp_ajax_seatreg_add_booking_with_manager', 'seatreg_add_booking_with_manager_callback' );
+function seatreg_add_booking_with_manager_callback() {
+	seatreg_ajax_security_check();
+	$registrationCode = sanitize_text_field($_POST['code']);
+
+	$bookingToAdd = new stdClass();
+	$bookingToAdd->firstName = sanitize_text_field($_POST['fname']);
+	$bookingToAdd->lastName = sanitize_text_field($_POST['lname']);
+	$bookingToAdd->seatNr = sanitize_text_field($_POST['seatnumber']);
+	$bookingToAdd->roomName = sanitize_text_field($_POST['room']);
+	$bookingToAdd->customfield = stripslashes_deep($_POST['customfield']);
+	$bookingToAdd->email = sanitize_text_field($_POST['email']);
+
+	$statusArray = seatreg_valdiate_add_booking_with_manager(sanitize_text_field($registrationCode), $bookingToAdd );
+
+	if ( $statusArray['status'] != 'ok' ) {
+		wp_send_json( array('status'=>$statusArray['status'], 'text'=> $statusArray['text'] ) );
+
+		die();
+	}
+
+	$bookingId = seatreg_add_booking( 
+		$bookingToAdd->firstName,
+		$bookingToAdd->lastName,
+		$bookingToAdd->email,
+		$bookingToAdd->customfield, 
+		$bookingToAdd->seatNr, 
+		$statusArray['seatId'],
+		$statusArray['roomUUID'],
+		$registrationCode,
+		"1"
+	);
+
+	if( $bookingId ) {
+		seatreg_add_activity_log('booking', $bookingId, 'Booking added with booking manager', true);
+		wp_send_json( array('status'=>'created') );
+
+		die();
+	}else {
+		wp_send_json( array('status'=>'create failed') );
+
+		die();
+	}
 }
 
 add_action( 'wp_ajax_seatreg_edit_booking', 'seatreg_edit_booking_callback' );

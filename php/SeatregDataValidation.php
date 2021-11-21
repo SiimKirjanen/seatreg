@@ -382,7 +382,7 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
-    public static function validateCustomFieldEdit($editCustomFields, $existingCustomFields) {
+    public static function validateCustomFieldManagerSubmit($editCustomFields, $existingCustomFields) {
         $validationStatus = new SeatregValidationStatus();
 
         try {
