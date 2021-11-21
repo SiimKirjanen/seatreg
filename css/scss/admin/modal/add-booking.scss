@@ -1,0 +1,34 @@
+.seatreg-tabs-content {
+    .add-modal {
+        h5 {
+            margin-bottom: 0;
+        }
+        .add-modal-input-wrap {
+            margin-bottom: 12px;
+        }
+        .modal-custom {
+            margin-bottom: 12px;
+        }
+        .modal-body-items {
+            display: flex;
+            overflow-x: auto;
+
+            .modal-body-item:not(:last-child) {
+                margin-right: 24px;
+            }
+        }
+        .bottom-action {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 24px;
+
+            .fa-plus-circle {
+                color: #61B329;
+            }
+            .bottom-action-item {
+                cursor: pointer;
+            }
+        }
+    }
+}

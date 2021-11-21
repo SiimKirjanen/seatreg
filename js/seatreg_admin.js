@@ -532,6 +532,12 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 	promise.fail = seatreg_admin_ajax_error;
 });
 
+$('#seatreg-booking-manager').on('click', '#add-modal-add-seat', function() {
+	var bookingItems = $(this).closest('form').find('.modal-body-items');
+	var newItem = bookingItems.find('.modal-body-item').first().clone();
+	bookingItems.append(newItem);
+});
+
 $('#seatreg-booking-manager').on('click', '.add-booking', function() {
 	var customFields = $(this).data('custom-fields');
 	var registrationCode = $(this).data('registration-code');

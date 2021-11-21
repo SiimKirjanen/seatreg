@@ -1117,8 +1117,8 @@ function seatreg_generate_payment_section($booking) {
 function seatreg_add_booking_modal() {
 ?>
 	
-<div class="modal fade edit-modal" id="add-booking-modal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade add-modal" id="add-booking-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
 	  	<h4 class="modal-title"><?php esc_html_e('Add booking', 'seatreg'); ?></h4>
@@ -1126,31 +1126,41 @@ function seatreg_add_booking_modal() {
       </div>
       <div class="modal-body">
 		<form>
-			<div class="edit-modal-input-wrap">
-				<label for="add-seat"><h5><?php esc_html_e('Seat', 'seatreg'); ?></h5></label><br>
-				<input type="text" id="add-seat" name="seat-nr"/></label> <span id="add-seat-error"></span>
-			</div>
-			
-			<div class="edit-modal-input-wrap">
-				<label for="add-room"><h5><?php esc_html_e('Room', 'seatreg'); ?></h5></label><br>
-				<input type="text" id="add-room" name="room"/> <span id="add-room-error"></span>
-			</div>
+			<div class="modal-body-items">
+				<div class="modal-body-item">
+					<div class="add-modal-input-wrap">
+						<label for="add-seat"><h5><?php esc_html_e('Seat', 'seatreg'); ?></h5></label><br>
+						<input type="text" id="add-seat" name="seat-nr"/></label> <span id="add-seat-error"></span>
+					</div>
+					
+					<div class="add-modal-input-wrap">
+						<label for="add-room"><h5><?php esc_html_e('Room', 'seatreg'); ?></h5></label><br>
+						<input type="text" id="add-room" name="room"/> <span id="add-room-error"></span>
+					</div>
 
-			<div class="edit-modal-input-wrap">
-				<label for="add-fname"><h5><?php esc_html_e('First name', 'seatreg'); ?></h5></label><br>
-				<input type="text" id="add-fname" name="first-name"/> <span id="add-fname-error"></span>
-			</div>
+					<div class="add-modal-input-wrap">
+						<label for="add-fname"><h5><?php esc_html_e('First name', 'seatreg'); ?></h5></label><br>
+						<input type="text" id="add-fname" name="first-name"/> <span id="add-fname-error"></span>
+					</div>
 
-			<div class="edit-modal-input-wrap">
-				<label for="add-lname"><h5><?php esc_html_e('Last name', 'seatreg'); ?></h5></label><br>
-				<input type="text" id="add-lname" name="last-name"/></label> <span id="add-lname-error"></span>
-			</div>
+					<div class="add-modal-input-wrap">
+						<label for="add-lname"><h5><?php esc_html_e('Last name', 'seatreg'); ?></h5></label><br>
+						<input type="text" id="add-lname" name="last-name"/></label> <span id="add-lname-error"></span>
+					</div>
 
-			<div class="edit-modal-input-wrap">
-				<label for="add-email"><h5><?php esc_html_e('Email', 'seatreg'); ?></h5></label><br>
-				<input type="text" id="add-email" name="last-name"/></label> <span id="add-email-error"></span>
+					<div class="add-modal-input-wrap">
+						<label for="add-email"><h5><?php esc_html_e('Email', 'seatreg'); ?></h5></label><br>
+						<input type="text" id="add-email" name="last-name"/></label> <span id="add-email-error"></span>
+					</div>
+					<div class="modal-body-custom"></div>
+				</div>
 			</div>
-	        <div class="modal-body-custom"></div>
+			<div class="bottom-action">
+				<div class="bottom-action-item" id="add-modal-add-seat">
+					<?php esc_html_e('Add seat', 'seatreg'); ?>
+					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+				</div>
+			</div>
 			<input type="hidden" id="add-booking-registration-id">
 	     </form>
       </div>
