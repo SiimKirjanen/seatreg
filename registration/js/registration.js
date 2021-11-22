@@ -490,7 +490,7 @@ SeatReg.prototype.addSeatToCart = function() {
 			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('youCanAdd_') + scope.spotName + translator.translate('_toCartClickTab') + '</p>');
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
-			$('#booking-total-price').empty();
+			$('#booking-total-price').empty().attr('data-booking-price', 0);
 		}else {
 			var selected = scope.selectedSeats.length;
 			var infoText;
@@ -503,7 +503,8 @@ SeatReg.prototype.addSeatToCart = function() {
 			var totalPrice = scope.selectedSeats.reduce(function(accumulator, currentValue) {
 				return currentValue.price + accumulator;
 			}, 0);
-			$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + totalPrice + ' ' + scope.payPalCurrencyCode );
+			$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + totalPrice + ' ' + scope.payPalCurrencyCode);
+			$('#booking-total-price').attr('data-booking-price', totalPrice);
 		}
 		$('.seats-in-cart').text(scope.selectedSeats.length);
 	});
@@ -516,6 +517,7 @@ SeatReg.prototype.addSeatToCart = function() {
 	}, 0);
 
 	$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + totalPrice + ' ' + scope.payPalCurrencyCode );
+	$('#booking-total-price').attr('data-booking-price', totalPrice);
 
 	this.closeSeatDialog();
 };
@@ -1183,7 +1185,12 @@ function bookingsConfirmedInfo(data, status) {
 	$('#bookings-confirmed').css('display','block');
 
 	if(status === 1) {
+		var bookingTotalPrice = parseInt($('#booking-total-price').attr('data-booking-price'));
+
 		$('.booking-confirmed-header').text(translator.translate('bookingsConfirmedPending'));
+		if(window.payPalEnabled === '1' && bookingTotalPrice > 0) {
+			$('#booking-confirmed-text').text(translator.translate('payForBookingLink'));
+		}
 	}else if (status === 2) {
 		if(window.receiptEnabled === '1') {
 			$('.booking-confirmed-header').html(translator.translate('bookingsConfirmed') + '<br>' + translator.translate('receiptSent'));

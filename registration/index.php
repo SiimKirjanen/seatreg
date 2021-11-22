@@ -323,7 +323,7 @@
 						<div id="seat-cart-items"></div>
 						
 						<?php if($data->paypal_payments === '1') : ?>
-							<div id="booking-total-price"></div>
+							<div id="booking-total-price" data-booking-price="0"></div>
 						<?php endif; ?>
 
 						<div id="checkout" class="seatreg-btn green-btn">
@@ -404,7 +404,7 @@
 						?>		
 					</h2>
 					<p>
-						<?php esc_html_e('You can look your booking status at the following link'); ?><br>
+						<span id="booking-confirmed-text"><?php esc_html_e('You can look your booking status at the following link', 'seatreg'); ?></span><br>
 						<a href="" class="booking-check-url" target="_blank"></a>
 					</p>
 					<p>
