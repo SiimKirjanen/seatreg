@@ -45,6 +45,7 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 * Booking manager can now add bookings
 * Added more logging for QR Code sending
 * Fixed booking manager loading spinner position
+* When email confirm is turned off and you need to pay for you booking then booking success dialog has text telling people to click to pay for booking
 
 = 1.8.0 =
 * Added QR testing tool
