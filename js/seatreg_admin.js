@@ -531,7 +531,7 @@ $('#seatreg-booking-manager').on('click', '#add-modal-add-seat', function() {
 });
 
 $('#seatreg-booking-manager').on('click', '.add-booking', function() {
-	var customFields = $(this).data('custom-fields');
+	var customFields = $(this).data('custom-fields') || [];
 	var registrationCode = $(this).data('registration-code');
 	var modal = $('#add-booking-modal');
 	var modalCutsom = modal.find('.modal-body-custom');
