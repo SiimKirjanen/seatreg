@@ -85,16 +85,19 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
             <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->room_name) . '</td>
             <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->email) . '</td>';
 
-            foreach($bookingCustomFields as $bookingCustomField) {
-                $valueToDisplay = $bookingCustomField->value;
-                $customFieldObject = array_filter($registrationCustomFields, function($custField) use($bookingCustomField) {
-                    return $custField->label === $bookingCustomField->label;
-                });
+            if( is_array($bookingCustomFields) ) {
+                foreach($bookingCustomFields as $bookingCustomField) {
+                    $valueToDisplay = $bookingCustomField->value;
 
-                if($customFieldObject && $customFieldObject[0]->type === 'check') {
-                    $valueToDisplay = $bookingCustomField->value === '1' ? esc_html__('Yes', 'seatreg') : esc_html__('No', 'seatreg');
+                    $customFieldObject = array_values(array_filter($registrationCustomFields, function($custField) use($bookingCustomField) {
+                        return $custField->label === $bookingCustomField->label;
+                    }));
+    
+                    if( count($customFieldObject) > 0 && $customFieldObject[0]->type === 'check' ) {
+                        $valueToDisplay = $bookingCustomField->value === '1' ? esc_html__('Yes', 'seatreg') : esc_html__('No', 'seatreg');
+                    }
+                    $bookingTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($valueToDisplay) . '</td>';
                 }
-                $bookingTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($valueToDisplay) . '</td>';
             }
         
         $bookingTable .= '</tr>';
