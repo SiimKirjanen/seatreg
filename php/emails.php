@@ -44,6 +44,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     $registrationName = $registration->registration_name;
     $bookerEmail = $bookings[0]->booker_email;
     $bookingId = $bookings[0]->booking_id;
+    $bookingStatusUrl = seatreg_get_registration_status_url($registration->registration_code, $bookingId);
 
     if(!$bookerEmail) {
         //No booker email detected. Booker email column was added with version 1.7.0.
@@ -58,7 +59,12 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 
     $adminEmail = get_option( 'admin_email' );
     $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html($registrationName) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
-    $message .= '<p>' . esc_html__('Booking ID is: ', 'seatreg') . ' <strong>'. esc_html($bookingId) .'</strong>' . '</p>';
+
+    $message .= '<p>';
+    $message .= esc_html__('Booking ID: ', 'seatreg') . ' <strong>'. esc_html($bookingId) .'</strong><br>';
+    $message .= esc_html__('Booking status link:', 'seatreg') . ' <a href="'. $bookingStatusUrl .'" target="_blank">'. $bookingStatusUrl .'</a>';
+    $message .= '</p>';
+
     $registrationCustomFields = json_decode($registration->custom_fields);
     $enteredCustomFieldData = json_decode($bookings[0]->custom_field_data);
     $customFieldLabels = array_map(function($customField) {
