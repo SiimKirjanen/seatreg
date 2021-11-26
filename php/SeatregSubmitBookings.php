@@ -204,7 +204,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			$currentTimeStamp = time();
 			$registrationConfirmDate = null;
 			$seatsString = $this->generateSeatString();
-			$bookingCheckURL = get_site_url() . '?seatreg=booking-status&registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
+			$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
 
 			if(!$this->_requireBookingEmailConfirm) {
 				$bookingStatus = $this->_insertState;

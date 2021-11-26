@@ -864,8 +864,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	$bookings2 = seatreg_get_specific_bookings($code, $order, $searchTerm, '2');
 	$row_count = count($bookings1);
 	$row_count2 = count($bookings2);
-
-
+	
 	?>
 		<div class='management-header'>
 			<div class='registration-name'>
@@ -927,6 +926,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 				$registrationId = $row->id;
 				$time = strtotime($row->booking_date);
 				$myFormatForView = date("m-d-y", $row->booking_date);
+				$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 				
 				echo '<div class="reg-seat-item">';
 					echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
@@ -942,6 +942,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '</div>';
 
 					echo '<div class="more-info">';
+						echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', $bookingStatusUrl ,'</a>';
 						echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html(date('M j Y h:i e', $row->booking_date)), '</span></div>';
 						echo '<div>', esc_html__('Email', 'seatreg'), ': ', esc_html($row->email), '</div>';
 					
@@ -973,6 +974,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 				$registrationId = $row->id;
 				$time = strtotime($row->booking_date);
 				$myFormatForView = date("m-d-y", $row->booking_date);
+				$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 
 				echo '<div class="reg-seat-item">';
 					echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
@@ -988,6 +990,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '</div>';
 
 					echo '<div class="more-info">';
+						echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', $bookingStatusUrl ,'</a>';
 						echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_date) ), '</span></div>';
 						echo '<div>', esc_html__('Approval date', 'seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_confirm_date ) ), '</span></div>';
 						echo '<div>Email: ', esc_html( $row->email ), '</div>';
@@ -1402,7 +1405,6 @@ function seatreg_generate_registration_code() {
 	return substr(md5( microtime() ), 0, 10);
 }
 
-
 //return room info. How many bron and taken seats are in a rooms
 function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrations) {
 	$bronLength = count($bronRegistrations);
@@ -1673,6 +1675,10 @@ function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $boo
 
 		return $status;
 	}
+}
+
+function seatreg_get_registration_status_url($registrationCode, $bookingId) {
+	return esc_url(get_site_url() . '?seatreg=booking-status&registration=' . $registrationCode . '&id=' . $bookingId);
 }
 
 /*

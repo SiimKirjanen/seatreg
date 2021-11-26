@@ -86,7 +86,8 @@ class SeatregConfirmBooking extends SeatregBooking {
 			esc_html_e('You booking is now confirmed', 'seatreg');
 			echo '<br><br>';
 		}
-		$bookingCheckURL = get_site_url() . '?seatreg=booking-status&registration=' . $this->_registrationCode . '&id=' . $this->_bookingId;
+		$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
+
 		printf(
 			esc_html__('You can look your booking at %s', 'seatreg'), 
 			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"
