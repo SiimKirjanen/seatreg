@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SeatregBookingRepository {
     /**
      *
-     * Return bookings but the ID that are confirmed or approved.
+     * Return bookings by the booking ID that are confirmed or approved.
      *
      * @param string $bookingId The ID of the booking
      * @return  array|object|null

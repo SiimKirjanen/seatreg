@@ -22,14 +22,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     global $phpmailer;
 
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
-    $registration = $wpdb->get_row( $wpdb->prepare(
-		"SELECT a.*, b.send_approved_booking_email, b.send_approved_booking_email_qr_code, b.custom_fields
-        FROM $seatreg_db_table_names->table_seatreg AS a
-		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
-        ON a.registration_code = b.registration_code
-		WHERE a.registration_code = %s",
-		$registrationCode
-	) );
+    $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
 
     if( $registration->send_approved_booking_email === '0' ) {
         return false;
