@@ -2880,6 +2880,7 @@ function seatreg_add_booking_with_manager_callback() {
 	
 	if( $successStatusCount === $addingStatusCount ) {
 		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount .' seats added with booking manager', true );
+		seatreg_send_approved_booking_email($bookingId, $registrationCode);
 		wp_send_json_success( array('status' => 'created') );
 	}else if( $successStatusCount !== $addingStatusCount ) {
 		seatreg_add_activity_log( 'booking', $bookingId, 'There was a problem adding booking. '. $successStatusCount .' seat/seats was booked but '. $failStatusCount .' seat/seats failed', true );
