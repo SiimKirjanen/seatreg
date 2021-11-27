@@ -416,7 +416,7 @@ class SeatregDataValidation {
                 return $validationStatus;
             }
 
-            if( count($customFieldsDecoded) > $maxSeats ) {
+            if( count($customFieldsDecoded) > (int)$maxSeats ) {
                 $validationStatus->setInvalid('Max seats limit exceeded');
                 return $validationStatus;
             }

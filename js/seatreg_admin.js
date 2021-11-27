@@ -615,10 +615,11 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 	var subBtn = $(this);
 	var modal = $('#add-booking-modal');
 	var allFieldsValid = true;
-	var customFields = [];
+	var allBookingCustomFields = [];
 
 	modal.find('.modal-body-item').each(function() {
 		var booking = $(this);
+		var currentBookingItemCustomFields = [];
 		
 		booking.find('.input-error').text('');
 
@@ -648,7 +649,7 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			allFieldsValid = false;
 		}
 
-		booking.find('.modal-body-custom').each(function() {
+		booking.find('.modal-custom').each(function() {
 			var custObj = {};
 			var type = $(this).data('type');
 
@@ -662,11 +663,13 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 				custObj['value'] = $(this).find('.modal-custom-v').val();
 			}
 		
-			customFields.push([custObj]);
+			currentBookingItemCustomFields.push(custObj);
 		});
+
+		allBookingCustomFields.push(currentBookingItemCustomFields);
 	});
 
-	modal.find('[name="custom-fields"]').val(JSON.stringify(customFields));
+	modal.find('[name="custom-fields"]').val(JSON.stringify(allBookingCustomFields));
 
 	if(!allFieldsValid) {
 		return;
@@ -703,7 +706,11 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 				alert(translator.translate('errorBookingUpdate'));
 			}
 			if(data.status === 'custom field validation failed') {
-				alert('Custom field validation failed. ' + data.message);
+				if(data.message === 'Max seats limit exceeded') {
+					alert('Max seats limit exceeded');
+				}else {
+					alert('Custom field validation failed. ' + data.message);
+				}
 			}
 			if(data.status === 'duplicate-seat') {
 				alertify.error(translator.translate('duplicateSeatDetected'));
