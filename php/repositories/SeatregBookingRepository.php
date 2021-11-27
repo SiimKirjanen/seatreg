@@ -27,6 +27,25 @@ class SeatregBookingRepository {
 
     /**
      *
+     * Return bookings by conf code.
+     *
+     * @param string $confCode The conf code of the booking
+     *
+     */
+    public static function getBookingByConfCode($confCode) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+        
+        return $wpdb->get_results( $wpdb->prepare(
+			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+			WHERE conf_code = %s
+			AND status = 0",
+			$confCode
+		) );
+    }
+
+    /**
+     *
      * Return data related to booking (registration, registration options)
      *
      * @param string $bookingId The ID of the booking

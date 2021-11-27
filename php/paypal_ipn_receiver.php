@@ -16,11 +16,11 @@
 
 	$bookingId = sanitize_text_field($_POST['custom']);
 
-	if( !seatreg_get_bookings_by_booking_id( $bookingId )) {
+	if( !SeatregBookingRepository::getBookingsById($bookingId) ) {
 		exit('Booking not found'); 
 	}
 
-	$bookingData = seatreg_get_data_related_to_booking($bookingId);
+	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 	$bookingTotalCost = seatreg_get_booking_total_cost($bookingId, $bookingData->registration_layout);
     $payPalIPN = new SeatregPayPalIpn(
 		$bookingData->paypal_sandbox_mode === '1',

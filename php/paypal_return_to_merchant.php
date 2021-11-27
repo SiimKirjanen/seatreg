@@ -14,7 +14,7 @@
 	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
 
 	$bookingId = sanitize_text_field($_GET['id']);
-	$bookingData = seatreg_get_data_related_to_booking($bookingId);
+	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 	$paymentStatus = $bookingData->payment_status;
 
 	if($paymentStatus === null) {

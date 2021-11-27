@@ -1,6 +1,6 @@
 <?php
     function seatreg_shortcode( $atts ){
-        $registrations = seatreg_get_registrations();
+        $registrations = SeatregRegistrationRepository::getRegistrations();
         $a = shortcode_atts( array(
             'code' =>  (is_array($registrations) && count($registrations)) ? $registrations[0]->registration_code : null,
         ), $atts );

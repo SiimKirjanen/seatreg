@@ -81,12 +81,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 
     		$bookings[] = $booking;
 		}
-
-		$registration = $wpdb->get_row( $wpdb->prepare(
-			"SELECT registration_layout FROM $seatreg_db_table_names->table_seatreg
-			WHERE registration_code = %s",
-			$code
-		) );
+		$registration = SeatregRegistrationRepository::getRegistrationByCode($code);
 		$roomData = json_decode($registration->registration_layout)->roomData;
 		
 		foreach ($bookings as $booking) {

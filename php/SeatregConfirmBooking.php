@@ -27,22 +27,13 @@ class SeatregConfirmBooking extends SeatregBooking {
 		global $wpdb;
 		global $seatreg_db_table_names;
 
-		$rows = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE conf_code = %s
-			AND status = 0",
-			$this->_confirmationCode
-		) );
+		$rows = SeatregBookingRepository::getBookingByConfCode($this->_confirmationCode);
 
 		if(count($rows) == 0) {
 			$this->reply = esc_html__('This booking is already confirmed/expired/deleted', 'seaterg');
 			$this->_valid = false;
 		}else {
-			$registration = $wpdb->get_row( $wpdb->prepare(
-				"SELECT registration_layout FROM $seatreg_db_table_names->table_seatreg
-				WHERE registration_code = %s",
-				$rows[0]->registration_code
-			) );
+			$registration = SeatregRegistrationRepository::getRegistrationByCode($rows[0]->registration_code);
 			$roomData = json_decode($registration->registration_layout)->roomData;
 			$this->_bookings = $rows; 
 			foreach ($this->_bookings as $booking) {
