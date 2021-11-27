@@ -1181,9 +1181,15 @@ function seatreg_add_booking_modal() {
 			</div>
 			<input type="hidden" name="custom-fields" />
 			<div class="bottom-action">
-				<div class="bottom-action-item" id="add-modal-add-seat">
-					<?php esc_html_e('Add seat', 'seatreg'); ?>
-					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+				<div class="seat-operations">
+					<div class="seat-operation" id="add-modal-add-seat">
+						<?php esc_html_e('Add seat', 'seatreg'); ?>
+						<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+					</div>
+					<div class="seat-operation" id="add-modal-remove-seat">
+						<?php esc_html_e('Remove seat', 'seatreg'); ?>
+						<i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i>
+					</div>
 				</div>
 				<div class="bottom-action-item">
 					<div>

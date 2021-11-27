@@ -525,9 +525,18 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 $('#seatreg-booking-manager').on('click', '#add-modal-add-seat', function() {
 	var bookingItemsWrap = $(this).closest('form').find('.modal-body-items');
 	var bookingItems = bookingItemsWrap.find('.modal-body-item');
-	var bookingItemsLength = bookingItems.length;
 	var newItem = bookingItems.first().clone();
+	
 	bookingItemsWrap .append(newItem);
+});
+
+$('#seatreg-booking-manager').on('click', '#add-modal-remove-seat', function() {
+	var bookingItemsWrap = $('#add-booking-modal-form .modal-body-item');
+
+	if(bookingItemsWrap.length === 1) {
+		return;
+	}
+	bookingItemsWrap.last().remove();
 });
 
 $('#seatreg-booking-manager').on('click', '.add-booking', function() {

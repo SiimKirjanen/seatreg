@@ -23,14 +23,29 @@
             }
         }
         .bottom-action {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             margin-top: 24px;
+
+            .seat-operations {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 12px;
+
+                .seat-operation {
+                    cursor: pointer;
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+                .seat-operation:first-child {
+                    margin-right: 12px;
+                }
+            }
 
             .fa-plus-circle {
                 color: #61B329;
+            }
+            .fa-minus-circle {
+                color: red;
             }
             .bottom-action-item {
                 cursor: pointer;
