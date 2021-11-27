@@ -14,7 +14,7 @@
 	$bookingId = sanitize_text_field($_GET['id']);
 	$registrationId = sanitize_text_field($_GET['registration']);
 	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
-	$bookingData = seatreg_get_data_related_to_booking($bookingId);
+	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +33,7 @@
 
 		if($bookingData->send_approved_booking_email === '1' && $bookings[0]->status === '2' ) {
 			esc_html_e('Did not receive booking receipt? Click the button to send it again.', 'seatreg');
-			echo ' <button id="send-receipt" data-booking-id="'. $bookingId .'" data-registration-id="'. $registrationId .'">'. __('Send again', 'seatreg') .'</button>';
+			echo ' <button id="send-receipt" data-booking-id="'. $bookingId .'" data-registration-id="'. $registrationId .'">'. __('Send again', 'seatreg') .'</button><br>';
 		}
 
 		if($bookingData->paypal_payments === '1' && $bookingData->payment_status === null) {
