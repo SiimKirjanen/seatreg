@@ -135,7 +135,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 	 }
 
 	$registration = $registration[0];
-	$bookings = seatreg_get_registration_bookings( $registration->registration_code );
+	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $registration->registration_code );
 	$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND status = 1 GROUP BY room_uuid");
 	$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND status = 2 GROUP BY room_uuid");
 	$regStats = seatreg_get_room_seat_info($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
@@ -361,9 +361,9 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 
 //generate my registration section. In this section you can see your registration names with links to overview, booking manager and map builder.
 function seatreg_generate_my_registrations_section() {
-	$registrations = seatreg_get_registrations();
+	$registrations = SeatregRegistrationRepository::getRegistrations();
 
-	if(count($registrations)) {
+	if( count($registrations) ) {
 		echo '<h4 class="your-registrations-header">';
 			esc_html_e('Created registrations', 'seatreg');
 		echo '</h4>';
@@ -1113,7 +1113,7 @@ function seatreg_generate_payment_section($booking) {
 	echo '<br>';
 	echo '<div><strong>', esc_html__('Payment logs', 'seatreg') ,'</strong></div><br>';
 	
-	echo seatreg_generate_payment_logs(seatreg_get_payment_logs($booking->booking_id));
+	echo seatreg_generate_payment_logs( SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id) );
 }
 
 function seatreg_add_booking_modal() {
@@ -1316,17 +1316,17 @@ function seatreg_booking_activity_modal() {
 //generate tabs
 function seatreg_generate_tabs($targetPage) {
 	$active_tab = null;
-	$registrations = seatreg_get_registrations();
+	$registrations = SeatregRegistrationRepository::getRegistrations();
 
 	if( SeatregDataValidation::tabsDataExists() ) {
-	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
-		$validation = SeatregDataValidation::validateTabData($active_tab );
+	    $active_tab = sanitize_text_field( $_GET['tab'] );
+		$validation = SeatregDataValidation::validateTabData( $active_tab );
 
 		if( !$validation->valid ) {
 			wp_die($validation->errorMessage);
 		}
 	}else {
-		if(count($registrations) !== 0) {
+		if( count($registrations) !== 0 ) {
 			$active_tab = $registrations[0]->registration_code;
 		}
 	} 
@@ -1334,7 +1334,7 @@ function seatreg_generate_tabs($targetPage) {
 	?>
 
 	<h2 class="nav-tab-wrapper"> 
-		<?php foreach($registrations as $key=>$value): ?>
+		<?php foreach($registrations as $key => $value): ?>
 			<a href="?page=<?php echo esc_html($targetPage); ?>&tab=<?php echo esc_html($value->registration_code); ?>" class="nav-tab <?php echo $active_tab == $value->registration_code ? 'nav-tab-active' : ''; ?>">
 				<?php echo esc_html($value->registration_name); ?>
 			</a>
@@ -1349,34 +1349,17 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 
-	$registration = $wpdb->get_row( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg
-		WHERE registration_code = %s",
-		$registrationCode
-	) );
+	$registration = SeatregRegistrationRepository::getRegistrationByCode($registrationCode);
 
 	if($registration) {
-		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE registration_code = %s
-			AND booking_id = %s
-			AND status != 0",
-			$registrationCode,
-			$bookingId
-		) );
-
+		$bookings = SeatregBookingRepository::getBookingsByRegistrationCodeAndBookingId($registrationCode, $bookingId);
 		$roomData = json_decode($registration->registration_layout)->roomData;
 
 		foreach ($bookings as $booking) {
 			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
 		}
 
-		$options = $wpdb->get_row( $wpdb->prepare(
-			"SELECT payment_text FROM $seatreg_db_table_names->table_seatreg_options
-			WHERE registration_code = %s",
-			$registrationCode
-		) );
-
+		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
 		if(count($bookings) > 0) {
 			echo '<h4>', esc_html($registration->registration_name), '</h4>';
 			echo '<h4>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</h4>';
@@ -1518,7 +1501,7 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 	}
 
 	//step2. check whether seat is already pending or confirmed
-	$bookings = seatreg_get_registration_bookings($code);
+	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $code );
 	foreach($bookings as $booking) {
 		$booking->room_name = seatreg_get_room_name_from_layout($structure, $booking->room_uuid);
 	}
@@ -1566,7 +1549,7 @@ function seatreg_valdiate_add_booking_with_manager($code, $data) {
 		$resp['roomUUID'] = $status['roomUUID'];
 	}
 
-	$bookings = seatreg_get_registration_bookings($code);
+	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode($code);
 	$notBooked = true;
 
 	foreach ($bookings as $booking) {
@@ -1610,7 +1593,7 @@ function seatreg_validate_edit_booking($code, $data) {
 		$resp['oldSeatNr'] = $data->seatNr;
 		$resp['roomUUID'] = $status['roomUUID'];
 	}
-	$bookings = seatreg_get_registration_bookings($code);
+	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $code );
 	$notBooked = true;
 
 	foreach ($bookings as $booking) {
@@ -1801,18 +1784,6 @@ function seatreg_set_up_db() {
 	}
 }
 
-//return all registrations and their data
-function seatreg_get_registrations() {
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$registrations = $wpdb->get_results(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg WHERE is_deleted = 0"
-	);
-
-	return $registrations;
-}
-
 //return specific registration and its data if registration code provided.
 function seatreg_get_registration_data($code) {
 	global $wpdb;
@@ -1836,35 +1807,6 @@ function seatreg_get_registration_data($code) {
 	}
 
 	return $registration;
-}
-
-//return bookings(status 2 and 3) belonging to specific registration
-function seatreg_get_registration_bookings($code) {
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$bookings = $wpdb->get_results( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-		WHERE registration_code = %s
-		AND (status = '1' OR status = '2')",
-		$code
-	) );
-
-	return $bookings;
-}
-
-function seatreg_get_bookings_by_booking_id($bookingId) {
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$bookings = $wpdb->get_results( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-		WHERE booking_id = %s
-		AND status != 0",
-		$bookingId
-	) );
-
-	return $bookings;
 }
 
 // return data related to booking
@@ -1956,12 +1898,7 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 		ORDER BY $order",
 		$code
 	));
-
-	$registration = $wpdb->get_row( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg
-		WHERE registration_code = %s",
-		$code
-	) );
+	$registration = SeatregRegistrationRepository::getRegistrationByCode($code);
 
 	if($registration->registration_layout !== null) {
 		$roomData = json_decode($registration->registration_layout)->roomData;
@@ -2013,21 +1950,6 @@ function seatreg_get_room_name_from_layout($roomsLayout, $bookingRoomUuid) {
 	}
 
 	return $roomName;
-}
-
-function seatreg_get_bookings_in_room($registrationId, $roomName) {
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$bookings = $wpdb->get_results( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-		WHERE registration_code = %s
-		AND room_name = %s,",
-		$registrationId,
-		$roomName
-	) );
-
-	return $bookings;
 }
 
 //return specific registration options
@@ -2234,11 +2156,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 		) );
 	}
 
-	$registration = $wpdb->get_row( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg
-		WHERE registration_code = %s",
-		$code
-	) );
+	$registration = SeatregRegistrationRepository::getRegistrationByCode( $code );
 
 	if($registration->registration_layout !== null) {
 		$roomData = json_decode($registration->registration_layout)->roomData;
@@ -2509,8 +2427,8 @@ add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_
 function seatreg_get_registration_layout_and_bookings() {
 	seatreg_ajax_security_check();
 
-	$registration = seatreg_get_registration_data(sanitize_text_field($_POST['code']));
-	$bookings = seatreg_get_registration_bookings(sanitize_text_field($_POST['code']));
+	$registration = seatreg_get_registration_data(sanitize_text_field( $_POST['code']) );
+	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( sanitize_text_field($_POST['code']) );
 	$uploadedImages = seatreg_get_registration_uploaded_images(sanitize_text_field($_POST['code']));
 	$dataToSend = new stdClass();
 	$dataToSend->registration = $registration;
@@ -2801,12 +2719,7 @@ function seatreg_add_booking_with_manager_callback() {
 
 	$registrationCode = sanitize_text_field( $_POST['registration-code'] );
 	$bookingsToAdd = [];
-	$options = $wpdb->get_row( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_options
-		WHERE registration_code = %s",
-		$registrationCode
-	) );
-
+	$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
 	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields));
 
@@ -3062,17 +2975,7 @@ function seatreg_get_booking_logs() {
 		exit('Missing data');
 	}
 
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$activityLogs = $wpdb->get_results( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_activity_log
-		WHERE log_type = 'booking'
-		AND relation_id = %s
-		ORDER BY log_date DESC",
-		$_GET['bookingId']
-	) );
-
+	$activityLogs = SeatregActivityLogRepository::getBookingActivityLogsByBookingId( $_GET['bookingId'] );
 	$response = new SeatregJsonResponse();
 	$response->setData($activityLogs);
 
@@ -3087,17 +2990,7 @@ function seatreg_get_registration_logs() {
 		exit('Missing data');
 	}
 
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$activityLogs = $wpdb->get_results( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_activity_log
-		WHERE log_type IN ('map', 'settings')
-		AND relation_id = %s
-		ORDER BY log_date DESC",
-		$_GET['registrationId']
-	) );
-
+	$activityLogs = SeatregActivityLogRepository::getRegistrationAcitivityLogs( $_GET['registrationId'] );
 	$response = new SeatregJsonResponse();
 	$response->setData($activityLogs);
 
@@ -3147,7 +3040,7 @@ function seatreg_get_seat_price_from_layout($seatID, $roomUUID, $roomsData) {
 }
 
 function seatreg_get_booking_total_cost($bookingId, $registrationLayout) {
-	$bookings = seatreg_get_bookings_by_booking_id($bookingId);
+	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
 	$roomsData = json_decode($registrationLayout)->roomData;
 	$totalConst = 0;
 
@@ -3159,38 +3052,11 @@ function seatreg_get_booking_total_cost($bookingId, $registrationLayout) {
 	return $totalConst;
 }
 
-function seatreg_get_payment($bookingId) {
-	global $seatreg_db_table_names;
-	global $wpdb;
-
-	$payment = $wpdb->get_row( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_payments
-		WHERE booking_id = %s",
-		$bookingId
-	) );
-
-	return $payment;
-}
-
-function seatreg_get_processed_payment($bookingId) {
-	global $seatreg_db_table_names;
-	global $wpdb;
-
-	$payment = $wpdb->get_row( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_payments
-		WHERE booking_id = %s
-		AND payment_status = SEATREG_PAYMENT_COMPLETED",
-		$bookingId
-	) );
-
-	return $payment;
-}
-
 function seatreg_insert_processing_payment($bookingId) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
-	$alreadyInserted = seatreg_get_payment($bookingId);
+	$alreadyInserted = SeatregPaymentRepository::getPaymentByBookingId($bookingId);
 
 	if( !$alreadyInserted ) {
 		$wpdb->insert(
@@ -3214,10 +3080,7 @@ function seatreg_insert_processing_payment($bookingId) {
 }
 
 function seatreg_insert_update_payment($bookingId, $status, $txnId, $paymentCurrency, $paymentTotalPrice) {
-	global $seatreg_db_table_names;
-	global $wpdb;
-
-	$alreadyInserted = seatreg_get_payment($bookingId);
+	$alreadyInserted = SeatregPaymentRepository::getPaymentByBookingId($bookingId);
 
 	if( $alreadyInserted ) {
 		$wpdb->update( 
@@ -3246,17 +3109,4 @@ function seatreg_insert_update_payment($bookingId, $status, $txnId, $paymentCurr
 			'%s'
 		);
 	}
-}
-
-function seatreg_get_payment_logs($bookingId) {
-	global $seatreg_db_table_names;
-	global $wpdb;
-
-	$paymentLogs = $wpdb->get_results( $wpdb->prepare(
-		"SELECT * FROM $seatreg_db_table_names->table_seatreg_payments_log
-		WHERE booking_id = %s",
-		$bookingId
-	) );
-
-	return $paymentLogs;
 }

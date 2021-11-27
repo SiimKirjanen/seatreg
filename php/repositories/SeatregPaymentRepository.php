@@ -23,4 +23,16 @@ class SeatregPaymentRepository {
             $bookingId
         ) );
     }
+
+    public static function getProcessedPaymentsByBookingId($bookingId) {
+        global $seatreg_db_table_names;
+	    global $wpdb;
+
+        return $wpdb->get_row( $wpdb->prepare(
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg_payments
+            WHERE booking_id = %s
+            AND payment_status = SEATREG_PAYMENT_COMPLETED",
+            $bookingId
+        ) );
+    }
 }

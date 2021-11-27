@@ -24,6 +24,24 @@ class SeatregBookingRepository {
 			$bookingId
 		) );
     }
+    /**
+     *
+     * Return confirmed and approved bookings but registration code
+     *
+     * @param string $registrationCode The code of registration
+     *
+     */
+    public static function getConfirmedAndApprovedBookingsByRegistrationCode($registrationCode) {
+        global $wpdb;
+	    global $seatreg_db_table_names;
+
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+            WHERE registration_code = %s
+            AND (status = '1' OR status = '2')",
+            $registrationCode
+        ) );
+    } 
 
     /**
      *
@@ -41,6 +59,28 @@ class SeatregBookingRepository {
 			WHERE conf_code = %s
 			AND status = 0",
 			$confCode
+		) );
+    }
+
+    /**
+     *
+     * Return bookings by registration code and booking id
+     *
+     * @param string $registrationCode The code of registration
+     * @param string $bookingId The id of booking
+     *
+     */
+    public static function getBookingsByRegistrationCodeAndBookingId($registrationCode, $bookingId) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_results( $wpdb->prepare(
+			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+			WHERE registration_code = %s
+			AND booking_id = %s
+			AND status != 0",
+			$registrationCode,
+			$bookingId
 		) );
     }
 

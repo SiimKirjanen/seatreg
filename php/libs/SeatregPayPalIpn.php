@@ -124,7 +124,7 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 
 	private function txn_idCheck() {
 		// check that txn_id has not been previously processed
-		$payment = seatreg_get_processed_payment($bookingId);
+		$payment = SeatregPaymentRepository::getProcessedPaymentsByBookingId( $bookingId );
 
 		if( !$payment ) {
 			return true;

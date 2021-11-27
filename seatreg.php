@@ -20,6 +20,9 @@ require_once( 'php/constants.php' );
 require_once( 'php/repositories/SeatregBookingRepository.php' );
 require_once( 'php/repositories/SeatregRegistrationRepository.php' );
 require_once( 'php/repositories/SeatregPaymentRepository.php' );
+require_once( 'php/repositories/SeatregOptionsRepository.php' );
+require_once( 'php/repositories/SeatregActivityLogRepository.php' );
+require_once( 'php/repositories/SeatregPaymentLogRepository.php' );
 
 if( is_admin() ) {
 	require( plugin_dir_path( __FILE__ ) . 'php/enqueue_admin.php' );
