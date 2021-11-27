@@ -16,7 +16,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
-require_once( 'php/constants.php');
+require_once( 'php/constants.php' );
+require_once( 'php/repositories/SeatregBookingRepository.php' );
 
 if( is_admin() ) {
 	require( plugin_dir_path( __FILE__ ) . 'php/enqueue_admin.php' );

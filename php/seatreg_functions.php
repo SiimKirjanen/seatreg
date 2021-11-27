@@ -12,7 +12,6 @@ require_once 'SeatregJsonResponse.php';
 require_once 'constants.php';
 require_once 'emails.php';
 require_once 'SeatregDataValidation.php';
-require_once 'services/SeatregBookingService.php';
 
 $seatreg_db_table_names = new stdClass();
 $seatreg_db_table_names->table_seatreg = $wpdb->prefix . "seatreg";
@@ -2643,7 +2642,7 @@ function seatreg_resend_receipt_callback() {
 			die();
 	}
 	$bookingId = sanitize_text_field($_POST['bookingId']);
-	$bookings = SeatregBookingService::getBookings($bookingId);
+	$bookings = SeatregBookingRepository::getBookings($bookingId);
 
 	if($bookings && $bookings[0]->status === '2') {
 		seatreg_send_approved_booking_email( $bookingId, sanitize_text_field($_POST['registrationCode']) );

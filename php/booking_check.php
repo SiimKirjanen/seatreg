@@ -11,12 +11,9 @@
 		exit('Missing data'); 
 	}
 
-	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
-	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/services/SeatregBookingService.php' );
-
 	$bookingId = sanitize_text_field($_GET['id']);
 	$registrationId = sanitize_text_field($_GET['registration']);
-	$bookings = SeatregBookingService::getBookings($bookingId);
+	$bookings = SeatregBookingRepository::getBookings($bookingId);
 	$bookingData = seatreg_get_data_related_to_booking($bookingId);
 ?>
 
