@@ -648,7 +648,7 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			allFieldsValid = false;
 		}
 
-		booking.find('.modal-body-custom').each(function() {
+		booking.find('.modal-custom').each(function() {
 			var custObj = {};
 			var type = $(this).data('type');
 

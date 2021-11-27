@@ -2722,6 +2722,7 @@ function seatreg_add_booking_with_manager_callback() {
 	$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
 	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields));
+	$bookingStatus = sanitize_text_field($_POST['booking-status']);
 
 	if( !$customFieldValidation->valid ) {
 		wp_send_json_error( array('message' => $customFieldValidation->errorMessage, 'status' => 'custom field validation failed') );
@@ -2736,7 +2737,7 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingToAdd->roomName = sanitize_text_field($_POST['room'][$key]);
 		$bookingToAdd->customfield = $customFields[$key];
 		$bookingToAdd->email = sanitize_text_field($_POST['email'][$key]);
-		$bookingToAdd->status = sanitize_text_field($_POST['booking-status']);
+		$bookingToAdd->status = $bookingStatus;
 
 		$bookingsToAdd[] = $bookingToAdd;
 	}
@@ -2792,7 +2793,9 @@ function seatreg_add_booking_with_manager_callback() {
 	
 	if( $successStatusCount === $addingStatusCount ) {
 		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount .' seats added with booking manager', true );
-		seatreg_send_approved_booking_email($bookingId, $registrationCode);
+		if($bookingStatus === "2") {
+			seatreg_send_approved_booking_email($bookingId, $registrationCode);
+		}
 		wp_send_json_success( array('status' => 'created') );
 	}else if( $successStatusCount !== $addingStatusCount ) {
 		seatreg_add_activity_log( 'booking', $bookingId, 'There was a problem adding booking. '. $successStatusCount .' seat/seats was booked but '. $failStatusCount .' seat/seats failed', true );
