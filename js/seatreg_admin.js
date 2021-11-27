@@ -606,11 +606,11 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 	var subBtn = $(this);
 	var modal = $('#add-booking-modal');
 	var allFieldsValid = true;
+	var customFields = [];
 
 	modal.find('.modal-body-item').each(function() {
 		var booking = $(this);
-		var customFields = [];
-
+		
 		booking.find('.input-error').text('');
 
 		if(booking.find('[name="seat-nr[]"]').val() === '') {
@@ -653,12 +653,11 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 				custObj['value'] = $(this).find('.modal-custom-v').val();
 			}
 		
-			customFields.push(custObj);
+			customFields.push([custObj]);
 		});
-
-		booking.find('[name="custom-fields"]').val(JSON.stringify(customFields));
-
 	});
+
+	modal.find('[name="custom-fields"]').val(JSON.stringify(customFields));
 
 	if(!allFieldsValid) {
 		return;
@@ -695,7 +694,7 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 				alert(translator.translate('errorBookingUpdate'));
 			}
 			if(data.status === 'custom field validation failed') {
-				alert('Custom field validation failed');
+				alert('Custom field validation failed. ' + data.message);
 			}
 			if(data.status === 'duplicate-seat') {
 				alertify.error(translator.translate('duplicateSeatDetected'));

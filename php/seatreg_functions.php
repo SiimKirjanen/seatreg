@@ -1177,9 +1177,9 @@ function seatreg_add_booking_modal() {
 						</label>
 					</div>
 					<div class="modal-body-custom"></div>
-					<input type="hidden" name="custom-fields[]" />
 				</div>
 			</div>
+			<input type="hidden" name="custom-fields" />
 			<div class="bottom-action">
 				<div class="bottom-action-item" id="add-modal-add-seat">
 					<?php esc_html_e('Add seat', 'seatreg'); ?>
@@ -1549,7 +1549,6 @@ function seatreg_valdiate_add_booking_with_manager($code, $data) {
 	$resp = array();
     $resp['status'] = 'ok';
 	$status = seatreg_check_room_and_seat($structure, $data->roomName, $data->seatNr );
-	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->customfield, $registration->custom_fields);
 
 	if( $status['status'] != 'ok') {
 		$allCorrect = false;
@@ -1557,10 +1556,6 @@ function seatreg_valdiate_add_booking_with_manager($code, $data) {
 		$resp['text'] = $status['text'];
 
 		return $resp;
-	}else if( !$customFieldValidation->valid ) {
-		$allCorrect = false;
-		$resp['status'] = 'custom field validation failed';
-		$resp['text'] = $customFieldValidation->errorMessage;
 	}else {
 		$resp['seatId'] = $status['newSeatId'];
 		$resp['roomUUID'] = $status['roomUUID'];
@@ -2796,9 +2791,24 @@ function seatreg_add_booking_with_manager_callback() {
 		empty( $_POST['custom-fields'] ) ) {
 			wp_send_json_error( array('message'=> 'Missing parameters') );
 	}
+	global $wpdb;
+	global $seatreg_db_table_names;
 
 	$registrationCode = sanitize_text_field( $_POST['registration-code'] );
 	$bookingsToAdd = [];
+	$options = $wpdb->get_row( $wpdb->prepare(
+		"SELECT * FROM $seatreg_db_table_names->table_seatreg_options
+		WHERE registration_code = %s",
+		$registrationCode
+	) );
+
+	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
+	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields));
+
+	if( !$customFieldValidation->valid ) {
+		wp_send_json_error( array('message' => $customFieldValidation->errorMessage, 'status' => 'custom field validation failed') );
+	}
+	$customFields = json_decode($customFieldsInput);
 
 	foreach ( $_POST['first-name'] as $key => $value ) {
 		$bookingToAdd = new stdClass();
@@ -2806,7 +2816,7 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingToAdd->lastName = sanitize_text_field($_POST['last-name'][$key]);
 		$bookingToAdd->seatNr = sanitize_text_field($_POST['seat-nr'][$key]);
 		$bookingToAdd->roomName = sanitize_text_field($_POST['room'][$key]);
-		$bookingToAdd->customfield = stripslashes_deep($_POST['custom-fields'][$key]);
+		$bookingToAdd->customfield = $customFields[$key];
 		$bookingToAdd->email = sanitize_text_field($_POST['email'][$key]);
 		$bookingToAdd->status = sanitize_text_field($_POST['booking-status']);
 
