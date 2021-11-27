@@ -2642,7 +2642,7 @@ function seatreg_resend_receipt_callback() {
 			die();
 	}
 	$bookingId = sanitize_text_field($_POST['bookingId']);
-	$bookings = SeatregBookingRepository::getBookings($bookingId);
+	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
 
 	if($bookings && $bookings[0]->status === '2') {
 		seatreg_send_approved_booking_email( $bookingId, sanitize_text_field($_POST['registrationCode']) );

@@ -13,7 +13,7 @@
 
 	$bookingId = sanitize_text_field($_GET['id']);
 	$registrationId = sanitize_text_field($_GET['registration']);
-	$bookings = SeatregBookingRepository::getBookings($bookingId);
+	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
 	$bookingData = seatreg_get_data_related_to_booking($bookingId);
 ?>
 

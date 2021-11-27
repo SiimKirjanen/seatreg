@@ -13,7 +13,7 @@ class SeatregBookingRepository {
      * @return  array|object|null
      *
      */
-    public static function getBookings($bookingId) {
+    public static function getBookingsById($bookingId) {
         global $wpdb;
         global $seatreg_db_table_names;
 
