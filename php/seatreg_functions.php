@@ -2100,7 +2100,7 @@ function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seat
 			'booking_id' => $bookingId,
 			'status' => $bookingStatus,
 			'booking_date' => $currentTimeStamp,
-			'booking_confirm_date' => $registrationConfirmDate,
+			'booking_confirm_date' => $bookingStatus === '2' ? $currentTimeStamp : null,
 			'booker_email' => $email,
 			'conf_code' => $confCode, 
 			'status' => $bookingStatus,
