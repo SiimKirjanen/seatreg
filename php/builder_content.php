@@ -5,7 +5,6 @@
 ?>
 
 <div id="construction-wrapper">
-
 	<div class="build-head">
 		<h1 class="reg-title"><?php esc_html_e('Registration name', 'seatreg'); ?>: <span class="reg-title-name"></span></h1>
 		<h2 class="room-title"><?php esc_html_e('Room', 'seatreg');?>: <span class="room-title-name"></span><span class="change-room-name"><?php esc_html_e('Change name', 'seatreg');?></span></h2>
@@ -98,11 +97,11 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
-			<div class="color-dialog-info"></div>
-			<div id="picker"></div>
+				<div class="color-dialog-info"></div>
+				<div id="picker"></div>
 			</div>
 			<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>			
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>			
 			</div>
 		</div>
 		</div>
@@ -116,14 +115,14 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
-			<div class="hover-dialog-info"></div>
-			<label for="box-hover-text"><?php esc_html_e('Enter text', 'seatreg');?></label><br>
-			<textarea id="box-hover-text" rows="4" cols="26"></textarea>
-			<div><?php esc_html_e('Leave field empty to remove existing hover text', 'seatreg');?></div>
+				<div class="hover-dialog-info"></div>
+				<label for="box-hover-text"><?php esc_html_e('Enter text', 'seatreg');?></label><br>
+				<textarea id="box-hover-text" rows="4" cols="26"></textarea>
+				<div><?php esc_html_e('Leave field empty to remove existing hover text', 'seatreg');?></div>
 			</div>
 			<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
-			<button type="button" class="btn btn-primary" id="box-hover-submit"><?php esc_html_e('OK', 'seatreg');?></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+				<button type="button" class="btn btn-primary" id="box-hover-submit"><?php esc_html_e('OK', 'seatreg');?></button>
 			</div>
 		</div>
 		</div>
@@ -159,8 +158,8 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
-			<button type="button" class="btn btn-primary build-skeleton"><?php esc_html_e('Update grid', 'seatreg');?></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+				<button type="button" class="btn btn-primary build-skeleton"><?php esc_html_e('Update grid', 'seatreg');?></button>
 			</div>
 		</div>
 		</div>
@@ -185,8 +184,8 @@
 				<div id="selected-seats-for-pricing"></div>
 			</div>
 			<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
-			<button type="button" class="btn btn-primary" id="set-prices"><?php esc_html_e('Set price', 'seatreg');?></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+				<button type="button" class="btn btn-primary" id="set-prices"><?php esc_html_e('Set price', 'seatreg');?></button>
 			</div>
 		</div>
 		</div>
@@ -222,7 +221,6 @@
 					<select id="legend-change-select" class="legend-select"></select> 
 					<button type="button" id="change-legend" class="btn btn-secondary d-block btn-sm"><?php esc_html_e('Change', 'seatreg');?></button>
 				</div>
-
 			</div>
 		</div>
 
@@ -232,7 +230,6 @@
 					<label for="new-legend-text" class="legend-dialog-label-step"> 
 						<span class="legend-step"><?php esc_html_e('Step 1.', 'seatreg');?> </span> <span><?php _e('Enter legend name', 'seatreg');?>:</span>
 					</label>
-
 				</div>
 				<input type="text" id="new-legend-text" class="form-control"><br>
 				<span id="new-legend-text-rem"></span><br>
@@ -266,7 +263,6 @@
 				<div id="create-new-legend" class="green-toggle"><?php esc_html_e('Create new legend', 'seatreg');?></div>
 
 				<div class="prev-step step-btn" data-slide="3" data-slide-open="2"><?php esc_html_e('Step 2.', 'seatreg');?> <span class="glyphicon glyphicon-arrow-left"></span></div>
-
 			</div>	
 		</div>
 
@@ -296,7 +292,7 @@
 					<div class="d-flex justify-content-between pr-3">
 						<span class="change-btn" data-slide="2" data-slide-open="1"><span class="glyphicon glyphicon-arrow-left"></span><?php esc_html_e('Change name', 'seatreg');?> </span>
 						<span class="change-btn" data-slide="2" data-slide-open="3"><?php esc_html_e('Change color', 'seatreg');?> <span class="glyphicon glyphicon-arrow-right"></span></span>
-						</div>
+					</div>
 				</div>
 
 				<div class="legend-change-color change-wrap-section">
@@ -311,210 +307,199 @@
 			<div class="close-wrap">
 				<div id="close-legend-change"><?php esc_html_e('Close legend change', 'seatreg');?></div>
 			</div>
-
-		</div>
-				
+		</div>		
 	</div> 
 
 	<!-- end of #legend-dialog -->
 	
 	<div class="modal vert-modal fade" id="room-name-dialog" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog vert-modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Room name', 'seatreg');?></h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Room name', 'seatreg');?></h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<label for="room-name-dialog-input"><?php esc_html_e('Enter room name:', 'seatreg');?> </label>
+					<input type="text" id="room-name-dialog-input">
+					<div class="room-name-error"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+					<button type="button" class="btn btn-primary" id="room-dialog-ok"><?php esc_html_e('OK', 'seatreg');?></button>
+				</div>
 			</div>
-			<div class="modal-body">
-			<label for="room-name-dialog-input"><?php esc_html_e('Enter room name:', 'seatreg');?> </label>
-			<input type="text" id="room-name-dialog-input">
-			<div class="room-name-error"></div>
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
-			<button type="button" class="btn btn-primary" id="room-dialog-ok"><?php esc_html_e('OK', 'seatreg');?></button>
-		</div>
-		</div>
 		</div>
 	</div>
 
 	<div class="modal fade" id="help-dialog" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Manual', 'seatreg');?></h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			</div>
-			<div class="modal-body">
-			
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-mouse"></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('With select tool you can select individual objects in your seat map. This tool is also used to resize and change object location. To change seat/custom object location you need to drag it with mouse cursor. Resizing is done by placing mouse cursor at border of a object and dragging it to desired width or height.', 'seatreg');?>
-					</p>
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Manual', 'seatreg');?></h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
-
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-add"></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('With this tool you can create seats. Simply click on gray dotted box and new seat will be created. You can create multiple seats at once by dragging cursor over gray boxes.', 'seatreg');?>
-					</p>
-				</div>
-
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-add2"></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('Custom boxes are used to show special objects in your seat map (exit, trash can, stage and so on). Simply click on gray dotted box and new custom box will be created. You can create multiple boxes at once by dragging cursor over gray boxes.', 'seatreg');?>
-					</p>
-				</div>
-
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-eraser"></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('With eraser tool you can remove seats and custom boxes. Simply click on object and it will be removed. You can remove multiple objects at once by holding down left mouse and moving cursor over them.', 'seatreg');?>
-					</p>
-				</div>
+				<div class="modal-body">
 				
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-lasso"></div>
-					<p class="help-dialog-text">	
-						<?php esc_html_e('Lasso tool is helpful if you wish to work with multiple objects at the same time (changing color, deleting, adding hover text and legends). Simple hold down left mouse button and move your cursor to select multiple seats/boxes.', 'seatreg');?>						
-					</p>
-				</div>
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-mouse"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('With select tool you can select individual objects in your seat map. This tool is also used to resize and change object location. To change seat/custom object location you need to drag it with mouse cursor. Resizing is done by placing mouse cursor at border of a object and dragging it to desired width or height.', 'seatreg');?>
+						</p>
+					</div>
 
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-del"></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('Once you have selected seats/boxes with either select or lasso tool you can delete them with clicking on garbage can button. ', 'seatreg');?>
-					</p>
-				</div>
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-add"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('With this tool you can create seats. Simply click on gray dotted box and new seat will be created. You can create multiple seats at once by dragging cursor over gray boxes.', 'seatreg');?>
+						</p>
+					</div>
 
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-legend "></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('Legends are useful if you want to add labels to seats/custom boxes with special meaning. Example: Lets say you want to show where boys and where girls should sit. In legends dialog you can create, delete, change and apply legends to seats nad custom boxes.', 'seatreg');?>
-					</p>
-				</div>
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-add2"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('Custom boxes are used to show special objects in your seat map (exit, trash can, stage and so on). Simply click on gray dotted box and new custom box will be created. You can create multiple boxes at once by dragging cursor over gray boxes.', 'seatreg');?>
+						</p>
+					</div>
 
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-hover"></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('Hover text is shown when user clicks or moves mouse cursor over a seat/custom box. Simply select seats or custom boxes and add text via hover text dialog.', 'seatreg');?>
-						
-					</p>
-				</div>
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-eraser"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('With eraser tool you can remove seats and custom boxes. Simply click on object and it will be removed. You can remove multiple objects at once by holding down left mouse and moving cursor over them.', 'seatreg');?>
+						</p>
+					</div>
+					
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-lasso"></div>
+						<p class="help-dialog-text">	
+							<?php esc_html_e('Lasso tool is helpful if you wish to work with multiple objects at the same time (changing color, deleting, adding hover text and legends). Simple hold down left mouse button and move your cursor to select multiple seats/boxes.', 'seatreg');?>						
+						</p>
+					</div>
 
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-pallette"></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('Opens up color dialog where you can apply colors to selected seats/custom boxes.', 'seatreg');?>
-					</p>
-				</div>
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-del"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('Once you have selected seats/boxes with either select or lasso tool you can delete them with clicking on garbage can button. ', 'seatreg');?>
+						</p>
+					</div>
 
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-grid"></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('In seat map builder you can see lot of gray dotted boxes. These boxes are used to creat seats and custom boxes. In grid settings you can change size, distance and count of those grid boxes. That way you can change how new seats and boxes are created.', 'seatreg');?>
-					</p>
-				</div>
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-legend "></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('Legends are useful if you want to add labels to seats/custom boxes with special meaning. Example: Lets say you want to show where boys and where girls should sit. In legends dialog you can create, delete, change and apply legends to seats nad custom boxes.', 'seatreg');?>
+						</p>
+					</div>
 
-				<div class="help-dialog-row">
-					<div class="guide-item2 guide-item-price"></div>
-					<p class="help-dialog-text">
-						<?php esc_html_e('Lets you add prices to seats. You also need to configure paypal in settings to enable payments.', 'seatreg');?>
-					</p>
-				</div>
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-hover"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('Hover text is shown when user clicks or moves mouse cursor over a seat/custom box. Simply select seats or custom boxes and add text via hover text dialog.', 'seatreg');?>
+						</p>
+					</div>
 
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-pallette"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('Opens up color dialog where you can apply colors to selected seats/custom boxes.', 'seatreg');?>
+						</p>
+					</div>
+
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-grid"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('In seat map builder you can see lot of gray dotted boxes. These boxes are used to creat seats and custom boxes. In grid settings you can change size, distance and count of those grid boxes. That way you can change how new seats and boxes are created.', 'seatreg');?>
+						</p>
+					</div>
+
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-price"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('Lets you add prices to seats. You also need to configure paypal in settings to enable payments.', 'seatreg');?>
+						</p>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+				</div>
 			</div>
-			<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
-			
-			</div>
-		</div>
 		</div>
 	</div>
 
 	<div class="modal vert-modal fade" id="limit-dialog" role="dialog" aria-hidden="true">
 		<div class="modal-dialog vert-modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title"><?php esc_html_e('Limited deletion', 'seatreg');?></h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			</div>
-			<div class="modal-body">
-
-			<div>
-				<h5><?php esc_html_e('If room contains pending or approved seats then seat deletion is limited.', 'seatreg');?></h5>
-				<p><?php esc_html_e('Example:', 'seatreg');?> <br><?php _e('Lets say you have seats with numbers 1,2,3 and 4.', 'seatreg');?> <br><?php esc_html_e('If someone occupies seat number 2 then you won\'t be able to delete seats 1 and 2.', 'seatreg');?> 
-					</p>
-			</div>
-
-			</div>
-			<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>				        
-			</div>
-		</div><!-- /.modal-content -->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title"><?php esc_html_e('Limited deletion', 'seatreg');?></h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<div>
+						<h5><?php esc_html_e('If room contains pending or approved seats then seat deletion is limited.', 'seatreg');?></h5>
+						<p><?php esc_html_e('Example:', 'seatreg');?> <br><?php _e('Lets say you have seats with numbers 1,2,3 and 4.', 'seatreg');?> <br><?php esc_html_e('If someone occupies seat number 2 then you won\'t be able to delete seats 1 and 2.', 'seatreg');?></p>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>				        
+				</div>
+			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 
 	<div class="modal vert-modal fade" id="over-limit-dialog" role="dialog" aria-hidden="true">
 		<div class="modal-dialog vert-modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title"><?php esc_html_e('Saving is not allowed', 'seatreg');?></h4>
-			</div>
-			<div class="modal-body">
-			<div id="what-to-change"></div>
-		</div>
-			<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>				        
-			</div>
-		</div><!-- /.modal-content -->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"><?php esc_html_e('Saving is not allowed', 'seatreg');?></h4>
+				</div>
+				<div class="modal-body">
+					<div id="what-to-change"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>				        
+				</div>
+			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 
-
 	<div class="modal fade background-image-modal" id="background-image-modal" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title"><?php esc_html_e('Room background image', 'seatreg');?></h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			</div>
-			<div class="modal-body">
-
-				<h4><?php esc_html_e('Current room image', 'seatreg');?></h4>
-
-				<div id="activ-room-img-wrap"></div>
-				<br>
-
-				<h4><?php esc_html_e('Upload image', 'seatreg');?> (2MB)</h4>
-				<form action="<?php echo '/wp-admin/admin-ajax.php'; ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
-					<input type="file" name="fileToUpload" id="img-upload" class="file-select"><br>
-					<input type="hidden" name="code" id="urlCode"  value="">
-					<input type="hidden" name="action" value="seatreg_upload_image">
-					<input type="submit" class="btn btn-success" name="submit" id="file-sub" value="<?php esc_html_e('Upload'); ?>">
-					<input type="reset" class="btn btn-danger" value="Clear" id="reset-btn">
-				</form>
-				<br>
-				<div class="progress">
-					<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-						<span class="sr-only">0% Complete</span>
-					</div>
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title"><?php esc_html_e('Room background image', 'seatreg');?></h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
-				<br>
-				<div id="img-upload-resp"></div>
-				<br><br>
-			
-				<h4><?php esc_html_e('Previously uploaded images', 'seatreg');?></h4>
-				<div id="uploaded-images"></div>
+				<div class="modal-body">
+					<h4><?php esc_html_e('Current room image', 'seatreg');?></h4>
+					<div id="activ-room-img-wrap"></div>
+					<br>
 
-			</div>
-			<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>				        
-			</div>
-		</div><!-- /.modal-content -->
+					<h4><?php esc_html_e('Upload image', 'seatreg');?> (2MB)</h4>
+					<form action="<?php echo '/wp-admin/admin-ajax.php'; ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
+						<input type="file" name="fileToUpload" id="img-upload" class="file-select"><br>
+						<input type="hidden" name="code" id="urlCode"  value="">
+						<input type="hidden" name="action" value="seatreg_upload_image">
+						<input type="submit" class="btn btn-success" name="submit" id="file-sub" value="<?php esc_html_e('Upload'); ?>">
+						<input type="reset" class="btn btn-danger" value="Clear" id="reset-btn">
+					</form>
+					<br>
+					<div class="progress">
+						<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+							<span class="sr-only">0% Complete</span>
+						</div>
+					</div>
+					<br>
+					<div id="img-upload-resp"></div>
+					<br><br>
+				
+					<h4><?php esc_html_e('Previously uploaded images', 'seatreg');?></h4>
+					<div id="uploaded-images"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>				        
+				</div>
+			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 </div> <!-- end of construction-wrapper-->
