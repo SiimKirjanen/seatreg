@@ -143,26 +143,7 @@ class SeatregBooking {
 		global $wpdb;
 		global $seatreg_db_table_names;
 
-		$result = $wpdb->get_row( $wpdb->prepare(
-			"SELECT 
-			a.registration_name, 
-			a.registration_layout, 
-            b.seats_at_once,
-            b.gmail_required,
-			b.registration_start_timestamp, 
-			b.registration_end_timestamp, 
-			b.registration_open, 
-			b.use_pending, 
-			b.notify_new_bookings,
-			b.booking_email_confirm,
-			b.registration_password ,
-			b.custom_fields
-			FROM $seatreg_db_table_names->table_seatreg AS a 
-			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b 
-			ON a.registration_code = b.registration_code WHERE a.registration_code = %s",
-			$this->_registrationCode
-		) );
-
+		$result = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($this->_registrationCode);
 		$this->_registrationStartTimestamp = $result->registration_start_timestamp;
 		$this->_registrationEndTimestamp = $result->registration_end_timestamp;
 		$this->_registrationLayout = json_decode($result->registration_layout)->roomData;
