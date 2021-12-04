@@ -3053,6 +3053,9 @@ function seatreg_insert_processing_payment($bookingId) {
 }
 
 function seatreg_insert_update_payment($bookingId, $status, $txnId, $paymentCurrency, $paymentTotalPrice) {
+	global $seatreg_db_table_names;
+	global $wpdb;
+
 	$alreadyInserted = SeatregPaymentRepository::getPaymentByBookingId($bookingId);
 
 	if( $alreadyInserted ) {

@@ -18,7 +18,7 @@
 	$paymentStatus = $bookingData->payment_status;
 
 	if($paymentStatus === null) {
-		seatreg_insert_processing_payment($bookingId);
+		SeatregPaymentService::insertProcessingPayment($bookingId);
 	}	
 ?>
 

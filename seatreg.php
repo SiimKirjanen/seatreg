@@ -26,6 +26,7 @@ require_once( 'php/repositories/SeatregActivityLogRepository.php' );
 require_once( 'php/repositories/SeatregPaymentLogRepository.php' );
 require_once( 'php/services/SeatregRegistrationService.php' );
 require_once( 'php/services/SeatregBookingService.php' );
+require_once( 'php/services/SeatregPaymentService.php' );
 
 if( is_admin() ) {
 	require( plugin_dir_path( __FILE__ ) . 'php/enqueue_admin.php' );
