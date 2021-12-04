@@ -45,7 +45,7 @@
 			$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
 			
 			if($bookingTotalCost > 0) {
-				echo seatreg_generate_paypal_paynow_form(
+				echo SeatregPaymentService::generatePayPalPayNowForm(
 					$payPalFromAction, 
 					$bookingData,
 					$bookingTotalCost,
