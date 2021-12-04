@@ -18,11 +18,9 @@ function seatreg_send_booking_notification_email($registrationName, $bookedSeats
 
 function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     global $seatreg_db_table_names;
-	global $wpdb;
     global $phpmailer;
 
     $GLOBALS['seatreg_qr_code_bookingid'] = $bookingId;
-
 
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
     $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);

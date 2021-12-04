@@ -21,7 +21,7 @@
 	}
 
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
-	$bookingTotalCost = seatreg_get_booking_total_cost($bookingId, $bookingData->registration_layout);
+	$bookingTotalCost = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
     $payPalIPN = new SeatregPayPalIpn(
 		$bookingData->paypal_sandbox_mode === '1',
 		$bookingData->paypal_business_email,

@@ -3025,36 +3025,6 @@ function seatreg_generate_paypal_paynow_form($formAction, $bookingData, $amount,
 	<?php
 }
 
-function seatreg_get_seat_price_from_layout($seatID, $roomUUID, $roomsData) {
-	$price = 0;
-
-	foreach($roomsData as $roomData) {
-		if($roomData->room->uuid === $roomUUID) {
-			foreach($roomData->boxes as $box) {
-				if($box->id === $seatID) {
-					$price = $box->price;
-					break 2;
-				}
-			}
-		}
-	}
-
-	return $price;
-}
-
-function seatreg_get_booking_total_cost($bookingId, $registrationLayout) {
-	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
-	$roomsData = json_decode($registrationLayout)->roomData;
-	$totalConst = 0;
-
-	foreach($bookings as $booking) {
-		$seatPrice = seatreg_get_seat_price_from_layout($booking->seat_id, $booking->room_uuid, $roomsData);
-		$totalConst += $seatPrice;
-	}
-
-	return $totalConst;
-}
-
 function seatreg_insert_processing_payment($bookingId) {
 	global $seatreg_db_table_names;
 	global $wpdb;
