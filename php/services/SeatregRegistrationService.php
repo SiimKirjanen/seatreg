@@ -44,4 +44,21 @@ class SeatregRegistrationService {
 
         return $roomName;
     }
+
+    public static function updateRegistrationLayout($registrationLayout, $registrationCode) {
+        global $wpdb;
+	    global $seatreg_db_table_names;
+
+        return $wpdb->update(
+            "$seatreg_db_table_names->table_seatreg",
+            array(
+                'registration_layout' => $registrationLayout
+            ),
+            array(
+                'registration_code' => $registrationCode
+            ),
+            array('%s'),
+            array('%s')
+        );
+    }
 }

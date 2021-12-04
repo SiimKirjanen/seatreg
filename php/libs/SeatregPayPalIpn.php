@@ -112,7 +112,7 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 	}
 
 	private function insertPayment() {
-		seatreg_insert_update_payment($this->_bookingId, SEATREG_PAYMENT_COMPLETED, $_POST['txn_id'], $_POST['mc_currency'], $_POST['mc_gross']);
+		SeatregPaymentService::insertOrUpdatePayment($this->_bookingId, SEATREG_PAYMENT_COMPLETED, $_POST['txn_id'], $_POST['mc_currency'], $_POST['mc_gross']);
 		$this->log($this->_bookingId, sprintf(esc_html__('Payment for %s is completed', 'seatreg'), "$this->_price $this->_currency"));
 
 		if($this->_setBookingConfirmed === '1') {

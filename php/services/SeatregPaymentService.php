@@ -28,6 +28,42 @@ class SeatregPaymentService {
             self::insertPaymentLog($bookingId, 'PayPal return to merchant', 'ok');
         }
     }
+
+    public static function insertOrUpdatePayment($bookingId, $status, $txnId, $paymentCurrency, $paymentTotalPrice) {
+        global $seatreg_db_table_names;
+        global $wpdb;
+
+        $alreadyInserted = SeatregPaymentRepository::getPaymentByBookingId($bookingId);
+
+        if( $alreadyInserted ) {
+            $wpdb->update( 
+                $seatreg_db_table_names->table_seatreg_payments,
+                array( 
+                    'payment_status' => $status,
+                    'payment_txn_id' => $txnId,
+                    'payment_currency' => $paymentCurrency,
+                    'payment_total_price' => $paymentTotalPrice
+                ), 
+                array(
+                    'booking_id' => $bookingId
+                ),
+                '%s'
+            );
+        }else {
+            $wpdb->insert(
+                $seatreg_db_table_names->table_seatreg_payments,
+                array(
+                    'booking_id' => $bookingId,
+                    'payment_status' => $status,
+                    'payment_txn_id' => $txnId,
+                    'payment_currency' => $paymentCurrency,
+                    'payment_total_price' => $paymentTotalPrice
+                ),
+                '%s'
+            );
+        }
+    }
+
     /**
      *
      * Insert payment log

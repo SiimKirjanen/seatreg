@@ -2448,19 +2448,7 @@ function seatreg_update_layout() {
 		die();
 	}
 	
-	global $wpdb;
-	global $seatreg_db_table_names;
-	$status = $wpdb->update(
-		"$seatreg_db_table_names->table_seatreg",
-		array(
-			'registration_layout' => $updateData
-		),
-		array(
-			'registration_code' => sanitize_text_field($_POST['registration_code'])
-		),
-		array('%s'),
-		array('%s')
-	);
+	$status = SeatregRegistrationService::updateRegistrationLayout($updateData, $_POST['registration_code']);
 
 	if($status) {
 		seatreg_add_activity_log('map',sanitize_text_field($_POST['registration_code']), 'Registration layout updated');
@@ -2986,45 +2974,4 @@ function seatreg_get_registration_logs() {
 	$response->setData($activityLogs);
 
 	wp_send_json( $response );
-}
-
-/*
-==================================================================================================================================================================================================================
-Payment functions
-==================================================================================================================================================================================================================
-*/
-
-function seatreg_insert_update_payment($bookingId, $status, $txnId, $paymentCurrency, $paymentTotalPrice) {
-	global $seatreg_db_table_names;
-	global $wpdb;
-
-	$alreadyInserted = SeatregPaymentRepository::getPaymentByBookingId($bookingId);
-
-	if( $alreadyInserted ) {
-		$wpdb->update( 
-			$seatreg_db_table_names->table_seatreg_payments,
-			array( 
-				'payment_status' => $status,
-				'payment_txn_id' => $txnId,
-				'payment_currency' => $paymentCurrency,
-				'payment_total_price' => $paymentTotalPrice
-			), 
-			array(
-				'booking_id' => $bookingId
-			),
-			'%s'
-		);
-	}else {
-		$wpdb->insert(
-			$seatreg_db_table_names->table_seatreg_payments,
-			array(
-				'booking_id' => $bookingId,
-				'payment_status' => $status,
-				'payment_txn_id' => $txnId,
-				'payment_currency' => $paymentCurrency,
-				'payment_total_price' => $paymentTotalPrice
-			),
-			'%s'
-		);
-	}
 }
