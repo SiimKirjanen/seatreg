@@ -1356,7 +1356,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 		$roomData = json_decode($registration->registration_layout)->roomData;
 
 		foreach ($bookings as $booking) {
-			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
 		}
 
 		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
@@ -1503,7 +1503,7 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 	//step2. check whether seat is already pending or confirmed
 	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $code );
 	foreach($bookings as $booking) {
-		$booking->room_name = seatreg_get_room_name_from_layout($structure, $booking->room_uuid);
+		$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($structure, $booking->room_uuid);
 	}
 
 	$notBooked = true;
@@ -1553,7 +1553,7 @@ function seatreg_valdiate_add_booking_with_manager($code, $data) {
 	$notBooked = true;
 
 	foreach ($bookings as $booking) {
-		$booking->room_name = seatreg_get_room_name_from_layout($structure, $booking->room_uuid);
+		$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($structure, $booking->room_uuid);
 
 		if($booking->seat_nr === $data->seatNr && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
@@ -1601,7 +1601,7 @@ function seatreg_validate_edit_booking($code, $data) {
 
 			continue;
 		}
-		$booking->room_name = seatreg_get_room_name_from_layout($structure, $booking->room_uuid);
+		$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($structure, $booking->room_uuid);
 
 		if($booking->seat_nr === $data->seatNr && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
@@ -1904,7 +1904,7 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 		$roomData = json_decode($registration->registration_layout)->roomData;
 
 		foreach ($bookings as $booking) {
-			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
 		}
 	}
 	
@@ -1938,18 +1938,6 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 	}
 
 	return $bookings;
-}
-
-function seatreg_get_room_name_from_layout($roomsLayout, $bookingRoomUuid) {
-	$roomName = null;
-
-	foreach($roomsLayout as $roomLayout) {
-		if($roomLayout->room->uuid === $bookingRoomUuid) {
-			$roomName = $roomLayout->room->name;
-		}
-	}
-
-	return $roomName;
 }
 
 //return specific registration options
@@ -2162,7 +2150,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow) {
 		$roomData = json_decode($registration->registration_layout)->roomData;
 
 		foreach($bookings as $booking) {
-			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
 		}
 	}
 	

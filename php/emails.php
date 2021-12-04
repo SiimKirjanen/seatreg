@@ -31,7 +31,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 
     $roomData = json_decode($registration->registration_layout)->roomData;
     foreach ($bookings as $booking) {
-        $booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+        $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
     }
     $isSingleBooking = count($bookings) === 1;
     $registrationName = $registration->registration_name;

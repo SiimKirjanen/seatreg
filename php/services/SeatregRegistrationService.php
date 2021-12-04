@@ -27,4 +27,21 @@ class SeatregRegistrationService {
 
 	    return $price;
     }
+
+    /**
+     *
+     * Return room name from layout
+     *
+    */
+    public static function getRoomNameFromLayout($roomsLayout, $bookingRoomUuid) {
+        $roomName = null;
+
+        foreach($roomsLayout as $roomLayout) {
+            if($roomLayout->room->uuid === $bookingRoomUuid) {
+                $roomName = $roomLayout->room->name;
+            }
+        }
+
+        return $roomName;
+    }
 }

@@ -85,7 +85,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 		$roomData = json_decode($registration->registration_layout)->roomData;
 		
 		foreach ($bookings as $booking) {
-			$booking->room_name = seatreg_get_room_name_from_layout($roomData, $booking->room_uuid);
+			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
 		}
 
 		$this->_bookings = $bookings;
