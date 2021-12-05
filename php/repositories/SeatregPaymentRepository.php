@@ -31,8 +31,9 @@ class SeatregPaymentRepository {
         return $wpdb->get_row( $wpdb->prepare(
             "SELECT * FROM $seatreg_db_table_names->table_seatreg_payments
             WHERE booking_id = %s
-            AND payment_status = SEATREG_PAYMENT_COMPLETED",
-            $bookingId
+            AND payment_status = %s",
+            $bookingId,
+            SEATREG_PAYMENT_COMPLETED
         ) );
     }
 }
