@@ -146,6 +146,6 @@ class SeatregConfirmBooking extends SeatregBooking {
 		}	
 
 		//6 step. confirm bookings
-		$this->confirmBookings();  //this also updates structure
+		$this->confirmBookings();
 	}
 }
