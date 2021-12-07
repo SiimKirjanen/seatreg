@@ -4,7 +4,7 @@ Tags: seat registration, booking, booking seats, booking events, seat map, booki
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 5.8.1
-Stable tag: 1.10.2
+Stable tag: 1.10.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -40,6 +40,10 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 6. Legends and background image
 
 == Changelog ==
+
+= 1.10.3 =
+* Added booking id to XLSX
+* Removed Payment txn id and Payment received from XLSX
 
 = 1.10.2 =
 * Fixed PayPal payment bugs

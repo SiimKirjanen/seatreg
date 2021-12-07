@@ -58,16 +58,15 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
     
     public function printXlsx() {
         $header = array(
-            esc_html__('Seat nr', 'seatreg') => 'string',
-            esc_html__('Room', 'seatreg') => 'string',
+            esc_html__('Seat number', 'seatreg') => 'string',
+            esc_html__('Room name', 'seatreg') => 'string',
             esc_html__('Name', 'seatreg') => 'string',
             esc_html__('Email', 'seatreg') => 'string',
-            esc_html__('Registration data', 'seatreg') => 'string',
+            esc_html__('Registration date', 'seatreg') => 'string',
+            esc_html__('Booking id', 'seatreg') => 'string',
             esc_html__('Booking status', 'seatreg') => 'string',
             esc_html__('Booking approval date', 'seatreg') => 'string',
             esc_html__('Payment status', 'seatreg') => 'string',
-            esc_html__('Payment txn id', 'seatreg') => 'string',
-            esc_html__('Payment received', 'seatreg') => 'string',
         );
         $customFieldsLength = count($this->_customFields);
         $data = array();
@@ -82,7 +81,8 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
                 esc_html($registration->room_name), 
                 esc_html($registration->first_name) . ' ' . esc_html($registration->last_name),  
                 esc_html($registration->email), 
-                $bookingDate, 
+                $bookingDate,
+                $registration->booking_id,
                 $status
             );
 
@@ -95,11 +95,8 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
 
             if($registration->payment_status != null) {
                 $registrationData[] = $registration->payment_status;
-
-                if($registration->payment_status == SEATREG_PAYMENT_COMPLETED) {
-                    $registrationData[] = $registration->payment_txn_id;
-                    $registrationData[] = $registration->payment_total_price . ' ' . $registration->payment_currency;
-                }
+            }else {
+                $registrationData[] = '';
             }
         
             foreach ($this->_customFields as $customField) {
