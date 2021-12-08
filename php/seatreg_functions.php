@@ -941,7 +941,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '</div>';
 
 					echo '<div class="more-info">';
-						echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', $bookingStatusUrl ,'</a>';
+						echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl) ,'</a>';
 						echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html(date('M j Y h:i e', $row->booking_date)), '</span></div>';
 						echo '<div>', esc_html__('Email', 'seatreg'), ': ', esc_html($row->email), '</div>';
 					
