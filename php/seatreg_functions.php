@@ -1661,7 +1661,7 @@ function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $boo
 }
 
 function seatreg_get_registration_status_url($registrationCode, $bookingId) {
-	return esc_url(get_site_url() . '?seatreg=booking-status&registration=' . $registrationCode . '&id=' . $bookingId);
+	return get_site_url() . '?seatreg=booking-status&registration=' . $registrationCode . '&id=' . $bookingId;
 }
 
 /*

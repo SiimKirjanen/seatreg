@@ -44,6 +44,7 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 = 1.10.3 =
 * Added booking id to XLSX
 * Removed Payment txn id and Payment received from XLSX
+* Fixed booking status page link in registration page
 
 = 1.10.2 =
 * Fixed PayPal payment bugs
