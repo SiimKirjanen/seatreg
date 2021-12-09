@@ -54,7 +54,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
 
     $message .= '<p>';
     $message .= esc_html__('Booking ID: ', 'seatreg') . ' <strong>'. esc_html($bookingId) .'</strong><br>';
-    $message .= esc_html__('Booking status link:', 'seatreg') . ' <a href="'. $bookingStatusUrl .'" target="_blank">'. $bookingStatusUrl .'</a>';
+    $message .= esc_html__('Booking status link:', 'seatreg') . ' <a href="'. $bookingStatusUrl .'" target="_blank">'. esc_url($bookingStatusUrl) .'</a>';
     $message .= '</p>';
 
     $registrationCustomFields = json_decode($registration->custom_fields);
