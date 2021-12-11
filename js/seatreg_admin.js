@@ -895,7 +895,7 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 		var label = labelElem.val().trim();
 		var selectedSelect = $(this).closest('.cust-field-create').find('.custom-field-select').find(':selected').attr('data-type');
 		var existElems = $(this).closest('.user-custom-field-options').find('.existing-custom-fields');
-		var labelRegExp = new RegExp("^[\\p{L}1234567890\+]{1,100}$", "u");
+		var labelRegExp = new RegExp("^[\\p{L}1234567890\+\\s]{1,100}$", "u");
 
 		if(label === '') {
 			alertify.error(translator.translate('pleaseEnterName'));

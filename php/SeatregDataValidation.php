@@ -355,7 +355,7 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($customFieldDecoded, 'label') || !is_string($customFieldDecoded->label) || !preg_match('/^[\p{L}\p{N}+]+$/u', $customFieldDecoded->label) ) {
+                if( !property_exists($customFieldDecoded, 'label') || !is_string($customFieldDecoded->label) || !preg_match('/^[\p{L}\p{N}+\s]+$/u', $customFieldDecoded->label) ) {
                     $validationStatus->setInvalid('Custom field label is missing or invalid');
                     return $validationStatus;
                 }
