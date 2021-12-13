@@ -372,7 +372,7 @@ function seatreg_generate_my_registrations_section() {
 
 	foreach($registrations as $key=>$registration) {
 		?>
-			<div class="mb-4" style="margin-right: 52px">
+			<div class="mb-4" data-item="registration" style="margin-right: 52px">
 				<h5><a class="registration-name-link" href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h5>
 
 				<a href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
@@ -395,12 +395,12 @@ function seatreg_generate_my_registrations_section() {
 
 				<br>
 
-				<a href="#" data-action="view-registration-activity" data-registration-id="<?php echo $registration->registration_code; ?>"><?php esc_html_e('Logs', 'seatreg'); ?></a>
+				<a href="#" data-action="view-more-modal" data-registration-id="<?php echo $registration->registration_code; ?>"><?php esc_html_e('More', 'seatreg'); ?></a>
 
 				<br>
 
 				<?php
-					seatreg_create_delete_registration_from($registration->registration_code);
+					seatreg_more_items_modal($registration->registration_code);
 				?>
 
 			</div>
@@ -1289,6 +1289,10 @@ function seatreg_registration_logs_modal() {
 			</div>
 		</div>
 	<?php
+}
+
+function seatreg_more_items_modal($registrationCode) {
+	require(SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/more-items-modal.php');
 }
 
 function seatreg_booking_activity_modal() {

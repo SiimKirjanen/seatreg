@@ -3,6 +3,7 @@
 @import "modal/booking-activity";
 @import "loaders/booking-manager";
 @import "headers/management-header";
+@import "components/reg-more-items";
 
 html {
 	font-size: 100%;
@@ -502,23 +503,14 @@ html {
 
 /*buttons*/
 
-.seatreg-delete-registration-form {
-	margin-top: 8px;
-}
-.seatreg-delete-registration-form .glyphicon-trash{
-	color: red;
-}
-.seatreg-delete-registration-form .delete-registration-btn, .seatreg-delete-registration-form .delete-registration-btn:active, .seatreg-delete-registration-form .delete-registration-btn:focus {
-	padding: 0;
+.seatreg-delete-registration-form .delete-registration-btn, .seatreg-delete-registration-form .delete-registration-btn:active, .seatreg-delete-registration-form .delete-registration-btn:focus, .seatreg-delete-registration-form .delete-registration-btn:hover {
+	padding: 24px;
 	min-height: auto;
 	line-height: normal;
-	border: none;
-	color: red;
+	border: 1px solid #ccc;
 	box-shadow: none;
 	background: #fff;
-}
-.seatreg-delete-registration-form .delete-registration-btn:hover {
-	color: red;
+	font-size: 16px;
 }
 .change-name-wrap {
 	margin-bottom: 8px;

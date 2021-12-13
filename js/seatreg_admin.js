@@ -446,6 +446,12 @@ $('#registration-activity-modal').on('shown.bs.modal', function () {
 	promise.fail = seatreg_admin_ajax_error;
 });
 
+$('.seatreg-registrations [data-action=view-more-modal]').on('click', function(e) {
+	e.preventDefault();
+
+	$(this).closest('[data-item="registration"]').find('.more-items-modal').modal('show');
+});
+
 $('#seatreg-booking-manager').on('click', 'button[data-action=view-booking-activity]', function() {
 	$bookingId = $(this).data('booking-id');
 	$('#booking-activity-modal').find('.activity-modal__logs').empty();
