@@ -401,6 +401,7 @@ function seatreg_generate_my_registrations_section() {
 
 				<?php
 					seatreg_more_items_modal($registration->registration_code);
+					seatreg_copy_registration_modal($registration->registration_code);
 				?>
 
 			</div>
@@ -1293,6 +1294,10 @@ function seatreg_registration_logs_modal() {
 
 function seatreg_more_items_modal($registrationCode) {
 	require(SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/more-items-modal.php');
+}
+
+function seatreg_copy_registration_modal($registrationCode) {
+	require(SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/copy-registration-modal.php');
 }
 
 function seatreg_booking_activity_modal() {
@@ -2215,6 +2220,34 @@ function seatreg_create_submit_handler() {
 		die();
 	}else {
 		wp_die( esc_html_e('Something went wrong while creating a new registration', 'seatreg') );
+	}
+}
+
+add_action('admin_post_seatreg_copy_registration', 'seatreg_copy_registration_handler'); 
+function seatreg_copy_registration_handler() {
+	seatreg_nonce_check();
+
+	if( empty($_POST['new-registration-name']) || $_POST['new-registration-name'] === '' ) {
+		wp_die('Please provide registration name');
+	}
+
+	if( empty($_POST['registration_code']) ) {
+		wp_die('Code is missing');
+	}
+
+	$registrationName = sanitize_text_field($_POST['new-registration-name']); 
+	$nameValidation = SeatregDataValidation::validateRegistrationName($registrationName);
+
+	if( !$nameValidation->valid ) {
+		wp_die($nameValidation->errorMessage);
+	}
+
+	if( SeatregRegistrationService::copyRegistration( $_POST['registration_code'], $_POST['new-registration-name'] ) ) {
+		wp_redirect( $_POST['_wp_http_referer'] );
+
+		die();
+	}else {
+		wp_die( esc_html_e('Something went wrong while coping registration', 'seatreg') );
 	}
 }
 

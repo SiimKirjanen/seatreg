@@ -10,6 +10,9 @@
                     <div class="reg-more-items__item" data-action="view-registration-activity" data-registration-id="<?php echo $registrationCode; ?>">
                         <?php esc_html_e('Logs', 'seatreg'); ?>
                     </div>
+                    <div class="reg-more-items__item" data-action="open-copy-registration" data-registration-id="<?php echo $registrationCode; ?>">
+                        <?php esc_html_e('Copy', 'seatreg'); ?>
+                    </div>
                     <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" class="seatreg-delete-registration-form reg-more-items__item--delete-form" onsubmit="return confirm('Do you really want to delete?');">
                         <input type="hidden" name="registration-code" value="<?php echo esc_attr($registrationCode); ?>" />
                         <input type='hidden' name='action' value='seatreg_delete_registration' />
