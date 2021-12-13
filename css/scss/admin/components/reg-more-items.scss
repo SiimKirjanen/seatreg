@@ -9,6 +9,10 @@
         margin-right: 12px;
         cursor: pointer;
 
+        &:hover {
+            box-shadow: 1px 1px 10px 0px rgba(204,204,204,0.52);
+        }
+
         &--delete-form {
             padding: 0;
         }

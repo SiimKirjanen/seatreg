@@ -511,7 +511,12 @@ html {
 	box-shadow: none;
 	background: #fff;
 	font-size: 16px;
+	color: red;
 }
+.seatreg-delete-registration-form .delete-registration-btn:hover {
+	box-shadow: 1px 1px 10px 0px rgba(204,204,204,0.52);
+}
+
 .change-name-wrap {
 	margin-bottom: 8px;
 }
