@@ -10,6 +10,9 @@
                     <div class="reg-more-items__item" data-action="view-registration-activity" data-registration-id="<?php echo $registrationCode; ?>">
                         <?php esc_html_e('Logs', 'seatreg'); ?>
                     </div>
+                    <div class="reg-more-items__item" data-action="view-shortcode">
+                        <?php esc_html_e('Shortcode', 'seatreg'); ?>
+                    </div>
                     <div class="reg-more-items__item" data-action="open-copy-registration" data-registration-id="<?php echo $registrationCode; ?>">
                         <?php esc_html_e('Copy', 'seatreg'); ?>
                     </div>

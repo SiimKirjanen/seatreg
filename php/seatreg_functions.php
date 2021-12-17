@@ -400,10 +400,10 @@ function seatreg_generate_my_registrations_section() {
 				<br>
 
 				<?php
-					seatreg_more_items_modal($registration->registration_code);
-					seatreg_copy_registration_modal($registration->registration_code);
+					seatreg_more_items_modal( $registration->registration_code );
+					seatreg_copy_registration_modal( $registration->registration_code );
+					seatreg_shortcode_modal( $registration->registration_code );
 				?>
-
 			</div>
 		<?php
 	}
@@ -1298,6 +1298,10 @@ function seatreg_more_items_modal($registrationCode) {
 
 function seatreg_copy_registration_modal($registrationCode) {
 	require(SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/copy-registration-modal.php');
+}
+
+function seatreg_shortcode_modal($registrationCode) {
+	require(SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/shortcode-modal.php');
 }
 
 function seatreg_booking_activity_modal() {
