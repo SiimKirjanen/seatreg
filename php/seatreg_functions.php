@@ -437,6 +437,7 @@ function seatreg_generate_settings_form() {
 
 	 $custFields = json_decode($options[0]->custom_fields);
 	 $custLen = count(is_array($custFields) ? $custFields : []);
+	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
 	?>
 		<h4 class="settings-heading">
@@ -490,14 +491,14 @@ function seatreg_generate_settings_form() {
 				<p class="help-block"><?php esc_html_e('Show booking data in registration view when hovering a seat', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
-			      		<input type="checkbox" name="show-booking-data-registration[]" value="name" /> 
+			      		<input type="checkbox" name="show-booking-data-registration[]" value="name" <?php echo in_array('name', $previouslySelectedBookingDataToShow) ? 'checked' : '' ?> /> 
 			      		<?php esc_html_e('Show full name', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 				<?php foreach( $custFields as $customField ): ?>
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html_e($customField->label); ?>" /> 
+							<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html_e($customField->label); ?>" <?php echo in_array($customField->label, $previouslySelectedBookingDataToShow) ? 'checked' : '' ?> /> 
 							<?php esc_html_e($customField->label); ?>
 						</label>
 					</div>
@@ -2309,6 +2310,7 @@ function seatreg_update() {
 
 	$registrationName = sanitize_text_field($_POST['registration-name']);
 	$registrationNameValidation = SeatregDataValidation::validateRegistrationName($registrationName);
+	$selectedShowBookingData = null;
 
 	if( !$registrationNameValidation->valid ) {
 		wp_die($registrationNameValidation->errorMessage);
@@ -2379,6 +2381,10 @@ function seatreg_update() {
 		$_POST['approved-booking-email'] = 1;
 	}
 
+	if(!empty($_POST['show-booking-data-registration'])) {
+		$selectedShowBookingData = is_array($_POST['show-booking-data-registration']) ? implode(',', $_POST['show-booking-data-registration']) : null;
+	}
+
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
 		array(
@@ -2390,7 +2396,7 @@ function seatreg_update() {
 			'use_pending' => sanitize_text_field($_POST['use-pending']),
 			'registration_password' => $_POST['registration-password'] == '' ? null : sanitize_text_field($_POST['registration-password']),
 			'notify_new_bookings' => $_POST['booking-notification'] ? sanitize_text_field($_POST['booking-notification']) : null,
-			'show_bookings' => sanitize_text_field($_POST['show-registration-bookings']),
+			'show_bookings_data_in_registration' => $selectedShowBookingData,
 			'payment_text' => $_POST['payment-instructions'] == '' ? null : sanitize_text_field($_POST['payment-instructions']),
 			'info' => sanitize_text_field($_POST['registration-info-text']),
 			'registration_close_reason' => sanitize_text_field($_POST['registration-close-reason']),
