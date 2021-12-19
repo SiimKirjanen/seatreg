@@ -50,12 +50,9 @@ function seatreg_public_scripts_and_styles() {
 		$data = seatreg_get_options_reg($_GET['c']);
 		$seatsInfo = json_encode( seatreg_stats_for_registration_reg($data->registration_layout, $data->registration_code) );
 		$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
-		if($data->show_bookings == '1') {
-			$registrations = json_encode(seatreg_get_registration_bookings_reg($_GET['c'], true)); //also names
-		}else {
-			$registrations = json_encode(seatreg_get_registration_bookings_reg($_GET['c'], false));  //no names
-		}
-
+		$selectedShowRegistrationData = $data->show_bookings_data_in_registration ? explode(',', $data->show_bookings_data_in_registration) : [];
+		$registrations = json_encode(seatreg_get_registration_bookings_reg($_GET['c'], $selectedShowRegistrationData));
+	
 		$inlineScript = 'function showErrorView(title) {';
 			$inlineScript .= "jQuery('body').addClass('error-view').html('";
 				$inlineScript .= '<div>An error occured</div><img src="' . SEATREG_PLUGIN_FOLDER_URL . 'img/monkey.png" alt="monkey" /><div>title</div>';

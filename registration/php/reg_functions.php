@@ -130,26 +130,29 @@ function seatreg_get_seats_stats($struct, $bronRegistrations, $takenRegistration
 	return $statsArray;
 }
 
-function seatreg_get_registration_bookings_reg($code, $show_bookings) {
+function seatreg_get_registration_bookings_reg($code, $selectedShowRegistrationData) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 
-	if($show_bookings == 1) {
-		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT seat_id, room_uuid, status, CONCAT(first_name, ' ', last_name) AS reg_name
-			FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE registration_code = %s
-			AND (status = '1' OR status = '2')",
-			$code
-		) );
-	}else {
-		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT seat_id, room_uuid, status 
-			FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE registration_code = %s
-			AND (status = '1' OR status = '2')",
-			$code
-		) );
+	$bookings = $wpdb->get_results( $wpdb->prepare(
+		"SELECT seat_id, room_uuid, status, custom_field_data, CONCAT(first_name, ' ', last_name) AS reg_name 
+		FROM $seatreg_db_table_names->table_seatreg_bookings
+		WHERE registration_code = %s
+		AND (status = '1' OR status = '2')",
+		$code
+	) );
+
+	foreach($bookings as $booking ) {
+		if( !in_array('name', $selectedShowRegistrationData) ) {
+			unset($booking->reg_name);
+		}
+		if( $selectedShowRegistrationData ) {
+			$bookingCustomFieldData = json_decode( $booking->custom_field_data );
+			$bookingCustomFieldData = array_filter($bookingCustomFieldData, function($customField) use($selectedShowRegistrationData) {
+				return in_array($customField->label, $selectedShowRegistrationData);
+			});
+			$booking->custom_field_data = json_encode($bookingCustomFieldData, JSON_HEX_QUOT);
+		}
 	}
 
 	return $bookings;

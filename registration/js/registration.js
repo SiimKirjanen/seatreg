@@ -141,9 +141,9 @@
 
 		for(var i = 0; i < reLength; i++) {
 			if(registrations[i].hasOwnProperty('reg_name')) {
-				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], registrations[i]['reg_name']);
+				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], registrations[i]['reg_name'], registrations[i]['custom_field_data']);
 			}else {
-				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], null);
+				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], null, registrations[i]['custom_field_data']);
 			}
 		}
 
@@ -187,7 +187,7 @@
 		return roomName;
 	};
 
-	SeatReg.prototype.addRegistration = function(seatId, roomUuid, status, registrantName) {
+	SeatReg.prototype.addRegistration = function(seatId, roomUuid, status, registrantName, customFieldData) {
 		var roomLocation = this.locationObj[roomUuid];
 		var boxesLen = this.rooms[roomLocation].boxes.length;
 
@@ -202,6 +202,7 @@
 				if(registrantName != null) {	//need to show name
 					this.rooms[roomLocation].boxes[j].registrantName = registrantName;
 				}
+				this.rooms[roomLocation].boxes[j].customFieldData = JSON.parse(customFieldData);
 
 				break;
 			}
@@ -285,6 +286,12 @@
 
 			if(loc[i].hasOwnProperty('registrantName')) {
 				tooltipContent += '<div class="seatreg-tooltip-row">' + loc[i].registrantName + '</div>';
+			}
+
+			if(loc[i].hasOwnProperty('customFieldData')) {
+				loc[i].customFieldData.forEach(function (customField) {
+					tooltipContent += '<div class="seatreg-tooltip-row">' + customField.label + ': ' + customField.value + '</div>';
+				});
 			}
 
 			if(loc[i].hasOwnProperty('price')) {
