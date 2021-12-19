@@ -1721,6 +1721,7 @@ function seatreg_set_up_db() {
 			send_approved_booking_email tinyint(1) NOT NULL DEFAULT 1,
 			send_approved_booking_email_qr_code varchar(255) DEFAULT NULL,
 			show_bookings tinyint(1) NOT NULL DEFAULT 0,
+			show_bookings_data_in_registration varchar(255) DEFAULT NULL,
 			payment_text text,
 			info text,
 			registration_close_reason text,
