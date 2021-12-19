@@ -497,7 +497,7 @@ function seatreg_generate_settings_form() {
 				<?php foreach( $custFields as $customField ): ?>
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html($customField->label); ?>" /> 
+							<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html_e($customField->label); ?>" /> 
 							<?php esc_html_e($customField->label); ?>
 						</label>
 					</div>
