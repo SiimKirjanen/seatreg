@@ -486,14 +486,22 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="show-registration-bookings"><?php esc_html_e('Show bookings', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Let people see who has made a booking in registration page', 'seatreg'); ?>.</p>
+				<label><?php esc_html_e('Show booking data', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Show booking data in registration view when hovering a seat', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
-			      		<input type="checkbox" id="show-registration-bookings" name="show-registration-bookings" <?php echo $options[0]->show_bookings == '1' ? 'checked':'' ?> > 
-			      		<?php esc_html_e('Show bookings', 'seatreg'); ?>
+			      		<input type="checkbox" name="show-booking-data-registration[]" value="name" /> 
+			      		<?php esc_html_e('Show full name', 'seatreg'); ?>
 			    	</label>
 			  	</div>
+				<?php foreach( $custFields as $customField ): ?>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html($customField->label); ?>" /> 
+							<?php esc_html_e($customField->label); ?>
+						</label>
+					</div>
+				<?php endforeach; ?>	
 			</div>
 
 			<div class="form-group">
