@@ -140,13 +140,11 @@
 		var reLength = Object.size(registrations);
 
 		for(var i = 0; i < reLength; i++) {
-			if(registrations[i].hasOwnProperty('reg_name')) {
-				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], registrations[i]['reg_name'], registrations[i]['custom_field_data']);
-			}else {
-				seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], null, registrations[i]['custom_field_data']);
-			}
-		}
+			var customFieldData = registrations[i].hasOwnProperty('custom_field_data') ? registrations[i]['custom_field_data'] : '[]';
+			var bookingFullName = registrations[i].hasOwnProperty('reg_name') ? registrations[i]['reg_name'] : null;
 
+			seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], bookingFullName, customFieldData);
+		}
 		if(custF != null) {
 			seatReg.fillCustom(custF);
 		}

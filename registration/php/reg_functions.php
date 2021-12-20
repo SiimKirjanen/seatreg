@@ -134,6 +134,7 @@ function seatreg_get_registration_bookings_reg($code, $selectedShowRegistrationD
 	global $wpdb;
 	global $seatreg_db_table_names;
 
+	$showNames = in_array('name', $selectedShowRegistrationData);
 	$bookings = $wpdb->get_results( $wpdb->prepare(
 		"SELECT seat_id, room_uuid, status, custom_field_data, CONCAT(first_name, ' ', last_name) AS reg_name 
 		FROM $seatreg_db_table_names->table_seatreg_bookings
@@ -143,7 +144,7 @@ function seatreg_get_registration_bookings_reg($code, $selectedShowRegistrationD
 	) );
 
 	foreach($bookings as $booking ) {
-		if( !in_array('name', $selectedShowRegistrationData) ) {
+		if( !$showNames ) {
 			unset($booking->reg_name);
 		}
 		if( $selectedShowRegistrationData ) {
@@ -152,6 +153,8 @@ function seatreg_get_registration_bookings_reg($code, $selectedShowRegistrationD
 				return in_array($customField->label, $selectedShowRegistrationData);
 			});
 			$booking->custom_field_data = json_encode($bookingCustomFieldData, JSON_HEX_QUOT);
+		}else {
+			unset($booking->custom_field_data);
 		}
 	}
 
