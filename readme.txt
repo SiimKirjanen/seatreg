@@ -43,6 +43,7 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 
 = 1.12.0 =
 * Shortcode modal added to more items
+* Added functionality to settings to show custom field data in registration view
 
 = 1.11.0 =
 * More item added to Home page items

@@ -488,7 +488,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label><?php esc_html_e('Show booking data', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Show booking data in registration view when hovering a seat', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php esc_html_e('Show booking data in registration view. You can select custom fields here once they are created', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" name="show-booking-data-registration[]" value="name" <?php echo in_array('name', $previouslySelectedBookingDataToShow) ? 'checked' : '' ?> /> 

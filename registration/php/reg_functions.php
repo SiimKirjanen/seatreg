@@ -152,7 +152,7 @@ function seatreg_get_registration_bookings_reg($code, $selectedShowRegistrationD
 			$bookingCustomFieldData = array_filter($bookingCustomFieldData, function($customField) use($selectedShowRegistrationData) {
 				return in_array($customField->label, $selectedShowRegistrationData);
 			});
-			$booking->custom_field_data = json_encode($bookingCustomFieldData, JSON_HEX_QUOT);
+			$booking->custom_field_data = json_encode(array_values($bookingCustomFieldData));
 		}else {
 			unset($booking->custom_field_data);
 		}
