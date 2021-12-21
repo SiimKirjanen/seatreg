@@ -287,8 +287,20 @@
 			}
 
 			if(loc[i].hasOwnProperty('customFieldData')) {
-				loc[i].customFieldData.forEach(function (customField) {
-					tooltipContent += '<div class="seatreg-tooltip-row">' + customField.label + ': ' + customField.value + '</div>';
+				this.customF.forEach(function(createdCustomField) {
+					var userEnteredCustomFieldData = loc[i].customFieldData.find(function(c) {
+						return c.label === createdCustomField.label;
+					});
+
+					if(userEnteredCustomFieldData) {
+						var customFieldValue = userEnteredCustomFieldData.value;
+
+						if(createdCustomField.type === 'check') {
+							customFieldValue = customFieldValue === '1' ? translator.translate('yes') : translator.translate('no');
+						}	
+
+						tooltipContent += '<div class="seatreg-tooltip-row">' + userEnteredCustomFieldData.label + ': ' + customFieldValue + '</div>';
+					}
 				});
 			}
 

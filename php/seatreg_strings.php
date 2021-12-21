@@ -49,6 +49,8 @@ function seatreg_generate_registration_strings() {
     $translations->bookingTotalCostIs_ = esc_html__('Booking total cost is ', 'seatreg');
     $translations->receiptSent = esc_html__('Booking receipt has been sent to your email', 'seatreg');
     $translations->payForBookingLink = esc_html__('Click the following link to pay for the booking', 'seatreg');
+    $translations->yes = esc_html__('Yes', 'seatreg');
+    $translations->no = esc_html__('No', 'seatreg');
 
 	return $translations;
 }
