@@ -7,12 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 //===========
 	/* Data coming from registration. Someone wants to book a seat/seats */
 //===========
-require_once( 'constants.php');
-require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/SeatregBooking.php');
-require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php');
-require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/registration_time_status.php' );
-require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/session_captcha.php' );
-require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/SeatregDataValidation.php' );
 
 class SeatregSubmitBookings extends SeatregBooking {
 	public $response; //response object. 
@@ -233,7 +227,6 @@ class SeatregSubmitBookings extends SeatregBooking {
 			}
 
 			if($this->_requireBookingEmailConfirm) {
-				seatreg_change_captcha(3);
 				$confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
 				$message = esc_html__('Your selected seats are', 'seatreg') . ': <br/><br/>' . $seatsString . '
 							<p>' . esc_html__('Click on the link below to confirm your booking', 'seatreg') . '</p>

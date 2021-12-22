@@ -7,12 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $wpdb;
 global $seatreg_db_table_names;
 
-require_once 'SeatregSubmitBookings.php';
-require_once 'SeatregJsonResponse.php';
-require_once 'constants.php';
-require_once 'emails.php';
-require_once 'SeatregDataValidation.php';
-
 $seatreg_db_table_names = new stdClass();
 $seatreg_db_table_names->table_seatreg = $wpdb->prefix . "seatreg";
 $seatreg_db_table_names->table_seatreg_options = $wpdb->prefix . "seatreg_options";

@@ -17,32 +17,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
 
-require_once( 'php/constants.php' );
-require_once( 'php/repositories/SeatregBookingRepository.php' );
-require_once( 'php/repositories/SeatregRegistrationRepository.php' );
-require_once( 'php/repositories/SeatregPaymentRepository.php' );
-require_once( 'php/repositories/SeatregOptionsRepository.php' );
-require_once( 'php/repositories/SeatregActivityLogRepository.php' );
-require_once( 'php/repositories/SeatregPaymentLogRepository.php' );
-require_once( 'php/services/SeatregRegistrationService.php' );
-require_once( 'php/services/SeatregBookingService.php' );
-require_once( 'php/services/SeatregPaymentService.php' );
+require( 'php/constants.php' );
+require( 'php/repositories/SeatregBookingRepository.php' );
+require( 'php/repositories/SeatregRegistrationRepository.php' );
+require( 'php/repositories/SeatregPaymentRepository.php' );
+require( 'php/repositories/SeatregOptionsRepository.php' );
+require( 'php/repositories/SeatregActivityLogRepository.php' );
+require( 'php/repositories/SeatregPaymentLogRepository.php' );
+require( 'php/services/SeatregRegistrationService.php' );
+require( 'php/services/SeatregBookingService.php' );
+require( 'php/services/SeatregPaymentService.php' );
+require( 'php/emails.php' );
+require( 'php/SeatregBooking.php' );
+require( 'php/SeatregSubmitBookings.php' );
+require( 'php/SeatregDataValidation.php' );
+require( 'php/util/registration_time_status.php' );
 
 if( is_admin() ) {
-	require( plugin_dir_path( __FILE__ ) . 'php/enqueue_admin.php' );
-	require( plugin_dir_path( __FILE__ ) . 'php/seatreg_admin_panel.php' );	
+	require( 'php/enqueue_admin.php' );
+	require( 'php/seatreg_admin_panel.php' );	
 }
 
 if( !is_admin() ) {
-	require( plugin_dir_path( __FILE__ ) . 'php/enqueue_public.php' );
+	require( 'php/enqueue_public.php' );
 }
 
-require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_functions.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'php/SeatregJsonResponse.php' );
-
+require( 'php/seatreg_functions.php' );
+require( 'php/SeatregJsonResponse.php' );
 
 //Actions
-require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_actions.php' );
+require( 'php/seatreg_actions.php' );
 
 //Hooks
 function seatreg_plugin_activate() {
@@ -51,7 +55,7 @@ function seatreg_plugin_activate() {
 register_activation_hook( __FILE__, 'seatreg_plugin_activate' );
 
 //Filters
-require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_filters.php' );
+require( 'php/seatreg_filters.php' );
 
 //shortcode
-require_once( plugin_dir_path( __FILE__ ) . 'php/seatreg_shortcode.php' );
+require( 'php/seatreg_shortcode.php' );
