@@ -89,7 +89,7 @@ function seatreg_create_welcome() {
 	   <div class="seatreg-builder-popup">
 			<i class="fa fa-times-circle builder-popup-close"></i>
 			<div class="seatreg-builder-popup-content">
-				<?php require( plugin_dir_path( __FILE__ ) . 'builder_content.php'  ); ?>
+				<?php require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/sections/builder_content.php' ); ?>
 			</div>
 		</div>
 	 </div>

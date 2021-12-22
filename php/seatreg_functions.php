@@ -781,35 +781,11 @@ function seatreg_generate_settings_form() {
 }
 
 function seatreg_create_registration_from() {
-	?>
-	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" id="create-registration-form">
-			<h4 class="new-reg-title">
-				<?php esc_html_e('Create new registration','seatreg'); ?>
-			</h4>
-			<label for="new-registration-name">
-				<?php esc_html_e('Enter registration name','seatreg'); ?>
-			</label>
-	    	<input type="text" name="new-registration-name" id="new-registration-name" style="margin-left: 12px" maxlength="<?php echo SEATREG_REGISTRATION_NAME_MAX_LENGTH; ?>">
-			<input type='hidden' name='action' value='seatreg_create_submit' />
-			<?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
-			<?php
-				submit_button(esc_html__('Create new registration', 'seatreg'));
-			?>
-	    </form>
-	<?php
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/forms/create-registration-form.php' );
 }
 
 function seatreg_create_delete_registration_from($registrationCode) {
-	?>
-	    <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post" class="seatreg-delete-registration-form" onsubmit="return confirm('Do you really want to delete?');">
-	    	<input type="hidden" name="registration-code" value="<?php echo esc_attr($registrationCode); ?>" />
-			<input type='hidden' name='action' value='seatreg_delete_registration' />
-			<?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
-			<?php
-				submit_button(esc_html__('Delete', 'seatreg'), 'delete-registration-btn', 'delete-registration', false, array( 'id' => "delete-$registrationCode" ));
-			?>
-	    </form>
-	<?php
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/forms/delete-registration-form.php' );
 }
 
 function seatreg_generate_booking_manager() {
@@ -1024,15 +1000,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 }
 
 function seatreg_view_booking_activity_btn($booking) {
-	?>
-		<div>
-			<br>
-			<button class="btn btn-outline-info btn-sm" data-action="view-booking-activity" data-booking-id="<?php echo esc_attr($booking->booking_id); ?>">
-				<i class="fa fa-history" aria-hidden="true"></i>
-				<?php esc_html_e('View booking activity', 'seatreg'); ?>
-			</button>
-		</div>
-	<?php
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/buttons/view-booking-activity-btn.php' );
 }
 
 function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
