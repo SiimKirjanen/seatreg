@@ -8,10 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/* For booking confirm */
 //===========
 
-require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/SeatregBooking.php' );
-require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
-require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/util/registration_time_status.php' );
-
 class SeatregConfirmBooking extends SeatregBooking {
 	public $reply;
 	protected $_confirmationCode;

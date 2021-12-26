@@ -11,8 +11,7 @@
 		exit('Missing data'); 
 	}
 
-	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_functions.php' );
-    require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/SeatregPayPalIpn.php' );
+	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/SeatregPayPalIpn.php' );
 
 	$bookingId = sanitize_text_field($_POST['custom']);
 
