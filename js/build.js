@@ -1382,23 +1382,22 @@
 		});
 
 		$('.build-area-wrapper').off().on('click', function(e) {
+			e.stopPropagation();
 			var $this = $(this);
 			var target = $(e.target);
 
-			if(target.hasClass('drag-box') ) {
-
+			if(target.hasClass('drag-box') || target.hasClass('text-box-input') ) {
 				return;
 			}
 
-			var relX = e.pageX + $this.scrollLeft() - $this.offset().left;  //+ $this.scrollLeft()
+			var relX = e.pageX + $this.scrollLeft() - $this.offset().left;
 			var relY = e.pageY + $this.scrollTop() - $this.offset().top;
+			var outSideOfSkeletonBoxZone = relX > roomSkeleton.totalWidth || relY > roomSkeleton.totalHeight; //detect click outside of the 'skeletons' zone
 
-			e.stopPropagation();
-
-			if(relX > roomSkeleton.totalWidth || relY > roomSkeleton.totalHeight) {
+			if( (regScope.action == 2 || regScope.action == 5) && outSideOfSkeletonBoxZone ) {
 				var dataCounter = 'b' +  regScope.regBoxCounter;
 				var skelStyle = 'width: ' + roomSkeleton.width + 'px; height: ' + roomSkeleton.height + 'px; position: absolute; top: ' + (relY - roomSkeleton.height/2) + 'px; left: ' + (relX - roomSkeleton.width/2) + 'px;';
-				
+
 				if(regScope.action == 2) { 
 					regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#61B329', 'nohover',true,'noStatus',1);  //add box to room
 					regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, true);
@@ -1406,8 +1405,34 @@
 					regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#cccccc', 'nohover',false,'noStatus',1);  //add box to room
 					regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, false);
 				}
+			}else if(regScope.action == 9) {
+				var dataCounter = 'b' +  regScope.regBoxCounter;
+				var skelStyle = 'width: ' + 16 + 'px; height: ' + roomSkeleton.height + 'px; position: absolute; top: ' + (relY - roomSkeleton.height/2) + 'px; left: ' + (relX - roomSkeleton.width/2) + 'px;';
+
+				regScope.buildTextBox(skelStyle, dataCounter, regScope, false);
 			}
 		});
+	};
+
+	Registration.prototype.buildTextBox = function(styles, dataCounter) {
+		var textBox = $('<div class="drag-box text-box"><input class="text-box-input" /></div>').attr({
+			style: styles,
+			'data-id': dataCounter, 
+		}).on('keyup', function(e) {
+			var $input = $(this).find('input');
+			var inputTextWidth = $input.val().length;
+
+			$(this).css('width', (inputTextWidth + 1) * 9);
+		}).on('focusout', function() {
+			var inputTextWidth = $(this).find('input').val().length;
+
+			if(inputTextWidth < 1) {
+				$('.build-area .text-box[data-id="'+ dataCounter +'"]').remove();
+			}
+		});
+
+		textBox.appendTo('.build-area');
+		$('.build-area .text-box[data-id="'+ dataCounter +'"] .text-box-input').focus();
 	};
 
 	//creates a box out of skeleton box
@@ -1463,7 +1488,7 @@
 			}
 		});
 
-		box.appendTo('.build-area');  //fainally ad box to build-area
+		box.appendTo('.build-area');  //fainally add box to build-area
 	}
 
 	//this method is used for building already existing rooms. like when you change room. build old room
@@ -1647,7 +1672,7 @@
 			return true;
 		}
 		var regScope = this;
-		var boxCollection = $('.build-area .drag-box'); 
+		var boxCollection = $('.build-area .drag-box:not(.text-box)'); 
 		var autoHide = true;
 
 		if($('html').hasClass('touch')) {
@@ -1662,7 +1687,7 @@
 
 			start: function(event, ui) {
 				if(regScope.activeBoxArray.length == 0) {
-					$('.build-area .drag-box').resizable("option","alsoResize", false); 
+					$('.build-area .drag-box:not(.text-box)').resizable("option","alsoResize", false); 
 				}
 				if(regScope.activeBoxArray.indexOf($(this).data('id')) == -1) {
 					regScope.activeBoxArray.push($(this).data('id'));
@@ -1818,6 +1843,12 @@
 			regScope.removeResisableListeners();
 		}else if(this.action == 6) {  //in touch devices, move around tool
 			regScope.addselectableScroll();
+			regScope.removeDraggableListeners();
+			regScope.removeResisableListeners();
+		}else if(this.action == 9) {
+			$('.build-area-wrapper').attr('data-cursor','9');
+
+			regScope.removeSelectableScroll();	
 			regScope.removeDraggableListeners();
 			regScope.removeResisableListeners();
 		}
@@ -2861,8 +2892,7 @@
 	});
 
 	$('.mouse-action-boxes .mouse-option').on('click', function(){   //mouse action menu
-		//get button action code
-		reg.mouseActionChange($(this));	//changes mouse action
+		reg.mouseActionChange($(this));
 	});
 
 	//will be called when room number is clikked

@@ -21,10 +21,11 @@
 
 			<div class="mouse-action-boxes">
 				<div data-action="1" class="mouse-option action1" id="mouse-option-active" title="Select, move and resize tool"></div>
+				<div data-action="4" class="mouse-option action4" title="Lasso select tool"></div>
 				<div data-action="2" class="mouse-option action2" title="Seat creation tool"></div>
 				<div data-action="5" class="mouse-option action5" title="Custom box tool"></div>
+				<div data-action="9" class="mouse-option action9" title="Text tool"></div>
 				<div data-action="3" class="mouse-option action3" title="Eraser tool"></div>
-				<div data-action="4" class="mouse-option action4" title="Lasso select tool"></div>
 			</div>
 
 			<div id="build-section-click-controls">
@@ -55,7 +56,7 @@
 	
 		<div class="build-area-wrapper" data-cursor="1">
 			<div id="build-area-loading-wrap">
-				<img src="<?php echo plugins_url( 'img/loading.png', dirname(__FILE__) ) ?>" id="loading-img" alt="Loading...">
+				<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/loading.png'; ?>" id="loading-img" alt="Loading...">
 				<span class='loading-text'><?php esc_html_e('Loading...', 'seatreg');?></span>
 			</div>
 			<div class="build-area dragger" draggable="false">

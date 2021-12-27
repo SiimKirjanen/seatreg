@@ -247,7 +247,7 @@
 }
 
 .seatreg-map-builder-page .mouse-action-boxes .action1{
-	background-position: 0 0;
+	background-position: 0 -1px;
 	width: 41px;
 	height: 41px;
 }
@@ -276,7 +276,7 @@
 	height: 41px;
 }
 .seatreg-map-builder-page .mouse-action-boxes .action5#mouse-option-active{
-	background-position: -50px -268px ;
+	background-position: -50px -269px ;
 	width: 41px;
 	height: 41px;
 }
@@ -308,7 +308,7 @@
 	height: 41px;
 }
 .seatreg-map-builder-page .mouse-action-boxes .action4#mouse-option-active {
-	background-position: -207px -107px ;
+	background-position: -207px -108px;
 	width: 41px;
 	height: 41px;
 }
@@ -336,11 +336,26 @@
 	height: 41px;
 }
 .seatreg-map-builder-page .mouse-action-boxes .action2#mouse-option-active {
-	background-position: -51px -213px ;
+	background-position: -51px -214px ;
 	width: 41px;
 	height: 41px;
 }
 
+.seatreg-map-builder-page .mouse-action-boxes .action9 {
+	background-position: 0 -214px ;
+	width: 41px;
+	height: 41px;
+}
+.seatreg-map-builder-page .mouse-action-boxes .action9:hover {
+	background-position: -51px -214px ;
+	width: 41px;
+	height: 41px;
+}
+.seatreg-map-builder-page .mouse-action-boxes .action9#mouse-option-active {
+	background-position: -51px -214px ;
+	width: 41px;
+	height: 41px;
+}
 
 /*side options*/
 
@@ -596,11 +611,15 @@
 .seatreg-map-builder-page .drag-box {
     z-index: 1;
     border: 1px solid black;
- 
 }
-
-.seatreg-map-builder-page #build-section .build-area-wrapper[data-cursor="1"] .drag-box:hover {
-    cursor:move;
+.seatreg-map-builder-page .text-box {
+	input {
+		padding:0;
+		margin:0;
+		width: 100%;
+		height: 100%;
+		text-align: center;
+	}
 }
 
 .seatreg-map-builder-page .can-register {
@@ -943,6 +962,21 @@
 	background-position: -257px -161px;
 }
 
+.seatreg-map-builder-page #build-section .build-area-wrapper[data-cursor="1"] {
+	.drag-box:hover {
+		cursor: move;
+	}
+	.text-box {
+		.text-box-input {
+			pointer-events: none
+		}
+	}
+}
+
+.seatreg-map-builder-page #build-section .build-area-wrapper[data-cursor="9"] {
+    cursor:text;
+}
+
 .seatreg-map-builder-page #build-section .build-area-wrapper[data-cursor="4"] {
 	cursor: url("css/cursor/eraser_cursor.cur"), auto;
 	cursor: url('cursor/eraser_kursor.png') 0 21, auto;
@@ -977,7 +1011,6 @@
 	/*cursor: url("css/lasso2.cur"), auto !important;
 	cursor: url(lasso_tool_new.png) 8 8, auto !important;*/
 }
-
 
 .seatreg-map-builder-page #new-room-create {
 	float: left;
