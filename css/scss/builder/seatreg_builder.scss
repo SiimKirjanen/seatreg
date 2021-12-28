@@ -625,7 +625,7 @@
 .seatreg-map-builder-page .can-register {
 	background: #61B329;
 }
-.seatreg-map-builder-page .no-register {
+.seatreg-map-builder-page .no-register:not(.text-box) {
 	background-color: #ccc;
 }
 

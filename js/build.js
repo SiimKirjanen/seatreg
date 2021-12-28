@@ -75,7 +75,7 @@
 	*/
 
 	//box class 12 construct
-	function Box(legend, xPos, yPos, xSize, ySize, id, color, hoverText, canIRegister, seat, status, zIndex, price = 0) {
+	function Box(legend, xPos, yPos, xSize, ySize, id, color, hoverText, canIRegister, seat, status, zIndex, price, type) {
 		this.legend = legend;
 		this.xPosition = xPos;
 		this.yPosition = yPos;
@@ -89,6 +89,8 @@
 		this.status = status;
 		this.zIndex = zIndex;
 		this.price = price;
+		this.type = type;
+		this.input = '';
 	}
 
 	//Change box values. position and size
@@ -136,6 +138,10 @@
 
 	Box.prototype.changePrice = function(price) {
 		this.price = price;
+	}
+
+	Box.prototype.changeInput = function(newInput) {
+		this.input = newInput;
 	}
 
 	/*
@@ -247,13 +253,24 @@
 		return false;
 	};
 
+	Room.prototype.findAndReturnBox = function(id) {
+		var arrLength = this.boxes.length;
+		for(var i = 0; i < arrLength; i++) {
+			if(this.boxes[i].id == id) {
+				return this.boxes[i];
+			}
+		}
+
+		return false;
+	}
+
 	//adds box to room
-	Room.prototype.addBox = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,zIndex) {
+	Room.prototype.addBox = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,zIndex, type) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
 
-		this.boxes.push(new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,this.roomSeatCounter,status,zIndex));
+		this.boxes.push(new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,this.roomSeatCounter,status,zIndex, 0, type));
 		reg.needToSave = true;
 		this.boxCounter++;
 		reg.regBoxCounter++;
@@ -1359,24 +1376,24 @@
 			if(regScope.action == 2 && leftButtonDown == true) {
 				var skelStyle = $(this).attr('style');
 				var dataCounter = 'b' +  regScope.regBoxCounter;
-				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#61B329', 'nohover',true, "noStatus", 1);  //add box to room
+				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#61B329', 'nohover',true, "noStatus", 1, 'registration-box');  //add box to room
 				regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, true);
 			}else if(regScope.action == 5 && leftButtonDown == true) {
 				var skelStyle = $(this).attr('style');
 				var dataCounter = 'b' +  regScope.regBoxCounter;
-				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#cccccc', 'nohover',false, "noStatus", 1);  //add box to room
+				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#cccccc', 'nohover',false, "noStatus", 1, 'custom-box');  //add box to room
 				regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, false);
 			}
 		}).on('mousedown', function() {  //down klik on element
 			if(regScope.action == 2) {
 				var skelStyle = $(this).attr('style');
 				var dataCounter = 'b' +  regScope.regBoxCounter;	
-				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#61B329', 'nohover',true,'noStatus',1);  //add box to room
+				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#61B329', 'nohover',true,'noStatus',1, 'registration-box');  //add box to room
 				regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, true);
 			}else if(regScope.action == 5) {
 				var skelStyle = $(this).attr('style');
 				var dataCounter = 'b' +  regScope.regBoxCounter;
-				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#cccccc', 'nohover',false,'noStatus',1);  //add box to room
+				regScope.rooms[regScope.currentRoom].addBox("noLegend",parseInt($(this).css('left')), parseInt($(this).css('top')), parseInt($(this).css('width')), parseInt($(this).css('height')), dataCounter, '#cccccc', 'nohover',false,'noStatus',1, 'custom-box');  //add box to room
 				regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, false);
 			}
 		});
@@ -1399,39 +1416,46 @@
 				var skelStyle = 'width: ' + roomSkeleton.width + 'px; height: ' + roomSkeleton.height + 'px; position: absolute; top: ' + (relY - roomSkeleton.height/2) + 'px; left: ' + (relX - roomSkeleton.width/2) + 'px;';
 
 				if(regScope.action == 2) { 
-					regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#61B329', 'nohover',true,'noStatus',1);  //add box to room
+					regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#61B329', 'nohover',true,'noStatus',1, 'registration-box');  //add box to room
 					regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, true);
 				}else if(regScope.action == 5) {
-					regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#cccccc', 'nohover',false,'noStatus',1);  //add box to room
+					regScope.rooms[regScope.currentRoom].addBox("noLegend", relX - roomSkeleton.width/2, relY - roomSkeleton.height/2, roomSkeleton.width, roomSkeleton.height, dataCounter, '#cccccc', 'nohover',false,'noStatus',1, 'custom-box');  //add box to room
 					regScope.buildBoxOutOfSkeleton(skelStyle, dataCounter, regScope, false);
 				}
 			}else if(regScope.action == 9) {
 				var dataCounter = 'b' +  regScope.regBoxCounter;
 				var skelStyle = 'width: ' + 16 + 'px; height: ' + roomSkeleton.height + 'px; position: absolute; top: ' + (relY - roomSkeleton.height/2) + 'px; left: ' + (relX - roomSkeleton.width/2) + 'px;';
 
-				regScope.buildTextBox(skelStyle, dataCounter, regScope, false);
+				regScope.buildTextBox((relX - roomSkeleton.width/2), (relY - roomSkeleton.height/2), dataCounter);
 			}
 		});
 	};
 
-	Registration.prototype.buildTextBox = function(styles, dataCounter) {
+	Registration.prototype.buildTextBox = function(positionX, positionY, dataCounter) {
+		var initialBoxWidth = 16;
+		var initialBoxHeight = 32;
+		var styles = 'width: ' + initialBoxWidth + 'px; height: ' + initialBoxHeight + 'px; position: absolute; top: ' + positionY + 'px; left: ' + positionX + 'px;';
+		var registrationScope = this;
+
 		var textBox = $('<div class="drag-box text-box"><input class="text-box-input" /></div>').attr({
 			style: styles,
 			'data-id': dataCounter, 
-		}).on('keyup', function(e) {
+		}).on('keyup', function() {
 			var $input = $(this).find('input');
-			var inputTextWidth = $input.val().length;
-
-			$(this).css('width', (inputTextWidth + 1) * 9);
+			var box = registrationScope.rooms[registrationScope.currentRoom].findAndReturnBox(dataCounter);
+			box.changeInput($input.val());
+			$(this).css('width', ($input.val().length + 1) * 9);
 		}).on('focusout', function() {
 			var inputTextWidth = $(this).find('input').val().length;
 
 			if(inputTextWidth < 1) {
 				$('.build-area .text-box[data-id="'+ dataCounter +'"]').remove();
+				registrationScope.rooms[registrationScope.currentRoom].deleteBox(dataCounter);
 			}
 		});
 
 		textBox.appendTo('.build-area');
+		this.rooms[this.currentRoom].addBox("noLegend", positionX, positionY, initialBoxWidth, initialBoxHeight, dataCounter, 'none', 'nohover',false,'noStatus', 1, 'text-box'); 
 		$('.build-area .text-box[data-id="'+ dataCounter +'"] .text-box-input').focus();
 	};
 
@@ -1497,7 +1521,6 @@
 
 		if($('html').hasClass('touch')) {
 			regScope.action = 6;
-
 		}else {
 			regScope.action = 1;
 		}
@@ -1505,8 +1528,15 @@
 		var boxCount = this.rooms[this.currentRoom].boxes.length;
 
 		for(var i = 0; i < boxCount; i++) {
-			$('<div>').addClass('drag-box ' + this.rooms[this.currentRoom].boxes[i].id).attr({
-				'data-id': this.rooms[this.currentRoom].boxes[i].id
+			var boxId = this.rooms[this.currentRoom].boxes[i].id;
+			var boxClasses = 'drag-box ' + boxId;
+			
+			if(this.rooms[this.currentRoom].boxes[i].type === 'text-box') {
+				boxClasses += ' text-box';
+			}
+
+			$('<div>').addClass(boxClasses).attr({
+				'data-id': boxId
 			}).css({
 				width: this.rooms[this.currentRoom].boxes[i].width + 'px',
 				height: this.rooms[this.currentRoom].boxes[i].height + 'px',
@@ -1515,7 +1545,7 @@
 				top: this.rooms[this.currentRoom].boxes[i].yPosition,
 				'background-color': this.rooms[this.currentRoom].boxes[i].color,
 				'z-index': this.rooms[this.currentRoom].boxes[i].zIndex
-			}).on('click', function() { //chen you klik box			
+			}).on('click', function() { 	
 				if(regScope.action == 1) {	//is mouse action 1?
 					regScope.activeBoxArray.length = 0;  //make sure activebox in empty.
 					regScope.activeBoxArray.push($(this).attr('data-id'));	//this box in now active
@@ -1551,6 +1581,27 @@
 					}
 				}else {
 					$(this).addClass('no-register');
+
+					if(regScope.rooms[regScope.currentRoom].boxes[i].type === 'text-box') {
+						var boxInput = regScope.rooms[regScope.currentRoom].boxes[i].input;
+
+						$(this).append('<input class="text-box-input" value="' + boxInput + '" />');
+						$(this).css('width', (boxInput.length + 1) * 9);
+
+						$(this).on('keyup', function() {
+							var $input = $(this).find('input');
+							var box = regScope.rooms[regScope.currentRoom].findAndReturnBox(boxId);
+							box.changeInput($input.val());
+							$(this).css('width', ($input.val().length + 1) * 9);
+						}).on('focusout', function() {
+							var inputTextWidth = $(this).find('input').val().length;
+				
+							if(inputTextWidth < 1) {
+								$('.build-area .text-box[data-id="'+ boxId +'"]').remove();
+								regScope.rooms[regScope.currentRoom].deleteBox(boxId);
+							}
+						});
+					}
 				}
 
 				if(regScope.rooms[regScope.currentRoom].boxes[i].hoverText != 'nohover') {
