@@ -962,10 +962,7 @@
 	background-position: -257px -161px;
 }
 
-.seatreg-map-builder-page #build-section .build-area-wrapper[data-cursor="1"] {
-	.drag-box:hover {
-		cursor: move;
-	}
+.seatreg-map-builder-page #build-section .build-area-wrapper {
 	.text-box {
 		.text-box-input {
 			pointer-events: none
@@ -973,8 +970,20 @@
 	}
 }
 
+.seatreg-map-builder-page #build-section .build-area-wrapper[data-cursor="1"] {
+	.drag-box:hover {
+		cursor: move;
+	}
+}
+
 .seatreg-map-builder-page #build-section .build-area-wrapper[data-cursor="9"] {
-    cursor:text;
+    cursor: text;
+
+	.text-box {
+		.text-box-input {
+			pointer-events: auto;
+		}
+	}
 }
 
 .seatreg-map-builder-page #build-section .build-area-wrapper[data-cursor="4"] {

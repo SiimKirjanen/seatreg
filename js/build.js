@@ -208,7 +208,7 @@
 			width: this.roomWidth + 10,
 			height: this.roomHeight + 10,
 			seatCounter: this.roomSeatCounter,
-			backgroundImage: this.backgroundImage,
+			backgroundImage: this.backgroundImage
 		}
 
 		roomData['boxes'] = [];
@@ -234,7 +234,9 @@
 				seat: this.boxes[i].seat,
 				status: 'noStatus',
 				zIndex: this.boxes[i].zIndex,
-				price: this.boxes[i].price
+				price: this.boxes[i].price,
+				type: this.boxes[i].type,
+				input: this.boxes[i].input,
 			});
 		}
 
@@ -279,11 +281,13 @@
 	};
 
 	//add box to room from server data
-	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price) {
+	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
-		this.boxes.push(new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,this.roomSeatCounter,status,boxZIndex, price));
+		var box = new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,this.roomSeatCounter,status,boxZIndex, price, type);
+		box.input = input;
+		this.boxes.push(box);
 		this.boxCounter++;
 	};
 
@@ -1452,6 +1456,12 @@
 				$('.build-area .text-box[data-id="'+ dataCounter +'"]').remove();
 				registrationScope.rooms[registrationScope.currentRoom].deleteBox(dataCounter);
 			}
+		}).on('mouseenter', function() {
+			if(registrationScope.action === 3 && leftButtonDown === true) {
+				registrationScope.activeBoxArray.length = 0;	//make sure activebox in empty.
+				registrationScope.activeBoxArray.push($(this).attr('data-id'));
+				registrationScope.deleteBoxes();
+			}
 		});
 
 		textBox.appendTo('.build-area');
@@ -1800,7 +1810,6 @@
 		$('.build-area-wrapper').selectableScroll({
 			filter: ".drag-box",
 			stop: function( event, ui ) {
-				//alsoResize: ".active-box",
 				$('.build-area .ui-selected').addClass('active-box').removeClass('ui-selected');
 
 				var bIndex = regScope.biggestzIndex();
@@ -1811,10 +1820,10 @@
 				});
 
 				if($('.build-area .active-box').length > 1) {
-					$('.build-area .drag-box').resizable( "option", "alsoResize", ".active-box" );
+					$('.build-area .drag-box:not(.text-box)').resizable( "option", "alsoResize", ".active-box:not(.text-box)" );
 					regScope.needMultiDrag = true;
 				}else {
-					$('.build_area .drag-box').resizable( "option", "alsoResize", false );
+					$('.build_area .drag-box:not(.text-box)').resizable( "option", "alsoResize", false );
 					regScope.needMultiDrag = false;
 				}
 
@@ -1901,7 +1910,6 @@
 
 			regScope.removeSelectableScroll();	
 			regScope.removeDraggableListeners();
-			regScope.removeResisableListeners();
 		}
 	};
 
@@ -2114,6 +2122,8 @@
 							arr[i].status, 
 							arr[i].zIndex,
 							arr[i].price,
+							arr[i].type,
+							arr[i].input,
 						);
 			    	}
 			    }
