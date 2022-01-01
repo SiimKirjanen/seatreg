@@ -477,7 +477,6 @@ body {
 	position: relative;
 	cursor: pointer;
 	margin-top: 6px;
-	margin-bottom: 8px;
 }
 .header-time {
 	display: none;
@@ -518,7 +517,7 @@ body {
 .room-nav-link {
 	cursor: pointer;
 	display: inline-block;
-	font-size: 20px;
+	font-size: 22px;
 	margin: 2px 10px;
 }
 #room-nav.modal {
@@ -594,6 +593,7 @@ body {
 .active-nav-link {
 	font-weight: bold;
 	color: #ec6013;
+	text-decoration: underline;
 }
 
 /*end of nav rules*/
