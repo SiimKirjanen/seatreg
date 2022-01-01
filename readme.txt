@@ -42,6 +42,7 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 == Changelog ==
 
 = 1.13.0 =
+* Map editor can now add text
 * Added registration view room change buttons instead of just text.
 
 = 1.12.0 =
