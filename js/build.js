@@ -82,6 +82,7 @@
 		this.width = xSize;
 		this.height = ySize;
 		this.color = color;
+		this.fontColor = '#212529';
 		this.hoverText = hoverText;
 		this.id = id;
 		this.canRegister = canIRegister;
@@ -124,6 +125,10 @@
 		this.legend = "noLegend";
 		reg.needToSave = true;
 	};
+
+	Box.prototype.changeFontColor = function(newFontColor) {
+		this.fontColor = newFontColor;
+	}
 
 	Box.prototype.changeRegisterStatus = function(newStatus) {
 		this.canRegister = newStatus;
@@ -228,6 +233,7 @@
 				width: Math.round(this.boxes[i].width),
 				height: Math.round(this.boxes[i].height),
 				color: this.boxes[i].color,
+				fontColor: this.boxes[i].fontColor,
 				hoverText: this.boxes[i].hoverText.replace(/<br>/g,'^'),
 				id: this.boxes[i].id,
 				canRegister: canReg,
@@ -281,12 +287,13 @@
 	};
 
 	//add box to room from server data
-	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input) {
+	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
 		var box = new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,this.roomSeatCounter,status,boxZIndex, price, type);
 		box.input = input;
+		box.fontColor = fontColor;
 		this.boxes.push(box);
 		this.boxCounter++;
 	};
@@ -1119,34 +1126,39 @@
 		}
 	};
 
-	//can change box color also
+	//Change background color of a box. In case of text-box change font color
 	Registration.prototype.changeBoxColor = function(colorHex) {
 		if(this.action == 1) {
-			var index = this.rooms[this.currentRoom].findBox(this.activeBoxArray[0]);
+			var box = this.rooms[this.currentRoom].findAndReturnBox(this.activeBoxArray[0]);
 
-			if(index !== false) {
-				var oldLegend = [this.rooms[this.currentRoom].boxes[index].legend];
+			if(box !== false) {
+				if(box.type === 'text-box') {
+					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"'] .text-box-input").css('color', '#' + colorHex);
+					box.changeFontColor('#' + colorHex);
+				}else {
+					var oldLegend = [box.legend];
 
-				$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"']").css('background-color','#'+colorHex);
-				this.rooms[this.currentRoom].boxes[index].changeColor('#'+colorHex);
-				this.afterColorChange(oldLegend);
-			}else {
-				
+					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"']").css('background-color', '#' + colorHex);
+					box.changeColor('#' + colorHex);
+					this.afterColorChange(oldLegend);
+				}
 			}
-					
 		}else if(this.action == 4) {
-			var arrLength = this.activeBoxArray.length;
+			var activeBoxesLength = this.activeBoxArray.length;
 			var oldLegends = [];  //store box legends before new color
 
-			for(var i = 0; i < arrLength;i++) {
-				var index = this.rooms[this.currentRoom].findBox(this.activeBoxArray[i]);
+			for(var i = 0; i < activeBoxesLength; i++) {
+				var box = this.rooms[this.currentRoom].findAndReturnBox(this.activeBoxArray[i]);
 
-				if(index !== false) {
-					oldLegends.push(this.rooms[this.currentRoom].boxes[index].legend);
-					this.rooms[this.currentRoom].boxes[index].changeColor('#'+colorHex);
-					$('.build-area').find("[data-id='" + this.activeBoxArray[i] +"']").css('background-color','#'+colorHex);
-				}else {
-					
+				if(box !== false) {
+					if(box.type === 'text-box') {
+						$('.build-area').find("[data-id='" + this.activeBoxArray[i] +"'] .text-box-input").css('color', '#' + colorHex);
+						box.changeFontColor('#' + colorHex);
+					}else {
+						oldLegends.push(box.legend);
+						box.changeColor('#' + colorHex);
+						$('.build-area').find("[data-id='" + this.activeBoxArray[i] + "']").css('background-color', '#' + colorHex);
+					}
 				}
 			}
 			this.afterColorChange(oldLegends);
@@ -1590,21 +1602,24 @@
 						$(this).addClass('bron-register').append($('<div>').addClass('taken-sign'));
 					}
 				}else {
-					$(this).addClass('no-register');
+					var $this = $(this);
+
+					$this.addClass('no-register');
 
 					if(regScope.rooms[regScope.currentRoom].boxes[i].type === 'text-box') {
 						var boxInput = regScope.rooms[regScope.currentRoom].boxes[i].input;
 
-						$(this).append('<input class="text-box-input" value="' + boxInput + '" />');
-						$(this).css('width', (boxInput.length + 1) * 9);
+						$this.append('<input class="text-box-input" value="' + boxInput + '" />');
+						$this.find('.text-box-input').css('color', regScope.rooms[regScope.currentRoom].boxes[i].fontColor);
+						$this.css('width', (boxInput.length + 1) * 9);
 
-						$(this).on('keyup', function() {
-							var $input = $(this).find('input');
+						$this.on('keyup', function() {
+							var $input = $this.find('input');
 							var box = regScope.rooms[regScope.currentRoom].findAndReturnBox(boxId);
 							box.changeInput($input.val());
-							$(this).css('width', ($input.val().length + 1) * 9);
+							$this.css('width', ($input.val().length + 1) * 9);
 						}).on('focusout', function() {
-							var inputTextWidth = $(this).find('input').val().length;
+							var inputTextWidth = $this.find('input').val().length;
 				
 							if(inputTextWidth < 1) {
 								$('.build-area .text-box[data-id="'+ boxId +'"]').remove();
@@ -2124,6 +2139,7 @@
 							arr[i].price,
 							arr[i].type,
 							arr[i].input,
+							arr[i].fontColor,
 						);
 			    	}
 			    }
@@ -2452,10 +2468,9 @@
 
     //color picket for main dialog
     $('#picker').colpick({
-		flat:true,
-		layout:'hex',
-		color:'0072CE',
-
+		flat: true,
+		layout: 'hex',
+		color: '0072CE',
 		onSubmit: function(hsb,hex,rgb,el,bySetColor) {
 			reg.changeBoxColor(hex);
 			$('#color-dialog').modal('toggle');

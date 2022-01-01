@@ -613,12 +613,16 @@
     border: 1px solid black;
 }
 .seatreg-map-builder-page .text-box {
+	border: none;
+
 	input {
 		padding:0;
 		margin:0;
 		width: 100%;
 		height: 100%;
 		text-align: center;
+		border: none;
+		background-color: transparent;
 	}
 }
 
