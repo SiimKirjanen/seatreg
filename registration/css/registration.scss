@@ -657,6 +657,11 @@ body {
 	border: 1px solid black;
 	position: absolute;
 	font-size: 14px;
+
+	&.text-box {
+		line-height: 32px;
+		border: none;
+	}
 }
 .cursor {
 	cursor: pointer;

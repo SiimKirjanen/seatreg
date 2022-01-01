@@ -238,6 +238,12 @@
 			box.style.width = loc[i].width + 'px';
 			box.style.height = loc[i].height + 'px';
 
+			if(loc[i].type === 'text-box') {
+				box.className = box.className + ' text-box';
+				box.style.color = loc[i].fontColor;
+				box.innerHTML = loc[i].input;
+			}
+
 			if(legend !== 'noLegend') {
 				box.setAttribute('data-legend',legend);
 				box.setAttribute('data-leg',legend.replace(/\s+/g, '_').toLowerCase());

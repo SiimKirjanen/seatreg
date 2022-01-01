@@ -1459,8 +1459,10 @@
 		}).on('keyup', function() {
 			var $input = $(this).find('input');
 			var box = registrationScope.rooms[registrationScope.currentRoom].findAndReturnBox(dataCounter);
+			var inputLength = ($input.val().length + 1) * 9;
 			box.changeInput($input.val());
-			$(this).css('width', ($input.val().length + 1) * 9);
+			box.changeSize(inputLength, initialBoxHeight);
+			$(this).css('width', inputLength);
 		}).on('focusout', function() {
 			var inputTextWidth = $(this).find('input').val().length;
 
@@ -1603,6 +1605,7 @@
 					}
 				}else {
 					var $this = $(this);
+					var boxId = $this.data('id');
 
 					$this.addClass('no-register');
 
@@ -1616,8 +1619,10 @@
 						$this.on('keyup', function() {
 							var $input = $this.find('input');
 							var box = regScope.rooms[regScope.currentRoom].findAndReturnBox(boxId);
+							var inputLength = ($input.val().length + 1) * 9;
 							box.changeInput($input.val());
-							$this.css('width', ($input.val().length + 1) * 9);
+							box.changeSize(inputLength, 32);
+							$this.css('width', inputLength);
 						}).on('focusout', function() {
 							var inputTextWidth = $this.find('input').val().length;
 				
