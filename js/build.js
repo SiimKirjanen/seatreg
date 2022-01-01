@@ -149,6 +149,10 @@
 		this.input = newInput;
 	}
 
+	Box.prototype.calculateInputBoxWidth = function(inputValue) {
+		return (inputValue.length + 2) * 8;
+	}
+
 	/*
 
 		*-------Legend class and methods----------
@@ -1459,7 +1463,8 @@
 		}).on('keyup', function() {
 			var $input = $(this).find('input');
 			var box = registrationScope.rooms[registrationScope.currentRoom].findAndReturnBox(dataCounter);
-			var inputLength = ($input.val().length + 1) * 9;
+
+			var inputLength = box.calculateInputBoxWidth($input.val());
 			box.changeInput($input.val());
 			box.changeSize(inputLength, initialBoxHeight);
 			$(this).css('width', inputLength);
@@ -1619,7 +1624,7 @@
 						$this.on('keyup', function() {
 							var $input = $this.find('input');
 							var box = regScope.rooms[regScope.currentRoom].findAndReturnBox(boxId);
-							var inputLength = ($input.val().length + 1) * 9;
+							var inputLength = box.calculateInputBoxWidth($input.val());
 							box.changeInput($input.val());
 							box.changeSize(inputLength, 32);
 							$this.css('width', inputLength);
@@ -1810,7 +1815,7 @@
 
 	Registration.prototype.removeResisableListeners = function() {
 		if(this.hasResizableListeners()) {
-			$('.build-area-wrapper .drag-box').resizable("destroy");
+			$('.build-area-wrapper .drag-box:not(.text-box)').resizable("destroy");
 		}
 	};
 
