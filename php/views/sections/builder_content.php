@@ -350,6 +350,13 @@
 					</div>
 
 					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-lasso"></div>
+						<p class="help-dialog-text">	
+							<?php esc_html_e('Lasso tool is helpful if you wish to work with multiple objects at the same time (changing color, deleting, adding hover text and legends). Simple hold down left mouse button and move your cursor to select multiple seats/boxes.', 'seatreg');?>						
+						</p>
+					</div>
+
+					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-add"></div>
 						<p class="help-dialog-text">
 							<?php esc_html_e('With this tool you can create seats. Simply click on gray dotted box and new seat will be created. You can create multiple seats at once by dragging cursor over gray boxes.', 'seatreg');?>
@@ -364,19 +371,19 @@
 					</div>
 
 					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-text"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('With text tool you can add text directly to your seat map. You can also change the color of the text with color tool.', 'seatreg');?>
+						</p>
+					</div>
+
+					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-eraser"></div>
 						<p class="help-dialog-text">
 							<?php esc_html_e('With eraser tool you can remove seats and custom boxes. Simply click on object and it will be removed. You can remove multiple objects at once by holding down left mouse and moving cursor over them.', 'seatreg');?>
 						</p>
 					</div>
 					
-					<div class="help-dialog-row">
-						<div class="guide-item2 guide-item-lasso"></div>
-						<p class="help-dialog-text">	
-							<?php esc_html_e('Lasso tool is helpful if you wish to work with multiple objects at the same time (changing color, deleting, adding hover text and legends). Simple hold down left mouse button and move your cursor to select multiple seats/boxes.', 'seatreg');?>						
-						</p>
-					</div>
-
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-del"></div>
 						<p class="help-dialog-text">
