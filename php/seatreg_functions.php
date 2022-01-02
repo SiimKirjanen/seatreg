@@ -882,8 +882,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	echo '<div class="bg-color">';
 		echo '<div class="tab-container">';
 			echo '<ul class="etabs">';
-				echo '<li class="tab"><a href="#', esc_html($project_name), 'bron">', esc_html_e('Pending', 'seatreg'), '</a></li>';
-				echo '<li class="tab"><a href="#', esc_html($project_name), 'taken">', esc_html_e('Approved','seatreg'),'</a></li>';
+				echo '<li class="tab"><a href="#', sha1($project_name), 'bron">', esc_html_e('Pending', 'seatreg'), '</a></li>';
+				echo '<li class="tab"><a href="#', sha1($project_name), 'taken">', esc_html_e('Approved','seatreg'),'</a></li>';
 			echo '</ul>';
 		echo '<div class="panel-container differentBgColor">';
 				echo '<div class="registration-manager-labels">
@@ -893,7 +893,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						<div class="seat-name-box manager-box manager-box-link" data-order="date">', esc_html__('Date','seatreg'),'</div>
 						<div class="seat-date-box manager-box manager-box-link" data-order="id">', esc_html__('Booking id','seatreg'),'</div>	
 					</div>';
-				echo '<div id="', esc_html($project_name), 'bron" class="tab_container">';
+				echo '<div id="', sha1($project_name), 'bron" class="tab_container">';
 
 			if($row_count == 0) {
 				echo '<div class="notify-text">', esc_html__('No pending seats', 'seatreg'),'</div>';
@@ -941,7 +941,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 			
 			echo '</div>';
 
-			echo '<div id="', esc_html($project_name),'taken" class="tab_container active">';
+			echo '<div id="', sha1($project_name),'taken" class="tab_container active">';
 
 			if($row_count2 == 0) {
 				echo '<div class="notify-text">', esc_html__('No approved seats', 'seatreg'), '</div>';
