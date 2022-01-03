@@ -6,7 +6,6 @@
 	Author: Siim Kirjanen
 	Author URI: https://github.com/SiimKirjanen
 	Text Domain: seatreg
-	Domain Path: /languages
 	Version: 1.13.0
 	Requires at least: 5.3
 	Requires PHP: 7.2.28
