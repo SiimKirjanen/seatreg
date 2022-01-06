@@ -4,7 +4,7 @@ Tags: seat registration, booking, booking seats, booking events, seat map, booki
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 5.8.1
-Stable tag: 1.13.0
+Stable tag: 1.14.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -40,6 +40,12 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 6. Legends and background image
 
 == Changelog ==
+
+= 1.14.0 =
+* Fixed issue where certain characters in registration name would break booking manager
+* Fixed registration view when Google page translate is used
+* Not using language files from the project. Language files will be pulled from translate.wordpress.org/projects/wp-plugins/seatreg
+* Booking status will be set to 0 when related PayPal payment is refunded or reversed
 
 = 1.13.0 =
 * Map editor can now add text to registration view
