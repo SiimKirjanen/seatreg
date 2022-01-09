@@ -117,7 +117,7 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 
 		if($this->_setBookingConfirmed === '1') {
 			$this->changeBookingStatus(2);
-			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system', false);
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system (PayPal IPN)', false);
 			seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode);
 		}
 	}
@@ -142,12 +142,14 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 		}elseif( isset($_POST['payment_status']) && $_POST['payment_status'] == 'Reversed' ) {
 			$this->changePaymentStatus(SEATREG_PAYMENT_REVERSED);
 			$this->changeBookingStatus(0);
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to 0 state by the system (PayPal payment reversed)', false);
 			$this->log($this->_bookingId, esc_html__('Payment is reversed', 'seatreg'), SEATREG_PAYMENT_LOG_INFO);
 			
 			return false;
 		}elseif( isset($_POST['payment_status']) && $_POST['payment_status'] == 'Refunded' ) {
 			$this->changePaymentStatus(SEATREG_PAYMENT_REFUNDED);
 			$this->changeBookingStatus(0);
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to 0 state by the system (PayPal payment refunded)', false);
 			$this->log($this->_bookingId, esc_html__('Payment was refunded', 'seatreg'), SEATREG_PAYMENT_LOG_INFO);
 			
 			return false;

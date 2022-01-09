@@ -1824,14 +1824,14 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s',
 			'%s'
 		);
-		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved');
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved (Booking manager)');
 	}else if($action->action == 'del') {
 		$wpdb->delete( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array('booking_id' => $action->booking_id), 
 			'%s'
 		);
-		seatreg_add_activity_log('booking', $action->booking_id, 'Booking deleted');
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking deleted (Booking manager)');
 	}else if($action->action == 'unapprove') {
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
@@ -1843,7 +1843,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s',
 			'%s'
 		);
-		seatreg_add_activity_log('booking', $action->booking_id, 'Booking unapproved');
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking unapproved (Booking manager)');
 	}
 }
 
@@ -2605,7 +2605,8 @@ function seatreg_add_booking_with_manager_callback() {
 	$addingStatusCount = count($addingStatus);
 	
 	if( $successStatusCount === $addingStatusCount ) {
-		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount .' seats added with booking manager', true );
+		$selectedStatus = $bookingStatus === '1' ? 'pending' : 'approved';
+		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount . ' ' .  $selectedStatus .' seats added with booking manager', true );
 		if($bookingStatus === "2") {
 			seatreg_send_approved_booking_email($bookingId, $registrationCode);
 		}
@@ -2650,7 +2651,7 @@ function seatreg_edit_booking_callback() {
 			$statusArray['newSeatId'],
 			$bookingEdit->id
 		) !== false) {
-		seatreg_add_activity_log('booking', $bookingEdit->bookingId, 'Booking edited');
+		seatreg_add_activity_log('booking', $bookingEdit->bookingId, 'Booking edited (Booking manager)');
 		wp_send_json( array('status'=>'updated') );
 
 		die();

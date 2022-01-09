@@ -225,8 +225,10 @@ class SeatregSubmitBookings extends SeatregBooking {
 					'%s'	
 				);
 			}
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking inserted to database', false);
 
 			if($this->_requireBookingEmailConfirm) {
+				//send email with the confirm link
 				$confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
 				$message = esc_html__('Your selected seats are', 'seatreg') . ': <br/><br/>' . $seatsString . '
 							<p>' . esc_html__('Click on the link below to confirm your booking', 'seatreg') . '</p>
@@ -250,11 +252,11 @@ class SeatregSubmitBookings extends SeatregBooking {
 					seatreg_send_booking_notification_email($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
 				}
 				if($this->_insertState === SEATREG_BOOKING_PENDING) {
-					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system', false);
+					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system (No email verification)', false);
 					$this->response->setText('bookings-confirmed-status-1');
 					$this->response->setData($bookingCheckURL);
 				}else if($this->_insertState === SEATREG_BOOKING_APPROVED) {
-					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system', false);
+					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system (No email verification)', false);
 					seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode);
 					$this->response->setText('bookings-confirmed-status-2');
 					$this->response->setData($bookingCheckURL);

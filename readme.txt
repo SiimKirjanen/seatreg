@@ -46,6 +46,7 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 * Fixed registration view when Google page translate is used
 * Not using language files from the project. Language files will be pulled from translate.wordpress.org/projects/wp-plugins/seatreg
 * Booking status will be set to 0 when related PayPal payment is refunded or reversed
+* Improved booking activity logging
 
 = 1.13.0 =
 * Map editor can now add text to registration view
