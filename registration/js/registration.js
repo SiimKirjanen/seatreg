@@ -729,7 +729,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 	var hover = null;
 	var legend = null;
-	var nr = null;
+	var nr = clickBox.getAttribute('data-seat-nr');
 	var type = 'box';
 	var currentRoom = this.rooms[this.currentRoom].room;
 	var room = this.rooms[this.currentRoom].room.name;
@@ -753,7 +753,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		$('#selected-seat-room').val(currentRoom.name);
 		$('#selected-room-uuid').val(currentRoom.uuid);
 		type = 'rbox';
-		$('#selected-seat-nr').val(clickBox.getAttribute('data-seat-nr'));
+		$('#selected-seat-nr').val(nr);
 		showDialog = true;
 	}
 
