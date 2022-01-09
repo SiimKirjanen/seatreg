@@ -489,14 +489,16 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Show full name', 'seatreg'); ?>
 			    	</label>
 			  	</div>
-				<?php foreach( $custFields as $customField ): ?>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html_e($customField->label); ?>" <?php echo in_array($customField->label, $previouslySelectedBookingDataToShow) ? 'checked' : '' ?> /> 
-							<?php esc_html_e($customField->label); ?>
-						</label>
-					</div>
-				<?php endforeach; ?>	
+	 			<?php if( is_array($custFields) ): ?>
+					<?php foreach( $custFields as $customField ): ?>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html_e($customField->label); ?>" <?php echo in_array($customField->label, $previouslySelectedBookingDataToShow) ? 'checked' : '' ?> /> 
+								<?php esc_html_e($customField->label); ?>
+							</label>
+						</div>
+					<?php endforeach; ?>
+				<?php endif; ?>
 			</div>
 
 			<div class="form-group">
