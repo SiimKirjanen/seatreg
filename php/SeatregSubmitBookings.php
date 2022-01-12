@@ -229,21 +229,13 @@ class SeatregSubmitBookings extends SeatregBooking {
 
 			if($this->_requireBookingEmailConfirm) {
 				//send email with the confirm link
-				$confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
-				$message = esc_html__('Your selected seats are', 'seatreg') . ': <br/><br/>' . $seatsString . '
-							<p>' . esc_html__('Click on the link below to confirm your booking', 'seatreg') . '</p>
-							<a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
-							('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>
-							' . esc_html__('After confirmation you can look your booking at', 'seatreg') . '<br> <a href="'. esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) .'</a>';
-				$adminEmail = get_option( 'admin_email' );
-				$mailSent = wp_mail($this->_bookerEmail, esc_html__('Booking confirmation', 'seatreg'), $message, array(
-					"Content-type: text/html",
-					"FROM: $adminEmail"
-				));
+				$emailVerificationMailSent = seatreg_sent_email_verification_email($confCode, $this->_bookerEmail, $this->_registrationName);
 
-				if($mailSent) {
+				if($emailVerificationMailSent) {
+					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking email verification sent', false);
 					$this->response->setText('mail');
 				}else {
+					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking email verification sending failed', false);
 					$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out confirmation email. Please notify the site administrator.', 'seatreg'));
 				}
 				
@@ -253,13 +245,29 @@ class SeatregSubmitBookings extends SeatregBooking {
 				}
 				if($this->_insertState === SEATREG_BOOKING_PENDING) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system (No email verification)', false);
-					$this->response->setText('bookings-confirmed-status-1');
-					$this->response->setData($bookingCheckURL);
+
+					$peningBookingEmailSent = seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL);
+
+					if($peningBookingEmailSent) {
+						seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking email sent', false);
+						$this->response->setText('bookings-confirmed-status-1');
+						$this->response->setData($bookingCheckURL);
+					}else {
+						seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking email sending failed', false);
+						$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out booking email. Please notify the site administrator.', 'seatreg'));
+					}
+					
 				}else if($this->_insertState === SEATREG_BOOKING_APPROVED) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system (No email verification)', false);
-					seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode);
-					$this->response->setText('bookings-confirmed-status-2');
-					$this->response->setData($bookingCheckURL);
+					$approvedEmailSent = seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode);
+
+					if($approvedEmailSent) {
+						$this->response->setText('bookings-confirmed-status-2');
+						$this->response->setData($bookingCheckURL);
+					}else {
+						seatreg_add_activity_log('booking', $this->_bookingId, 'Approved booking email sending failed', false);
+						$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out booking email. Please notify the site administrator.', 'seatreg'));
+					}
 				}
 			}	
 		}

@@ -380,12 +380,12 @@
 				<div id="email-conf-inner" class="dialog-box-inner border-box animated zoomIn">
 					<h2>
 						<?php 
-							esc_html_e('Confirm email sent to', 'seatreg'); 
+							esc_html_e('Email verification sent to', 'seatreg'); 
 						?>
 					<span id="email-send"></span></h2>
 					<p>
 					<?php 
-						esc_html_e('You need to confirm your booking by following email instructions. Make sure you check your junk folders', 'seatreg');
+						esc_html_e('Please confirm your email by following the instructions. Make sure you check your junk folders', 'seatreg');
 					?>.
 					</p>
 					<button class="seatreg-btn green-btn refresh-btn">
