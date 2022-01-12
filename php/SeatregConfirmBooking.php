@@ -13,6 +13,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 	protected $_confirmationCode;
 	protected $_bookindId;
 	protected $_registrationOwnerEmail;
+	protected $_bookerEmail; //confirm email is send to this address
 	
 	public function __construct($code){
 		$this->_confirmationCode = $code;
@@ -37,6 +38,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			}
 			$this->_registrationCode = $this->_bookings[0]->registration_code; 
 			$this->_bookingId = $this->_bookings[0]->booking_id;
+			$this->_bookerEmail = $this->_bookings[0]->booker_email;
 		}
 	}
 
@@ -62,9 +64,11 @@ class SeatregConfirmBooking extends SeatregBooking {
 			esc_html_e('Something went wrong while confirming your booking', 'seatreg');
 			die();
 		}
+		$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
 
 		if($this->_insertState == 1) {
 			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system (Booking confirm link)', false);
+			seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL);
 			esc_html_e('You booking is now in pending state. Registration owner must approve it', 'seatreg');
 			echo '.<br><br>';
 		}else {
@@ -73,10 +77,10 @@ class SeatregConfirmBooking extends SeatregBooking {
 			esc_html_e('You booking is now confirmed', 'seatreg');
 			echo '<br><br>';
 		}
-		$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
+		
 
 		printf(
-			esc_html__('You can look your booking at %s', 'seatreg'), 
+			esc_html__('You can look your booking status at the following link %s', 'seatreg'), 
 			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"
 		);
 
