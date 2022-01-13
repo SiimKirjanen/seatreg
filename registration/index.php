@@ -404,7 +404,7 @@
 						?>		
 					</h2>
 					<p>
-						<span id="booking-confirmed-text"><?php esc_html_e('You can look your booking status at the following link', 'seatreg'); ?></span><br>
+						<span id="booking-confirmed-text"><?php esc_html_e('You can look your booking at the following link', 'seatreg'); ?></span><br>
 						<a href="" class="booking-check-url" target="_blank"></a>
 					</p>
 					<p>
