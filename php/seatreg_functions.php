@@ -546,14 +546,14 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="use-pending"><?php esc_html_e('Booking email confirm', 'seatreg'); ?></label>
+				<label for="use-pending"><?php esc_html_e('Booking email verification', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Bookings must be confirmed with email', 'seatreg'); ?>.
+					<?php esc_html_e('Bookings must be verified by email', 'seatreg'); ?>.
 				</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="email-confirm" name="email-confirm" value="1" <?php echo $options[0]->booking_email_confirm == '1' ? 'checked':'' ?> >
-			      		<?php esc_html_e('Email confirm', 'seatreg'); ?>
+			      		<?php esc_html_e('Email verification', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>
