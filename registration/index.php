@@ -407,8 +407,8 @@
 						<span id="booking-confirmed-text"><?php esc_html_e('You can look your booking at the following link', 'seatreg'); ?></span><br>
 						<a href="" class="booking-check-url" target="_blank"></a>
 					</p>
-					<p>
-						<?php esc_html_e('Save the link for future reference', 'seatreg'); ?>
+					<p id="should-receive-update-email-text">
+						<?php esc_html_e('You should also receive booking update email', 'seatreg'); ?>
 					</p>
 					<button class="seatreg-btn green-btn refresh-btn">
 						<?php 

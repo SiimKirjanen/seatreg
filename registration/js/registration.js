@@ -1215,6 +1215,8 @@ function bookingsConfirmedInfo(data, status) {
 			$('#booking-confirmed-text').text(translator.translate('payForBookingLink'));
 		}
 	}else if (status === 2) {
+		$('#should-receive-update-email-text').css('display', 'none');
+		
 		if(window.receiptEnabled === '1') {
 			$('.booking-confirmed-header').html(translator.translate('bookingsConfirmed') + '<br>' + translator.translate('receiptSent'));
 		}else {
