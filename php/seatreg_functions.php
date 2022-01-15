@@ -533,7 +533,7 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="use-pending"><?php esc_html_e('Pending status', 'seatreg'); ?></label>
+				<label for="use-pending"><?php esc_html_e('Use pending bookings', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('By default all bookings will first be in pending state so admin can approve them (with booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
 				</p>
@@ -543,6 +543,14 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Use pending', 'seatreg'); ?>
 			    	</label>
 			  	</div>
+			</div>
+
+			<div class="form-group">
+				<label for="pending-expiration"><?php esc_html_e('Pending booking expiration', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('You can enable pending booking expiration after a certain period of time (in minutes). If the booking has some payment related activity, then booking will not be removed. Leave empty for no expiration time.', 'seatreg'); ?>
+				</p>
+				<input type="number" class="form-control" id="pending-expiration" name="pending-expiration" autocomplete="off" placeholder="<?php echo esc_html('Expiration time not set', 'seatreg'); ?>" value="<?php echo ($options[0]->pending_expiration) ? esc_html($options[0]->pending_expiration) : ''; ?>" />
 			</div>
 
 			<div class="form-group">
@@ -1524,6 +1532,7 @@ function seatreg_set_up_db() {
 			paypal_currency_code varchar(3) DEFAULT NULL,
 			paypal_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
 			payment_completed_set_booking_confirmed tinyint(1) NOT NULL DEFAULT 0,
+			pending_expiration int(11) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2168,6 +2177,10 @@ function seatreg_update() {
 		$selectedShowBookingData = is_array($_POST['show-booking-data-registration']) ? implode(',', $_POST['show-booking-data-registration']) : null;
 	}
 
+	if(empty($_POST['pending-expiration'])) {
+		$_POST['pending-expiration'] = null;
+	}
+
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
 		array(
@@ -2193,6 +2206,7 @@ function seatreg_update() {
 			'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
 			'send_approved_booking_email' => $_POST['approved-booking-email'],
 			'send_approved_booking_email_qr_code' => $_POST['approved-booking-email-qr-code'] === '' ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
+			'pending_expiration' => $_POST['pending-expiration']
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
