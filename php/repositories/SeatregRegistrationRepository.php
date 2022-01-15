@@ -56,4 +56,24 @@ class SeatregRegistrationRepository {
             $registrationCode
         ) );
     }
+    /**
+         *
+         * Return registrations with options if pending_expiration is set
+         *
+         * @return (array|object|null)
+         *
+     */
+    public static function getRegistrationsWherePendingBookingExpirationIsSet() {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT a.*, b.*
+            FROM $seatreg_db_table_names->table_seatreg AS a
+            INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
+            ON a.registration_code = b.registration_code
+            WHERE b.pending_expiration IS NOT NULL"
+        ) );
+
+    }
 }
