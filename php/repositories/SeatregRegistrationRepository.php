@@ -67,13 +67,12 @@ class SeatregRegistrationRepository {
         global $wpdb;
         global $seatreg_db_table_names;
 
-        return $wpdb->get_results( $wpdb->prepare(
+        return $wpdb->get_results(
             "SELECT a.*, b.*
             FROM $seatreg_db_table_names->table_seatreg AS a
             INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
             ON a.registration_code = b.registration_code
             WHERE b.pending_expiration IS NOT NULL"
-        ) );
-
+        );     
     }
 }
