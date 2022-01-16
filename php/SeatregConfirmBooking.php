@@ -55,9 +55,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 				'booking_confirm_date' => $approvedTimestamp 
 			), 
 			array('booking_id' => $this->_bookingId), 
-			'%d',
-			'%d',
-			'%s'
+			array('%d', '%d', '%s')
 		);
 
 		if(!$rowsUpdated) {
