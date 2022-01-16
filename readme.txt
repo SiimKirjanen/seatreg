@@ -43,7 +43,9 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 
 = 1.15.0 =
 * Removed booking info from email verification.
-* Send out booking update email when booking gets pending state 
+* Send out booking update email when booking gets pending state
+* Fixed issue when confirming a booking can cause approved booking state change. 
+* Added setting to control how long can booking be in pending state.
 
 = 1.14.0 =
 * Fixed issue where certain characters in registration name would break booking manager

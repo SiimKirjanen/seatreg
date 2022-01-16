@@ -47,7 +47,6 @@ class SeatregConfirmBooking extends SeatregBooking {
 		global $seatreg_db_table_names;
 
 		$approvedTimestamp = ($this->_insertState == 2) ? time() : null;
-
 		$rowsUpdated = $wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array( 
@@ -76,7 +75,6 @@ class SeatregConfirmBooking extends SeatregBooking {
 			echo '<br><br>';
 		}
 		
-
 		printf(
 			esc_html__('You can look your booking status at the following link %s', 'seatreg'), 
 			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"
