@@ -26,7 +26,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 		$rows = SeatregBookingRepository::getBookingByConfCode($this->_confirmationCode);
 
-		if(count($rows) == 0) {
+		if( !$rows ) {
 			$this->reply = esc_html__('This booking is already confirmed/expired/deleted', 'seaterg');
 			$this->_valid = false;
 		}else {
