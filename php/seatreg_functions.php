@@ -489,14 +489,16 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Show full name', 'seatreg'); ?>
 			    	</label>
 			  	</div>
-				<?php foreach( $custFields as $customField ): ?>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html_e($customField->label); ?>" <?php echo in_array($customField->label, $previouslySelectedBookingDataToShow) ? 'checked' : '' ?> /> 
-							<?php esc_html_e($customField->label); ?>
-						</label>
-					</div>
-				<?php endforeach; ?>	
+	 			<?php if( is_array($custFields) ): ?>
+					<?php foreach( $custFields as $customField ): ?>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html_e($customField->label); ?>" <?php echo in_array($customField->label, $previouslySelectedBookingDataToShow) ? 'checked' : '' ?> /> 
+								<?php esc_html_e($customField->label); ?>
+							</label>
+						</div>
+					<?php endforeach; ?>
+				<?php endif; ?>
 			</div>
 
 			<div class="form-group">
@@ -531,7 +533,7 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="use-pending"><?php esc_html_e('Pending status', 'seatreg'); ?></label>
+				<label for="use-pending"><?php esc_html_e('Use pending bookings', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('By default all bookings will first be in pending state so admin can approve them (with booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
 				</p>
@@ -544,14 +546,22 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="use-pending"><?php esc_html_e('Booking email confirm', 'seatreg'); ?></label>
+				<label for="pending-expiration"><?php esc_html_e('Pending booking expiration', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Bookings must be confirmed with email', 'seatreg'); ?>.
+					<?php esc_html_e('You can enable pending booking expiration after a certain period of time (in minutes). If the booking has some payment related activity, then booking will not be removed. Leave empty for no expiration time.', 'seatreg'); ?>
+				</p>
+				<input type="number" class="form-control" id="pending-expiration" name="pending-expiration" autocomplete="off" placeholder="<?php echo esc_html('Expiration time not set', 'seatreg'); ?>" value="<?php echo ($options[0]->pending_expiration) ? esc_html($options[0]->pending_expiration) : ''; ?>" />
+			</div>
+
+			<div class="form-group">
+				<label for="use-pending"><?php esc_html_e('Booking email verification', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Bookings must be verified by email', 'seatreg'); ?>.
 				</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="email-confirm" name="email-confirm" value="1" <?php echo $options[0]->booking_email_confirm == '1' ? 'checked':'' ?> >
-			      		<?php esc_html_e('Email confirm', 'seatreg'); ?>
+			      		<?php esc_html_e('Email verification', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>
@@ -882,8 +892,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	echo '<div class="bg-color">';
 		echo '<div class="tab-container">';
 			echo '<ul class="etabs">';
-				echo '<li class="tab"><a href="#', esc_html($project_name), 'bron">', esc_html_e('Pending', 'seatreg'), '</a></li>';
-				echo '<li class="tab"><a href="#', esc_html($project_name), 'taken">', esc_html_e('Approved','seatreg'),'</a></li>';
+				echo '<li class="tab"><a href="#', sha1($project_name), 'bron">', esc_html_e('Pending', 'seatreg'), '</a></li>';
+				echo '<li class="tab"><a href="#', sha1($project_name), 'taken">', esc_html_e('Approved','seatreg'),'</a></li>';
 			echo '</ul>';
 		echo '<div class="panel-container differentBgColor">';
 				echo '<div class="registration-manager-labels">
@@ -893,7 +903,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						<div class="seat-name-box manager-box manager-box-link" data-order="date">', esc_html__('Date','seatreg'),'</div>
 						<div class="seat-date-box manager-box manager-box-link" data-order="id">', esc_html__('Booking id','seatreg'),'</div>	
 					</div>';
-				echo '<div id="', esc_html($project_name), 'bron" class="tab_container">';
+				echo '<div id="', sha1($project_name), 'bron" class="tab_container">';
 
 			if($row_count == 0) {
 				echo '<div class="notify-text">', esc_html__('No pending seats', 'seatreg'),'</div>';
@@ -941,7 +951,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 			
 			echo '</div>';
 
-			echo '<div id="', esc_html($project_name),'taken" class="tab_container active">';
+			echo '<div id="', sha1($project_name),'taken" class="tab_container active">';
 
 			if($row_count2 == 0) {
 				echo '<div class="notify-text">', esc_html__('No approved seats', 'seatreg'), '</div>';
@@ -969,7 +979,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					echo '</div>';
 
 					echo '<div class="more-info">';
-						echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', $bookingStatusUrl ,'</a>';
+						echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl), '</a>';
 						echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_date) ), '</span></div>';
 						echo '<div>', esc_html__('Approval date', 'seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_confirm_date ) ), '</span></div>';
 						echo '<div>Email: ', esc_html( $row->email ), '</div>';
@@ -1522,6 +1532,7 @@ function seatreg_set_up_db() {
 			paypal_currency_code varchar(3) DEFAULT NULL,
 			paypal_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
 			payment_completed_set_booking_confirmed tinyint(1) NOT NULL DEFAULT 0,
+			pending_expiration int(11) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -1824,14 +1835,14 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s',
 			'%s'
 		);
-		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved');
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved (Booking manager)');
 	}else if($action->action == 'del') {
 		$wpdb->delete( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array('booking_id' => $action->booking_id), 
 			'%s'
 		);
-		seatreg_add_activity_log('booking', $action->booking_id, 'Booking deleted');
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking deleted (Booking manager)');
 	}else if($action->action == 'unapprove') {
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
@@ -1843,7 +1854,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s',
 			'%s'
 		);
-		seatreg_add_activity_log('booking', $action->booking_id, 'Booking unapproved');
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking unapproved (Booking manager)');
 	}
 }
 
@@ -2166,6 +2177,10 @@ function seatreg_update() {
 		$selectedShowBookingData = is_array($_POST['show-booking-data-registration']) ? implode(',', $_POST['show-booking-data-registration']) : null;
 	}
 
+	if(empty($_POST['pending-expiration'])) {
+		$_POST['pending-expiration'] = null;
+	}
+
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
 		array(
@@ -2191,6 +2206,7 @@ function seatreg_update() {
 			'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
 			'send_approved_booking_email' => $_POST['approved-booking-email'],
 			'send_approved_booking_email_qr_code' => $_POST['approved-booking-email-qr-code'] === '' ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
+			'pending_expiration' => $_POST['pending-expiration']
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
@@ -2313,8 +2329,6 @@ add_action( 'wp_ajax_seatreg_booking_submit', 'seatreg_booking_submit_callback' 
 add_action( 'wp_ajax_nopriv_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
 function seatreg_booking_submit_callback() {
 	$resp = new SeatregJsonResponse();
-	
-	session_start();
 
 	if ( ! wp_verify_nonce( $_POST['seatreg-booking-submit'], 'seatreg-booking-submit' ) ) {
 		$resp->setError('Nonce validation failed');
@@ -2605,7 +2619,8 @@ function seatreg_add_booking_with_manager_callback() {
 	$addingStatusCount = count($addingStatus);
 	
 	if( $successStatusCount === $addingStatusCount ) {
-		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount .' seats added with booking manager', true );
+		$selectedStatus = $bookingStatus === '1' ? 'pending' : 'approved';
+		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount . ' ' .  $selectedStatus .' seats added with booking manager', true );
 		if($bookingStatus === "2") {
 			seatreg_send_approved_booking_email($bookingId, $registrationCode);
 		}
@@ -2650,7 +2665,7 @@ function seatreg_edit_booking_callback() {
 			$statusArray['newSeatId'],
 			$bookingEdit->id
 		) !== false) {
-		seatreg_add_activity_log('booking', $bookingEdit->bookingId, 'Booking edited');
+		seatreg_add_activity_log('booking', $bookingEdit->bookingId, 'Booking edited (Booking manager)');
 		wp_send_json( array('status'=>'updated') );
 
 		die();

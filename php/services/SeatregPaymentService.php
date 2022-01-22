@@ -107,4 +107,28 @@ class SeatregPaymentService {
             </form>
 	    <?php
     }
+
+    /**
+     *
+     * Change payment status
+     * @param string $status payment status
+     * @param string $bookingId The UUID of the booking
+     * @return (int|false) The number of rows updated, or false on error.
+     * 
+    */
+    public static function changePaymentStatus($status, $bookingId) {
+        global $seatreg_db_table_names;
+		global $wpdb;
+
+		return $wpdb->update( 
+			$seatreg_db_table_names->table_seatreg_payments,
+			array( 
+				'payment_status' => $status,
+			), 
+			array(
+				'booking_id' => $bookingId
+			),
+			'%s'
+		);
+    }
 }

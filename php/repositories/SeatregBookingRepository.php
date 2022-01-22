@@ -89,7 +89,7 @@ class SeatregBookingRepository {
      * Return data related to booking (registration, registration options)
      *
      * @param string $bookingId The ID of the booking
-     * @return  array|object|null|void
+     * @return array|object|null|void
      *
      */
     public static function getDataRelatedToBooking($bookingId) {
@@ -116,5 +116,29 @@ class SeatregBookingRepository {
         }
 
         return $data;
+    }
+
+    /**
+     *
+     * Return registration pending bookings where registration time is older than expiration time. If booking has some payment related entries then dont include it.
+     *
+     * @param string $registrationCode The registration code
+     * @param int $expirationTimeInMinutes The expiration time set in registration settings. In minutes
+     * @return (array|object|null)
+     *
+     */
+    public static function getPendingBookingsThatAreExpired($registrationCode, $expirationTimeInMinutes) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings AS a
+            WHERE a.registration_code = %s
+            AND a.status = 1
+            AND ((UNIX_TIMESTAMP() - a.booking_date) / 60) > %d
+            AND (SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_payments AS b WHERE b.booking_id = a.booking_id) = 0",
+            $registrationCode,
+            $expirationTimeInMinutes
+        ) );
     }
 }

@@ -380,12 +380,12 @@
 				<div id="email-conf-inner" class="dialog-box-inner border-box animated zoomIn">
 					<h2>
 						<?php 
-							esc_html_e('Confirm email sent to', 'seatreg'); 
+							esc_html_e('Email verification sent to', 'seatreg'); 
 						?>
 					<span id="email-send"></span></h2>
 					<p>
 					<?php 
-						esc_html_e('You need to confirm your booking by following email instructions. Make sure you check your junk folders', 'seatreg');
+						esc_html_e('Please confirm your email by following the instructions. Make sure you check your junk folders', 'seatreg');
 					?>.
 					</p>
 					<button class="seatreg-btn green-btn refresh-btn">
@@ -404,11 +404,11 @@
 						?>		
 					</h2>
 					<p>
-						<span id="booking-confirmed-text"><?php esc_html_e('You can look your booking status at the following link', 'seatreg'); ?></span><br>
+						<span id="booking-confirmed-text"><?php esc_html_e('You can look your booking at the following link', 'seatreg'); ?></span><br>
 						<a href="" class="booking-check-url" target="_blank"></a>
 					</p>
-					<p>
-						<?php esc_html_e('Save the link for future reference', 'seatreg'); ?>
+					<p id="should-receive-update-email-text">
+						<?php esc_html_e('You should also receive booking update email', 'seatreg'); ?>
 					</p>
 					<button class="seatreg-btn green-btn refresh-btn">
 						<?php 

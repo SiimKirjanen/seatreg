@@ -1461,8 +1461,9 @@
 		var initialBoxHeight = 32;
 		var styles = 'width: ' + initialBoxWidth + 'px; height: ' + initialBoxHeight + 'px; position: absolute; top: ' + positionY + 'px; left: ' + positionX + 'px;';
 		var registrationScope = this;
+		var boxClasses = "drag-box text-box " + dataCounter;
 
-		var textBox = $('<div class="drag-box text-box"><input class="text-box-input" /></div>').attr({
+		var textBox = $('<div class="'+ boxClasses +'"><input class="text-box-input" /></div>').attr({
 			style: styles,
 			'data-id': dataCounter, 
 		}).on('keyup', function() {

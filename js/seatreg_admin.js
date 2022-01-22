@@ -269,7 +269,7 @@ $('#existing-regs-wrap').on('click', '.room-list-item', function() {
 			var donutWrapper = $('#existing-regs-wrap').find('.reg-overview-donuts');		
 			var doughnutData = [
 				{
-					value: parseInt(donutWrapper.find('.seats-total-don').val()),
+					value: parseInt(donutWrapper.find('.seats-open-don').val()),
 					color:"#61B329"
 				},
 				{
@@ -298,7 +298,7 @@ $('.reg-overview-donuts').each(function() {
 	var donutWrapper = $(this);
 	var doughnutData = [
 		{
-			value: parseInt(donutWrapper.find('.seats-total-don').val()),
+			value: parseInt(donutWrapper.find('.seats-open-don').val()),
 			color:"#61B329"
 		},
 		{

@@ -6,8 +6,7 @@
 	Author: Siim Kirjanen
 	Author URI: https://github.com/SiimKirjanen
 	Text Domain: seatreg
-	Domain Path: /languages
-	Version: 1.13.0
+	Version: 1.15.0
 	Requires at least: 5.3
 	Requires PHP: 7.2.28
 	License: GPLv2 or later
@@ -27,6 +26,7 @@ require( 'php/repositories/SeatregPaymentLogRepository.php' );
 require( 'php/services/SeatregRegistrationService.php' );
 require( 'php/services/SeatregBookingService.php' );
 require( 'php/services/SeatregPaymentService.php' );
+require( 'php/services/SeatregJobService.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );
@@ -49,13 +49,27 @@ require( 'php/SeatregJsonResponse.php' );
 require( 'php/seatreg_actions.php' );
 
 //Hooks
+register_activation_hook( __FILE__, 'seatreg_plugin_activate' );
 function seatreg_plugin_activate() {
 	seatreg_set_up_db();
 }
-register_activation_hook( __FILE__, 'seatreg_plugin_activate' );
+
+register_deactivation_hook( __FILE__, 'seatreg_plugin_deactivate' );
+function seatreg_plugin_deactivate() {
+	$timestamp = wp_next_scheduled( 'seatreg_pending_booking_expiration' );
+
+	if($timestamp) {
+		wp_unschedule_event( $timestamp, 'seatreg_pending_booking_expiration' );
+	}
+}	
 
 //Filters
 require( 'php/seatreg_filters.php' );
 
 //shortcode
 require( 'php/seatreg_shortcode.php' );
+
+//CRON
+if ( ! wp_next_scheduled( 'seatreg_pending_booking_expiration' ) ) {
+    wp_schedule_event( time(), 'seatreg_expiration_schedult', 'seatreg_pending_booking_expiration' );
+}

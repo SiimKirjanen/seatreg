@@ -253,6 +253,7 @@
 
 			if(loc[i].canRegister == "true") {
 				box.setAttribute('data-seat',loc[i].id);
+				box.setAttribute('data-seat-nr',loc[i].seat);
 				var number = document.createElement('div');
 				number.className = "seat-number";
 				var newContent = document.createTextNode(loc[i].seat);
@@ -674,7 +675,7 @@ SeatReg.prototype.generateField = function(fieldName) {
 };
 
 SeatReg.prototype.generateCustomField = function(custom) {
-	var label = $('<label class="field-label custom-input"><span class="l-text">' + custom.label +  '</span></label>');
+	var label = $('<label class="field-label custom-input" data-label="' + custom.label + '"><span class="l-text">' + custom.label +  '</span></label>');
 
 	if(custom.type == 'text') {
 		var fieldInput = $('<input type="text" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type +'" maxlength="'+ WP_Seatreg.SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH +'">');
@@ -728,7 +729,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 	var hover = null;
 	var legend = null;
-	var nr = null;
+	var nr = clickBox.getAttribute('data-seat-nr');
 	var type = 'box';
 	var currentRoom = this.rooms[this.currentRoom].room;
 	var room = this.rooms[this.currentRoom].room.name;
@@ -752,7 +753,6 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		$('#selected-seat-room').val(currentRoom.name);
 		$('#selected-room-uuid').val(currentRoom.uuid);
 		type = 'rbox';
-		nr = clickBox.getElementsByTagName('div')[0].firstChild.nodeValue;
 		$('#selected-seat-nr').val(nr);
 		showDialog = true;
 	}
@@ -1100,11 +1100,11 @@ function collectData() {
 			var type = $(this).find('.field-input').attr('data-type');
 
 			if(type == 'text') {
-				customFieldPack.push(new CustomData($(this).find('.l-text').text(), $(this).find('.field-input').val()));
+				customFieldPack.push(new CustomData($(this).attr('data-label'), $(this).find('.field-input').val()));
 			}else if(type == 'check') {
-				customFieldPack.push(new CustomData($(this).find('.l-text').text(), $(this).find('.field-input').is(":checked") ? '1' : '0') );
+				customFieldPack.push(new CustomData($(this).attr('data-label'), $(this).find('.field-input').is(":checked") ? '1' : '0') );
 			}else if(type == 'sel') {
-				customFieldPack.push(new CustomData($(this).find('.l-text').text(),$(this).find('.field-input').find(":selected").val()));
+				customFieldPack.push(new CustomData($(this).attr('data-label'),$(this).find('.field-input').find(":selected").val()));
 			}	
 		});
 
@@ -1215,6 +1215,8 @@ function bookingsConfirmedInfo(data, status) {
 			$('#booking-confirmed-text').text(translator.translate('payForBookingLink'));
 		}
 	}else if (status === 2) {
+		$('#should-receive-update-email-text').css('display', 'none');
+		
 		if(window.receiptEnabled === '1') {
 			$('.booking-confirmed-header').html(translator.translate('bookingsConfirmed') + '<br>' + translator.translate('receiptSent'));
 		}else {

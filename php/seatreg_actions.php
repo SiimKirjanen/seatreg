@@ -47,7 +47,7 @@ function seatreg_update_db_check() {
     }
 }
 
-add_action('init', 'seatreg_init');
-function seatreg_init() {
-	load_plugin_textdomain( 'seatreg', false,  dirname( plugin_basename( __FILE__ ), 2) . '/languages/');
-} 
+add_action( 'seatreg_pending_booking_expiration', 'seatreg_pending_bookings_expiration_time_job');
+function seatreg_pending_bookings_expiration_time_job() {
+	SeatregJobService::pendingBookingExpirationTimeJob();
+}

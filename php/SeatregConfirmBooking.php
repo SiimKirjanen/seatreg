@@ -13,6 +13,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 	protected $_confirmationCode;
 	protected $_bookindId;
 	protected $_registrationOwnerEmail;
+	protected $_bookerEmail; //confirm email is send to this address
 	
 	public function __construct($code){
 		$this->_confirmationCode = $code;
@@ -25,7 +26,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 		$rows = SeatregBookingRepository::getBookingByConfCode($this->_confirmationCode);
 
-		if(count($rows) == 0) {
+		if( !$rows ) {
 			$this->reply = esc_html__('This booking is already confirmed/expired/deleted', 'seaterg');
 			$this->_valid = false;
 		}else {
@@ -37,6 +38,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			}
 			$this->_registrationCode = $this->_bookings[0]->registration_code; 
 			$this->_bookingId = $this->_bookings[0]->booking_id;
+			$this->_bookerEmail = $this->_bookings[0]->booker_email;
 		}
 	}
 
@@ -45,7 +47,6 @@ class SeatregConfirmBooking extends SeatregBooking {
 		global $seatreg_db_table_names;
 
 		$approvedTimestamp = ($this->_insertState == 2) ? time() : null;
-
 		$rowsUpdated = $wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array( 
@@ -53,30 +54,29 @@ class SeatregConfirmBooking extends SeatregBooking {
 				'booking_confirm_date' => $approvedTimestamp 
 			), 
 			array('booking_id' => $this->_bookingId), 
-			'%d',
-			'%d',
-			'%s'
+			array('%d', '%d', '%s')
 		);
 
 		if(!$rowsUpdated) {
 			esc_html_e('Something went wrong while confirming your booking', 'seatreg');
 			die();
 		}
+		$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
 
 		if($this->_insertState == 1) {
-			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system', false);
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system (Booking confirm link)', false);
+			seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL);
 			esc_html_e('You booking is now in pending state. Registration owner must approve it', 'seatreg');
 			echo '.<br><br>';
 		}else {
-			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system', false);
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system (Booking confirm link)', false);
 			seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode);
 			esc_html_e('You booking is now confirmed', 'seatreg');
 			echo '<br><br>';
 		}
-		$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
-
+		
 		printf(
-			esc_html__('You can look your booking at %s', 'seatreg'), 
+			esc_html__('You can look your booking status at the following link %s', 'seatreg'), 
 			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"
 		);
 

@@ -104,11 +104,12 @@ function seatreg_remove_admin_footer_text() {
     echo '';
 }
 
-add_filter( 'load_textdomain_mofile', 'seatreg_load_my_own_textdomain', 10, 2 );
-function seatreg_load_my_own_textdomain( $mofile, $domain ) {
-    if ( 'seatreg' === $domain && false !== strpos( $mofile, WP_LANG_DIR . '/plugins/' ) ) {
-        $locale = apply_filters( 'plugin_locale', determine_locale(), $domain );
-        $mofile = WP_PLUGIN_DIR . '/' . dirname( plugin_basename( __FILE__ ), 2 ) . '/languages/' . $domain . '-' . strtoupper($locale) . '.mo';
-    }
-    return $mofile;
+add_filter( 'cron_schedules', 'seatreg_expiration_booking_interval' );
+function seatreg_expiration_booking_interval( $schedules ) {
+    $schedules['seatreg_expiration_schedult'] = array(
+        'interval' => 10,
+        'display'  => esc_html__( 'Seatreg expiration booking interval' ),
+    );
+
+    return $schedules;
 }
