@@ -246,7 +246,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 				if($this->_insertState === SEATREG_BOOKING_PENDING) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system (No email verification)', false);
 
-					$peningBookingEmailSent = seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL);
+					$peningBookingEmailSent = seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate);
 
 					if($peningBookingEmailSent) {
 						seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking email sent', false);

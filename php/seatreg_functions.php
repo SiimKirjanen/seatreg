@@ -547,7 +547,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="email-verification-template"><?php esc_html_e('Booking email verification template', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('You can customize email verification.', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php esc_html_e('You can customize the email. It is mandatory to add [verification-link] to the text', 'seatreg'); ?>.</p>
 				<textarea rows="4" class="form-control" id="email-verification-template" name="email-verification-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->email_verification_template); ?></textarea>
 			</div>
 
@@ -566,8 +566,8 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="pendin-booking-email-template"><?php esc_html_e('Pending booking email template', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Pending booking', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="pendin-booking-email-template" name="pendin-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->pending_booking_email_template); ?></textarea>
+				<p class="help-block"><?php esc_html_e('Pending booking. It is mandatory to add [status-link] to the text', 'seatreg'); ?>.</p>
+				<textarea rows="4" class="form-control" id="pendin-booking-email-template" name="pendin-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->pending_booking_email_template); ?></textarea>
 			</div>
 
 			<div class="form-group">

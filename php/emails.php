@@ -156,12 +156,18 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
     ));
 }
 
-function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL) {
+function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template) {
     $adminEmail = get_option( 'admin_email' );
-    $message =  '<p>' . esc_html__('Your booking is now in pending state. Registration admin needs to approve it', 'seatreg') . '</p>' .
-                '<p>' . esc_html__('You can look your booking at the following link', 'seatreg') . '</p>' .
-                '<a href="' .  esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) . '</a>';
+    $message = '';
 
+    if($template) {
+        $message = SeatregTemplateService::pendingBookingTemplateProcessing($template, $bookingCheckURL);
+    }else {
+        $message =  '<p>' . esc_html__('Your booking is now in pending state. Registration admin needs to approve it', 'seatreg') . '</p>' .
+        '<p>' . esc_html__('You can look your booking at the following link', 'seatreg') . '</p>' .
+        '<a href="' .  esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) . '</a>';
+    }
+    
     return wp_mail($bookerEmail, esc_html__('Booking update', 'seatreg'), $message, array(
         "Content-type: text/html",
         "FROM: $adminEmail"

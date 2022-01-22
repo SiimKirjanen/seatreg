@@ -19,11 +19,24 @@ class SeatregTemplateService {
 
         return str_replace('[verification-link]', $confirmationURL, $template);
     }
+    public static function replaceBookingStatusLink($template, $bookingStatusLink) {
+        $bookingStatusLink = self::constructLink($bookingStatusLink);
+
+        return str_replace('[status-link]', $bookingStatusLink, $template);
+    }
     public static function emailVerificationTemplateProcessing($template, $confirmationURL) {
         $template = self::sanitizeTemplate($template);
         $template = self::replaceLineBreaksWithBrTags($template);
         $message = self::replaceEmailVerificationLink($template, $confirmationURL);
 
+        return $message;
+    }
+
+    public static function pendingBookingTemplateProcessing($template, $bookingStatusLink) {
+        $template = self::sanitizeTemplate($template);
+        $template = self::replaceLineBreaksWithBrTags($template);
+        $message= self::replaceBookingStatusLink($template, $bookingStatusLink);
+        
         return $message;
     }
 }
