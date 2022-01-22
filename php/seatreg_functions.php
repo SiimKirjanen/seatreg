@@ -2131,6 +2131,18 @@ function seatreg_update() {
 		wp_die('Missing registration name');
 	}
 
+	if( !SeatregDataValidation::validateEmailVerificationTemplate() ) {
+		wp_die('Email Verification template not valid');
+	}
+
+	if( !SeatregDataValidation::validatePendingBookingEmailTemplate() ) {
+		wp_die('Pending booking email template not valid');
+	}
+
+	if( !SeatregDataValidation::validateApprovedBookingEmailTemplate() ) {
+		wp_die('Approved booking email template not valid');
+	}
+
 	if( isset($_POST['paypal-payments']) && ($_POST['paypal-business-email'] === "" || $_POST['paypal-button-id'] === "" || $_POST['paypal-currency-code'] === "" ) ) {
 		wp_die('Missing PayPal configuration');
 	}

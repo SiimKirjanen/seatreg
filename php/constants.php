@@ -35,3 +35,9 @@ define('SEATREG_BOOKING_APPROVED', 2);
 $up_dir = wp_upload_dir();
 define('SEATREG_TEMP_FOLDER_DIR', $up_dir['basedir'].'/seatreg');
 define('SEATREG_TEMP_FOLDER_URL', $up_dir['baseurl'].'/seatreg');
+
+//Email template keywords
+define('SEATREG_TEMPLATE_STATUS_LINK', '[status-link]');
+define('SEATREG_TEMPLATE_EMAIL_VERIFICATION_LINK', '[verification-link]');
+define('SEATREG_TEMPLATE_BOOKING_TABLE', '[booking-table]');
+define('SEATREG_TEMPLATE_BOOKING_ID', '[booking-id]');

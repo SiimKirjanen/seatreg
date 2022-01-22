@@ -20,23 +20,23 @@ class SeatregTemplateService {
     public static function replaceEmailVerificationLink($template, $confirmationURL) {
         $confirmationURL = self::constructLink($confirmationURL);
 
-        return str_replace('[verification-link]', $confirmationURL, $template);
+        return str_replace(SEATREG_TEMPLATE_EMAIL_VERIFICATION_LINK, $confirmationURL, $template);
     }
 
     public static function replaceBookingStatusLink($template, $bookingStatusLink) {
         $bookingStatusLink = self::constructLink($bookingStatusLink);
 
-        return str_replace('[status-link]', $bookingStatusLink, $template);
+        return str_replace(SEATREG_TEMPLATE_STATUS_LINK, $bookingStatusLink, $template);
     }
 
     public static function replaceBookingTable($template, $bookings, $customFieldLabels, $registrationCustomFields) {
         $bookingTable = SeatregBookingService::generateBookingTable($customFieldLabels, $registrationCustomFields, $bookings);
 
-        return str_replace('[booking-table]', $bookingTable, $template);
+        return str_replace(SEATREG_TEMPLATE_BOOKING_TABLE, $bookingTable, $template);
     }
 
     public static function replaceBookingId($template, $bookingId) {
-        return str_replace('[booking-id]', '<strong>' . $bookingId . '</strong>', $template);
+        return str_replace(SEATREG_TEMPLATE_BOOKING_ID, '<strong>' . $bookingId . '</strong>', $template);
     }
 
     public static function emailVerificationTemplateProcessing($template, $confirmationURL) {
