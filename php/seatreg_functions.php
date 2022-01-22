@@ -547,7 +547,11 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="email-verification-template"><?php esc_html_e('Booking email verification template', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('You can customize the email. It is mandatory to add [verification-link] to the text', 'seatreg'); ?>.</p>
+				<p class="help-block">
+					<?php esc_html_e('You can customize the verification email.', 'seatreg'); ?>
+					<?php esc_html_e('Supported keywords are', 'seatreg'); ?>: <br>
+					<code>[verification-link]</code> <?php esc_html_e('(required) will be converted to email verification link', 'seatreg'); ?>
+				</p>
 				<textarea rows="4" class="form-control" id="email-verification-template" name="email-verification-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->email_verification_template); ?></textarea>
 			</div>
 
@@ -566,7 +570,11 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="pendin-booking-email-template"><?php esc_html_e('Pending booking email template', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Pending booking. It is mandatory to add [status-link] to the text', 'seatreg'); ?>.</p>
+				<p class="help-block">
+					<?php esc_html_e('When booking gets pending status then email will be sent out. You can customize the email.', 'seatreg'); ?>
+					<?php esc_html_e('Supported keywords are', 'seatreg'); ?>: <br>
+					<code>[status-link]</code> <?php esc_html_e('(required) will be converted to booking status link', 'seatreg'); ?>
+				</p>
 				<textarea rows="4" class="form-control" id="pendin-booking-email-template" name="pendin-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->pending_booking_email_template); ?></textarea>
 			</div>
 
@@ -614,7 +622,13 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="approved-booking-email-template"><?php esc_html_e('Approved booking email template', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Approved booking', 'seatreg'); ?>.</p>
+				<p class="help-block">
+					<?php esc_html_e('Customize how approved booking email looks like.', 'seatreg'); ?>
+					<?php esc_html_e('Supported keywords are', 'seatreg'); ?>: <br>
+					<code>[status-link]</code> <?php esc_html_e('(required) will be converted to booking status link', 'seatreg'); ?> <br>
+					<code>[booking-id]</code> <?php esc_html_e('(optional) will be converted to booking id', 'seatreg'); ?> <br>
+					<code>[booking-table]</code> <?php esc_html_e('(optional) will be converted to booking table', 'seatreg'); ?> <br>
+				</p>
 				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->approved_booking_email_template); ?></textarea>
 			</div>
 
