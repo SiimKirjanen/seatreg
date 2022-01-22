@@ -533,6 +533,25 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="use-pending"><?php esc_html_e('Booking email verification', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Bookings must be verified by email', 'seatreg'); ?>.
+				</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="email-confirm" name="email-confirm" value="1" <?php echo $options[0]->booking_email_confirm == '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Email verification', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
+				<label for="email-verification-template"><?php esc_html_e('Booking email verification template', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('You can customize email verification.', 'seatreg'); ?>.</p>
+				<textarea class="form-control" id="email-verification-template" name="email-verification-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->email_verification_template); ?></textarea>
+			</div>
+
+			<div class="form-group">
 				<label for="use-pending"><?php esc_html_e('Use pending bookings', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('By default all bookings will first be in pending state so admin can approve them (with booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
@@ -546,24 +565,17 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="pendin-booking-email-template"><?php esc_html_e('Pending booking email template', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Pending booking', 'seatreg'); ?>.</p>
+				<textarea class="form-control" id="pendin-booking-email-template" name="pendin-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->pending_booking_email_template); ?></textarea>
+			</div>
+
+			<div class="form-group">
 				<label for="pending-expiration"><?php esc_html_e('Pending booking expiration', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('You can enable pending booking expiration after a certain period of time (in minutes). If the booking has some payment related activity, then booking will not be removed. Leave empty for no expiration time.', 'seatreg'); ?>
 				</p>
 				<input type="number" class="form-control" id="pending-expiration" name="pending-expiration" autocomplete="off" placeholder="<?php echo esc_html('Expiration time not set', 'seatreg'); ?>" value="<?php echo ($options[0]->pending_expiration) ? esc_html($options[0]->pending_expiration) : ''; ?>" />
-			</div>
-
-			<div class="form-group">
-				<label for="use-pending"><?php esc_html_e('Booking email verification', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Bookings must be verified by email', 'seatreg'); ?>.
-				</p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="email-confirm" name="email-confirm" value="1" <?php echo $options[0]->booking_email_confirm == '1' ? 'checked':'' ?> >
-			      		<?php esc_html_e('Email verification', 'seatreg'); ?>
-			    	</label>
-			  	</div>
 			</div>
 
 			<div class="form-group">
@@ -598,6 +610,12 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Send approved booking email', 'seatreg'); ?>
 			    	</label>
 			  	</div>
+			</div>
+
+			<div class="form-group">
+				<label for="approved-booking-email-template"><?php esc_html_e('Approved booking email template', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Approved booking', 'seatreg'); ?>.</p>
+				<textarea class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->approved_booking_email_template); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -1183,7 +1201,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 
 			if($options && $options->payment_text) {
 				echo '<h3>', esc_html__('Payment info', 'seatreg'), '</h3>';
-				echo '<p>', esc_html($options->payment_text) ,'</p>';
+				echo '<p>', nl2br(esc_html($options->payment_text)) ,'</p>';
 			}
 		}else {
 			esc_html_e('Booking not found.', 'seatreg');
@@ -1533,6 +1551,9 @@ function seatreg_set_up_db() {
 			paypal_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
 			payment_completed_set_booking_confirmed tinyint(1) NOT NULL DEFAULT 0,
 			pending_expiration int(11) DEFAULT NULL,
+			email_verification_template text,
+			pending_booking_email_template text,
+			approved_booking_email_template text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2172,7 +2193,7 @@ function seatreg_update() {
 	}else {
 		$_POST['approved-booking-email'] = 1;
 	}
-
+	
 	if(!empty($_POST['show-booking-data-registration'])) {
 		$selectedShowBookingData = is_array($_POST['show-booking-data-registration']) ? implode(',', $_POST['show-booking-data-registration']) : null;
 	}
@@ -2193,7 +2214,7 @@ function seatreg_update() {
 			'registration_password' => $_POST['registration-password'] == '' ? null : sanitize_text_field($_POST['registration-password']),
 			'notify_new_bookings' => $_POST['booking-notification'] ? sanitize_text_field($_POST['booking-notification']) : null,
 			'show_bookings_data_in_registration' => $selectedShowBookingData,
-			'payment_text' => $_POST['payment-instructions'] == '' ? null : sanitize_text_field($_POST['payment-instructions']),
+			'payment_text' => $_POST['payment-instructions'] == '' ? null : $_POST['payment-instructions'],
 			'info' => sanitize_text_field($_POST['registration-info-text']),
 			'registration_close_reason' => sanitize_text_field($_POST['registration-close-reason']),
 			'custom_fields' => $customFileds,
@@ -2206,7 +2227,10 @@ function seatreg_update() {
 			'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
 			'send_approved_booking_email' => $_POST['approved-booking-email'],
 			'send_approved_booking_email_qr_code' => $_POST['approved-booking-email-qr-code'] === '' ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
-			'pending_expiration' => $_POST['pending-expiration']
+			'pending_expiration' => $_POST['pending-expiration'],
+			'email_verification_template' => $_POST['email-verification-template'] === '' ? null : $_POST['email-verification-template'],
+			'pending_booking_email_template' => $_POST['pendin-booking-email-template'] === '' ? null : $_POST['pendin-booking-email-template'],
+			'approved_booking_email_template' => $_POST['approved-booking-email-template'] === '' ? null : $_POST['approved-booking-email-template'],
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
