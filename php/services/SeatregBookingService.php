@@ -64,4 +64,48 @@ class SeatregBookingService {
 			'%s'
 		);
     }
+
+    public static function generateBookingTable($customFieldLabels, $registrationCustomFields, $bookings) {
+        $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;">
+            <tr>
+            <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Name', 'seatreg') . '</th>
+            <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Seat', 'seatreg') . '</th>
+            <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Room', 'seatreg') . '</th>
+            <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Email', 'seatreg') . '</th>';
+        
+        foreach($customFieldLabels as $customFieldLabel) {
+            $bookingTable .= '<th style=";border:1px solid black;text-align: left;padding: 6px;">' . esc_html($customFieldLabel) . '</th>';
+        }
+        $bookingTable .= '</tr>';
+
+        foreach ($bookings as $booking) {
+            $bookingCustomFields = json_decode($booking->custom_field_data);
+            $bookingTable .= '<tr>
+                <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->first_name . ' ' .  $booking->last_name) .'</td>
+                <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->seat_nr) . '</td>
+                <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->room_name) . '</td>
+                <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->email) . '</td>';
+    
+                if( is_array($bookingCustomFields) ) {
+                    foreach($bookingCustomFields as $bookingCustomField) {
+                        $valueToDisplay = $bookingCustomField->value;
+    
+                        $customFieldObject = array_values(array_filter($registrationCustomFields, function($custField) use($bookingCustomField) {
+                            return $custField->label === $bookingCustomField->label;
+                        }));
+        
+                        if( count($customFieldObject) > 0 && $customFieldObject[0]->type === 'check' ) {
+                            $valueToDisplay = $bookingCustomField->value === '1' ? esc_html__('Yes', 'seatreg') : esc_html__('No', 'seatreg');
+                        }
+                        $bookingTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($valueToDisplay) . '</td>';
+                    }
+                }
+            
+            $bookingTable .= '</tr>';
+        }
+
+        $bookingTable .= '</table>';
+
+        return $bookingTable;
+    }
 }

@@ -615,7 +615,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="approved-booking-email-template"><?php esc_html_e('Approved booking email template', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Approved booking', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->approved_booking_email_template); ?></textarea>
+				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->approved_booking_email_template); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -2510,7 +2510,8 @@ function seatreg_confirm_del_bookings_callback() {
 			seatreg_confirm_or_delete_booking( $value, $code);
 
 			if($value->action == 'conf' && !in_array($value->booking_id, $approvalBookingEmailProcessed)) {
-				$mailSent = seatreg_send_approved_booking_email( $value->booking_id, $code );
+				$bookingData = SeatregBookingRepository::getDataRelatedToBooking($value->booking_id);
+				$mailSent = seatreg_send_approved_booking_email( $value->booking_id, $code, $bookingData->approved_booking_email_template );
 				if($mailSent) {
 					$approvalBookingEmailProcessed[] = $value->booking_id;
 				}

@@ -259,7 +259,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 					
 				}else if($this->_insertState === SEATREG_BOOKING_APPROVED) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system (No email verification)', false);
-					$approvedEmailSent = seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode);
+					$approvedEmailSent = seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode, $this->_approvedBookingTemplate);
 
 					if($approvedEmailSent) {
 						$this->response->setText('bookings-confirmed-status-2');

@@ -22,6 +22,7 @@ class SeatregBooking {
 	protected $_createdCustomFields;
 	protected $_emailVerificationTemplate;
 	protected $_pendingBookingTemplate;
+	protected $_approvedBookingTemplate;
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -154,6 +155,7 @@ class SeatregBooking {
 		$this->_createdCustomFields = json_decode($result->custom_fields);
 		$this->_emailVerificationTemplate = $result->email_verification_template;
 		$this->_pendingBookingTemplate = $result->pending_booking_email_template;
+		$this->_approvedBookingTemplate = $result->approved_booking_email_template;
         
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;

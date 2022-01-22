@@ -8,22 +8,37 @@ class SeatregTemplateService {
     public static function sanitizeTemplate($template) {
         return sanitize_textarea_field($template);
     }
+
     public static function replaceLineBreaksWithBrTags($template) {
         return nl2br($template);
     }
+
     public static function constructLink($link) {
         return '<a href="'. $link .'">'. $link .'</a>';
     }
+
     public static function replaceEmailVerificationLink($template, $confirmationURL) {
         $confirmationURL = self::constructLink($confirmationURL);
 
         return str_replace('[verification-link]', $confirmationURL, $template);
     }
+
     public static function replaceBookingStatusLink($template, $bookingStatusLink) {
         $bookingStatusLink = self::constructLink($bookingStatusLink);
 
         return str_replace('[status-link]', $bookingStatusLink, $template);
     }
+
+    public static function replaceBookingTable($template, $bookings, $customFieldLabels, $registrationCustomFields) {
+        $bookingTable = SeatregBookingService::generateBookingTable($customFieldLabels, $registrationCustomFields, $bookings);
+
+        return str_replace('[booking-table]', $bookingTable, $template);
+    }
+
+    public static function replaceBookingId($template, $bookingId) {
+        return str_replace('[booking-id]', '<strong>' . $bookingId . '</strong>', $template);
+    }
+
     public static function emailVerificationTemplateProcessing($template, $confirmationURL) {
         $template = self::sanitizeTemplate($template);
         $template = self::replaceLineBreaksWithBrTags($template);
@@ -35,8 +50,20 @@ class SeatregTemplateService {
     public static function pendingBookingTemplateProcessing($template, $bookingStatusLink) {
         $template = self::sanitizeTemplate($template);
         $template = self::replaceLineBreaksWithBrTags($template);
-        $message= self::replaceBookingStatusLink($template, $bookingStatusLink);
+        $message = self::replaceBookingStatusLink($template, $bookingStatusLink);
         
+        return $message;
+    }
+
+    public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $customFieldLabels, $registrationCustomFields, $bookingId) {
+        $template = self::sanitizeTemplate($template);
+        $template = self::replaceLineBreaksWithBrTags($template);
+        $template = self::replaceBookingStatusLink($template, $bookingStatusLink);
+        $template = self::replaceBookingTable($template, $bookings, $customFieldLabels, $registrationCustomFields);
+        $template = self::replaceBookingId($template, $bookingId);
+
+        $message = $template;
+
         return $message;
     }
 }
