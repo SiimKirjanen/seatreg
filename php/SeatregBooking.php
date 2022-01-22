@@ -20,8 +20,8 @@ class SeatregBooking {
 	protected $_registrationStartTimestamp;
 	protected $_gmailNeeded = false;  //require gmail address from registrants
 	protected $_createdCustomFields;
+	protected $_emailVerificationTemplate;
 	
-
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
     	$seatsString = '';
@@ -151,6 +151,7 @@ class SeatregBooking {
 		$this->_maxSeats = $result->seats_at_once;
 		$this->_requireBookingEmailConfirm = $result->booking_email_confirm;
 		$this->_createdCustomFields = json_decode($result->custom_fields);
+		$this->_emailVerificationTemplate = $result->email_verification_template;
         
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;

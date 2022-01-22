@@ -136,13 +136,19 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     return false;
 }
 
-function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName) {
+function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template) {
     $confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
     $adminEmail = get_option( 'admin_email' );
-    $message =  '<p>' . sprintf(esc_html__('Thank you for booking at %s', 'seatreg'), $registrationName) . '</p>' .
-                '<p>' . esc_html__('Click on the link below to complete email verification', 'seatreg') . '</p>
-                <a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
-                ('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>';
+    $message = '';
+
+    if($template) {
+        $message = SeatregTemplateService::emailVerificationTemplateProcessing($template, $confirmationURL);
+    }else {
+        $message =  '<p>' . sprintf(esc_html__('Thank you for booking at %s', 'seatreg'), $registrationName) . '</p>' .
+        '<p>' . esc_html__('Click on the link below to complete email verification', 'seatreg') . '</p>
+        <a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
+        ('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>';
+    }
     
     return wp_mail($bookerEmail, esc_html__('Booking email verification', 'seatreg'), $message, array(
         "Content-type: text/html",

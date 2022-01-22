@@ -548,7 +548,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="email-verification-template"><?php esc_html_e('Booking email verification template', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('You can customize email verification.', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="email-verification-template" name="email-verification-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->email_verification_template); ?></textarea>
+				<textarea rows="4" class="form-control" id="email-verification-template" name="email-verification-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->email_verification_template); ?></textarea>
 			</div>
 
 			<div class="form-group">
