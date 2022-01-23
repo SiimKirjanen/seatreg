@@ -1031,7 +1031,7 @@ function SeatregCustomField(label, type, options) {
 		this.options = options;
 }
 
-//when user submits seatreg settings. First generate #custom-fields hidden input value. 
+//when user submits seatreg settings. Do validation, generate #custom-fields hidden input value. 
 $('#seatreg-settings-submit').on('click', function(e) {
 	var customFieldArray = [];  //array to store custom inputs
 
@@ -1051,6 +1051,33 @@ $('#seatreg-settings-submit').on('click', function(e) {
 		if($('#paypal-currency-code').val() === "") {
 			e.preventDefault();
 			alertify.error(translator.translate('pleaseEnterPayPalCurrencyCode'));
+
+			return true;
+		}
+	}
+
+	if($('#approved-booking-email-template').val()) {
+		if($('#approved-booking-email-template').val().indexOf('[status-link]') === -1) {
+			e.preventDefault();
+			alertify.error(translator.translate('emailTemplateNotCorrect'));
+
+			return true;
+		}
+	}
+
+	if($('#pendin-booking-email-template').val()) {
+		if($('#pendin-booking-email-template').val().indexOf('[status-link]') === -1) {
+			e.preventDefault();
+			alertify.error(translator.translate('emailTemplateNotCorrect'));
+
+			return true;
+		}
+	}
+
+	if($('#email-verification-template').val()) {
+		if($('#email-verification-template').val().indexOf('[verification-link]') === -1) {
+			e.preventDefault();
+			alertify.error(translator.translate('emailTemplateNotCorrect'));
 
 			return true;
 		}
