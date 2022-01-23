@@ -621,7 +621,7 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="approved-booking-email-template"><?php esc_html_e('Approved booking email template', 'seatreg'); ?></label>
+				<label for="approved-booking-email-template"><?php esc_html_e('Approved booking receipt email template', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Customize how approved booking email looks like.', 'seatreg'); ?>
 					<?php esc_html_e('Supported keywords are', 'seatreg'); ?>: <br>
