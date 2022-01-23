@@ -2438,9 +2438,10 @@ function seatreg_resend_receipt_callback() {
 	}
 	$bookingId = sanitize_text_field($_POST['bookingId']);
 	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
+	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 
 	if($bookings && $bookings[0]->status === '2') {
-		seatreg_send_approved_booking_email( $bookingId, sanitize_text_field($_POST['registrationCode']) );
+		seatreg_send_approved_booking_email( $bookingId, sanitize_text_field($_POST['registrationCode']), $bookingData->approved_booking_email_template );
 	}else {
 		$resp->setError('Not allowed');
 	}
@@ -2668,12 +2669,13 @@ function seatreg_add_booking_with_manager_callback() {
 		return $status === false;
 	}));
 	$addingStatusCount = count($addingStatus);
+	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 	
 	if( $successStatusCount === $addingStatusCount ) {
 		$selectedStatus = $bookingStatus === '1' ? 'pending' : 'approved';
 		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount . ' ' .  $selectedStatus .' seats added with booking manager', true );
 		if($bookingStatus === "2") {
-			seatreg_send_approved_booking_email($bookingId, $registrationCode);
+			seatreg_send_approved_booking_email($bookingId, $registrationCode, $bookingData->approved_booking_email_template);
 		}
 		wp_send_json_success( array('status' => 'created') );
 	}else if( $successStatusCount !== $addingStatusCount ) {
