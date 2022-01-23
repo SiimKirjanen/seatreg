@@ -259,14 +259,20 @@ class SeatregSubmitBookings extends SeatregBooking {
 					
 				}else if($this->_insertState === SEATREG_BOOKING_APPROVED) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system (No email verification)', false);
-					$approvedEmailSent = seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode, $this->_approvedBookingTemplate);
 
-					if($approvedEmailSent) {
+					if($this->_sendApprovedBookingEmail) {
+						$approvedEmailSent = seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode, $this->_approvedBookingTemplate);
+
+						if($approvedEmailSent) {
+							$this->response->setText('bookings-confirmed-status-2');
+							$this->response->setData($bookingCheckURL);
+						}else {
+							seatreg_add_activity_log('booking', $this->_bookingId, 'Approved booking email sending failed', false);
+							$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out booking email. Please notify the site administrator.', 'seatreg'));
+						}
+					}else {
 						$this->response->setText('bookings-confirmed-status-2');
 						$this->response->setData($bookingCheckURL);
-					}else {
-						seatreg_add_activity_log('booking', $this->_bookingId, 'Approved booking email sending failed', false);
-						$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out booking email. Please notify the site administrator.', 'seatreg'));
 					}
 				}
 			}	

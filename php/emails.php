@@ -23,11 +23,6 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
     $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
     $registrationCustomFields = json_decode($registration->custom_fields);
-
-    if( $registration->send_approved_booking_email === '0' ) {
-        return false;
-    }
-
     $roomData = json_decode($registration->registration_layout)->roomData;
     foreach ($bookings as $booking) {
         $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
