@@ -62,25 +62,24 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
 
         $bookingTable = SeatregBookingService::generateBookingTable($customFieldLabels, $registrationCustomFields, $bookings);
         $message .= $bookingTable;
-        
+    }
 
-        if( extension_loaded('gd') && $qrType ) {
-            if (!file_exists(SEATREG_TEMP_FOLDER_DIR)) {
-                mkdir(SEATREG_TEMP_FOLDER_DIR, 0775, true);
-            }
-
-            $bookingCheckURL = get_site_url() . '?seatreg=booking-status&registration=' . $registration->registration_code . '&id=' . $bookingId;
-            $qrContent = $qrType === 'booking-id' ? $bookingId : $bookingCheckURL;
-
-            QRcode::png($qrContent, SEATREG_TEMP_FOLDER_DIR. '/'.$bookingId.'.png', QR_ECLEVEL_L, 4);
-            
-            add_action( 'phpmailer_init', function($phpmailer){
-                $bookingId = $GLOBALS['seatreg_qr_code_bookingid'];
-                $phpmailer->AddEmbeddedImage( SEATREG_TEMP_FOLDER_DIR. '/' .$bookingId.'.png', 'qrcode', 'qrcode.png');
-            });
-            
-            $message .= '<br><img src="cid:qrcode" />';
+    if( extension_loaded('gd') && $qrType ) {
+        if (!file_exists(SEATREG_TEMP_FOLDER_DIR)) {
+            mkdir(SEATREG_TEMP_FOLDER_DIR, 0775, true);
         }
+
+        $bookingCheckURL = get_site_url() . '?seatreg=booking-status&registration=' . $registration->registration_code . '&id=' . $bookingId;
+        $qrContent = $qrType === 'booking-id' ? $bookingId : $bookingCheckURL;
+
+        QRcode::png($qrContent, SEATREG_TEMP_FOLDER_DIR. '/'.$bookingId.'.png', QR_ECLEVEL_L, 4);
+        
+        add_action( 'phpmailer_init', function($phpmailer){
+            $bookingId = $GLOBALS['seatreg_qr_code_bookingid'];
+            $phpmailer->AddEmbeddedImage( SEATREG_TEMP_FOLDER_DIR. '/' .$bookingId.'.png', 'qrcode', 'qrcode.png');
+        });
+        
+        $message .= '<br><img src="cid:qrcode" />';
     }
     
     $isSent = wp_mail($bookerEmail, "Your booking at $registrationName is approved", $message, array(
