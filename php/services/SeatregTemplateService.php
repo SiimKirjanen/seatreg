@@ -29,8 +29,8 @@ class SeatregTemplateService {
         return str_replace(SEATREG_TEMPLATE_STATUS_LINK, $bookingStatusLink, $template);
     }
 
-    public static function replaceBookingTable($template, $bookings, $customFieldLabels, $registrationCustomFields) {
-        $bookingTable = SeatregBookingService::generateBookingTable($customFieldLabels, $registrationCustomFields, $bookings);
+    public static function replaceBookingTable($template, $bookings, $registrationCustomFields) {
+        $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
 
         return str_replace(SEATREG_TEMPLATE_BOOKING_TABLE, $bookingTable, $template);
     }
@@ -55,11 +55,11 @@ class SeatregTemplateService {
         return $message;
     }
 
-    public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $customFieldLabels, $registrationCustomFields, $bookingId) {
+    public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $registrationCustomFields, $bookingId) {
         $template = self::sanitizeTemplate($template);
         $template = self::replaceLineBreaksWithBrTags($template);
         $template = self::replaceBookingStatusLink($template, $bookingStatusLink);
-        $template = self::replaceBookingTable($template, $bookings, $customFieldLabels, $registrationCustomFields);
+        $template = self::replaceBookingTable($template, $bookings, $registrationCustomFields);
         $template = self::replaceBookingId($template, $bookingId);
 
         $message = $template;

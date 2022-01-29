@@ -65,7 +65,12 @@ class SeatregBookingService {
 		);
     }
 
-    public static function generateBookingTable($customFieldLabels, $registrationCustomFields, $bookings) {
+    public static function generateBookingTable($registrationCustomFields, $bookings) {
+        $enteredCustomFieldData = json_decode($bookings[0]->custom_field_data);
+        $customFieldLabels = array_map(function($customField) {
+            return $customField->label;
+        }, is_array( $enteredCustomFieldData) ? $enteredCustomFieldData : [] );
+        
         $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;">
             <tr>
             <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Name', 'seatreg') . '</th>

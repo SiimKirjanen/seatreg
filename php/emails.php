@@ -45,14 +45,10 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
 
     $adminEmail = get_option( 'admin_email' );
     $message = '';
-    $enteredCustomFieldData = json_decode($bookings[0]->custom_field_data);
-    $customFieldLabels = array_map(function($customField) {
-        return $customField->label;
-    }, is_array( $enteredCustomFieldData) ? $enteredCustomFieldData : [] );
     $qrType = $registration->send_approved_booking_email_qr_code;
 
     if($template) {
-        $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $customFieldLabels, $registrationCustomFields, $bookingId);
+        $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $registrationCustomFields, $bookingId);
     }else {
         $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html($registrationName) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
         $message .= '<p>';
@@ -60,7 +56,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         $message .= esc_html__('Booking status link:', 'seatreg') . ' <a href="'. $bookingStatusUrl .'" target="_blank">'. esc_url($bookingStatusUrl) .'</a>';
         $message .= '</p>';
 
-        $bookingTable = SeatregBookingService::generateBookingTable($customFieldLabels, $registrationCustomFields, $bookings);
+        $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
         $message .= $bookingTable;
     }
 

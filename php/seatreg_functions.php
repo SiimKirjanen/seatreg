@@ -1191,27 +1191,23 @@ function seatreg_generate_tabs($targetPage) {
 
 //echo out booking info and status
 function seatreg_echo_booking($registrationCode, $bookingId) {
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$registration = SeatregRegistrationRepository::getRegistrationByCode($registrationCode);
+	$registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
 
 	if($registration) {
 		$bookings = SeatregBookingRepository::getBookingsByRegistrationCodeAndBookingId($registrationCode, $bookingId);
 		$roomData = json_decode($registration->registration_layout)->roomData;
+		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
+		$registrationCustomFields = json_decode($registration->custom_fields);
 
 		foreach ($bookings as $booking) {
 			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
 		}
 
-		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
-		if(count($bookings) > 0) {
-			echo '<h4>', esc_html($registration->registration_name), '</h4>';
+		if(count($bookings)) {
+			echo '<h2>', esc_html($registration->registration_name), '</h2>';
 			echo '<h4>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</h4>';
 
-			foreach($bookings as $booking) {
-				echo esc_html__('Name','seatreg'), ': ' , esc_html($booking->first_name), ' ', esc_html($booking->last_name) , '<br>', esc_html__('Seat', 'seatreg'), ': ' , esc_html($booking->seat_nr), '<br>', esc_html__('Room', 'seatreg') , ': ' , esc_html($booking->room_name), '<br>', esc_html__('Booking status', 'seatreg'), ': ' , ($booking->status === "1") ? esc_html__('Pending', 'seatreg') : esc_html__('Approved', 'seatreg'), '<br><br>';
-			}
+			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
 
 			if($options && $options->payment_text) {
 				echo '<h3>', esc_html__('Payment info', 'seatreg'), '</h3>';
