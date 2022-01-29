@@ -110,6 +110,11 @@
 		this.height = ySize;
 	};
 
+	//Change width
+	Box.prototype.changeWidth = function(newWidth) {
+		this.width = newWidth;
+	}
+
 	//change position
 	Box.prototype.changePosition = function(xPos, yPos) {
 		this.xPosition = xPos;
@@ -150,12 +155,23 @@
 		this.input = newInput;
 	}
 
-	Box.prototype.calculateInputBoxWidth = function(inputValue) {
-		return (inputValue.length + 2) * 8;
+	Box.prototype.calculateInputBoxDimentions = function(inputValue, inputFontSize) {
+		$testingBox = $('<span id="font-size-width-test" style="font-size:'+ inputFontSize +'px">'+ inputValue +'</span>');
+		$('.seatreg-builder-popup').append($testingBox);
+		var testDivWidth = $('#font-size-width-test').width();
+		$('#font-size-width-test').remove();
+
+		return {
+			width: testDivWidth + 16
+		};
 	}
 
 	Box.prototype.calculateAndSetTextBoxFontSize = function(inputAreaWidth) {
-		this.inputSize = inputAreaWidth / 8;
+		//this.inputSize = inputAreaWidth / 8;
+	}
+
+	Box.prototype.setInputFontSize = function(newFontSize) {
+		this.inputSize = newFontSize;
 	}
 
 	/*
@@ -252,6 +268,7 @@
 				price: this.boxes[i].price,
 				type: this.boxes[i].type,
 				input: this.boxes[i].input,
+				inputSize: this.boxes[i].inputSize,
 			});
 		}
 
@@ -296,13 +313,14 @@
 	};
 
 	//add box to room from server data
-	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor) {
+	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
 		var box = new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,this.roomSeatCounter,status,boxZIndex, price, type);
 		box.input = input;
 		box.fontColor = fontColor;
+		box.inputSize = inputSize;
 		this.boxes.push(box);
 		this.boxCounter++;
 	};
@@ -1463,17 +1481,18 @@
 		var registrationScope = this;
 		var boxClasses = "drag-box text-box " + dataCounter;
 
-		var textBox = $('<div class="'+ boxClasses +'"><input class="text-box-input" /></div>').attr({
+		var textBox = $('<div class="'+ boxClasses +'"><input class="text-box-input" /><i class="fa fa-plus text-size-control" data-action="increase"></i><i class="fa fa-minus text-size-control" data-action="degrease"></i></div>').attr({
 			style: styles,
 			'data-id': dataCounter, 
 		}).on('keyup', function() {
 			var $input = $(this).find('input');
+			var inputFontSize = parseInt($input.css('font-size'), 10);
 			var box = registrationScope.rooms[registrationScope.currentRoom].findAndReturnBox(dataCounter);
 
-			var inputLength = box.calculateInputBoxWidth($input.val());
+			var dimentions = box.calculateInputBoxDimentions($input.val(), inputFontSize);
 			box.changeInput($input.val());
-			box.changeSize(inputLength, initialBoxHeight);
-			$(this).css('width', inputLength);
+			box.changeSize(dimentions.width, initialBoxHeight);
+			$(this).css('width', dimentions.width);
 		}).on('focusout', function() {
 			var inputTextWidth = $(this).find('input').val().length;
 
@@ -1490,6 +1509,30 @@
 		});
 
 		textBox.appendTo('.build-area');
+		$('.build-area .text-box .text-size-control').off().on('click', function(e) {
+			e.stopPropagation();
+
+			var boxId = $(this).closest('.drag-box').data('id');
+			var $box = $('.build-area .text-box[data-id="'+ boxId +'"]');
+			var action = $(this).data('action');
+			var fontSize = parseInt($box.find('.text-box-input').css('font-size'), 10);
+			var inputValue = $box.find('.text-box-input').val();
+
+			if(action === 'increase') {
+				fontSize += 1;
+			}else {
+				fontSize -= 1;
+			}
+
+			var regBox = registrationScope.rooms[registrationScope.currentRoom].findAndReturnBox(boxId);
+			var dimentions = regBox.calculateInputBoxDimentions(inputValue, fontSize);
+			regBox.setInputFontSize(fontSize);
+			regBox.changeWidth(dimentions.width);
+
+			$box.find('.text-box-input').css('font-size', fontSize);
+			$box.css('width', dimentions.width);
+		});
+
 		this.rooms[this.currentRoom].addBox("noLegend", positionX, positionY, initialBoxWidth, initialBoxHeight, dataCounter, 'none', 'nohover',false,'noStatus', 1, 'text-box'); 
 		$('.build-area .text-box[data-id="'+ dataCounter +'"] .text-box-input').focus();
 	};
@@ -1622,18 +1665,23 @@
 
 					if(regScope.rooms[regScope.currentRoom].boxes[i].type === 'text-box') {
 						var boxInput = regScope.rooms[regScope.currentRoom].boxes[i].input;
+						var boxInputFontSize = regScope.rooms[regScope.currentRoom].boxes[i].inputSize;
 
 						$this.append('<input class="text-box-input" value="' + boxInput + '" />');
-						$this.find('.text-box-input').css('color', regScope.rooms[regScope.currentRoom].boxes[i].fontColor);
-						$this.css('width', (boxInput.length + 1) * 9);
+						$this.find('.text-box-input').css({
+							'color': regScope.rooms[regScope.currentRoom].boxes[i].fontColor,
+							'font-size':  boxInputFontSize + 'px'
+						});
+						//var dimentions = regScope.rooms[regScope.currentRoom].boxes[i].calculateInputBoxDimentions(boxInput, boxInputFontSize);
+						//$this.css('width', dimentions.width);
 
 						$this.on('keyup', function() {
 							var $input = $this.find('input');
 							var box = regScope.rooms[regScope.currentRoom].findAndReturnBox(boxId);
-							var inputLength = box.calculateInputBoxWidth($input.val());
+							var dimentions = box.calculateInputBoxDimentions($input.val(), parseInt($input.css('font-size'), 10));
 							box.changeInput($input.val());
-							box.changeSize(inputLength, 32);
-							$this.css('width', inputLength);
+							box.changeSize(dimentions.width, 32);
+							$this.css('width', dimentions.width);
 						}).on('focusout', function() {
 							var inputTextWidth = $this.find('input').val().length;
 				
@@ -1761,10 +1809,10 @@
 
 	Registration.prototype.addResisableListeners = function(disableDrag) {
 		if(this.hasResizableListeners()) {
-			return true;
+			//return true;
 		}
 		var regScope = this;
-		var boxCollection = $('.build-area .drag-box'); 
+		var boxCollection = $('.build-area .drag-box:not(.ui-resizable):not(.text-box)'); 
 		var autoHide = true;
 
 		if($('html').hasClass('touch')) {
@@ -1950,7 +1998,7 @@
 			regScope.removeResisableListeners();
 		}else if(this.action == 9) {
 			$('.build-area-wrapper').attr('data-cursor','9');
-
+			//regScope.removeResisableListeners();
 			regScope.removeSelectableScroll();	
 			regScope.removeDraggableListeners();
 		}
@@ -2168,6 +2216,7 @@
 							arr[i].type,
 							arr[i].input,
 							arr[i].fontColor,
+							arr[i].inputSize,
 						);
 			    	}
 			    }

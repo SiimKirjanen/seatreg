@@ -624,6 +624,22 @@
 		border: none;
 		background-color: transparent;
 	}
+	.text-size-control{
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		cursor: pointer;
+		font-size: 14px;
+
+		&[data-action="increase"] {
+			left: 0;
+			bottom: -22px;
+		}
+		&[data-action="degrease"] {
+			right: 0;
+			bottom: -22px;
+		}
+	}
 }
 
 .seatreg-map-builder-page .can-register {
