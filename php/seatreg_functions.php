@@ -533,6 +533,29 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="use-pending"><?php esc_html_e('Booking email verification', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Bookings must be verified by email', 'seatreg'); ?>.
+				</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="email-confirm" name="email-confirm" value="1" <?php echo $options[0]->booking_email_confirm == '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Email verification', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
+				<label for="email-verification-template"><?php esc_html_e('Booking email verification template', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('You can customize the verification email.', 'seatreg'); ?>
+					<?php esc_html_e('Supported keywords are', 'seatreg'); ?>: <br>
+					<code>[verification-link]</code> <?php esc_html_e('(required) will be converted to email verification link', 'seatreg'); ?>
+				</p>
+				<textarea rows="4" class="form-control" id="email-verification-template" name="email-verification-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->email_verification_template); ?></textarea>
+			</div>
+
+			<div class="form-group">
 				<label for="use-pending"><?php esc_html_e('Use pending bookings', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('By default all bookings will first be in pending state so admin can approve them (with booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
@@ -546,24 +569,21 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="pendin-booking-email-template"><?php esc_html_e('Pending booking email template', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('When booking gets pending status then email will be sent out. You can customize the email.', 'seatreg'); ?>
+					<?php esc_html_e('Supported keywords are', 'seatreg'); ?>: <br>
+					<code>[status-link]</code> <?php esc_html_e('(required) will be converted to booking status link', 'seatreg'); ?>
+				</p>
+				<textarea rows="4" class="form-control" id="pendin-booking-email-template" name="pendin-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->pending_booking_email_template); ?></textarea>
+			</div>
+
+			<div class="form-group">
 				<label for="pending-expiration"><?php esc_html_e('Pending booking expiration', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('You can enable pending booking expiration after a certain period of time (in minutes). If the booking has some payment related activity, then booking will not be removed. Leave empty for no expiration time.', 'seatreg'); ?>
 				</p>
 				<input type="number" class="form-control" id="pending-expiration" name="pending-expiration" autocomplete="off" placeholder="<?php echo esc_html('Expiration time not set', 'seatreg'); ?>" value="<?php echo ($options[0]->pending_expiration) ? esc_html($options[0]->pending_expiration) : ''; ?>" />
-			</div>
-
-			<div class="form-group">
-				<label for="use-pending"><?php esc_html_e('Booking email verification', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Bookings must be verified by email', 'seatreg'); ?>.
-				</p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="email-confirm" name="email-confirm" value="1" <?php echo $options[0]->booking_email_confirm == '1' ? 'checked':'' ?> >
-			      		<?php esc_html_e('Email verification', 'seatreg'); ?>
-			    	</label>
-			  	</div>
 			</div>
 
 			<div class="form-group">
@@ -598,6 +618,18 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Send approved booking email', 'seatreg'); ?>
 			    	</label>
 			  	</div>
+			</div>
+
+			<div class="form-group">
+				<label for="approved-booking-email-template"><?php esc_html_e('Approved booking receipt email template', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Customize how approved booking email looks like.', 'seatreg'); ?>
+					<?php esc_html_e('Supported keywords are', 'seatreg'); ?>: <br>
+					<code>[status-link]</code> <?php esc_html_e('(required) will be converted to booking status link', 'seatreg'); ?> <br>
+					<code>[booking-id]</code> <?php esc_html_e('(optional) will be converted to booking id', 'seatreg'); ?> <br>
+					<code>[booking-table]</code> <?php esc_html_e('(optional) will be converted to booking table', 'seatreg'); ?> <br>
+				</p>
+				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->approved_booking_email_template); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -1159,31 +1191,27 @@ function seatreg_generate_tabs($targetPage) {
 
 //echo out booking info and status
 function seatreg_echo_booking($registrationCode, $bookingId) {
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$registration = SeatregRegistrationRepository::getRegistrationByCode($registrationCode);
+	$registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
 
 	if($registration) {
 		$bookings = SeatregBookingRepository::getBookingsByRegistrationCodeAndBookingId($registrationCode, $bookingId);
 		$roomData = json_decode($registration->registration_layout)->roomData;
+		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
+		$registrationCustomFields = json_decode($registration->custom_fields);
 
 		foreach ($bookings as $booking) {
 			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
 		}
 
-		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
-		if(count($bookings) > 0) {
-			echo '<h4>', esc_html($registration->registration_name), '</h4>';
+		if(count($bookings)) {
+			echo '<h2>', esc_html($registration->registration_name), '</h2>';
 			echo '<h4>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</h4>';
 
-			foreach($bookings as $booking) {
-				echo esc_html__('Name','seatreg'), ': ' , esc_html($booking->first_name), ' ', esc_html($booking->last_name) , '<br>', esc_html__('Seat', 'seatreg'), ': ' , esc_html($booking->seat_nr), '<br>', esc_html__('Room', 'seatreg') , ': ' , esc_html($booking->room_name), '<br>', esc_html__('Booking status', 'seatreg'), ': ' , ($booking->status === "1") ? esc_html__('Pending', 'seatreg') : esc_html__('Approved', 'seatreg'), '<br><br>';
-			}
+			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
 
 			if($options && $options->payment_text) {
 				echo '<h3>', esc_html__('Payment info', 'seatreg'), '</h3>';
-				echo '<p>', esc_html($options->payment_text) ,'</p>';
+				echo '<p>', nl2br(esc_html($options->payment_text)) ,'</p>';
 			}
 		}else {
 			esc_html_e('Booking not found.', 'seatreg');
@@ -1533,6 +1561,9 @@ function seatreg_set_up_db() {
 			paypal_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
 			payment_completed_set_booking_confirmed tinyint(1) NOT NULL DEFAULT 0,
 			pending_expiration int(11) DEFAULT NULL,
+			email_verification_template text,
+			pending_booking_email_template text,
+			approved_booking_email_template text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2096,6 +2127,18 @@ function seatreg_update() {
 		wp_die('Missing registration name');
 	}
 
+	if( !SeatregDataValidation::validateEmailVerificationTemplate() ) {
+		wp_die('Email Verification template not valid');
+	}
+
+	if( !SeatregDataValidation::validatePendingBookingEmailTemplate() ) {
+		wp_die('Pending booking email template not valid');
+	}
+
+	if( !SeatregDataValidation::validateApprovedBookingEmailTemplate() ) {
+		wp_die('Approved booking email template not valid');
+	}
+
 	if( isset($_POST['paypal-payments']) && ($_POST['paypal-business-email'] === "" || $_POST['paypal-button-id'] === "" || $_POST['paypal-currency-code'] === "" ) ) {
 		wp_die('Missing PayPal configuration');
 	}
@@ -2172,7 +2215,7 @@ function seatreg_update() {
 	}else {
 		$_POST['approved-booking-email'] = 1;
 	}
-
+	
 	if(!empty($_POST['show-booking-data-registration'])) {
 		$selectedShowBookingData = is_array($_POST['show-booking-data-registration']) ? implode(',', $_POST['show-booking-data-registration']) : null;
 	}
@@ -2193,7 +2236,7 @@ function seatreg_update() {
 			'registration_password' => $_POST['registration-password'] == '' ? null : sanitize_text_field($_POST['registration-password']),
 			'notify_new_bookings' => $_POST['booking-notification'] ? sanitize_text_field($_POST['booking-notification']) : null,
 			'show_bookings_data_in_registration' => $selectedShowBookingData,
-			'payment_text' => $_POST['payment-instructions'] == '' ? null : sanitize_text_field($_POST['payment-instructions']),
+			'payment_text' => $_POST['payment-instructions'] == '' ? null : $_POST['payment-instructions'],
 			'info' => sanitize_text_field($_POST['registration-info-text']),
 			'registration_close_reason' => sanitize_text_field($_POST['registration-close-reason']),
 			'custom_fields' => $customFileds,
@@ -2206,7 +2249,10 @@ function seatreg_update() {
 			'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
 			'send_approved_booking_email' => $_POST['approved-booking-email'],
 			'send_approved_booking_email_qr_code' => $_POST['approved-booking-email-qr-code'] === '' ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
-			'pending_expiration' => $_POST['pending-expiration']
+			'pending_expiration' => $_POST['pending-expiration'],
+			'email_verification_template' => $_POST['email-verification-template'] === '' ? null : $_POST['email-verification-template'],
+			'pending_booking_email_template' => $_POST['pendin-booking-email-template'] === '' ? null : $_POST['pendin-booking-email-template'],
+			'approved_booking_email_template' => $_POST['approved-booking-email-template'] === '' ? null : $_POST['approved-booking-email-template'],
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
@@ -2388,9 +2434,10 @@ function seatreg_resend_receipt_callback() {
 	}
 	$bookingId = sanitize_text_field($_POST['bookingId']);
 	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
+	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 
 	if($bookings && $bookings[0]->status === '2') {
-		seatreg_send_approved_booking_email( $bookingId, sanitize_text_field($_POST['registrationCode']) );
+		seatreg_send_approved_booking_email( $bookingId, sanitize_text_field($_POST['registrationCode']), $bookingData->approved_booking_email_template );
 	}else {
 		$resp->setError('Not allowed');
 	}
@@ -2486,7 +2533,8 @@ function seatreg_confirm_del_bookings_callback() {
 			seatreg_confirm_or_delete_booking( $value, $code);
 
 			if($value->action == 'conf' && !in_array($value->booking_id, $approvalBookingEmailProcessed)) {
-				$mailSent = seatreg_send_approved_booking_email( $value->booking_id, $code );
+				$bookingData = SeatregBookingRepository::getDataRelatedToBooking($value->booking_id);
+				$mailSent = seatreg_send_approved_booking_email( $value->booking_id, $code, $bookingData->approved_booking_email_template );
 				if($mailSent) {
 					$approvalBookingEmailProcessed[] = $value->booking_id;
 				}
@@ -2617,12 +2665,13 @@ function seatreg_add_booking_with_manager_callback() {
 		return $status === false;
 	}));
 	$addingStatusCount = count($addingStatus);
+	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 	
 	if( $successStatusCount === $addingStatusCount ) {
 		$selectedStatus = $bookingStatus === '1' ? 'pending' : 'approved';
 		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount . ' ' .  $selectedStatus .' seats added with booking manager', true );
 		if($bookingStatus === "2") {
-			seatreg_send_approved_booking_email($bookingId, $registrationCode);
+			seatreg_send_approved_booking_email($bookingId, $registrationCode, $bookingData->approved_booking_email_template);
 		}
 		wp_send_json_success( array('status' => 'created') );
 	}else if( $successStatusCount !== $addingStatusCount ) {

@@ -116,9 +116,10 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 		$this->log($this->_bookingId, sprintf(esc_html__('Payment for %s is completed', 'seatreg'), "$this->_price $this->_currency"));
 
 		if($this->_setBookingConfirmed === '1') {
+			$bookingData = SeatregBookingRepository::getDataRelatedToBooking($this->_bookingId);
 			$this->changeBookingStatus(2);
 			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system (PayPal IPN)', false);
-			seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode);
+			seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode, $bookingData->approved_booking_email_template);
 		}
 	}
 

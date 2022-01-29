@@ -528,4 +528,28 @@ class SeatregDataValidation {
 
         return $validationStatus;
     }
+
+    public static function validateEmailVerificationTemplate() {
+        if( !$_POST['email-verification-template'] ) {
+            return true;
+        }else {
+            return strpos($_POST['email-verification-template'], SEATREG_TEMPLATE_EMAIL_VERIFICATION_LINK) !== false;
+        }
+    }
+
+    public static function validatePendingBookingEmailTemplate() {
+        if( !$_POST['pendin-booking-email-template'] ) {
+            return true;
+        }else {
+            return strpos($_POST['pendin-booking-email-template'], SEATREG_TEMPLATE_STATUS_LINK) !== false;
+        }
+    }
+
+    public static function validateApprovedBookingEmailTemplate() {
+        if( !$_POST['approved-booking-email-template'] ) {
+            return true;
+        }else {
+            return strpos($_POST['approved-booking-email-template'], SEATREG_TEMPLATE_STATUS_LINK) !== false;
+        }
+    }
 }

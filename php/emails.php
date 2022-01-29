@@ -6,9 +6,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/phpqrcode/qrlib.php');
 
-function seatreg_send_booking_notification_email($registrationName, $bookedSeatsString, $emailAddress) {
-    $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), esc_html($registrationName) ) . "<br><br> $bookedSeatsString <br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg");
+function seatreg_send_booking_notification_email($registrationCode, $bookingId, $emailAddress) {
+    $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
+    $bookings = SeatregBookingRepository::getBookingsById($bookingId);
+    $roomData = json_decode($registration->registration_layout)->roomData;
+    $registrationCustomFields = json_decode($registration->custom_fields);
     $adminEmail = get_option( 'admin_email' );
+    $registrationName = esc_html($registration->registration_name);
+
+    foreach ($bookings as $booking) {
+        $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
+    }
+   
+    $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), $registrationName ) . "<br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg") . "<br><br>";
+    $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
 
     wp_mail($adminEmail, "$registrationName has a new booking", $message, array(
         "Content-type: text/html",
@@ -16,19 +27,13 @@ function seatreg_send_booking_notification_email($registrationName, $bookedSeats
     ));
 }
 
-function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
-    global $seatreg_db_table_names;
+function seatreg_send_approved_booking_email($bookingId, $registrationCode, $template) {
     global $phpmailer;
 
     $GLOBALS['seatreg_qr_code_bookingid'] = $bookingId;
-
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
     $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
-
-    if( $registration->send_approved_booking_email === '0' ) {
-        return false;
-    }
-
+    $registrationCustomFields = json_decode($registration->custom_fields);
     $roomData = json_decode($registration->registration_layout)->roomData;
     foreach ($bookings as $booking) {
         $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
@@ -50,61 +55,22 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     }
 
     $adminEmail = get_option( 'admin_email' );
-    $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html($registrationName) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
-
-    $message .= '<p>';
-    $message .= esc_html__('Booking ID: ', 'seatreg') . ' <strong>'. esc_html($bookingId) .'</strong><br>';
-    $message .= esc_html__('Booking status link:', 'seatreg') . ' <a href="'. $bookingStatusUrl .'" target="_blank">'. esc_url($bookingStatusUrl) .'</a>';
-    $message .= '</p>';
-
-    $registrationCustomFields = json_decode($registration->custom_fields);
-    $enteredCustomFieldData = json_decode($bookings[0]->custom_field_data);
-    $customFieldLabels = array_map(function($customField) {
-        return $customField->label;
-    }, is_array( $enteredCustomFieldData) ? $enteredCustomFieldData : [] );
-
-    $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;">
-        <tr>
-            <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Name', 'seatreg') . '</th>
-            <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Seat', 'seatreg') . '</th>
-            <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Room', 'seatreg') . '</th>
-            <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Email', 'seatreg') . '</th>';
-    foreach($customFieldLabels as $customFieldLabel) {
-        $bookingTable .= '<th style=";border:1px solid black;text-align: left;padding: 6px;">' . esc_html($customFieldLabel) . '</th>';
-    }
-
-    $bookingTable .= '</tr>';
- 
-    foreach ($bookings as $booking) {
-        $bookingCustomFields = json_decode($booking->custom_field_data);
-        $bookingTable .= '<tr>
-            <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->first_name . ' ' .  $booking->last_name) .'</td>
-            <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->seat_nr) . '</td>
-            <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->room_name) . '</td>
-            <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->email) . '</td>';
-
-            if( is_array($bookingCustomFields) ) {
-                foreach($bookingCustomFields as $bookingCustomField) {
-                    $valueToDisplay = $bookingCustomField->value;
-
-                    $customFieldObject = array_values(array_filter($registrationCustomFields, function($custField) use($bookingCustomField) {
-                        return $custField->label === $bookingCustomField->label;
-                    }));
-    
-                    if( count($customFieldObject) > 0 && $customFieldObject[0]->type === 'check' ) {
-                        $valueToDisplay = $bookingCustomField->value === '1' ? esc_html__('Yes', 'seatreg') : esc_html__('No', 'seatreg');
-                    }
-                    $bookingTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($valueToDisplay) . '</td>';
-                }
-            }
-        
-        $bookingTable .= '</tr>';
-    }
-
-    $bookingTable .= '</table>';
-    $message .= $bookingTable;
+    $message = '';
     $qrType = $registration->send_approved_booking_email_qr_code;
-    
+
+    if($template) {
+        $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $registrationCustomFields, $bookingId);
+    }else {
+        $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html($registrationName) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
+        $message .= '<p>';
+        $message .= esc_html__('Booking ID: ', 'seatreg') . ' <strong>'. esc_html($bookingId) .'</strong><br>';
+        $message .= esc_html__('Booking status link:', 'seatreg') . ' <a href="'. $bookingStatusUrl .'" target="_blank">'. esc_url($bookingStatusUrl) .'</a>';
+        $message .= '</p>';
+
+        $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
+        $message .= $bookingTable;
+    }
+
     if( extension_loaded('gd') && $qrType ) {
         if (!file_exists(SEATREG_TEMP_FOLDER_DIR)) {
             mkdir(SEATREG_TEMP_FOLDER_DIR, 0775, true);
@@ -136,13 +102,19 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode) {
     return false;
 }
 
-function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName) {
+function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template) {
     $confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
     $adminEmail = get_option( 'admin_email' );
-    $message =  '<p>' . sprintf(esc_html__('Thank you for booking at %s', 'seatreg'), $registrationName) . '</p>' .
-                '<p>' . esc_html__('Click on the link below to complete email verification', 'seatreg') . '</p>
-                <a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
-                ('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>';
+    $message = '';
+
+    if($template) {
+        $message = SeatregTemplateService::emailVerificationTemplateProcessing($template, $confirmationURL);
+    }else {
+        $message =  '<p>' . sprintf(esc_html__('Thank you for booking at %s', 'seatreg'), $registrationName) . '</p>' .
+        '<p>' . esc_html__('Click on the link below to complete email verification', 'seatreg') . '</p>
+        <a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
+        ('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>';
+    }
     
     return wp_mail($bookerEmail, esc_html__('Booking email verification', 'seatreg'), $message, array(
         "Content-type: text/html",
@@ -150,12 +122,18 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
     ));
 }
 
-function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL) {
+function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template) {
     $adminEmail = get_option( 'admin_email' );
-    $message =  '<p>' . esc_html__('Your booking is now in pending state. Registration admin needs to approve it', 'seatreg') . '</p>' .
-                '<p>' . esc_html__('You can look your booking at the following link', 'seatreg') . '</p>' .
-                '<a href="' .  esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) . '</a>';
+    $message = '';
 
+    if($template) {
+        $message = SeatregTemplateService::pendingBookingTemplateProcessing($template, $bookingCheckURL);
+    }else {
+        $message =  '<p>' . esc_html__('Your booking is now in pending state. Registration admin needs to approve it', 'seatreg') . '</p>' .
+        '<p>' . esc_html__('You can look your booking at the following link', 'seatreg') . '</p>' .
+        '<a href="' .  esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) . '</a>';
+    }
+    
     return wp_mail($bookerEmail, esc_html__('Booking update', 'seatreg'), $message, array(
         "Content-type: text/html",
         "FROM: $adminEmail"

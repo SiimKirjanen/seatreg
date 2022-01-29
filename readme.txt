@@ -4,7 +4,7 @@ Tags: seat registration, booking, booking seats, booking events, seat map, booki
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 5.8.1
-Stable tag: 1.15.0
+Stable tag: 1.16.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -17,11 +17,12 @@ Create and manage seat registrations. Design your own seat maps and manage seat 
 
 SeatReg is a plugin that offers the following and more to build and manage your online seat registrations.
  
-* Map builder tool helps you design your seat maps. Create, delete, resize, move around and change color of your seats. You can also add price, custom legends and hover text to your seats.
+* Map builder helps you design your seat maps. Create, delete, resize, move around and change color of your seats. You can also add price, custom legends and hover text to your seats.
 * Each registration can have as many seats and rooms you wish.
-* With manager you keep an eye on your bookings. You can view, search, remove, confirm, change and download (PDF, XLSX, text) them. 
+* With manager you keep an eye on your bookings. You can view, search, remove, confirm, change, add and download (PDF, XLSX, text) them. 
 * Get an overview of your registrations. See how many open, approved or pending bookings you have.
 * Many settings to control the booking flow. For example you can create custom fields that allow customers to enter extra data.
+* Email templates.
 * Scrollable and resizable registration view that can be provided to people via direct link or by inserting it to your website pages via shortcode (example of shortcode: [seatreg code=d0ca254995]).
 * Paypal payments support.
   
@@ -40,6 +41,12 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 6. Legends and background image
 
 == Changelog ==
+
+= 1.16.1 =
+* Fixed issue where QR code was not sent when using approved booking email template
+
+= 1.16.0 =
+* You can now customize verification, pending booking and approved booking emails.
 
 = 1.15.0 =
 * Removed booking info from email verification.
