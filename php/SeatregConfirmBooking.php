@@ -81,8 +81,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		);
 
 		if($this->_sendNewBookingNotificationEmail) {
-			$seatsString = $this->generateSeatString();
-			seatreg_send_booking_notification_email($this->_registrationName, $seatsString, $this->_sendNewBookingNotificationEmail);
+			seatreg_send_booking_notification_email($this->_registrationCode, $this->_bookingId, $this->_sendNewBookingNotificationEmail);
 		}
 	}
 

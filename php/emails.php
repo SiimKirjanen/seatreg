@@ -6,9 +6,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/phpqrcode/qrlib.php');
 
-function seatreg_send_booking_notification_email($registrationName, $bookedSeatsString, $emailAddress) {
-    $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), esc_html($registrationName) ) . "<br><br> $bookedSeatsString <br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg");
+function seatreg_send_booking_notification_email($registrationCode, $bookingId, $emailAddress) {
+    $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
+    $bookings = SeatregBookingRepository::getBookingsById($bookingId);
+    $roomData = json_decode($registration->registration_layout)->roomData;
+    $registrationCustomFields = json_decode($registration->custom_fields);
     $adminEmail = get_option( 'admin_email' );
+    $registrationName = esc_html($registration->registration_name);
+
+    foreach ($bookings as $booking) {
+        $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
+    }
+   
+    $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), $registrationName ) . "<br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg") . "<br><br>";
+    $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
 
     wp_mail($adminEmail, "$registrationName has a new booking", $message, array(
         "Content-type: text/html",
