@@ -1830,9 +1830,6 @@
 	};
 
 	Registration.prototype.addResisableListeners = function(disableDrag) {
-		if(this.hasResizableListeners()) {
-			//return true;
-		}
 		var regScope = this;
 		var boxCollection = $('.build-area .drag-box:not(.ui-resizable):not(.text-box)'); 
 		var autoHide = true;
