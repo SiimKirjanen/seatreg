@@ -373,7 +373,7 @@
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-text"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('With text tool you can add text directly to your seat map. You can also change the color of the text with color tool.', 'seatreg');?>
+							<?php esc_html_e('With text tool you can add text to your seat map. You can also change the color of the text with the color tool.', 'seatreg');?>
 						</p>
 					</div>
 

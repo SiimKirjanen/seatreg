@@ -628,16 +628,25 @@
 		position: absolute;
 		width: 16px;
 		height: 16px;
+		padding: 4px;
 		cursor: pointer;
 		font-size: 14px;
 
 		&[data-action="increase"] {
 			left: 0;
-			bottom: -22px;
+			bottom: -18px;
+
+			&:hover {
+				color: #58c40f;
+			}
 		}
 		&[data-action="degrease"] {
 			right: 0;
-			bottom: -22px;
+			bottom: -18px;
+
+			&:hover {
+				color: red;
+			}
 		}
 	}
 }
