@@ -1923,10 +1923,10 @@
 				});
 
 				if($('.build-area .active-box').length > 1) {
-					$('.build-area .drag-box').resizable( "option", "alsoResize", ".active-box" );
+					$('.build-area .drag-box:not(.text-box)').resizable( "option", "alsoResize", ".active-box:not(.text-box)" );
 					regScope.needMultiDrag = true;
 				}else {
-					$('.build_area .drag-box').resizable( "option", "alsoResize", false );
+					$('.build_area .drag-box:not(.text-box)').resizable( "option", "alsoResize", false );
 					regScope.needMultiDrag = false;
 				}
 
