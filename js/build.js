@@ -165,11 +165,13 @@
 	Box.prototype.calculateInputBoxDimentions = function() {
 		$testingBox = $('<span id="font-size-width-test" style="font-size:'+ this.inputSize +'px">'+ this.input +'</span>');
 		$('.seatreg-builder-popup').append($testingBox);
-		var testDivWidth = $('#font-size-width-test').width();
+		var testElementWidth = $('#font-size-width-test').width();
+		var testElementHeight = $('#font-size-width-test').height();
 		$('#font-size-width-test').remove();
 
 		return {
-			width: testDivWidth + 16
+			width: testElementWidth + 16,
+			height: testElementHeight + 16
 		};
 	}
 
@@ -1493,8 +1495,11 @@
 
 			box.changeTextBoxInputValues($input);
 			var dimentions = box.calculateInputBoxDimentions();
-			box.changeSize(dimentions.width, initialBoxHeight);
-			$(this).css('width', dimentions.width);
+			box.changeSize(dimentions.width, dimentions.height);
+			$(this).css({
+				'width': dimentions.width,
+				'height': dimentions.height
+			});
 		}).on('focusout', function() {
 			var inputTextWidth = $(this).find('input').val().length;
 
@@ -1530,10 +1535,13 @@
 			regBox.changeTextBoxInputValues($input);
 			var dimentions = regBox.calculateInputBoxDimentions();
 			
-			regBox.changeWidth(dimentions.width);
+			regBox.changeSize(dimentions.width, dimentions.height);
 
 			$box.find('.text-box-input').css('font-size', fontSize);
-			$box.css('width', dimentions.width);
+			$box.css({
+				'width': dimentions.width,
+				'height': dimentions.height,
+			});
 		});
 
 		this.rooms[this.currentRoom].addBox("noLegend", positionX, positionY, initialBoxWidth, initialBoxHeight, dataCounter, 'none', 'nohover',false,'noStatus', 1, 'text-box'); 
