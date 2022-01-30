@@ -241,6 +241,7 @@
 			if(loc[i].type === 'text-box') {
 				box.className = box.className + ' text-box';
 				box.style.color = loc[i].fontColor;
+				box.style.fontSize = loc[i].inputSize + 'px';
 				box.innerHTML = loc[i].input;
 			}
 
