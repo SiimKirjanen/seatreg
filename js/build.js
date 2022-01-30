@@ -155,8 +155,15 @@
 		this.input = newInput;
 	}
 
-	Box.prototype.calculateInputBoxDimentions = function(inputValue, inputFontSize) {
-		$testingBox = $('<span id="font-size-width-test" style="font-size:'+ inputFontSize +'px">'+ inputValue +'</span>');
+	Box.prototype.changeTextBoxInputValues = function($input) {
+		var inputFontSize = parseInt($input.css('font-size'), 10);
+
+		this.changeInput($input.val());
+		this.setInputFontSize(inputFontSize);
+	}
+
+	Box.prototype.calculateInputBoxDimentions = function() {
+		$testingBox = $('<span id="font-size-width-test" style="font-size:'+ this.inputSize +'px">'+ this.input +'</span>');
 		$('.seatreg-builder-popup').append($testingBox);
 		var testDivWidth = $('#font-size-width-test').width();
 		$('#font-size-width-test').remove();
@@ -164,10 +171,6 @@
 		return {
 			width: testDivWidth + 16
 		};
-	}
-
-	Box.prototype.calculateAndSetTextBoxFontSize = function(inputAreaWidth) {
-		//this.inputSize = inputAreaWidth / 8;
 	}
 
 	Box.prototype.setInputFontSize = function(newFontSize) {
@@ -1486,11 +1489,10 @@
 			'data-id': dataCounter, 
 		}).on('keyup', function() {
 			var $input = $(this).find('input');
-			var inputFontSize = parseInt($input.css('font-size'), 10);
 			var box = registrationScope.rooms[registrationScope.currentRoom].findAndReturnBox(dataCounter);
 
-			var dimentions = box.calculateInputBoxDimentions($input.val(), inputFontSize);
-			box.changeInput($input.val());
+			box.changeTextBoxInputValues($input);
+			var dimentions = box.calculateInputBoxDimentions();
 			box.changeSize(dimentions.width, initialBoxHeight);
 			$(this).css('width', dimentions.width);
 		}).on('focusout', function() {
@@ -1516,7 +1518,7 @@
 			var $box = $('.build-area .text-box[data-id="'+ boxId +'"]');
 			var action = $(this).data('action');
 			var fontSize = parseInt($box.find('.text-box-input').css('font-size'), 10);
-			var inputValue = $box.find('.text-box-input').val();
+			var $input = $box.find('.text-box-input');
 
 			if(action === 'increase') {
 				fontSize += 1;
@@ -1525,8 +1527,9 @@
 			}
 
 			var regBox = registrationScope.rooms[registrationScope.currentRoom].findAndReturnBox(boxId);
-			var dimentions = regBox.calculateInputBoxDimentions(inputValue, fontSize);
-			regBox.setInputFontSize(fontSize);
+			regBox.changeTextBoxInputValues($input);
+			var dimentions = regBox.calculateInputBoxDimentions();
+			
 			regBox.changeWidth(dimentions.width);
 
 			$box.find('.text-box-input').css('font-size', fontSize);
@@ -1672,15 +1675,14 @@
 							'color': regScope.rooms[regScope.currentRoom].boxes[i].fontColor,
 							'font-size':  boxInputFontSize + 'px'
 						});
-						//var dimentions = regScope.rooms[regScope.currentRoom].boxes[i].calculateInputBoxDimentions(boxInput, boxInputFontSize);
-						//$this.css('width', dimentions.width);
-
 						$this.on('keyup', function() {
 							var $input = $this.find('input');
 							var box = regScope.rooms[regScope.currentRoom].findAndReturnBox(boxId);
-							var dimentions = box.calculateInputBoxDimentions($input.val(), parseInt($input.css('font-size'), 10));
-							box.changeInput($input.val());
-							box.changeSize(dimentions.width, 32);
+
+							box.changeTextBoxInputValues($input);
+							var dimentions = box.calculateInputBoxDimentions();
+							
+							box.changeWidth(dimentions.width);
 							$this.css('width', dimentions.width);
 						}).on('focusout', function() {
 							var inputTextWidth = $this.find('input').val().length;
@@ -1843,11 +1845,6 @@
 
 					if(box !== false) {
 						box.changeValues(ui.position.left, ui.position.top, ui.size.width, ui.size.height);
-
-						if(box.type === 'text-box'){
-							box.calculateAndSetTextBoxFontSize(ui.size.width);
-							$('.build-area .text-box[data-id="' + box.id + '"] .text-box-input').css('font-size', box.inputSize);
-						} 
 					}
 				}else {
 					for(var i = 0; i < aLen; i++) {
@@ -1855,14 +1852,9 @@
 						var location = regScope.rooms[regScope.currentRoom].findBox(regScope.activeBoxArray[i]);
 
 						if(location !== false) {
-							
 							var resizedBox = $('.drag-box[data-id='+ regScope.activeBoxArray[i] +']');
-							box.changeValues(parseInt(resizedBox.css('left')), parseInt(resizedBox.css('top')), parseInt(resizedBox.css('width')), parseInt(resizedBox.css('height')));
 
-							if(box.type === 'text-box'){
-								box.calculateAndSetTextBoxFontSize(ui.size.width);
-								$('.build-area .text-box[data-id="' + box.id + '"] .text-box-input').css('font-size', box.inputSize);
-							} 
+							box.changeValues(parseInt(resizedBox.css('left')), parseInt(resizedBox.css('top')), parseInt(resizedBox.css('width')), parseInt(resizedBox.css('height')));
 						}
 					} 
 				}
