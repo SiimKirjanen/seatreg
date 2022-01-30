@@ -1890,7 +1890,7 @@
 
 	Registration.prototype.removeResisableListeners = function() {
 		if(this.hasResizableListeners()) {
-			$('.build-area-wrapper .drag-box').resizable("destroy");
+			$('.build-area-wrapper .drag-box:not(.text-box)').resizable("destroy");
 		}
 	};
 
@@ -2017,7 +2017,7 @@
 		}else if(this.action == 9) {
 			$('.build-area-wrapper').attr('data-cursor','9');
 			regScope.showTextBoxFontControls();
-			//regScope.removeResisableListeners();
+			regScope.removeResisableListeners();
 			regScope.removeSelectableScroll();	
 			regScope.removeDraggableListeners();
 		}
