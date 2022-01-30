@@ -179,6 +179,14 @@
 		this.inputSize = newFontSize;
 	}
 
+	Box.prototype.hideTextBoxFontSizeControls = function() {
+		$('.build-area .text-box[data-id="'+ this.id +'"]').find('.text-size-control').css('display', 'none');
+	}
+
+	Box.prototype.showTextBoxFontSizeControls = function() {
+		$('.build-area .text-box[data-id="'+ this.id +'"]').find('.text-size-control').css('display', 'block');
+	}
+
 	/*
 
 		*-------Legend class and methods----------
@@ -1485,13 +1493,14 @@
 		var styles = 'width: ' + initialBoxWidth + 'px; height: ' + initialBoxHeight + 'px; position: absolute; top: ' + positionY + 'px; left: ' + positionX + 'px;';
 		var registrationScope = this;
 		var boxClasses = "drag-box text-box " + dataCounter;
+		this.rooms[this.currentRoom].addBox("noLegend", positionX, positionY, initialBoxWidth, initialBoxHeight, dataCounter, 'none', 'nohover',false,'noStatus', 1, 'text-box'); 
+		var box = registrationScope.rooms[registrationScope.currentRoom].findAndReturnBox(dataCounter);
 
 		var textBox = $('<div class="'+ boxClasses +'"><input class="text-box-input" /><i class="fa fa-plus text-size-control" data-action="increase"></i><i class="fa fa-minus text-size-control" data-action="degrease"></i></div>').attr({
 			style: styles,
 			'data-id': dataCounter, 
 		}).on('keyup', function() {
 			var $input = $(this).find('input');
-			var box = registrationScope.rooms[registrationScope.currentRoom].findAndReturnBox(dataCounter);
 
 			box.changeTextBoxInputValues($input);
 			var dimentions = box.calculateInputBoxDimentions();
@@ -1507,6 +1516,8 @@
 				$('.build-area .text-box[data-id="'+ dataCounter +'"]').remove();
 				registrationScope.rooms[registrationScope.currentRoom].deleteBox(dataCounter);
 			}
+		}).on('focusin', function() {
+			box.showTextBoxFontSizeControls();
 		}).on('mouseenter', function() {
 			if(registrationScope.action === 3 && leftButtonDown === true) {
 				registrationScope.activeBoxArray.length = 0;	//make sure activebox in empty.
@@ -1544,7 +1555,6 @@
 			});
 		});
 
-		this.rooms[this.currentRoom].addBox("noLegend", positionX, positionY, initialBoxWidth, initialBoxHeight, dataCounter, 'none', 'nohover',false,'noStatus', 1, 'text-box'); 
 		$('.build-area .text-box[data-id="'+ dataCounter +'"] .text-box-input').focus();
 	};
 
@@ -1679,6 +1689,8 @@
 						var boxInputFontSize = regScope.rooms[regScope.currentRoom].boxes[i].inputSize;
 
 						$this.append('<input class="text-box-input" value="' + boxInput + '" />');
+						$this.append('<i class="fa fa-plus text-size-control" data-action="increase" style="display:none"></i>');
+						$this.append('<i class="fa fa-minus text-size-control" data-action="degrease" style="display:none"></i>');
 						$this.find('.text-box-input').css({
 							'color': regScope.rooms[regScope.currentRoom].boxes[i].fontColor,
 							'font-size':  boxInputFontSize + 'px'
@@ -1837,7 +1849,7 @@
 
 			start: function(event, ui) {
 				if(regScope.activeBoxArray.length == 0) {
-					$('.build-area .drag-box').resizable("option","alsoResize", false); 
+					$('.build-area .drag-box:not(.text-box)').resizable("option","alsoResize", false); 
 				}
 				if(regScope.activeBoxArray.indexOf($(this).data('id')) == -1) {
 					regScope.activeBoxArray.push($(this).data('id'));
@@ -1937,6 +1949,14 @@
 		}
 	};
 
+	Registration.prototype.hideTextBoxFontControls = function() {
+		$('.build-area .text-box').find('.text-size-control').css('display', 'none');
+	}
+
+	Registration.prototype.showTextBoxFontControls = function() {
+		$('.build-area .text-box').find('.text-size-control').css('display', 'block');
+	}
+
 	Registration.prototype.mouseActionChange = function(driggerElement) {
 		var action = parseInt(driggerElement.attr('data-action'));
 		var regScope = this;
@@ -1961,43 +1981,45 @@
 		if(this.action == 1) { 			//normal mouse action
 			regScope.needMultiDrag = false;
 			$('.build-area-wrapper').attr('data-cursor','1');
-
+			regScope.hideTextBoxFontControls();
 			regScope.removeSelectableScroll();		
 			regScope.addDraggableListeners();
 			regScope.addResisableListeners();
 			
 		}else if(this.action == 2) { 	//speed creator tool selected
 			$('.build-area-wrapper').attr('data-cursor','2');
-
+			regScope.hideTextBoxFontControls();
 			regScope.removeSelectableScroll();	
 			regScope.removeDraggableListeners();
 			regScope.removeResisableListeners();
 
 		}else if(this.action == 3) { //speed delete tool selected
 			$('.build-area-wrapper').attr('data-cursor','4');
-
+			regScope.hideTextBoxFontControls();
 			regScope.removeSelectableScroll();	
 			regScope.removeDraggableListeners();
 			regScope.removeResisableListeners();
 			
 		}else if(this.action == 4) {	//lasso tool selected
 			$('.build-area-wrapper').attr('data-cursor','5');
-
+			regScope.hideTextBoxFontControls();
 			regScope.addDraggableListeners();
 			regScope.addResisableListeners();
 			regScope.addselectableScroll();
 		}else if(this.action == 5) {  //normal box creation tool
 			$('.build-area-wrapper').attr('data-cursor','3');
-
+			regScope.hideTextBoxFontControls();
 			regScope.removeSelectableScroll();	
 			regScope.removeDraggableListeners();
 			regScope.removeResisableListeners();
 		}else if(this.action == 6) {  //in touch devices, move around tool
+			regScope.hideTextBoxFontControls();
 			regScope.addselectableScroll();
 			regScope.removeDraggableListeners();
 			regScope.removeResisableListeners();
 		}else if(this.action == 9) {
 			$('.build-area-wrapper').attr('data-cursor','9');
+			regScope.showTextBoxFontControls();
 			//regScope.removeResisableListeners();
 			regScope.removeSelectableScroll();	
 			regScope.removeDraggableListeners();
