@@ -242,6 +242,7 @@
 				box.className = box.className + ' text-box';
 				box.style.color = loc[i].fontColor;
 				box.style.fontSize = loc[i].inputSize + 'px';
+				box.style.pointerEvents = 'none';
 				box.innerHTML = loc[i].input;
 			}
 

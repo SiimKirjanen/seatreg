@@ -655,8 +655,11 @@ body {
 	font-size: 14px;
 
 	&.text-box {
-		line-height: 32px;
 		border: none;
+
+		.comment-icon {
+			display: none;
+		}
 	}
 }
 .cursor {
