@@ -954,7 +954,7 @@ function initScroll(needHorizScroll, needVerticScroll) {
 	//do i need to zoom out?
 	var needToZoom = false;
 
-	if(seatReg.rooms[seatReg.currentRoom].room[4] > $('#middle-section').width() || seatReg.rooms[seatReg.currentRoom].room[5] > $('#middle-section').height()) {
+	if(seatReg.rooms[seatReg.currentRoom].room.width > $('#middle-section').width() || seatReg.rooms[seatReg.currentRoom].room.height > $('#middle-section').height()) {
 		needToZoom = true;
 	}
 
@@ -991,7 +991,7 @@ function zoomStart() {
 }
 
 function boxWrapSize(fitF) {
-	var w = seatReg.rooms[seatReg.currentRoom].room[4] * fitF;
+	var w = seatReg.rooms[seatReg.currentRoom].room.width * fitF;
 
 	if(w < parseInt($('#box-wrap').data('sec-size'))) {
 
@@ -1008,8 +1008,8 @@ function boxWrapSize(fitF) {
 function fitFactor(){
 	    //compute witch dimension is larger width vs height
 
-	    var w = seatReg.rooms[seatReg.currentRoom].room[4] / ($('#middle-section').width() - 20);
-	    var h = seatReg.rooms[seatReg.currentRoom].room[5] / ($('#middle-section').height() - 20);
+	    var w = seatReg.rooms[seatReg.currentRoom].room.width / ($('#middle-section').width() - 20);
+	    var h = seatReg.rooms[seatReg.currentRoom].room.height / ($('#middle-section').height() - 20);
 	    //h = content.H / wrap.H;//zoom factor for height
 	    //w = content.W/ wrap.W;//zoom factor for width
 	    //get max between zoom factores, remove percents
