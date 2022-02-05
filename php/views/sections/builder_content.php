@@ -484,7 +484,7 @@
 					<br>
 
 					<h4><?php esc_html_e('Upload image', 'seatreg');?> (2MB)</h4>
-					<form action="<?php echo '/wp-admin/admin-ajax.php'; ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
+					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
 						<input type="file" name="fileToUpload" id="img-upload" class="file-select"><br>
 						<input type="hidden" name="code" id="urlCode"  value="">
 						<input type="hidden" name="action" value="seatreg_upload_image">
