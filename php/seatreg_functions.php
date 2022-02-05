@@ -1205,9 +1205,12 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 
 		if(count($bookings)) {
 			echo '<h2>', esc_html($registration->registration_name), '</h2>';
-			echo '<h4>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</h4>';
-
+			echo '<div>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</div>';
+			echo '<div>', esc_html__('Booking status', 'seatreg'), ': ' , SeatregBookingService::getBookingStatusText($bookings[0]->status),'</div>';
+			
+			echo '<div style="margin: 12px 0px">';
 			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
+			echo '</div>';
 
 			if($options && $options->payment_text) {
 				echo '<h3>', esc_html__('Payment info', 'seatreg'), '</h3>';

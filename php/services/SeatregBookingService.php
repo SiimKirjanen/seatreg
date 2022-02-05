@@ -122,4 +122,19 @@ class SeatregBookingService {
 
         return $bookingTable;
     }
+
+    /**
+     *
+     * Get booking status as text
+     * @param string $status booking status
+     * @return string Booking status as text
+     * 
+    */
+    public static function getBookingStatusText($status) {
+        if($status === '1') {
+            return esc_html__('Pending', 'seatreg');
+        }else if ($status === '2') {
+            return esc_html__('Approved', 'seatreg');
+        }
+    }
 }
