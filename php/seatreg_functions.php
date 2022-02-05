@@ -1198,19 +1198,33 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 		$roomData = json_decode($registration->registration_layout)->roomData;
 		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
 		$registrationCustomFields = json_decode($registration->custom_fields);
-
+	
 		foreach ($bookings as $booking) {
 			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
 		}
 
 		if(count($bookings)) {
+			$bookingStatus = $bookings[0]->status;
 			echo '<h2>', esc_html($registration->registration_name), '</h2>';
+			
+			if($options && $options->pending_expiration && $bookingStatus === '1') {
+				$hasPaymentEntry = SeatregBookingService::checkIfBookingHasPaymentEntry($bookings[0]->booking_id);
+				$bookingDateTimestampInMinutes = ceil($bookings[0]->booking_date / 60);
+				$bookingWillBeDeletedTimestamp = $bookingDateTimestampInMinutes + (int)$options->pending_expiration;
+				$bookingTimeToLive = floor($bookingWillBeDeletedTimestamp - (time() / 60));
+
+				if($bookingTimeToLive > 0 && !$hasPaymentEntry) {
+					echo '<h3 style="color:red">', sprintf(esc_html__('This pending booking will be deleted in about %s minutes if not approved', 'seatreg'), $bookingTimeToLive), '</h3>';
+				}
+			}
 			echo '<div>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</div>';
-			echo '<div>', esc_html__('Booking status', 'seatreg'), ': ' , SeatregBookingService::getBookingStatusText($bookings[0]->status),'</div>';
+			echo '<div>', esc_html__('Booking status', 'seatreg'), ': ' , SeatregBookingService::getBookingStatusText($bookingStatus),'</div>';
 			
 			echo '<div style="margin: 12px 0px">';
 			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
 			echo '</div>';
+
+			
 
 			if($options && $options->payment_text) {
 				echo '<h3>', esc_html__('Payment info', 'seatreg'), '</h3>';

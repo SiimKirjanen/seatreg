@@ -137,4 +137,28 @@ class SeatregBookingService {
             return esc_html__('Approved', 'seatreg');
         }
     }
+
+    /**
+     *
+     * Check if booking has entry in payments table
+     * @param string $bookingId booking id
+     * @return bool
+     * 
+    */
+    public static function checkIfBookingHasPaymentEntry($bookingId) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        $result = $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_payments
+            WHERE booking_id = %s",
+            $bookingId
+        ));
+
+        if($result) {
+            return true;
+        }
+
+        return false;
+    }
 }
