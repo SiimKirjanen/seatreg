@@ -317,6 +317,14 @@
 				box.setAttribute('data-price', loc[i].price);
 			}
 
+			if(loc[i].hasOwnProperty('lock')) {
+				box.setAttribute('data-lock', loc[i].lock);
+			}
+
+			if(loc[i].hasOwnProperty('password')) {
+				box.setAttribute('data-password', loc[i].password);
+			}
+
 			if(tooltipContent) {
 				box.setAttribute('data-powertip', tooltipContent);
 			}
@@ -714,8 +722,6 @@ SeatReg.prototype.openSeatDialog = function(clickBox) {
 		$('#modal-bg').css('display','block');
 		$('#confirm-dialog-mob').css('display','block');
 		$('#confirm-dialog-mob-inner').removeClass('zoomOut').addClass('zoomIn');  //bounceInRight
-	}else {
-		//console.log('dont open');
 	}
 };
 
@@ -732,6 +738,8 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	var hover = null;
 	var legend = null;
 	var nr = clickBox.getAttribute('data-seat-nr');
+	var isLocked = clickBox.getAttribute('data-lock') === "true";
+	var passwordNeeded = clickBox.getAttribute('data-password') === "true";
 	var type = 'box';
 	var currentRoom = this.rooms[this.currentRoom].room;
 	var room = this.rooms[this.currentRoom].room.name;
@@ -779,7 +787,15 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 	if(type != 'box') {
 		if(!isSelected) {
-			if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
+			if(isLocked) {
+				$('#confirm-dialog-mob-ok').css('display','none');
+				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ translator.translate('seatIsLocked') +'</div>');
+			}else if(passwordNeeded) {
+				$('#confirm-dialog-mob-ok').css('display','none');
+				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ translator.translate('pleaseEnterPassword') + '</div>' + 
+					'<div class="box-password-wrap"><input type="text" /> ' +
+					'<div class="seatreg-btn green-btn">Ok</div></div>');
+			}else if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
 
 				if(this.status == 'run') {
 					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ translator.translate('maxSeatsToAdd') + ' ' + this.seatLimit +'</p>' + '</div>');

@@ -55,7 +55,7 @@ function seatreg_public_scripts_and_styles() {
 	
 		$inlineScript = 'function showErrorView(title) {';
 			$inlineScript .= "jQuery('body').addClass('error-view').html('";
-				$inlineScript .= '<div>An error occured</div><img src="' . SEATREG_PLUGIN_FOLDER_URL . 'img/monkey.png" alt="monkey" /><div>title</div>';
+				$inlineScript .= '<div>An error occured</div><img src="' . SEATREG_PLUGIN_FOLDER_URL . 'img/monkey.png" alt="monkey" /><div></div>';
 			$inlineScript .= "');";
 		$inlineScript .= '}';
 		

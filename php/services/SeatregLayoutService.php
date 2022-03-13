@@ -17,6 +17,7 @@ class SeatregLayoutService {
                 }
             }
        }
-       return $layout;
+       
+       return json_encode($layout);
     }
 }
