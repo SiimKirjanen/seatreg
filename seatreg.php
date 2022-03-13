@@ -28,6 +28,7 @@ require( 'php/services/SeatregBookingService.php' );
 require( 'php/services/SeatregPaymentService.php' );
 require( 'php/services/SeatregJobService.php' );
 require( 'php/services/SeatregTemplateService.php' );
+require( 'php/services/SeatregLayoutService.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );
