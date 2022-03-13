@@ -93,6 +93,8 @@
 		this.type = type;
 		this.input = '';
 		this.inputSize = 16;
+		this.lock = false;
+		this.password = '';
 	}
 
 	//Change box values. position and size
@@ -153,6 +155,14 @@
 
 	Box.prototype.changeInput = function(newInput) {
 		this.input = newInput;
+	}
+
+	Box.prototype.changeLock = function(newLock) {
+		this.lock = newLock;
+	}
+
+	Box.prototype.changePassword = function(newPassword) {
+		this.password = newPassword;
 	}
 
 	Box.prototype.changeTextBoxInputValues = function($input) {
@@ -282,6 +292,8 @@
 				type: this.boxes[i].type,
 				input: this.boxes[i].input,
 				inputSize: this.boxes[i].inputSize,
+				lock: this.boxes[i].lock,
+				password: this.boxes[i].password
 			});
 		}
 
@@ -326,7 +338,7 @@
 	};
 
 	//add box to room from server data
-	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize) {
+	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize, lock, password) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
@@ -334,6 +346,8 @@
 		box.input = input;
 		box.fontColor = fontColor;
 		box.inputSize = inputSize;
+		box.password = password;
+		box.lock = lock;
 		this.boxes.push(box);
 		this.boxCounter++;
 	};
@@ -2236,6 +2250,8 @@
 							arr[i].input,
 							arr[i].fontColor,
 							arr[i].inputSize,
+							arr[i].lock,
+							arr[i].password,
 						);
 			    	}
 			    }
@@ -2445,6 +2461,54 @@
 		$('#margin-y').val(reg.rooms[reg.currentRoom].skeleton.marginY);
 	});
 
+	$('#lock-seat-dialog').on('show.bs.modal', function() {
+		var $lockWrap = $('#selected-seats-for-locking');
+		var currentRoom = reg.rooms[reg.currentRoom];
+		var selectedBoxes = reg.activeBoxArray.map(function(selectedBoxId) {
+			var boxLocation = currentRoom.findBox(selectedBoxId);
+			
+			return currentRoom.boxes[boxLocation];
+		});
+		var hasSeatSelected = selectedBoxes.some(function(box) {
+			return box.canRegister === true;
+		});
+
+		$lockWrap.empty();
+
+		if(!hasSeatSelected) {
+			$('.set-password-wrap').addClass('d-none');
+			$('#set-seat-locks').addClass('d-none');
+			$lockWrap.append(
+				'<div class="alert alert-primary">'+ translator.translate('noSeatsSelected') +'</div>'
+			);
+		}else if(selectedBoxes.length == 1) {
+			$('.set-password-wrap').addClass('d-none');
+			$('#set-seat-locks').removeClass('d-none');
+		}else {
+			$('.set-password-wrap').removeClass('d-none');
+			$('#set-seat-locks').removeClass('d-none');
+		}
+
+		selectedBoxes.forEach(function(box) {
+			if(box.canRegister) {
+				var boxLocation = currentRoom.findBox(box.id);
+
+				$lockWrap.append(
+					'<div class="lock-item" data-box-location="' + boxLocation + '">' + 
+						'<div class="lock-item-seat">'  + box.seat  + '</div>' +
+						'<label>' + translator.translate('lockSeat') +
+							'<input type="checkbox" ' + (box.lock ? "checked" : "") + ' />' + 
+						'</label>' +
+						'<label>' + translator.translate('setPassword') + 
+							'<input type="text" value="' + box.password + '" />' + 
+						'</label>' + 
+					'</div>'
+				);
+			}
+		});
+
+	});
+
 	$('#price-dialog').on('show.bs.modal', function() {
 		var $pricingWrap = $('#selected-seats-for-pricing');
 		var currentRoom = reg.rooms[reg.currentRoom];
@@ -2497,6 +2561,15 @@
 		});
 	});
 
+	$("#fill-password-for-all-selected").on('click', function() {
+		var passwordForAllSelected = $('#password-for-all-selected').val();
+
+		$("#selected-seats-for-locking .lock-item").each(function() {
+			$(this).find('input[type=text]').val(passwordForAllSelected);
+		});
+	});
+
+
 	$('#set-prices').on('click', function() {
 		var currentRoom = reg.rooms[reg.currentRoom];
 
@@ -2507,6 +2580,26 @@
 			var box = currentRoom.boxes[boxLocation];
 
 			box.changePrice(price);
+			reg.needToSave = true;
+		});
+		$('#price-dialog').modal('hide');
+		if(reg.activeBoxArray.length) {
+			alertify.success(translator.translate('pricesAdded'));
+		}
+	});
+
+	$('#set-seat-locks').on('click', function() {
+		var currentRoom = reg.rooms[reg.currentRoom];
+
+		$('#selected-seats-for-locking .lock-item').each(function() {
+			var $this = $(this);
+			var boxLocation = $this.data('box-location');
+			var password = $this.find('input[type=text]').val();
+			var locked = $this.find('input[type=checkbox]').is(":checked");
+			var box = currentRoom.boxes[boxLocation];
+
+			box.changePassword(password);
+			box.changeLock(locked);
 			reg.needToSave = true;
 		});
 		$('#price-dialog').modal('hide');

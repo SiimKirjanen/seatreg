@@ -52,6 +52,7 @@
 			<div class="side-option background-image" data-action="7" title="Background image" data-toggle="modal" data-target="#background-image-modal"></div>
 			<div class="side-option grid-stats" data-action="6" title="Grid settings" data-toggle="modal" data-target="#skeleton-dialog"></div>
 			<div class="side-option price-option" data-action="8" title="Seat price" data-toggle="modal" data-target="#price-dialog"></div>
+			<div class="side-option lock-option" data-action="10" title="Lock seats" data-toggle="modal" data-target="#lock-seat-dialog"></div>
 		</div>
 	
 		<div class="build-area-wrapper" data-cursor="1">
@@ -187,6 +188,29 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
 				<button type="button" class="btn btn-primary" id="set-prices"><?php esc_html_e('Set price', 'seatreg');?></button>
+			</div>
+		</div>
+		</div>
+	</div>
+
+	<div class="modal vert-modal fade" id="lock-seat-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog vert-modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Lock seats', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<div class="set-password-wrap">
+					<div><label for="password-for-all-selected"><?php esc_html_e('Fill password to all selected seats', 'seatreg'); ?></label></div>
+					<input type="text" id="password-for-all-selected" />
+					<button type="button" class="btn btn-success btn-sm" id="fill-password-for-all-selected"><?php esc_html_e('Fill password', 'seatreg'); ?></button>
+				</div>
+				<div id="selected-seats-for-locking"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+				<button type="button" class="btn btn-primary" id="set-seat-locks"><?php esc_html_e('Save', 'seatreg');?></button>
 			</div>
 		</div>
 		</div>

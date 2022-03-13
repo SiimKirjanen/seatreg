@@ -329,6 +329,11 @@ class SeatregDataValidation {
                     $validationStatus->setInvalid('box price is missing or invalid');
                     return $validationStatus;
                 }
+
+                if( !property_exists($box, 'lock') || !is_bool($box->lock) ) {
+                    $validationStatus->setInvalid('box lock is missing or invalid');
+                    return $validationStatus;
+                }
             }
         }
 

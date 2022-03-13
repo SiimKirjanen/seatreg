@@ -451,6 +451,17 @@
 	height: 41px;
 }
 
+.seatreg-map-builder-page .build-area-side .lock-option {
+	background-position: -257px -320px;
+	width: 41px;
+	height: 41px;
+}
+.seatreg-map-builder-page .build-area-side .lock-option:hover {
+	background-position: -257px -370px;
+	width: 41px;
+	height: 41px;
+}
+
 
 .seatreg-map-builder-page .legend-dialog-div {
 	margin-top: 14px;
@@ -1230,6 +1241,15 @@
 	margin-bottom: 10px;
 }
 
+.seatreg-map-builder-page #selected-seats-for-locking {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+.seatreg-map-builder-page .set-password-wrap {
+	text-align: center;
+	margin-bottom: 8px;
+}
 .seatreg-map-builder-page #selected-seats-for-pricing {
 	display: flex;
 	flex-wrap: wrap;
@@ -1241,6 +1261,15 @@
 }
 .seatreg-map-builder-page #price-for-all-selected {
 	width: 80px;
+}
+
+#selected-seats-for-locking .lock-item {
+	width: 160px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 6px;
+	margin: 6px;
+	text-align: center;
 }
 
 #selected-seats-for-pricing .price-item {
@@ -1259,6 +1288,15 @@
 #selected-seats-for-pricing .price-item input {
 	width: 100%;
 	box-sizing: border-box;
+}
+
+#selected-seats-for-locking .lock-item input[type=text] {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+#selected-seats-for-locking .lock-item input[type=checkbox] {
+	margin-left: 8px;
 }
 
 .seatreg-map-builder-page .clear-fix:before,
