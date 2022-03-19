@@ -53,6 +53,7 @@ function seatreg_generate_registration_strings() {
     $translations->no = esc_html__('No', 'seatreg');
     $translations->seatIsLocked = esc_html__('Seat is locked', 'seatreg');
     $translations->pleaseEnterPassword = esc_html__('Please enter password', 'seatreg');
+    $translations->passwordNotCorrect = esc_html__('Password is not correct', 'seatreg');
 
 	return $translations;
 }

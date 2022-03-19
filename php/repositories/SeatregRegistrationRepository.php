@@ -21,6 +21,13 @@ class SeatregRegistrationRepository {
         ) );
     }
 
+
+    public static function getRegistrationLayout($registrationCode) {
+        $registration = self::getRegistrationByCode($registrationCode);
+
+        return json_decode( $registration->registration_layout );
+    }
+
      /**
      *
      * Return all registrations that are not deleted

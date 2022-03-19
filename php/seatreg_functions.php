@@ -2388,6 +2388,28 @@ function seatreg_random_string($length){
 	return $str;
 }
 
+add_action( 'wp_ajax_seatreg_seat_password_check', 'seatreg_seat_password_check_callback' );
+add_action( 'wp_ajax_nopriv_seatreg_seat_password_check', 'seatreg_seat_password_check_callback' );
+function seatreg_seat_password_check_callback() {
+	if( empty($_POST['registration-code']) || empty($_POST['seat-id']) || empty($_POST['password']) ) {
+		wp_send_json_error("Missing data");
+	}
+
+	$layout = SeatregRegistrationRepository::getRegistrationLayout( $_POST['registration-code'] );
+	$hasPassword = SeatregLayoutService::checkIfSeatHasPassword($layout, $_POST['seat-id']);
+
+	if($hasPassword) {
+		$seatPassword = SeatregLayoutService::getSeatPassword($layout, $_POST['seat-id']);
+
+		if($seatPassword === $_POST['password']) {
+			wp_send_json_success("Password correct");
+		}else {
+			wp_send_json_error("Password missmatch");
+		}
+	}
+	wp_send_json_success("No password set");
+}
+
 add_action( 'wp_ajax_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
 add_action( 'wp_ajax_nopriv_seatreg_booking_submit', 'seatreg_booking_submit_callback' );
 function seatreg_booking_submit_callback() {
