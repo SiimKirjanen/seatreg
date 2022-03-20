@@ -28,7 +28,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 
     	$this->_bookerEmail = $emailToSend;
         $this->_submittedPassword = $pw;
-		$this->_seatPasswords = get_object_vars(json_decode(stripslashes_deep($passwords)));
+		$this->_seatPasswords = json_decode(stripslashes_deep($passwords));
     
 		$customFields = stripslashes_deep($customFields);
 
