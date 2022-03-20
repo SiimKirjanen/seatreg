@@ -2602,9 +2602,9 @@
 			box.changeLock(locked);
 			reg.needToSave = true;
 		});
-		$('#price-dialog').modal('hide');
+
 		if(reg.activeBoxArray.length) {
-			alertify.success(translator.translate('pricesAdded'));
+			alertify.success(translator.translate('changesApplied'));
 		}
 	});
 

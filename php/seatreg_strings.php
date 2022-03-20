@@ -151,6 +151,7 @@ function seatreg_generate_admin_strings() {
     $translations->emailTemplateNotCorrect = esc_html__('Email template is missing required keywords', 'seatreg');
     $translations->lockSeat = esc_html__('Lock seat', 'seatreg');
     $translations->setPassword = esc_html__('Set password', 'seatreg');
+    $translations->changesApplied = esc_html__('Changes applied', 'seatreg');
 
     return $translations;
 }

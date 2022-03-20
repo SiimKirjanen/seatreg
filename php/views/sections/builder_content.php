@@ -210,7 +210,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
-				<button type="button" class="btn btn-primary" id="set-seat-locks"><?php esc_html_e('Save', 'seatreg');?></button>
+				<button type="button" class="btn btn-primary" id="set-seat-locks"><?php esc_html_e('Apply', 'seatreg');?></button>
 			</div>
 		</div>
 		</div>
