@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //===========
-	/* Data coming from registration. Someone wants to book a seat/seats */
+	/* Data coming from registration view. Someone wants to book a seat/seats */
 //===========
 
 class SeatregSubmitBookings extends SeatregBooking {
@@ -22,12 +22,13 @@ class SeatregSubmitBookings extends SeatregBooking {
       	$this->getRegistrationAndOptions();
     }
 
-    public function validateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID) {
+    public function validateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords) {
 		global $wpdb;
 		global $seatreg_db_table_names;
 
     	$this->_bookerEmail = $emailToSend;
         $this->_submittedPassword = $pw;
+		$this->_seatPasswords = get_object_vars(json_decode(stripslashes_deep($passwords)));
     
 		$customFields = stripslashes_deep($customFields);
 
@@ -153,6 +154,22 @@ class SeatregSubmitBookings extends SeatregBooking {
 		$bookStatus = $this->isAllSelectedSeatsOpen(); 
 		if($bookStatus != 'ok') {
 			$this->response->setError($bookStatus);
+
+			return;
+		}
+
+		//7.step. Check if seat/seats are locked
+		$lockStatus = $this->seatLockCheck();
+		if($lockStatus != 'ok') {
+			$this->response->setError($lockStatus);
+
+			return;
+		}
+
+		//8.step. seat/seats password check
+		$passwordStatus = $this->seatPasswordCheck();
+		if($passwordStatus != 'ok') {
+			$this->response->setError($passwordStatus);
 
 			return;
 		}

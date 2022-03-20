@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SeatregBooking {
 	protected $_bookings; //seat bookings 
 	protected $_registrationLayout;
+	protected $_registrationLayoutFull;
 	protected $_registrationCode;
 	protected $_valid = true;
 	protected $_requireBookingEmailConfirm = true;
@@ -24,6 +25,7 @@ class SeatregBooking {
 	protected $_pendingBookingTemplate;
 	protected $_approvedBookingTemplate;
 	protected $_sendApprovedBookingEmail;
+	protected $_seatPasswords; //seat passwords provided by seat registration
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -55,6 +57,35 @@ class SeatregBooking {
 					$statusReport = 'Seat <b>'. esc_html($this->_bookings[$i]->seat_nr) . '</b> in room <b>' . esc_html($this->_bookings[$i]->room_name) . '</b > is already confirmed.';
 
 					break 2;
+				}
+			}
+		}
+
+		return $statusReport;
+	}
+
+	protected function seatLockCheck() {
+		$statusReport = 'ok';
+
+		foreach( $this->_bookings as $booking ) {
+			if( SeatregLayoutService::checkIfSeatLocked($this->_registrationLayoutFull, $booking->seat_id) ) {
+				$statusReport = $booking->seat_id . ' is locked';
+				break;
+			}
+		}
+
+		return $statusReport;
+	}
+
+	protected function seatPasswordCheck() {
+		$statusReport = 'ok';
+
+		foreach( $this->_bookings as $booking ) {
+			if( SeatregLayoutService::checkIfSeatHasPassword($this->_registrationLayoutFull, $booking->seat_id) ) {
+				if( SeatregLayoutService::getSeatPassword($this->_registrationLayoutFull, $booking->seat_id) !== $this->_seatPasswords[$booking->seat_id] ) {
+					$statusReport = sprintf(esc_html__('Seat %s password is not correct', 'seatreg'),  $booking->seat_id);
+
+					break;
 				}
 			}
 		}
@@ -150,6 +181,7 @@ class SeatregBooking {
 		$this->_registrationStartTimestamp = $result->registration_start_timestamp;
 		$this->_registrationEndTimestamp = $result->registration_end_timestamp;
 		$this->_registrationLayout = json_decode($result->registration_layout)->roomData;
+		$this->_registrationLayoutFull = json_decode($result->registration_layout);
         $this->_registrationName = $result->registration_name;
 		$this->_maxSeats = $result->seats_at_once;
 		$this->_requireBookingEmailConfirm = $result->booking_email_confirm;

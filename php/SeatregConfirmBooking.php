@@ -138,9 +138,27 @@ class SeatregConfirmBooking extends SeatregBooking {
 			echo $seatsOpenCheck;
 
 			exit();
-		}	
+		}
+		
+		//6 step. Seat/seats lock check
+		$lockStatus = $this->seatLockCheck();
+		if($lockStatus != 'ok') {
+			echo $lockStatus;
 
-		//6 step. confirm bookings
+			return;
+		}
+
+		//7 step. Seat/seats password check
+		/*
+		$passwordStatus = $this->seatPasswordCheck();
+		if($passwordStatus != 'ok') {
+			echo $passwordStatus;
+
+			return;
+		}
+		*/
+
+	
 		$this->confirmBookings();
 	}
 }

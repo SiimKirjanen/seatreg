@@ -24,7 +24,7 @@ class SeatregLayoutService {
         $box = self::findBox($layout, $boxId);
 
         if($box) {
-            if($box->locked) {
+            if($box->lock === true) {
                 return true;
             }else {
                 return false;

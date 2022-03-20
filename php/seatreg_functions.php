@@ -2430,6 +2430,7 @@ function seatreg_booking_submit_callback() {
 		empty($_POST['room-uuid']) ||
 		empty($_POST['em']) ||
 		empty($_POST['c']) ||
+		empty($_POST['passwords']) ||
 		!isset($_POST['pw']) ||
 		empty($_POST['custom'])) {
 			$resp->setError('Missing data');
@@ -2450,7 +2451,8 @@ function seatreg_booking_submit_callback() {
 			$_POST['c'], 
 			$_POST['pw'], 
 			$_POST['custom'],
-			$_POST['room-uuid']) 
+			$_POST['room-uuid'],
+			$_POST['passwords']) 
 	){
 		$newBooking->validateBooking();
 	}	
