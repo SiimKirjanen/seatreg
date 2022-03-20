@@ -42,7 +42,7 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 
 == Changelog ==
 
-= 1.19.0 =
+= 1.19.1 =
 * Bug fix
 
 = 1.19.0 =
