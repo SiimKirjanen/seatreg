@@ -69,7 +69,8 @@ class SeatregBooking {
 
 		foreach( $this->_bookings as $booking ) {
 			if( SeatregLayoutService::checkIfSeatLocked($this->_registrationLayoutFull, $booking->seat_id) ) {
-				$statusReport = $booking->seat_id . ' is locked';
+				$statusReport = sprintf(esc_html__('Seat %s is locked', 'seatreg'),  $booking->seat_nr);
+
 				break;
 			}
 		}
@@ -85,7 +86,7 @@ class SeatregBooking {
 				$enteredPassword = array_key_exists($booking->seat_id, $this->_seatPasswords) ? $this->_seatPasswords[$booking->seat_id] : '';
 
 				if( SeatregLayoutService::getSeatPassword($this->_registrationLayoutFull, $booking->seat_id) !== $enteredPassword ) {
-					$statusReport = sprintf(esc_html__('Seat %s password is not correct', 'seatreg'),  $booking->seat_id);
+					$statusReport = sprintf(esc_html__('Seat %s password is not correct', 'seatreg'),  $booking->seat_nr);
 
 					break;
 				}
