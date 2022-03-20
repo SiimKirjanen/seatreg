@@ -450,6 +450,13 @@
 						</p>
 					</div>
 
+					<div class="help-dialog-row">
+						<div class="guide-item2 guide-item-lock"></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('Lets you lock or set password to seats. When seat is locked then only admin can book a seat using booking-manager. If password is added to the seat then it is required before booking can be made.', 'seatreg');?>
+						</p>
+					</div>
+
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
