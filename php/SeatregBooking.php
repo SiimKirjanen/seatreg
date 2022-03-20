@@ -82,7 +82,9 @@ class SeatregBooking {
 
 		foreach( $this->_bookings as $booking ) {
 			if( SeatregLayoutService::checkIfSeatHasPassword($this->_registrationLayoutFull, $booking->seat_id) ) {
-				if( SeatregLayoutService::getSeatPassword($this->_registrationLayoutFull, $booking->seat_id) !== $this->_seatPasswords[$booking->seat_id] ) {
+				$enteredPassword = array_key_exists($booking->seat_id, $this->_seatPasswords) ? $this->_seatPasswords[$booking->seat_id] : '';
+
+				if( SeatregLayoutService::getSeatPassword($this->_registrationLayoutFull, $booking->seat_id) !== $enteredPassword ) {
 					$statusReport = sprintf(esc_html__('Seat %s password is not correct', 'seatreg'),  $booking->seat_id);
 
 					break;
@@ -206,7 +208,7 @@ class SeatregBooking {
         if($result->registration_password != null) {
 			$this->_registrationPassword = $result->registration_password;
         }
-		
+
 		$this->_sendNewBookingNotificationEmail = $result->notify_new_bookings;
 	}
 }

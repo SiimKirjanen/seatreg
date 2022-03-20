@@ -237,7 +237,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 						'status' => $bookingStatus,
 						'booking_date' => $currentTimeStamp,
 						'booking_confirm_date' => $registrationConfirmDate,
-						'booker_email' => $this->_bookerEmail
+						'booker_email' => $this->_bookerEmail,
+						'seat_passwords' => json_encode($this->_seatPasswords)
 					), 
 					'%s'	
 				);

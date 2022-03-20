@@ -39,6 +39,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			$this->_registrationCode = $this->_bookings[0]->registration_code; 
 			$this->_bookingId = $this->_bookings[0]->booking_id;
 			$this->_bookerEmail = $this->_bookings[0]->booker_email;
+			$this->_seatPasswords = json_decode(stripslashes_deep($this->_bookings[0]->seat_passwords));
 		}
 	}
 
@@ -149,16 +150,13 @@ class SeatregConfirmBooking extends SeatregBooking {
 		}
 
 		//7 step. Seat/seats password check
-		/*
 		$passwordStatus = $this->seatPasswordCheck();
 		if($passwordStatus != 'ok') {
 			echo $passwordStatus;
 
 			return;
 		}
-		*/
-
-	
+			
 		$this->confirmBookings();
 	}
 }
