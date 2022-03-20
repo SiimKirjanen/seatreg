@@ -42,6 +42,9 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 
 == Changelog ==
 
+= 1.19.0 =
+* Seat lock and seat password feature added.
+
 = 1.18.0 =
 * Display warning in booking status page when pending booking expiration time is set
 * Minor changes to booking status page
