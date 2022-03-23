@@ -57,7 +57,7 @@ class SeatregLayoutService {
 
        foreach( $layout->roomData as $roomData ) {
             foreach( $roomData->boxes as $box ) {
-                if($box->password) {
+                if( property_exists($box, 'password') && $box->password ) {
                     $box->password = true;
                 }else {
                     $box->password = false;
