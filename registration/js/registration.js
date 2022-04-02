@@ -258,8 +258,9 @@
 				box.setAttribute('data-seat',loc[i].id);
 				box.setAttribute('data-seat-nr',loc[i].seat);
 				var number = document.createElement('div');
+				var prefix = loc[i].hasOwnProperty('prefix') ? loc[i].prefix : '';
 				number.className = "seat-number";
-				var newContent = document.createTextNode(loc[i].seat);
+				var newContent = document.createTextNode(prefix + loc[i].seat);
 				number.appendChild(newContent);
 				box.appendChild(number);
 				clickable = true;
