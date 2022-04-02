@@ -356,7 +356,7 @@
 		box.inputSize = inputSize;
 		box.password = password;
 		box.lock = lock;
-		box.prefix = prefix;
+		box.prefix = prefix ? prefix : '';
 		this.boxes.push(box);
 		this.boxCounter++;
 	};
@@ -1694,6 +1694,7 @@
 			}).appendTo('.build-area').each(function(){
 				if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister === true) {
 					$(this).addClass('can-register').attr('data-seatnr', regScope.rooms[regScope.currentRoom].boxes[i].seat);
+
 					$(this).append($('<div>').addClass('seat-number').text(regScope.rooms[regScope.currentRoom].boxes[i].prefix + regScope.rooms[regScope.currentRoom].boxes[i].seat));
 
 					if(regScope.rooms[regScope.currentRoom].boxes[i].status == 'bronRegister') {
