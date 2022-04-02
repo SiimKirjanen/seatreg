@@ -1593,7 +1593,7 @@ function seatreg_set_up_db() {
 			last_name varchar(255) NOT NULL,
 			email varchar(255) NOT NULL,
 			seat_id varchar(255) NOT NULL,
-			seat_nr int(11) NOT NULL,
+			seat_nr varchar(11) NOT NULL,
 			room_uuid varchar(255) NOT NULL,
 			booking_date int(11) DEFAULT NULL,
 			booking_confirm_date int(11) DEFAULT NULL,
