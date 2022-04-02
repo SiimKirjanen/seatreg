@@ -95,6 +95,7 @@
 		this.inputSize = 16;
 		this.lock = false;
 		this.password = '';
+		this.prefix = '';
 	}
 
 	//Change box values. position and size
@@ -197,6 +198,12 @@
 		$('.build-area .text-box[data-id="'+ this.id +'"]').find('.text-size-control').css('display', 'block');
 	}
 
+	Box.prototype.changePrefix = function(newPrefix) {
+		this.prefix = newPrefix;
+
+		$('.build-area .drag-box[data-id="'+ this.id +'"] .seat-number').text(this.prefix + this.seat);
+	}
+
 	/*
 
 		*-------Legend class and methods----------
@@ -293,7 +300,8 @@
 				input: this.boxes[i].input,
 				inputSize: this.boxes[i].inputSize,
 				lock: this.boxes[i].lock,
-				password: this.boxes[i].password
+				password: this.boxes[i].password,
+				prefix: this.boxes[i].prefix,
 			});
 		}
 
@@ -338,7 +346,7 @@
 	};
 
 	//add box to room from server data
-	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize, lock, password) {
+	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize, lock, password, prefix) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
@@ -348,6 +356,7 @@
 		box.inputSize = inputSize;
 		box.password = password;
 		box.lock = lock;
+		box.prefix = prefix;
 		this.boxes.push(box);
 		this.boxCounter++;
 	};
@@ -1685,7 +1694,7 @@
 			}).appendTo('.build-area').each(function(){
 				if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister === true) {
 					$(this).addClass('can-register').attr('data-seatnr', regScope.rooms[regScope.currentRoom].boxes[i].seat);
-					$(this).append($('<div>').addClass('seat-number').text(regScope.rooms[regScope.currentRoom].boxes[i].seat));
+					$(this).append($('<div>').addClass('seat-number').text(regScope.rooms[regScope.currentRoom].boxes[i].prefix + regScope.rooms[regScope.currentRoom].boxes[i].seat));
 
 					if(regScope.rooms[regScope.currentRoom].boxes[i].status == 'bronRegister') {
 						$(this).append($('<div>').addClass('bron-sign'));
@@ -2252,6 +2261,7 @@
 							arr[i].inputSize,
 							arr[i].lock,
 							arr[i].password,
+							arr[i].prefix
 						);
 			    	}
 			    }
@@ -2459,6 +2469,35 @@
 
 		$('#margin-x').val(reg.rooms[reg.currentRoom].skeleton.marginX);
 		$('#margin-y').val(reg.rooms[reg.currentRoom].skeleton.marginY);
+	});
+
+	$('#seat-numbering-dialog').on('show.bs.modal', function() {
+		var currentRoom = reg.rooms[reg.currentRoom];
+		var selectedBoxes = reg.activeBoxArray.map(function(selectedBoxId) {
+			return currentRoom.findAndReturnBox(selectedBoxId);
+		});
+		var selectedSeats = selectedBoxes.filter(function(box) {
+			return box.canRegister === true;
+		});
+
+		$('#seat-numbering-dialog .alert').addClass('d-none');
+		$('#seat-numbering-wrap').removeClass('d-none');
+
+		if(!selectedSeats.length) {
+			$('#seat-numbering-dialog .alert').removeClass('d-none');
+			$('#seat-numbering-wrap').addClass('d-none');
+		}else {
+			$('#set-seat-prefix').off('click').on('click', function() {
+				selectedSeats.forEach(function(seat) {
+					var box = currentRoom.findAndReturnBox(seat.id);
+
+					box.changePrefix( $('#seat-prefix').val() );
+				});
+			})
+			$('#reorder-seats').off('click').on('click', function() {
+
+			});
+		}
 	});
 
 	$('#lock-seat-dialog').on('show.bs.modal', function() {

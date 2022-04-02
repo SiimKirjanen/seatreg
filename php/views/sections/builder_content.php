@@ -225,6 +225,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-primary d-none"><?php esc_html_e('No seats selected', 'seatreg'); ?></div>
 				<div id="seat-numbering-wrap">
 					<div>
 						<div><label for="seat-prefix"><?php esc_html_e('Seat prefix for selected seats', 'seatreg'); ?></label></div>
