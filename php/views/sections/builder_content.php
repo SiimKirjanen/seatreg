@@ -53,6 +53,7 @@
 			<div class="side-option grid-stats" data-action="6" title="Grid settings" data-toggle="modal" data-target="#skeleton-dialog"></div>
 			<div class="side-option price-option" data-action="8" title="Seat price" data-toggle="modal" data-target="#price-dialog"></div>
 			<div class="side-option lock-option" data-action="10" title="Lock seats" data-toggle="modal" data-target="#lock-seat-dialog"></div>
+			<div class="side-option numbering-option" data-action="11" title="Change numbering" data-toggle="modal" data-target="#seat-numbering-dialog"></div>
 		</div>
 	
 		<div class="build-area-wrapper" data-cursor="1">

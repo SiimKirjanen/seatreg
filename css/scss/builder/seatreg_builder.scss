@@ -462,6 +462,15 @@
 	height: 41px;
 }
 
+.seatreg-map-builder-page .build-area-side .numbering-option {
+	background-position: -305px -6px;
+	width: 41px;
+	height: 41px;
+
+	&:hover {
+		background-position: -305px -55px;
+	}
+}
 
 .seatreg-map-builder-page .legend-dialog-div {
 	margin-top: 14px;
