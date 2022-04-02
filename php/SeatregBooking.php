@@ -132,8 +132,9 @@ class SeatregBooking {
 							if($this->_registrationLayout[$j]->boxes[$k]->status == 'noStatus') {
 								//seat is available
 								$searchStatus = 'seat-nr-check';
+								$seatPrefix = property_exists($this->_registrationLayout[$j]->boxes[$k], 'prefix') ? $this->_registrationLayout[$j]->boxes[$k]->prefix : '';
 							
-								if($this->_registrationLayout[$j]->boxes[$k]->seat == $this->_bookings[$i]->seat_nr) {
+								if($seatPrefix . $this->_registrationLayout[$j]->boxes[$k]->seat == $this->_bookings[$i]->seat_nr) {
 									$searchStatus = 'seat-ok';
 								}
 

@@ -255,10 +255,12 @@
 			}
 
 			if(loc[i].canRegister == "true") {
-				box.setAttribute('data-seat',loc[i].id);
-				box.setAttribute('data-seat-nr',loc[i].seat);
-				var number = document.createElement('div');
 				var prefix = loc[i].hasOwnProperty('prefix') ? loc[i].prefix : '';
+				box.setAttribute('data-seat', loc[i].id);
+				box.setAttribute('data-seat-nr', loc[i].seat);
+				box.setAttribute('data-seat-prefix', prefix);
+				var number = document.createElement('div');
+				
 				number.className = "seat-number";
 				var newContent = document.createTextNode(prefix + loc[i].seat);
 				number.appendChild(newContent);
@@ -740,6 +742,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	var hover = null;
 	var legend = null;
 	var nr = clickBox.getAttribute('data-seat-nr');
+	var seatPrefix = clickBox.getAttribute('data-seat-prefix');
 	var seatId = clickBox.getAttribute('data-seat'); 
 	var isLocked = clickBox.getAttribute('data-lock') === "true";
 	var passwordNeeded = clickBox.getAttribute('data-password') === "true";
@@ -766,7 +769,8 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		$('#selected-seat-room').val(currentRoom.name);
 		$('#selected-room-uuid').val(currentRoom.uuid);
 		type = 'rbox';
-		$('#selected-seat-nr').val(nr);
+	
+		$('#selected-seat-nr').val(seatPrefix + nr);
 		showDialog = true;
 	}
 
@@ -803,7 +807,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 			}else if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
 
 				if(this.status == 'run') {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ translator.translate('maxSeatsToAdd') + ' ' + this.seatLimit +'</p>' + '</div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + seatPrefix + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ translator.translate('maxSeatsToAdd') + ' ' + this.seatLimit +'</p>' + '</div>');
 
 					if(this.payPalEnabled  && this.payPalCurrencyCode && price > 0) {
 						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + translator.translate('seatCosts_') + '<strong>' + price + ' ' + this.payPalCurrencyCode + '</strong></p>');

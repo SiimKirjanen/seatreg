@@ -117,7 +117,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 		}
 
 		//3.step
-		//seat room, id, nr and is availvable check.
+		//seat room, id, nr exists check
 		$seatsStatusCheck = $this->doSeatsExistInRegistrationLayoutCheck();
 		if($seatsStatusCheck != 'ok') {
 			$this->response->setError($seatsStatusCheck);
