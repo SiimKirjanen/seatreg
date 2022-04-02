@@ -217,6 +217,34 @@
 		</div>
 	</div>
 
+	<div class="modal vert-modal fade" id="seat-numbering-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog vert-modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Seat numbering', 'seatreg');?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<div id="seat-numbering-wrap">
+					<div>
+						<div><label for="seat-prefix"><?php esc_html_e('Seat prefix for selected seats', 'seatreg'); ?></label></div>
+						<input type="text" id="seat-prefix" style="width:60px" />
+						<button type="button" class="btn btn-success btn-sm" id="set-seat-prefix"><?php esc_html_e('Set prefix', 'seatreg'); ?></button>
+					</div><br>
+					<div>
+						<div><label for="seat-reorder"><?php esc_html_e('Reorder seats starting from', 'seatreg'); ?></label></div>
+						<input type="number" id="seat-reorder" size="3" style="width:60px" />
+						<button type="button" class="btn btn-success btn-sm" id="reorder-seats"><?php esc_html_e('Reorder seats', 'seatreg'); ?></button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+			</div>
+		</div>
+		</div>
+	</div>
+
 	<!-- Legend dialog-->
 	<div id="legend-dialog" title="Legends" class="display-none">
 		<div class="legend-dialog-upper">
