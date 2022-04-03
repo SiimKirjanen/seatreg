@@ -8,8 +8,8 @@
       <div class="modal-body">
 		<form id="booking-edit-form">
 			<div class="edit-modal-input-wrap">
-				<label for="edit-seat"><h5><?php esc_html_e('Seat', 'seatreg'); ?></h5></label><br>
-				<input type="text" id="edit-seat" name="seat-nr"/></label> <span id="edit-seat-error"></span>
+				<label for="edit-seat"><h5><?php esc_html_e('Seat id', 'seatreg'); ?></h5></label><br>
+				<input type="text" id="edit-seat" name="seat-id"/></label> <span id="edit-seat-error"></span>
 			</div>
 			
 			<div class="edit-modal-input-wrap">
@@ -30,6 +30,7 @@
 			<input type="hidden" id="modal-code">
 			<input type="hidden" id="booking-id">
 			<input type="hidden" id="r-id">
+			<input type="hidden" id="edit-booking-seat-nr">
 	     </form>
       </div>
       <div class="modal-footer">

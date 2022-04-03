@@ -61,7 +61,6 @@
 					fname: editInfo.firstName,
 					lname: editInfo.lastName,
 					room: editInfo.seatRoom,
-					seatnumber: editInfo.seatNumber,
 					seatid: editInfo.seatId,
 					bookingid: editInfo.bookingId,
 					customfield: editInfo.customFieldData,
@@ -592,13 +591,14 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	var modal = $('#edit-modal');
 	var modalCutsom = modal.find('.modal-body-custom');
 	modalCutsom.empty();
-	modal.find('#edit-seat').val(info.find('.seat-nr-box').text());
+	modal.find('#edit-seat').val(info.find('.seat-id').val());
 	modal.find('#edit-room').val(info.find('.seat-room-box').text());
 	modal.find('#edit-fname').val(info.find('.f-name').val());
 	modal.find('#edit-lname').val(info.find('.l-name').val());
 	modal.find('#modal-code').val($(this).attr('data-code'));
 	modal.find('#booking-id').val($(this).attr('data-booking'));
 	modal.find('#r-id').val($(this).attr('data-id'));
+	modal.find('#edit-booking-seat-nr').val(info.find('.seat-nr-box').text());
 	info.find('.custom-field').each(function() {
 		var type = $(this).data('type');
 
@@ -713,8 +713,8 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 				alertify.error(translator.translate('roomNotExist'));
 			}
 			if(data.status === 'seat-nr-searching') {
-				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatNotExist'));
-				alertify.error(translator.translate('seatNotExist'));
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatIdNotExist'));
+				alertify.error(translator.translate('seatIdNotExist'));
 			}
 			if(data.status === 'seat-booked') {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatAlreadyBookedPending'));
@@ -744,13 +744,14 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 	var modal = $('#edit-modal');
 	var customFields = [];
 	var code = $('#seatreg-reg-code').val();
-	var seat_number = modal.find('#edit-seat').val();
+	var seatId = modal.find('#edit-seat').val();
+	var seat_number = modal.find('#edit-booking-seat-nr').val();
 	var seat_room = modal.find('#edit-room').val(); 
 	var first_name = modal.find('#edit-fname').val();
 	var last_name = modal.find('#edit-lname').val();
 
 	$('#edit-room-error, #edit-seat-error').text('');
-	if(seat_number == '') {
+	if( seatId == '' ) {
 		$('#edit-seat-error').text('No seat');
 		subBtn.css('display','inline').next().css('display','none');
 
@@ -800,9 +801,8 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		'firstName': first_name,
 		'lastName': last_name,
 		'bookingId': $('#booking-id').val(),
-		'seatId': $('#r-id').val(),
+		'seatId': seatId,
 		'customFieldData': JSON.stringify(customFields),
-		'seatNumber': seat_number,
 		'seatRoom': seat_room,
 		'id': $('#r-id').val(),
 	}
@@ -856,8 +856,8 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 				alertify.error(translator.translate('roomNotExist'));
 			}
 			if(data.status == 'seat-nr-searching') {
-				$('#edit-seat-error').text(translator.translate('seatNotExist'));
-				alertify.error(translator.translate('seatNotExist'));
+				$('#edit-seat-error').text(translator.translate('seatIdNotExist'));
+				alertify.error(translator.translate('seatIdNotExist'));
 			}
 			if(data.status == 'seat-booked') {
 				$('#edit-seat-error').text(translator.translate('seatAlreadyBookedPending'));

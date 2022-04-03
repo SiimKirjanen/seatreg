@@ -974,6 +974,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						echo seatreg_generate_payment_section($row);
 					echo '</div>';
 					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
+					echo '<input type="hidden" class="seat-id" value='. esc_attr($row->seat_id) .' />';
 				echo '</div>'; 
 			}
 		
@@ -2733,7 +2734,6 @@ function seatreg_edit_booking_callback() {
 	$bookingEdit = new stdClass();
 	$bookingEdit->firstName = sanitize_text_field($_POST['fname']);
 	$bookingEdit->lastName = sanitize_text_field($_POST['lname']);
-	$bookingEdit->seatNr = sanitize_text_field($_POST['seatnumber']);
 	$bookingEdit->roomName = sanitize_text_field($_POST['room']);
 	$bookingEdit->seatId = sanitize_text_field($_POST['seatid']);
 	$bookingEdit->bookingId = sanitize_text_field($_POST['bookingid']);
