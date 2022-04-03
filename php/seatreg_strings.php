@@ -68,7 +68,7 @@ function seatreg_generate_admin_strings() {
     $translations->roomNameChanged = esc_html__('Room name changed', 'seatreg');
     $translations->roomNameSet = esc_html__('New room added', 'seatreg');
     $translations->roomNotExist = esc_html__('Room does not exist', 'seatreg');
-    $translations->seatNotExist = esc_html__('Seat dose not exist', 'seatreg');
+    $translations->seatNotExist = esc_html__('Seat does not exist', 'seatreg');
     $translations->seatIdNotExist = esc_html__('Seat id dose not exist', 'seatreg');
     $translations->seatAlreadyBookedPending = esc_html__('Seat is already booked/pending', 'seatreg');
     $translations->errorBookingUpdate = esc_html__('Error updating booking', 'seatreg');
