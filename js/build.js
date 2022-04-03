@@ -1753,9 +1753,6 @@
 			scroll: true, 
 			scrollSensitivity: 50,
 			scrollSpeed: 30, 
-			//snap: true,
-			//snapMode: "outer",
-			//snapTolerance: 10,
 			stack: ".drag-box",
 			disabled: disableDrag,
 			start: function(){
@@ -1927,11 +1924,32 @@
 				$('.build-area .ui-selected').addClass('active-box').removeClass('ui-selected');
 
 				var bIndex = regScope.biggestzIndex();
+				var selectedBoxesData = [];
 
 				$('.build-area .active-box').each(function() {
-					regScope.activeBoxArray.push($(this).attr('data-id'));
+					selectedBoxesData.push({
+						id: $(this).attr('data-id'),
+						left: parseInt($(this).css('left')),
+						top: parseInt($(this).css('top')),
+					});
 					$(this).css({'zIndex':bIndex});
 				});
+
+				selectedBoxesData.sort(function(a, b) {
+					if( a.left < b.left && a.top < b.top ) {
+						return -1;
+					}
+					if( a.left > b.left && a.top > b.top ) {
+						return 1;
+					}
+
+					return 0;
+				});
+				
+				var selectedBoxesIds = selectedBoxesData.map(function(box) {
+					return box.id;
+				});
+				regScope.activeBoxArray = selectedBoxesIds;
 
 				if($('.build-area .active-box').length > 1) {
 					$('.build-area .drag-box:not(.text-box)').resizable( "option", "alsoResize", ".active-box:not(.text-box)" );
