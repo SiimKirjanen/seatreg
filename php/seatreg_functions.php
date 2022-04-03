@@ -1489,9 +1489,11 @@ function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $boo
 			$searchStatus = 'seat-nr-searching';
 			$errorText = esc_html__('Seat ','seatreg') . esc_html($bookingSeatNr) . esc_html__(' dose not exist in ', 'seatreg') . esc_html($bookingRoomName);
 			$boxLen = count($registrationLayout[$i]->boxes);
-
+			
 			for($k = 0; $k < $boxLen; $k++) {
-				if($registrationLayout[$i]->boxes[$k]->canRegister == 'true' && $registrationLayout[$i]->boxes[$k]->seat == $bookingSeatNr) {
+				$prefix = property_exists($registrationLayout[$i]->boxes[$k], 'prefix') ? $registrationLayout[$i]->boxes[$k]->prefix : '';
+
+				if($registrationLayout[$i]->boxes[$k]->canRegister == 'true' && $prefix . $registrationLayout[$i]->boxes[$k]->seat == $bookingSeatNr) {
 					$searchStatus = 'ok';
 					$allCorrect = true;
 					$seat_id = $registrationLayout[$i]->boxes[$k]->id;
