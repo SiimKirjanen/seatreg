@@ -1433,13 +1433,13 @@ function seatreg_validate_edit_booking($code, $data) {
 	$allCorrect = true;
     $resp = array();
     $resp['status'] = 'ok';
-	$status = seatreg_check_room_and_seat($structure, $data->roomName, $data->seatNr );
+	$layoutValidation = SeatregLayoutService::validateRoomAndSeatId($structure, $data->roomName, $data->seatId );
 	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->editCustomField, $registration->custom_fields);
 
-	if( $status['status'] != 'ok') {
+	if( !$layoutValidation->valid ) {
 			$allCorrect = false;
-			$resp['status'] = $status['status'];
-			$resp['text'] = $status['text'];
+			$resp['status'] = $layoutValidation->searchStatus;
+			$resp['text'] = $layoutValidation->errorText;
 
 			return $resp;
 	}else if( !$customFieldValidation->valid ) {
@@ -1448,9 +1448,11 @@ function seatreg_validate_edit_booking($code, $data) {
 		$resp['text'] = $customFieldValidation->errorMessage;
 
 	}else {
-		$resp['newSeatId'] = $status['newSeatId'];
-		$resp['oldSeatNr'] = $data->seatNr;
-		$resp['roomUUID'] = $status['roomUUID'];
+		$seat = SeatregLayoutService::getBoxFromLayout($structure, $data->seatId);
+		$prefix = property_exists($seat, 'prefix') ? $seat->prefix : '';
+		$resp['newSeatId'] = $data->seatId;
+		$resp['newSeatNr'] = $prefix . $seat->seat;
+		$resp['roomUUID'] = SeatregLayoutService::getRoomUUID($structure, $data->roomName);
 	}
 	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $code );
 	$notBooked = true;
@@ -1462,7 +1464,7 @@ function seatreg_validate_edit_booking($code, $data) {
 		}
 		$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($structure, $booking->room_uuid);
 
-		if($booking->seat_nr === $data->seatNr && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
+		if($booking->seat_id === $data->seatId && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
 			$resp['text'] = esc_html__('Seat ', 'seatreg') . esc_html($data->roomName) . esc_html__(' from room ', 'seatreg') . esc_html($booking->room_name) . esc_html__(' is already booked', 'seatreg');
@@ -2750,7 +2752,7 @@ function seatreg_edit_booking_callback() {
 
 	if( seatreg_edit_booking( 
 			$bookingEdit->editCustomField, 
-			$bookingEdit->seatNr, 
+			$statusArray['newSeatNr'], 
 			$statusArray['roomUUID'], 
 			$bookingEdit->firstName,
 			$bookingEdit->lastName,
@@ -2759,7 +2761,10 @@ function seatreg_edit_booking_callback() {
 			$bookingEdit->id
 		) !== false) {
 		seatreg_add_activity_log('booking', $bookingEdit->bookingId, 'Booking edited (Booking manager)');
-		wp_send_json( array('status'=>'updated') );
+		wp_send_json( array(
+			'status' => 'updated',
+			'newSeatNr' => $statusArray['newSeatNr']
+		) );
 
 		die();
 	}else {

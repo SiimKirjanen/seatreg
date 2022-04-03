@@ -815,7 +815,7 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		if(data.status == 'updated') {
 			var bookingLoc = $('#r-id').val();
 			var bookingInfo = $('#seatreg-booking-manager .edit-btn[data-id="'+ bookingLoc +'"]').parent();
-			bookingInfo.find('.seat-nr-box').text(seat_number);
+			bookingInfo.find('.seat-nr-box').text(data.newSeatNr);
 			bookingInfo.find('.seat-room-box').text(seat_room);
 			bookingInfo.find('.seat-name-box').attr('title', first_name + ' ' + last_name).find('.full-name').text(first_name + ' ' + last_name);
 			bookingInfo.find('.f-name').val(first_name);
@@ -855,7 +855,7 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 				$('#edit-room-error').text(translator.translate('roomNotExist'));
 				alertify.error(translator.translate('roomNotExist'));
 			}
-			if(data.status == 'seat-nr-searching') {
+			if(data.status == 'seat-id-searching') {
 				$('#edit-seat-error').text(translator.translate('seatIdNotExist'));
 				alertify.error(translator.translate('seatIdNotExist'));
 			}
