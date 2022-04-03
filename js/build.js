@@ -128,6 +128,10 @@
 		this.zIndex = newIndex;
 	};
 
+	Box.prototype.changeSeatNr = function(newSeatNr) {
+		this.seat = newSeatNr;
+	};
+
 	//change color
 	Box.prototype.changeColor = function(color) {
 		this.color = color;
@@ -198,10 +202,14 @@
 		$('.build-area .text-box[data-id="'+ this.id +'"]').find('.text-size-control').css('display', 'block');
 	}
 
+	Box.prototype.renderSeatNr = function() {
+		$('.build-area .drag-box[data-id="'+ this.id +'"] .seat-number').text(this.prefix + this.seat);
+	};
+
 	Box.prototype.changePrefix = function(newPrefix) {
 		this.prefix = newPrefix;
 
-		$('.build-area .drag-box[data-id="'+ this.id +'"] .seat-number').text(this.prefix + this.seat);
+		this.renderSeatNr();
 	}
 
 	/*
@@ -2496,7 +2504,15 @@
 				});
 			})
 			$('#reorder-seats').off('click').on('click', function() {
+				var startReorderFrom = $('#seat-reorder').val();
 
+				selectedSeats.forEach(function(seat) {
+					var box = currentRoom.findAndReturnBox(seat.id);
+
+					box.changeSeatNr(startReorderFrom);
+					box.renderSeatNr();
+					startReorderFrom++;
+				});
 			});
 		}
 	});

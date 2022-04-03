@@ -233,7 +233,7 @@
 						<button type="button" class="btn btn-success btn-sm" id="set-seat-prefix"><?php esc_html_e('Set prefix', 'seatreg'); ?></button>
 					</div><br>
 					<div>
-						<div><label for="seat-reorder"><?php esc_html_e('Reorder seats starting from', 'seatreg'); ?></label></div>
+						<div><label for="seat-reorder"><?php esc_html_e('Reorder selected seats starting from', 'seatreg'); ?></label></div>
 						<input type="number" id="seat-reorder" size="3" style="width:60px" />
 						<button type="button" class="btn btn-success btn-sm" id="reorder-seats"><?php esc_html_e('Reorder seats', 'seatreg'); ?></button>
 					</div>

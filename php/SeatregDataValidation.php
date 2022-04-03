@@ -310,7 +310,7 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($box, 'seat') || !is_int($box->seat) ) {
+                if( !property_exists($box, 'seat') ) {
                     $validationStatus->setInvalid('box seat is missing or invalid');
                     return $validationStatus;
                 }
