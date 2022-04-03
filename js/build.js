@@ -425,7 +425,6 @@
 					var lastNr = this.lastBronOrTaken();
 
 					if(this.boxes[location].seat > lastNr) {						
-						this.seatNumberReOrder(this.boxes[location].seat); 
 						this.roomSeatCounter--;
 						this.boxes.splice(location, 1);
 						reg.needToSave = true;
@@ -459,7 +458,6 @@
 						}	
 					}
 				}else {
-					this.seatNumberReOrder(this.boxes[location].seat); 
 					this.roomSeatCounter--;
 					this.boxes.splice(location, 1);
 					reg.needToSave = true;
@@ -474,19 +472,6 @@
 				}
 			}
 		}
-	};
-
-	Room.prototype.seatNumberReOrder = function(seatnr) {
-			var arrLength = this.boxes.length;
-
-			for(var i = 0; i < arrLength; i++) {
-				if(this.boxes[i].seat > seatnr && (this.boxes[i].canRegister == true || this.boxes[i].status == 'bronRegister' || this.boxes[i].status == 'takenRegister')) {
-					var newNumber = this.boxes[i].seat - 1;
-
-					$('.build-area .drag-box[data-seatnr="' + this.boxes[i].seat + '"]').attr('data-seatnr', newNumber).find('.seat-number').text(newNumber);
-					this.boxes[i].seat -= 1;
-				}
-			}	
 	};
 
 	//do i have bron or taken spots in this room?
@@ -1263,14 +1248,11 @@
 
 					if(location.legend == 'RegSpot') {
 						location.changeRegisterStatus(false);
-						this.rooms[this.currentRoom].seatNumberReOrder(location.seat);
 						this.rooms[this.currentRoom].roomSeatCounter--;
 						location.seat = 0;
 						location.legend = 'custom';
 						$('.build-area .drag-box[data-id="' + this.activeBoxArray[i] + '"]').removeClass('can-register').addClass('no-register').removeAttr('data-seatnr').css('background-color', '#ccc').find('.seat-number').text('');
 					}
-				}else {
-					//console.log('Major error....changeBoxNoRegister');
 				}
 			}
 		}else {
