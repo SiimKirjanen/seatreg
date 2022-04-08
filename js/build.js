@@ -2485,17 +2485,24 @@
 		var selectedBoxes = reg.activeBoxArray.map(function(selectedBoxId) {
 			return currentRoom.findAndReturnBox(selectedBoxId);
 		});
+		var hasStatusSeat = selectedBoxes.some(function(box) {
+			return box.status !== "noStatus"
+		});
 		var selectedSeats = selectedBoxes.filter(function(box) {
-			return box.canRegister === true;
+			return box.canRegister === true && box.status === "noStatus";
 		});
 
 		$('#seat-numbering-dialog .alert').addClass('d-none');
 		$('#seat-numbering-wrap').removeClass('d-none');
 
 		if(!selectedSeats.length) {
-			$('#seat-numbering-dialog .alert').removeClass('d-none');
+			$('#seat-nr-change-no-selection').removeClass('d-none');
 			$('#seat-numbering-wrap').addClass('d-none');
 		}else {
+			if(hasStatusSeat) {
+				$('#seat-nr-change-warning').removeClass('d-none');
+			}
+
 			$('#set-seat-prefix').off('click').on('click', function() {
 				selectedSeats.forEach(function(seat) {
 					var box = currentRoom.findAndReturnBox(seat.id);
