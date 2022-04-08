@@ -70,7 +70,7 @@
 		<div class="legends"></div>
 		<div class="update-wrapper">
 			<div id="build-section-message-wrap" data-toggle="modal" data-target="#limit-dialog">
-				<span class="message-text"><span style="vertical-align:middle"><?php esc_html_e('Seat deletion is limited!', 'seatreg');?></span><span class="more-message-btn"></span></span>
+				<span class="message-text"><span style="vertical-align:middle"><?php esc_html_e('Pending and booked seats can\'t be deleted', 'seatreg');?></span><span class="more-message-btn"></span></span>
 			</div>
 
 			<div id="build-head-stats-2">
@@ -505,8 +505,8 @@
 				</div>
 				<div class="modal-body">
 					<div>
-						<h5><?php esc_html_e('If room contains pending or approved seats then seat deletion is limited.', 'seatreg');?></h5>
-						<p><?php esc_html_e('Example:', 'seatreg');?> <br><?php _e('Lets say you have seats with numbers 1,2,3 and 4.', 'seatreg');?> <br><?php esc_html_e('If someone occupies seat number 2 then you won\'t be able to delete seats 1 and 2.', 'seatreg');?></p>
+						<h5><?php esc_html_e('Deleting seats with pending or booked status is not enabled', 'seatreg');?></h5>
+						<p><?php esc_html_e('If you really want to delete it then you first need to relocate booking to other seat with booking-manager.', 'seatreg'); ?></p>
 					</div>
 				</div>
 				<div class="modal-footer">
