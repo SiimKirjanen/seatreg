@@ -578,15 +578,24 @@
 
 			for(var i = 0; i < arrLength; i++) {
 				var index = this.rooms[this.currentRoom].findBox(this.activeBoxArray[i]);
+
 				if(index !== false) {
 					var box = $('.build-area .drag-box[data-id="' + this.activeBoxArray[i] + '"]');
+					var canRegistraBox = this.rooms[this.currentRoom].boxes[index].canRegister; 
 
 					if(newHover != '') {
 						this.rooms[this.currentRoom].boxes[index].hoverText = newHover;
+						var newHoverToShow = newHover;
+
+						if(canRegistraBox) {
+							newHoverToShow = 'ID: ' + this.rooms[this.currentRoom].boxes[index].id + '<br>' + newHoverToShow;
+						}
+
 						if(box.data('powertip')) {
-							box.attr('data-powertip', newHover).data('powertip', newHover).addClass('box-hover');
+							box.attr('data-powertip', newHoverToShow).data('powertip', newHoverToShow).addClass('box-hover');
+
 						}else {
-							box.attr('data-powertip', newHover).addClass('box-hover').powerTip({
+							box.attr('data-powertip', newHoverToShow).addClass('box-hover').powerTip({
 								fadeInTime: 0,
 								fadeOutTime:0,
 								intentPollInterval: 10,
@@ -1039,7 +1048,7 @@
 	Registration.prototype.initToolTip = function() {
 		$('.build-area-wrapper .box-hover').powerTip({
 			fadeInTime: 0,
-			fadeOutTime:0,
+			fadeOutTime: 0,
 			intentPollInterval: 10,
 			placement: 's',
 			manual: true
@@ -1597,6 +1606,7 @@
 		for(var i = 0; i < boxCount; i++) {
 			var boxId = this.rooms[this.currentRoom].boxes[i].id;
 			var boxClasses = 'drag-box ' + boxId;
+			var canRegisterBox = regScope.rooms[regScope.currentRoom].boxes[i].canRegister;
 			
 			if(this.rooms[this.currentRoom].boxes[i].type === 'text-box') {
 				boxClasses += ' text-box';
@@ -1650,6 +1660,7 @@
 				}else {
 					var $this = $(this);
 					var boxId = $this.data('id');
+					
 
 					$this.addClass('no-register');
 
@@ -1683,11 +1694,20 @@
 						});
 					}
 				}
-
-				if(regScope.rooms[regScope.currentRoom].boxes[i].hoverText != 'nohover') {
-					$(this).attr('data-powertip', regScope.rooms[regScope.currentRoom].boxes[i].hoverText).addClass('box-hover');
+				var hoverText = regScope.rooms[regScope.currentRoom].boxes[i].hoverText;
+				
+				if(hoverText != 'nohover') {
+					if(canRegisterBox) {
+						$(this).attr('data-powertip', 'ID: ' + regScope.rooms[regScope.currentRoom].boxes[i].id + '<br>' + hoverText).addClass('box-hover');
+					}else {
+						$(this).attr('data-powertip', hoverText).addClass('box-hover');
+					}
+				}else {
+					if(canRegisterBox) {
+						$(this).attr('data-powertip', 'ID: ' + regScope.rooms[regScope.currentRoom].boxes[i].id).addClass('box-hover');
+					}
 				}
-			});	//adds to dom
+			});	
 		}
 		regScope.initToolTip();
 		regScope.addDraggableListeners();
