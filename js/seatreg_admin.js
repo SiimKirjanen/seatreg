@@ -1128,6 +1128,8 @@ $('#seatreg-send-test-email').on('click', function(e) {
 	}
 });
 
+$('.seatreg-ui-tooltip').tooltip();
+
 })(jQuery);
 
 

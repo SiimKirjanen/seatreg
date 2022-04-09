@@ -8,7 +8,11 @@
       <div class="modal-body">
 		<form id="booking-edit-form">
 			<div class="edit-modal-input-wrap">
-				<label for="edit-seat"><h5><?php esc_html_e('Seat id', 'seatreg'); ?></h5></label><br>
+				<label for="edit-seat">
+					<h5><?php esc_html_e('Seat id', 'seatreg'); ?></h5>
+				</label> 
+				<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php esc_html_e('ID can be seen in map-editor when hovering seats', 'seatreg'); ?>"></i>
+				<br>
 				<input type="text" id="edit-seat" name="seat-id"/></label> <span id="edit-seat-error"></span>
 			</div>
 			
