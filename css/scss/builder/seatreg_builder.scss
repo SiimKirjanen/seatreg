@@ -107,8 +107,7 @@
 	left: 0;
 	
 }
-.seatreg-map-builder-page .build-area .box-hover {
-	
+.seatreg-map-builder-page .build-area .box-hover:not(.no-bubble) {
 	background-image: url('img/bubble.png');
 	background-repeat:no-repeat;
 	background-position:right bottom; 

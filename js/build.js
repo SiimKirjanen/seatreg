@@ -592,10 +592,10 @@
 						}
 
 						if(box.data('powertip')) {
-							box.attr('data-powertip', newHoverToShow).data('powertip', newHoverToShow).addClass('box-hover');
+							box.attr('data-powertip', newHoverToShow).data('powertip', newHoverToShow).addClass('box-hover').removeClass('no-bubble');
 
 						}else {
-							box.attr('data-powertip', newHoverToShow).addClass('box-hover').powerTip({
+							box.attr('data-powertip', newHoverToShow).addClass('box-hover').removeClass('no-bubble').powerTip({
 								fadeInTime: 0,
 								fadeOutTime:0,
 								intentPollInterval: 10,
@@ -1704,7 +1704,7 @@
 					}
 				}else {
 					if(canRegisterBox) {
-						$(this).attr('data-powertip', 'ID: ' + regScope.rooms[regScope.currentRoom].boxes[i].id).addClass('box-hover');
+						$(this).attr('data-powertip', 'ID: ' + regScope.rooms[regScope.currentRoom].boxes[i].id).addClass('box-hover no-bubble');
 					}
 				}
 			});	
