@@ -13,6 +13,7 @@
 						<label>
 							<h5>
 								<?php esc_html_e('Seat ID', 'seatreg'); ?>
+								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php esc_html_e('ID can be seen in map-editor when hovering seats', 'seatreg'); ?>"></i>
 							</h5>
 							<input type="text" name="seat-id[]"/>
 							<div class="input-error"></div>
