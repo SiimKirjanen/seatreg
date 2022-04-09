@@ -12,9 +12,9 @@
 					<div class="add-modal-input-wrap">
 						<label>
 							<h5>
-								<?php esc_html_e('Seat', 'seatreg'); ?>
+								<?php esc_html_e('Seat ID', 'seatreg'); ?>
 							</h5>
-							<input type="text" name="seat-nr[]"/>
+							<input type="text" name="seat-id[]"/>
 							<div class="input-error"></div>
 						</label>
 					</div>

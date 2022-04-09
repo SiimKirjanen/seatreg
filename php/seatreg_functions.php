@@ -1395,17 +1395,21 @@ function seatreg_valdiate_add_booking_with_manager($code, $data) {
 	$allCorrect = true;
 	$resp = array();
     $resp['status'] = 'ok';
-	$status = seatreg_check_room_and_seat($structure, $data->roomName, $data->seatNr );
+	$layoutValidation = SeatregLayoutService::validateRoomAndSeatId($structure, $data->roomName, $data->seatId );
 
-	if( $status['status'] != 'ok') {
+	if( !$layoutValidation->valid ) {
 		$allCorrect = false;
-		$resp['status'] = $status['status'];
-		$resp['text'] = $status['text'];
+		$resp['status'] = $layoutValidation->searchStatus;
+		$resp['text'] = $layoutValidation->errorText;
 
 		return $resp;
 	}else {
-		$resp['seatId'] = $status['newSeatId'];
-		$resp['roomUUID'] = $status['roomUUID'];
+		$seat = SeatregLayoutService::getBoxFromLayout($structure, $data->seatId);
+		$prefix = property_exists($seat, 'prefix') ? $seat->prefix : '';
+
+		$resp['seatId'] = $data->seatId;
+		$resp['seatNr'] = $prefix . $seat->seat;
+		$resp['roomUUID'] = SeatregLayoutService::getRoomUUID($structure, $data->roomName);
 	}
 
 	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode($code);
@@ -1414,10 +1418,10 @@ function seatreg_valdiate_add_booking_with_manager($code, $data) {
 	foreach ($bookings as $booking) {
 		$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($structure, $booking->room_uuid);
 
-		if($booking->seat_nr === $data->seatNr && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
+		if($booking->seat_id === $data->seatId && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
-			$resp['text'] = esc_html__('Seat ', 'seatreg') . esc_html($data->roomName) . esc_html__(' from room ', 'seatreg') . esc_html($booking->room_name) . esc_html__(' is already booked', 'seatreg');
+			$resp['text'] = esc_html__('Seat ID ', 'seatreg') . esc_html($data->seatId) . esc_html__(' from room ', 'seatreg') . esc_html($booking->room_name) . esc_html__(' is already booked', 'seatreg');
 
 			break;
 		}
@@ -2629,7 +2633,7 @@ function seatreg_add_booking_with_manager_callback() {
 	if( empty( $_POST['first-name'] ) || 
 		empty( $_POST['last-name'] ) || 
 		empty( $_POST['email'] ) || 
-		empty( $_POST['seat-nr'] ) ||
+		empty( $_POST['seat-id'] ) ||
 		empty( $_POST['room'] ) ||
 		empty( $_POST['registration-code'] ) ||
 		empty( $_POST['booking-status'] ) ||
@@ -2655,7 +2659,7 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingToAdd = new stdClass();
 		$bookingToAdd->firstName = sanitize_text_field($_POST['first-name'][$key]);
 		$bookingToAdd->lastName = sanitize_text_field($_POST['last-name'][$key]);
-		$bookingToAdd->seatNr = sanitize_text_field($_POST['seat-nr'][$key]);
+		$bookingToAdd->seatId = sanitize_text_field($_POST['seat-id'][$key]);
 		$bookingToAdd->roomName = sanitize_text_field($_POST['room'][$key]);
 		$bookingToAdd->customfield = $customFields[$key];
 		$bookingToAdd->email = sanitize_text_field($_POST['email'][$key]);
@@ -2671,12 +2675,13 @@ function seatreg_add_booking_with_manager_callback() {
 			wp_send_json_error( array('message' => $statusArray['text'], 'status' => $statusArray['status'], 'index' => $key) );
 		}
 
-		$bookingsToAdd[$key]->seatId = $statusArray['seatId'];
+		$bookingsToAdd[$key]->seatId = $bookingToAdd->seatId;
 		$bookingsToAdd[$key]->roomUUID = $statusArray['roomUUID'];
+		$bookingsToAdd[$key]->seatNr = $statusArray['seatNr'];
 	}
 
-	$seatIds = [];
 	// Are separate seats?
+	$seatIds = [];
 	foreach( $bookingsToAdd as $key => $bookingToAdd ) {
 		if(!in_array($bookingToAdd->seatId, $seatIds)) {
 			array_push($seatIds, $bookingToAdd->seatId);
@@ -2684,7 +2689,6 @@ function seatreg_add_booking_with_manager_callback() {
 			wp_send_json_error( array('status' => 'duplicate-seat') );
 		}
 	}
-
 
 	$bookingId = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
 	$confCode = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);

@@ -641,8 +641,8 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 		
 		booking.find('.input-error').text('');
 
-		if(booking.find('[name="seat-nr[]"]').val() === '') {
-			booking.find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text('No seat');
+		if(booking.find('[name="seat-id[]"]').val() === '') {
+			booking.find('[name="seat-id[]"]').closest('.add-modal-input-wrap').find('.input-error').text('No ID');
 			subBtn.css('display','inline').next().css('display','none');
 			allFieldsValid = false;
 		}
@@ -712,12 +712,12 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="room[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('roomNotExist'));
 				alertify.error(translator.translate('roomNotExist'));
 			}
-			if(data.status === 'seat-nr-searching') {
-				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatIdNotExist'));
+			if(data.status === 'seat-id-searching') {
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-id[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatIdNotExist'));
 				alertify.error(translator.translate('seatIdNotExist'));
 			}
 			if(data.status === 'seat-booked') {
-				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-nr[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatAlreadyBookedPending'));
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-id[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatAlreadyBookedPending'));
 				alertify.error(translator.translate('seatAlreadyBookedPending'));
 			}
 			if(data.status === 'create failed') {
