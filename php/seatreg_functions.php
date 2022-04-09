@@ -2565,7 +2565,7 @@ function seatreg_confirm_del_bookings_callback() {
 				$errorText = $statusArray['text'];
 
 				break;
-			case 'seat-nr-searching';
+			case 'seat-id-searching';
 				$errorText = $statusArray['text'];
 
 				break;
