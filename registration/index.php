@@ -198,7 +198,7 @@
 										?>
 										<span class="time">
 											<?php
-												esc_html($data->registration_start_timestamp);
+												echo esc_html($data->registration_start_timestamp);
 											?>
 										</span>
 									</div>
@@ -214,7 +214,7 @@
 										?>
 										<span class="time">
 											<?php
-												esc_html($data->registration_end_timestamp);
+												echo esc_html($data->registration_end_timestamp);
 											?>
 										</span>
 									</div>
