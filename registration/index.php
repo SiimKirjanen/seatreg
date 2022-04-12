@@ -368,11 +368,21 @@
 							esc_html_e('seats selected', 'seatreg');
 						?>
 					</div>
+					<div class="bottom-btn-wrap">
+						<div class="bottom-btn">
+							<?php esc_html_e('Open', 'seatreg'); ?>
+						</div>
+					</div>
 				</div>
 				<div class="mobile-legend">
 					<?php 
 						esc_html_e('Show legends', 'seatreg');
 					?>
+					<div class="bottom-btn-wrap">
+						<div class="bottom-btn">
+							<?php esc_html_e('Open', 'seatreg'); ?>
+						</div>
+					</div>
 				</div>
 			</div>
 

@@ -952,10 +952,25 @@ body {
 	top: 8px;
 	left: 8px;
 }
+
 .mobile-cart {
 	cursor: pointer;
 	float: left;
 }
+
+#bottom-wrapper {
+	.bottom-btn-wrap {
+		display: flex;
+		justify-content: center;
+	}
+	.bottom-btn {
+		margin-top: 6px;
+		background-color: #0000db;
+		color: #fff;
+		padding: 4px 8px;
+	}
+}
+
 .mobile-legend {
 	float: right;
 	cursor: pointer;
