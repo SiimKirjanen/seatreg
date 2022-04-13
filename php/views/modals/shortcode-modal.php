@@ -6,7 +6,7 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
             </div>
             <div class="modal-body">
-                <code>[seatreg code=<?php echo $registrationCode; ?>]</code>
+                <code>[seatreg code=<?php echo $registrationCode; ?> height=600]</code>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>
