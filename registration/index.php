@@ -109,9 +109,6 @@
 						<div id="room-nav-btn">
 							<?php esc_html_e('Change room', 'seatreg'); ?>
 						</div>
-						<div class="room-nav-extra-info-btn">
-							<i class="fa fa-info-circle"></i>
-						</div>
 					</div>
 				</div>
 
@@ -373,6 +370,9 @@
 							<?php esc_html_e('Open', 'seatreg'); ?>
 						</div>
 					</div>
+				</div>
+				<div class="room-nav-extra-info-btn center-fix">
+					<i class="fa fa-info-circle"></i>
 				</div>
 				<div class="mobile-legend">
 					<?php 

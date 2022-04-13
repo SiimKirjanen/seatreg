@@ -502,19 +502,14 @@ body {
 	display: none;
 }
 #room-nav-info {
-	width: 60%;
-	display: table;
-}
-#room-nav-btn-wrap {
-	width: 40%;
-}
-#room-nav-info {
+	text-align: center;
+	display: none;
 	margin-top: 4px;
 	margin-bottom: 12px;
 }
-#room-nav-info, #room-nav-btn-wrap {
-	float: left;
+#room-nav-btn-wrap {
 	text-align: center;
+	margin-bottom: 8px;
 }
 
 .room-nav-link {
@@ -586,11 +581,14 @@ body {
 	display: inline-block;
 	vertical-align: middle;
 	font-size: 40px;
-/*
-	background: url(registrationsprite.png) no-repeat;
-	background-position: -42px 0;
-*/
 	cursor: pointer;
+
+	&.center-fix {
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, 0);
+		margin: 0;
+	}
 }
 
 .active-nav-link {
@@ -1716,9 +1714,6 @@ body {
 		overflow: hidden;
 		padding: 10px;
 	}
-
-
-
 }
 
 @media only screen and (max-width: 480px) {
@@ -1732,19 +1727,10 @@ body {
 	
 }
 
-
-
 @media only screen and (min-width: 460px) {
 
 	#room-nav-btn {
 		padding: 4px 8px;
-	}
-	.room-nav-extra-info-btn {
-		background-position: 0 -41px ;
-		width: 31px;
-		height: 31px;
-		vertical-align: top;
-		margin-left: 10px;
 	}
 	.cart-btn-mobile {
 		background-image: url(logos/cart_small2.png);
@@ -1803,16 +1789,13 @@ body {
 		width: 39px;
 		height: 39px;
 		vertical-align: top;
-	}
 
-	#room-nav-info {
-		height: 70px;
 	}
 	#room-nav-info-inner {
 		display: table-cell;
 		vertical-align: middle;
-
 	}
+
 	#checkoput-area-inner {
 		width: auto;
 		padding: 20px;
@@ -1834,13 +1817,6 @@ body {
 	#room-nav-btn-wrap {
 		display: none;
 	}
-	.big-display-btn {
-		display: block;
-		position: absolute;
-		top: 0;
-		margin-top: -46px;
-		right: 80px;
-	}
 	#room-nav-info-inner {
 		display: block;
 	}
@@ -1853,11 +1829,9 @@ body {
 }
 
 @media only screen and (min-width: 920px) {
-		
 	.header-time {
 		display: inline;
-	}
-		
+	}	
 }
 
 @media only screen and (min-width: 1024px) {
@@ -1870,6 +1844,13 @@ body {
 		height: auto;
 		border: 1px solid #ccc;
 		margin: 0 10px;
+	}
+	.big-display-btn {
+		display: block;
+		position: absolute;
+		top: 0;
+		margin-top: -46px;
+		right: 80px;
 	}
 	.cart-icon {
 		width: 60px;
