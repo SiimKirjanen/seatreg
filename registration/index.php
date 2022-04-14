@@ -106,9 +106,11 @@
 
 					<div id="room-nav-btn-wrap" class="border-box">
 						<div id="current-room-name"></div>
-						<div id="room-nav-btn">
-							<?php esc_html_e('Change room', 'seatreg'); ?>
-						</div>
+						<?php if( SeatregLayoutService::getRoomsLength( json_decode($data->registration_layout)->roomData ) > 1 ): ?>
+							<div id="room-nav-btn">
+								<?php esc_html_e('Change room', 'seatreg'); ?>
+							</div>
+						<?php endif; ?>	
 					</div>
 				</div>
 

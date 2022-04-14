@@ -134,5 +134,8 @@ class SeatregLayoutService {
 
         return $roomUUID;
     }
-    
+
+    public static function getRoomsLength($roomData) {
+        return count($roomData);
+    }
 }
