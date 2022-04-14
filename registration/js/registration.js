@@ -404,8 +404,10 @@ SeatReg.prototype.paintRoomLegends = function() {
 	if(arrLen > 0) {
 		if(this.mobileview) {
 			$('#legend-wrapper').css('display','none');
+			$('#bottom-wrapper .mobile-legend').css('display','inline-block');
 		}else {
-			$('#legend-wrapper').css('display','inline-block');
+			$('#legend-wrapper, .mobile-legend').css('display','none');
+			$('#bottom-wrapper .mobile-legend').css('display','inline-block');
 		}
 	}else {
 		$('#legend-wrapper, .mobile-legend').css('display','none');
