@@ -334,7 +334,7 @@
 				</div>
 			</div>
 
-			<div id="checkout-area" class="dialog-box">
+			<div id="checkout-area" class="dialog-box overflow-y-scroll">
 				<form id="checkoput-area-inner" class="dialog-box-inner border-box">
 					<div id="checkout-close" class="close-btn">
 						<div class="close-btn-bg"></div>

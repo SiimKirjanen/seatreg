@@ -443,6 +443,10 @@ body {
 	flex-direction: column;
 }
 
+.overflow-y-scroll {
+	overflow-y: auto;
+}
+
 @font-face {
 	font-family: 'icomoon';
 	src:url('../fonts/icomoon.eot?-h7well');
