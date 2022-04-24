@@ -632,9 +632,14 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 		var checkItemHeader = $('<div class="check-item-head">'+ this.spotName +' nr <span>' + this.selectedSeats[i].nr + '</span><br><span>' + this.selectedSeats[i].room + '</span></div>');
 		var documentFragment2 = $(document.createDocumentFragment());
 		var arrLen2 = this.selectedSeats[i].defFields.length;
+		var isLastCheckItem = i === arrLen - 1;
+
+		if( isLastCheckItem ) {
+			checkItem.addClass('check-item--last');
+		}
 		
 		for(var j = 0; j < arrLen2; j++) {
-			var field = this.generateField(this.selectedSeats[i].defFields[j]);
+			var field = this.generateField(this.selectedSeats[i].defFields[j], isLastCheckItem);
 			documentFragment2.append(field);
 		}
 
@@ -668,7 +673,7 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 	}
 };
 
-SeatReg.prototype.generateField = function(fieldName) {
+SeatReg.prototype.generateField = function(fieldName, isLastCheckItem) {
 	var fieldText;
 	switch(fieldName) {
 		case 'FirstName':
@@ -683,7 +688,11 @@ SeatReg.prototype.generateField = function(fieldName) {
 	}
 
 	var label = $('<label class="field-label"><span class="l-text">' + fieldText + '</span></label>');
-	var fieldInput = $('<input type="text" name="'+ fieldName +'[]" class="field-input" data-field="' + fieldName+ '" maxlength="100">');
+	var fieldInput = $('<div style="position:relative"><input type="text" name="'+ fieldName +'[]" class="field-input" data-field="' + fieldName+ '" maxlength="100"></div>');
+
+	if( !isLastCheckItem ) {
+		fieldInput.append('<i class="fa fa-arrow-circle-right check-item__copy" aria-hidden="true"></i>');
+	}
 	
 	var errorText = $('<span class="field-error">error</span>');
 	label.append(fieldInput, errorText);
@@ -1292,6 +1301,15 @@ $('#checkout').on('click', function() {
 
 $('#checkout-input-area').on('keyup','.field-input', function() {
 	validateInput($(this));
+});
+
+
+$('#checkout-input-area').on('click', '.check-item__copy', function(e) {
+	e.preventDefault();
+
+	var input = $(this).siblings('.field-input');
+
+	$(this).closest('.check-item').next().find('.field-input[data-field="'+ input.data('field') +'"]').val( input.val() );
 });
 
 $('.refresh-btn').on('click', function() {
