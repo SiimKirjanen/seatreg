@@ -716,7 +716,7 @@ SeatReg.prototype.generateCustomField = function(custom) {
 	}
 
 	var errorText = $('<span class="field-error">error</span>');
-	label.append(fieldInput,errorText);
+	label.append($('<div>').append(fieldInput),errorText);
 	return label;
 };
 
