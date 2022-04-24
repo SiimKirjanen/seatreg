@@ -1068,27 +1068,27 @@ function validateInput(inputField) {
 	var value = inputField.val();
 
 	if(value == '') {
-		inputField.next().text(translator.translate('emptyField')).css('display','block');
+		inputField.parent().siblings('.field-error').text(translator.translate('emptyField')).css('display','block');
 
 		return false;
 	}
 
 	switch(inputField.attr('data-field')) {
 		case 'FirstName':
-			inputField.next().text('').css('display','inline');
+			inputField.parent().siblings('.field-error').text('').css('display','inline');
 
 			if(!inputReg.test(value)) {
-				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','block');	
+				inputField.parent().siblings('.field-error').text(translator.translate('illegalCharactersDetec')).css('display','block');	
 
 				return false;
 			}
 	
 			break;
 		case 'LastName':
-			inputField.next().css('display','none');
+			inputField.parent().siblings('.field-error').css('display','none');
 
 			if(!inputReg.test(value)) {
-				inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','block');	
+				inputField.parent().siblings('.field-error').text(translator.translate('illegalCharactersDetec')).css('display','block');	
 
 				return false;
 			}
@@ -1101,9 +1101,9 @@ function validateInput(inputField) {
 			}
 
 			if(useThis.test(value)) {
-				inputField.next().css('display','none');
+				inputField.parent().siblings('.field-error').css('display','none');
 			}else {
-				inputField.next().text(translator.translate('emailNotCorrect')).css('display','block');
+				inputField.parent().siblings('.field-error').text(translator.translate('emailNotCorrect')).css('display','block');
 	
 				return false;
 			}
@@ -1115,9 +1115,9 @@ function validateInput(inputField) {
 
 			if(customFieldType === 'text' || customFieldType === 'sel') {
 				if( customFieldRegExp.test(value)) {				
-					inputField.next().css('display','none');	
+					inputField.parent().siblings('.field-error').css('display','none');	
 				}else {	
-					inputField.next().text(translator.translate('illegalCharactersDetec')).css('display','block');	
+					inputField.parent().siblings('.field-error').text(translator.translate('illegalCharactersDetec')).css('display','block');	
 	
 					return false;	
 				}
