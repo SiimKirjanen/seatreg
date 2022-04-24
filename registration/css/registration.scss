@@ -1169,13 +1169,20 @@ body {
 .check-item {
 	text-align: left;
 	display: inline-block;
-	margin: 0 6px;
+	margin: 0 6px 6px;
 
 	&:not(.check-item--last) {
 		.field-input {
 			margin-right:26px;
-		}	
+		}
 	}
+
+	@media only screen and (max-width: 800px) {
+		.field-input {
+			margin-right:26px;
+		}
+	}
+
 	&__copy {
 		position: absolute;
 		cursor: pointer;
