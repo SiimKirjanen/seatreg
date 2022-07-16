@@ -675,7 +675,7 @@ function seatreg_generate_settings_form() {
 							<?php esc_html_e('Allow payments', 'seatreg'); ?>
 						</label>
 					</div>
-					<div class="paypal-configuration">
+					<div class="payment-configuration">
 						<label for="paypal-business-email"><?php esc_html_e('PayPal business email', 'seatreg'); ?></label>
 						<p class="help-block">
 							<?php esc_html_e('Pease enter your PayPal business email', 'seatreg'); ?>.
@@ -726,6 +726,45 @@ function seatreg_generate_settings_form() {
 					</div>
 				<?php endif; ?>
 			</div>
+			
+			<div class="form-group">
+				<label for="stripe"><?php esc_html_e('Stripe payments', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Allow and configure Stripe payments. Enables you to ask money for bookings. ', 'seatreg'); ?>
+				</p>
+				<?php if(extension_loaded('curl')): ?>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="stripe" name="stripe-payments" value="0" <?php echo $options[0]->stripe_payments == '1' ? 'checked':'' ?> >
+							<?php esc_html_e('Allow payments', 'seatreg'); ?>
+						</label>
+					</div>
+					<div class="payment-configuration">
+						<label for="stripe_api_key"><?php esc_html_e('Stripe API key', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Pease enter your Stripe API key', 'seatreg'); ?>.
+						</p>
+						<input type="text" class="form-control" id="stripe-api-key" name="stripe-api-key" autocomplete="off" placeholder="<?php echo esc_html('Stripe API key', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->stripe_api_key); ?>"> 
+						<br>
+
+						<label for="payment-mark-confirmed-stripe"><?php esc_html_e('Set paid booking approved', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Set booking approved automatically when payment has been completed', 'seatreg'); ?>.
+						</p>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="payment-mark-confirmed-stripe" name="payment-mark-confirmed-stripe" value="0" <?php echo $options[0]->payment_completed_set_booking_confirmed_stripe == '1' ? 'checked': ''; ?> >
+								<?php esc_html_e('Set approved', 'seatreg'); ?>
+							</label>
+						</div>
+					</div>
+				<?php else: ?>
+					<div class="alert alert-primary" role="alert">
+						<?php esc_html_e('Curl extension is required for Stripe to work', 'seatreg'); ?>
+					</div>
+				<?php endif; ?>
+			</div>
+
 
 			<div class="form-group">
 				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
@@ -1590,6 +1629,9 @@ function seatreg_set_up_db() {
 			email_verification_template text,
 			pending_booking_email_template text,
 			approved_booking_email_template text,
+			stripe_payments tinyint(1) NOT NULL DEFAULT 0,
+			stripe_api_key varchar(255) DEFAULT NULL,
+			payment_completed_set_booking_confirmed_stripe tinyint(1) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2169,6 +2211,9 @@ function seatreg_update() {
 	if( isset($_POST['paypal-payments']) && ($_POST['paypal-business-email'] === "" || $_POST['paypal-button-id'] === "" || $_POST['paypal-currency-code'] === "" ) ) {
 		wp_die('Missing PayPal configuration');
 	}
+	if( isset($_POST['stripe-payments']) && ($_POST['stripe-api-key'] === "" ) ) {
+		wp_die('Missing Stripe configuration');
+	}
 
 	$registrationName = sanitize_text_field($_POST['registration-name']);
 	$registrationNameValidation = SeatregDataValidation::validateRegistrationName($registrationName);
@@ -2242,6 +2287,18 @@ function seatreg_update() {
 	}else {
 		$_POST['approved-booking-email'] = 1;
 	}
+
+	if(!isset($_POST['stripe-payments'])) {
+		$_POST['stripe-payments'] = 0;  
+	}else {
+		$_POST['stripe-payments'] = 1;
+	}
+
+	if(!isset($_POST['payment-mark-confirmed-stripe'])) {
+		$_POST['payment-mark-confirmed-stripe'] = 0;  
+	}else {
+		$_POST['payment-mark-confirmed-stripe'] = 1;
+	}
 	
 	if(!empty($_POST['show-booking-data-registration'])) {
 		$selectedShowBookingData = is_array($_POST['show-booking-data-registration']) ? implode(',', $_POST['show-booking-data-registration']) : null;
@@ -2280,6 +2337,9 @@ function seatreg_update() {
 			'email_verification_template' => $_POST['email-verification-template'] === '' ? null : $_POST['email-verification-template'],
 			'pending_booking_email_template' => $_POST['pendin-booking-email-template'] === '' ? null : $_POST['pendin-booking-email-template'],
 			'approved_booking_email_template' => $_POST['approved-booking-email-template'] === '' ? null : $_POST['approved-booking-email-template'],
+			'stripe_payments' => $_POST['stripe-payments'],
+			'stripe_api_key' => $_POST['stripe-api-key'],
+			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
