@@ -103,9 +103,24 @@ class SeatregPaymentService {
                 <input type='hidden' name="cancel_return" value="<?php echo $cancelUrl; ?>" />
                 <input type="hidden" name="return" value="<?php echo $returnUrl; ?>" />
                 <input type="hidden" name="custom" value="<?php echo $bookingId; ?>">
-                <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
+                <input type="image" src="<?php echo plugins_url('../img/paypal.png', dirname(__FILE__) )?>" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
             </form>
 	    <?php
+    }
+
+    /**
+     *
+     * Generate Stripe HTML checkout Form
+     *
+    */
+    public static function generateStripeCheckoutForm($bookingId) {
+        ?>
+            <form action="<?php echo get_site_url(); ?>">
+                <input type="hidden" name="seatreg" value="stripe-checkout-session" />
+                <input type="hidden" name="booking-id" value="<?php echo $bookingId; ?>" />
+                <input type="image" src="<?php echo plugins_url('../img/stripe.png', dirname(__FILE__) )?>" border="0" name="submit" alt="Stripe" style="margin-top: -4px" />
+            </form>
+        <?php
     }
 
     /**

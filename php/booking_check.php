@@ -25,6 +25,20 @@
 	<title>
 		<?php esc_html_e('Booking check', 'seatreg'); ?>
 	</title>
+	<style>
+		.payment-forms {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+			gap: 12px;
+		}
+		.payment-forms form {
+			
+		}
+		.payment-instructions {
+			margin: 24px 0 12px;
+		}
+	</style>
 	<?php wp_head(); ?>
 </head>
 <body>
@@ -36,25 +50,42 @@
 			echo ' <button id="send-receipt" data-booking-id="'. $bookingId .'" data-registration-id="'. $registrationId .'">'. __('Send again', 'seatreg') .'</button><br>';
 		}
 
-		if($bookingData->paypal_payments === '1' && $bookingData->payment_status === null) {
+		if( ($bookingData->paypal_payments === '1' || $bookingData->stripe_payments === '1') && $bookingData->payment_status === null ) {
 			$bookingTotalCost = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
-			$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
-			$siteUrl = get_site_url(); // use ngrok here for local testing. For live use get_site_url()
-			$returnUrl = $siteUrl . '?seatreg=payment-return&id=' . $bookingId;
-			$cancelUrl = $siteUrl . '?seatreg=booking-status&registration=' . $registrationId . '&id=' . $bookingId;
-			$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
+
+			?>
+				<p class="payment-instructions"><?php esc_html_e('Pay for your booking', 'seatreg'); ?></p>
+				<div class="payment-forms">
+			<?php
+
+				if( $bookingData->paypal_payments === '1' ) {
+					$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
+					$siteUrl = get_site_url(); // use ngrok here for local testing. For live use get_site_url()
+					$returnUrl = $siteUrl . '?seatreg=payment-return&id=' . $bookingId;
+					$cancelUrl = $siteUrl . '?seatreg=booking-status&registration=' . $registrationId . '&id=' . $bookingId;
+					$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
+					
+					if($bookingTotalCost > 0) {
+						echo SeatregPaymentService::generatePayPalPayNowForm(
+							$payPalFromAction, 
+							$bookingData,
+							$bookingTotalCost,
+							$returnUrl,
+							$cancelUrl,
+							$notifyUrl,
+							$bookingId
+						);
+					}
+				}
+				
+				if( $bookingData->stripe_payments === '1' ) {
+					echo SeatregPaymentService::generateStripeCheckoutForm($bookingId);
+				}
+			?>
+				</div>
+			<?php
+
 			
-			if($bookingTotalCost > 0) {
-				echo SeatregPaymentService::generatePayPalPayNowForm(
-					$payPalFromAction, 
-					$bookingData,
-					$bookingTotalCost,
-					$returnUrl,
-					$cancelUrl,
-					$notifyUrl,
-					$bookingId
-				);
-			}
 		}else if($bookingData->payment_status === SEATREG_PAYMENT_PROCESSING) {
 			esc_html_e('Your payment is being processed', 'seatreg');
 		}else if($bookingData->payment_status === SEATREG_PAYMENT_COMPLETED) {
