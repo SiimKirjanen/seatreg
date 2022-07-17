@@ -2316,6 +2316,8 @@ function seatreg_update() {
 		$_POST['pending-expiration'] = null;
 	}
 
+	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
+
 	$status1 = $wpdb->update(
 		"$seatreg_db_table_names->table_seatreg_options",
 		array(
@@ -2368,6 +2370,18 @@ function seatreg_update() {
 		'%s',
 		'%s'
 	);
+
+	//SeatregWebhooksService::removeStripeWebhook($_POST['stripe-api-key']);
+
+	if( $oldOptions->stripe_payments === '0' && $_POST['stripe-payments'] === 1) {
+		if( !SeatregWebhooksService::isStripeWebhookCreated($_POST['stripe-api-key']) ) {
+			//Create a webhook when turning on stripe payments
+			SeatregWebhooksService::createStripeWebhook($_POST['stripe-api-key']);
+		}
+	}else if( $oldOptions->stripe_payments === '1' &&  $_POST['stripe-payments'] === 0) {
+		//Remove a webhook when stripe payments are turned off
+		SeatregWebhooksService::removeStripeWebhook($_POST['stripe-api-key']);
+	}
 
 	return ($status1 !== false && $status2 !== false);
 }

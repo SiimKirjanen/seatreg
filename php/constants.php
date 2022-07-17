@@ -27,6 +27,9 @@ define('SEATREG_PAYMENT_LOG_ERROR', 'error');
 define('SEATREG_PAYMENT_LOG_OK', 'ok');
 define('SEATREG_PAYMENT_LOG_INFO', 'info');
 
+// Stripe
+define('SEATREG_STRIPE_WEBHOOK_DESCRIPTION', 'WordPress SeatReg plugin webhook');
+
 // Status
 define('SEATREG_BOOKING_PENDING', 1);
 define('SEATREG_BOOKING_APPROVED', 2);

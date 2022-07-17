@@ -90,6 +90,13 @@ function seatreg_custom_pages() {
 
 		die();
 	}
+
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'stripe-webhook-callback' ) {
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/stripe/handle-stripe-webhook.php';
+
+		die();
+	}
+	
 }
 
 add_filter( 'admin_body_class', 'seatreg_admin_body_class' );
