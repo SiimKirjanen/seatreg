@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit(); 
 }
 
-class SeatregWebhooksService {
+class StripeWebhooksService {
 
     /**
      *

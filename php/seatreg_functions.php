@@ -2371,16 +2371,14 @@ function seatreg_update() {
 		'%s'
 	);
 
-	//SeatregWebhooksService::removeStripeWebhook($_POST['stripe-api-key']);
-
 	if( $oldOptions->stripe_payments === '0' && $_POST['stripe-payments'] === 1) {
-		if( !SeatregWebhooksService::isStripeWebhookCreated($_POST['stripe-api-key']) ) {
-			//Create a webhook when turning on stripe payments
-			SeatregWebhooksService::createStripeWebhook($_POST['stripe-api-key']);
+		if( !StripeWebhooksService::isStripeWebhookCreated($_POST['stripe-api-key']) ) {
+			//Create a Stripe webhook when turning on Stripe payments
+			StripeWebhooksService::createStripeWebhook($_POST['stripe-api-key']);
 		}
 	}else if( $oldOptions->stripe_payments === '1' &&  $_POST['stripe-payments'] === 0) {
-		//Remove a webhook when stripe payments are turned off
-		SeatregWebhooksService::removeStripeWebhook($_POST['stripe-api-key']);
+		//Remove Stripe webhook when Stripe payments are turned off
+		StripeWebhooksService::removeStripeWebhook($_POST['stripe-api-key']);
 	}
 
 	return ($status1 !== false && $status2 !== false);
