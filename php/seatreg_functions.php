@@ -672,7 +672,7 @@ function seatreg_generate_settings_form() {
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" id="paypal" name="paypal-payments" value="0" <?php echo $options[0]->paypal_payments == '1' ? 'checked':'' ?> >
-							<?php esc_html_e('Allow payments', 'seatreg'); ?>
+							<?php esc_html_e('Turn on Paypal payments', 'seatreg'); ?>
 						</label>
 					</div>
 					<div class="payment-configuration">
@@ -736,7 +736,7 @@ function seatreg_generate_settings_form() {
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" id="stripe" name="stripe-payments" value="0" <?php echo $options[0]->stripe_payments == '1' ? 'checked':'' ?> >
-							<?php esc_html_e('Allow payments', 'seatreg'); ?>
+							<?php esc_html_e('Turn on Stripe payments', 'seatreg'); ?>
 						</label>
 					</div>
 					<div class="payment-configuration">
