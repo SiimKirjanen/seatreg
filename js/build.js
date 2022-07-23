@@ -2701,9 +2701,8 @@
 		alpha: true,
 		editor: true,
 		editorFormat: 'rgb',
-		defaultColor: '#0072CE',
+		color: '#0072CE',
 		onDone: function (color) {
-			console.log(color.rgbaString);
 			reg.changeBoxColor(color.rgbaString);
 			$('#color-dialog').modal('toggle');
 			alertify.success(translator.translate('colorApplied'));	
@@ -2711,16 +2710,19 @@
 	});
 	
     //color picker for legends
-	$('#picker2').colpick({
-		flat:true,
-		layout:'hex',
-		color:'61B329',
-		submit:false,
-		onChange: function(hsb,hex,rgb,el,bySetColor) {
-			$('#dummy-legend .legend-box').css("background-color",'#' + hex);
-			$('#hiddenColor').val('#' + hex);
-		}
+	var legendColorPicker = new Picker({
+		parent: document.querySelector('#picker2'),
+		popup: false,
+		alpha: true,
+		editor: true,
+		editorFormat: 'rgb',
+		color: '#61B329',
+		onChange: function (color) {
+			$('#dummy-legend .legend-box').css("background-color", color.rgbaString);
+			$('#hiddenColor').val(color.rgbaString);
+		},
 	});
+
 	/*
 		*--------button click listeners--------
 	*/

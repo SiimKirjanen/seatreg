@@ -1,0 +1,12 @@
+.seatreg-map-builder-page {
+    #legend-dialog {
+        .legends-color-picker {
+            display: flex;
+            justify-content: center;
+            
+            .picker_done {
+                display: none;
+            }
+        }
+    }
+}
