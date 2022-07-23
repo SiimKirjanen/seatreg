@@ -1147,19 +1147,19 @@
 	};
 
 	//Change background color of a box. In case of text-box change font color
-	Registration.prototype.changeBoxColor = function(colorHex) {
+	Registration.prototype.changeBoxColor = function(colorRGBA) {
 		if(this.action == 1) {
 			var box = this.rooms[this.currentRoom].findAndReturnBox(this.activeBoxArray[0]);
 
 			if(box !== false) {
 				if(box.type === 'text-box') {
-					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"'] .text-box-input").css('color', '#' + colorHex);
-					box.changeFontColor('#' + colorHex);
+					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"'] .text-box-input").css('color', colorRGBA);
+					box.changeFontColor(colorRGBA);
 				}else {
 					var oldLegend = [box.legend];
 
-					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"']").css('background-color', '#' + colorHex);
-					box.changeColor('#' + colorHex);
+					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"']").css('background-color', colorRGBA);
+					box.changeColor(colorRGBA);
 					this.afterColorChange(oldLegend);
 				}
 			}
@@ -1172,12 +1172,12 @@
 
 				if(box !== false) {
 					if(box.type === 'text-box') {
-						$('.build-area').find("[data-id='" + this.activeBoxArray[i] +"'] .text-box-input").css('color', '#' + colorHex);
-						box.changeFontColor('#' + colorHex);
+						$('.build-area').find("[data-id='" + this.activeBoxArray[i] +"'] .text-box-input").css('color', colorRGBA);
+						box.changeFontColor(colorRGBA);
 					}else {
 						oldLegends.push(box.legend);
-						box.changeColor('#' + colorHex);
-						$('.build-area').find("[data-id='" + this.activeBoxArray[i] + "']").css('background-color', '#' + colorHex);
+						box.changeColor(colorRGBA);
+						$('.build-area').find("[data-id='" + this.activeBoxArray[i] + "']").css('background-color', colorRGBA);
 					}
 				}
 			}
@@ -2694,17 +2694,22 @@
     });
 
     //color picket for main dialog
-    $('#picker').colpick({
-		flat: true,
-		layout: 'hex',
-		color: '0072CE',
-		onSubmit: function(hsb,hex,rgb,el,bySetColor) {
-			reg.changeBoxColor(hex);
+	
+	var seatColorPicker = new Picker({
+		parent: document.querySelector('#picker'),
+		popup: false,
+		alpha: true,
+		editor: true,
+		editorFormat: 'rgb',
+		defaultColor: '#0072CE',
+		onDone: function (color) {
+			console.log(color.rgbaString);
+			reg.changeBoxColor(color.rgbaString);
 			$('#color-dialog').modal('toggle');
 			alertify.success(translator.translate('colorApplied'));	
-		}
+		},
 	});
-
+	
     //color picker for legends
 	$('#picker2').colpick({
 		flat:true,

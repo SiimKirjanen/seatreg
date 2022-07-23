@@ -30,6 +30,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_style('alertify-core', plugins_url('css/alertify.core.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('colpick_style', plugins_url('css/colpick.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
+		wp_enqueue_style('vanilla_picker_style', plugins_url('js/vanilla-picker/dist/vanilla-picker.csp.css', dirname(__FILE__) ), array(), '2.12.1', 'all');
 		wp_enqueue_style('seatreg_builder_style', plugins_url('css/seatreg_builder.min.css', dirname(__FILE__) ), array(), '1.0.4', 'all');
 		wp_enqueue_style('seatreg_admin_styles', plugins_url('css/seatreg_admin.min.css', dirname(__FILE__) ), array(), '1.6.0', 'all');
 		wp_enqueue_style('Google_open_sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,600', array(), '1.0.0', 'all');
@@ -50,6 +51,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('alertify', plugins_url('js/alertify.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('easytabs', plugins_url('js/jquery.easytabs.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('colpick', plugins_url('js/colpick.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
+		wp_enqueue_script('vanilla_picker', plugins_url('js/vanilla-picker/dist/vanilla-picker.js', dirname(__FILE__) ), array('jquery'), '2.12.1', true);
 		wp_enqueue_script('powertip', plugins_url('js/jquery.powertip.js', dirname(__FILE__) ), array('jquery'), '1.2.0', true);
 
 		wp_enqueue_script('date-format', plugins_url('js/date.format.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);

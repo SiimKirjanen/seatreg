@@ -101,7 +101,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="color-dialog-info"></div>
-				<div id="picker"></div>
+				<div id="picker" style="display:flex;justify-content:center;"></div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>			
