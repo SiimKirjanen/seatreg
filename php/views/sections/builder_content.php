@@ -351,7 +351,7 @@
 					</div>
 				</div>
 
-				<div class="legend-change-color change-wrap-section">
+				<div class="legend-change-color change-wrap-section" style="text-align:center">
 					<div id="legend-change-color-pic" class="legend-change-color-pic"></div>
 					<input type="hidden" id="change-chosen-color">
 					<div id="new-legend-color-info"></div>
