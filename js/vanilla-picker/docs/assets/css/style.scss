@@ -1,0 +1,100 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+
+h2 {
+    clear: both;
+}
+
+
+.page-header {
+    position: relative;
+    background-color: orange;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.9)),
+        url('../img/steve-johnson-754951-unsplash_mod.jpg');
+    background-size: cover;
+    background-clip: content-box, border-box;
+
+    &::after {
+        content: 'Photo by Steve Johnson on Unsplash';
+        display: inline-block;
+        position: absolute;
+        right: 0; top: 100%;
+
+        padding: .2em .5em;
+        color: gray;
+        font-size: .85em;
+        font-style: italic;
+    }
+}
+
+
+.abo-linkbtn {
+    @extend .btn;
+
+    display: inline-block;
+    width: auto;
+    margin: 0;
+
+    background-image: linear-gradient(gold, orangered); //linear-gradient(mediumturquoise, lightseagreen);
+    background-clip: padding-box;
+    color: white;
+    border-color: white;
+
+    &:hover {
+        background-image: linear-gradient(gold, orange);
+        color: white;
+        border-color: white;
+    }
+}
+
+
+#example-container {
+    margin-left: 1em;
+    float: right;
+    @media (max-width: 740px) {
+        float: none;
+    }
+
+    #example-picker {
+        display: inline-flex;
+        position: relative;
+
+        &::before, &::after {
+            content: '';
+            display: inline-block;
+            border-radius: 100%;
+        }
+        &::before {
+            position: absolute;
+            top: 30px; right: 20px;
+            width:  10px;
+            height: 10px;
+            color: #888;
+            background: currentColor;
+            box-shadow: 0 0 20px 20px currentColor;
+        }
+        &::after {
+            position: relative;
+            width:  60px;
+            height: 60px;
+            margin-left: 10px;
+            background: currentColor;
+        }
+    }
+}
+
+
+#installing + ul {
+
+    p {
+        margin: 0;
+    }
+
+    ul {
+        margin-bottom: 1em;
+    }
+}
