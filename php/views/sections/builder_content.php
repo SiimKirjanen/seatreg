@@ -352,7 +352,7 @@
 				</div>
 
 				<div class="legend-change-color change-wrap-section">
-					<div id="legend-change-color-pic"></div>
+					<div id="legend-change-color-pic" class="legend-change-color-pic"></div>
 					<input type="hidden" id="change-chosen-color">
 					<div id="new-legend-color-info"></div>
 					<span class="change-btn btn-left" data-slide="3" data-slide-open="2"><span class="glyphicon glyphicon-arrow-left"></span> <?php esc_html_e('Back', 'seatreg');?></span>

@@ -3,10 +3,21 @@
         .legends-color-picker {
             display: flex;
             justify-content: center;
-            
+
             .picker_done {
                 display: none;
             }
+        }
+    }
+    .legend-change-color-pic {
+        display: flex;
+        justify-content: center;
+        
+        .picker_sample {
+            display: none;
+        }
+        .picker_done {
+            display: none;
         }
     }
 }

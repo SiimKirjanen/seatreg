@@ -2999,9 +2999,11 @@
 		})
 	}
 
+	var changeLegendsColorPicker = null;
 	$('#legend-change-wrap-inner .change-btn').on('click', function() {
 		var currentSlide = $(this).attr('data-slide');
 		var targetSlide = $(this).attr('data-slide-open');
+		
 
 		if(targetSlide == 1) {
 			$('#new-legend-name-info').empty();
@@ -3012,19 +3014,22 @@
 			},1000,"easeOutCubic");
 		}else if(targetSlide == 3) {
 			$('#new-legend-color-info').empty();
-			var currentColor = colorToHex($('#legend-change-wrap-inner .legend-box-2').css('background-color'));
+			var currentColor = $('#legend-change-wrap-inner .legend-box-2').css('background-color');
 
-			if ( $('#legend-change-color-pic > *').length > 0 ) {				    
-				$('#legend-change-color-pic').colpickSetColor(currentColor.replace('#',''),true);
+			if ( changeLegendsColorPicker ) {
+				changeLegendsColorPicker.setColor(currentColor);		    
+				//$('#legend-change-color-pic').colpickSetColor(currentColor.replace('#',''),true);
 			}else {
-				$('#legend-change-color-pic').colpick({
-					flat:true,
-					layout:'hex',
-					submit:false,
-					color:currentColor,
-					onChange: function(hsb,hex,rgb,el,bySetColor) {
-						$('#change-chosen-color').val(hex);	
-					}
+				changeLegendsColorPicker = new Picker({
+					parent: document.querySelector('#legend-change-color-pic'),
+					popup: false,
+					alpha: true,
+					editor: false,
+					editorFormat: 'rgb',
+					color: currentColor,
+					onChange: function (color) {
+						$('#change-chosen-color').val(color.rgbaString);	
+					},
 				});
 			}
 			$('#legend-change-wrap-inner').animate({
@@ -3068,7 +3073,7 @@
 	});
 
 	$('#apply-new-legend-color').on('click', function() {
-		var chosenColor = '#' + $('#change-chosen-color').val();
+		var chosenColor = $('#change-chosen-color').val();
 		var legendName = $('#legend-change-wrap-inner .dialog-legend-text-2').text();
 
 		if(!reg.legendColorExists(chosenColor)) {
