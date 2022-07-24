@@ -1147,19 +1147,19 @@
 	};
 
 	//Change background color of a box. In case of text-box change font color
-	Registration.prototype.changeBoxColor = function(colorHex) {
+	Registration.prototype.changeBoxColor = function(colorRGBA) {
 		if(this.action == 1) {
 			var box = this.rooms[this.currentRoom].findAndReturnBox(this.activeBoxArray[0]);
 
 			if(box !== false) {
 				if(box.type === 'text-box') {
-					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"'] .text-box-input").css('color', '#' + colorHex);
-					box.changeFontColor('#' + colorHex);
+					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"'] .text-box-input").css('color', colorRGBA);
+					box.changeFontColor(colorRGBA);
 				}else {
 					var oldLegend = [box.legend];
 
-					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"']").css('background-color', '#' + colorHex);
-					box.changeColor('#' + colorHex);
+					$('.build-area').find("[data-id='" + this.activeBoxArray[0] +"']").css('background-color', colorRGBA);
+					box.changeColor(colorRGBA);
 					this.afterColorChange(oldLegend);
 				}
 			}
@@ -1172,12 +1172,12 @@
 
 				if(box !== false) {
 					if(box.type === 'text-box') {
-						$('.build-area').find("[data-id='" + this.activeBoxArray[i] +"'] .text-box-input").css('color', '#' + colorHex);
-						box.changeFontColor('#' + colorHex);
+						$('.build-area').find("[data-id='" + this.activeBoxArray[i] +"'] .text-box-input").css('color', colorRGBA);
+						box.changeFontColor(colorRGBA);
 					}else {
 						oldLegends.push(box.legend);
-						box.changeColor('#' + colorHex);
-						$('.build-area').find("[data-id='" + this.activeBoxArray[i] + "']").css('background-color', '#' + colorHex);
+						box.changeColor(colorRGBA);
+						$('.build-area').find("[data-id='" + this.activeBoxArray[i] + "']").css('background-color', colorRGBA);
 					}
 				}
 			}
@@ -2694,28 +2694,35 @@
     });
 
     //color picket for main dialog
-    $('#picker').colpick({
-		flat: true,
-		layout: 'hex',
-		color: '0072CE',
-		onSubmit: function(hsb,hex,rgb,el,bySetColor) {
-			reg.changeBoxColor(hex);
+	
+	var seatColorPicker = new Picker({
+		parent: document.querySelector('#picker'),
+		popup: false,
+		alpha: true,
+		editor: true,
+		editorFormat: 'rgb',
+		color: '#0072CE',
+		onDone: function (color) {
+			reg.changeBoxColor(color.rgbaString);
 			$('#color-dialog').modal('toggle');
 			alertify.success(translator.translate('colorApplied'));	
-		}
+		},
+	});
+	
+    //color picker for legends
+	var legendColorPicker = new Picker({
+		parent: document.querySelector('#picker2'),
+		popup: false,
+		alpha: true,
+		editor: true,
+		editorFormat: 'rgb',
+		color: '#61B329',
+		onChange: function (color) {
+			$('#dummy-legend .legend-box').css("background-color", color.rgbaString);
+			$('#hiddenColor').val(color.rgbaString);
+		},
 	});
 
-    //color picker for legends
-	$('#picker2').colpick({
-		flat:true,
-		layout:'hex',
-		color:'61B329',
-		submit:false,
-		onChange: function(hsb,hex,rgb,el,bySetColor) {
-			$('#dummy-legend .legend-box').css("background-color",'#' + hex);
-			$('#hiddenColor').val('#' + hex);
-		}
-	});
 	/*
 		*--------button click listeners--------
 	*/
@@ -2992,9 +2999,11 @@
 		})
 	}
 
+	var changeLegendsColorPicker = null;
 	$('#legend-change-wrap-inner .change-btn').on('click', function() {
 		var currentSlide = $(this).attr('data-slide');
 		var targetSlide = $(this).attr('data-slide-open');
+		
 
 		if(targetSlide == 1) {
 			$('#new-legend-name-info').empty();
@@ -3005,19 +3014,22 @@
 			},1000,"easeOutCubic");
 		}else if(targetSlide == 3) {
 			$('#new-legend-color-info').empty();
-			var currentColor = colorToHex($('#legend-change-wrap-inner .legend-box-2').css('background-color'));
+			var currentColor = $('#legend-change-wrap-inner .legend-box-2').css('background-color');
 
-			if ( $('#legend-change-color-pic > *').length > 0 ) {				    
-				$('#legend-change-color-pic').colpickSetColor(currentColor.replace('#',''),true);
+			if ( changeLegendsColorPicker ) {
+				changeLegendsColorPicker.setColor(currentColor);		    
+				//$('#legend-change-color-pic').colpickSetColor(currentColor.replace('#',''),true);
 			}else {
-				$('#legend-change-color-pic').colpick({
-					flat:true,
-					layout:'hex',
-					submit:false,
-					color:currentColor,
-					onChange: function(hsb,hex,rgb,el,bySetColor) {
-						$('#change-chosen-color').val(hex);	
-					}
+				changeLegendsColorPicker = new Picker({
+					parent: document.querySelector('#legend-change-color-pic'),
+					popup: false,
+					alpha: true,
+					editor: false,
+					editorFormat: 'rgb',
+					color: currentColor,
+					onChange: function (color) {
+						$('#change-chosen-color').val(color.rgbaString);	
+					},
 				});
 			}
 			$('#legend-change-wrap-inner').animate({
@@ -3061,7 +3073,7 @@
 	});
 
 	$('#apply-new-legend-color').on('click', function() {
-		var chosenColor = '#' + $('#change-chosen-color').val();
+		var chosenColor = $('#change-chosen-color').val();
 		var legendName = $('#legend-change-wrap-inner .dialog-legend-text-2').text();
 
 		if(!reg.legendColorExists(chosenColor)) {

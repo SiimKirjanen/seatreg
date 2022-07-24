@@ -101,7 +101,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="color-dialog-info"></div>
-				<div id="picker"></div>
+				<div id="picker" class="color-picker-wrap"></div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>			
@@ -299,7 +299,7 @@
 					</label>
 				</div>
 
-				<div id="picker2"></div>
+				<div id="picker2" class="legends-color-picker"></div>
 				<div class="prev-step step-btn" data-slide="2" data-slide-open="1"><?php esc_html_e('Step 1.', 'seatreg');?> <span class="glyphicon glyphicon-arrow-left"></span></div>
 				<div class="next-step step-btn" data-slide="2" data-slide-open="3"><?php esc_html_e('Step 3.', 'seatreg');?> <span class="glyphicon glyphicon-arrow-right"></span></div>
 			</div>
@@ -351,8 +351,8 @@
 					</div>
 				</div>
 
-				<div class="legend-change-color change-wrap-section">
-					<div id="legend-change-color-pic"></div>
+				<div class="legend-change-color change-wrap-section" style="text-align:center">
+					<div id="legend-change-color-pic" class="legend-change-color-pic"></div>
 					<input type="hidden" id="change-chosen-color">
 					<div id="new-legend-color-info"></div>
 					<span class="change-btn btn-left" data-slide="3" data-slide-open="2"><span class="glyphicon glyphicon-arrow-left"></span> <?php esc_html_e('Back', 'seatreg');?></span>

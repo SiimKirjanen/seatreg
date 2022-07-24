@@ -1,0 +1,13 @@
+{
+    "opts": {
+        "destination": "./docs/gen",
+        "sort": false
+    },
+    "plugins": ["plugins/markdown"],
+    "templates": {
+        "includeDate": false,
+        "default": {
+            "includeDate": false
+        }
+    }
+}

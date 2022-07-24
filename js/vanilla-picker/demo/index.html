@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>vanilla-picker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--
+    <script src="../dist/vanilla-picker.csp.js"></script>
+    <link rel="stylesheet" href="../dist/vanilla-picker.csp.css">
+    -->
+    <script src="../dist/vanilla-picker.js"></script>
+
+    <script src="./main.js"></script>
+    <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+    <h1><a href="https://vanilla-picker.js.org">vanilla-picker</a> demo</h1>
+
+    <div id="main-color"></div>
+
+    <h2>Shared picker</h2>
+    <ul id="shared">
+        <li id="shared-1"></li>
+        <li id="shared-2"></li>
+        <li id="shared-3"></li>
+        <li id="shared-4"></li>
+    </ul>
+
+    <a href="#" id="basic" class="popup-parent">
+        Click me!
+    </a>
+
+    <button id="custom-toggler">
+        Open "Custom" popup
+    </button>
+    <a href="#" id="custom" class="popup-parent">
+        Custom
+        <select id="custom-placement" _onclick="event.stopPropagation();">
+            <option selected>top</option>
+            <option>bottom</option>
+            <option>left</option>
+            <option>right</option>
+        </select>
+    </a>
+    
+    <h2>Shadow DOM</h2>
+    <div id="shadow"></div>
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Documentation Index</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Documentation</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="Picker.html">Picker</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+
+
+
+
+
+    <section class="readme-section">
+        <article><h1>vanilla-picker</h1>
+<p><a href="https://github.com/Sphinxxxx/vanilla-picker/blob/master/LICENSE.md"><img src="https://img.shields.io/npm/l/vanilla-picker.svg" alt="License"></a>
+<a href="https://npmjs.com/vanilla-picker"><img src="https://img.shields.io/npm/v/vanilla-picker.svg" alt="Version"></a>
+<a href="https://unpkg.com/vanilla-picker"><img src="https://badgen.net/badgesize/gzip/sphinxxxx/vanilla-picker/master/dist/vanilla-picker.min.js?label=min%2Bgzip" alt="Size"></a>
+<a href="https://npmjs.com/vanilla-picker"><img src="https://img.shields.io/npm/dm/vanilla-picker.svg" alt="Downloads"></a></p>
+<p>A simple, easy to use vanilla JS (no dependencies) color picker with alpha selection.</p>
+<h4>Demo</h4>
+<p>https://codepen.io/Sphinxxxx/pen/zRmKBX</p>
+<h2>Getting Started</h2>
+<h4>Installing</h4>
+<ul>
+<li>
+<p>For the pros:</p>
+<ul>
+<li><code>npm install vanilla-picker --save</code></li>
+<li><code>import Picker from 'vanilla-picker';</code></li>
+</ul>
+</li>
+<li>
+<p>For the rest of us:</p>
+</li>
+</ul>
+<pre class="prettyprint source"><code>&lt;script src=&quot;https://unpkg.com/vanilla-picker@2&quot;>&lt;/script>
+</code></pre>
+<blockquote>
+<p><strong><em>Note:</em></strong></p>
+<p>The script adds a <code>&lt;style&gt;</code> element to the page, with all the needed CSS. If your site's <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content Security Policy</a> doesn't allow that, use the CSP build with a separate CSS file instead:</p>
+<pre class="prettyprint source"><code>import Picker from 'vanilla-picker/csp';
+import 'vanilla-picker/dist/vanilla-picker.csp.css';
+</code></pre>
+<p>..or</p>
+<pre class="prettyprint source"><code>&lt;script src=&quot;vanilla-picker.csp.min.js&quot;>&lt;/script>
+&lt;link  href=&quot;vanilla-picker.csp.css&quot; rel=&quot;stylesheet&quot;>
+</code></pre>
+</blockquote>
+<h4>Usage</h4>
+<pre class="prettyprint source lang-html"><code>&lt;div id=&quot;parent&quot;>Click me&lt;/div>
+
+&lt;script>
+
+    /*
+        Create a new Picker instance and set the parent element.
+        By default, the color picker is a popup which appears when you click the parent.
+    */
+    var parent = document.querySelector('#parent');
+    var picker = new Picker(parent);
+
+    /*
+        You can do what you want with the chosen color using two callbacks: onChange and onDone.
+    */
+    picker.onChange = function(color) {
+        parent.style.background = color.rgbaString;
+    };
+
+    /* onDone is similar to onChange, but only called when you click 'Ok' */
+
+&lt;/script>
+</code></pre>
+<h2>API and advanced options</h2>
+<p>https://vanilla-picker.js.org/gen/Picker.html</p>
+<h2>Accessibility</h2>
+<p>The color picker is built to support basic keyboard navigation and use with screen readers.
+I would be very interested in feedback on improvements that could be done here!</p>
+<h2>Credits</h2>
+<ul>
+<li>Based on https://github.com/dissimulate/Picker by <strong>Adam Brooks</strong></li>
+<li>Built with https://github.com/Joudee/color-conversion by <strong>Joudee</strong></li>
+<li>Built with https://gist.github.com/mjackson/5311256 by <strong>Michael Jackson</strong></li>
+</ul>
+<h2>License</h2>
+<p>The ISC license - see the <a href="LICENSE.md">LICENSE.md</a> file for details.</p></article>
+    </section>
+
+
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
