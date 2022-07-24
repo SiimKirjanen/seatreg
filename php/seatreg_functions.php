@@ -1640,6 +1640,7 @@ function seatreg_set_up_db() {
 			stripe_api_key varchar(255) DEFAULT NULL,
 			payment_completed_set_booking_confirmed_stripe tinyint(1) NOT NULL DEFAULT 0,
 			stripe_currency_code varchar(3) DEFAULT NULL,
+			stripe_webhook_secret varchar(255) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2374,11 +2375,35 @@ function seatreg_update() {
 	if( $oldOptions->stripe_payments === '0' && $_POST['stripe-payments'] === 1) {
 		if( !StripeWebhooksService::isStripeWebhookCreated($_POST['stripe-api-key']) ) {
 			//Create a Stripe webhook when turning on Stripe payments
-			StripeWebhooksService::createStripeWebhook($_POST['stripe-api-key']);
+			$webhook = StripeWebhooksService::createStripeWebhook($_POST['stripe-api-key']);
+
+			$wpdb->update(
+				"$seatreg_db_table_names->table_seatreg_options",
+				array(
+					'stripe_webhook_secret' => $webhook->secret,
+				),
+				array(
+					'registration_code' => sanitize_text_field($_POST['registration_code'])
+				),
+				'%s',
+				'%s'
+			);
+		
 		}
 	}else if( $oldOptions->stripe_payments === '1' &&  $_POST['stripe-payments'] === 0) {
 		//Remove Stripe webhook when Stripe payments are turned off
 		StripeWebhooksService::removeStripeWebhook($_POST['stripe-api-key']);
+
+		$wpdb->update(
+			"$seatreg_db_table_names->table_seatreg_options",
+			array(
+				'stripe_webhook_secret' => null,
+			),
+			array(
+				'registration_code' => sanitize_text_field($_POST['registration_code'])
+			),
+			'%s'
+		);
 	}
 
 	return ($status1 !== false && $status2 !== false);

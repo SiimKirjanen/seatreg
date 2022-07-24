@@ -16,16 +16,16 @@ class StripeWebhooksService {
         require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/stripe-php/init.php' );
 
         \Stripe\Stripe::setApiKey($stripeAPIKey);
-        $endpoint = \Stripe\WebhookEndpoint::create([
-            'url' => get_site_url() . '?seatreg=stripe-webhook-callback',
-            'description' => 'WordPress SeatReg plugin webhook',
+        $webhook = \Stripe\WebhookEndpoint::create([
+            'url' => SEATREG_STRIPE_WEBHOOK_CALLBACK_URL,
+            'description' => SEATREG_STRIPE_WEBHOOK_DESCRIPTION,
             'enabled_events' => [
               'charge.failed',
               'charge.succeeded',
             ],
         ]);
 
-        return $endpoint;
+        return $webhook;
     }
 
     public static function getStripeWebhooks($stripeAPIKey) {

@@ -29,6 +29,7 @@ define('SEATREG_PAYMENT_LOG_INFO', 'info');
 
 // Stripe
 define('SEATREG_STRIPE_WEBHOOK_DESCRIPTION', 'WordPress SeatReg plugin webhook');
+define('SEATREG_STRIPE_WEBHOOK_CALLBACK_URL', get_site_url() . '?seatreg=stripe-webhook-callback'); //for local use: ngrok . '?seatreg=stripe-webhook-callback', live use: get_site_url() . '?seatreg=stripe-webhook-callback'
 
 // Status
 define('SEATREG_BOOKING_PENDING', 1);

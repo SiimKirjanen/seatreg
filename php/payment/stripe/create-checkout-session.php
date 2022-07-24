@@ -41,6 +41,11 @@ $checkout_session = \Stripe\Checkout\Session::create([
   'mode' => 'payment',
   'success_url' => $YOUR_DOMAIN . '?seatreg=payment-return&id=' . $bookingId,
   'cancel_url' => $YOUR_DOMAIN . '?seatreg=booking-status&registration=' . $bookingData->registration_code . '&id=' . $bookingId,
+  'payment_intent_data' => [
+    'metadata' => [
+      'booking_id' => $bookingId
+    ]
+  ]
 ]);
 
 header("HTTP/1.1 303 See Other");
