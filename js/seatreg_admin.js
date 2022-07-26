@@ -1035,6 +1035,21 @@ function SeatregCustomField(label, type, options) {
 $('#seatreg-settings-submit').on('click', function(e) {
 	var customFieldArray = [];  //array to store custom inputs
 
+	if($('#stripe').is(":checked")) {
+		if($('#stripe-api-key').val() === "") {
+			e.preventDefault();
+			alertify.error(translator.translate('pleaseEnterStripeApiKey'));
+
+			return true;
+		}
+		if($('#paypal-currency-code').val() === "") {
+			e.preventDefault();
+			alertify.error(translator.translate('pleaseEnterPayPalCurrencyCode'));
+
+			return true;
+		}
+	}
+
 	if($('#paypal').is(":checked")) {
 		if($('#paypal-business-email').val() === "") {
 			e.preventDefault();

@@ -664,6 +664,14 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="paypal-currency-code"><?php esc_html_e('Currency', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Pease enter payment currency code (ISO 4217)', 'seatreg'); ?>.
+				</p>
+				<input type="text" class="form-control" id="paypal-currency-code" name="paypal-currency-code" autocomplete="off" maxlength="3" oninput="this.value = this.value.toUpperCase()" placeholder="<?php echo esc_html('Currency code', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_currency_code); ?>"> 
+			</div>
+
+			<div class="form-group">
 				<label for="paypal"><?php esc_html_e('PayPal payments', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create a Buy Now button in Paypal. When creating a button only fill item name. Don\'t add price, shipping etc.', 'seatreg'); ?>
@@ -688,13 +696,6 @@ function seatreg_generate_settings_form() {
 							<?php esc_html_e('Pease enter PayPal button id', 'seatreg'); ?>.
 						</p>
 						<input type="text" class="form-control" id="paypal-button-id" name="paypal-button-id" autocomplete="off" placeholder="<?php echo esc_html('PayPal button id', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_button_id); ?>"> 
-						<br>
-
-						<label for="paypal-currency-code"><?php esc_html_e('PayPal currency', 'seatreg'); ?></label>
-						<p class="help-block">
-							<?php esc_html_e('Pease enter PayPal currency code (ISO 4217)', 'seatreg'); ?>.
-						</p>
-						<input type="text" class="form-control" id="paypal-currency-code" name="paypal-currency-code" autocomplete="off" maxlength="3" oninput="this.value = this.value.toUpperCase()" placeholder="<?php echo esc_html('PayPal currency code', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_currency_code); ?>"> 
 						<br>
 
 						<label for="payment-mark-confirmed"><?php esc_html_e('Set paid booking approved', 'seatreg'); ?></label>
@@ -746,14 +747,6 @@ function seatreg_generate_settings_form() {
 						</p>
 						<input type="text" class="form-control" id="stripe-api-key" name="stripe-api-key" autocomplete="off" placeholder="<?php echo esc_html('Stripe API key', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->stripe_api_key); ?>"> 
 						<br>
-
-						<label for="stripe-currency-code"><?php esc_html_e('Stripe currency', 'seatreg'); ?></label>
-						<p class="help-block">
-							<?php esc_html_e('Pease enter Stripe currency code (ISO 4217)', 'seatreg'); ?>.
-						</p>
-						<input type="text" class="form-control" id="stripe-currency-code" name="stripe-currency-code" autocomplete="off" maxlength="3" oninput="this.value = this.value.toUpperCase()" placeholder="<?php echo esc_html('Stripe currency code', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->stripe_currency_code); ?>"> 
-						<br>
-
 						<label for="payment-mark-confirmed-stripe"><?php esc_html_e('Set paid booking approved', 'seatreg'); ?></label>
 						<p class="help-block">
 							<?php esc_html_e('Set booking approved automatically when payment has been completed', 'seatreg'); ?>.
@@ -1639,7 +1632,6 @@ function seatreg_set_up_db() {
 			stripe_payments tinyint(1) NOT NULL DEFAULT 0,
 			stripe_api_key varchar(255) DEFAULT NULL,
 			payment_completed_set_booking_confirmed_stripe tinyint(1) NOT NULL DEFAULT 0,
-			stripe_currency_code varchar(3) DEFAULT NULL,
 			stripe_webhook_secret varchar(255) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
@@ -2220,7 +2212,7 @@ function seatreg_update() {
 	if( isset($_POST['paypal-payments']) && ($_POST['paypal-business-email'] === "" || $_POST['paypal-button-id'] === "" || $_POST['paypal-currency-code'] === "" ) ) {
 		wp_die('Missing PayPal configuration');
 	}
-	if( isset($_POST['stripe-payments']) && ($_POST['stripe-api-key'] === "" ) ) {
+	if( isset($_POST['stripe-payments']) && ($_POST['stripe-api-key'] === "" || $_POST['paypal-currency-code'] === "") ) {
 		wp_die('Missing Stripe configuration');
 	}
 
@@ -2351,7 +2343,6 @@ function seatreg_update() {
 			'stripe_payments' => $_POST['stripe-payments'],
 			'stripe_api_key' => $_POST['stripe-api-key'],
 			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
-			'stripe_currency_code' => sanitize_text_field(strtoupper($_POST['stripe-currency-code'])),
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
