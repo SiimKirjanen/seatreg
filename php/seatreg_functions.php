@@ -1668,7 +1668,7 @@ function seatreg_set_up_db() {
 			payment_status varchar(255) NOT NULL,
 			payment_currency varchar(3) DEFAULT NULL,
 			payment_total_price int(11) DEFAULT NULL,
-			payment_txn_id varchar(20), 
+			payment_txn_id varchar(255), 
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
