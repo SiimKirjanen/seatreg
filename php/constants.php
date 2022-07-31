@@ -13,19 +13,21 @@ define('SEATREG_CUSTOM_FIELD_TYPES', array('text', 'check', 'sel'));
 define('SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH', 50);
 define('SEATREG_DEFAULT_INPUT_MAX_LENGHT', 100);
 
+// Payments
+define('SEATREG_PAYMENT_PROCESSING', 'processing');
+define('SEATREG_PAYMENT_COMPLETED', 'completed');
+define('SEATREG_PAYMENT_REVERSED', 'reversed');
+define('SEATREG_PAYMENT_REFUNDED', 'refunded');
+define('SEATREG_PAYMENT_LOG_ERROR', 'error');
+define('SEATREG_PAYMENT_LOG_OK', 'ok');
+define('SEATREG_PAYMENT_LOG_INFO', 'info');
+define('SEATREG_PAYMENT_VALIDATION_FAILED', 'validation_failure');
+
 // PayPal
 define('SEATREG_PAYPAL_FORM_ACTION', "https://www.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_FORM_ACTION_SANDBOX', "https://www.sandbox.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_IPN', "https://ipnpb.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_IPN_SANDBOX', "https://ipnpb.sandbox.paypal.com/cgi-bin/webscr"); //https://ipnpb.sandbox.paypal.com/cgi-bin/webscr
-define('SEATREG_PAYMENT_PROCESSING', 'processing');
-define('SEATREG_PAYMENT_COMPLETED', 'completed');
-define('SEATREG_PAYMENT_REVERSED', 'reversed');
-define('SEATREG_PAYMENT_REFUNDED', 'refunded');
-define('SEATREG_PAYMENT_VALIDATION_FAILED', 'validation_failure');
-define('SEATREG_PAYMENT_LOG_ERROR', 'error');
-define('SEATREG_PAYMENT_LOG_OK', 'ok');
-define('SEATREG_PAYMENT_LOG_INFO', 'info');
 
 // Stripe
 define('SEATREG_STRIPE_WEBHOOK_DESCRIPTION', 'WordPress SeatReg plugin webhook');
