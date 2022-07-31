@@ -45,7 +45,6 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 				}
 			}	
 		}
-
 	}
 
 	private function ipnVerification() {
@@ -79,7 +78,7 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 				CURLOPT_CONNECTTIMEOUT => 100,
 	
 			));
-			$result = curl_exec($ch);
+			$result = trim(curl_exec($ch));
 			curl_close($ch);
 
 			if (strcmp ($result , "VERIFIED") == 0) {

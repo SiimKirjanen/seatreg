@@ -74,13 +74,13 @@ function seatreg_custom_pages() {
 	}
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'payment-return' ) {
-		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/paypal_return_to_merchant.php';
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/return_to_merchant.php';
 
 		die();
 	}
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'paypal-ipn' ) {
-		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/paypal_ipn_receiver.php';
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/paypal/paypal_ipn_receiver.php';
 
 		die();
 	}

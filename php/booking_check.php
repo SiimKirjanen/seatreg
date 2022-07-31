@@ -60,10 +60,8 @@
 
 				if( $bookingData->paypal_payments === '1' ) {
 					$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
-					$siteUrl = get_site_url(); // use ngrok here for local testing. For live use get_site_url()
-					$returnUrl = $siteUrl . '?seatreg=payment-return&id=' . $bookingId;
-					$cancelUrl = $siteUrl . '?seatreg=booking-status&registration=' . $registrationId . '&id=' . $bookingId;
-					$notifyUrl = $siteUrl . '?seatreg=paypal-ipn';
+					$returnUrl = SEATREG_PAYPAL_RETURN_URL . '&id=' . $bookingId;
+					$cancelUrl = SEATREG_PAYPAL_CANCEL_URL . '&registration=' . $registrationId . '&id=' . $bookingId;
 					
 					if($bookingTotalCost > 0) {
 						echo SeatregPaymentService::generatePayPalPayNowForm(
@@ -72,7 +70,7 @@
 							$bookingTotalCost,
 							$returnUrl,
 							$cancelUrl,
-							$notifyUrl,
+							SEATREG_PAYPAL_NOTIFY_URL,
 							$bookingId
 						);
 					}

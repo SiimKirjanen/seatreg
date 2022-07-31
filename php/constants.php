@@ -3,7 +3,7 @@ define('SEATREG_PLUGIN_FOLDER_DIR', plugin_dir_path( dirname( __FILE__ ) ));
 define('SEATREG_PLUGIN_FOLDER_URL', plugin_dir_url( dirname( __FILE__ ) ));
 
 // DB
-define('SEATREG_DB_VERSION', '1.11');
+define('SEATREG_DB_VERSION', '1.12');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr'));
@@ -22,16 +22,20 @@ define('SEATREG_PAYMENT_LOG_ERROR', 'error');
 define('SEATREG_PAYMENT_LOG_OK', 'ok');
 define('SEATREG_PAYMENT_LOG_INFO', 'info');
 define('SEATREG_PAYMENT_VALIDATION_FAILED', 'validation_failure');
+define('SEATREG_PAYMENT_CALLBACK_URL', get_site_url()); //For live use get_site_url(). For local testing use ngrok URL
 
 // PayPal
 define('SEATREG_PAYPAL_FORM_ACTION', "https://www.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_FORM_ACTION_SANDBOX', "https://www.sandbox.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_IPN', "https://ipnpb.paypal.com/cgi-bin/webscr");
 define('SEATREG_PAYPAL_IPN_SANDBOX', "https://ipnpb.sandbox.paypal.com/cgi-bin/webscr"); //https://ipnpb.sandbox.paypal.com/cgi-bin/webscr
+define('SEATREG_PAYPAL_NOTIFY_URL', SEATREG_PAYMENT_CALLBACK_URL  . '?seatreg=paypal-ipn');
+define('SEATREG_PAYPAL_RETURN_URL', SEATREG_PAYMENT_CALLBACK_URL  . '?seatreg=payment-return');
+define('SEATREG_PAYPAL_CANCEL_URL', SEATREG_PAYMENT_CALLBACK_URL  . '?seatreg=booking-status');
 
 // Stripe
 define('SEATREG_STRIPE_WEBHOOK_DESCRIPTION', 'WordPress SeatReg plugin webhook');
-define('SEATREG_STRIPE_WEBHOOK_CALLBACK_URL', get_site_url() . '?seatreg=stripe-webhook-callback'); //for local use: ngrok . '?seatreg=stripe-webhook-callback', live use: get_site_url() . '?seatreg=stripe-webhook-callback'
+define('SEATREG_STRIPE_WEBHOOK_CALLBACK_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=stripe-webhook-callback');
 
 // Status
 define('SEATREG_BOOKING_PENDING', 1);

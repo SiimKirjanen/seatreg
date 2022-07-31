@@ -36,7 +36,7 @@ class SeatregPaymentService {
         $alreadyInserted = SeatregPaymentRepository::getPaymentByBookingId($bookingId);
 
         if( $alreadyInserted ) {
-            $wpdb->update( 
+            return $wpdb->update( 
                 $seatreg_db_table_names->table_seatreg_payments,
                 array( 
                     'payment_status' => $status,
@@ -50,7 +50,7 @@ class SeatregPaymentService {
                 '%s'
             );
         }else {
-            $wpdb->insert(
+            return $wpdb->insert(
                 $seatreg_db_table_names->table_seatreg_payments,
                 array(
                     'booking_id' => $bookingId,
