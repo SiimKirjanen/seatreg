@@ -521,7 +521,7 @@ class SeatregDataValidation {
     public static function validateBookingData($seatId, $seatNr, $roomUUID) {
         $validationStatus = new SeatregValidationStatus();
 
-        if(!preg_match('/^[\p{L}\p{N}]+$/u', $seatId) || !preg_match('/^[\p{L}\p{N}-]+$/u', $seatNr)) {
+        if(!preg_match('/^[\p{L}\p{N}]+$/u', $seatId)) {
             $validationStatus->setInvalid('Illegal characters in booking data');
             return $validationStatus;
         }
