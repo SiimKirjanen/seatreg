@@ -92,7 +92,7 @@ function seatreg_custom_pages() {
 	}
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'stripe-webhook-callback' ) {
-		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/stripe/handle-stripe-webhook.php';
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/stripe/stripe-webhook-receiver.php';
 
 		die();
 	}

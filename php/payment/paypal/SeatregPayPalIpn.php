@@ -14,7 +14,7 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 	private $_ipnVerificationRetry = 5;
 
 	public function __construct($isSandbox, $businessEmail, $currency, $price, $bookingId, $setBookingConfirmed, $registrationCode) {
-		parent::__construct($currency, $price, $bookingId, $setBookingConfirmed, $registrationCode);
+		parent::__construct($currency, $price, $bookingId, $setBookingConfirmed, $registrationCode, 'PayPal');
 
 		if ( !$isSandbox ) {
 			$this->_url = SEATREG_PAYPAL_IPN;
@@ -31,7 +31,7 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 				if($this->statusCheck()) {
 					if($this->currencyAndAmountCheck($_POST['mc_currency'], $_POST['mc_gross'])) {
 						if($this->paymentDoneCheck()) {
-							$this->insertPayment($_POST['txn_id'], 'PayPal IPN');
+							$this->insertPayment($_POST['txn_id']);
 						}
 					}
 				}

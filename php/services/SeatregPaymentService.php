@@ -25,7 +25,7 @@ class SeatregPaymentService {
                 ),
                 '%s'
             );
-            self::insertPaymentLog($bookingId, 'PayPal return to merchant', 'ok');
+            self::insertPaymentLog($bookingId, 'Return to merchant link', 'ok');
         }
     }
 
