@@ -36,6 +36,8 @@ define('SEATREG_PAYPAL_CANCEL_URL', SEATREG_PAYMENT_CALLBACK_URL  . '?seatreg=bo
 // Stripe
 define('SEATREG_STRIPE_WEBHOOK_DESCRIPTION', 'WordPress SeatReg plugin webhook');
 define('SEATREG_STRIPE_WEBHOOK_CALLBACK_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=stripe-webhook-callback');
+define('SEATREG_STRIPE_WEBHOOK_SUCCESS_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=payment-return');
+define('SEATREG_STRIPE_WEBHOOK_CANCEL_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=booking-status');
 
 // Status
 define('SEATREG_BOOKING_PENDING', 1);
