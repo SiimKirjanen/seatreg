@@ -31,6 +31,7 @@ require( 'php/services/SeatregJobService.php' );
 require( 'php/services/SeatregTemplateService.php' );
 require( 'php/services/SeatregLayoutService.php' );
 require( 'php/services/StripeWebhooksService.php' );
+require( 'php/services/SeatregOptionsService.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );
