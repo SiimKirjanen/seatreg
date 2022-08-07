@@ -40,7 +40,7 @@ class StripeWebhooksService {
     public static function isStripeWebhookCreated($stripeAPIKey) {
         $webhooks = self::getStripeWebhooks($stripeAPIKey);    
         $seatregWebhooks = array_filter($webhooks, function($webhook){
-            return $webhook['description'] === SEATREG_STRIPE_WEBHOOK_DESCRIPTION;
+            return $webhook['description'] === SEATREG_STRIPE_WEBHOOK_DESCRIPTION && strpos($webhook['url'], SEATREG_PAYMENT_CALLBACK_URL) !== false;
         });
 
         return !empty($seatregWebhooks);
@@ -51,8 +51,12 @@ class StripeWebhooksService {
 
         $webhooks = self::getStripeWebhooks($stripeAPIKey);    
         $seatregWebhooks = array_filter($webhooks, function($webhook){
-            return $webhook['description'] === SEATREG_STRIPE_WEBHOOK_DESCRIPTION;
+            return $webhook['description'] === SEATREG_STRIPE_WEBHOOK_DESCRIPTION && strpos($webhook['url'], SEATREG_PAYMENT_CALLBACK_URL) !== false;
         });
+
+        if( !$seatregWebhooks ) {
+            return true;
+        }
 
         $webhookIdToDelete = $seatregWebhooks[0]['id'];
 
