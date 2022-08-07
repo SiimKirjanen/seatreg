@@ -1664,7 +1664,7 @@ function seatreg_set_up_db() {
 			id int(11) NOT NULL AUTO_INCREMENT,
 			booking_id varchar(40) NOT NULL,
 			payment_start_date TIMESTAMP DEFAULT NOW(),
-			payment_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			payment_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
 			payment_status varchar(255) NOT NULL,
 			payment_currency varchar(3) DEFAULT NULL,
 			payment_total_price int(11) DEFAULT NULL,
