@@ -121,7 +121,9 @@ class SeatregRegistrationService {
                 'send_approved_booking_email_qr_code' => $registrationData->send_approved_booking_email_qr_code,
                 'email_verification_template' => $registrationData->email_verification_template,
                 'pending_booking_email_template' => $registrationData->pending_booking_email_template,
-                'approved_booking_email_template' => $registrationData->approved_booking_email_template
+                'approved_booking_email_template' => $registrationData->approved_booking_email_template,
+                'payment_completed_set_booking_confirmed_stripe' => $registrationData->payment_completed_set_booking_confirmed_stripe,
+                'stripe_api_key' => $registrationData->stripe_api_key
             ),
     		'%s'
     	);
