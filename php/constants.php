@@ -3,7 +3,7 @@ define('SEATREG_PLUGIN_FOLDER_DIR', plugin_dir_path( dirname( __FILE__ ) ));
 define('SEATREG_PLUGIN_FOLDER_URL', plugin_dir_url( dirname( __FILE__ ) ));
 
 // DB
-define('SEATREG_DB_VERSION', '1.12');
+define('SEATREG_DB_VERSION', '1.13');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr'));
@@ -18,6 +18,7 @@ define('SEATREG_PAYMENT_PROCESSING', 'processing');
 define('SEATREG_PAYMENT_COMPLETED', 'completed');
 define('SEATREG_PAYMENT_REVERSED', 'reversed');
 define('SEATREG_PAYMENT_REFUNDED', 'refunded');
+define('SEATREG_PAYMENT_ERROR', 'error');
 define('SEATREG_PAYMENT_LOG_ERROR', 'error');
 define('SEATREG_PAYMENT_LOG_OK', 'ok');
 define('SEATREG_PAYMENT_LOG_INFO', 'info');
@@ -40,6 +41,7 @@ define('SEATREG_STRIPE_WEBHOOK_SUCCESS_URL', SEATREG_PAYMENT_CALLBACK_URL . '?se
 define('SEATREG_STRIPE_WEBHOOK_CANCEL_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=booking-status');
 
 // Status
+define('SEATREG_BOOKING_DEFAULT', 0);
 define('SEATREG_BOOKING_PENDING', 1);
 define('SEATREG_BOOKING_APPROVED', 2);
 

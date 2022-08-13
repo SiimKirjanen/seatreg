@@ -28,7 +28,7 @@ class SeatregStripePayment extends SeatregPaymentBase {
             if($this->statusCheck()) {
                 if($this->currencyAndAmountCheck($this->_webhookData->currency , $this->_webhookData->amount / 100)) {
                     if($this->paymentDoneCheck()) {
-                        $this->insertPayment($this->_webhookData->id);
+                        $this->insertPayment($this->_webhookData->payment_intent);
                         http_response_code(200);
                     }
                 }
@@ -49,12 +49,12 @@ class SeatregStripePayment extends SeatregPaymentBase {
             );
         } catch(\UnexpectedValueException $e) {
             // Invalid payload
-            SeatregPaymentLogService::log($this->_bookingId, esc_html__('Stripe webhook signature has invalid payload', 'seatreg'));
+            SeatregPaymentLogService::log($this->_bookingId, esc_html__('Stripe webhook signature has invalid payload', 'seatreg'), SEATREG_PAYMENT_VALIDATION_FAILED);
             http_response_code(400);
             exit();
         } catch(\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
-            SeatregPaymentLogService::log($this->_bookingId, esc_html__('Stripe webhook signature is invalid', 'seatreg'));
+            SeatregPaymentLogService::log($this->_bookingId, esc_html__('Stripe webhook signature is invalid', 'seatreg'), SEATREG_PAYMENT_VALIDATION_FAILED);
             http_response_code(400);
             exit();
         }
@@ -66,8 +66,21 @@ class SeatregStripePayment extends SeatregPaymentBase {
        
     private function statusCheck() {
         if( $this->_event->type === 'charge.succeeded') {
+
             return true;
         }else if ( $this->_event->type === 'charge.failed' ) {
+            $this->changePaymentStatus(SEATREG_PAYMENT_ERROR);
+			$this->changeBookingStatus(SEATREG_BOOKING_DEFAULT);
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to 0 state by the system (Stripe payment error)', false);
+			$this->log(esc_html__('Payment failed', 'seatreg'), SEATREG_PAYMENT_LOG_ERROR);
+
+            return false;
+        }else if( $this->_event->type === 'charge.refunded' ) {
+            $this->changePaymentStatus(SEATREG_PAYMENT_REFUNDED);
+			$this->changeBookingStatus(SEATREG_BOOKING_DEFAULT);
+			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to 0 state by the system (Stripe payment refunded)', false);
+			$this->log(esc_html__('Payment was refunded', 'seatreg'), SEATREG_PAYMENT_LOG_INFO);
+
             return false;
         }
 

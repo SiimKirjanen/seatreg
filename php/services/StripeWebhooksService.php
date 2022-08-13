@@ -22,6 +22,7 @@ class StripeWebhooksService {
             'enabled_events' => [
               'charge.failed',
               'charge.succeeded',
+              'charge.refunded',
             ],
         ]);
 
