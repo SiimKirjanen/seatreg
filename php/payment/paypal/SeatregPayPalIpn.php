@@ -29,7 +29,7 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 		if($this->ipnVerification()) {
 			if($this->emailCheck()) {
 				if($this->statusCheck()) {
-					if($this->currencyAndAmountCheck($_POST['mc_currency'], $_POST['mc_gross'])) {
+					if($this->currencyAndAmountCheck( $_POST['mc_currency'], $_POST['mc_gross'] )) {
 						if($this->paymentDoneCheck()) {
 							$this->insertPayment($_POST['txn_id']);
 						}
