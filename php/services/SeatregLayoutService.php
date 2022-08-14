@@ -53,6 +53,10 @@ class SeatregLayoutService {
     }
 
     public static function hideSensitiveData($layout) {   
+       if(!$layout) {
+            return $layout;
+       } 
+
        $layout = json_decode($layout); 
 
        foreach( $layout->roomData as $roomData ) {
