@@ -743,7 +743,7 @@ function seatreg_generate_settings_form() {
 					<div class="payment-configuration">
 						<label for="stripe_api_key"><?php esc_html_e('Stripe API secret key', 'seatreg'); ?></label>
 						<p class="help-block">
-							<?php esc_html_e('Pease enter your Stripe API secret key', 'seatreg'); ?>.
+							<?php esc_html_e('Please enter your Stripe API secret key', 'seatreg'); ?>.
 						</p>
 						<input type="text" class="form-control" id="stripe-api-key" name="stripe-api-key" autocomplete="off" placeholder="<?php echo esc_html('Stripe API key', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->stripe_api_key); ?>"> 
 						<br>
