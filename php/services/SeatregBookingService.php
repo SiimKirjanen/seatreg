@@ -23,6 +23,26 @@ class SeatregBookingService {
         return $totalCost;
     }
 
+    /**
+     *
+     * Return booked seats and their cost
+     *
+    */
+    public static function getBookingsCost($bookingId, $registrationLayout) {
+        $bookings = SeatregBookingRepository::getBookingsById($bookingId);
+        $roomsData = json_decode($registrationLayout)->roomData;
+
+        return array_map(function($booking) use($roomsData) {
+            $seatPrice = SeatregRegistrationService::getSeatPriceFromLayout($booking->seat_id, $booking->room_uuid, $roomsData);
+
+            return (object)[
+                'seatId' => $booking->seat_id,
+                'seatNr' => $booking->seat_nr,
+                'price' => $seatPrice
+            ];
+        }, $bookings);
+    }
+
      /**
      *
      * Delete a booking
@@ -121,6 +141,34 @@ class SeatregBookingService {
         $bookingTable .= '</table>';
 
         return $bookingTable;
+    }
+
+    public static function generatePaymentTable($bookingId) {
+        $bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
+        $bookings = self::getBookingsCost($bookingId, $bookingData->registration_layout);
+        $totalCost = 0;
+        $paymentTable = '<table style="border: 1px solid black;border-collapse: collapse;">
+            <tr>
+                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Sear nr', 'seatreg') . '</th>
+                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Sear price', 'seatreg') . '</th>
+            </tr>';
+
+        foreach($bookings as $booking) {
+            $totalCost += $booking->price;
+            $paymentTable .= '<tr>';
+                $paymentTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->seatNr) .'</td>';
+                $paymentTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->price) .'</td>';
+            $paymentTable .= '</tr>';
+        }
+
+        $paymentTable .= '<tr>';
+            $paymentTable .= '<td style=";border:1px solid black;padding: 6px;font-weight:700">'.  __('Total', 'seatreg') .'</td>';
+            $paymentTable .= '<td style=";border:1px solid black;padding: 6px;font-weight:700">'. $totalCost .'</td>';
+        $paymentTable .= '</tr>';
+
+        $paymentTable .= '</table>';
+
+        return $paymentTable;
     }
 
     /**
