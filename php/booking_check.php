@@ -53,36 +53,36 @@
 		if( ($bookingData->paypal_payments === '1' || $bookingData->stripe_payments === '1') && $bookingData->payment_status === null ) {
 			$bookingTotalCost = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
 
-			?>
-				<p class="payment-instructions"><?php esc_html_e('Pay for your booking', 'seatreg'); ?></p>
-				<div class="payment-forms">
-			<?php
-
-				if( $bookingData->paypal_payments === '1' ) {
-					$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
-					$returnUrl = SEATREG_PAYPAL_RETURN_URL . '&id=' . $bookingId;
-					$cancelUrl = SEATREG_PAYPAL_CANCEL_URL . '&registration=' . $registrationId . '&id=' . $bookingId;
-					
-					if($bookingTotalCost > 0) {
-						echo SeatregPaymentService::generatePayPalPayNowForm(
-							$payPalFromAction, 
-							$bookingData,
-							$bookingTotalCost,
-							$returnUrl,
-							$cancelUrl,
-							SEATREG_PAYPAL_NOTIFY_URL,
-							$bookingId
-						);
-					}
-				}
+			if( $bookingTotalCost > 0 ) {
+				?>
+					<p class="payment-instructions"><?php esc_html_e('Pay for your booking', 'seatreg'); ?></p>
+					<div class="payment-forms">
+				<?php
+			}
+			
+			if( $bookingData->paypal_payments === '1' && $bookingTotalCost > 0 ) {
+				$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
+				$returnUrl = SEATREG_PAYPAL_RETURN_URL . '&id=' . $bookingId;
+				$cancelUrl = SEATREG_PAYPAL_CANCEL_URL . '&registration=' . $registrationId . '&id=' . $bookingId;
+			
+				echo SeatregPaymentService::generatePayPalPayNowForm(
+					$payPalFromAction, 
+					$bookingData,
+					$bookingTotalCost,
+					$returnUrl,
+					$cancelUrl,
+					SEATREG_PAYPAL_NOTIFY_URL,
+					$bookingId
+				);
+			}
 				
-				if( $bookingData->stripe_payments === '1' ) {
-					echo SeatregPaymentService::generateStripeCheckoutForm($bookingId);
-				}
+			if( $bookingData->stripe_payments === '1' && $bookingTotalCost > 0 ) {
+				echo SeatregPaymentService::generateStripeCheckoutForm($bookingId);
+			}
+			
 			?>
 				</div>
 			<?php
-
 			
 		}else if($bookingData->payment_status === SEATREG_PAYMENT_PROCESSING) {
 			esc_html_e('Your payment is being processed', 'seatreg');
