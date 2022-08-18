@@ -150,7 +150,7 @@ class SeatregBookingService {
         $paymentTable = '<table style="border: 1px solid black;border-collapse: collapse;">
             <tr>
                 <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Sear nr', 'seatreg') . '</th>
-                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Sear price', 'seatreg') . '</th>
+                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Seat price', 'seatreg') . '</th>
             </tr>';
 
         foreach($bookings as $booking) {

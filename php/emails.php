@@ -70,6 +70,10 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
         $message .= $bookingTable;
         
+        if( SeatregBookingService::getBookingTotalCost($bookingId, $registration->registration_layout) > 0 ) {
+            $message .= '<br>';
+            $message .= SeatregBookingService::generatePaymentTable($bookingId);
+        }
     }
 
     if( extension_loaded('gd') && $qrType ) {

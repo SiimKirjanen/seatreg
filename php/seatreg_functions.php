@@ -1266,6 +1266,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 
 			if( SeatregBookingService::getBookingTotalCost($bookingId, $registration->registration_layout) > 0 ) {
 				echo SeatregBookingService::generatePaymentTable($bookingId);
+				echo '<br>';
 			}
 
 			if($options && $options->payment_text) {
