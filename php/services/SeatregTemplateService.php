@@ -55,12 +55,19 @@ class SeatregTemplateService {
         return $message;
     }
 
+    public static function replacePaymentTable($template, $bookingId) {
+        $paymentTable = SeatregBookingService::generatePaymentTable($bookingId);
+
+        return str_replace(SEATREG_TEMPLATE_PAYMENT_TABLE, $paymentTable, $template);
+    }
+
     public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $registrationCustomFields, $bookingId) {
         $template = self::sanitizeTemplate($template);
         $template = self::replaceLineBreaksWithBrTags($template);
         $template = self::replaceBookingStatusLink($template, $bookingStatusLink);
         $template = self::replaceBookingTable($template, $bookings, $registrationCustomFields);
         $template = self::replaceBookingId($template, $bookingId);
+        $template = self::replacePaymentTable($template, $bookingId);
 
         $message = $template;
 

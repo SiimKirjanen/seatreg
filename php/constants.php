@@ -54,4 +54,5 @@ define('SEATREG_TEMP_FOLDER_URL', $up_dir['baseurl'].'/seatreg');
 define('SEATREG_TEMPLATE_STATUS_LINK', '[status-link]');
 define('SEATREG_TEMPLATE_EMAIL_VERIFICATION_LINK', '[verification-link]');
 define('SEATREG_TEMPLATE_BOOKING_TABLE', '[booking-table]');
+define('SEATREG_TEMPLATE_PAYMENT_TABLE', '[payment-table]');
 define('SEATREG_TEMPLATE_BOOKING_ID', '[booking-id]');

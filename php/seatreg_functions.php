@@ -628,6 +628,7 @@ function seatreg_generate_settings_form() {
 					<code>[status-link]</code> <?php esc_html_e('(required) will be converted to booking status link', 'seatreg'); ?> <br>
 					<code>[booking-id]</code> <?php esc_html_e('(optional) will be converted to booking id', 'seatreg'); ?> <br>
 					<code>[booking-table]</code> <?php esc_html_e('(optional) will be converted to booking table', 'seatreg'); ?> <br>
+					<code>[payment-table]</code> <?php esc_html_e('(optional) will be converted to payment table', 'seatreg'); ?> <br>
 				</p>
 				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->approved_booking_email_template); ?></textarea>
 			</div>
