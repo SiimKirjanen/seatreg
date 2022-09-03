@@ -1910,11 +1910,18 @@
 					$(this).css({'zIndex':bIndex});
 				});
 
+				var beforeNewRow = 10;
 				selectedBoxesData.sort(function(a, b) {
-					if( a.left < b.left && a.top < b.top ) {
+					if( a.top + beforeNewRow < b.top ) {
 						return -1;
 					}
-					if( a.left > b.left && a.top > b.top ) {
+					if( a.top - beforeNewRow > b.top ) {
+						return 1;
+					}
+					if( a.left < b.left ) {
+						return -1;
+					}
+					if( a.left > b.left ) {
 						return 1;
 					}
 
