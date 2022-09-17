@@ -40,7 +40,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title><?php echo esc_html( $data->registration_name ); ?></title>
-	<meta name="viewport" content="width=device-width, user-scalable=no">
+	
 	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
 
 	<?php if($data->registration_open !== 1) : ?>	
@@ -61,6 +61,7 @@
 	<?php endif; ?>
 	
 	<?php wp_head(); ?>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 </head>
 <body>
 <?php include('noscript.html'); ?>	

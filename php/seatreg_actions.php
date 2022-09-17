@@ -8,8 +8,8 @@ if( is_admin() ) {
 	add_action( 'admin_menu', 'seatreg_add_plugin_menu' );
 }
 
-add_action( 'after_setup_theme', 'seatreg_remove_unnecessary_tags' );
-function seatreg_remove_unnecessary_tags(){
+add_action( 'after_setup_theme', 'seatreg_remove_unnecessary_tags_and_more' );
+function seatreg_remove_unnecessary_tags_and_more(){
 	if( seatreg_is_registration_view_page() ) {
 		 // REMOVE WP EMOJI
 		 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );

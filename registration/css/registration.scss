@@ -1131,16 +1131,15 @@ body {
 /*zoom-controller rules*/
 
 #zoom-controller {
-	display: none;
-	position: absolute;
-	width: 100px;
-	text-align: center;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	top: 256px;
-	right: 4px;
-	padding: 10px 10px;
-	margin: 0 10px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: right;
+	padding: 12px 24px;
+
+	.fa {
+		padding: 0 12px;
+	}
+
 }
 
 .no-select {
@@ -1950,6 +1949,19 @@ body {
 	}
 	#zoom-controller {
 		display: block;
+		position: absolute;
+		width: 100px;
+		text-align: center;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		top: 256px;
+		right: 4px;
+		padding: 10px 10px;
+		margin: 0 10px;
+
+		.fa {
+			padding: 0;
+		}
 	}
 	#bottom-wrapper {
 		display: none;

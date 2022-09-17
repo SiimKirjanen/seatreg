@@ -904,7 +904,7 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 	var infoHeight = $('.top-info-bar').outerHeight(true) || 0;
 	var cartWidth = $('#seat-cart').outerWidth(true);
 	var spaceForMiddleWidth = screenWidth - 20; //how much room for seat map
-	var spaceForMiddleHeight = screenHeight - 30 - 30 - navHeight - $('#bottom-wrapper').outerHeight(true);  // - header height, -legend height, navbar height, -spacing  --default mobile
+	var spaceForMiddleHeight = screenHeight - 30 - 30 - navHeight - $('#bottom-wrapper').outerHeight(true) - $('#zoom-controller').outerHeight(true);  // - header height, -legend height, navbar height, -spacing  --default mobile
 	var needHorizScroll = false;
 	var needVerticScroll = false;
 
