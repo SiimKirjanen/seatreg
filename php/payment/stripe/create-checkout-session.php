@@ -18,6 +18,7 @@ if( $bookingData->stripe_payments !== '1' ) {
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/stripe-php/init.php' );
 
 \Stripe\Stripe::setApiKey($bookingData->stripe_api_key);
+\Stripe\Stripe::setApiVersion( SEATREG_STRIPE_API_VERSION );
 
 $checkout_session = \Stripe\Checkout\Session::create([
   'line_items' => [[
