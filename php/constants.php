@@ -23,7 +23,7 @@ define('SEATREG_PAYMENT_LOG_ERROR', 'error');
 define('SEATREG_PAYMENT_LOG_OK', 'ok');
 define('SEATREG_PAYMENT_LOG_INFO', 'info');
 define('SEATREG_PAYMENT_VALIDATION_FAILED', 'validation_failure');
-define('SEATREG_PAYMENT_CALLBACK_URL', 'https://7321-2001-7d0-8430-f80-1062-d7eb-5643-f6bf.eu.ngrok.io'); //For live use get_site_url(). For local testing use ngrok URL
+define('SEATREG_PAYMENT_CALLBACK_URL', get_site_url()); //For live use get_site_url(). For local testing use ngrok URL
 
 // PayPal
 define('SEATREG_PAYPAL_FORM_ACTION', "https://www.paypal.com/cgi-bin/webscr");
