@@ -20,7 +20,7 @@ $stripePayment = new SeatregStripePayment(
     $bookingData->paypal_currency_code,
     $bookingTotalCost,
     $bookingId,
-    $bookingData->payment_completed_set_booking_confirmed,
+    $bookingData->payment_completed_set_booking_confirmed_stripe,
     $bookingData->registration_code,
     $bookingData->stripe_api_key,
     $bookingData->stripe_webhook_secret
