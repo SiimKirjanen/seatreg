@@ -39,6 +39,7 @@ class SeatregStripePayment extends SeatregPaymentBase {
     private function webhookSignatureCheck() {
         $payload = @file_get_contents('php://input');
         \Stripe\Stripe::setApiKey($this->_stripeApiKey);
+        \Stripe\Stripe::setApiVersion( SEATREG_STRIPE_API_VERSION );
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $endpoint_secret = $this->_stripeWebhookSecret;
 

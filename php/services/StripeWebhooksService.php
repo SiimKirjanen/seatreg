@@ -16,6 +16,7 @@ class StripeWebhooksService {
         require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/stripe-php/init.php' );
 
         \Stripe\Stripe::setApiKey($stripeAPIKey);
+        \Stripe\Stripe::setApiVersion( SEATREG_STRIPE_API_VERSION );
         $webhook = \Stripe\WebhookEndpoint::create([
             'url' => SEATREG_STRIPE_WEBHOOK_CALLBACK_URL,
             'description' => SEATREG_STRIPE_WEBHOOK_DESCRIPTION,
@@ -39,6 +40,7 @@ class StripeWebhooksService {
         require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/stripe-php/init.php' );
 
         \Stripe\Stripe::setApiKey($stripeAPIKey);
+        \Stripe\Stripe::setApiVersion( SEATREG_STRIPE_API_VERSION );
         $response = \Stripe\WebhookEndpoint::all()->jsonSerialize();
 
         return array_filter($response['data'], function($webhook) {
@@ -73,7 +75,10 @@ class StripeWebhooksService {
         }
 
         $webhookIdToDelete = $currentSiteWebhooks[0]['id'];
-        $stripe = new \Stripe\StripeClient($stripeAPIKey);
+        $stripe = new \Stripe\StripeClient([
+            'api_key' => $stripeAPIKey,
+            'stripe_version' => SEATREG_STRIPE_API_VERSION
+        ]);
         $resp = $stripe->webhookEndpoints->delete($webhookIdToDelete, []);
 
         //$resp->jsonSerialize();
