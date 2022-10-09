@@ -351,6 +351,7 @@
 		reg.regBoxCounter++;
 		
 		$('.room-box-counter').text(this.boxes.length);
+		this.setBuildingAreaDimentions();
 	};
 
 	//add box to room from server data
@@ -367,6 +368,7 @@
 		box.prefix = prefix ? prefix : '';
 		this.boxes.push(box);
 		this.boxCounter++;
+		this.setBuildingAreaDimentions();
 	};
 
 	//find last bron or taken seat and return it seat number
@@ -476,6 +478,28 @@
 				this.boxes[i].legend = "noLegend";
 			}
 		}
+	};
+
+	Room.prototype.setBuildingAreaDimentions = function() {
+		var highestXCordinateOnBox = 0;
+		var highestYCordinateOnBox = 0;
+		var roomBoxLength = this.boxes.length;
+
+		for(var i = 0; i < roomBoxLength; i++) {
+			if(this.boxes[i].xPosition > highestXCordinateOnBox) {
+				highestXCordinateOnBox = this.boxes[i].xPosition;
+			}
+			if(this.boxes[i].yPosition > highestYCordinateOnBox) {
+				highestYCordinateOnBox = this.boxes[i].yPosition;
+			}
+		}
+
+		//set build-area width and height
+		var extraEmptyBuildingSpace = 500;
+		$('#construction-wrapper .build-area').css({
+			width: highestXCordinateOnBox + extraEmptyBuildingSpace,
+			height: highestYCordinateOnBox + extraEmptyBuildingSpace
+		});
 	};
 
 	/*
@@ -1709,6 +1733,9 @@
 				}
 			});	
 		}
+
+		this.rooms[this.currentRoom].setBuildingAreaDimentions();
+
 		regScope.initToolTip();
 		regScope.addDraggableListeners();
 		regScope.addResisableListeners();
@@ -1791,6 +1818,7 @@
 						}
 					});
 				}
+				regScope.rooms[regScope.currentRoom].setBuildingAreaDimentions();
 			}
 		});
 	};
