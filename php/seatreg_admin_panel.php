@@ -74,6 +74,7 @@ function seatreg_create_welcome() {
 		  <p class="jumbotron-text"><?php esc_html_e('Design your own seat map and manage seat bookings', 'seatreg'); ?></p>
 	    </div>
 		<div class="donate-wrap">
+			<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/consider_donating.svg'; ?>" alt="Consider donating" width="200" />
 			<form action="https://www.paypal.com/donate" method="post" target="_blank">
 				<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
 				<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />

@@ -53,6 +53,8 @@ html {
 	margin-bottom: 0;
 }
 .seatreg-wp-admin .donate-wrap {
+	display: flex;
+	justify-content: end;
 	margin-top: 12px;
 	margin-bottom: 12px;
 	padding: 0 15px;
