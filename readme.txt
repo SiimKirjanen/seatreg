@@ -43,6 +43,11 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 
 == Changelog ==
 
+= 1.26.3 =
+* Fixed map eidtor seat/boxes moving issue with larger grids.
+* Changed Stripe API version to 2020-08-27 when dealing with Stripe.
+* Added donation text.
+
 = 1.26.2 =
 * Changed Stripe API version.
 
