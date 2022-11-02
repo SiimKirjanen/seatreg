@@ -508,7 +508,8 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 						booking_id: $(this).val(),
 						action: 'del',
 						room_name: $(this).closest('.reg-seat-item').find('.seat-room-box').text(),
-						seat_nr: $(this).closest('.reg-seat-item').find('.seat-nr-box').text()
+						seat_nr: $(this).closest('.reg-seat-item').find('.seat-nr-box').text(),
+						seat_id: $(this).closest('.reg-seat-item').find('.seat-id').val(),
 					});
 				}else if($(this).attr('data-action') == 'confirm') {
 					data.push({

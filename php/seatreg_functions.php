@@ -1944,10 +1944,13 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 	}else if($action->action == 'del') {
 		$wpdb->delete( 
 			$seatreg_db_table_names->table_seatreg_bookings,
-			array('booking_id' => $action->booking_id), 
+			array(
+				'booking_id' => $action->booking_id, 
+				'seat_id' => $action->seat_id
+			), 
 			'%s'
 		);
-		seatreg_add_activity_log('booking', $action->booking_id, 'Booking deleted (Booking manager)');
+		seatreg_add_activity_log('booking', $action->booking_id, sprintf('Seat %s from room %s deleted from booking (Booking manager)', $action->seat_nr, $action->room_name));
 	}else if($action->action == 'unapprove') {
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
