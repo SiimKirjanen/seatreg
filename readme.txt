@@ -3,8 +3,8 @@ Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source
 Tags: seat registration, booking, booking seats, booking events, seat map, booking management, registration
 Requires at least: 5.3
 Requires PHP: 7.2.28
-Tested up to: 5.9.3
-Stable tag: 1.26.3
+Tested up to: 6.1.0
+Stable tag: 1.27.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -42,6 +42,9 @@ SeatReg is a plugin that offers the following and more to build and manage your 
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.27.0 =
+* Booking manager can now delete individual seats from bookings.
 
 = 1.26.3 =
 * Fixed map eidtor seat/boxes moving issue with larger grids.
