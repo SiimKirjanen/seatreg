@@ -1064,6 +1064,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 						echo seatreg_generate_payment_section($row);
 					echo '</div>';
 					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
+					echo '<input type="hidden" class="seat-id" value='. esc_attr($row->seat_id) .' />';
 				echo '</div>'; 
 			}
 
