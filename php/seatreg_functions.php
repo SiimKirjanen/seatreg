@@ -519,8 +519,12 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="registration-max-seats"><?php esc_html_e('Max seats per booking', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Set how many seats can be added to the booking', 'seatreg'); ?>.</p>
+				<label for="registration-max-seats">
+					<?php $options[0]->using_seats == '1' ? esc_html_e('Max seats per booking', 'seatreg') : esc_html_e('Max places per booking', 'seatreg'); ?>
+				</label>
+				<p class="help-block">
+					<?php $options[0]->using_seats == '1' ? esc_html_e('Set how many seats can be added to the booking', 'seatreg') : esc_html_e('Set how many places can be added to the booking', 'seatreg'); ?>.
+				</p>
 				<input type="number" class="form-control" id="registration-max-seats" name="registration-max-seats" value="<?php echo esc_html($options[0]->seats_at_once); ?>">
 			</div>
 
@@ -724,7 +728,7 @@ function seatreg_generate_settings_form() {
 
 						<label for="paypal-sandbox-mode"><?php esc_html_e('PayPal sandbox mode', 'seatreg'); ?></label>
 						<p class="help-block">
-							<?php esc_html_e('Turn on sandbox mode. Lets you test payments with your sandbox account. Don\'t forget to change business email and button id.', 'seatreg'); ?>.
+							<?php esc_html_e('Turn on sandbox mode. Lets you test payments with your sandbox account. Don\'t forget to change business email and button id.', 'seatreg'); ?>
 						</p>
 						<div class="checkbox">
 							<label>
