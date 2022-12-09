@@ -161,13 +161,17 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					<?php
 						if($targetRoom == 'overview') {
 							echo "<div class='reg-overview-top-bron-notify'>";
-								echo sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']);
+								echo $registration->using_seats === '1' ? sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']) : sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats']);
 							echo '</div>';
 						}else {
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
 								if($regStats['roomsInfo'][$i]['roomName'] == $targetRoom) {
 									echo '<div class="reg-overview-top-bron-notify">';
-										echo esc_html($regStats['roomsInfo'][$i]['roomBronSeats']),' ', esc_html__('pending seats', 'seatreg'), '!';
+										if( $registration->using_seats === '1' ) {
+											echo esc_html($regStats['roomsInfo'][$i]['roomBronSeats']),' ', esc_html__('pending seats', 'seatreg'), '!';
+										}else {
+											echo esc_html($regStats['roomsInfo'][$i]['roomBronSeats']),' ', esc_html__('pending places', 'seatreg'), '!';
+										}	
 									echo '</div>'; 
 									
 									$roomLoactionInStats = $i;
@@ -217,7 +221,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 				<?php echo '<div class="reg-overview-middle">';?>
 					<div class="overview-middle-box">
 						<div class="overview-middle-box-h">
-							<?php esc_html_e('Seats', 'seatreg'); ?>
+							<?php $registration->using_seats === '1' ? esc_html_e('Seats', 'seatreg') : esc_html_e('Places', 'seatreg'); ?>
 						</div>
 						<div class="overview-middle-box-stat">
 							<?php 
