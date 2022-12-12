@@ -12,6 +12,7 @@ class SeatregBookingsFile {
     protected $_registrationName = null;
     protected $_customFields = null;
     protected $_currentTimestamp = null;
+    protected $_usingSeats = true;
 
     public function __construct($showPending, $showConfirmed, $registrationCode) {
         $this->_registrationCode = $registrationCode;
@@ -32,6 +33,7 @@ class SeatregBookingsFile {
         $this->_registrations = seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat);
         $this->_registrationName = esc_html($this->_registrationInfo->registration_name);
         $this->_customFields = ($this->_registrationInfo->custom_fields !== null) ? json_decode($this->_registrationInfo->custom_fields, true) : [];
+        $this->_usingSeats = $this->_registrationInfo->using_seats === '1';
     }
 
     protected function customFieldsWithValues($customField, $customData) {

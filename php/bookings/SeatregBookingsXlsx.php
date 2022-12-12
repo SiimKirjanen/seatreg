@@ -57,8 +57,10 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
     }
     
     public function printXlsx() {
+        $placeNumberText = $this->_usingSeats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
+        
         $header = array(
-            esc_html__('Seat number', 'seatreg') => 'string',
+            $placeNumberText => 'string',
             esc_html__('Room name', 'seatreg') => 'string',
             esc_html__('Name', 'seatreg') => 'string',
             esc_html__('Email', 'seatreg') => 'string',
