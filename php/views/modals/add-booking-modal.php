@@ -12,8 +12,8 @@
 					<div class="add-modal-input-wrap">
 						<label>
 							<h5>
-								<?php esc_html_e('Seat ID', 'seatreg'); ?>
-								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php esc_html_e('ID can be seen in map-editor when hovering seats', 'seatreg'); ?>"></i>
+								<?php $usingSeats ? esc_html_e('Seat ID', 'seatreg') : esc_html_e('Place ID', 'seatreg'); ?>
+								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php $usingSeats ? esc_html_e('ID can be seen in map-editor when hovering seats', 'seatreg') : esc_html_e('ID can be seen in map-editor when hovering places', 'seatreg'); ?>"></i>
 							</h5>
 							<input type="text" name="seat-id[]"/>
 							<div class="input-error"></div>
@@ -62,11 +62,11 @@
 			<div class="bottom-action">
 				<div class="seat-operations">
 					<div class="seat-operation" id="add-modal-add-seat">
-						<?php esc_html_e('Add seat', 'seatreg'); ?>
+						<?php $usingSeats ? esc_html_e('Add seat', 'seatreg') : esc_html_e('Add place', 'seatreg'); ?>
 						<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 					</div>
 					<div class="seat-operation" id="add-modal-remove-seat">
-						<?php esc_html_e('Remove seat', 'seatreg'); ?>
+						<?php $usingSeats ? esc_html_e('Remove seat', 'seatreg') : esc_html_e('Remove place', 'seatreg'); ?>
 						<i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i>
 					</div>
 				</div>

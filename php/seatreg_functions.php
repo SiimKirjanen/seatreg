@@ -944,6 +944,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	$bookings2 = seatreg_get_specific_bookings($code, $order, $searchTerm, '2');
 	$row_count = count($bookings1);
 	$row_count2 = count($bookings2);
+	$project_name = str_replace(' ', '_', $project_name_original);
+	$usingSeats = $seatregData->using_seats === '1';
 	
 	?>
 		<div class='management-header'>
@@ -961,144 +963,146 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 				</div>
 			</div>
+		</div>
 
-		</div>	
+		<div class="input-group manager-search-wrap">
+			<input type="hidden" id="seatreg-reg-code" value="<?php echo esc_attr($seatregData->registration_code); ?>" />
+			<input type="text" class="form-control manager-search" placeholder="<?php esc_html_e('Search booking', 'seatreg'); ?>" maxlength="<?php echo SEATREG_REGISTRATION_SEARCH_MAX_LENGTH; ?>" value="<?php echo esc_attr($searchTerm); ?>"/>
+			<div class="input-group-btn">
+				<button class="btn btn-default search-button" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+			</div>
+		</div>
+
+		<a href="<?php echo get_site_url() . '?seatreg=pdf&code=' . esc_attr($code); ?>" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a>
+    	<a href="<?php echo get_site_url() . '?seatreg=xlsx&code=' . esc_attr($code); ?>" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a>
+    	<a href="<?php echo get_site_url() . '?seatreg=text&code=' . esc_attr($code); ?>" class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a>
+
+		<div class="bg-color">
+			<div class="tab-container">
+				<ul class="etabs">
+					<li class="tab"><a href="<?php echo '#' . sha1($project_name) . 'bron'; ?>"><?php esc_html_e('Pending', 'seatreg'); ?></a></li>
+					<li class="tab"><a href="<?php echo '#' . sha1($project_name) . 'taken'; ?>"><?php esc_html_e('Approved','seatreg'); ?></a></li>
+				</ul>
+				<div class="panel-container differentBgColor">
+					<div class="registration-manager-labels">
+						<div class="seat-nr-box manager-box manager-box-link" data-order="nr">
+							<?php $usingSeats ? esc_html_e('Seat', 'seatreg') : esc_html_e('Place', 'seatreg'); ?>
+						</div>
+						<div class="seat-room-box manager-box manager-box-link" data-order="room"><?php esc_html_e('Room', 'seatreg'); ?></div>
+						<div class="seat-name-box manager-box manager-box-link" data-order="name"><?php esc_html_e('Name', 'seatreg'); ?></div>
+						<div class="seat-name-box manager-box manager-box-link" data-order="date"><?php esc_html_e('Date', 'seatreg'); ?></div>
+						<div class="seat-date-box manager-box manager-box-link" data-order="id"><?php esc_html_e('Booking id', 'seatreg'); ?></div>	
+					</div>
+
+				<?php
+					echo '<div id="', sha1($project_name), 'bron" class="tab_container">';
+		
+					if($row_count == 0) {
+						echo '<div class="notify-text">';
+							$usingSeats ? esc_html_e('No pending seats', 'seatreg') : esc_html_e('No pending places', 'seatreg');
+						echo '</div>';
+					}			
+		
+					foreach ($bookings1 as $row) {
+						$custom_field_data = json_decode($row->custom_field_data, true);
+						$booking = $row->booking_id;
+						$registrationId = $row->id;
+						$time = strtotime($row->booking_date);
+						$myFormatForView = date("m-d-y", $row->booking_date);
+						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
+						
+						echo '<div class="reg-seat-item">';
+							echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
+							echo '<div class="seat-room-box manager-box" title="',esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
+							echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
+							echo '<div class="seat-date-box manager-box" title="', esc_html(date('M j Y h:i e', $row->booking_date)),'">',esc_html($myFormatForView),'</div>';
+							echo "<div class='booking-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
+							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
+							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
+							echo '<div class="action-select">';
+								echo "<label class='action-label'>", esc_html__('Remove','seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
+								echo "<label class='action-label'>", esc_html__('Approve','seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action'data-action='confirm'/></label>";
+							echo '</div>';
+		
+							echo '<div class="more-info">';
+								echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl) ,'</a>';
+								echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html(date('M j Y h:i e', $row->booking_date)), '</span></div>';
+								echo '<div>', esc_html__('Email', 'seatreg'), ': ', esc_html($row->email), '</div>';
+							
+								for($i = 0; $i < $cus_length; $i++) {
+									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
+								}
+								echo seatreg_view_booking_activity_btn($row);
+								echo seatreg_generate_payment_section($row);
+							echo '</div>';
+							echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
+							echo '<input type="hidden" class="seat-id" value='. esc_attr($row->seat_id) .' />';
+						echo '</div>'; 
+					}
+				
+					if($row_count > 0) {
+						echo "<div class='action-control' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
+					}
+					
+					echo '</div>';
+		
+					echo '<div id="', sha1($project_name),'taken" class="tab_container active">';
+		
+					if($row_count2 == 0) {
+						echo '<div class="notify-text">', esc_html__('No approved seats', 'seatreg'), '</div>';
+					}
+		
+					foreach ($bookings2 as $row) {
+						$custom_field_data = json_decode($row->custom_field_data, true);
+						$booking = $row->booking_id;
+						$registrationId = $row->id;
+						$time = strtotime($row->booking_date);
+						$myFormatForView = date("m-d-y", $row->booking_date);
+						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
+		
+						echo '<div class="reg-seat-item">';
+							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
+							echo '<div class="seat-room-box manager-box" title="',esc_attr($row->room_name),'">', esc_html($row->room_name),'</div>';
+							echo '<div class="seat-name-box manager-box" title="'.esc_attr($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
+							echo '<div class="seat-date-box manager-box" title="', esc_html(date('M j Y h:i e', $row->booking_date)),'">',esc_html($myFormatForView),'</div>';
+							echo "<div class='booking-id-box manager-box' title='",esc_attr($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
+							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
+							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
+							echo '<div class="action-select">';
+								echo "<label>", esc_html__('Remove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
+								echo "<label>", esc_html__('Unapprove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='unapprove'/></label>";
+							echo '</div>';
+		
+							echo '<div class="more-info">';
+								echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl), '</a>';
+								echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_date) ), '</span></div>';
+								echo '<div>', esc_html__('Approval date', 'seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_confirm_date ) ), '</span></div>';
+								echo '<div>Email: ', esc_html( $row->email ), '</div>';
+		
+								for($i = 0; $i < $cus_length; $i++) {
+									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
+								}
+								echo seatreg_view_booking_activity_btn($row);
+								echo seatreg_generate_payment_section($row);
+							echo '</div>';
+							echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
+							echo '<input type="hidden" class="seat-id" value='. esc_attr($row->seat_id) .' />';
+						echo '</div>'; 
+					}
+		
+					if($row_count2 > 0) {
+						echo "<div class='action-control' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
+					}
+		
+					echo '</div>';
+				?>
+				</div>
+			</div>
+		</div>
 	<?php
 	
-	$project_name = str_replace(' ', '_', $project_name_original);
-
-	echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
-	echo '<div class="input-group manager-search-wrap">';
-				echo '<input type="hidden" id="seatreg-reg-code" value="', esc_attr($seatregData->registration_code), '"/>';
-            	echo '<input type="text" class="form-control manager-search" placeholder="'.esc_html__('Search booking', 'seatreg').'" maxlength="', SEATREG_REGISTRATION_SEARCH_MAX_LENGTH ,'" value="', esc_attr($searchTerm), '"/>';
-            	echo '<div class="input-group-btn">';
-                	echo '<button class="btn btn-default search-button" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>';
-            	echo '</div>';
-          echo '</div>';
-	
-    echo '<a href="'. get_site_url() .'?seatreg=pdf&code=', esc_attr($code) , '" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a> ';
-    echo '<a href="' . get_site_url() . '?seatreg=xlsx&code=', esc_attr($code), '" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a> ';
-    echo '<a href="' . get_site_url() . '?seatreg=text&code=', esc_attr($code), '"class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a> ';
-
-	echo '<div class="bg-color">';
-		echo '<div class="tab-container">';
-			echo '<ul class="etabs">';
-				echo '<li class="tab"><a href="#', sha1($project_name), 'bron">', esc_html_e('Pending', 'seatreg'), '</a></li>';
-				echo '<li class="tab"><a href="#', sha1($project_name), 'taken">', esc_html_e('Approved','seatreg'),'</a></li>';
-			echo '</ul>';
-		echo '<div class="panel-container differentBgColor">';
-				echo '<div class="registration-manager-labels">
-						<div class="seat-nr-box manager-box manager-box-link" data-order="nr">', esc_html__('Seat','seatreg'),'</div>
-						<div class="seat-room-box manager-box manager-box-link" data-order="room">', esc_html__('Room','seatreg'),'</div>
-						<div class="seat-name-box manager-box manager-box-link" data-order="name">', esc_html__('Name','seatreg'),'</div>
-						<div class="seat-name-box manager-box manager-box-link" data-order="date">', esc_html__('Date','seatreg'),'</div>
-						<div class="seat-date-box manager-box manager-box-link" data-order="id">', esc_html__('Booking id','seatreg'),'</div>	
-					</div>';
-				echo '<div id="', sha1($project_name), 'bron" class="tab_container">';
-
-			if($row_count == 0) {
-				echo '<div class="notify-text">', esc_html__('No pending seats', 'seatreg'),'</div>';
-			}			
-
-			foreach ($bookings1 as $row) {
-				$custom_field_data = json_decode($row->custom_field_data, true);
-				$booking = $row->booking_id;
-				$registrationId = $row->id;
-				$time = strtotime($row->booking_date);
-				$myFormatForView = date("m-d-y", $row->booking_date);
-				$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
-				
-				echo '<div class="reg-seat-item">';
-					echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
-					echo '<div class="seat-room-box manager-box" title="',esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
-					echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
-					echo '<div class="seat-date-box manager-box" title="', esc_html(date('M j Y h:i e', $row->booking_date)),'">',esc_html($myFormatForView),'</div>';
-					echo "<div class='booking-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
-					echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
-					echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
-					echo '<div class="action-select">';
-						echo "<label class='action-label'>", esc_html__('Remove','seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
-						echo "<label class='action-label'>", esc_html__('Approve','seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action'data-action='confirm'/></label>";
-					echo '</div>';
-
-					echo '<div class="more-info">';
-						echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl) ,'</a>';
-						echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html(date('M j Y h:i e', $row->booking_date)), '</span></div>';
-						echo '<div>', esc_html__('Email', 'seatreg'), ': ', esc_html($row->email), '</div>';
-					
-						for($i = 0; $i < $cus_length; $i++) {
-							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
-						}
-						echo seatreg_view_booking_activity_btn($row);
-						echo seatreg_generate_payment_section($row);
-					echo '</div>';
-					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
-					echo '<input type="hidden" class="seat-id" value='. esc_attr($row->seat_id) .' />';
-				echo '</div>'; 
-			}
-		
-			if($row_count > 0) {
-				echo "<div class='action-control' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
-			}
-			
-			echo '</div>';
-
-			echo '<div id="', sha1($project_name),'taken" class="tab_container active">';
-
-			if($row_count2 == 0) {
-				echo '<div class="notify-text">', esc_html__('No approved seats', 'seatreg'), '</div>';
-			}
-
-			foreach ($bookings2 as $row) {
-				$custom_field_data = json_decode($row->custom_field_data, true);
-				$booking = $row->booking_id;
-				$registrationId = $row->id;
-				$time = strtotime($row->booking_date);
-				$myFormatForView = date("m-d-y", $row->booking_date);
-				$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
-
-				echo '<div class="reg-seat-item">';
-					echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
-					echo '<div class="seat-room-box manager-box" title="',esc_attr($row->room_name),'">', esc_html($row->room_name),'</div>';
-					echo '<div class="seat-name-box manager-box" title="'.esc_attr($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
-					echo '<div class="seat-date-box manager-box" title="', esc_html(date('M j Y h:i e', $row->booking_date)),'">',esc_html($myFormatForView),'</div>';
-					echo "<div class='booking-id-box manager-box' title='",esc_attr($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
-					echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
-					echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
-					echo '<div class="action-select">';
-					    echo "<label>", esc_html__('Remove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
-					    echo "<label>", esc_html__('Unapprove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='unapprove'/></label>";
-					echo '</div>';
-
-					echo '<div class="more-info">';
-						echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl), '</a>';
-						echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_date) ), '</span></div>';
-						echo '<div>', esc_html__('Approval date', 'seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_confirm_date ) ), '</span></div>';
-						echo '<div>Email: ', esc_html( $row->email ), '</div>';
-
-						for($i = 0; $i < $cus_length; $i++) {
-							echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
-						}
-						echo seatreg_view_booking_activity_btn($row);
-						echo seatreg_generate_payment_section($row);
-					echo '</div>';
-					echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
-					echo '<input type="hidden" class="seat-id" value='. esc_attr($row->seat_id) .' />';
-				echo '</div>'; 
-			}
-
-			if($row_count2 > 0) {
-				echo "<div class='action-control' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
-			}
-
-			echo '</div>';
-		echo '</div>';
-
-	echo '</div>';
-	echo '</div>'; 
-		
-	seatreg_booking_edit_modal();
-	seatreg_add_booking_modal();
+	seatreg_booking_edit_modal($usingSeats);
+	seatreg_add_booking_modal($usingSeats);
 	seatreg_booking_activity_modal();
 }
 
@@ -1191,11 +1195,11 @@ function seatreg_generate_payment_section($booking) {
 	echo seatreg_generate_payment_logs( SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id) );
 }
 
-function seatreg_add_booking_modal() {
+function seatreg_add_booking_modal($usingSeats) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/add-booking-modal.php' );
 }
 
-function seatreg_booking_edit_modal() {
+function seatreg_booking_edit_modal($usingSeats) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/booking-edit-modal.php' );
 }
 
