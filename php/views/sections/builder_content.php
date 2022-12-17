@@ -20,12 +20,12 @@
 			<div class="help-icon" data-toggle="modal" data-target="#help-dialog"></div>
 
 			<div class="mouse-action-boxes">
-				<div data-action="1" class="mouse-option action1" id="mouse-option-active" title="Select, move and resize tool"></div>
-				<div data-action="4" class="mouse-option action4" title="Lasso select tool"></div>
-				<div data-action="2" class="mouse-option action2" title="Seat creation tool"></div>
-				<div data-action="5" class="mouse-option action5" title="Custom box tool"></div>
-				<div data-action="9" class="mouse-option action9" title="Text tool"></div>
-				<div data-action="3" class="mouse-option action3" title="Eraser tool"></div>
+				<div data-action="1" class="mouse-option action1" id="mouse-option-active" title="<?php esc_attr_e('Select, move and resize tool', 'seatreg'); ?>"></div>
+				<div data-action="4" class="mouse-option action4" title="<?php esc_attr_e('Lasso select tool', 'seatreg'); ?>"></div>
+				<div data-action="2" class="mouse-option action2" title="<?php esc_attr_e('Seat/place creation tool', 'seatreg'); ?>"></div>
+				<div data-action="5" class="mouse-option action5" title="<?php esc_attr_e('Custom box tool', 'seatreg'); ?>"></div>
+				<div data-action="9" class="mouse-option action9" title="<?php esc_attr_e('Text tool', 'seatreg'); ?>"></div>
+				<div data-action="3" class="mouse-option action3" title="<?php esc_attr_e('Eraser tool', 'seatreg'); ?>"></div>
 			</div>
 
 			<div id="build-section-click-controls">
@@ -51,8 +51,8 @@
 			<div class="side-option palette-call" data-action="5" title="Color"></div>
 			<div class="side-option background-image" data-action="7" title="Background image" data-toggle="modal" data-target="#background-image-modal"></div>
 			<div class="side-option grid-stats" data-action="6" title="Grid settings" data-toggle="modal" data-target="#skeleton-dialog"></div>
-			<div class="side-option price-option" data-action="8" title="Seat price" data-toggle="modal" data-target="#price-dialog"></div>
-			<div class="side-option lock-option" data-action="10" title="Lock seats" data-toggle="modal" data-target="#lock-seat-dialog"></div>
+			<div class="side-option price-option" data-action="8" title="Price" data-toggle="modal" data-target="#price-dialog"></div>
+			<div class="side-option lock-option" data-action="10" title="Lock" data-toggle="modal" data-target="#lock-seat-dialog"></div>
 			<div class="side-option numbering-option" data-action="11" title="Change numbering" data-toggle="modal" data-target="#seat-numbering-dialog"></div>
 		</div>
 	
@@ -172,7 +172,7 @@
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Seat pricing', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Seat/place pricing', 'seatreg');?></h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
@@ -198,7 +198,7 @@
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Lock seats', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Lock seats/places', 'seatreg');?></h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
@@ -221,11 +221,11 @@
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Seat numbering', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Seat/place numbering', 'seatreg');?></h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
-				<div class="alert alert-primary d-none" id="seat-nr-change-no-selection"><?php esc_html_e('No seats selected', 'seatreg'); ?></div>
+				<div class="alert alert-primary d-none" id="seat-nr-change-no-selection"><?php esc_html_e('No seats/places selected', 'seatreg'); ?></div>
 				<div class="alert alert-primary d-none" id="seat-nr-change-warning"><?php esc_html_e('Pending or booked seat numbers can\'t be changed', 'seatreg'); ?></div>
 				<div id="seat-numbering-wrap">
 					<div>
@@ -400,98 +400,98 @@
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-mouse"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('With select tool you can select individual objects in your seat map. This tool is also used to resize and change object location. To change seat/custom object location you need to drag it with mouse cursor. Resizing is done by placing mouse cursor at border of a object and dragging it to desired width or height.', 'seatreg');?>
+							<?php esc_html_e('With select tool you can select individual objects in your registration map. This tool is also used to resize and change object location. To change object location you need to drag it with mouse cursor. Resizing is done by placing mouse cursor at border of a object and dragging it to desired width or height.', 'seatreg'); ?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-lasso"></div>
 						<p class="help-dialog-text">	
-							<?php esc_html_e('Lasso tool is helpful if you wish to work with multiple objects at the same time (changing color, deleting, adding hover text and legends). Simple hold down left mouse button and move your cursor to select multiple seats/boxes.', 'seatreg');?>						
+							<?php esc_html_e('Lasso tool is helpful if you wish to work with multiple objects at the same time (changing color, deleting, adding hover text and legends). Simple hold down left mouse button and move your cursor to select multiple objects.', 'seatreg');?>						
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-add"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('With this tool you can create seats. Simply click on gray dotted box and new seat will be created. You can create multiple seats at once by dragging cursor over gray boxes.', 'seatreg');?>
+							<?php esc_html_e('With this tool you can create seats/places. Simply click on gray dotted box and new seat/place will be created. You can create multiple seats/places at once by dragging cursor over gray boxes.', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-add2"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Custom boxes are used to show special objects in your seat map (exit, trash can, stage and so on). Simply click on gray dotted box and new custom box will be created. You can create multiple boxes at once by dragging cursor over gray boxes.', 'seatreg');?>
+							<?php esc_html_e('Custom boxes are used to show special objects in your registration map (exit, trash can, stage and so on). Simply click on gray dotted box and new custom box will be created. You can create multiple boxes at once by dragging cursor over gray boarder boxes.', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-text"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('With text tool you can add text to your seat map. You can also change the color of the text with the color tool.', 'seatreg');?>
+							<?php esc_html_e('With text tool you can add text to your registration map. You can also change the color of the text with the color tool.', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-eraser"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('With eraser tool you can remove seats and custom boxes. Simply click on object and it will be removed. You can remove multiple objects at once by holding down left mouse and moving cursor over them.', 'seatreg');?>
+							<?php esc_html_e('With eraser tool you can remove objects. Simply click on object and it will be removed. You can remove multiple objects at once by holding down left mouse and moving cursor over them.', 'seatreg');?>
 						</p>
 					</div>
 					
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-del"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Once you have selected seats/boxes with either select or lasso tool you can delete them with clicking on garbage can button. ', 'seatreg');?>
+							<?php esc_html_e('Once you have selected objects with either select or lasso tool you can delete them with clicking on garbage can button. ', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-legend "></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Legends are useful if you want to add labels to seats/custom boxes with special meaning. Example: Lets say you want to show where boys and where girls should sit. In legends dialog you can create, delete, change and apply legends to seats nad custom boxes.', 'seatreg');?>
+							<?php esc_html_e('Legends are useful if you want to add labels to ojectss with special meaning. Example: Lets say you want to show where boys and where girls should sit. In legends dialog you can create, delete, change and apply legends to objects.', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-hover"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Hover text is shown when user clicks or moves mouse cursor over a seat/custom box. Simply select seats or custom boxes and add text via hover text dialog.', 'seatreg');?>
+							<?php esc_html_e('Hover text is shown when user clicks or moves mouse cursor over an object. Simply select objects and add text via hover text dialog.', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-pallette"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Opens up color dialog where you can apply colors to selected seats/custom boxes.', 'seatreg');?>
+							<?php esc_html_e('Opens up color dialog where you can apply colors to selected objects.', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-grid"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('In seat map builder you can see lot of gray dotted boxes. These boxes are used to creat seats and custom boxes. In grid settings you can change size, distance and count of those grid boxes. That way you can change how new seats and boxes are created.', 'seatreg');?>
+							<?php esc_html_e('In map builder you can see lot of gray dotted boxes. These boxes are used to creat objects. In grid settings you can change size, distance and count of those grid boxes. That way you can change how objects are created.', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-price"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Lets you add prices to seats. You also need to configure paypal in settings to enable payments.', 'seatreg');?>
+							<?php esc_html_e('Lets you add prices to seats/places. You also need to configure paypal in settings to enable payments.', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-lock"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Lets you lock or set password to seats. When seat is locked then only admin can book a seat using booking-manager. If password is added to the seat then it is required before booking can be made.', 'seatreg');?>
+							<?php esc_html_e('Lets you lock or set password to seats/places. When seat/place is locked then only admin can book it using booking-manager. If password is added then it is required before booking can be made.', 'seatreg');?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-seat-nr"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Lets you change seat numbers. Pending and booked seat numbers can\'t be changed.', 'seatreg');?>
+							<?php esc_html_e('Lets you change seat/place numbers. Pending and booked seat/place numbers can\'t be changed.', 'seatreg');?>
 						</p>
 					</div>
 
@@ -512,8 +512,8 @@
 				</div>
 				<div class="modal-body">
 					<div>
-						<h5><?php esc_html_e('Deleting seats with pending or booked status is not enabled', 'seatreg');?></h5>
-						<p><?php esc_html_e('If you really want to delete it then you first need to relocate booking to other seat with booking-manager.', 'seatreg'); ?></p>
+						<h5><?php esc_html_e('Deleting objects with pending or booked status is not enabled', 'seatreg');?></h5>
+						<p><?php esc_html_e('If you really want to delete it then you first need to relocate booking to other object with booking-manager.', 'seatreg'); ?></p>
 					</div>
 				</div>
 				<div class="modal-footer">

@@ -141,7 +141,7 @@ function seatreg_generate_admin_strings() {
     $translations->pleaseEnterPayPalCurrencyCode = esc_html__('Please enter currency code', 'seatreg');
     $translations->pleaseEnterStripeApiKey = esc_html__('Please enter Stripe API key', 'seatreg');
     $translations->pricesAdded = esc_html__('Prices added', 'seatreg');
-    $translations->noSeatsSelected = esc_html__('No seats selected!', 'seatreg');
+    $translations->noSeatsSelected = esc_html__('No seats/places selected!', 'seatreg');
     $translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
     $translations->checkEmailAddress = esc_html__('Check your email address', 'seatreg');
     $translations->emailSendingFailed= esc_html__('Email sending failed', 'seatreg');
