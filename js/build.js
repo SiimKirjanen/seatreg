@@ -527,6 +527,7 @@
 		this.needToChangeStructure = false;
 		this.needToSave = false;  //if user makes changes this will be true. when saved this will be false
 		this.roomNameChange = {};  //if room name got changed. store old and new here
+		this.usingSeats = true; //do we use seats or generic place
 		this.settings = {};
 	}
 
@@ -816,12 +817,12 @@
 					colorBox.css({
 						'background-color':'yellow',
 					}).addClass('legend-box-circle');
-					textSpan.text(translator.translate('pendingSeat'));
+					textSpan.text(this.using_seats ? translator.translate('pendingSeat') : translator.translate('pendingPlace'));
 					break;
 
 				case 1:
 					colorBox.css('background-color','red').addClass('legend-box-circle');
-					textSpan.text(translator.translate('confirmedSeat'));
+					textSpan.text(this.using_seats ? translator.translate('confirmedSeat') : translator.translate('confirmedPlace'));
 					break;
 			}
 			$('.legends').append(colorBox,textSpan);
@@ -2211,7 +2212,9 @@
 			$('#room-name-dialog').modal("toggle");
 			this.setBuilderHeight();
 		}else {
-			this.settings =  window.seatreg.settings;
+			this.settings = window.seatreg.settings;
+			this.usingSeats = window.seatreg.settings.using_seats === '1';
+
 			var roomData = responseObj.roomData;
 			this.regBoxCounter = responseObj.global.boxCounter;
 			var globalLegendsLength = responseObj.global.legends.length;

@@ -1736,7 +1736,7 @@ function seatreg_get_registration_data($code) {
 
 	if($code != null) {
 		$registration = $wpdb->get_results( $wpdb->prepare(
-			"SELECT a.*, b.paypal_payments
+			"SELECT a.*, b.paypal_payments, b.using_seats
 			FROM $seatreg_db_table_names->table_seatreg AS a
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 			ON a.registration_code = b.registration_code
