@@ -10,6 +10,7 @@ function seatreg_generate_registration_strings() {
 	$translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
 	$translations->somethingWentWrong = esc_html__('Something went wrong. Please try again', 'seatreg');
 	$translations->selectionIsEmpty = esc_html__('Seat selection is empty', 'seatreg');
+    $translations->selectionIsEmptyPlace = esc_html__('Place selection is empty', 'seatreg');
     $translations->youCanAdd_ = esc_html__('You can add ', 'seatreg');
     $translations->_toCartClickTab = esc_html__(' to selection by selecting boxes', 'seatreg');
 	$translations->toCartClickTab = esc_html__(' to selection by clicking/tabbing them', 'seatreg');
@@ -29,9 +30,11 @@ function seatreg_generate_registration_strings() {
 	$translations->remove = esc_html__('Remove', 'seatreg');
 	$translations->add_ = esc_html__('Add ', 'seatreg');
 	$translations->openSeatsInRoom_ = esc_html__('Open seats in the room: ', 'seatreg');
+    $translations->openPlacesInRoom_ = esc_html__('Open places in the room: ', 'seatreg');
 	$translations->pendingSeatInRoom_ = esc_html__('Pending bookings in the room: ', 'seatreg');
 	$translations->confirmedSeatInRoom_ = esc_html__('Approved bookings in the room: ', 'seatreg');
 	$translations->seat = esc_html__('seat', 'seatreg');
+    $translations->place = esc_html__('place', 'seatreg');
 	$translations->firstName = esc_html__('Firstname', 'seatreg');
 	$translations->lastName = esc_html__('Lastname', 'seatreg');
 	$translations->eMail = esc_html__('Email', 'seatreg');
@@ -39,19 +42,25 @@ function seatreg_generate_registration_strings() {
     $translations->_selected = esc_html__(' selected', 'seatreg');
     $translations->_seatSelected = esc_html__(' seat selected', 'seatreg');
     $translations->_seatsSelected = esc_html__(' seats selected', 'seatreg');
+    $translations->_placeSelected = esc_html__(' place selected', 'seatreg');
+    $translations->_placesSelected = esc_html__(' places selected', 'seatreg');
     $translations->bookingsConfirmed = esc_html__('Your booking is approved', 'seatreg');
     $translations->bookingsConfirmedPending = esc_html__('Your booking is now in pending state. Registration admin needs to approve it', 'seatreg');
     $translations->selectingGuide = esc_html__('Select a seat you want to add to booking', 'seatreg');
+    $translations->selectingGuidePlace = esc_html__('Select a place you want to add to booking', 'seatreg');
     $translations->Booked = esc_html__('Booked', 'seatreg');
     $translations->Pending = esc_html__('Pending', 'seatreg');
     $translations->maxSeatsToAdd = esc_html__('Total seats you can add to booking is ', 'seatreg');
+    $translations->maxPlacesToAdd = esc_html__('Total places you can add to booking is ', 'seatreg');
     $translations->seatCosts_ = esc_html__('Booking this seat costs ', 'seatreg');
+    $translations->placeCosts_ = esc_html__('Booking this place costs ', 'seatreg');
     $translations->bookingTotalCostIs_ = esc_html__('Booking total cost is ', 'seatreg');
     $translations->receiptSent = esc_html__('Booking receipt has been sent to your email', 'seatreg');
     $translations->payForBookingLink = esc_html__('Click the following link to pay for the booking', 'seatreg');
     $translations->yes = esc_html__('Yes', 'seatreg');
     $translations->no = esc_html__('No', 'seatreg');
     $translations->seatIsLocked = esc_html__('Seat is locked', 'seatreg');
+    $translations->placeLocked = esc_html__('Place is locked', 'seatreg');
     $translations->pleaseEnterPassword = esc_html__('Please enter password', 'seatreg');
     $translations->passwordNotCorrect = esc_html__('Password is not correct', 'seatreg');
 

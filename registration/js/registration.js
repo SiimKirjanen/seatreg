@@ -69,11 +69,12 @@
 		this.customF = [];
 		this.gmailNeeded = gmail;
 		this.status = regTime;
-		this.spotName = translator.translate('seat');
 		this.emailConfirmEnabled = emailConfirmRequired;
 		this.payPalEnabled = payPalEnabled === '1' ? true : false;
 		this.payPalCurrencyCode = this.payPalEnabled ? payPalCurrencyCode : '';
 		this.enteredSeatPasswords = {};
+		this.usingSeats = usingSeats === '1';
+		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
 	}
 
 	function CartItem(id, nr, room, roomUUID, price) {
@@ -383,11 +384,12 @@ SeatReg.prototype.paintRoomInfo = function() {
 	$('#current-room-name').text(this.rooms[this.currentRoom].room.name);
 	var infoLoc = this.rooms[this.currentRoom].room;
 	var documentFragment = $(document.createDocumentFragment());
+	var text = this.usingSeats ? translator.translate('openSeatsInRoom_') : translator.translate('openPlacesInRoom_');
 
 	documentFragment.append(
 		'<div class="info-item open-seats">' + 
 		'<span>' + 
-		translator.translate('openSeatsInRoom_') +
+		text +
 		'</span>' + 
 		infoLoc.roomOpenSeats + 
 		'</div>', 
@@ -534,10 +536,12 @@ SeatReg.prototype.addSeatToCart = function() {
 		}else {
 			var selected = scope.selectedSeats.length;
 			var infoText;
-			if(selected > 1) {
-				infoText = selected + translator.translate('_seatsSelected');
+
+			if( selected > 1 ) {
+				infoText = selected + (this.usingSeats ? translator.translate('_seatsSelected') : translator.translate('_placesSelected') );
 			}else {
 				infoText = selected + translator.translate('_seatSelected');
+				infoText = selected + (this.usingSeats ? translator.translate('_seatSelected') : translator.translate('_placeSelected') );
 			}
 			$('#seat-cart-info').text(infoText);
 			var totalPrice = scope.selectedSeats.reduce(function(accumulator, currentValue) {
@@ -564,10 +568,12 @@ SeatReg.prototype.addSeatToCart = function() {
 
 SeatReg.prototype.openSeatCart = function() {
 	var selected = this.selectedSeats.length;
+	var cartHeaderText = this.usingSeats ? translator.translate('selectionIsEmpty') : translator.translate('selectionIsEmptyPlace');
+	var cartEmptyText = this.usingSeats ? translator.translate('selectingGuide') : translator.translate('selectingGuidePlace');
 
 	if(selected == 0) {	
 		if(this.status == 'run') {
-			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('selectingGuide') + '</p>');
+			$('#seat-cart-info').html('<h3>'+ cartHeaderText +'</h3><p>' + cartEmptyText + '</p>');
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
 		}else {
@@ -577,10 +583,12 @@ SeatReg.prototype.openSeatCart = function() {
 	}else {
 		$('#seat-cart-rows').css('display','block');
 		var infoText;
+
 		if(selected > 1) {
-			infoText = selected + translator.translate('_seatsSelected');
+			infoText = selected + ( this.usingSeats ? translator.translate('_seatsSelected') : translator.translate('_placesSelected') );
 		}else {
 			infoText = selected + translator.translate('_seatSelected');
+			infoText = selected + ( this.usingSeats ? translator.translate('_seatSelected') : translator.translate('_placeSelected') );
 		}
 		$('#seat-cart-info').text(infoText);
 		$('#checkout').css('display','inline-block');
@@ -806,8 +814,10 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	if(type != 'box') {
 		if(!isSelected) {
 			if(isLocked) {
+				var text = this.usingSeats ? translator.translate('seatIsLocked') : translator.translate('placeIsLocked');
+
 				$('#confirm-dialog-mob-ok').css('display','none');
-				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ translator.translate('seatIsLocked') +'</div>');
+				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">' + text + '</div>');
 			}else if(passwordNeeded && !this.enteredSeatPasswords.hasOwnProperty(seatId)) {
 				$('#confirm-dialog-mob-ok').css('display','none');
 				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ translator.translate('pleaseEnterPassword') + '</div>' + 
@@ -818,10 +828,14 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 			}else if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
 
 				if(this.status == 'run') {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + seatPrefix + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ translator.translate('maxSeatsToAdd') + ' ' + this.seatLimit +'</p>' + '</div>');
+					var maxPlacesText = this.usingSeats ? translator.translate('maxSeatsToAdd') : translator.translate('maxPlacesToAdd');
+					
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + seatPrefix + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ maxPlacesText + ' ' + this.seatLimit +'</p>' + '</div>');
 
 					if(this.payPalEnabled  && this.payPalCurrencyCode && price > 0) {
-						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + translator.translate('seatCosts_') + '<strong>' + price + ' ' + this.payPalCurrencyCode + '</strong></p>');
+						var placeCostText = this.usingSeats ? translator.translate('seatCosts_') : translator.translate('placeCosts_');
+
+						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + placeCostText + '<strong>' + price + ' ' + this.payPalCurrencyCode + '</strong></p>');
 					}
 					$('#confirm-dialog-mob-ok').css('display','inline-block');
 				}else {
