@@ -2154,7 +2154,7 @@ function seatreg_create_submit_handler() {
 	}
 
 	if( seatreg_create_new_registration($registrationName) ) {
-		wp_redirect( $_POST['_wp_http_referer'] );
+		wp_redirect( SEATREG_HOME_PAGE );
 
 		die();
 	}else {
@@ -2182,7 +2182,7 @@ function seatreg_copy_registration_handler() {
 	}
 
 	if( SeatregRegistrationService::copyRegistration( $_POST['registration_code'], $_POST['new-registration-name'] ) ) {
-		wp_redirect( $_POST['_wp_http_referer'] );
+		wp_redirect( SEATREG_HOME_PAGE );
 
 		die();
 	}else {
@@ -2210,7 +2210,7 @@ function seatreg_delete_registration_handler() {
 
 	if( $status ) {
 		seatreg_add_activity_log('map', sanitize_text_field($_POST['registration-code']), 'Registration deleted');
-		wp_redirect( $_POST['_wp_http_referer'] );
+		wp_redirect( SEATREG_HOME_PAGE );
 		die();
 	}else {
 		wp_die( esc_html_e('Something went wrong while deleting a registration', 'seatreg') );
@@ -2437,7 +2437,7 @@ function seatreg_form_submit_handle() {
 		wp_die('Error updating settings');
 	}else {
 		seatreg_add_activity_log('settings', sanitize_text_field($_POST['registration_code']), 'Settings changed');
-		wp_redirect($_POST['_wp_http_referer']);
+		wp_redirect( SEATREG_HOME_PAGE );
 
 		die();
 	}

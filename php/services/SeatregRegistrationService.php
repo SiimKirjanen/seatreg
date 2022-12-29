@@ -142,7 +142,7 @@ class SeatregRegistrationService {
         if( $insertStatus ) {
             $insertStatus = self::insertRegistrationOptions($generatedCode, $registrationData);
             if($insertStatus) {
-                wp_redirect( $_POST['_wp_http_referer'] );
+                wp_redirect( SEATREG_HOME_PAGE );
 
                 die();
             }else {
