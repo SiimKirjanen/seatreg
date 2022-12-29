@@ -29,8 +29,8 @@ class SeatregTemplateService {
         return str_replace(SEATREG_TEMPLATE_STATUS_LINK, $bookingStatusLink, $template);
     }
 
-    public static function replaceBookingTable($template, $bookings, $registrationCustomFields) {
-        $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
+    public static function replaceBookingTable($template, $bookings, $registrationCustomFields, $registration) {
+        $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 
         return str_replace(SEATREG_TEMPLATE_BOOKING_TABLE, $bookingTable, $template);
     }
@@ -61,11 +61,11 @@ class SeatregTemplateService {
         return str_replace(SEATREG_TEMPLATE_PAYMENT_TABLE, $paymentTable, $template);
     }
 
-    public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $registrationCustomFields, $bookingId) {
+    public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $registrationCustomFields, $bookingId, $registration) {
         $template = self::sanitizeTemplate($template);
         $template = self::replaceLineBreaksWithBrTags($template);
         $template = self::replaceBookingStatusLink($template, $bookingStatusLink);
-        $template = self::replaceBookingTable($template, $bookings, $registrationCustomFields);
+        $template = self::replaceBookingTable($template, $bookings, $registrationCustomFields, $registration);
         $template = self::replaceBookingId($template, $bookingId);
         $template = self::replacePaymentTable($template, $bookingId);
 

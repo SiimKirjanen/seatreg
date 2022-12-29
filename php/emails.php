@@ -19,7 +19,7 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
     }
    
     $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), $registrationName ) . "<br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg") . "<br><br>";
-    $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
+    $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 
     wp_mail($adminEmail, "$registrationName has a new booking", $message, array(
         "Content-type: text/html",
@@ -59,7 +59,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     $qrType = $registration->send_approved_booking_email_qr_code;
 
     if($template) {
-        $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $registrationCustomFields, $bookingId);
+        $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $registrationCustomFields, $bookingId, $registration);
     }else {
         $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html($registrationName) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
         $message .= '<p>';
@@ -67,7 +67,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         $message .= esc_html__('Booking status link:', 'seatreg') . ' <a href="'. $bookingStatusUrl .'" target="_blank">'. esc_url($bookingStatusUrl) .'</a>';
         $message .= '</p>';
 
-        $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
+        $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
         $message .= $bookingTable;
         
         if( SeatregBookingService::getBookingTotalCost($bookingId, $registration->registration_layout) > 0 ) {

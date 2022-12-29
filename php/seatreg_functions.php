@@ -1286,7 +1286,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			echo '<div>', esc_html__('Booking status', 'seatreg'), ': ' , SeatregBookingService::getBookingStatusText($bookingStatus),'</div>';
 			
 			echo '<div style="margin: 12px 0px">';
-			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings);
+			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 			echo '</div>';
 
 			if( SeatregBookingService::getBookingTotalCost($bookingId, $registration->registration_layout) > 0 ) {

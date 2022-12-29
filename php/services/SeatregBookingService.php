@@ -90,20 +90,22 @@ class SeatregBookingService {
      * Generate booking table
      * @param array $registrationCustomFields custom fields added to registration
      * @param array $bookings The UUID of the booking
+     * @param object $registration Registration data
      * @return string Booking table markup
      * 
     */
 
-    public static function generateBookingTable($registrationCustomFields, $bookings) {
+    public static function generateBookingTable($registrationCustomFields, $bookings, $registration) {
         $enteredCustomFieldData = json_decode($bookings[0]->custom_field_data);
         $customFieldLabels = array_map(function($customField) {
             return $customField->label;
         }, is_array( $enteredCustomFieldData) ? $enteredCustomFieldData : [] );
+        $spotName = $registration->using_seats ? __('Seat', 'seatreg') : __('Place', 'seatreg');
 
         $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;">
             <tr>
             <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Name', 'seatreg') . '</th>
-            <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Seat', 'seatreg') . '</th>
+            <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . $spotName . '</th>
             <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Room', 'seatreg') . '</th>
             <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Email', 'seatreg') . '</th>';
         
@@ -147,9 +149,10 @@ class SeatregBookingService {
         $bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
         $bookings = self::getBookingsCost($bookingId, $bookingData->registration_layout);
         $totalCost = 0;
+        $spotName = $bookingData->using_seats ? __('Sear nr', 'seatreg') : __('Place nr', 'seatreg');
         $paymentTable = '<table style="border: 1px solid black;border-collapse: collapse;">
             <tr>
-                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Sear nr', 'seatreg') . '</th>
+                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . $spotName . '</th>
                 <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Seat price', 'seatreg') . '</th>
             </tr>';
 
