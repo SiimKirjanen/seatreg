@@ -389,6 +389,13 @@
 				</div>
 			</div>
 
+			<div id="powered-by" class="powered-by">
+				<a href="https://wordpress.org/plugins/seatreg/" target="_blank" class="powered-by__link">
+					<span class="powered-by__text"><?php esc_html_e('Powered by', 'seatreg'); ?></span>
+					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . '/img/seatreg_logo.png'?>" class="powered-by__logo" alt="SeatReg" />	
+				</a>		
+			</div>
+
 			<div id="email-conf" class="dialog-box">
 				<div id="email-conf-inner" class="dialog-box-inner border-box animated zoomIn">
 					<h2>

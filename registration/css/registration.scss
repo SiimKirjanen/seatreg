@@ -973,6 +973,36 @@ body {
 	}
 }
 
+.powered-by {
+	position: absolute;
+	bottom: 10px;
+	right: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	font-size: 14px;
+
+	@media only screen and (max-width: 1023px) {
+		display: none;
+	}
+
+	&__link {
+		text-decoration: none;
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__text {
+		color: #000;
+		padding-bottom: 3px;
+	}
+
+	&__logo {
+		width: 100px;
+	}
+}
+
 .mobile-legend {
 	float: right;
 	cursor: pointer;
