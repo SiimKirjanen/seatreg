@@ -1104,6 +1104,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	seatreg_booking_edit_modal($usingSeats);
 	seatreg_add_booking_modal($usingSeats);
 	seatreg_booking_activity_modal();
+	seatreg_bookings_file_modal($custom_fields, $code);
 }
 
 function seatreg_view_booking_activity_btn($booking) {
@@ -1221,6 +1222,10 @@ function seatreg_shortcode_modal($registrationCode) {
 
 function seatreg_booking_activity_modal() {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/booking-activity-modal.php' );
+}
+
+function seatreg_bookings_file_modal($customFields, $registrationCode) {
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/bookings-file-modal.php' );
 }
 
 //generate tabs

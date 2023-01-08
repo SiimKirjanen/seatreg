@@ -635,6 +635,16 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	modal.modal('show');
 });
 
+$('#generate-bookings-file').on('click', function() {
+	var href = $(this).attr('data-link');
+	var getParams = $('#bookings-file-form :input').filter(function(index, element) {
+        return $(element).val() != '';
+    }).serialize();
+
+	window.open(href + '&' + getParams, '_blank');
+
+});
+
 $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' + '" alt="Loading..." class="ajax-load" />');
 	var subBtn = $(this);
@@ -886,30 +896,7 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e) {
 	e.preventDefault();
 
-	var _href = $(this).attr('href');
-
-	alertify.set({ buttonFocus: "ok" });
-	alertify.set({ labels: {
-		ok     : translator.translate('ok'),
-		cancel : translator.translate('cancel')
-	} });
-
-	alertify.confirm( 
-	"<div class='booking-status-check-wrap'><label>" + translator.translate('showPendingBookings') + "<input type='checkbox' id='show-pending' checked /></label></div>" +
-	"<div class='booking-status-check-wrap'><label>" + translator.translate('showApprovedBookings') + "<input type='checkbox' id='show-confirmed' checked /></label></div>", function (e) {
-
-	    if (e) {
-	    	if($('#show-pending').is(':checked')) {
-	    		_href += '&s1';
-			}
-			
-	    	if($('#show-confirmed').is(':checked')) {
-	    		_href += '&s2';
-			}
-			
-	    	window.open(_href,'_blank');
-	    }
-	});
+	$('#bookings-file-modal').modal('show');
 });
 
 /*Settings page custom fields functions*/
