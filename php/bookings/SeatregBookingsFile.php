@@ -30,9 +30,9 @@ class SeatregBookingsFile {
 
     protected function setUp() {
         $this->_registrationInfo = seatreg_get_options($this->_registrationCode)[0];
-        $this->_registrations = seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat);
-        $this->_registrationName = esc_html($this->_registrationInfo->registration_name);
         $this->_customFields = ($this->_registrationInfo->custom_fields !== null) ? json_decode($this->_registrationInfo->custom_fields, true) : [];
+        $this->_registrations = $this->filtering( seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat) );
+        $this->_registrationName = esc_html($this->_registrationInfo->registration_name);
         $this->_usingSeats = $this->_registrationInfo->using_seats === '1';
     }
 
@@ -76,5 +76,47 @@ class SeatregBookingsFile {
 
     protected function getFileName() {
         return date('Y-M-d', $this->_currentTimestamp);
+    }
+
+    private function filtering( $bookingsData ) {
+        return array_filter($bookingsData, function($booking) {
+            $bookingCustomFieldData = json_decode($booking->custom_field_data);
+
+            if( isset( $_GET['name'] ) ) {
+                if( !str_contains( $booking->first_name . $booking->last_name, $_GET['name'] ) ) {
+                    return false;
+                }
+            }
+
+            if( isset( $_GET['email'] ) ) {
+                if( $booking->email !== $_GET['email'] ) {
+                    return false;
+                }
+            }
+
+            foreach( $this->_customFields as $customField ) {
+                if( isset( $_GET[$customField["label"]] ) ) {
+                    $data = array_values(array_filter($bookingCustomFieldData, function($customFieldData) use ($customField)  {
+                        return $customFieldData->label === $customField["label"];
+                    }));
+                
+                    if( !$data || count($data) === 0) {
+                        return false;
+                    }
+
+                    if( $customField["type"] === 'check' ) {
+                        if( $data[0]->value !== '1' ) {
+                            return false;
+                        }
+                    }else {
+                        if( $data[0]->value !== $_GET[$customField["label"]] ) {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        });
     }
 }

@@ -24,7 +24,7 @@ class SeatregCustomFieldService {
                             ?>
                                 <div class="custom-field" data-type="sel">
                                     <label><span><?php esc_html_e($customField['label']); ?></span>
-                                        <select>
+                                        <select name="<?php esc_html_e($customField['label']); ?>">
                                             <?php foreach($customField['options'] as $option) : ?>
                                                 <option><span><?php esc_html_e($option); ?></span></option>
                                             <?php endforeach; ?>
@@ -35,13 +35,13 @@ class SeatregCustomFieldService {
                         }else if( $customField['type'] == 'text' ){
                             ?>
                                 <div class="custom-field" data-type="text">
-                                    <label><span><?php esc_html_e($customField['label']); ?></span><input type="text" /></label>
+                                    <label><span><?php esc_html_e($customField['label']); ?></span><input type="text" name="<?php esc_html_e($customField['label']); ?>" /></label>
                                 </div>
                             <?php
                         }else if( $customField['type'] == 'check' ) {
                             ?>
                                 <div class="custom-field" data-type="check">
-                                    <label><span><?php esc_html_e($customField['label']); ?></span><input type="checkbox" /></label>
+                                    <label><span><?php esc_html_e($customField['label']); ?></span><input type="checkbox" name="<?php esc_html_e($customField['label']); ?>" /></label>
                                 </div>
                             <?php
                         }

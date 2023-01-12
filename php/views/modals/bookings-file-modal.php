@@ -18,11 +18,11 @@
                     <?php SeatregCustomFieldService::generateCustomFieldsMarkup($customFields); ?>
 
                     <div>
-                        <label><?php esc_html_e('Show pending bookins', 'seatreg'); ?><input type='checkbox' name='show-pending' checked /></label>
+                        <label><?php esc_html_e('Show pending bookins', 'seatreg'); ?><input type='checkbox' name='s1' checked></label>
                     </div>
 
                     <div>
-                        <label><?php esc_html_e('Show approved bookings', 'seatreg'); ?><input type='checkbox' name='show-confirmed' checked /></label>
+                        <label><?php esc_html_e('Show approved bookings', 'seatreg'); ?><input type='checkbox' name='s2' checked></label>
                     </div>
                 </form>
             </div>
