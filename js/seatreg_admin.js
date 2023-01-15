@@ -635,10 +635,14 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	modal.modal('show');
 });
 
+$('#bookings-file-modal .custom-filtering').on('click', function() {
+	$('.custom-filtering-selection').toggle(400);
+});
+
 $('#generate-bookings-file').on('click', function() {
 	var href = $(this).attr('data-link');
 	var getParams = $('#bookings-file-form :input').filter(function(index, element) {
-        return $(element).val() != '';
+        return true;
     }).serialize();
 
 	window.open(href + '&' + getParams, '_blank');

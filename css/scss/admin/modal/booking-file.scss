@@ -2,7 +2,19 @@
     .bookings-file-modal{
         input {
             margin-left: 8px;
-            margin-bottom: 8px;
+        }
+        .fa-plus-circle {
+            color: #61B329;
+        }
+        .form-fields {
+            margin-bottom: 12px;  
+        }
+        .custom-filtering {
+            cursor: pointer;
+        }
+        .custom-filtering-selection {
+            display: none;
+            margin-top: 12px;
         }
     }
 }

@@ -7,24 +7,32 @@
             </div>
             <div class="modal-body">
                 <form id="bookings-file-form">
-                    <div>
-                        <label>Name<input name="name"/></label>
+                    <div class="form-fields">
+                        <div class="mb-1">
+                            <label>Name<input name="name"/></label>
+                        </div>
+
+                        <div class="mb-1">
+                            <label>Email<input name="email" /></label>
+                        </div>
+
+                        <div class="mb-1">
+                            <label><?php esc_html_e('Show pending bookins', 'seatreg'); ?><input type='checkbox' name='s1' checked></label>
+                        </div>
+
+                        <div class="mb-1">
+                            <label><?php esc_html_e('Show approved bookings', 'seatreg'); ?><input type='checkbox' name='s2' checked></label>
+                        </div>
                     </div>
-
-                    <div>
-                        <label>Email<input name="email" /></label>
-                    </div>
-
-                    <?php SeatregCustomFieldService::generateCustomFieldsMarkup($customFields); ?>
-
-                    <div>
-                        <label><?php esc_html_e('Show pending bookins', 'seatreg'); ?><input type='checkbox' name='s1' checked></label>
-                    </div>
-
-                    <div>
-                        <label><?php esc_html_e('Show approved bookings', 'seatreg'); ?><input type='checkbox' name='s2' checked></label>
+                    <hr>
+                    <div class="custom-filtering">
+                        <span><?php esc_html_e('Add custom filter', 'seatreg'); ?></span>
                     </div>
                 </form>
+                <div class="custom-filtering-selection">
+                    <?php SeatregCustomFieldService::generateCustomFieldsMarkup($customFields, true); ?>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>

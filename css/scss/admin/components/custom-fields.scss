@@ -1,0 +1,17 @@
+#seatreg-booking-manager {
+    .custom-fields {
+        .custom-field {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+
+            label, input {
+                margin-bottom: 0;
+            }
+            .fa {
+                cursor: pointer;
+                margin-left: 8px;
+            }
+        }
+    }
+}
