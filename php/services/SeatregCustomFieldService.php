@@ -33,7 +33,7 @@ class SeatregCustomFieldService {
                                         </select>
                                     </label>
                                     <?php if($addButtons): ?>
-                                        <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                                        <i class="fa fa-plus-circle fa-lg" data-action="remove" aria-hidden="true"></i>
                                     <?php endif; ?>
                                 </div>
                            <?php 
@@ -42,16 +42,16 @@ class SeatregCustomFieldService {
                                 <div class="custom-field" data-type="text">
                                     <label><span><?php esc_html_e($customField['label']); ?></span><input type="text" name="<?php esc_html_e($customField['label']); ?>" /></label>
                                     <?php if($addButtons): ?>
-                                        <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                                        <i class="fa fa-plus-circle fa-lg" data-action="remove" aria-hidden="true"></i>
                                     <?php endif; ?>
                                 </div>
                             <?php
                         }else if( $customField['type'] == 'check' ) {
                             ?>
                                 <div class="custom-field" data-type="check">
-                                    <label><span><?php esc_html_e($customField['label']); ?></span><input type="checkbox" name="<?php esc_html_e($customField['label']); ?>" /></label>
+                                    <label><span><?php esc_html_e($customField['label']); ?></span><input type="checkbox" name="<?php esc_html_e($customField['label']); ?>" value="1" checked /></label>
                                     <?php if($addButtons): ?>
-                                        <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+                                        <i class="fa fa-plus-circle fa-lg" data-action="remove" aria-hidden="true"></i>
                                     <?php endif; ?>
                                 </div>
                             <?php

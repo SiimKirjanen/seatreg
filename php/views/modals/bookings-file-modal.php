@@ -9,11 +9,11 @@
                 <form id="bookings-file-form">
                     <div class="form-fields">
                         <div class="mb-1">
-                            <label>Name<input name="name"/></label>
+                            <label><?php esc_html_e('Name', 'seatreg'); ?><input name="name"/></label>
                         </div>
 
                         <div class="mb-1">
-                            <label>Email<input name="email" /></label>
+                            <label><?php esc_html_e('Email', 'seatreg'); ?><input name="email" /></label>
                         </div>
 
                         <div class="mb-1">
@@ -26,13 +26,12 @@
                     </div>
                     <hr>
                     <div class="custom-filtering">
-                        <span><?php esc_html_e('Add custom filter', 'seatreg'); ?></span>
+                        <span><?php esc_html_e('Add custom field filter', 'seatreg'); ?></span><i class="fa fa-plus-square-o" aria-hidden="true"></i>
                     </div>
                 </form>
                 <div class="custom-filtering-selection">
                     <?php SeatregCustomFieldService::generateCustomFieldsMarkup($customFields, true); ?>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>

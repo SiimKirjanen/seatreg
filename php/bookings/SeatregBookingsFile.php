@@ -104,14 +104,8 @@ class SeatregBookingsFile {
                         return false;
                     }
 
-                    if( $customField["type"] === 'check' ) {
-                        if( $data[0]->value !== '1' ) {
-                            return false;
-                        }
-                    }else {
-                        if( $data[0]->value !== $_GET[$customField["label"]] ) {
-                            return false;
-                        }
+                    if( $data[0]->value !== $_GET[$customField["label"]] ) {
+                        return false;
                     }
                 }
             }

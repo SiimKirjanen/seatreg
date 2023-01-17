@@ -636,16 +636,27 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 });
 
 $('#bookings-file-modal .custom-filtering').on('click', function() {
-	$('.custom-filtering-selection').toggle(400);
+	$('.custom-filtering-selection').toggle();
+});
+
+$("#bookings-file-modal .fa[data-action='remove']").on('click', function() {
+	$customField = $(this).closest('.custom-field').children(':not(.fa)').clone();
+
+	$('#bookings-file-form .form-fields').append($('<div class="mb-1">').append($customField));
 });
 
 $('#generate-bookings-file').on('click', function() {
 	var href = $(this).attr('data-link');
 	var getParams = $('#bookings-file-form :input').filter(function(index, element) {
-        return true;
+		return $(element).val() != '';
     }).serialize();
+	var uncheckedCheckboxesGetparams = "";
+	
+	$("#bookings-file-form input:checkbox:not(:checked)").each(function() {
+		uncheckedCheckboxesGetparams += "&" + $(this).attr('name') + "=0";
+	});
 
-	window.open(href + '&' + getParams, '_blank');
+	window.open(href + '&' + getParams + uncheckedCheckboxesGetparams, '_blank');
 
 });
 
