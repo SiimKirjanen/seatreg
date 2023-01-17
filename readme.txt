@@ -8,7 +8,7 @@ Stable tag: 1.28.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
-Create and manage seat registrations. Design your own seat maps and manage seat bookings.
+Create and manage online registrations. Design your own registration scheme and manage bookings.
  
 
 == Description ==

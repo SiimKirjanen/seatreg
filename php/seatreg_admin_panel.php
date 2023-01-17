@@ -70,8 +70,8 @@ function seatreg_create_welcome() {
 	?>
 	<div class="seatreg-wp-admin seatreg_page_seatreg-builder">
 		<div class="jumbotron">
-		  <h2 class="main-heading"><?php esc_html_e('Create and manage seat registrations', 'seatreg'); ?></h2>
-		  <p class="jumbotron-text"><?php esc_html_e('Design your own seat map and manage seat bookings', 'seatreg'); ?></p>
+		  <h2 class="main-heading"><?php esc_html_e('Create and manage online registrations', 'seatreg'); ?></h2>
+		  <p class="jumbotron-text"><?php esc_html_e('Design your own registration scheme and manage bookings.', 'seatreg'); ?></p>
 	    </div>
 		<div class="donate-wrap">
 			<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/consider_donating.svg'; ?>" alt="Consider donating" width="160" />

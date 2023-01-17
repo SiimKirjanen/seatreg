@@ -16,7 +16,7 @@
                     <?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
                     <br><br>
                     <p>
-                        <?php esc_html_e('Only registration map and settings will be copied', 'seatreg'); ?>
+                        <?php esc_html_e('Only registration scheme and settings will be copied', 'seatreg'); ?>
                     </p>
                     <?php
                         submit_button(esc_html__('Copy registration', 'seatreg'), 'primary', 'submit', false);

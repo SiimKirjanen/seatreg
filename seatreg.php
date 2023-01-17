@@ -2,7 +2,7 @@
 /*
 	Plugin Name: SeatReg
 	Plugin URI: https://github.com/SiimKirjanen/seatreg
-	Description: Create and manage seat registrations. Design your own seat maps and manage seat bookings
+	Description: Create and manage online registrations. Design your own registration scheme and manage bookings.
 	Author: Siim Kirjanen
 	Author URI: https://github.com/SiimKirjanen
 	Text Domain: seatreg

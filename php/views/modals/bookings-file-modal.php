@@ -30,7 +30,7 @@
                     </div>
                 </form>
                 <div class="custom-filtering-selection">
-                    <?php SeatregCustomFieldService::generateCustomFieldsMarkup($customFields, true); ?>
+                    <?php count($customFields) > 0 ? SeatregCustomFieldService::generateCustomFieldsMarkup($customFields, true) : esc_html_e('No custom fields created!', 'seatreg'); ?>
                 </div>
             </div>
             <div class="modal-footer">
