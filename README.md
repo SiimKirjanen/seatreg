@@ -8,7 +8,7 @@ Create and manage online registrations. Design your own registration scheme and 
 
 ## Install
 Clone this project to your local WordPress installation plugins directory. Make sure you name the folder as seatreg.
-Activate the plugin through the ‘Plugins’ menu in WordPress.
+Activate the plugin through the ‘Plugins’ menu in WordPress. You can also download it straight from WordPress plugins directory https://wordpress.org/plugins/seatreg/
 
 ## NPM Scripts
 

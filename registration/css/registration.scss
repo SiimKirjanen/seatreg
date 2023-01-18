@@ -975,13 +975,13 @@ body {
 
 .powered-by {
 	position: absolute;
-	bottom: 10px;
+	bottom: 14px;
 	right: 0;
 	left: 0;
 	display: flex;
 	justify-content: center;
 	text-align: center;
-	font-size: 14px;
+	font-size: 12px;
 
 	@media only screen and (max-width: 1023px) {
 		display: none;
@@ -999,7 +999,7 @@ body {
 	}
 
 	&__logo {
-		width: 100px;
+		width: 80px;
 	}
 }
 
