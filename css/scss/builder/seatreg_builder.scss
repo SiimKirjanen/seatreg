@@ -1289,22 +1289,49 @@
 	text-align: center;
 }
 
-#selected-seats-for-pricing .price-item {
-	width: 160px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	padding: 6px;
-	margin: 6px;
-	text-align: center;
-}
+#selected-seats-for-pricing {
+	.price-item {
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		padding: 6px;
+		margin: 6px;
+		text-align: center;
+	}
 
-#selected-seats-for-pricing .price-item-seat {
-	font-weight: 700;
-}
+	.price-item-seat {
+		font-weight: 700;
+	}
 
-#selected-seats-for-pricing .price-item input {
-	width: 100%;
-	box-sizing: border-box;
+	.add-price {
+		cursor: pointer;
+	}
+
+	.price-item .price-input {
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.input-wrap {
+		margin-bottom: 12px;
+
+		&.multi-input{
+			display: flex;
+			align-items: center;
+	
+			.price-input {
+				width: 76px;
+				margin-right: 12px;
+			}
+			.fa.fa-trash {
+				cursor: pointer;
+				width: 30px;
+
+				&:hover {
+					color: red;
+				}
+			}
+		}
+	}
 }
 
 #selected-seats-for-locking .lock-item input[type=text] {

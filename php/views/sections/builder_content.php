@@ -168,6 +168,8 @@
 		</div>
 	</div>
 
+	<?php require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/seat-price-modal.php' ); ?>
+
 	<div class="modal vert-modal fade" id="price-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
@@ -177,7 +179,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-primary" role="alert" id="enable-paypal-alert">
-					<?php esc_html_e('You need to enable PayPal in settings to turn on pricing functionality.', 'seatreg'); ?>
+					<?php esc_html_e('You need to enable PayPal or Stripe payments in settings to turn on pricing functionality.', 'seatreg'); ?>
 				</div>
 				<div class="set-price-wrap">
 					<div><label for="price-for-all-selected"><?php esc_html_e('Fill price to all selected seats', 'seatreg'); ?></label></div>

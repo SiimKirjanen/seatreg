@@ -2622,18 +2622,45 @@
 				$pricingWrap.append(
 					'<div class="price-item" data-box-location="' + boxLocation + '">' + 
 						'<div class="price-item-seat">'  + box.seat  + '</div>' +
-						'<input type="number" min="0" oninput="this.value = Math.abs(this.value)" value="' + box.price + '" />' + 
+						'<div class="prices">' +
+						     '<div class="input-wrap">' +
+								'<input type="number" class="price-input" min="0" oninput="this.value = Math.abs(this.value)" value="' + box.price + '" />' + 
+							'</div>' + 
+						'</div>' +
+						'<div class="price-controls"><i class="fa fa-plus add-price" aria-hidden="true" title="Add price"></i></div>' +
 					'</div>'
 				);
 			}
 		});
 	});
 
+	$("#price-dialog").on('click', '.add-price', function() {
+		console.log('siim');
+        var $parent = $(this).closest('.price-item');
+		var $inputClone = $parent.find('.prices .price-input').last().clone(true);
+		var $inputWrap = $('<div class="input-wrap multi-input"></div').append($inputClone).append('<input type="text" class="text-input" placeholder="Description" />').append('<i class="fa fa-trash remove-price" aria-hidden="true"></i>');
+
+		$parent.find('.prices').append($inputWrap);
+
+		if( !$parent.find('.input-wrap:first-child').hasClass('multi-input') ) {
+			console.log('No class!!!');
+			$parent.find('.input-wrap:first-child').addClass('multi-input').append('<input type="text" class="text-input" placeholder="Description" />').append('<i class="fa fa-trash remove-price" aria-hidden="true"></i>');
+		}
+	});
+
+	$("#price-dialog").on('click', '.remove-price', function() {
+		$(this).closest('.input-wrap').remove();
+
+		if($('.prices .input-wrap').length === 1) {
+			$('.prices .input-wrap').removeClass('multi-input').find('.text-input, .remove-price').remove();
+		}
+	});
+
 	$("#fill-price-for-all-selected").on('click', function() {
 		var priceForAllSelected = $('#price-for-all-selected').val();
 
 		$("#selected-seats-for-pricing .price-item").each(function() {
-			$(this).find('input').val(priceForAllSelected);
+			$(this).find('.price-input').val(priceForAllSelected);
 		});
 	});
 
