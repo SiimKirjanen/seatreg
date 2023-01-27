@@ -1225,6 +1225,9 @@ function seatreg_booking_activity_modal() {
 }
 
 function seatreg_bookings_file_modal($customFields, $registrationCode) {
+	if( !is_array($customFields) ) {
+		$customFields = [];
+	}
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/bookings-file-modal.php' );
 }
 

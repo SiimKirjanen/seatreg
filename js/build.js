@@ -355,11 +355,11 @@
 	};
 
 	//add box to room from server data
-	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize, lock, password, prefix) {
+	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize, lock, password, prefix, seatNr) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
-		var box = new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,this.roomSeatCounter,status,boxZIndex, price, type);
+		var box = new Box(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,seatNr,status,boxZIndex, price, type);
 		box.input = input;
 		box.fontColor = fontColor;
 		box.inputSize = inputSize;
@@ -2283,7 +2283,8 @@
 							arr[i].inputSize,
 							arr[i].lock,
 							arr[i].password,
-							arr[i].prefix
+							arr[i].prefix,
+							arr[i].seat
 						);
 			    	}
 			    }
