@@ -1225,6 +1225,9 @@ function seatreg_booking_activity_modal() {
 }
 
 function seatreg_bookings_file_modal($customFields, $registrationCode) {
+	if( !is_array($customFields) ) {
+		$customFields = [];
+	}
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/bookings-file-modal.php' );
 }
 
@@ -2415,7 +2418,7 @@ function seatreg_update() {
 			//webhook already created. Set stripe_webhook secret fro existing webhook
 			SeatregOptionsService::updateStripeWebhookSecret(
 				SeatregOptionsRepository::getActiveStripeWebhookSecret($_POST['stripe-api-key']),
-				sanitize_text_field($_POST['registration_code']),
+				sanitize_text_field($_POST['registration_code'])
 			);
 		}
 	}else if( $oldOptions->stripe_payments === '1' &&  $_POST['stripe-payments'] === 0) {
