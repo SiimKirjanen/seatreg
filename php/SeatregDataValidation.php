@@ -325,9 +325,28 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($box, 'price') || !is_int($box->price) || $box->price < 0 ) {
+                if( !property_exists($box, 'price') || (is_int($box->price) && $box->price < 0) ) {
                     $validationStatus->setInvalid('box price is missing or invalid');
                     return $validationStatus;
+                }
+
+                if( property_exists($box, 'price') || is_array($box->price) ) {
+                    foreach($box->price as $price) {
+                        if( !is_object($price) ) {
+                            $validationStatus->setInvalid('price is invalid (multi price)');
+                            return $validationStatus;
+                        }
+        
+                        if( !property_exists($price, 'price') ) {
+                            $validationStatus->setInvalid('price is missing (multi price)');
+                            return $validationStatus;
+                        }
+        
+                        if( !property_exists($price, 'description') || !is_string($price->description) ) {
+                            $validationStatus->setInvalid('description is missing or invalid (multi price)');
+                            return $validationStatus;
+                        }
+                    }
                 }
 
                 if( !property_exists($box, 'lock') || !is_bool($box->lock) ) {

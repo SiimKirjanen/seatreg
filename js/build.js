@@ -2619,24 +2619,34 @@
 		selectedBoxes.forEach(function(box) {
 			if(box.canRegister) {
 				var boxLocation = currentRoom.findBox(box.id);
+				var hasMultiPrice = Array.isArray(box.price);
 
 				$pricingWrap.append(
 					'<div class="price-item" data-box-location="' + boxLocation + '">' + 
-						'<div class="price-item-seat">'  + box.seat  + '</div>' +
-						'<div class="prices">' +
-						     '<div class="input-wrap">' +
-								'<input type="number" class="price-input" min="0" oninput="this.value = Math.abs(this.value)" value="' + box.price + '" />' + 
-							'</div>' + 
-						'</div>' +
+						'<div class="price-item-seat">NR: '  + box.seat  + '</div>' +
+						'<div class="prices"></div>' +
 						'<div class="price-controls"><i class="fa fa-plus add-price" aria-hidden="true" title="Add price"></i></div>' +
 					'</div>'
 				);
+
+				if(hasMultiPrice) {
+					box.price.forEach(function(price) {
+						$pricingWrap.find('.price-item[data-box-location="'+ boxLocation +'"] .prices').append('<div class="input-wrap multi-input">' +
+							'<input type="number" class="price-input" min="0" oninput="this.value = Math.abs(this.value)" value="' + price.price + '" />' + 
+							'<input type="text" class="text-input" placeholder="Description" value="' + price.description + '" />' + 
+							'<i class="fa fa-trash remove-price" aria-hidden="true"></i>' +
+						'</div>');
+					});
+				}else {
+					$pricingWrap.find('.price-item[data-box-location="'+ boxLocation +'"] .prices').append('<div class="input-wrap">' +
+						'<input type="number" class="price-input" min="0" oninput="this.value = Math.abs(this.value)" value="' + box.price + '" />' + 
+					'</div>');
+				}
 			}
 		});
 	});
 
 	$("#price-dialog").on('click', '.add-price', function() {
-		console.log('siim');
         var $parent = $(this).closest('.price-item');
 		var $inputClone = $parent.find('.prices .price-input').last().clone(true);
 		var $inputWrap = $('<div class="input-wrap multi-input"></div').append($inputClone).append('<input type="text" class="text-input" placeholder="Description" />').append('<i class="fa fa-trash remove-price" aria-hidden="true"></i>');
@@ -2644,16 +2654,19 @@
 		$parent.find('.prices').append($inputWrap);
 
 		if( !$parent.find('.input-wrap:first-child').hasClass('multi-input') ) {
-			console.log('No class!!!');
 			$parent.find('.input-wrap:first-child').addClass('multi-input').append('<input type="text" class="text-input" placeholder="Description" />').append('<i class="fa fa-trash remove-price" aria-hidden="true"></i>');
 		}
 	});
 
 	$("#price-dialog").on('click', '.remove-price', function() {
-		$(this).closest('.input-wrap').remove();
+		var $this = $(this);
+		var $pricesWrap = $this.closest('.prices');
+	    
+		$this.closest('.input-wrap').remove();
 
-		if($('.prices .input-wrap').length === 1) {
-			$('.prices .input-wrap').removeClass('multi-input').find('.text-input, .remove-price').remove();
+		if( $pricesWrap.find('.input-wrap').length === 1 ) {
+			//Only one price left.
+			$pricesWrap.find('.input-wrap').removeClass('multi-input').find('.text-input, .remove-price').remove();
 		}
 	});
 
@@ -2680,9 +2693,22 @@
 		$('#selected-seats-for-pricing .price-item').each(function() {
 			var $this = $(this);
 			var boxLocation = $this.data('box-location');
-			var price = parseInt($this.find('input').val());
 			var box = currentRoom.boxes[boxLocation];
+			var price = [];
 
+			if( $this.find('.multi-input').length > 0 ) {
+				//Multi price configured
+				$this.find('.multi-input').each(function() {
+					price.push({
+						price: $(this).find('.price-input').val(),
+						description: $(this).find('.text-input').val(),
+					});
+				});
+			}else {
+				//Single price configuration
+				price = parseInt($this.find('.price-input').val());
+			}
+			
 			box.changePrice(price);
 			reg.needToSave = true;
 		});
