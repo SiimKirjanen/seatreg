@@ -319,7 +319,11 @@
 			}
 
 			if(loc[i].hasOwnProperty('price')) {
-				box.setAttribute('data-price', loc[i].price);
+				if( Array.isArray(loc[i].price) ) {
+					box.setAttribute('data-price', JSON.stringify(loc[i].price));
+				}else {
+					box.setAttribute('data-price', loc[i].price);
+				}
 			}
 
 			if(loc[i].hasOwnProperty('lock')) {
@@ -755,8 +759,7 @@ SeatReg.prototype.closeSeatDialog = function() {
 
 SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	$('#confirm-dialog-mob-hover, #confirm-dialog-mob-legend').empty().css('display','none');
-	$('#confirm-dialog-mob-text').empty();
-	$('#confirm-dialog-mob-ok').css('display','none');
+	$('#confirm-dialog-mob-text, #confirm-dialog-bottom').empty();
 
 	var hover = null;
 	var legend = null;
@@ -803,12 +806,24 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	}
 
 	if(clickBox.hasAttribute("data-price")) {
-		price = clickBox.getAttribute('data-price');
-		$('#selected-seat-price').val(price);
+		price = JSON.parse(clickBox.getAttribute('data-price'));
+		//$('#selected-seat-price').val(price);
 	}
 	
 	if(hover != null) {
 		$('#confirm-dialog-mob-hover').html(hover);
+	}
+
+	if( price === 0 ) {
+		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="0">Add to booking</div>');
+	}else if( !Array.isArray(price) ) {
+		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="'+ price +'">Add to booking</div>');
+	}else if( Array.isArray(price) ) {
+		$('#confirm-dialog-bottom').append('<div class="multi-price-title">Price selction</div><div class="multi-price-wrap"></div>');
+
+		price.forEach(function(price) {
+			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ price.price + ' ' + this.payPalCurrencyCode + '</strong> <span class="mullti-price-description">' + price.description  + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '">Add to booking</div>');
+		});
 	}
 
 	if(type != 'box') {
@@ -816,10 +831,10 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 			if(isLocked) {
 				var text = this.usingSeats ? translator.translate('seatIsLocked') : translator.translate('placeIsLocked');
 
-				$('#confirm-dialog-mob-ok').css('display','none');
+				$('#confirm-dialog-bottom').empty();
 				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">' + text + '</div>');
 			}else if(passwordNeeded && !this.enteredSeatPasswords.hasOwnProperty(seatId)) {
-				$('#confirm-dialog-mob-ok').css('display','none');
+				$('#confirm-dialog-bottom').empty();
 				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ translator.translate('pleaseEnterPassword') + '</div>' + 
 					'<div class="box-password-wrap"><input type="text" id="seat-password" /> ' +
 					'<div class="seatreg-btn green-btn" id="password-check">Ok</div></div>' +
@@ -837,22 +852,22 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + placeCostText + '<strong>' + price + ' ' + this.payPalCurrencyCode + '</strong></p>');
 					}
-					$('#confirm-dialog-mob-ok').css('display','inline-block');
 				}else {
 					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + this.spotName + ' ' + nr + translator.translate('_fromRoom_')  + room + '</h5></div>');
 				}
 
 			}else if(type == 'tak') {
-				$('#confirm-dialog-mob-ok').css('display','none');
+				$('#confirm-dialog-bottom').empty();
 				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify"><h5>'+ translator.translate('this_') + this.spotName + translator.translate('_isOccupied') + '</h5></div>');
 			}else if(type == 'bron') {
-				$('#confirm-dialog-mob-ok').css('display','none');
+				$('#confirm-dialog-bottom').empty();
 				$('#confirm-dialog-mob-text').html('<div class="seat-bron-notify"><h5>' + translator.translate('this_') +  ' ' + this.spotName + translator.translate('_isPendingState') +'</h5>'+ translator.translate('regOwnerNotConfirmed') +'</div>');
 			}else if(type == 'rbox' && this.selectedSeats.length >= this.seatLimit ) {
-				$('#confirm-dialog-mob-ok').css('display','none');
+				$('#confirm-dialog-bottom').empty();
 				$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">'+ translator.translate('selectionIsFull') +'</div>');
 			}
 		}else {
+			$('#confirm-dialog-bottom').empty();
 			$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + capitalizeFirstLetter(this.spotName)  + ' ' + nr + translator.translate('_isAlreadySelected') +'</h5></div>');
 		}	
 	}
@@ -1298,12 +1313,9 @@ $('#dialog-close-btn').on('click', function() {
 	seatReg.closeSeatDialog();
 });
 
-$('#confirm-dialog-mob-ok').on('click', function() {
+$('#confirm-dialog-bottom').on('click', '.add-to-cart', function() {
+	$('#selected-seat-price').val( $(this).data('price') );
 	seatReg.addSeatToCart();
-});
-
-$('#confirm-dialog-mob-cancel').on('click', function() {
-	seatReg.closeSeatDialog();
 });
 
 $('#room-nav-close').on('click', function() {

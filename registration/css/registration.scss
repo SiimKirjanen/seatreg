@@ -1079,6 +1079,25 @@ body {
 #confirm-dialog-bottom {
 	text-align: center;
 	margin-top: 16px;
+
+	.seatreg-btn {
+		margin-bottom: 8px;
+	}
+	.multi-price-title {
+		margin-bottom: 12px;
+	}
+	.multi-price-wrap {
+		display: grid;
+		grid-template-columns: 1fr 200px;
+		grid-row-gap: 6px;
+		margin: 0 60px;
+		align-items: baseline;
+
+		.multi-price-description {
+			margin-right: 8px;
+		}
+	}
+	
 }
 .green-btn:hover {
 	background-color: #51A816;

@@ -270,18 +270,7 @@
 
 					<?php if($registrationTime == 'run') : ?>
 
-						<div id="confirm-dialog-bottom">
-							<div id="confirm-dialog-mob-ok" class="seatreg-btn green-btn">
-								<?php 
-									esc_html_e('Add to booking', 'seatreg');
-								?>
-							</div>
-							<div id="confirm-dialog-mob-cancel" class="seatreg-btn red-btn">
-								<?php 
-									esc_html_e('Close', 'seatreg');
-								?>
-							</div>
-						</div>
+						<div id="confirm-dialog-bottom"></div>
 
 					<?php endif; ?>
 
