@@ -2379,7 +2379,7 @@ function seatreg_update() {
 			'paypal_sandbox_mode' => $_POST['paypal-sandbox-mode'],
 			'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
 			'send_approved_booking_email' => $_POST['approved-booking-email'],
-			'send_approved_booking_email_qr_code' => $_POST['approved-booking-email-qr-code'] === '' ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
+			'send_approved_booking_email_qr_code' => ( !isset($_POST['approved-booking-email-qr-code']) || $_POST['approved-booking-email-qr-code'] === '') ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
 			'pending_expiration' => $_POST['pending-expiration'],
 			'email_verification_template' => $_POST['email-verification-template'] === '' ? null : $_POST['email-verification-template'],
 			'pending_booking_email_template' => $_POST['pendin-booking-email-template'] === '' ? null : $_POST['pendin-booking-email-template'],
@@ -2445,7 +2445,7 @@ function seatreg_form_submit_handle() {
 		wp_die('Error updating settings');
 	}else {
 		seatreg_add_activity_log('settings', sanitize_text_field($_POST['registration_code']), 'Settings changed');
-		wp_redirect( SEATREG_HOME_PAGE );
+		wp_redirect( SEATREG_SETTINGS_PAGE . '&tab=' . $_POST['registration_code'] );
 
 		die();
 	}

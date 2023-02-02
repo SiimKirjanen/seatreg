@@ -2,6 +2,7 @@
 define('SEATREG_PLUGIN_FOLDER_DIR', plugin_dir_path( dirname( __FILE__ ) ));
 define('SEATREG_PLUGIN_FOLDER_URL', plugin_dir_url( dirname( __FILE__ ) ));
 define('SEATREG_HOME_PAGE', admin_url('/admin.php?page=seatreg-welcome'));
+define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 
 // DB
 define('SEATREG_DB_VERSION', '1.14');

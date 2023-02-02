@@ -4,7 +4,7 @@ Tags: seat registration, booking, booking seats, booking events, seat map, booki
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.1.0
-Stable tag: 1.29.2
+Stable tag: 1.29.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -42,6 +42,10 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.29.3 =
+* Allow space character usage in bookings
+* Minor improvements (PHP warnings removed, redirect to settings page when settings saved)
 
 = 1.29.2 =
 * Fixed issue with older PHP version (trailing comma)
