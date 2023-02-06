@@ -234,12 +234,12 @@ class SeatregDataValidation {
                 }
             }
 
-            if( !property_exists($roomData->room, 'width') || !is_int($roomData->room->width) ) {
+            if( !property_exists($roomData->room, 'width') || !is_numeric($roomData->room->width) ) {
                 $validationStatus->setInvalid('room width missing or invalid');
                 return $validationStatus;
             }
 
-            if( !property_exists($roomData->room, 'height') || !is_int($roomData->room->height) ) {
+            if( !property_exists($roomData->room, 'height') || !is_numeric($roomData->room->height) ) {
                 $validationStatus->setInvalid('room height missing or invalid');
                 return $validationStatus;
             }
