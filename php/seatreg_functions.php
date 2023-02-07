@@ -1692,6 +1692,7 @@ function seatreg_set_up_db() {
 			conf_code char(40) NOT NULL,
 			booker_email varchar(255) NOT NULL,
 			seat_passwords text,
+			multi_price_selection varchar(255) DEFAULT NULL
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
