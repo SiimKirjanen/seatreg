@@ -234,12 +234,12 @@ class SeatregDataValidation {
                 }
             }
 
-            if( !property_exists($roomData->room, 'width') || !is_int($roomData->room->width) ) {
+            if( !property_exists($roomData->room, 'width') || !is_numeric($roomData->room->width) ) {
                 $validationStatus->setInvalid('room width missing or invalid');
                 return $validationStatus;
             }
 
-            if( !property_exists($roomData->room, 'height') || !is_int($roomData->room->height) ) {
+            if( !property_exists($roomData->room, 'height') || !is_numeric($roomData->room->height) ) {
                 $validationStatus->setInvalid('room height missing or invalid');
                 return $validationStatus;
             }
@@ -471,8 +471,9 @@ class SeatregDataValidation {
             $validationStatus->setInvalid('Custom field label is missing or invalid');
             return $validationStatus;
         }
-        if( !property_exists($personCustomField, 'value') ) {
-            $validationStatus->setInvalid('Custom field value is missing');
+     
+        if( !property_exists($personCustomField, 'value') || !preg_match('/^[\p{L}\p{N}\\s-]+$/u', $personCustomField->value)) {
+            $validationStatus->setInvalid('Custom field value is missing or invalid');
             return $validationStatus;
         }
 
@@ -524,7 +525,7 @@ class SeatregDataValidation {
             return $validationStatus;
         }
 
-        if(!preg_match('/^[\p{L}\p{N}]+$/u', $firstName) || !preg_match('/^[\p{L}\p{N}]+$/u', $lastname)) {
+        if(!preg_match('/^[\p{L}\p{N}\\s-]+$/u', $firstName) || !preg_match('/^[\p{L}\p{N}\\s-]+$/u', $lastname)) {
             $validationStatus->setInvalid('Illegal characters in default inputs');
             return $validationStatus;
         }
