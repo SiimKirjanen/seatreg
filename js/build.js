@@ -2631,7 +2631,7 @@
 
 				if(hasMultiPrice) {
 					box.price.forEach(function(price) {
-						$pricingWrap.find('.price-item[data-box-location="'+ boxLocation +'"] .prices').append('<div class="input-wrap multi-input">' +
+						$pricingWrap.find('.price-item[data-box-location="'+ boxLocation +'"] .prices').append('<div class="input-wrap multi-input" data-price-uuid="' + price.uuid + '">' +
 							'<input type="number" class="price-input" min="0" oninput="this.value = Math.abs(this.value)" value="' + price.price + '" />' + 
 							'<input type="text" class="text-input" placeholder="Description" value="' + price.description + '" />' + 
 							'<i class="fa fa-trash remove-price" aria-hidden="true"></i>' +
@@ -2649,11 +2649,12 @@
 	$("#price-dialog").on('click', '.add-price', function() {
         var $parent = $(this).closest('.price-item');
 		var $inputClone = $parent.find('.prices .price-input').last().clone(true);
-		var $inputWrap = $('<div class="input-wrap multi-input"></div').append($inputClone).append('<input type="text" class="text-input" placeholder="Description" />').append('<i class="fa fa-trash remove-price" aria-hidden="true"></i>');
+		var $inputWrap = $('<div class="input-wrap multi-input" data-price-uuid="' + generateUUID() + '"></div').append($inputClone).append('<input type="text" class="text-input" placeholder="Description" />').append('<i class="fa fa-trash remove-price" aria-hidden="true"></i>');
 
 		$parent.find('.prices').append($inputWrap);
 
 		if( !$parent.find('.input-wrap:first-child').hasClass('multi-input') ) {
+			$parent.find('.input-wrap:first-child').attr('data-price-uuid', generateUUID());
 			$parent.find('.input-wrap:first-child').addClass('multi-input').append('<input type="text" class="text-input" placeholder="Description" />').append('<i class="fa fa-trash remove-price" aria-hidden="true"></i>');
 		}
 	});
@@ -2666,7 +2667,7 @@
 
 		if( $pricesWrap.find('.input-wrap').length === 1 ) {
 			//Only one price left.
-			$pricesWrap.find('.input-wrap').removeClass('multi-input').find('.text-input, .remove-price').remove();
+			$pricesWrap.find('.input-wrap').removeClass('multi-input').removeAttr('data-price-uuid').find('.text-input, .remove-price').remove();
 		}
 	});
 
@@ -2702,6 +2703,7 @@
 					price.push({
 						price: $(this).find('.price-input').val(),
 						description: $(this).find('.text-input').val(),
+						uuid: $(this).data('price-uuid')
 					});
 				});
 			}else {
