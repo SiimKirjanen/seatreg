@@ -22,7 +22,7 @@ class SeatregSubmitBookings extends SeatregBooking {
       	$this->getRegistrationAndOptions();
     }
 
-    public function validateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords) {
+    public function validateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords, $multiPriceUUID) {
 		global $wpdb;
 		global $seatreg_db_table_names;
 
@@ -73,6 +73,7 @@ class SeatregSubmitBookings extends SeatregBooking {
     		$booking->seat_nr = sanitize_text_field($seatNr[$key]);
 			$booking->room_uuid = sanitize_text_field($roomUUID[$key]);
     		$booking->custom_field = $customFieldData[$key];
+			$booking->multi_price_uuid = sanitize_text_field($multiPriceUUID[$key]);
 
     		$bookings[] = $booking;
 		}
@@ -174,6 +175,15 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
+		//9.step. If multi price selected then make sure that price uuid exists
+		$multiPriceUUIDCheckStatus = $this->multiPriceUUIDCheck();
+		if($multiPriceUUIDCheckStatus != 'ok') {
+			$this->response->setError($multiPriceUUIDCheckStatus);
+
+			return;
+		}
+
+
 		$this->insertRegistration();
 	}
 
@@ -221,6 +231,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 			}
 	 
 			for($i = 0; $i < $dataLength; $i++) {
+				$multiPriceSelection = $this->_bookings[$i]->multi_price_uuid ? $this->_bookings[$i]->multi_price_uuid : null;
+
 				$wpdb->insert( 
 					$seatreg_db_table_names->table_seatreg_bookings, 
 					array(
@@ -238,7 +250,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 						'booking_date' => $currentTimeStamp,
 						'booking_confirm_date' => $registrationConfirmDate,
 						'booker_email' => $this->_bookerEmail,
-						'seat_passwords' => json_encode($this->_seatPasswords)
+						'seat_passwords' => json_encode($this->_seatPasswords),
+						'multi_price_selection' => $multiPriceSelection
 					), 
 					'%s'	
 				);

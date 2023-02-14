@@ -77,7 +77,7 @@
 		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
 	}
 
-	function CartItem(id, nr, room, roomUUID, price) {
+	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
 		this.id = id;
 		this.nr = nr;
 		this.room = room;
@@ -85,6 +85,7 @@
 		this.defFields = ['FirstName','LastName','Email'];
 		this.customFields = [];
 		this.price = price;
+		this.multiPriceUUID = multiPriceUUID;
 	};
 
 	SeatReg.prototype.browserInfo = function() {
@@ -504,8 +505,9 @@ SeatReg.prototype.addSeatToCart = function() {
 	var roomName = document.getElementById('selected-seat-room').value;
 	var roomUUID = document.getElementById('selected-room-uuid').value;
 	var price = parseInt(document.getElementById('selected-seat-price').value);
+	var multiPriceUUID = document.getElementById('selected-multi-price-uuid').value;
 	var scope = this;
-	this.selectedSeats.push(new CartItem(seatId, seatNr, roomName, roomUUID, price));
+	this.selectedSeats.push(new CartItem(seatId, seatNr, roomName, roomUUID, price, multiPriceUUID));
 	
 	$('.seats-in-cart').text(this.selectedSeats.length);
 	var boxColor = $('#boxes .box[data-seat="' + seatId + '"]').css('background-color');
@@ -663,8 +665,9 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 		var seatId = $('<input type="hidden" class="item-id" name="item-id[]" value="' + this.selectedSeats[i].id + '" />');
 		var seatNr = $('<input type="hidden" class="item-nr" name="item-nr[]" value="' + this.selectedSeats[i].nr + '" />');
 		var roomUUID = $('<input type="hidden" name="room-uuid[]" value="' + this.selectedSeats[i].roomUUID + '" />');
+		var multiPriceUUID = $('<input type="hidden" name="multi-price-uuid[]" value="' + this.selectedSeats[i].multiPriceUUID + '" />');
 
-		checkItem.append(checkItemHeader, documentFragment2, seatId, seatNr, roomUUID);
+		checkItem.append(checkItemHeader, documentFragment2, seatId, seatNr, roomUUID, multiPriceUUID);
 		documentFragment.append(checkItem);
 	}
 
@@ -807,7 +810,6 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 	if(clickBox.hasAttribute("data-price")) {
 		price = JSON.parse(clickBox.getAttribute('data-price'));
-		//$('#selected-seat-price').val(price);
 	}
 	
 	if(hover != null) {
@@ -822,7 +824,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		$('#confirm-dialog-bottom').append('<div class="multi-price-title">Price selction</div><div class="multi-price-wrap"></div>');
 
 		price.forEach(function(price) {
-			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ price.price + ' ' + this.payPalCurrencyCode + '</strong> <span class="mullti-price-description">' + price.description  + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '">Add to booking</div>');
+			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ price.price + ' ' + this.payPalCurrencyCode + '</strong> <span class="mullti-price-description">' + price.description  + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '" data-price-uuid="' + price.uuid + '">Add to booking</div>');
 		});
 	}
 
@@ -1315,6 +1317,7 @@ $('#dialog-close-btn').on('click', function() {
 
 $('#confirm-dialog-bottom').on('click', '.add-to-cart', function() {
 	$('#selected-seat-price').val( $(this).data('price') );
+	$('#selected-multi-price-uuid').val( $(this).data('price-uuid') || '' );
 	seatReg.addSeatToCart();
 });
 

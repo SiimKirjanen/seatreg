@@ -97,6 +97,20 @@ class SeatregBooking {
 		return $statusReport;
 	}
 
+	protected function multiPriceUUIDCheck() {
+		$statusReport = 'ok';
+
+		foreach( $this->_bookings as $booking ) {
+			if( $booking->multi_price_uuid ) {
+				if( !SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) ) {
+					$statusReport = esc_html__('Selected price not found', 'seatreg');
+				}
+			}
+		}
+
+		return $statusReport;
+	}
+
 	protected function seatsLimitCheck() {
 		if(count($this->_bookings) > $this->_maxSeats) {
 

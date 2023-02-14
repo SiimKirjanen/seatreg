@@ -142,4 +142,30 @@ class SeatregLayoutService {
     public static function getRoomsLength($roomData) {
         return count($roomData);
     }
+
+    public static function checkIfMultiPriceUUIDExists($booking, $layout) {
+        $multiPriceUUIDFound = false;
+
+
+        foreach( $layout as $layoutData ) {
+            if( $layoutData->room->uuid === $booking->room_uuid ) {
+                foreach( $layoutData->boxes as $box ) {
+                    if( $box->id === $booking->seat_id ) {
+                        $prices = $box->price;
+
+                        foreach($prices as $price) {
+                            if($price->uuid === $booking->multi_price_uuid) {
+                                $multiPriceUUIDFound = true;
+
+                                break 3;
+                            }
+                        }   
+                    }
+                }
+                break;
+            }
+        }
+
+        return $multiPriceUUIDFound;
+    }
 }

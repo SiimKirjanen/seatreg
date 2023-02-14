@@ -279,6 +279,7 @@
 					<input type="hidden" id="selected-seat-nr">
 					<input type="hidden" id="selected-room-uuid">
 					<input type="hidden" id="selected-seat-price">
+					<input type="hidden" id="selected-multi-price-uuid">
 				</div>
 			</div>
 
