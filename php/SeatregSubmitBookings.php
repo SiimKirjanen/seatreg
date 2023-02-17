@@ -73,7 +73,7 @@ class SeatregSubmitBookings extends SeatregBooking {
     		$booking->seat_nr = sanitize_text_field($seatNr[$key]);
 			$booking->room_uuid = sanitize_text_field($roomUUID[$key]);
     		$booking->custom_field = $customFieldData[$key];
-			$booking->multi_price_uuid = sanitize_text_field($multiPriceUUID[$key]);
+			$booking->multi_price_selection = sanitize_text_field($multiPriceUUID[$key]);
 
     		$bookings[] = $booking;
 		}
@@ -231,7 +231,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			}
 	 
 			for($i = 0; $i < $dataLength; $i++) {
-				$multiPriceSelection = $this->_bookings[$i]->multi_price_uuid ? $this->_bookings[$i]->multi_price_uuid : null;
+				$multiPriceSelection = $this->_bookings[$i]->multi_price_selection ? $this->_bookings[$i]->multi_price_selection : null;
 
 				$wpdb->insert( 
 					$seatreg_db_table_names->table_seatreg_bookings, 

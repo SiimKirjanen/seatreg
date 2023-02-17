@@ -162,7 +162,7 @@ class SeatregLayoutService {
                         $prices = $box->price;
 
                         foreach( $prices as $price ) {
-                            if( $price->uuid === $booking->multi_price_uuid ) {
+                            if( $price->uuid === $booking->multi_price_selection ) {
                                 $multiPriceUUIDFound = $price;
 
                                 break 3;

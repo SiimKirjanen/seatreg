@@ -34,11 +34,21 @@ class SeatregBookingService {
 
         return array_map(function($booking) use($roomsData) {
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($booking, $roomsData);
+            $priceDescription = null;
+
+            if( $booking->multi_price_selection ) {
+               $multiPriceObject = SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $roomsData);
+
+                if($multiPriceObject) {
+                    $priceDescription = $multiPriceObject->description;
+                }
+            }
 
             return (object)[
                 'seatId' => $booking->seat_id,
                 'seatNr' => $booking->seat_nr,
-                'price' => $seatPrice
+                'price' => $seatPrice,
+                'description' => $priceDescription
             ];
         }, $bookings);
     }
@@ -158,15 +168,17 @@ class SeatregBookingService {
 
         foreach($bookings as $booking) {
             $totalCost += $booking->price;
+            $priceDescription = $booking->description ? "($booking->description)" : null;
+
             $paymentTable .= '<tr>';
                 $paymentTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->seatNr) .'</td>';
-                $paymentTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->price) .'</td>';
+                $paymentTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->price) . ' ' . $bookingData->paypal_currency_code . ' ' . $priceDescription  . '</td>';
             $paymentTable .= '</tr>';
         }
 
         $paymentTable .= '<tr>';
             $paymentTable .= '<td style=";border:1px solid black;padding: 6px;font-weight:700">'.  __('Total', 'seatreg') .'</td>';
-            $paymentTable .= '<td style=";border:1px solid black;padding: 6px;font-weight:700">'. $totalCost .'</td>';
+            $paymentTable .= '<td style=";border:1px solid black;padding: 6px;font-weight:700">'. $totalCost . ' ' . $bookingData->paypal_currency_code . '</td>';
         $paymentTable .= '</tr>';
 
         $paymentTable .= '</table>';
