@@ -102,7 +102,7 @@ class SeatregBooking {
 
 		foreach( $this->_bookings as $booking ) {
 			if( $booking->multi_price_uuid ) {
-				if( !SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) ) {
+				if( SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) === false ) {
 					$statusReport = esc_html__('Selected price not found', 'seatreg');
 				}
 			}

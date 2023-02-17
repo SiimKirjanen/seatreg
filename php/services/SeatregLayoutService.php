@@ -143,9 +143,17 @@ class SeatregLayoutService {
         return count($roomData);
     }
 
+     /**
+     *
+     * check if multi price UUID exists 
+     * @param object $booking Booking
+     * @param array $layout Registration layout
+     * @return string|false Returns false if the price UUID won't exist on the seat. If exist return the multi-price object
+     * 
+    */
+
     public static function checkIfMultiPriceUUIDExists($booking, $layout) {
         $multiPriceUUIDFound = false;
-
 
         foreach( $layout as $layoutData ) {
             if( $layoutData->room->uuid === $booking->room_uuid ) {
@@ -153,9 +161,9 @@ class SeatregLayoutService {
                     if( $box->id === $booking->seat_id ) {
                         $prices = $box->price;
 
-                        foreach($prices as $price) {
-                            if($price->uuid === $booking->multi_price_uuid) {
-                                $multiPriceUUIDFound = true;
+                        foreach( $prices as $price ) {
+                            if( $price->uuid === $booking->multi_price_uuid ) {
+                                $multiPriceUUIDFound = $price;
 
                                 break 3;
                             }
@@ -167,5 +175,37 @@ class SeatregLayoutService {
         }
 
         return $multiPriceUUIDFound;
+    }
+
+     /**
+     *
+     * Return seat price from registration layout
+     *
+    */
+    public static function getSeatPriceFromLayout($booking, $roomsData) {
+        $price = 0;
+
+        foreach($roomsData as $roomData) {
+            if($roomData->room->uuid === $booking->room_uuid) {
+                foreach($roomData->boxes as $box) {
+                    if($box->id === $booking->seat_id) {
+                        if( $booking->multi_price_selection ) {
+                            //multy price selection
+                            foreach($box->price as $multyPrice) {
+                                if($multyPrice->uuid === $booking->multi_price_selection) {
+                                    $price = $multyPrice->price;
+                                }
+                            } 
+                        }else {
+                            $price = $box->price;
+                        }
+                        
+                        break 2;
+                    }
+                }
+            }
+        }
+
+	    return $price;
     }
 }

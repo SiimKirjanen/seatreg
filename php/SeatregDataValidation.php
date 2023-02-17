@@ -330,7 +330,7 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( property_exists($box, 'price') || is_array($box->price) ) {
+                if( property_exists($box, 'price') && is_array($box->price) ) {
                     foreach($box->price as $price) {
                         if( !is_object($price) ) {
                             $validationStatus->setInvalid('price is invalid (multi price)');

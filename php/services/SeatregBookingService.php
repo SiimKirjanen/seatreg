@@ -16,7 +16,7 @@ class SeatregBookingService {
         $totalCost = 0;
     
         foreach($bookings as $booking) {
-            $seatPrice = SeatregRegistrationService::getSeatPriceFromLayout($booking->seat_id, $booking->room_uuid, $roomsData);
+            $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($booking, $roomsData);
             $totalCost += $seatPrice;
         }
     
@@ -33,7 +33,7 @@ class SeatregBookingService {
         $roomsData = json_decode($registrationLayout)->roomData;
 
         return array_map(function($booking) use($roomsData) {
-            $seatPrice = SeatregRegistrationService::getSeatPriceFromLayout($booking->seat_id, $booking->room_uuid, $roomsData);
+            $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($booking, $roomsData);
 
             return (object)[
                 'seatId' => $booking->seat_id,
