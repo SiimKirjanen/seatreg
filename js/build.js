@@ -2620,26 +2620,27 @@
 			if(box.canRegister) {
 				var boxLocation = currentRoom.findBox(box.id);
 				var hasMultiPrice = Array.isArray(box.price);
+				var inputEnabled = box.status === 'noStatus';
 
 				$pricingWrap.append(
 					'<div class="price-item" data-box-location="' + boxLocation + '">' + 
 						'<div class="price-item-seat">NR: '  + box.seat  + '</div>' +
 						'<div class="prices"></div>' +
-						'<div class="price-controls"><i class="fa fa-plus add-price" aria-hidden="true" title="Add price"></i></div>' +
+						(inputEnabled ? '<div class="price-controls"><i class="fa fa-plus add-price" aria-hidden="true" title="Add price"></i></div>' : '<div class="alert alert-info">Occupied seat price cant be changed</div>') +
 					'</div>'
 				);
 
 				if(hasMultiPrice) {
 					box.price.forEach(function(price) {
 						$pricingWrap.find('.price-item[data-box-location="'+ boxLocation +'"] .prices').append('<div class="input-wrap multi-input" data-price-uuid="' + price.uuid + '">' +
-							'<input type="number" class="price-input" min="0" oninput="this.value = Math.abs(this.value)" value="' + price.price + '" />' + 
-							'<input type="text" class="text-input" placeholder="Description" value="' + price.description + '" />' + 
-							'<i class="fa fa-trash remove-price" aria-hidden="true"></i>' +
+							'<input type="number" class="price-input" min="0"' + (!inputEnabled ? " disabled ": " ") + 'oninput="this.value = Math.abs(this.value)" value="' + price.price + '" />' + 
+							'<input type="text" class="text-input" placeholder="Description"' + (!inputEnabled ? " disabled ": " ") + 'value="' + price.description + '" />' + 
+							(inputEnabled ? '<i class="fa fa-trash remove-price" aria-hidden="true"></i>': '') +
 						'</div>');
 					});
 				}else {
 					$pricingWrap.find('.price-item[data-box-location="'+ boxLocation +'"] .prices').append('<div class="input-wrap">' +
-						'<input type="number" class="price-input" min="0" oninput="this.value = Math.abs(this.value)" value="' + box.price + '" />' + 
+						'<input type="number" class="price-input" min="0"' + (!inputEnabled ? " disabled ": " ") + 'oninput="this.value = Math.abs(this.value)" value="' + box.price + '" />' + 
 					'</div>');
 				}
 			}
@@ -2675,7 +2676,7 @@
 		var priceForAllSelected = $('#price-for-all-selected').val();
 
 		$("#selected-seats-for-pricing .price-item").each(function() {
-			$(this).find('.price-input').val(priceForAllSelected);
+			$(this).find('.price-input').not(':disabled').val(priceForAllSelected);
 		});
 	});
 
