@@ -333,17 +333,17 @@ class SeatregDataValidation {
                 if( property_exists($box, 'price') && is_array($box->price) ) {
                     foreach($box->price as $price) {
                         if( !is_object($price) ) {
-                            $validationStatus->setInvalid('price is invalid (multi price)');
+                            $validationStatus->setInvalid('Price is invalid (multi price)');
                             return $validationStatus;
                         }
         
                         if( !property_exists($price, 'price') ) {
-                            $validationStatus->setInvalid('price is missing (multi price)');
+                            $validationStatus->setInvalid('Price is missing (multi price)');
                             return $validationStatus;
                         }
         
-                        if( !property_exists($price, 'description') || !is_string($price->description) ) {
-                            $validationStatus->setInvalid('description is missing or invalid (multi price)');
+                        if( !property_exists($price, 'description') || !is_string($price->description) || strlen($price->description) === 0) {
+                            $validationStatus->setInvalid('Price description is missing or invalid (multi price)');
                             return $validationStatus;
                         }
                     }

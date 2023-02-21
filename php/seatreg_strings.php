@@ -165,6 +165,7 @@ function seatreg_generate_admin_strings() {
     $translations->lockSeat = esc_html__('Lock seat', 'seatreg');
     $translations->setPassword = esc_html__('Set password', 'seatreg');
     $translations->changesApplied = esc_html__('Changes applied', 'seatreg');
+    $translations->addPriceDescription = esc_html__('Please add price description', 'seatreg');
 
     return $translations;
 }

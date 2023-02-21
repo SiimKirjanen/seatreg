@@ -2691,6 +2691,21 @@
 
 	$('#set-prices').on('click', function() {
 		var currentRoom = reg.rooms[reg.currentRoom];
+		var valid = true;
+
+		//Validation
+		$('#selected-seats-for-pricing .price-item').find('.multi-input').each(function() {
+			if( $(this).find('.text-input').val() === '' ) {
+				alertify.error(translator.translate('addPriceDescription'));
+				valid = false;
+
+				return false;
+			}
+		});
+		
+		if(!valid) {
+			return false;
+		}
 
 		$('#selected-seats-for-pricing .price-item').each(function() {
 			var $this = $(this);
