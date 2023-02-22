@@ -70,8 +70,9 @@
 		this.gmailNeeded = gmail;
 		this.status = regTime;
 		this.emailConfirmEnabled = emailConfirmRequired;
-		this.payPalEnabled = payPalEnabled === '1' ? true : false;
-		this.payPalCurrencyCode = this.payPalEnabled ? payPalCurrencyCode : '';
+		this.payPalEnabled = window.payPalEnabled === '1' ? true : false;
+		this.stripeEnabled = window.stripeEnabled === '1' ? true : false;
+		this.payPalCurrencyCode = window.payPalCurrencyCode;
 		this.enteredSeatPasswords = {};
 		this.usingSeats = usingSeats === '1';
 		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
@@ -86,6 +87,10 @@
 		this.customFields = [];
 		this.price = price;
 		this.multiPriceUUID = multiPriceUUID;
+	};
+
+	SeatReg.prototype.isPaymentEnabled = function() {
+		return this.payPalEnabled || this.stripeEnabled;
 	};
 
 	SeatReg.prototype.browserInfo = function() {
@@ -816,16 +821,19 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		$('#confirm-dialog-mob-hover').html(hover);
 	}
 
-	if( price === 0 ) {
-		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="0">Add to booking</div>');
-	}else if( !Array.isArray(price) ) {
-		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="'+ price +'">Add to booking</div>');
-	}else if( Array.isArray(price) ) {
+	if( !Array.isArray(price) ) {
+		//Not multi price
+		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="' + price + '">Add to booking</div>');
+	}else if( this.isPaymentEnabled() ) {
+		//Multi price
 		$('#confirm-dialog-bottom').append('<div class="multi-price-title">Price selction</div><div class="multi-price-wrap"></div>');
 
 		price.forEach(function(price) {
 			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ price.price + ' ' + this.payPalCurrencyCode + '</strong> <span class="mullti-price-description">' + price.description  + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '" data-price-uuid="' + price.uuid + '">Add to booking</div>');
 		});
+	}else {
+		//Fallback
+		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="0">Add to booking</div>');
 	}
 
 	if(type != 'box') {
@@ -849,7 +857,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 					
 					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + seatPrefix + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ maxPlacesText + ' ' + this.seatLimit +'</p>' + '</div>');
 
-					if(this.payPalEnabled  && this.payPalCurrencyCode && price > 0) {
+					if(this.isPaymentEnabled() && this.payPalCurrencyCode && price > 0) {
 						var placeCostText = this.usingSeats ? translator.translate('seatCosts_') : translator.translate('placeCosts_');
 
 						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + placeCostText + '<strong>' + price + ' ' + this.payPalCurrencyCode + '</strong></p>');
@@ -1285,7 +1293,7 @@ function bookingsConfirmedInfo(data, status) {
 		var bookingTotalPrice = parseInt($('#booking-total-price').attr('data-booking-price'));
 
 		$('.booking-confirmed-header').text(translator.translate('bookingsConfirmedPending'));
-		if(window.payPalEnabled === '1' && bookingTotalPrice > 0) {
+		if( seatReg.isPaymentEnabled() && bookingTotalPrice > 0) {
 			$('#booking-confirmed-text').text(translator.translate('payForBookingLink'));
 		}
 	}else if (status === 2) {

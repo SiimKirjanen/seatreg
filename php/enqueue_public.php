@@ -72,7 +72,8 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var ajaxUrl = "'. admin_url('admin-ajax.php') . '";';
 			$inlineScript .= 'var emailConfirmRequired = "'. esc_js($data->booking_email_confirm) . '";';
 			$inlineScript .= 'var payPalEnabled = "'. esc_js($data->paypal_payments) . '";';
-			$inlineScript .= 'var payPalCurrencyCode = "'. esc_js( $data->paypal_payments === '1' ? $data->paypal_currency_code : '') . '";';
+			$inlineScript .= 'var stripeEnabled = "'. esc_js($data->stripe_payments) . '";';
+			$inlineScript .= 'var payPalCurrencyCode = "'. esc_js($data->paypal_currency_code) . '";';
 			$inlineScript .= 'var receiptEnabled = "'. esc_js( $data->send_approved_booking_email) . '";';
 			$inlineScript .= 'var usingSeats = "'. esc_js( $data->using_seats ) . '";';
 			$inlineScript .= '} catch(err) {';
