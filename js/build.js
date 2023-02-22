@@ -2601,7 +2601,7 @@
 		$pricingWrap.empty();
 		$('#set-prices').removeClass('d-none');
 
-		if(reg.settings.paypal_payments === '1') {
+		if(reg.settings.paypal_payments === '1' || reg.settings.stripe_payments === '1') {
 			$('#enable-paypal-alert').css('display', 'none');
 		}
 		if(!hasSeatSelected) {

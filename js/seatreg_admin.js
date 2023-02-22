@@ -178,6 +178,7 @@
 					window.seatreg.selectedRegistration = code;
 					window.seatreg.settings = {
 						paypal_payments: data._response.data.registration[0].paypal_payments,
+						stripe_payments: data._response.data.registration[0].stripe_payments,
 						using_seats: data._response.data.registration[0].using_seats
 					};
 					$('.reg-title-name').text(data._response.data.registration[0].registration_name);
