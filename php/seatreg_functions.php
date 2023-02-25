@@ -482,6 +482,17 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="using-calendar"><?php esc_html_e('Registration calendar', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Check if you want to turn on calendar functionality', 'seatreg'); ?>.</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="using-calendar" name="using-calendar" value="1" <?php echo $options[0]->using_calendar == '1' ? 'checked="checked"':''; ?> >
+			      		<?php esc_html_e('Turn on calendar', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
 				<label for="registration-start-timestamp"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:3px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
 				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
@@ -2287,6 +2298,10 @@ function seatreg_update() {
 		$_POST['using-seats'] = 0;
 	}
 
+	if(!isset($_POST['using-calendar'])) {
+		$_POST['using-calendar'] = 0;
+	}
+
 	if(!isset($_POST['use-pending'])) {
 		$_POST['use-pending'] = 0;
 	}else {
@@ -2389,7 +2404,8 @@ function seatreg_update() {
 			'stripe_payments' => $_POST['stripe-payments'],
 			'stripe_api_key' => $_POST['stripe-api-key'],
 			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
-			'using_seats' => $_POST['using-seats']
+			'using_seats' => $_POST['using-seats'],
+			'using_calendar' => $_POST['using-calendar']
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
