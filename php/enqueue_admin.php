@@ -27,6 +27,7 @@ function seatreg_load_admin_scripts($hook) {
 	if(in_array($screen->id, $allowedToLoadStylesAndScripts)) {
 		wp_enqueue_style('jquery-ui-style', plugins_url('css/custom-theme/jquery-ui-1.9.2.custom.min.css', dirname(__FILE__) ), array(), '1.9.2', 'all');
 		wp_enqueue_style('bootstrap-styles', plugins_url('css/bootstrap.min.css', dirname(__FILE__) ), array(), '3.1.1', 'all');
+		wp_enqueue_style('jquery-ui-multidatespicker', plugins_url('js/jquery-ui-multidatespicker/jquery-ui.multidatespicker.css', dirname(__FILE__) ), array(), '1.6.4', 'all');
 		wp_enqueue_style('alertify-core', plugins_url('css/alertify.core.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('vanilla_picker_style', plugins_url('js/vanilla-picker/dist/vanilla-picker.csp.css', dirname(__FILE__) ), array(), '2.12.1', 'all');
@@ -47,6 +48,7 @@ function seatreg_load_admin_scripts($hook) {
 
 		wp_enqueue_script('selectable_scroll', plugins_url('js/selectableScroll.js', dirname(__FILE__) ), array('jquery','jquery-ui-core', 'jquery-ui-draggable', 'jquery-ui-selectable'), '1.0.0', true);
 		wp_enqueue_script('bootstrap-3-1-1', plugins_url('js/bootstrap.min.js', dirname(__FILE__) ), array('jquery'), '3.1.1', true);
+		wp_enqueue_script('jquery-ui-multidatespicker', plugins_url('js/jquery-ui-multidatespicker/jquery-ui.multidatespicker.js', dirname(__FILE__) ), array('jquery', 'jquery-ui-core'), '1.6.4', true);
 		wp_enqueue_script('alertify', plugins_url('js/alertify.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('easytabs', plugins_url('js/jquery.easytabs.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('vanilla_picker', plugins_url('js/vanilla-picker/dist/vanilla-picker.js', dirname(__FILE__) ), array('jquery'), '2.12.1', true);

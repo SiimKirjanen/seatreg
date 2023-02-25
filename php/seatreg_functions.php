@@ -492,6 +492,16 @@ function seatreg_generate_settings_form() {
 			  	</div>
 			</div>
 
+			<?php if( $options[0]->using_calendar === '1' ) : ?>
+				<div class="form-group">
+					<label for="registration-name"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
+					<p class="help-block">
+						<?php esc_html_e('Calendar', 'seatreg'); ?>.
+					</p>
+					<input type="text" class="form-control" id="calendar-dates" name="calendar-dates" placeholder="<?php esc_html_e('Click here to add dates', 'seatreg'); ?>" autocomplete="off" value="<?php echo $options[0]->calendar_dates ? $options[0]->calendar_dates : ""; ?>">
+				</div>
+			<?php endif; ?>
+
 			<div class="form-group">
 				<label for="registration-start-timestamp"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:3px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
@@ -1682,6 +1692,7 @@ function seatreg_set_up_db() {
 			stripe_webhook_secret varchar(255) DEFAULT NULL,
 			using_seats tinyint(1) NOT NULL DEFAULT 1,
 			using_calendar tinyint(1) NOT NULL DEFAULT 0,
+			calendar_dates text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2405,7 +2416,8 @@ function seatreg_update() {
 			'stripe_api_key' => $_POST['stripe-api-key'],
 			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
 			'using_seats' => $_POST['using-seats'],
-			'using_calendar' => $_POST['using-calendar']
+			'using_calendar' => $_POST['using-calendar'],
+			'calendar_dates' => $_POST['calendar-dates']
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])

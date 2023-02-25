@@ -233,6 +233,10 @@ $('#registration-end-timestamp').datepicker({
 	}
 });
 
+$('#calendar-dates').multiDatesPicker({
+	dateFormat: 'dd.mm.yy'
+});
+
 $('.datepicker-altfield').each(function() {
 	if( $(this).val() != '' ) {
 		var date = new Date(parseInt( $(this).val() ));
