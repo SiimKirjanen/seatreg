@@ -96,6 +96,14 @@ class SeatregDataValidation {
         return !empty($_POST['updatedata']);
     }
 
+    public static function calendarDatesValdiation($method) {
+        if( !empty($_POST['calendar-dates']) && !preg_match('/^([0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4},?)+$/', $_POST['calendar-dates']) ) {
+            return false;
+        }
+
+        return true;
+    }
+
     public static function layoutDataIsCorrect($data) {
         $validationStatus = new SeatregValidationStatus();
         $layout = json_decode($data);

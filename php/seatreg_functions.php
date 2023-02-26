@@ -2273,6 +2273,10 @@ function seatreg_update() {
 		wp_die('Approved booking email template not valid');
 	}
 
+	if( !SeatregDataValidation::calendarDatesValdiation($_POST) ) {
+		wp_die('Calendar dates are not valid');
+	}
+
 	if( isset($_POST['paypal-payments']) && ($_POST['paypal-business-email'] === "" || $_POST['paypal-button-id'] === "" || $_POST['paypal-currency-code'] === "" ) ) {
 		wp_die('Missing PayPal configuration');
 	}
@@ -2417,7 +2421,7 @@ function seatreg_update() {
 			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
 			'using_seats' => $_POST['using-seats'],
 			'using_calendar' => $_POST['using-calendar'],
-			'calendar_dates' => $_POST['calendar-dates']
+			'calendar_dates' => !empty($_POST['calendar-dates']) ? $_POST['calendar-dates'] : $oldOptions->calendar_dates
 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
