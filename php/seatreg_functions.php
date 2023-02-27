@@ -1716,6 +1716,7 @@ function seatreg_set_up_db() {
 			booker_email varchar(255) NOT NULL,
 			seat_passwords text,
 			multi_price_selection varchar(255) DEFAULT NULL,
+			calendar_date varchar(255) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -1766,23 +1767,15 @@ function seatreg_get_registration_data($code) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 
-	if($code != null) {
-		$registration = $wpdb->get_results( $wpdb->prepare(
-			"SELECT a.*, b.paypal_payments, b.stripe_payments, b.using_seats
-			FROM $seatreg_db_table_names->table_seatreg AS a
-			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
-			ON a.registration_code = b.registration_code
-			WHERE a.registration_code = %s",
-			$code
-		) );
-	}else {
-		$registration = $wpdb->get_results( 
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg
-			ORDER BY registration_create_timestamp
-			LIMIT 1"
-		);
-	}
-
+	$registration = $wpdb->get_results( $wpdb->prepare(
+		"SELECT a.*, b.paypal_payments, b.stripe_payments, b.using_seats, b.using_calendar, b.calendar_dates
+		FROM $seatreg_db_table_names->table_seatreg AS a
+		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
+		ON a.registration_code = b.registration_code
+		WHERE a.registration_code = %s",
+		$code
+	) );
+	
 	return $registration;
 }
 
@@ -2508,7 +2501,9 @@ function seatreg_get_registration_layout_and_bookings() {
 	seatreg_ajax_security_check();
 
 	$registration = seatreg_get_registration_data(sanitize_text_field( $_POST['code']) );
-	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( sanitize_text_field($_POST['code']) );
+	$filterCalendarDate = SeatregCalendarService::getBookingFilteringDate($data);
+
+	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( sanitize_text_field($_POST['code']), $filterCalendarDate );
 	$uploadedImages = seatreg_get_registration_uploaded_images(sanitize_text_field($_POST['code']));
 	$dataToSend = new stdClass();
 	$dataToSend->registration = $registration;

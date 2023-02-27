@@ -142,6 +142,10 @@
 						<div id="legends"></div>
 					</div>
 
+					<div id="calendar-date-selection">
+						<input type="text" id="text-calendar" class="calendar" />
+					</div>
+
 					<div id="seat-cart" class="border-box no-select">
 						<div class="seat-cart-left">
 							<div id="cart-text">

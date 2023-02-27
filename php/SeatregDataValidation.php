@@ -97,7 +97,7 @@ class SeatregDataValidation {
     }
 
     public static function calendarDatesValdiation($method) {
-        if( !empty($_POST['calendar-dates']) && !preg_match('/^([0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4},?)+$/', $_POST['calendar-dates']) ) {
+        if( !empty($_POST['calendar-dates']) && !preg_match('/^([0-9]{4}-[0-9]{1,2}-[0-9]{1,2},?)+$/', $_POST['calendar-dates']) ) {
             return false;
         }
 

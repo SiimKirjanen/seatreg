@@ -75,7 +75,10 @@
 		this.payPalCurrencyCode = window.payPalCurrencyCode;
 		this.enteredSeatPasswords = {};
 		this.usingSeats = usingSeats === '1';
+		this.usingCalendar = window.usingCalendar === '1' ? true : false;
+		this.calendarDates = window.calendarDates ? window.calendarDates.split(',') : [];
 		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
+		this.currentDate = window.currentDate;
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -175,6 +178,22 @@
 			seatReg.paintRoomLegends();
 			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.width, seatReg.rooms[seatReg.currentRoom].room.height);
 			seatReg.paintRoom();
+		}
+		this.initCalendar();
+	};
+
+	SeatReg.prototype.initCalendar = function() {
+		if( this.usingCalendar ) {
+			console.log(this.calendarDates);
+			$('#calendar-date-selection .calendar').pignoseCalendar({
+				modal: true,
+				theme: 'blue',
+				enabledDates: this.calendarDates,
+		
+				select: function(dates, context) {
+					console.log('toggle active dates', dates);
+				}
+			});
 		}
 	};
 

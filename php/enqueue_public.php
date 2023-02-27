@@ -47,14 +47,15 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_script('date-format', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/date.format.js' , array(), '1.0.0', true);
 		wp_enqueue_script('iscroll-zoom', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/iscroll-zoom.js' , array(), '5.1.3', true);
 		wp_enqueue_script('jquery-powertip', SEATREG_PLUGIN_FOLDER_URL . 'js/jquery.powertip.js' , array(), '1.2.0', true);
-		wp_enqueue_script('pg-calendar', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/js/pignose.calendar.full.min.js' , array('jquery'), '1.4.31', true);
+		wp_enqueue_script('pg-calendar', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/js/pignose.calendar.full.min.js' , array('jquery'), '1.4.31', false);
 		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip'), '1.8.0', true);
 
 		$data = seatreg_get_options_reg($_GET['c']);
 		$seatsInfo = json_encode( seatreg_stats_for_registration_reg($data->registration_layout, $data->registration_code) );
 		$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 		$selectedShowRegistrationData = $data->show_bookings_data_in_registration ? explode(',', $data->show_bookings_data_in_registration) : [];
-		$registrations = json_encode(seatreg_get_registration_bookings_reg($_GET['c'], $selectedShowRegistrationData));
+		$filterCalendarDate = SeatregCalendarService::getBookingFilteringDate($data);
+		$registrations = json_encode(seatreg_get_registration_bookings_reg($_GET['c'], $selectedShowRegistrationData, $filterCalendarDate));
 	
 		$inlineScript = 'function showErrorView(title) {';
 			$inlineScript .= "jQuery('body').addClass('error-view').html('";
@@ -79,6 +80,9 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var payPalCurrencyCode = "'. esc_js($data->paypal_currency_code) . '";';
 			$inlineScript .= 'var receiptEnabled = "'. esc_js( $data->send_approved_booking_email) . '";';
 			$inlineScript .= 'var usingSeats = "'. esc_js( $data->using_seats ) . '";';
+			$inlineScript .= 'var usingCalendar = "'. esc_js( $data->using_calendar ) . '";';
+			$inlineScript .= 'var calendarDates = "'. esc_js( $data->calendar_dates ) . '";';
+			$inlineScript .= 'var currentDate = "'. date('Y-m-d') . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";

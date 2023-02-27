@@ -130,7 +130,7 @@ function seatreg_get_seats_stats($struct, $bronRegistrations, $takenRegistration
 	return $statsArray;
 }
 
-function seatreg_get_registration_bookings_reg($code, $selectedShowRegistrationData) {
+function seatreg_get_registration_bookings_reg($code, $selectedShowRegistrationData, $calendarDateFilter) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 
@@ -139,8 +139,10 @@ function seatreg_get_registration_bookings_reg($code, $selectedShowRegistrationD
 		"SELECT seat_id, room_uuid, status, custom_field_data, CONCAT(first_name, ' ', last_name) AS reg_name 
 		FROM $seatreg_db_table_names->table_seatreg_bookings
 		WHERE registration_code = %s
-		AND (status = '1' OR status = '2')",
-		$code
+		AND (status = '1' OR status = '2')
+		AND calendar_date = %s",
+		$code,
+		$calendarDateFilter
 	) );
 
 	foreach($bookings as $booking ) {

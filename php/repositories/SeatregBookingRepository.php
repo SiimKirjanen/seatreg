@@ -26,20 +26,23 @@ class SeatregBookingRepository {
     }
     /**
      *
-     * Return confirmed and approved bookings but registration code
+     * Return confirmed and approved bookings by registration code
      *
      * @param string $registrationCode The code of registration
+     * @param string|null $filterCalendarDate Optional. Filter by calendar date
      *
      */
-    public static function getConfirmedAndApprovedBookingsByRegistrationCode($registrationCode) {
+    public static function getConfirmedAndApprovedBookingsByRegistrationCode($registrationCode, $filterCalendarDate) {
         global $wpdb;
 	    global $seatreg_db_table_names;
 
         return $wpdb->get_results( $wpdb->prepare(
             "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
             WHERE registration_code = %s
-            AND (status = '1' OR status = '2')",
-            $registrationCode
+            AND (status = '1' OR status = '2')
+            AND calendar_date = %s",
+            $registrationCode,
+            $filterCalendarDate
         ) );
     } 
 

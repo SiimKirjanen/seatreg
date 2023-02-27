@@ -234,7 +234,7 @@ $('#registration-end-timestamp').datepicker({
 });
 
 $('#calendar-dates').multiDatesPicker({
-	dateFormat: 'dd.mm.yy',
+	dateFormat: 'yy-mm-dd',
 	separator: ','
 });
 
