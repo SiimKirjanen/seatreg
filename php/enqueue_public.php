@@ -7,7 +7,7 @@ add_action('wp_print_styles', 'seatreg_remove_all_styles', 100);
 function seatreg_remove_all_styles() {
 	if( seatreg_is_registration_view_page() ) {
 		global $wp_styles;
-		$allowedToLoad = array('seatreg-registration-style', 'google-open-sans');
+		$allowedToLoad = array('seatreg-registration-style', 'google-open-sans', 'pg-calendar-style');
     	$wp_styles->queue = $allowedToLoad;
 	}
 	if( seatreg_is_booking_check_page() ) {
@@ -22,7 +22,7 @@ add_action('wp_print_scripts', 'seatreg_remove_all_scripts', 100);
 function seatreg_remove_all_scripts() {
 	if( seatreg_is_registration_view_page() ) {
 		global $wp_scripts;
-		$allowedToLoad = array('jquery', 'seatreg-registration', 'date-format', 'jquery-powertip', 'iscroll-zoom', 'modernizr');
+		$allowedToLoad = array('jquery', 'seatreg-registration', 'date-format', 'jquery-powertip', 'iscroll-zoom', 'modernizr', 'pg-calendar');
 		$wp_scripts->queue = $allowedToLoad;
 	}
 	if( seatreg_is_booking_check_page() ) {
@@ -40,11 +40,14 @@ function seatreg_public_scripts_and_styles() {
 
 		wp_enqueue_style('google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,700', array(), '1.0.0', 'all');
 		wp_enqueue_style('seatreg-registration-style', SEATREG_PLUGIN_FOLDER_URL . 'registration/css/' . $manifest['registration.min.css'] , array(), '1.2.0', 'all');
+		wp_enqueue_style('pg-calendar-style', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/css/pignose.calendar.css', array(), '1.4.31', 'all');
+		
 		wp_enqueue_script("jquery");
 		wp_enqueue_script('modernizr', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/modernizr.custom.89593.min.js' , array(), '2.8.3', false);
 		wp_enqueue_script('date-format', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/date.format.js' , array(), '1.0.0', true);
 		wp_enqueue_script('iscroll-zoom', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/iscroll-zoom.js' , array(), '5.1.3', true);
 		wp_enqueue_script('jquery-powertip', SEATREG_PLUGIN_FOLDER_URL . 'js/jquery.powertip.js' , array(), '1.2.0', true);
+		wp_enqueue_script('pg-calendar', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/js/pignose.calendar.full.min.js' , array('jquery'), '1.4.31', true);
 		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip'), '1.8.0', true);
 
 		$data = seatreg_get_options_reg($_GET['c']);

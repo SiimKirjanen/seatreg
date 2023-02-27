@@ -1,0 +1,72 @@
+{
+  "name": "pg-calendar",
+  "version": "1.4.31",
+  "description": "Beautiful and eidetic jQuery date picker plguin.",
+  "main": "dist/js/pignose.calendar.js",
+  "scripts": {
+    "build": "grunt",
+    "clean": "rimraf ./coverage ./.nyc_output",
+    "test": "npm run clean && nyc --reporter=html --reporter=json ./node_modules/mocha/bin/mocha **/*.spec.js -t 1000",
+    "coverage": "nyc report --reporter=text-lcov > ./coverage/coverage.lcov && cat ./coverage/coverage.lcov | coveralls && codecov -t e0e9165c-fa05-48bd-8b42-9e221c01f84d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennethanCeyer/PIGNOSE-Calendar.git"
+  },
+  "keywords": [
+    "datepicker",
+    "toggle",
+    "date",
+    "material",
+    "pignose",
+    "kennethanceyer",
+    "jquery",
+    "plugin"
+  ],
+  "author": "PIGNOSE <kennethan@nhpcw.com>",
+  "contributors": [
+    {
+      "name": "Adrian Hernandez",
+      "url": "https://github.com/adrian2monk"
+    }
+  ],
+  "license": "MIT",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "bugs": {
+    "url": "https://github.com/KennethanCeyer/PIGNOSE-Calendar/issues"
+  },
+  "homepage": "https://www.pigno.se/barn/PIGNOSE-Calendar/",
+  "devDependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
+    "almond": "^0.3.3",
+    "chai": "^4.2.0",
+    "grunt": "^1.0.4",
+    "grunt-babel": "^8.0.0",
+    "grunt-cli": "^1.3.2",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-contrib-csslint": "^2.0.0",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-requirejs": "^1.0.0",
+    "grunt-contrib-uglify": "^4.0.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-css-url-rewrite": "0.3.5",
+    "grunt-umd": "^3.0.0",
+    "jsdom": "^15.1.1",
+    "less-plugin-autoprefix": "^2.0.0",
+    "libumd": "^0.9.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "rimraf": "^2.6.3"
+  },
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "moment": "^2.24.0"
+  }
+}
