@@ -6,12 +6,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/phpqrcode/qrlib.php');
 
+function getEmailFromAddress($emailFromAddress) {
+    return $emailFromAddress ? $emailFromAddress : get_option( 'admin_email' );
+}
+
 function seatreg_send_booking_notification_email($registrationCode, $bookingId, $emailAddress) {
     $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
     $roomData = json_decode($registration->registration_layout)->roomData;
     $registrationCustomFields = json_decode($registration->custom_fields);
     $adminEmail = get_option( 'admin_email' );
+    $fromAddress = getEmailFromAddress($registration->email_from_address);
     $registrationName = esc_html($registration->registration_name);
 
     foreach ($bookings as $booking) {
@@ -23,7 +28,7 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
 
     wp_mail($adminEmail, "$registrationName has a new booking", $message, array(
         "Content-type: text/html",
-        "FROM: $adminEmail"
+        "FROM: $fromAddress"
     ));
 }
 
@@ -54,7 +59,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         }
     }
 
-    $adminEmail = get_option( 'admin_email' );
+    $fromEmail = getEmailFromAddress($registration->email_from_address);
     $message = '';
     $qrType = $registration->send_approved_booking_email_qr_code;
 
@@ -96,7 +101,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     
     $isSent = wp_mail($bookerEmail, "Your booking at $registrationName is approved", $message, array(
         "Content-type: text/html",
-        "FROM: $adminEmail"
+        "FROM: $fromEmail"
     ));
 
     if($isSent) {
@@ -107,9 +112,9 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     return false;
 }
 
-function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template) {
+function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template, $emailFromAddress) {
     $confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
-    $adminEmail = get_option( 'admin_email' );
+    $fromEmail = getEmailFromAddress($emailFromAddress);
     $message = '';
 
     if($template) {
@@ -123,12 +128,12 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
     
     return wp_mail($bookerEmail, esc_html__('Booking email verification', 'seatreg'), $message, array(
         "Content-type: text/html",
-        "FROM: $adminEmail"
+        "FROM: $fromEmail"
     ));
 }
 
-function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template) {
-    $adminEmail = get_option( 'admin_email' );
+function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template, $emailFromAddress) {
+    $fromEmail = getEmailFromAddress($emailFromAddress);
     $message = '';
 
     if($template) {
@@ -141,6 +146,6 @@ function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bo
     
     return wp_mail($bookerEmail, esc_html__('Booking update', 'seatreg'), $message, array(
         "Content-type: text/html",
-        "FROM: $adminEmail"
+        "FROM: $fromEmail"
     ));
 }
