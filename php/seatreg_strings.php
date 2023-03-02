@@ -152,6 +152,7 @@ function seatreg_generate_admin_strings() {
     $translations->pricesAdded = esc_html__('Prices added', 'seatreg');
     $translations->noSeatsSelected = esc_html__('No seats/places selected!', 'seatreg');
     $translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
+    $translations->emailFromNotCorrect = esc_html__('Email FROM address is not correct', 'seatreg');
     $translations->checkEmailAddress = esc_html__('Check your email address', 'seatreg');
     $translations->emailSendingFailed= esc_html__('Email sending failed', 'seatreg');
     $translations->pealseWait= esc_html__('Please wait', 'seatreg');
