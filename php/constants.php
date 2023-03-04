@@ -59,3 +59,7 @@ define('SEATREG_TEMPLATE_EMAIL_VERIFICATION_LINK', '[verification-link]');
 define('SEATREG_TEMPLATE_BOOKING_TABLE', '[booking-table]');
 define('SEATREG_TEMPLATE_PAYMENT_TABLE', '[payment-table]');
 define('SEATREG_TEMPLATE_BOOKING_ID', '[booking-id]');
+
+
+//Time related
+define('CALENDAR_DATE_FORMAT', 'Y-m-d');

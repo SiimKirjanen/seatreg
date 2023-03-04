@@ -15,6 +15,6 @@ class SeatregCalendarService {
      * 
     */
     public static function getBookingFilteringDate($registrationOptions) {
-        return $registrationOptions->using_calendar === "1" ? date('d.m.Y') : null;
+        return $registrationOptions->using_calendar === "1" ? date(CALENDAR_DATE_FORMAT) : null;
     }
 }

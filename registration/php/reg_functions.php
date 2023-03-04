@@ -130,39 +130,6 @@ function seatreg_get_seats_stats($struct, $bronRegistrations, $takenRegistration
 	return $statsArray;
 }
 
-function seatreg_get_registration_bookings_reg($code, $selectedShowRegistrationData, $calendarDateFilter) {
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$showNames = in_array('name', $selectedShowRegistrationData);
-	$bookings = $wpdb->get_results( $wpdb->prepare(
-		"SELECT seat_id, room_uuid, status, custom_field_data, CONCAT(first_name, ' ', last_name) AS reg_name 
-		FROM $seatreg_db_table_names->table_seatreg_bookings
-		WHERE registration_code = %s
-		AND (status = '1' OR status = '2')
-		AND calendar_date = %s",
-		$code,
-		$calendarDateFilter
-	) );
-
-	foreach($bookings as $booking ) {
-		if( !$showNames ) {
-			unset($booking->reg_name);
-		}
-		if( $selectedShowRegistrationData ) {
-			$bookingCustomFieldData = json_decode( $booking->custom_field_data );
-			$bookingCustomFieldData = array_filter($bookingCustomFieldData, function($customField) use($selectedShowRegistrationData) {
-				return in_array($customField->label, $selectedShowRegistrationData);
-			});
-			$booking->custom_field_data = json_encode(array_values($bookingCustomFieldData));
-		}else {
-			unset($booking->custom_field_data);
-		}
-	}
-
-	return $bookings;
-}
-
 function seatreg_get_options_reg($code) {
 	global $wpdb;
 	global $seatreg_db_table_names;

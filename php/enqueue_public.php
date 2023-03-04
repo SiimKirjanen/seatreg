@@ -55,7 +55,7 @@ function seatreg_public_scripts_and_styles() {
 		$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 		$selectedShowRegistrationData = $data->show_bookings_data_in_registration ? explode(',', $data->show_bookings_data_in_registration) : [];
 		$filterCalendarDate = SeatregCalendarService::getBookingFilteringDate($data);
-		$registrations = json_encode(seatreg_get_registration_bookings_reg($_GET['c'], $selectedShowRegistrationData, $filterCalendarDate));
+		$registrations = json_encode(SeatregBookingRepository::getBookingsForRegistrationPage($_GET['c'], $selectedShowRegistrationData, $filterCalendarDate));
 	
 		$inlineScript = 'function showErrorView(title) {';
 			$inlineScript .= "jQuery('body').addClass('error-view').html('";

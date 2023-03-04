@@ -52,9 +52,12 @@
 	    return b;
 	})(window.location.search.substr(1).split('&'));
 
+	function deepCopyObject(object) {
+		return JSON.parse(JSON.stringify(object))
+	}
 
 	function SeatReg() {
-		this.rooms = (dataReg !== null) ? dataReg.roomData : null;
+		this.rooms = (window.dataReg !== null) ? deepCopyObject(window.dataReg.roomData) : null;
 		this.seatLimit = seatLimit;
 		this.currentRoom = 0;
 		this.css3 = false;
@@ -76,9 +79,10 @@
 		this.enteredSeatPasswords = {};
 		this.usingSeats = usingSeats === '1';
 		this.usingCalendar = window.usingCalendar === '1' ? true : false;
-		this.calendarDates = window.calendarDates ? window.calendarDates.split(',') : [];
+		this.enabledCalendarDates = window.calendarDates ? window.calendarDates.split(',') : [];
 		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
 		this.currentDate = window.currentDate;
+		this.userSelectedCalendarDate = this.currentDate;
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -128,7 +132,7 @@
 		this.customF = customs;
 	};
 
-	SeatReg.prototype.init = function() {
+	SeatReg.prototype.buildRegistration = function() {
 		//add roomsInfo to seatReg
 		this.bronSeats = roomsInfo.bronSeats;
 		this.openSeats = roomsInfo.openSeats;
@@ -148,13 +152,13 @@
 		}
 
 		//adding registrations
-		var reLength = Object.size(registrations);
+		var reLength = Object.size(window.registrations);
 
 		for(var i = 0; i < reLength; i++) {
-			var customFieldData = registrations[i].hasOwnProperty('custom_field_data') ? registrations[i]['custom_field_data'] : '[]';
-			var bookingFullName = registrations[i].hasOwnProperty('reg_name') ? registrations[i]['reg_name'] : null;
+			var customFieldData = window.registrations[i].hasOwnProperty('custom_field_data') ? window.registrations[i]['custom_field_data'] : '[]';
+			var bookingFullName = window.registrations[i].hasOwnProperty('reg_name') ? window.registrations[i]['reg_name'] : null;
 
-			seatReg.addRegistration(registrations[i]['seat_id'], registrations[i]['room_uuid'], registrations[i]['status'], bookingFullName, customFieldData);
+			seatReg.addRegistration(window.registrations[i]['seat_id'], window.registrations[i]['room_uuid'], window.registrations[i]['status'], bookingFullName, customFieldData);
 		}
 		if(custF != null) {
 			seatReg.fillCustom(custF);
@@ -179,23 +183,61 @@
 			setMiddleSecSize(seatReg.rooms[seatReg.currentRoom].room.width, seatReg.rooms[seatReg.currentRoom].room.height);
 			seatReg.paintRoom();
 		}
+	};
+
+	SeatReg.prototype.init = function() {
+		this.buildRegistration();
 		this.initCalendar();
 	};
 
 	SeatReg.prototype.initCalendar = function() {
 		if( this.usingCalendar ) {
-			console.log(this.calendarDates);
+			var seatregScope = this;
+
 			$('#calendar-date-selection .calendar').pignoseCalendar({
-				modal: true,
+				//modal: true,
 				theme: 'blue',
-				enabledDates: this.calendarDates,
-		
-				select: function(dates, context) {
-					console.log('toggle active dates', dates);
+				format: 'YYYY-MM-DD',
+				date: this.currentDate,
+				buttons: true,
+				enabledDates: this.enabledCalendarDates,
+				apply(date, context) {
+					if(date && date[0] !== null) {
+						console.log(date[0].format('YYYY-MM-DD') );
+						seatregScope.calendarDateChange( date[0].format('YYYY-MM-DD') );
+					}
 				}
 			});
 		}
 	};
+
+	SeatReg.prototype.calendarDateChange = function( selectedCalendarDate ) {
+		console.log('change selected calendar date to ', selectedCalendarDate);
+		this.userSelectedCalendarDate = selectedCalendarDate;
+		this.fetchBookings();
+	};
+
+	SeatReg.prototype.fetchBookings = function() {
+		var scope = this;
+
+		$.ajax({
+			type: 'GET',
+			url: window.ajaxUrl,
+			data: {
+				date: this.userSelectedCalendarDate,
+				'registration-code': getRegistrationCode(),
+				action: 'seatreg_fetch_bookings'
+			},
+			success: function(response) {
+				console.log('Success');
+				console.log(scope.rooms);
+				window.registrations = response;
+				scope.rooms = (window.dataReg !== null) ? deepCopyObject(window.dataReg.roomData) : null;
+				deepCopyObject
+				scope.buildRegistration();
+			}
+		});
+	}
 
 	SeatReg.prototype.getRoomNameFromLayout = function(roomUUID) {
 		var roomsLength = this.rooms.length;
@@ -211,6 +253,16 @@
 
 		return roomName;
 	};
+/*
+	SeatReg.clearRegistrations = function() {
+		this.rooms.forEach(function(room) {
+			room.boxes.forEach(function(box) {
+				box.status = 'noStatus';
+				delete box.registrantName;
+			});
+		});
+	}
+*/
 
 	SeatReg.prototype.addRegistration = function(seatId, roomUuid, status, registrantName, customFieldData) {
 		var roomLocation = this.locationObj[roomUuid];
@@ -218,6 +270,7 @@
 
 		for(var j = 0; j < boxesLen; j++) {
 			if(this.rooms[roomLocation].boxes[j].id == seatId) {
+				console.log(this.rooms[roomLocation].boxes[j].registrantName);
 				if(status == 1) {
 					this.rooms[roomLocation].boxes[j].status = 'bronRegister';
 				}else {
@@ -485,7 +538,7 @@ SeatReg.prototype.paintRoomsNav = function() {
 
 		navItem.appendTo(documentFragment);
 	}
-	$('#room-nav-items').append(documentFragment);
+	$('#room-nav-items').html(documentFragment);
 };
 
 SeatReg.prototype.roomChange = function(roomUUID) {
@@ -690,8 +743,13 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 		var seatNr = $('<input type="hidden" class="item-nr" name="item-nr[]" value="' + this.selectedSeats[i].nr + '" />');
 		var roomUUID = $('<input type="hidden" name="room-uuid[]" value="' + this.selectedSeats[i].roomUUID + '" />');
 		var multiPriceUUID = $('<input type="hidden" name="multi-price-uuid[]" value="' + this.selectedSeats[i].multiPriceUUID + '" />');
+		var selectedCalendarDate = null;
 
-		checkItem.append(checkItemHeader, documentFragment2, seatId, seatNr, roomUUID, multiPriceUUID);
+		if( this.usingCalendar ) {
+			selectedCalendarDate = $('<input type="hidden" name="selected-calendar-date" value="' + this.userSelectedCalendarDate + '" />');
+		}
+
+		checkItem.append(checkItemHeader, documentFragment2, seatId, seatNr, roomUUID, multiPriceUUID, selectedCalendarDate);
 		documentFragment.append(checkItem);
 	}
 
@@ -1216,7 +1274,7 @@ function collectData() {
 	
 }
 
-function sendData(customFieldBack, regURL) {
+function sendData(customFieldBack, registrationCode) {
 	$('#checkout-confirm-btn').css('display','none');
 	$('#checkoput-area-inner .ajax-load').css('display','inline-block');
 
@@ -1233,7 +1291,7 @@ function sendData(customFieldBack, regURL) {
 	$.ajax({
 		type: 'POST',
 		url: ajaxUrl,
-		data: $('#checkoput-area-inner').serialize() + '&custom=' + encodeURIComponent(customFieldBack) +'&action=' + 'seatreg_booking_submit' + '&c=' + regURL + '&em=' + mailToSend + '&pw=' + $('#sub-pwd').val() + '&passwords=' + encodeURIComponent(seatPasswords),
+		data: $('#checkoput-area-inner').serialize() + '&custom=' + encodeURIComponent(customFieldBack) +'&action=' + 'seatreg_booking_submit' + '&c=' + registrationCode + '&em=' + mailToSend + '&pw=' + $('#sub-pwd').val() + '&passwords=' + encodeURIComponent(seatPasswords),
 
 		success: function(data) {
 			$('#checkoput-area-inner .ajax-load').css('display','none');
@@ -1326,6 +1384,10 @@ function bookingsConfirmedInfo(data, status) {
 	}
 }
 
+function getRegistrationCode() {
+	return qs['c'];
+}
+
 $('#room-nav-btn').on('click', function() {	
 	seatReg.openModel();
 });
@@ -1404,13 +1466,11 @@ $('#confirm-dialog-mob-text').on('click', '#password-check', function() {
 
 $('#checkoput-area-inner').submit(function(e) {
 	e.preventDefault();
-
-	$('#request-error').text('');
-
 	var valid = true;
 
+	$('#request-error').text('');
 	$('#checkout-input-area .field-input').each(function() {
-		if(!validateInput($(this))) {
+		if( !validateInput( $(this) ) ) {
 			valid = false;
 		}
 	});
@@ -1423,7 +1483,7 @@ $('#checkoput-area-inner').submit(function(e) {
 	}
 
 	if(valid) {
-		sendData(collectData(), qs['c']);
+		sendData( collectData(), getRegistrationCode() );
 	}
 })
 
