@@ -26,6 +26,7 @@ class SeatregBooking {
 	protected $_approvedBookingTemplate;
 	protected $_sendApprovedBookingEmail;
 	protected $_seatPasswords; //seat passwords provided by seat registration
+	protected $_emailFromAddress = null;
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -209,6 +210,7 @@ class SeatregBooking {
 		$this->_pendingBookingTemplate = $result->pending_booking_email_template;
 		$this->_approvedBookingTemplate = $result->approved_booking_email_template;
 		$this->_sendApprovedBookingEmail = $result->send_approved_booking_email;
+		$this->_emailFromAddress = $result->email_from_address;
         
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;

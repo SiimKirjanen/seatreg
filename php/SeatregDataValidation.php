@@ -585,4 +585,8 @@ class SeatregDataValidation {
             return strpos($_POST['approved-booking-email-template'], SEATREG_TEMPLATE_STATUS_LINK) !== false;
         }
     }
+
+    public static function validateEmailAddress($email) {
+        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+    }
 }

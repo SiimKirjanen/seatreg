@@ -1065,6 +1065,13 @@ $('#seatreg-settings-submit').on('click', function(e) {
 		}
 	}
 
+	if( $('#email-from').val() !== '' && !/^\S+@\S+$/.test( $('#email-from').val() ) ) {
+		e.preventDefault();
+		alertify.error(translator.translate('emailFromNotCorrect'));
+
+		return true;
+	}
+
 	if($('#paypal').is(":checked")) {
 		if($('#paypal-business-email').val() === "") {
 			e.preventDefault();

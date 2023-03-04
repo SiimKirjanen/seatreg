@@ -260,7 +260,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 
 			if($this->_requireBookingEmailConfirm) {
 				//send email with the confirm link
-				$emailVerificationMailSent = seatreg_sent_email_verification_email($confCode, $this->_bookerEmail, $this->_registrationName, $this->_emailVerificationTemplate);
+				$emailVerificationMailSent = seatreg_sent_email_verification_email($confCode, $this->_bookerEmail, $this->_registrationName, $this->_emailVerificationTemplate, $this->_emailFromAddress);
 
 				if($emailVerificationMailSent) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking email verification sent', false);
@@ -277,7 +277,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 				if($this->_insertState === SEATREG_BOOKING_PENDING) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system (No email verification)', false);
 
-					$peningBookingEmailSent = seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate);
+					$peningBookingEmailSent = seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate, $this->_emailFromAddress);
 
 					if($peningBookingEmailSent) {
 						seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking email sent', false);

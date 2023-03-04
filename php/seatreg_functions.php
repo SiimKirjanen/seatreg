@@ -573,6 +573,14 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="use-pending"><?php esc_html_e('Email from address', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php echo sprintf(esc_html__('You can specify email FROM address that will be used when sending out emails. By default site admin (%s) email will be used', 'seatreg'), get_option( 'admin_email' )); ?>.
+				</p>
+				<input type="text" class="form-control" id="email-from" name="email-from" placeholder="<?php echo esc_html('Using default admin email', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->email_from_address); ?>">
+			</div>
+
+			<div class="form-group">
 				<label for="use-pending"><?php esc_html_e('Booking email verification', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Bookings must be verified by email', 'seatreg'); ?>.
@@ -1691,6 +1699,7 @@ function seatreg_set_up_db() {
 			payment_completed_set_booking_confirmed_stripe tinyint(1) NOT NULL DEFAULT 0,
 			stripe_webhook_secret varchar(255) DEFAULT NULL,
 			using_seats tinyint(1) NOT NULL DEFAULT 1,
+			email_from_address varchar(255) DEFAULT NULL,
 			using_calendar tinyint(1) NOT NULL DEFAULT 0,
 			calendar_dates text,
 			PRIMARY KEY  (id)
@@ -2266,6 +2275,10 @@ function seatreg_update() {
 		wp_die('Approved booking email template not valid');
 	}
 
+	if( !empty($_POST['email-from']) && !SeatregDataValidation::validateEmailAddress($_POST['email-from']) ) {
+		wp_die('From email not valid');
+	}
+
 	if( !SeatregDataValidation::calendarDatesValdiation($_POST) ) {
 		wp_die('Calendar dates are not valid');
 	}
@@ -2413,6 +2426,7 @@ function seatreg_update() {
 			'stripe_api_key' => $_POST['stripe-api-key'],
 			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
 			'using_seats' => $_POST['using-seats'],
+			'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null,
 			'using_calendar' => $_POST['using-calendar'],
 			'calendar_dates' => !empty($_POST['calendar-dates']) ? $_POST['calendar-dates'] : $oldOptions->calendar_dates
 		),
