@@ -246,6 +246,17 @@ $('.datepicker-altfield').each(function() {
 	}
 });
 
+$('#using-calendar').on('click', function() {
+	if( $(this).is(":checked") ) {
+		$('#calendar-dates').closest('.form-group').removeAttr("style");
+	}else {
+		$('#calendar-dates').closest('.form-group').css({
+			display: 'none'
+		});
+	}
+});
+
+
 //add registration code to href in map builder
 $('#registration-link').on('click', function() {
 	var href = $(this).attr('href').split('?')[0];

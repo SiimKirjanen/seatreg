@@ -492,16 +492,14 @@ function seatreg_generate_settings_form() {
 			  	</div>
 			</div>
 
-			<?php if( $options[0]->using_calendar === '1' ) : ?>
-				<div class="form-group">
-					<label for="registration-name"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
-					<p class="help-block">
-						<?php esc_html_e('Calendar', 'seatreg'); ?>.
-					</p>
-					<input type="text" class="form-control" id="calendar-dates" name="calendar-dates" placeholder="<?php esc_html_e('Click here to add dates', 'seatreg'); ?>" autocomplete="off" value="<?php echo $options[0]->calendar_dates ? $options[0]->calendar_dates : ""; ?>">
-				</div>
-			<?php endif; ?>
-
+			<div class="form-group ml-4 mt-n3" <?php if( $options[0]->using_calendar === '0' ) { echo ' style="display:none;"'; } ?>>
+				<label for="registration-name"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Choose the dates when registration is open', 'seatreg'); ?>.
+				</p>
+				<input type="text" class="form-control" id="calendar-dates" name="calendar-dates" placeholder="<?php esc_html_e('Click here to add dates', 'seatreg'); ?>" autocomplete="off" value="<?php echo $options[0]->calendar_dates ? $options[0]->calendar_dates : ""; ?>">
+			</div>
+		
 			<div class="form-group">
 				<label for="registration-start-timestamp"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:3px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
