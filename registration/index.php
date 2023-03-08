@@ -106,6 +106,11 @@
 						<div id="room-nav-info-inner"></div>
 					</div>
 
+					<div id="calendar-date-selection">
+						<div><?php esc_html_e('Selected calendar date', 'seatreg'); ?></div>
+						<a href="#" class="calendar"><?php echo date('Y-m-d'); ?></a>
+					</div>
+
 					<div id="room-nav-btn-wrap" class="border-box">
 						<div id="current-room-name"></div>
 						<?php if( SeatregLayoutService::getRoomsLength( json_decode($data->registration_layout)->roomData ) > 1 ): ?>
@@ -140,10 +145,6 @@
 
 					<div id="legend-wrapper" class="border-box">
 						<div id="legends"></div>
-					</div>
-
-					<div id="calendar-date-selection">
-						<input type="text" id="text-calendar" class="calendar" />
 					</div>
 
 					<div id="seat-cart" class="border-box no-select">
@@ -243,6 +244,12 @@
 			<?php endif; ?>
 
 			<div id="modal-bg"></div>
+
+			<div id="calendar-date-change-loading" class="dialog-box">
+				<div class="dialog-box-inner border-box">
+					Loading...
+				</div>
+			</div>
 
 			<div id="legend-popup-dialog" class="dialog-box">
 				<div id="legend-popup-dialog-inner" class="dialog-box-inner border-box">

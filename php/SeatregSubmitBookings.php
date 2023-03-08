@@ -173,7 +173,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 		if( $this->_usingCalendar ) {
 			$avalidableDates = explode(',',$_POST['selected-calendar-date']);
 
-			if( !in_aray($_POST['selected-calendar-date'], $avalidableDates) ) {
+			if( !in_array($_POST['selected-calendar-date'], $avalidableDates) ) {
 				$this->response->setError( esc_html__('Selected date not available', 'seatreg') );
 
 				return;

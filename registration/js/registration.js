@@ -194,8 +194,8 @@
 		if( this.usingCalendar ) {
 			var seatregScope = this;
 
-			$('#calendar-date-selection .calendar').pignoseCalendar({
-				//modal: true,
+			$('#calendar-date-selection').pignoseCalendar({
+				modal: true,
 				theme: 'blue',
 				format: 'YYYY-MM-DD',
 				date: this.currentDate,
@@ -214,11 +214,14 @@
 	SeatReg.prototype.calendarDateChange = function( selectedCalendarDate ) {
 		console.log('change selected calendar date to ', selectedCalendarDate);
 		this.userSelectedCalendarDate = selectedCalendarDate;
+		$('#calendar-date-selection .calendar').text(this.userSelectedCalendarDate);
 		this.fetchBookings();
 	};
 
 	SeatReg.prototype.fetchBookings = function() {
 		var scope = this;
+		$('#modal-bg').css('display','block');
+		$('#calendar-date-change-loading').css('display', 'block');
 
 		$.ajax({
 			type: 'GET',
@@ -229,10 +232,16 @@
 				action: 'seatreg_fetch_bookings'
 			},
 			success: function(response) {
+				$('#calendar-date-change-loading').css('display', 'none');
+				$('#modal-bg').css('display','none');
 				window.registrations = response;
 				scope.rooms = (window.dataReg !== null) ? deepCopyObject(window.dataReg.roomData) : null;
 				deepCopyObject
 				scope.buildRegistration();
+			},
+			error: function() {
+				$('#calendar-date-change-loading').css('display', 'none');
+				$('#modal-bg').css('display','none');
 			}
 		});
 	}

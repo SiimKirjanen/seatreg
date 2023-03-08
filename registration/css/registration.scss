@@ -601,6 +601,17 @@ body {
 	text-decoration: underline;
 }
 
+#calendar-date-selection {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	cursor: pointer;
+	
+	a {
+		text-decoration: none;
+	}
+}
+
 /*end of nav rules*/
 
 .top-info-bar {
