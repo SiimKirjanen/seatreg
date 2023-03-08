@@ -27,6 +27,9 @@ class SeatregBooking {
 	protected $_sendApprovedBookingEmail;
 	protected $_seatPasswords; //seat passwords provided by seat registration
 	protected $_emailFromAddress = null;
+	protected $_usingCalendar = false; //is registration calendar mode activated?
+	protected $_calendarDates = null; // dates for calendar mode
+	protected $_userSelectedCalendarDate = null;
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -39,24 +42,20 @@ class SeatregBooking {
     	return $seatsString;
     }
 
-    protected function isAllSelectedSeatsOpen() {  
-		global $wpdb;
-		global $seatreg_db_table_names;
-
+    protected function isAllSelectedSeatsOpen($calendarDate = null) {  
 		$bookingsLength = count($this->_bookings);
-		$bookedBookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-			WHERE registration_code = %s AND status != 0",
-			$this->_registrationCode
-		) );
+		$bookedBookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode($this->_registrationCode, $calendarDate);	
 		$bookedBookingsLength = count($bookedBookings);
 		$statusReport = 'ok';
 
 		for($i = 0; $i < $bookingsLength; $i++) {
 			for($j = 0; $j < $bookedBookingsLength; $j++) {
 				if($this->_bookings[$i]->seat_id == $bookedBookings[$j]->seat_id) {
-					$statusReport = 'Seat <b>'. esc_html($this->_bookings[$i]->seat_nr) . '</b> in room <b>' . esc_html($this->_bookings[$i]->room_name) . '</b > is already confirmed.';
+					$statusReport = 'Seat <b>'. esc_html($this->_bookings[$i]->seat_nr) . '</b> in room <b>' . esc_html($this->_bookings[$i]->room_name) . '</b > is already confirmed';
 
+					if( $calendarDate ) {
+						$statusReport .= ' for <b>' . $calendarDate . '<b>';
+					}
 					break 2;
 				}
 			}
@@ -198,6 +197,7 @@ class SeatregBooking {
 		global $seatreg_db_table_names;
 
 		$result = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($this->_registrationCode);
+
 		$this->_registrationStartTimestamp = $result->registration_start_timestamp;
 		$this->_registrationEndTimestamp = $result->registration_end_timestamp;
 		$this->_registrationLayout = json_decode($result->registration_layout)->roomData;
@@ -211,7 +211,9 @@ class SeatregBooking {
 		$this->_approvedBookingTemplate = $result->approved_booking_email_template;
 		$this->_sendApprovedBookingEmail = $result->send_approved_booking_email;
 		$this->_emailFromAddress = $result->email_from_address;
-        
+		$this->_usingCalendar = $result->using_calendar === '1';
+		$this->_calendarDates = $result->calendar_dates;
+
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;
         }

@@ -44,6 +44,16 @@ class SeatregSubmitBookings extends SeatregBooking {
 		$bookings = [];
 		$customFieldData = json_decode( $customFields );
 
+		//calendar date validation if needed
+		if( $this->_usingCalendar ) {
+			if( !preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $_POST['selected-calendar-date']) ) {
+				$this->response->setValidationError( 'Selected calendar date is not valid' );
+
+				return false;
+			}
+			$this->_userSelectedCalendarDate = $_POST['selected-calendar-date'];
+		}
+
     	foreach ($firstname as $key => $value) {
 
 			//default field validation
@@ -126,7 +136,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//4.step. Email check if needed
+		//4.step. GMail check if needed
 		if($this->_gmailNeeded) {
 			$gmailReg = '/^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/';
 
@@ -137,7 +147,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			}
 		}
 
-		//5.step. Time check. is registration open.
+		//5.step. Time check. is registration open?
 		if ($this->_isRegistrationOpen == false) {
 			$this->response->setError(esc_html__('Registration is closed', 'seatreg'));
 
@@ -152,14 +162,25 @@ class SeatregSubmitBookings extends SeatregBooking {
 		}
 
 		//6.step. Check if seat/seats are allready taken
-		$bookStatus = $this->isAllSelectedSeatsOpen(); 
+		$bookStatus = $this->isAllSelectedSeatsOpen($this->_userSelectedCalendarDate); 
 		if($bookStatus != 'ok') {
 			$this->response->setError($bookStatus);
 
 			return;
 		}
 
-		//7.step. Check if seat/seats are locked
+		//7.step. In calendar mode make sure that booking date is avalidable
+		if( $this->_usingCalendar ) {
+			$avalidableDates = explode(',',$_POST['selected-calendar-date']);
+
+			if( !in_aray($_POST['selected-calendar-date'], $avalidableDates) ) {
+				$this->response->setError( esc_html__('Selected date not available', 'seatreg') );
+
+				return;
+			}
+		}
+	
+		//8.step. Check if seat/seats are locked
 		$lockStatus = $this->seatLockCheck();
 		if($lockStatus != 'ok') {
 			$this->response->setError($lockStatus);
@@ -167,7 +188,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//8.step. seat/seats password check
+		//9.step. seat/seats password check
 		$passwordStatus = $this->seatPasswordCheck();
 		if($passwordStatus != 'ok') {
 			$this->response->setError($passwordStatus);
@@ -175,14 +196,13 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//9.step. If multi price selected then make sure that price uuid exists
+		//10.step. If multi price selected then make sure that price uuid exists
 		$multiPriceUUIDCheckStatus = $this->multiPriceUUIDCheck();
 		if($multiPriceUUIDCheckStatus != 'ok') {
 			$this->response->setError($multiPriceUUIDCheckStatus);
 
 			return;
 		}
-
 
 		$this->insertRegistration();
 	}
@@ -251,7 +271,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 						'booking_confirm_date' => $registrationConfirmDate,
 						'booker_email' => $this->_bookerEmail,
 						'seat_passwords' => json_encode($this->_seatPasswords),
-						'multi_price_selection' => $multiPriceSelection
+						'multi_price_selection' => $multiPriceSelection,
+						'calendar_date' => $this->_userSelectedCalendarDate
 					), 
 					'%s'	
 				);

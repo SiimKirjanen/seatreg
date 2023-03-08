@@ -229,8 +229,6 @@
 				action: 'seatreg_fetch_bookings'
 			},
 			success: function(response) {
-				console.log('Success');
-				console.log(scope.rooms);
 				window.registrations = response;
 				scope.rooms = (window.dataReg !== null) ? deepCopyObject(window.dataReg.roomData) : null;
 				deepCopyObject
