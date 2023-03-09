@@ -169,12 +169,23 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//7.step. In calendar mode make sure that booking date is avalidable
+		//7.step. In calendar mode 
+		//Make sure that booking date is avalidable
+		//Make sure the booking date is not in the past
 		if( $this->_usingCalendar ) {
 			$avalidableDates = explode(',',$_POST['selected-calendar-date']);
 
 			if( !in_array($_POST['selected-calendar-date'], $avalidableDates) ) {
 				$this->response->setError( esc_html__('Selected date not available', 'seatreg') );
+
+				return;
+			}
+
+			$currentTimeStamp = strtotime( date('Y-m-d') );
+			$bookingTimeStamp = strtotime( $_POST['selected-calendar-date'] );
+
+			if( $bookingTimeStamp < $currentTimeStamp ) {
+				$this->response->setError( esc_html__('Selected date is in the past', 'seatreg') );
 
 				return;
 			}
