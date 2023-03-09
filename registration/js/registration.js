@@ -1,8 +1,8 @@
 (function($) {
 	var translator = {
 		translate: function(translationKey) {
-			if(seatregTranslations && seatregTranslations.hasOwnProperty(translationKey)) {
-				return seatregTranslations[translationKey];
+			if(window.seatregTranslations && window.seatregTranslations.hasOwnProperty(translationKey)) {
+				return window.seatregTranslations[translationKey];
 			}
 		}
 	};
@@ -100,8 +100,8 @@
 		return this.payPalEnabled || this.stripeEnabled;
 	};
 
-	SeatReg.prototype.browserInfo = function() {
-		//set browser info. css3 support and is ie8
+	SeatReg.prototype.browserInfoDetection = function() {
+		//set browser related info.
 
 		if( $('html').hasClass('csstransitions') ) {
 			this.css3 = true;
@@ -186,8 +186,15 @@
 	};
 
 	SeatReg.prototype.init = function() {
-		this.buildRegistration();
-		this.initCalendar();
+		this.browserInfoDetection();
+
+		if(this.rooms === null) {
+			$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ translator.translate('_regUnderConstruction') +'</div>');
+		}else {
+			this.fillLocationObj();
+			this.buildRegistration();
+			this.initCalendar();
+		} 
 	};
 
 	SeatReg.prototype.initCalendar = function() {
@@ -973,20 +980,13 @@ SeatReg.prototype.addEnteredSeatPassword = function(seatId, password) {
 	this.enteredSeatPasswords[seatId] = password;
 };
 
+/*Turning on lights*/
 var seatReg = new SeatReg();
-seatReg.browserInfo();
-
-if(dataReg === null) {
-	$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ translator.translate('_regUnderConstruction') +'</div>');
-
-	return false;
-}else {
-	seatReg.fillLocationObj();
-}
+seatReg.init();
 
 $(window).resize(function() {
 		rtime = new Date();
-	    if (timeout === false) {
+	    if (timeout === false && seatReg.rooms) {
 	        timeout = true;
 	        setTimeout(resizeend, delta);
 	    }
@@ -1563,10 +1563,6 @@ $('.move-action').on('click', function() {
 		}
 	}
 });
-
-if(seatReg.rooms != null) {
-	seatReg.init();
-}
 
 $('#middle-section').on( 'DOMMouseScroll mousewheel', function ( event ) {
 	 event.preventDefault();
