@@ -158,7 +158,7 @@
 			var customFieldData = window.registrations[i].hasOwnProperty('custom_field_data') ? window.registrations[i]['custom_field_data'] : '[]';
 			var bookingFullName = window.registrations[i].hasOwnProperty('reg_name') ? window.registrations[i]['reg_name'] : null;
 
-			seatReg.addRegistration(window.registrations[i]['seat_id'], window.registrations[i]['room_uuid'], window.registrations[i]['status'], bookingFullName, customFieldData);
+			seatReg.markBookingToRegistration(window.registrations[i]['seat_id'], window.registrations[i]['room_uuid'], window.registrations[i]['status'], bookingFullName, customFieldData);
 		}
 		if(custF != null) {
 			seatReg.fillCustom(custF);
@@ -236,7 +236,7 @@
 				$('#modal-bg').css('display','none');
 				window.registrations = response;
 				scope.rooms = (window.dataReg !== null) ? deepCopyObject(window.dataReg.roomData) : null;
-				deepCopyObject
+				scope.clearCart();
 				scope.buildRegistration();
 			},
 			error: function() {
@@ -260,24 +260,13 @@
 
 		return roomName;
 	};
-/*
-	SeatReg.clearRegistrations = function() {
-		this.rooms.forEach(function(room) {
-			room.boxes.forEach(function(box) {
-				box.status = 'noStatus';
-				delete box.registrantName;
-			});
-		});
-	}
-*/
 
-	SeatReg.prototype.addRegistration = function(seatId, roomUuid, status, registrantName, customFieldData) {
+	SeatReg.prototype.markBookingToRegistration = function(seatId, roomUuid, status, registrantName, customFieldData) {
 		var roomLocation = this.locationObj[roomUuid];
 		var boxesLen = this.rooms[roomLocation].boxes.length;
 
 		for(var j = 0; j < boxesLen; j++) {
 			if(this.rooms[roomLocation].boxes[j].id == seatId) {
-				console.log(this.rooms[roomLocation].boxes[j].registrantName);
 				if(status == 1) {
 					this.rooms[roomLocation].boxes[j].status = 'bronRegister';
 				}else {
@@ -453,8 +442,7 @@
 				documentFragment.querySelector('.box[data-seat="' + this.selectedSeats[i].id + '"]').setAttribute('data-selectedbox','true');
 			}
 		}
-
-		document.getElementById("boxes").appendChild(documentFragment);	
+		$('#boxes').html(documentFragment);
 
 		if(this.rooms[this.currentRoom].room.backgroundImage !== null && this.rooms[this.currentRoom].room.backgroundImage.indexOf('.') !== -1) {  //dose room have a background image?
 			$('#boxes').append('<img class="room-image" src="' + seatregPluginFolder + 'uploads/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room.backgroundImage + '" />');
@@ -582,6 +570,16 @@ SeatReg.prototype.roomChange = function(roomUUID) {
 	this.paintRoom();
 };
 
+SeatReg.prototype.clearCart = function() {
+	this.selectedSeats = [];
+
+	$('#boxes .box').removeAttr('data-selectedbox');
+	$('#booking-total-price').empty().attr('data-booking-price', 0);
+	$('#seat-cart-items').empty();
+	$('.seats-in-cart').text(0);
+
+};
+
 SeatReg.prototype.addSeatToCart = function() {
 	//adding selected seat to seat cart
 	var seatId = document.getElementById('selected-seat').value;
@@ -630,7 +628,6 @@ SeatReg.prototype.addSeatToCart = function() {
 			if( selected > 1 ) {
 				infoText = selected + (this.usingSeats ? translator.translate('_seatsSelected') : translator.translate('_placesSelected') );
 			}else {
-				infoText = selected + translator.translate('_seatSelected');
 				infoText = selected + (this.usingSeats ? translator.translate('_seatSelected') : translator.translate('_placeSelected') );
 			}
 			$('#seat-cart-info').text(infoText);
