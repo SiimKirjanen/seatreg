@@ -249,6 +249,7 @@
 			error: function() {
 				$('#calendar-date-change-loading').css('display', 'none');
 				$('#modal-bg').css('display','none');
+				showErrorAlertDialog(translator.translate('somethingWentWrong'));
 			}
 		});
 	}
@@ -1330,14 +1331,12 @@ function sendData(customFieldBack, registrationCode) {
 					$('#checkout-confirm-btn').css('display','inline-block');
 					$('#request-error').text(resp.text).css('display','block');
 				} else {
-					$('#error-text').text(translator.translate('somethingWentWrong'));
-					$('#error').css('display','block');
+					showErrorAlertDialog(translator.translate('somethingWentWrong'));
 					$('#checkout-confirm-btn').css('display','inline-block');
 				}
 			}else {
 				$('#checkout-area').css('display','none');
-				$('#error-inner').prepend(translator.translate('somethingWentWrong'));
-				$('#error').css('display','block');
+				showErrorAlertDialog(translator.translate('somethingWentWrong'));
 				$('#checkout-confirm-btn').css('display','inline-block');
 			}
 		},
@@ -1358,6 +1357,11 @@ function sendData(customFieldBack, registrationCode) {
             }
 		}
 	});
+}
+
+function showErrorAlertDialog(errorText) {
+	$('#error-inner').prepend(translator.translate(errorText));
+	$('#error').css('display','block');
 }
 
 function needMailCheckInfo() {

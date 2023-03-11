@@ -493,7 +493,7 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group ml-4 mt-n3" <?php if( $options[0]->using_calendar === '0' ) { echo ' style="display:none;"'; } ?>>
-				<label for="registration-name"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
+				<label for="calendar-dates"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Choose the dates when registration is open', 'seatreg'); ?>.
 				</p>

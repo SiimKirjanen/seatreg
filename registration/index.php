@@ -106,10 +106,12 @@
 						<div id="room-nav-info-inner"></div>
 					</div>
 
-					<div id="calendar-date-selection">
-						<div><?php esc_html_e('Selected calendar date', 'seatreg'); ?></div>
-						<a href="#" class="calendar"><?php echo date('Y-m-d'); ?></a>
-					</div>
+					<?php if( $data->using_calendar ) : ?>	
+						<div id="calendar-date-selection">
+							<div><?php esc_html_e('Selected calendar date', 'seatreg'); ?></div>
+							<a href="#" class="calendar"><?php echo date('Y-m-d'); ?></a>
+						</div>
+					<?php endif; ?>
 
 					<div id="room-nav-btn-wrap" class="border-box">
 						<div id="current-room-name"></div>
@@ -245,6 +247,7 @@
 
 			<div id="modal-bg"></div>
 
+						
 			<div id="calendar-date-change-loading" class="dialog-box">
 				<div class="dialog-box-inner border-box">
 					Loading...

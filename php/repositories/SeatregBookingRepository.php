@@ -36,14 +36,23 @@ class SeatregBookingRepository {
         global $wpdb;
 	    global $seatreg_db_table_names;
 
-        return $wpdb->get_results( $wpdb->prepare(
-            "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-            WHERE registration_code = %s
-            AND (status = '1' OR status = '2')
-            AND calendar_date = %s",
-            $registrationCode,
-            $filterCalendarDate
-        ) );
+        if( $filterCalendarDate ) {
+            return $wpdb->get_results( $wpdb->prepare(
+                "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+                WHERE registration_code = %s
+                AND (status = '1' OR status = '2')
+                AND calendar_date = %s",
+                $registrationCode,
+                $filterCalendarDate
+            ) );
+        }else {
+            return $wpdb->get_results( $wpdb->prepare(
+                "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+                WHERE registration_code = %s
+                AND (status = '1' OR status = '2')",
+                $registrationCode,
+            ) );
+        }
     } 
 
     /**
@@ -159,17 +168,29 @@ class SeatregBookingRepository {
         global $wpdb;
         global $seatreg_db_table_names;
     
+        $bookings = [];
         $showNames = in_array('name', $selectedShowRegistrationData);
-        $bookings = $wpdb->get_results( $wpdb->prepare(
-            "SELECT seat_id, room_uuid, status, custom_field_data, CONCAT(first_name, ' ', last_name) AS reg_name 
-            FROM $seatreg_db_table_names->table_seatreg_bookings
-            WHERE registration_code = %s
-            AND (status = '1' OR status = '2')
-            AND calendar_date = %s",
-            $registrationCode,
-            $calendarDateFilter
-        ) );
-    
+
+        if( $calendarDateFilter ) {
+            $bookings = $wpdb->get_results( $wpdb->prepare(
+                "SELECT seat_id, room_uuid, status, custom_field_data, CONCAT(first_name, ' ', last_name) AS reg_name 
+                FROM $seatreg_db_table_names->table_seatreg_bookings
+                WHERE registration_code = %s
+                AND (status = '1' OR status = '2')
+                AND calendar_date = %s",
+                $registrationCode,
+                $calendarDateFilter
+            ) );
+        }else {
+            $bookings = $wpdb->get_results( $wpdb->prepare(
+                "SELECT seat_id, room_uuid, status, custom_field_data, CONCAT(first_name, ' ', last_name) AS reg_name 
+                FROM $seatreg_db_table_names->table_seatreg_bookings
+                WHERE registration_code = %s
+                AND (status = '1' OR status = '2')",
+                $registrationCode,
+            ) );
+        }
+        
         foreach($bookings as $booking ) {
             if( !$showNames ) {
                 unset($booking->reg_name);
