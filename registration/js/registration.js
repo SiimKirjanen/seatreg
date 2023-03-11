@@ -192,9 +192,23 @@
 			$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ translator.translate('_regUnderConstruction') +'</div>');
 		}else {
 			this.fillLocationObj();
-			this.buildRegistration();
+
+			if( this.usingCalendar && !this.isSelectedCalendarDateAvalidable() ) {
+				this.paintRegistrationMessage(translator.translate('closedPleaseChooseNewDate'));
+			}else {
+				this.buildRegistration();
+			}
+			
 			this.initCalendar();
 		} 
+	};
+
+	SeatReg.prototype.isSelectedCalendarDateAvalidable = function() {
+		if(this.enabledCalendarDates.length) {
+			return this.enabledCalendarDates.includes(this.userSelectedCalendarDate);
+		}
+
+		return true;
 	};
 
 	SeatReg.prototype.initCalendar = function() {
@@ -219,9 +233,9 @@
 	};
 
 	SeatReg.prototype.calendarDateChange = function( selectedCalendarDate ) {
-		console.log('change selected calendar date to ', selectedCalendarDate);
 		this.userSelectedCalendarDate = selectedCalendarDate;
 		$('#calendar-date-selection .calendar').text(this.userSelectedCalendarDate);
+		this.hideRegistrationMessage();
 		this.fetchBookings();
 	};
 
@@ -543,6 +557,16 @@ SeatReg.prototype.paintRoomsNav = function() {
 	}
 	$('#room-nav-items').html(documentFragment);
 };
+
+SeatReg.prototype.paintRegistrationMessage = function(text) {
+	var $messageWrap = $('#registration-message');
+
+	$messageWrap.find('p').text(text);
+	$messageWrap.removeClass('dont-display');
+};
+SeatReg.prototype.hideRegistrationMessage = function() {
+	$('#registration-message').addClass('dont-display');
+}
 
 SeatReg.prototype.roomChange = function(roomUUID) {
 	$('#room-nav').removeClass('modal');

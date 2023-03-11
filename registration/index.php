@@ -142,7 +142,10 @@
 							<p class="room-is-empty-text">
 								<?php esc_html_e('Room is empty', 'seatreg'); ?>
 							</p>
-						</div>		
+						</div>	
+						<div id="registration-message" class="dont-display">
+							<p></p>
+						</div>	
 					</div>
 
 					<div id="legend-wrapper" class="border-box">
