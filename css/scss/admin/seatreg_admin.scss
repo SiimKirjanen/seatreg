@@ -162,6 +162,16 @@ html {
 	overflow: hidden;
 }
 
+.seatreg-tabs-content .overview-calendar-wrap {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+
+	input {
+		text-align: center;
+	}
+}
+
 .seatreg-tabs-content .reg-overview-aside {
 	width: 220px;
 	float: left;

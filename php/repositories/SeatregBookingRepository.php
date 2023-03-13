@@ -32,7 +32,7 @@ class SeatregBookingRepository {
      * @param string|null $filterCalendarDate Optional. Filter by calendar date
      *
      */
-    public static function getConfirmedAndApprovedBookingsByRegistrationCode($registrationCode, $filterCalendarDate) {
+    public static function getConfirmedAndApprovedBookingsByRegistrationCode($registrationCode, $filterCalendarDate = null) {
         global $wpdb;
 	    global $seatreg_db_table_names;
 

@@ -9,12 +9,12 @@ class SeatregCalendarService {
     /**
      *
      * Get booking filtering date. If calendar mode not enabled return null
-     * @param object $registrationData Registration options
+     * @param string $usingCalendar Does registration use calendar mode?
      * 
      * @return string|null
      * 
     */
-    public static function getBookingFilteringDate($registrationOptions) {
-        return $registrationOptions->using_calendar === "1" ? date(CALENDAR_DATE_FORMAT) : null;
+    public static function getBookingFilteringDate($usingCalendar) {
+        return $usingCalendar === "1" ? date(CALENDAR_DATE_FORMAT) : null;
     }
 }

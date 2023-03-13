@@ -233,6 +233,18 @@ $('#registration-end-timestamp').datepicker({
 	}
 });
 
+function initOverviewCalendarDatePicker() {
+	$('#overview-calendar-date').datepicker({
+		altField: '#overview-calendar-date-value',
+		altFormat: 'yy-mm-dd',
+		dateFormat: 'yy-mm-dd',
+		onSelect: function(dateText) {
+			$('#existing-regs .room-list-item[data-active="true"]').trigger('click');
+		}
+	});
+}
+initOverviewCalendarDatePicker();
+
 $('#calendar-dates').multiDatesPicker({
 	dateFormat: 'yy-mm-dd',
 	separator: ','
@@ -272,10 +284,14 @@ $('.tab-container').easytabs({
 $('#existing-regs-wrap').on('click', '.room-list-item', function() {
 	var code = $('#seatreg-reg-code').val();
 	var target = $(this).attr('data-stats-target');
+	var calendarDate = $('#overview-calendar-date-value').val() || null;
 	var overViewContainer = $(this).closest('.reg-overview');
 	overViewContainer.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
 
-	var promise = seaterg_admin_ajax2('seatreg_get_room_stats', code, target);
+	var promise = seaterg_admin_ajax2('seatreg_get_room_stats', code, {
+		target: target, 
+		calendarDate: calendarDate
+	});
 
 	promise.done(function(data) {
 		overViewContainer.replaceWith(data).promise().done(function() {
@@ -306,6 +322,7 @@ $('#existing-regs-wrap').on('click', '.room-list-item', function() {
 			}
 
 		});
+		initOverviewCalendarDatePicker();
 		
 	});
 	promise.fail = seatreg_admin_ajax_error;

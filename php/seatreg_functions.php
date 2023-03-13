@@ -111,12 +111,14 @@ function seatreg_generate_overview_section($targetRoom) {
 			wp_die($validation->errorMessage);
 		}
 	} 
+	$registration = seatreg_get_options( $active_tab )[0];
+	$filterBookingsByDate = SeatregCalendarService::getBookingFilteringDate($registration->using_calendar);
 
-	seatreg_generate_overview_section_html($targetRoom, $active_tab);
+	seatreg_generate_overview_section_html($targetRoom, $active_tab, $filterBookingsByDate);
 }
 
 //generate overview section html.
-function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
+function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filterBookingsByDate) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 
@@ -129,9 +131,19 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 	 }
 
 	$registration = $registration[0];
+
 	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $registration->registration_code );
-	$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND status = 1 GROUP BY room_uuid");
-	$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND status = 2 GROUP BY room_uuid");
+	$pendingBookingsRoomInfo = [];
+	$confirmedBookingsRoomInfo = [];
+
+	if($registration->using_calendar === '1') {
+		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 1 GROUP BY room_uuid");
+		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 2 GROUP BY room_uuid");
+	}else {
+		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = null AND status = 1 GROUP BY room_uuid");
+		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = null AND status = 2 GROUP BY room_uuid");
+	}
+	
 	$regStats = seatreg_get_room_seat_info($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
 	$project_name = $registration->registration_name;
 	$start_date = $registration->registration_start_timestamp;
@@ -198,6 +210,13 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab) {
 					?>
 	  				
 				<?php echo '</div>';?>
+				<?php if($registration->using_calendar === '1') : ?>
+					<div class="overview-calendar-wrap">
+						<input type="text" id="overview-calendar-date" class="" value="<?php echo $filterBookingsByDate; ?>" autocomplete="off" />
+						<input type='hidden' value='<?php echo $filterBookingsByDate; ?>' id='overview-calendar-date-value' />
+					</div>
+				<?php endif; ?>
+
 				<?php echo '<div class="reg-overview-middle-wrap">'; ?>			
 				<?php echo '<div class="reg-overview-aside">';?>
 
@@ -2513,7 +2532,7 @@ function seatreg_get_registration_layout_and_bookings() {
 	seatreg_ajax_security_check();
 
 	$registration = seatreg_get_registration_data(sanitize_text_field( $_POST['code']) );
-	$filterCalendarDate = SeatregCalendarService::getBookingFilteringDate($data);
+	$filterCalendarDate = SeatregCalendarService::getBookingFilteringDate($data->using_calendar);
 
 	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( sanitize_text_field($_POST['code']), $filterCalendarDate );
 	$uploadedImages = seatreg_get_registration_uploaded_images(sanitize_text_field($_POST['code']));
@@ -2688,7 +2707,7 @@ add_action( 'wp_ajax_seatreg_get_room_stats', 'seatreg_get_room_stats_callback' 
 function seatreg_get_room_stats_callback() {
 	seatreg_ajax_security_check();
 
-	seatreg_generate_overview_section_html(sanitize_text_field($_POST['data']), sanitize_text_field($_POST['code']));
+	seatreg_generate_overview_section_html($_POST['data']['target'], sanitize_text_field($_POST['code']), $_POST['data']['calendarDate']);
 
 	die();
 }
