@@ -358,6 +358,21 @@ Booking manager
 ==================================================================================================================================================================================================================
 */
 
+(function() {
+	var queryParams = new URLSearchParams(window.location.search);
+
+	if( !queryParams.has('calendar-date') ) {
+		var bookingManagerCalendarDate = $('#booking-manager-calendar-date').val();
+
+		if( bookingManagerCalendarDate ) {
+			//Calendar mode enabled. Lets update URL
+			queryParams.set('calendar-date', bookingManagerCalendarDate);
+			window.history.replaceState(null, null, '?' + queryParams.toString());
+		}
+	} 
+	
+})();
+
 function managerSearch() {
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
@@ -533,6 +548,7 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
+	var queryParams = new URLSearchParams(window.location.search); 
 
 	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
 	button.parent().find('.reg-seat-item').each(function() {
@@ -565,7 +581,13 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 		});
 	});
 
-	var promise = seaterg_admin_ajax2('seatreg_confirm_del_bookings', code, {searchTerm: searchTerm ,orderby: bookingOrderInManager, actionData: JSON.stringify(data)});
+
+	var promise = seaterg_admin_ajax2('seatreg_confirm_del_bookings', code, {
+		searchTerm: searchTerm,
+		orderby: bookingOrderInManager, 
+		actionData: JSON.stringify(data),
+		calendarDate: queryParams.get('calendar-date')
+	});
 
 	promise.done(function(data) {
 		wrapper.empty().html(data).promise().done(function() {

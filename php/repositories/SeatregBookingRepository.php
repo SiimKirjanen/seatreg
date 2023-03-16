@@ -49,7 +49,8 @@ class SeatregBookingRepository {
             return $wpdb->get_results( $wpdb->prepare(
                 "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
                 WHERE registration_code = %s
-                AND (status = '1' OR status = '2')",
+                AND (status = '1' OR status = '2')
+                AND calendar_date IS NULL",
                 $registrationCode,
             ) );
         }
@@ -186,7 +187,8 @@ class SeatregBookingRepository {
                 "SELECT seat_id, room_uuid, status, custom_field_data, CONCAT(first_name, ' ', last_name) AS reg_name 
                 FROM $seatreg_db_table_names->table_seatreg_bookings
                 WHERE registration_code = %s
-                AND (status = '1' OR status = '2')",
+                AND (status = '1' OR status = '2')
+                AND calendar_date IS NULL",
                 $registrationCode,
             ) );
         }

@@ -91,6 +91,10 @@ function seatreg_validate_bookings_file_input() {
 	}
 }
 
+function assignIfNotEmpty(&$item, $default){
+    return (!empty($item)) ? $item : $default;
+}
+
 /*
 ==================================================================================================================================================================================================================
 Generating HTML stuff
@@ -939,7 +943,7 @@ function seatreg_generate_booking_manager() {
 	$active_tab = null;
 	$order = 'date';
 	$searchTerm = '';
-
+	
 	if( SeatregDataValidation::tabsDataExists() ) {
 	    $active_tab = sanitize_text_field($_GET[ 'tab' ]);
 		$validation = SeatregDataValidation::validateTabData($active_tab );
@@ -967,11 +971,19 @@ function seatreg_generate_booking_manager() {
 		}
 	}
 
-	seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm);
+	$seatregData = seatreg_get_options($active_tab)[0];
+	$calendarDate = assignIfNotEmpty( $_GET['calendar-date'], null );
+
+	if( !$calendarDate ) {
+		//When calendar mode enabled but not GET['calendar-date'], set initial date for today
+		$calendarDate = SeatregCalendarService::getBookingFilteringDate($seatregData->using_calendar);
+	}
+
+	seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm, $calendarDate);
 }
 
 //generate bookings list for manager
-function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm) {
+function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm, $calendarDate) {
 	$seatregData = seatreg_get_options($active_tab);
 
 	if( count($seatregData) == 0 ) {
@@ -986,8 +998,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	$cus_length = count(is_array($custom_fields) ? $custom_fields : []);
 	$regId = $seatregData->id;
 	$project_name_original = $seatregData->registration_name;
-	$bookings1 = seatreg_get_specific_bookings($code, $order, $searchTerm, '1');
-	$bookings2 = seatreg_get_specific_bookings($code, $order, $searchTerm, '2');
+	$bookings1 = seatreg_get_specific_bookings($code, $order, $searchTerm, '1', $calendarDate);
+	$bookings2 = seatreg_get_specific_bookings($code, $order, $searchTerm, '2', $calendarDate);
 	$row_count = count($bookings1);
 	$row_count2 = count($bookings2);
 	$project_name = str_replace(' ', '_', $project_name_original);
@@ -995,6 +1007,10 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm)
 	
 	?>
 		<div class='management-header'>
+			<?php if($calendarDate) : ?>
+				<input type="hidden" id="booking-manager-calendar-date" value="<?php echo esc_html($calendarDate); ?>" />
+			<?php endif; ?>
+			
 			<div class='registration-name'>
 				<?php echo $project_name_original; ?>
 			</div>
@@ -1860,7 +1876,7 @@ function seatreg_order_bookings_by_room_name($a, $b) {
 }
 
 //return bookins
-function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStatus ) {
+function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStatus, $calendarDate ) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 
@@ -1882,18 +1898,37 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 			break;
 	}
 
-	$bookings = $wpdb->get_results( $wpdb->prepare(
-		"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_update_date, b.payment_txn_id, c.paypal_payments
-		FROM $seatreg_db_table_names->table_seatreg_bookings AS a
-		LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
-		ON a.booking_id = b.booking_id
-		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS c
-		ON a.registration_code = c.registration_code
-		WHERE a.registration_code = %s
-		AND a.status = $bookingStatus
-		ORDER BY $order",
-		$code
-	));
+	if( $calendarDate ) {
+		$bookings = $wpdb->get_results( $wpdb->prepare(
+			"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_update_date, b.payment_txn_id, c.paypal_payments
+			FROM $seatreg_db_table_names->table_seatreg_bookings AS a
+			LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+			ON a.booking_id = b.booking_id
+			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS c
+			ON a.registration_code = c.registration_code
+			WHERE a.registration_code = %s
+			AND a.status = $bookingStatus
+			AND a.calendar_date = %s
+			ORDER BY $order",
+			$code,
+			$calendarDate
+		));
+	}else {
+		$bookings = $wpdb->get_results( $wpdb->prepare(
+			"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_update_date, b.payment_txn_id, c.paypal_payments
+			FROM $seatreg_db_table_names->table_seatreg_bookings AS a
+			LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+			ON a.booking_id = b.booking_id
+			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS c
+			ON a.registration_code = c.registration_code
+			WHERE a.registration_code = %s
+			AND a.status = $bookingStatus
+			AND a.calendar_date IS NULL
+			ORDER BY $order",
+			$code
+		));
+	}
+	
 	$registration = SeatregRegistrationRepository::getRegistrationByCode($code);
 
 	if($registration->registration_layout !== null) {
@@ -2731,6 +2766,7 @@ function seatreg_get_booking_manager_callback() {
 	$order = sanitize_text_field($_POST['data']['orderby']);
 	$code = sanitize_text_field($_POST['code']);
 	$search = sanitize_text_field($_POST['data']['searchTerm']); 
+	$calendarDate = assignIfNotEmpty($_GET['calendar-date'], null);
 
 	if( strlen($code) > SEATREG_REGISTRATION_NAME_MAX_LENGTH ) {
 		wp_die('Too long code');
@@ -2747,7 +2783,8 @@ function seatreg_get_booking_manager_callback() {
 	seatreg_generate_booking_manager_html(
 		$code,
 		$order,
-		$search
+		$search,
+		$calendarDate
 	);
 
 	die();
@@ -2758,6 +2795,7 @@ function seatreg_confirm_del_bookings_callback() {
 	seatreg_ajax_security_check();
 
 	$data = json_decode( stripslashes_deep($_POST['data']['actionData']) );
+	$calendarDate = assignIfNotEmpty( $_POST['data']['calendarDate'], null );
 	$code = sanitize_text_field( $_POST['code'] );
 	$statusArray = seatreg_validate_del_conf_booking( $code, $data );
 
@@ -2799,7 +2837,7 @@ function seatreg_confirm_del_bookings_callback() {
 
 	$order = 'date';
 	$searchTerm = '';
-
+	
 	if( !empty( $_POST['data']['orderby'] ) ) {
 		$order = sanitize_text_field($_POST['data']['orderby']);
 	}
@@ -2807,7 +2845,7 @@ function seatreg_confirm_del_bookings_callback() {
 	if( !empty( $_POST['data']['searchTerm'] ) ) {
 		$searchTerm = sanitize_text_field($_POST['data']['searchTerm']);
 	}
-	seatreg_generate_booking_manager_html( sanitize_text_field($_POST['code']) , $order, $searchTerm );
+	seatreg_generate_booking_manager_html( sanitize_text_field($_POST['code']) , $order, $searchTerm, $calendarDate );
 
 	die();
 }
@@ -2817,6 +2855,7 @@ function seatreg_search_bookings_callback() {
 	seatreg_ajax_security_check();
 	$order = 'date';
 	$searchTerm = '';
+	$calendarDate = assignIfNotEmpty($_GET['calendar-date'], null);
 
 	if( !empty( $_POST['data']['orderby'] ) ) {
 		$order = sanitize_text_field($_POST['data']['orderby']);
@@ -2825,7 +2864,7 @@ function seatreg_search_bookings_callback() {
 	if( !empty( $_POST['data']['searchTerm'] ) ) {
 		$searchTerm = sanitize_text_field($_POST['data']['searchTerm']);
 	}
-	seatreg_generate_booking_manager_html( sanitize_text_field($_POST['code']) , $order, $searchTerm );
+	seatreg_generate_booking_manager_html( sanitize_text_field($_POST['code']) , $order, $searchTerm, $calendarDate );
 
 	die();
 }
