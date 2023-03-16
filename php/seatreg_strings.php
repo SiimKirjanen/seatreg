@@ -60,7 +60,7 @@ function seatreg_generate_registration_strings() {
     $translations->yes = esc_html__('Yes', 'seatreg');
     $translations->no = esc_html__('No', 'seatreg');
     $translations->seatIsLocked = esc_html__('Seat is locked', 'seatreg');
-    $translations->placeLocked = esc_html__('Place is locked', 'seatreg');
+    $translations->placeIsLocked = esc_html__('Place is locked', 'seatreg');
     $translations->pleaseEnterPassword = esc_html__('Please enter password', 'seatreg');
     $translations->passwordNotCorrect = esc_html__('Password is not correct', 'seatreg');
     $translations->closedPleaseChooseNewDate = esc_html__('Registration not open for today. Please choose another date', 'seatreg');
