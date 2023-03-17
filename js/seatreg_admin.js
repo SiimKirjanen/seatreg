@@ -377,8 +377,13 @@ function managerSearch() {
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
+	var queryParams = new URLSearchParams(window.location.search); 
 	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
-	var promise = seaterg_admin_ajax2('seatreg_search_bookings', code, {searchTerm: searchTerm ,orderby: bookingOrderInManager});
+	var promise = seaterg_admin_ajax2('seatreg_search_bookings', code, {
+		searchTerm: searchTerm,
+		orderby: bookingOrderInManager,
+		calendarDate: queryParams.get('calendar-date')
+	});
 
 	promise.done(function(data) {
 		wrapper.empty().html(data).promise().done(function() {
@@ -701,19 +706,24 @@ $("#bookings-file-modal .fa[data-action='remove']").on('click', function() {
 	$('#bookings-file-form .form-fields').append($('<div class="mb-1">').append($customField));
 });
 
-$('#generate-bookings-file').on('click', function() {
+$('#seatreg-booking-manager').on('click', '#generate-bookings-file', function() {
 	var href = $(this).attr('data-link');
 	var getParams = $('#bookings-file-form :input').filter(function(index, element) {
 		return $(element).val() != '';
     }).serialize();
 	var uncheckedCheckboxesGetparams = "";
+	var calendarDateparam = "";
+	var queryParams = new URLSearchParams(window.location.search);
 	
 	$("#bookings-file-form input:checkbox:not(:checked)").each(function() {
 		uncheckedCheckboxesGetparams += "&" + $(this).attr('name') + "=0";
 	});
 
-	window.open(href + '&' + getParams + uncheckedCheckboxesGetparams, '_blank');
+	if(queryParams.has('calendar-date')) {
+		calendarDateparam += "&calendar-date=" + queryParams.get('calendar-date');
+	}
 
+	window.open(href + '&' + getParams + uncheckedCheckboxesGetparams + calendarDateparam, '_blank');
 });
 
 $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {

@@ -39,8 +39,8 @@ class SeatregPDF extends tFPDF {
 class SeatregBookingsPDF extends SeatregBookingsFile {
     private $pdf = null;
 
-    public function __construct($showPending, $showConfirmed, $registrationCode) {
-        parent::__construct($showPending, $showConfirmed, $registrationCode);
+    public function __construct($showPending, $showConfirmed, $registrationCode, $calendarDate) {
+        parent::__construct($showPending, $showConfirmed, $registrationCode, $calendarDate);
 
         $this->setupPDF();
 	}

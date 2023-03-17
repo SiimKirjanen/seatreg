@@ -13,16 +13,20 @@ class SeatregBookingsFile {
     protected $_customFields = null;
     protected $_currentTimestamp = null;
     protected $_usingSeats = true;
+    protected $_calendarDate = null;
 
-    public function __construct($showPending, $showConfirmed, $registrationCode) {
+    public function __construct($showPending, $showConfirmed, $registrationCode, $calendarDate) {
         $this->_registrationCode = $registrationCode;
         $this->_currentTimestamp = time();
 
-        if($showPending && !$showConfirmed) {
+        if( $showPending && !$showConfirmed ) {
             $this->_showWhat = 'pending';
         }
-        if($showConfirmed && !$showPending) {
+        if( $showConfirmed && !$showPending ) {
             $this->_showWhat = 'confirmed';
+        }
+        if( $calendarDate ) {
+            $this->_calendarDate = $calendarDate;
         }
         
         $this->setUp();
@@ -31,7 +35,7 @@ class SeatregBookingsFile {
     protected function setUp() {
         $this->_registrationInfo = seatreg_get_options($this->_registrationCode)[0];
         $this->_customFields = ($this->_registrationInfo->custom_fields !== null) ? json_decode($this->_registrationInfo->custom_fields, true) : [];
-        $this->_registrations = $this->filtering( seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat) );
+        $this->_registrations = $this->filtering( seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat, $this->_calendarDate) );
         $this->_registrationName = esc_html($this->_registrationInfo->registration_name);
         $this->_usingSeats = $this->_registrationInfo->using_seats === '1';
     }

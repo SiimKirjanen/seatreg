@@ -1010,7 +1010,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 			<?php if($calendarDate) : ?>
 				<input type="hidden" id="booking-manager-calendar-date" value="<?php echo esc_html($calendarDate); ?>" />
 			<?php endif; ?>
-			
+
 			<div class='registration-name'>
 				<?php echo $project_name_original; ?>
 			</div>
@@ -2139,43 +2139,95 @@ function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seat
 
 
 //for generating pdf, xlsx and text
-function seatreg_get_data_for_booking_file($code, $whatToShow) {
+function seatreg_get_data_for_booking_file($code, $whatToShow, $calendarDate) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
-	if($whatToShow == 'all') {
-		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
-			FROM $seatreg_db_table_names->table_seatreg_bookings AS a 
-			LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
-			ON a.booking_id = b.booking_id
-			WHERE a.registration_code = %s
-			AND a.status IN (1,2)
-			ORDER BY room_uuid, seat_nr",
-			$code
-		) );
-	}else if($whatToShow == 'pending') {
-		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
-			FROM $seatreg_db_table_names->table_seatreg_bookings AS a 
-			LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
-			ON a.booking_id = b.booking_id
-			WHERE a.registration_code = %s
-			AND a.status = 1
-			ORDER BY room_uuid, seat_nr",
-			$code
-		) );
+	if( $whatToShow == 'all' ) {
+
+		if( $calendarDate ) {
+			$bookings = $wpdb->get_results( $wpdb->prepare(
+				"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
+				FROM $seatreg_db_table_names->table_seatreg_bookings AS a 
+				LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+				ON a.booking_id = b.booking_id
+				WHERE a.registration_code = %s
+				AND a.status IN (1,2)
+				AND a.calendar_date = %s
+				ORDER BY room_uuid, seat_nr",
+				$code,
+				$calendarDate
+			) );
+		}else {
+			$bookings = $wpdb->get_results( $wpdb->prepare(
+				"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
+				FROM $seatreg_db_table_names->table_seatreg_bookings AS a 
+				LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+				ON a.booking_id = b.booking_id
+				WHERE a.registration_code = %s
+				AND a.status IN (1,2)
+				AND a.calendar_date IS NULL
+				ORDER BY room_uuid, seat_nr",
+				$code
+			) );
+		}
+
+	}else if( $whatToShow == 'pending' ) {
+
+		if( $calendarDate ) {
+			$bookings = $wpdb->get_results( $wpdb->prepare(
+				"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
+				FROM $seatreg_db_table_names->table_seatreg_bookings AS a 
+				LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+				ON a.booking_id = b.booking_id
+				WHERE a.registration_code = %s
+				AND a.status = 1
+				AND a.calendar_date = %s
+				ORDER BY room_uuid, seat_nr",
+				$code,
+				$calendarDate
+			) );
+		}else {
+			$bookings = $wpdb->get_results( $wpdb->prepare(
+				"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
+				FROM $seatreg_db_table_names->table_seatreg_bookings AS a 
+				LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+				ON a.booking_id = b.booking_id
+				WHERE a.registration_code = %s
+				AND a.status = 1
+				AND a.calendar_date IS NULL
+				ORDER BY room_uuid, seat_nr",
+				$code
+			) );
+		}
+
 	}else {
-		$bookings = $wpdb->get_results( $wpdb->prepare(
-			"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
-			FROM $seatreg_db_table_names->table_seatreg_bookings AS a
-			LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
-			ON a.booking_id = b.booking_id
-			WHERE a.registration_code = %s
-			AND a.status = 2
-			ORDER BY room_uuid, seat_nr",
-			$code
-		) );
+		if( $calendarDate ) {
+			$bookings = $wpdb->get_results( $wpdb->prepare(
+				"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
+				FROM $seatreg_db_table_names->table_seatreg_bookings AS a
+				LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+				ON a.booking_id = b.booking_id
+				WHERE a.registration_code = %s
+				AND a.status = 2
+				AND a.calendar_date = %s
+				ORDER BY room_uuid, seat_nr",
+				$code,
+				$calendarDate
+			) );
+		}else {
+			$bookings = $wpdb->get_results( $wpdb->prepare(
+				"SELECT a.*, b.payment_status, b.payment_currency, b.payment_total_price, b.payment_txn_id
+				FROM $seatreg_db_table_names->table_seatreg_bookings AS a
+				LEFT JOIN $seatreg_db_table_names->table_seatreg_payments AS b
+				ON a.booking_id = b.booking_id
+				WHERE a.registration_code = %s
+				AND a.status = 2
+				AND a.calendar_date IS NULL
+				ORDER BY room_uuid, seat_nr",
+				$code
+			) );
+		}
 	}
 
 	$registration = SeatregRegistrationRepository::getRegistrationByCode( $code );
@@ -2855,7 +2907,7 @@ function seatreg_search_bookings_callback() {
 	seatreg_ajax_security_check();
 	$order = 'date';
 	$searchTerm = '';
-	$calendarDate = assignIfNotEmpty($_GET['calendar-date'], null);
+	$calendarDate = assignIfNotEmpty($_POST['data']['calendarDate'], null);
 
 	if( !empty( $_POST['data']['orderby'] ) ) {
 		$order = sanitize_text_field($_POST['data']['orderby']);

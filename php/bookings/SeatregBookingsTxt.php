@@ -6,8 +6,8 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsFile.php'
 
 class SeatregBookingsTxt extends SeatregBookingsFile {
 
-    public function __construct($showPending, $showConfirmed, $registrationCode) {
-        parent::__construct($showPending, $showConfirmed, $registrationCode);
+    public function __construct($showPending, $showConfirmed, $registrationCode, $calendarDate) {
+        parent::__construct($showPending, $showConfirmed, $registrationCode, $calendarDate);
 
         $this->setupTxt();
 	}
