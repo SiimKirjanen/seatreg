@@ -208,4 +208,94 @@ class SeatregLayoutService {
 
 	    return $price;
     }
+
+    public static function getBookingsInfoForLayout($structure, $code, $filterCalendarDate) {
+        $pendingBookingsRoomsInfo = SeatregBookingRepository::getRoomsBookingsInfo($code, 1, $filterCalendarDate);
+	    $confirmedBookingsRoomsInfo = SeatregBookingRepository::getRoomsBookingsInfo($code, 2, $filterCalendarDate);
+
+	    $statsArray = self::getSeatsStats($structure, $pendingBookingsRoomsInfo, $confirmedBookingsRoomsInfo);
+
+	    return $statsArray;	
+    }
+
+    public static function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
+        $registration = json_decode($struct);
+        if(!isset($registration->roomData)) {
+            return [];
+        }
+
+        $bronLength = count($bronRegistrations);
+        $takenLength = count($takenRegistrations);
+        $regStructure = $registration->roomData;
+        $roomCount = count(is_array($regStructure) ? $regStructure : []);
+        $howManyRegSeats = 0;
+        $howManyOpenSeats = 0;
+        $howManyBronSeats= 0;
+        $howManyTakenSeats = 0;
+        $howManyCustomBoxes = 0;
+        $statsArray = array();
+        $roomsInfo = array();
+
+        for($i = 0; $i < $roomCount; $i++) {
+            $roomBoxes = $regStructure[$i]->boxes;
+            //find how many bron seats in this room
+            $roomBoxCount = count($roomBoxes);
+            $roomRegSeats = 0;  //how many reg seats
+            $roomOpenSeats = 0; //how many open reg seats
+            $roomTakenSeats = 0; //how many taken seats
+            $roomBronSeats = 0;	//bron seats
+            $roomCustomBoxes = 0;
+    
+            for($k = 0; $k < $bronLength; $k++) {  
+                if( $regStructure[$i]->room->uuid == $bronRegistrations[$k]->room_uuid ) { //find how many bron seats in this room
+                    $roomBronSeats = $bronRegistrations[$k]->total;
+                    $howManyBronSeats += $bronRegistrations[$k]->total;
+    
+                    break;
+                }
+            }
+    
+            for($k = 0; $k < $takenLength; $k++) {
+                if($regStructure[$i]->room->uuid == $takenRegistrations[$k]->room_uuid) { //find how many taken seats in this room
+                    $roomTakenSeats = $takenRegistrations[$k]->total;
+                    $howManyTakenSeats += $takenRegistrations[$k]->total;
+    
+                    break;
+                }
+            }
+            
+            for($j = 0; $j < $roomBoxCount; $j++) {
+                if($roomBoxes[$j]->canRegister === 'true') {
+                    if($roomBoxes[$j]->status === 'noStatus') {
+                        $howManyOpenSeats++;
+                        $roomOpenSeats++;
+                    }
+    
+                    $howManyRegSeats++;
+                    $roomRegSeats++;
+                }else {
+                    $howManyCustomBoxes++;
+                    $roomCustomBoxes++;
+                }
+            }
+    
+            $roomsInfo[] = array(
+                'roomUuid' => $regStructure[$i]->room->uuid,
+                'roomSeatsTotal' => $roomRegSeats,
+                'roomOpenSeats' => $roomRegSeats - $roomTakenSeats - $roomBronSeats,
+                'roomTakenSeats' => $roomTakenSeats,
+                'roomBronSeats' => $roomBronSeats,
+                'roomCustomBoxes' => $roomCustomBoxes
+            );
+        }
+
+        $statsArray['seatsTotal'] = $howManyRegSeats;
+        $statsArray['openSeats'] = $howManyOpenSeats - $howManyBronSeats - $howManyTakenSeats;
+        $statsArray['bronSeats'] = $howManyBronSeats;
+        $statsArray['takenSeats'] = $howManyTakenSeats;
+        $statsArray['roomCount'] = $roomCount;
+        $statsArray['roomsInfo'] = $roomsInfo;
+
+        return $statsArray;
+    }
 }

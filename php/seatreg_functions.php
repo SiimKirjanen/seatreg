@@ -2699,14 +2699,19 @@ function seatreg_seat_password_check_callback() {
 	wp_send_json_success("No password set");
 }
 
-add_action( 'wp_ajax_seatreg_fetch_bookings', 'seatreg_fetch_bookings_callback' );
-add_action( 'wp_ajax_nopriv_seatreg_fetch_bookings', 'seatreg_fetch_bookings_callback' );
-function seatreg_fetch_bookings_callback() {
-	$data = SeatregOptionsRepository::getOptionsByRegistrationCode( $_GET['registration-code'] );
+add_action( 'wp_ajax_seatreg_fetch_bookings_and_info', 'seatreg_fetch_bookings_and_info_callback' );
+add_action( 'wp_ajax_nopriv_seatreg_fetch_bookings_and_info', 'seatreg_fetch_bookings_and_info_callback' );
+function seatreg_fetch_bookings_and_info_callback() {
+	$data = SeatregRegistrationRepository::getRegistrationWithOptionsByCode( $_GET['registration-code'] );
 	$selectedShowRegistrationData = $data->show_bookings_data_in_registration ? explode(',', $data->show_bookings_data_in_registration) : [];
 	$bookings = SeatregBookingRepository::getBookingsForRegistrationPage( $_GET['registration-code'], $selectedShowRegistrationData, $_GET['date']);
+	$roomsBookingInfo = json_encode( SeatregLayoutService::getBookingsInfoForLayout($data->registration_layout, $data->registration_code, $_GET['date']) );
+	$responseData = (object)[
+		'bookings' => $bookings,
+		'roomsBookingInfo' => $roomsBookingInfo
+	];
 
-	wp_send_json( $bookings );
+	wp_send_json( $responseData );
 }
 
 add_action( 'wp_ajax_seatreg_booking_submit', 'seatreg_booking_submit_callback' );

@@ -250,12 +250,14 @@
 			data: {
 				date: this.userSelectedCalendarDate,
 				'registration-code': getRegistrationCode(),
-				action: 'seatreg_fetch_bookings'
+				action: 'seatreg_fetch_bookings_and_info'
 			},
 			success: function(response) {
 				$('#calendar-date-change-loading').css('display', 'none');
 				$('#modal-bg').css('display','none');
-				window.registrations = response;
+				window.registrations = response.bookings;
+				window.roomsInfo = jQuery.parseJSON(response.roomsBookingInfo);
+
 				scope.rooms = (window.dataReg !== null) ? deepCopyObject(window.dataReg.roomData) : null;
 				scope.clearCart();
 				scope.buildRegistration();

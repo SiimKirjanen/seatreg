@@ -210,4 +210,44 @@ class SeatregBookingRepository {
     
         return $bookings;
     }
+
+    /**
+     *
+     * Return bookings count in registration rooms
+     *
+     * @param string $registrationCode The registration code
+     * @param string|null $filterCalendarDate The calendar date filtering
+     * @param int $bookingStatus. 
+     * @return array of objects with room info about booking count
+     *
+     */
+    public static function getRoomsBookingsInfo($registrationCode, $bookingStatus, $filterCalendarDate) {
+        global $wpdb;
+	    global $seatreg_db_table_names;
+
+        if( $filterCalendarDate ) {
+            return $wpdb->get_results( $wpdb->prepare(
+                "SELECT room_uuid, COUNT(id) AS total
+                FROM $seatreg_db_table_names->table_seatreg_bookings
+                WHERE registration_code = %s
+                AND status = %d
+                AND calendar_date = %s
+                GROUP BY room_uuid",
+                $registrationCode,
+                $bookingStatus,
+                $filterCalendarDate
+            ) );
+        }else {
+            return $wpdb->get_results( $wpdb->prepare(
+                "SELECT room_uuid, COUNT(id) AS total
+                FROM $seatreg_db_table_names->table_seatreg_bookings
+                WHERE registration_code = %s
+                AND status = %d
+                AND calendar_date IS NULL
+                GROUP BY room_uuid",
+                $registrationCode,
+                $bookingStatus
+            ) );
+        }
+    }
 }
