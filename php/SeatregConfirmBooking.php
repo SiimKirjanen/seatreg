@@ -156,7 +156,17 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 			return;
 		}
-			
+
+		if($this->_bookingSameEmailLimit) {
+			$sameEmailBookingCheckStatus = $this->sameEmailBookingCheck($this->_bookerEmail, $this->_bookingSameEmailLimit);
+
+			if($sameEmailBookingCheckStatus != 'ok') {
+				echo $sameEmailBookingCheckStatus;
+	
+				return;
+			}
+		}
+
 		$this->confirmBookings();
 	}
 }

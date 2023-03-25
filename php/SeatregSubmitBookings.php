@@ -139,15 +139,14 @@ class SeatregSubmitBookings extends SeatregBooking {
 
 		//5. Bookings with same email limit check if enabled
 		if($this->_bookingSameEmailLimit) {
-			$sameEmailBookingsCount = (int)SeatregBookingRepository::getBookingsCountWithSameEmail($this->_registrationCode, $this->_bookerEmail);
+			$sameEmailBookingCheckStatus = $this->sameEmailBookingCheck($this->_bookerEmail, $this->_bookingSameEmailLimit);
 
-			if($sameEmailBookingsCount >= $this->_bookingSameEmailLimit) {
-				$this->response->setError(esc_html__('Email has been used already', 'seatreg'));
-
+			if($sameEmailBookingCheckStatus != 'ok') {
+				$this->response->setError($sameEmailBookingCheckStatus);
+	
 				return;
 			}
 		}
-
 
 		//6.step. Time check. is registration open.
 		if ($this->_isRegistrationOpen == false) {

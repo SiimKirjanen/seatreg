@@ -121,6 +121,18 @@ class SeatregBooking {
 
 		return true;
 	}
+
+	protected function sameEmailBookingCheck($email, $emailLimit) {
+		$statusReport = 'ok';
+
+		$sameEmailBookingsCount = (int)SeatregBookingRepository::getBookingsCountWithSameEmail($this->_registrationCode, $this->_bookerEmail);
+
+		if($sameEmailBookingsCount >= $emailLimit) {
+			$statusReport = sprintf(esc_html__('Email %s is already used. You are allowed to make %s booking with the same email', 'seatreg'), $email, $emailLimit);
+		}
+
+		return $statusReport;
+	}
     
     protected function doSeatsExistInRegistrationLayoutCheck() {
 		//check if seats are in rooms and seat numbers are correct.
