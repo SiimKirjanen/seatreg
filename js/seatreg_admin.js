@@ -1132,7 +1132,6 @@ $('#seatreg-settings-submit').on('click', function(e) {
  				customFieldArray.push(new SeatregCustomField($(this).find('.l-text').text(), $(this).attr('data-type'), optArr));
  			}	
  	}); 
-	debugger
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
 });
 

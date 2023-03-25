@@ -406,7 +406,7 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
-    public static function validateCustomFieldManagerSubmit($editCustomFields, $existingCustomFields) {
+    public static function validateCustomFieldManagerSubmit($editCustomFields, $existingCustomFields, $registrationCode) {
         $validationStatus = new SeatregValidationStatus();
 
         try {
@@ -414,7 +414,7 @@ class SeatregDataValidation {
             $existingCustomFieldsDecoded = json_decode($existingCustomFields);
 
             foreach($editCustomFieldsDecoded as $editCustomFieldDecoded) {
-                $customFieldValidation = self::validateSingleCustomFieldSubmit($editCustomFieldDecoded, $editCustomFieldsDecoded, $existingCustomFieldsDecoded);
+                $customFieldValidation = self::validateSingleCustomFieldSubmit($editCustomFieldDecoded, $editCustomFieldsDecoded, $existingCustomFieldsDecoded, $registrationCode);
 
                 if( !$customFieldValidation->valid ) {
                     $validationStatus->setInvalid($personCustomFieldValidation->errorMessage);

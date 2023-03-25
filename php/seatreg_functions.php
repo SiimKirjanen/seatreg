@@ -1535,7 +1535,7 @@ function seatreg_validate_edit_booking($code, $data) {
     $resp = array();
     $resp['status'] = 'ok';
 	$layoutValidation = SeatregLayoutService::validateRoomAndSeatId($structure, $data->roomName, $data->seatId );
-	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->editCustomField, $registration->custom_fields);
+	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->editCustomField, $registration->custom_fields, $registration->registration_code);
 
 	if( !$layoutValidation->valid ) {
 			$allCorrect = false;
@@ -2816,7 +2816,7 @@ function seatreg_add_booking_with_manager_callback() {
 	$bookingsToAdd = [];
 	$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
-	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields));
+	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields), $options->registration_code);
 	$bookingStatus = sanitize_text_field($_POST['booking-status']);
 
 	if( !$customFieldValidation->valid ) {
