@@ -141,4 +141,18 @@ class SeatregBookingRepository {
             $expirationTimeInMinutes
         ) );
     }
+
+    public static function getBookingsCountWithSameEmail($registrationCode, $bookerEmail) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_bookings
+            WHERE registration_code = %s
+            AND (status = '1' OR status = '2')
+            AND booker_email = %s",
+            $registrationCode,
+            $bookerEmail
+        ) );
+    }
 }

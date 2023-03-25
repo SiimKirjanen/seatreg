@@ -137,7 +137,19 @@ class SeatregSubmitBookings extends SeatregBooking {
 			}
 		}
 
-		//5.step. Time check. is registration open.
+		//5. Bookings with same email limit check if enabled
+		if($this->_bookingSameEmailLimit) {
+			$sameEmailBookingsCount = (int)SeatregBookingRepository::getBookingsCountWithSameEmail($this->_registrationCode, $this->_bookerEmail);
+
+			if($sameEmailBookingsCount >= $this->_bookingSameEmailLimit) {
+				$this->response->setError(esc_html__('Email has been used already', 'seatreg'));
+
+				return;
+			}
+		}
+
+
+		//6.step. Time check. is registration open.
 		if ($this->_isRegistrationOpen == false) {
 			$this->response->setError(esc_html__('Registration is closed', 'seatreg'));
 
@@ -151,7 +163,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//6.step. Check if seat/seats are allready taken
+		//7.step. Check if seat/seats are allready taken
 		$bookStatus = $this->isAllSelectedSeatsOpen(); 
 		if($bookStatus != 'ok') {
 			$this->response->setError($bookStatus);
@@ -159,7 +171,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//7.step. Check if seat/seats are locked
+		//8.step. Check if seat/seats are locked
 		$lockStatus = $this->seatLockCheck();
 		if($lockStatus != 'ok') {
 			$this->response->setError($lockStatus);
@@ -167,7 +179,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//8.step. seat/seats password check
+		//9.step. seat/seats password check
 		$passwordStatus = $this->seatPasswordCheck();
 		if($passwordStatus != 'ok') {
 			$this->response->setError($passwordStatus);
@@ -175,7 +187,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//9.step. If multi price selected then make sure that price uuid exists
+		//10.step. If multi price selected then make sure that price uuid exists
 		$multiPriceUUIDCheckStatus = $this->multiPriceUUIDCheck();
 		if($multiPriceUUIDCheckStatus != 'ok') {
 			$this->response->setError($multiPriceUUIDCheckStatus);
