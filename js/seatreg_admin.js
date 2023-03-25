@@ -973,7 +973,7 @@ function seatreg_insert_custom_field(label,type,options, placeToPut) {
 		var containerDiv = $('<div class="custom-container" data-label="'+ label +'"></div>');
 
 		if(type == 'field') {
-			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label><i class="fa fa-times-circle remove-cust-item"></i>'); 
+			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label> <span class="seatreg-ui-tooltip" title="Prevents booking when same input value provided">Unique value required</span> <input type="checkbox" class="unique-input" /> <i class="fa fa-times-circle remove-cust-item"></i>'); 
 			containerDiv.attr('data-type','text').append(cusLabel);
 		}else if(type == 'checkbox') {
 			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="checkbox"/></label><i class="fa fa-times-circle remove-cust-item"></i>'); 
@@ -992,6 +992,7 @@ function seatreg_insert_custom_field(label,type,options, placeToPut) {
 			containerDiv.attr('data-type','sel').append(lab);
 		}	
 		placeToPut.append(containerDiv);
+		initTooltips();
 }
 
 
@@ -1035,10 +1036,11 @@ $('.seatreg_page_seatreg-options .cust-field-create').on('click','.remove-cust-i
 	}
 });
 
-function SeatregCustomField(label, type, options) {
+function SeatregCustomField(label, type, options, unique = false) {
 		this.label = label;
 		this.type = type;
 		this.options = options;
+		this.unique = unique;
 }
 
 //when user submits seatreg settings. Do validation, generate #custom-fields hidden input value. 
@@ -1117,7 +1119,9 @@ $('#seatreg-settings-submit').on('click', function(e) {
 
 	$('#seatreg-settings-form .custom-container').each(function() {
  			if($(this).attr('data-type') != 'sel') {
- 				customFieldArray.push(new SeatregCustomField($(this).find('.l-text').text(), $(this).attr('data-type'), []));
+				var isUnique = $(this).find('.unique-input').is(':checked');
+
+ 				customFieldArray.push(new SeatregCustomField($(this).find('.l-text').text(), $(this).attr('data-type'), [], isUnique));
  			}else {
  				var optArr = [];
 
@@ -1160,7 +1164,10 @@ $('#seatreg-send-test-email').on('click', function(e) {
 	}
 });
 
-$('.seatreg-ui-tooltip').tooltip();
+function initTooltips() {
+	$('.seatreg-ui-tooltip').tooltip();
+}
+initTooltips();
 
 })(jQuery);
 

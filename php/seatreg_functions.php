@@ -835,9 +835,15 @@ function seatreg_generate_settings_form() {
 										echo '</div>';
 
 									}else if($custFields[$i]->type == 'text'){
-										echo '<div class="custom-container" data-type="text" data-label="'. $custFields[$i]->label .'">';
-											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>', '<input type="text" /> </label><i class="fa fa-times-circle remove-cust-item"></i>';
-										echo '</div>';
+										?>
+											<div class="custom-container" data-type="text" data-label="<?php echo $custFields[$i]->label; ?>">
+												<label><span class="l-text"><?php echo esc_html($custFields[$i]->label); ?> </span>
+													<input type="text" />
+												</label>
+												<span class="seatreg-ui-tooltip" title="<?php esc_html_e('Prevents booking when same input value provided', 'seatreg');?>"><?php esc_html_e('Unique value required', 'seatreg');?></span> <input type="checkbox" class="unique-input" <?php echo $custFields[$i]->unique ? 'checked' : ''; ?> />
+												<i class="fa fa-times-circle remove-cust-item"></i>
+											</div>
+										<?php
 
 									}else if($custFields[$i]->type == 'check') {
 										echo '<div class="custom-container" data-type="check" data-label="'. $custFields[$i]->label .'">';
