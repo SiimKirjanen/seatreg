@@ -45,6 +45,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.32.0 =
 * Added setting to add limit how many bookings can be made with the same email
+* Added option to made text custom field unique.
 
 = 1.31.1 =
 * Fixed issue where locked seat text was not showing
