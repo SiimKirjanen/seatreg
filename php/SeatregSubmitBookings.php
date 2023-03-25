@@ -33,7 +33,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 		$customFields = stripslashes_deep($customFields);
 
 		//custom fields validation
-		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFields, $this->_maxSeats, $this->_createdCustomFields);
+		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFields, $this->_maxSeats, $this->_createdCustomFields, $this->_registrationCode);
 		
 		if( !$customFieldValidation->valid ) {
 			$this->response->setValidationError( $customFieldValidation->errorMessage );

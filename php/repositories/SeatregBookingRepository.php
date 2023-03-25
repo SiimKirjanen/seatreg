@@ -26,7 +26,7 @@ class SeatregBookingRepository {
     }
     /**
      *
-     * Return confirmed and approved bookings but registration code
+     * Return confirmed and approved bookings by registration code
      *
      * @param string $registrationCode The code of registration
      *
@@ -154,5 +154,26 @@ class SeatregBookingRepository {
             $registrationCode,
             $bookerEmail
         ) );
+    }
+
+    public static function findIfExistingBookingWasMadeWithCustomFieldValue($registrationCode, $assosiatedCustomField, $personCustomField) {
+        $bookings = self::getConfirmedAndApprovedBookingsByRegistrationCode($registrationCode);
+        $existingUniqueCustomFieldValue = false;
+
+        foreach($bookings as $booking) {
+            $bookingCustomFields = json_decode($booking->custom_field_data);
+
+            if($bookingCustomFields) {
+                foreach($bookingCustomFields as $bookingCustomField) {
+                    if($bookingCustomField->label === $personCustomField->label && $bookingCustomField->value ===  $personCustomField->value) {
+                        $existingUniqueCustomFieldValue = true;
+
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        return $existingUniqueCustomFieldValue;
     }
 }

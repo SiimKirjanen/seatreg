@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function SeatregFindCustomField($customFieldLabel, $createdCustomFields) {
     foreach($createdCustomFields as $createdCustomField) {
-        if($createdCustomField->label === $customFieldLabel) {
+        if(trim($createdCustomField->label) === trim($customFieldLabel)) {
             return $createdCustomField;
         }
     }
@@ -429,7 +429,7 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
-    public static function validateBookingCustomFields($submittedCustomFields, $maxSeats, $createdCustomFields) {
+    public static function validateBookingCustomFields($submittedCustomFields, $maxSeats, $createdCustomFields, $registrationCode) {
         $validationStatus = new SeatregValidationStatus();
 
         try {
@@ -447,7 +447,7 @@ class SeatregDataValidation {
 
             foreach($customFieldsDecoded as $personCustomFields) {
                 foreach($personCustomFields as $personCustomField) {
-                    $personCustomFieldValidation = self::validateSingleCustomFieldSubmit($personCustomField, $personCustomFields,  $createdCustomFields);
+                    $personCustomFieldValidation = self::validateSingleCustomFieldSubmit($personCustomField, $personCustomFields,  $createdCustomFields, $registrationCode);
 
                     if( !$personCustomFieldValidation->valid ) {
                         $validationStatus->setInvalid($personCustomFieldValidation->errorMessage);
@@ -464,7 +464,7 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
-    public static function validateSingleCustomFieldSubmit($personCustomField, $personCustomFields, $createdCustomFields) {
+    public static function validateSingleCustomFieldSubmit($personCustomField, $personCustomFields, $createdCustomFields, $registrationCode) {
         $validationStatus = new SeatregValidationStatus();
 
         if( !property_exists($personCustomField, 'label') || !is_string($personCustomField->label) ) {
@@ -504,6 +504,14 @@ class SeatregDataValidation {
             if( strlen($personCustomField->value) > SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH ) {
                 $validationStatus->setInvalid('Text field too long');
                 return $validationStatus;
+            }
+            if( $assosiatedCustomField->unique === true ) {
+                $foundExistingUnique = SeatregBookingRepository::findIfExistingBookingWasMadeWithCustomFieldValue($registrationCode, $assosiatedCustomField, $personCustomField);
+
+                if($foundExistingUnique) {
+                    $validationStatus->setInvalid(sprintf(esc_html__('%s field value is already used', 'seatreg'), $assosiatedCustomField->label));
+                    return $validationStatus;
+                }
             }
         }
 
