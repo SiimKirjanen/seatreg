@@ -533,6 +533,14 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="bookings-email-limit"><?php esc_html_e('Booking email limit', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Specify how many bookings can be made with the same email. Leave empty for no limit', 'seatreg'); ?>.
+				</p>
+				<input type="number" class="form-control" id="bookings-email-limit" name="bookings-email-limit" value="<?php echo esc_html($options[0]->booking_email_limit); ?>" placeholder="<?php esc_html_e('No limit for email', 'seatreg'); ?>">
+			</div>
+
+			<div class="form-group">
 				<label for="gmail-required"><?php esc_html_e('Gmail required', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Gmail address is required when making a booking', 'seatreg'); ?>.</p>
 				<div class="checkbox">
@@ -1679,6 +1687,7 @@ function seatreg_set_up_db() {
 			stripe_webhook_secret varchar(255) DEFAULT NULL,
 			using_seats tinyint(1) NOT NULL DEFAULT 1,
 			email_from_address varchar(255) DEFAULT NULL,
+			booking_email_limit int(11) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2367,6 +2376,10 @@ function seatreg_update() {
 		$_POST['pending-expiration'] = null;
 	}
 
+	if(empty($_POST['bookings-email-limit'])) {
+		$_POST['bookings-email-limit'] = null;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 
 	$status1 = $wpdb->update(
@@ -2402,8 +2415,9 @@ function seatreg_update() {
 			'stripe_api_key' => $_POST['stripe-api-key'],
 			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
 			'using_seats' => $_POST['using-seats'],
-			'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null
-		),
+			'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null,
+			'booking_email_limit' => $_POST['bookings-email-limit']
+ 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
 		),
