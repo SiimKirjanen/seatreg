@@ -1037,7 +1037,7 @@ $('.seatreg_page_seatreg-options .cust-field-create').on('click','.remove-cust-i
 });
 
 function SeatregCustomField(label, type, options, unique = false) {
-		this.label = trim(label);
+		this.label = label.trim();
 		this.type = type;
 		this.options = options;
 		this.unique = unique;
@@ -1132,6 +1132,7 @@ $('#seatreg-settings-submit').on('click', function(e) {
  				customFieldArray.push(new SeatregCustomField($(this).find('.l-text').text(), $(this).attr('data-type'), optArr));
  			}	
  	}); 
+	debugger
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
 });
 
