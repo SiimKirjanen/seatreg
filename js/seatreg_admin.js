@@ -1037,7 +1037,7 @@ $('.seatreg_page_seatreg-options .cust-field-create').on('click','.remove-cust-i
 });
 
 function SeatregCustomField(label, type, options, unique = false) {
-		this.label = label;
+		this.label = trim(label);
 		this.type = type;
 		this.options = options;
 		this.unique = unique;
