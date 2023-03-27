@@ -103,7 +103,7 @@ class SeatregBooking {
 		$statusReport = 'ok';
 
 		foreach( $this->_bookings as $booking ) {
-			if( $booking->multi_price_uuid ) {
+			if( $booking->multi_price_selection ) {
 				if( SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) === false ) {
 					$statusReport = esc_html__('Selected price not found', 'seatreg');
 				}
@@ -207,10 +207,8 @@ class SeatregBooking {
     }
     
     protected function getRegistrationAndOptions() {
-		global $wpdb;
-		global $seatreg_db_table_names;
-
 		$result = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($this->_registrationCode);
+		
 		$this->_registrationStartTimestamp = $result->registration_start_timestamp;
 		$this->_registrationEndTimestamp = $result->registration_end_timestamp;
 		$this->_registrationLayout = json_decode($result->registration_layout)->roomData;
