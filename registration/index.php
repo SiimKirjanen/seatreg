@@ -300,7 +300,7 @@
 						<div id="seat-cart-rows">
 							<div class="row-nr">
 								<?php
-									esc_html_e('NR', 'seatreg');
+									esc_html_e('No.', 'seatreg');
 								?>
 							</div>
 							<div class="row-room">
