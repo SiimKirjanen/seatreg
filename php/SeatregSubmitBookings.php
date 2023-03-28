@@ -142,8 +142,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 			$sameEmailBookingCheckStatus = $this->sameEmailBookingCheck($this->_bookerEmail, $this->_bookingSameEmailLimit);
 
 			if($sameEmailBookingCheckStatus != 'ok') {
-				$this->response->setError($sameEmailBookingCheckStatus);
-	
+				$this->response->setValidationError($sameEmailBookingCheckStatus);
+					
 				return;
 			}
 		}
