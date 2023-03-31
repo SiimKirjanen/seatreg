@@ -29,7 +29,7 @@ class SeatregBooking {
 	protected $_emailFromAddress = null;
 	protected $_bookingSameEmailLimit = null;
 	protected $_usingCalendar = false; //is registration calendar mode activated?
-	protected $_calendarDates = null; // dates for calendar mode
+	protected $_calendarDates = []; // dates for calendar mode
 	protected $_userSelectedCalendarDate = null;
 	
     protected function generateSeatString() {
@@ -119,6 +119,40 @@ class SeatregBooking {
 		}
 
 		return true;
+	}
+
+	protected function calendarDateValidation($bookingSelectedDate) {
+		$statusReport = 'ok';
+		$hasCalendarDates = count($this->_calendarDates) >= 1;
+
+		if( !in_array($bookingSelectedDate, $this->_calendarDates) && $hasCalendarDates ) {
+			$statusReport = esc_html__('Selected date not available', 'seatreg');	
+		}
+
+		return $statusReport;
+	}
+
+	protected function calendarDatePastDateCheck($bookingSelectedDate) {
+		$statusReport = 'ok';
+
+		$currentTimeStamp = strtotime( date(CALENDAR_DATE_FORMAT) );
+		$bookingTimeStamp = strtotime( $bookingSelectedDate );
+
+		if( $bookingTimeStamp < $currentTimeStamp ) {
+			$statusReport = esc_html__('Selected date is in the past', 'seatreg');
+		}
+
+		return $statusReport;
+	}
+
+	protected function calendarDateFormatCheck($bookingSelectedDate) {
+		$statusReport = 'ok';
+
+		if( !preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $bookingSelectedDate ) ) {
+			$statusReport = esc_html__('Selected calendar date is not valid', 'seatreg');
+		}
+
+		return $statusReport;
 	}
 
 	protected function sameEmailBookingCheck($email, $emailLimit) {
@@ -224,7 +258,7 @@ class SeatregBooking {
 		$this->_emailFromAddress = $result->email_from_address;
 		$this->_bookingSameEmailLimit = is_null($result->booking_email_limit) ? null : (int)$result->booking_email_limit;
 		$this->_usingCalendar = $result->using_calendar === '1';
-		$this->_calendarDates = $result->calendar_dates;
+		$this->_calendarDates = $result->calendar_dates ? explode(',', $result->calendar_dates) : [];
 
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;

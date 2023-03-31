@@ -14,12 +14,13 @@ class SeatregConfirmBooking extends SeatregBooking {
 	protected $_bookindId;
 	protected $_registrationOwnerEmail;
 	protected $_bookerEmail; //confirm email is send to this address
+	protected $_selectedBookingCalendarDate; //in calendar mode user selected calendar date
 	
 	public function __construct($code){
 		$this->_confirmationCode = $code;
 	}
 
-	protected function getNotConfirmedBookings() {
+	protected function init() {
 		//find out if confirmation code is in db and return all bookings with that code
 		$rows = SeatregBookingRepository::getBookingByConfCode($this->_confirmationCode);
 
@@ -37,6 +38,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			$this->_bookingId = $this->_bookings[0]->booking_id;
 			$this->_bookerEmail = $this->_bookings[0]->booker_email;
 			$this->_seatPasswords = json_decode(stripslashes_deep($this->_bookings[0]->seat_passwords));
+			$this->_selectedBookingCalendarDate = $this->_bookings[0]->calendar_date;
 		}
 	}
 
@@ -84,7 +86,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 	}
 
 	public function startConfirm() {
-		$this->getNotConfirmedBookings();
+		$this->init();
 
 		if(!$this->_valid) {
 			esc_html_e($this->reply);
@@ -179,6 +181,30 @@ class SeatregConfirmBooking extends SeatregBooking {
 			echo $customFieldValidation->errorMessage;
 
 			return false;
+		}
+
+		//10 step. Calendar mode validation
+		if( $this->_usingCalendar ) {
+			$calendarDateFormatCheck = $this->calendarDateFormatCheck( $this->_selectedBookingCalendarDate );
+			if($calendarDateFormatCheck != 'ok') {
+				echo $calendarDateFormatCheck;
+
+				return;
+			}
+
+			$calendarDateCheck = $this->calendarDateValidation( $this->_selectedBookingCalendarDate );
+			if($calendarDateCheck != 'ok') {
+				echo $calendarDateCheck;
+
+				return;
+			}
+
+			$calendarDatePastCheck = $this->calendarDatePastDateCheck( $this->_selectedBookingCalendarDate );
+			if($calendarDatePastCheck != 'ok') {
+				echo $calendarDatePastCheck;
+
+				return;
+			}
 		}
 
 		$this->confirmBookings();

@@ -1773,7 +1773,7 @@ function seatreg_set_up_db() {
 			booker_email varchar(255) NOT NULL,
 			seat_passwords text,
 			multi_price_selection varchar(255) DEFAULT NULL,
-			calendar_date varchar(255) DEFAULT NULL,
+			calendar_date DATE DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -2766,7 +2766,7 @@ function seatreg_booking_submit_callback() {
 
 	$newBooking = new SeatregSubmitBookings( $_POST['c'], $resp );
 
-	if( $newBooking->validateBookingData(
+	if( $newBooking->validateAndPopulateBookingData(
 			$_POST['FirstName'], 
 			$_POST['LastName'], 
 			$_POST['Email'], 

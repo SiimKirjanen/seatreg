@@ -22,17 +22,17 @@ class SeatregSubmitBookings extends SeatregBooking {
       	$this->getRegistrationAndOptions();
     }
 
-    public function validateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords, $multiPriceUUID) {
-		global $wpdb;
-		global $seatreg_db_table_names;
-
+    public function validateAndPopulateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords, $multiPriceUUID) {
     	$this->_bookerEmail = $emailToSend;
         $this->_submittedPassword = $pw;
 		$this->_seatPasswords = json_decode(stripslashes_deep($passwords));
+
+		if( $this->_usingCalendar ) {
+			$this->_userSelectedCalendarDate = $_POST['selected-calendar-date'];
+		}
     
 		$customFields = stripslashes_deep($customFields);
 
-		//custom fields validation
 		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFields, $this->_maxSeats, $this->_createdCustomFields, $this->_registrationCode);
 		
 		if( !$customFieldValidation->valid ) {
@@ -43,16 +43,6 @@ class SeatregSubmitBookings extends SeatregBooking {
 
 		$bookings = [];
 		$customFieldData = json_decode( $customFields );
-
-		//calendar date validation if needed
-		if( $this->_usingCalendar ) {
-			if( !preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $_POST['selected-calendar-date']) ) {
-				$this->response->setValidationError( 'Selected calendar date is not valid' );
-
-				return false;
-			}
-			$this->_userSelectedCalendarDate = $_POST['selected-calendar-date'];
-		}
 
     	foreach ($firstname as $key => $value) {
 
@@ -184,22 +174,28 @@ class SeatregSubmitBookings extends SeatregBooking {
 		//Make sure that booking date is avalidable
 		//Make sure the booking date is not in the past
 		if( $this->_usingCalendar ) {
-			$avalidableDates = explode(',', $this->_calendarDates);
 
-			if( !in_array($_POST['selected-calendar-date'], $avalidableDates) ) {
-				$this->response->setError( esc_html__('Selected date not available', 'seatreg') );
+			$calendarDateFormatCheck = $this->calendarDateFormatCheck( $_POST['selected-calendar-date'] );
+			if($calendarDateFormatCheck != 'ok') {
+				$this->response->setValidationError( $calendarDateFormatCheck );
+
+				return;
+			}
+
+			$calendarDateCheck = $this->calendarDateValidation( $_POST['selected-calendar-date'] );
+			if($calendarDateCheck != 'ok') {
+				$this->response->setValidationError( $calendarDateCheck );
 
 				return;
 			}
 
-			$currentTimeStamp = strtotime( date(CALENDAR_DATE_FORMAT) );
-			$bookingTimeStamp = strtotime( $_POST['selected-calendar-date'] );
-
-			if( $bookingTimeStamp < $currentTimeStamp ) {
-				$this->response->setError( esc_html__('Selected date is in the past', 'seatreg') );
+			$calendarDatePastCheck = $this->calendarDatePastDateCheck( $_POST['selected-calendar-date'] );
+			if($calendarDatePastCheck != 'ok') {
+				$this->response->setValidationError( $calendarDatePastCheck );
 
 				return;
 			}
+
 		}
 	
 		//8.step. Check if seat/seats are locked
