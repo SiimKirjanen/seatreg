@@ -27,6 +27,7 @@ class SeatregBooking {
 	protected $_sendApprovedBookingEmail;
 	protected $_seatPasswords; //seat passwords provided by seat registration
 	protected $_emailFromAddress = null;
+	protected $_bookingSameEmailLimit = null;
 	protected $_usingCalendar = false; //is registration calendar mode activated?
 	protected $_calendarDates = null; // dates for calendar mode
 	protected $_userSelectedCalendarDate = null;
@@ -101,7 +102,7 @@ class SeatregBooking {
 		$statusReport = 'ok';
 
 		foreach( $this->_bookings as $booking ) {
-			if( $booking->multi_price_uuid ) {
+			if( $booking->multi_price_selection ) {
 				if( SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) === false ) {
 					$statusReport = esc_html__('Selected price not found', 'seatreg');
 				}
@@ -118,6 +119,18 @@ class SeatregBooking {
 		}
 
 		return true;
+	}
+
+	protected function sameEmailBookingCheck($email, $emailLimit) {
+		$statusReport = 'ok';
+
+		$sameEmailBookingsCount = (int)SeatregBookingRepository::getBookingsCountWithSameEmail($this->_registrationCode, $this->_bookerEmail);
+
+		if($sameEmailBookingsCount >= $emailLimit) {
+			$statusReport = sprintf(esc_html__('Email %s is already used. You are allowed to make %s booking with the same email', 'seatreg'), $email, $emailLimit);
+		}
+
+		return $statusReport;
 	}
     
     protected function doSeatsExistInRegistrationLayoutCheck() {
@@ -193,10 +206,8 @@ class SeatregBooking {
     }
     
     protected function getRegistrationAndOptions() {
-		global $wpdb;
-		global $seatreg_db_table_names;
-
 		$result = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($this->_registrationCode);
+		
 
 		$this->_registrationStartTimestamp = $result->registration_start_timestamp;
 		$this->_registrationEndTimestamp = $result->registration_end_timestamp;
@@ -211,6 +222,7 @@ class SeatregBooking {
 		$this->_approvedBookingTemplate = $result->approved_booking_email_template;
 		$this->_sendApprovedBookingEmail = $result->send_approved_booking_email;
 		$this->_emailFromAddress = $result->email_from_address;
+		$this->_bookingSameEmailLimit = is_null($result->booking_email_limit) ? null : (int)$result->booking_email_limit;
 		$this->_usingCalendar = $result->using_calendar === '1';
 		$this->_calendarDates = $result->calendar_dates;
 

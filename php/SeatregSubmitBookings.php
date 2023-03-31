@@ -33,7 +33,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 		$customFields = stripslashes_deep($customFields);
 
 		//custom fields validation
-		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFields, $this->_maxSeats, $this->_createdCustomFields);
+		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFields, $this->_maxSeats, $this->_createdCustomFields, $this->_registrationCode);
 		
 		if( !$customFieldValidation->valid ) {
 			$this->response->setValidationError( $customFieldValidation->errorMessage );
@@ -147,7 +147,18 @@ class SeatregSubmitBookings extends SeatregBooking {
 			}
 		}
 
-		//5.step. Time check. is registration open?
+		//5. Bookings with same email limit check if enabled
+		if($this->_bookingSameEmailLimit) {
+			$sameEmailBookingCheckStatus = $this->sameEmailBookingCheck($this->_bookerEmail, $this->_bookingSameEmailLimit);
+
+			if($sameEmailBookingCheckStatus != 'ok') {
+				$this->response->setValidationError($sameEmailBookingCheckStatus);
+					
+				return;
+			}
+		}
+
+		//6.step. Time check. is registration open?
 		if ($this->_isRegistrationOpen == false) {
 			$this->response->setError(esc_html__('Registration is closed', 'seatreg'));
 

@@ -575,6 +575,14 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="bookings-email-limit"><?php esc_html_e('Booking email limit', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Specify how many bookings can be made with the same email. Leave empty for no limit', 'seatreg'); ?>.
+				</p>
+				<input type="number" class="form-control" id="bookings-email-limit" name="bookings-email-limit" value="<?php echo esc_html($options[0]->booking_email_limit); ?>" placeholder="<?php esc_html_e('No limit for email', 'seatreg'); ?>">
+			</div>
+
+			<div class="form-group">
 				<label for="gmail-required"><?php esc_html_e('Gmail required', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Gmail address is required when making a booking', 'seatreg'); ?>.</p>
 				<div class="checkbox">
@@ -869,9 +877,15 @@ function seatreg_generate_settings_form() {
 										echo '</div>';
 
 									}else if($custFields[$i]->type == 'text'){
-										echo '<div class="custom-container" data-type="text" data-label="'. $custFields[$i]->label .'">';
-											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>', '<input type="text" /> </label><i class="fa fa-times-circle remove-cust-item"></i>';
-										echo '</div>';
+										?>
+											<div class="custom-container" data-type="text" data-label="<?php echo $custFields[$i]->label; ?>">
+												<label><span class="l-text"><?php echo esc_html($custFields[$i]->label); ?> </span>
+													<input type="text" />
+												</label>
+												<span class="seatreg-ui-tooltip" title="<?php esc_html_e('Prevents booking when same input value provided', 'seatreg');?>"><?php esc_html_e('Unique value required', 'seatreg');?></span> <input type="checkbox" class="unique-input" <?php echo $custFields[$i]->unique ? 'checked' : ''; ?> />
+												<i class="fa fa-times-circle remove-cust-item"></i>
+											</div>
+										<?php
 
 									}else if($custFields[$i]->type == 'check') {
 										echo '<div class="custom-container" data-type="check" data-label="'. $custFields[$i]->label .'">';
@@ -1575,7 +1589,7 @@ function seatreg_validate_edit_booking($code, $data) {
     $resp = array();
     $resp['status'] = 'ok';
 	$layoutValidation = SeatregLayoutService::validateRoomAndSeatId($structure, $data->roomName, $data->seatId );
-	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->editCustomField, $registration->custom_fields);
+	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->editCustomField, $registration->custom_fields, $registration->registration_code);
 
 	if( !$layoutValidation->valid ) {
 			$allCorrect = false;
@@ -1733,6 +1747,7 @@ function seatreg_set_up_db() {
 			stripe_webhook_secret varchar(255) DEFAULT NULL,
 			using_seats tinyint(1) NOT NULL DEFAULT 1,
 			email_from_address varchar(255) DEFAULT NULL,
+			booking_email_limit int(11) DEFAULT NULL,
 			using_calendar tinyint(1) NOT NULL DEFAULT 0,
 			calendar_dates text,
 			PRIMARY KEY  (id)
@@ -2495,6 +2510,10 @@ function seatreg_update() {
 		$_POST['pending-expiration'] = null;
 	}
 
+	if(empty($_POST['bookings-email-limit'])) {
+		$_POST['bookings-email-limit'] = null;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 
 	$status1 = $wpdb->update(
@@ -2531,9 +2550,10 @@ function seatreg_update() {
 			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
 			'using_seats' => $_POST['using-seats'],
 			'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null,
+			'booking_email_limit' => $_POST['bookings-email-limit'],
 			'using_calendar' => $_POST['using-calendar'],
 			'calendar_dates' => !empty($_POST['calendar-dates']) ? $_POST['calendar-dates'] : $oldOptions->calendar_dates
-		),
+ 		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
 		),
@@ -2947,7 +2967,7 @@ function seatreg_add_booking_with_manager_callback() {
 	$bookingsToAdd = [];
 	$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
-	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields));
+	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields), $options->registration_code);
 	$bookingStatus = sanitize_text_field($_POST['booking-status']);
 
 	if( !$customFieldValidation->valid ) {

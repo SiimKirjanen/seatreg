@@ -155,6 +155,41 @@ class SeatregBookingRepository {
         ) );
     }
 
+    public static function getBookingsCountWithSameEmail($registrationCode, $bookerEmail) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_bookings
+            WHERE registration_code = %s
+            AND (status = '1' OR status = '2')
+            AND booker_email = %s",
+            $registrationCode,
+            $bookerEmail
+        ) );
+    }
+
+    public static function findIfExistingBookingWasMadeWithCustomFieldValue($registrationCode, $assosiatedCustomField, $personCustomField) {
+        $bookings = self::getConfirmedAndApprovedBookingsByRegistrationCode($registrationCode);
+        $existingUniqueCustomFieldValue = false;
+
+        foreach($bookings as $booking) {
+            $bookingCustomFields = json_decode($booking->custom_field_data);
+
+            if($bookingCustomFields) {
+                foreach($bookingCustomFields as $bookingCustomField) {
+                    if($bookingCustomField->label === $personCustomField->label && $bookingCustomField->value ===  $personCustomField->value) {
+                        $existingUniqueCustomFieldValue = true;
+
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        return $existingUniqueCustomFieldValue;
+    }
+
     /**
      *
      * Return bookings data to be used on public registration page

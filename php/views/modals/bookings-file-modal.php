@@ -26,7 +26,7 @@
                     </div>
                     <hr>
                     <div class="custom-filtering">
-                        <span><?php esc_html_e('Add custom field filter', 'seatreg'); ?></span><i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                        <span><?php esc_html_e('Add custom field filter', 'seatreg'); ?></span> <i class="fa fa-plus-square-o" aria-hidden="true"></i>
                     </div>
                 </form>
                 <div class="custom-filtering-selection">

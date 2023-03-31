@@ -21,9 +21,6 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 	protected function getNotConfirmedBookings() {
 		//find out if confirmation code is in db and return all bookings with that code
-		global $wpdb;
-		global $seatreg_db_table_names;
-
 		$rows = SeatregBookingRepository::getBookingByConfCode($this->_confirmationCode);
 
 		if( !$rows ) {
@@ -156,7 +153,34 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 			return;
 		}
-			
+
+		//8 step. If enebled check booking email limit
+		if($this->_bookingSameEmailLimit) {
+			$sameEmailBookingCheckStatus = $this->sameEmailBookingCheck($this->_bookerEmail, $this->_bookingSameEmailLimit);
+
+			if($sameEmailBookingCheckStatus != 'ok') {
+				echo $sameEmailBookingCheckStatus;
+	
+				return;
+			}
+		}
+
+		//9 step. Custom field validation
+		$bookingCustomFields = [];
+
+		foreach($this->_bookings as $booking) {
+			$customFieldDecoded = json_decode($booking->custom_field_data);
+			array_push($bookingCustomFields, $customFieldDecoded);
+		}
+
+		$bookingCustomFieldsEncoded = json_encode($bookingCustomFields);
+		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($bookingCustomFieldsEncoded, $this->_maxSeats, $this->_createdCustomFields, $this->_registrationCode);
+		if( !$customFieldValidation->valid ) {
+			echo $customFieldValidation->errorMessage;
+
+			return false;
+		}
+
 		$this->confirmBookings();
 	}
 }
