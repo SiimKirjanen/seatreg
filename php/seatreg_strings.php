@@ -167,6 +167,7 @@ function seatreg_generate_admin_strings() {
     $translations->setPassword = esc_html__('Set password', 'seatreg');
     $translations->changesApplied = esc_html__('Changes applied', 'seatreg');
     $translations->addPriceDescription = esc_html__('Please add price description', 'seatreg');
+    $translations->enableZipExtension = esc_html__('PHP Zip extension is needed for XLSX file generation', 'seatreg');
 
     return $translations;
 }

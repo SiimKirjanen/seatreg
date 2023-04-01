@@ -651,13 +651,8 @@ $('#generate-bookings-file').on('click', function() {
 	var getParams = $('#bookings-file-form :input').filter(function(index, element) {
 		return $(element).val() != '';
     }).serialize();
-	var uncheckedCheckboxesGetparams = "";
-	
-	$("#bookings-file-form input:checkbox:not(:checked)").each(function() {
-		uncheckedCheckboxesGetparams += "&" + $(this).attr('name') + "=0";
-	});
 
-	window.open(href + '&' + getParams + uncheckedCheckboxesGetparams, '_blank');
+	window.open(href + '&' + getParams, '_blank');
 
 });
 
@@ -911,7 +906,15 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 //text, xlsx and pdf 
 $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e) {
 	e.preventDefault();
+	$this = $(this);
 
+	if( $this.attr('data-file-type') === 'xlsx' && $this.attr('data-zip-is-enabled') === 'false' ) {
+		alertify.error(translator.translate('enableZipExtension'));
+
+		return false;
+	}
+
+	$('#generate-bookings-file').attr('data-link', $this.attr('href'));
 	$('#bookings-file-modal').modal('show');
 });
 

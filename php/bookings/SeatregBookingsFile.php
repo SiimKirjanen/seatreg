@@ -83,7 +83,7 @@ class SeatregBookingsFile {
             $bookingCustomFieldData = json_decode($booking->custom_field_data);
 
             if( isset( $_GET['name'] ) ) {
-                if( !str_contains( $booking->first_name . $booking->last_name, $_GET['name'] ) ) {
+                if( !str_contains( strtolower($booking->first_name . $booking->last_name), strtolower($_GET['name']) ) ) {
                     return false;
                 }
             }
