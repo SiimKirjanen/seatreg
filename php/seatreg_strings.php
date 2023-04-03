@@ -170,6 +170,7 @@ function seatreg_generate_admin_strings() {
     $translations->changesApplied = esc_html__('Changes applied', 'seatreg');
     $translations->addPriceDescription = esc_html__('Please add price description', 'seatreg');
     $translations->enableZipExtension = esc_html__('PHP Zip extension is needed for XLSX file generation', 'seatreg');
+    $translations->reloadingPage = esc_html__('Reloading page. Please wait.', 'seatreg');
 
     return $translations;
 }

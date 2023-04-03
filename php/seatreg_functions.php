@@ -1023,9 +1023,11 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	?>
 		<div class='management-header'>
 			<?php if($calendarDate) : ?>
-				<input type="hidden" id="booking-manager-calendar-date" value="<?php echo esc_html($calendarDate); ?>" />
+				<div class="booking-manager-calendar-wrap">
+					<input id="booking-manager-calendar-date" value="<?php echo esc_html($calendarDate); ?>" />
+				</div>
 			<?php endif; ?>
-
+			
 			<div class='registration-name'>
 				<?php echo $project_name_original; ?>
 			</div>

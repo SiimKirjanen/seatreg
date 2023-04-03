@@ -245,6 +245,18 @@ function initOverviewCalendarDatePicker() {
 }
 initOverviewCalendarDatePicker();
 
+function initBookingManagerCalendarDatePicer() {
+	$('#booking-manager-calendar-date').datepicker({
+		dateFormat: 'yy-mm-dd',
+		onSelect: function(dateText) {
+			setCalendarDateUrlParam(dateText);
+			alertify.success(translator.translate('reloadingPage'));
+			location.reload(); 
+		}
+	});
+}
+initBookingManagerCalendarDatePicer();
+
 $('#calendar-dates').multiDatesPicker({
 	dateFormat: 'yy-mm-dd',
 	separator: ','
@@ -366,12 +378,17 @@ Booking manager
 
 		if( bookingManagerCalendarDate ) {
 			//Calendar mode enabled. Lets update URL
-			queryParams.set('calendar-date', bookingManagerCalendarDate);
-			window.history.replaceState(null, null, '?' + queryParams.toString());
+			setCalendarDateUrlParam(bookingManagerCalendarDate);
 		}
 	} 
-	
 })();
+
+function setCalendarDateUrlParam(calendarDate) {
+	var queryParams = new URLSearchParams(window.location.search);
+
+	queryParams.set('calendar-date', calendarDate);
+	window.history.replaceState(null, null, '?' + queryParams.toString());
+}
 
 function managerSearch() {
 	var code = $('#seatreg-reg-code').val();
