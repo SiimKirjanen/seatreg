@@ -46,6 +46,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 = 1.32.3 =
 * Made booking related email subjects translatable
 * Allow more characters with custom fields
+* Added Stripe API key validation
 
 = 1.32.2 =
 * Fixed bug that only allowed to open PDF file generation.

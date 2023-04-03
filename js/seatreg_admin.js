@@ -1065,6 +1065,13 @@ $('#seatreg-settings-submit').on('click', function(e) {
 		}
 	}
 
+	if( $('#stripe-api-key').val() !== "" && !$('#stripe-api-key').val().startsWith('sk') ) {
+		e.preventDefault();
+		alertify.error(translator.translate('pleaseProvideStripeApiSecretKey'));
+
+		return true;
+	}
+
 	if( $('#email-from').val() !== '' && !/^\S+@\S+$/.test( $('#email-from').val() ) ) {
 		e.preventDefault();
 		alertify.error(translator.translate('emailFromNotCorrect'));
