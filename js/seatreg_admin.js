@@ -711,19 +711,14 @@ $('#seatreg-booking-manager').on('click', '#generate-bookings-file', function() 
 	var getParams = $('#bookings-file-form :input').filter(function(index, element) {
 		return $(element).val() != '';
     }).serialize();
-	var uncheckedCheckboxesGetparams = "";
 	var calendarDateparam = "";
 	var queryParams = new URLSearchParams(window.location.search);
-	
-	$("#bookings-file-form input:checkbox:not(:checked)").each(function() {
-		uncheckedCheckboxesGetparams += "&" + $(this).attr('name') + "=0";
-	});
 
 	if(queryParams.has('calendar-date')) {
 		calendarDateparam += "&calendar-date=" + queryParams.get('calendar-date');
 	}
 
-	window.open(href + '&' + getParams + uncheckedCheckboxesGetparams + calendarDateparam, '_blank');
+	window.open(href + '&' + getParams +  calendarDateparam, '_blank');
 });
 
 $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
@@ -976,7 +971,15 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 //text, xlsx and pdf 
 $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e) {
 	e.preventDefault();
+	$this = $(this);
 
+	if( $this.attr('data-file-type') === 'xlsx' && $this.attr('data-zip-is-enabled') === 'false' ) {
+		alertify.error(translator.translate('enableZipExtension'));
+
+		return false;
+	}
+
+	$('#generate-bookings-file').attr('data-link', $this.attr('href'));
 	$('#bookings-file-modal').modal('show');
 });
 
@@ -1125,6 +1128,13 @@ $('#seatreg-settings-submit').on('click', function(e) {
 
 			return true;
 		}
+	}
+
+	if( $('#stripe-api-key').val() !== "" && !$('#stripe-api-key').val().startsWith('sk') ) {
+		e.preventDefault();
+		alertify.error(translator.translate('pleaseProvideStripeApiSecretKey'));
+
+		return true;
 	}
 
 	if( $('#email-from').val() !== '' && !/^\S+@\S+$/.test( $('#email-from').val() ) ) {

@@ -35,7 +35,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>
-                <button type="button" class="btn btn-primary" id="generate-bookings-file" data-link=<?php echo get_site_url() . '?seatreg=pdf&code=' . esc_attr($registrationCode); ?>><?php esc_html_e('Generate file', 'seatreg'); ?></button>
+                <button type="button" class="btn btn-primary" id="generate-bookings-file" data-link=""><?php esc_html_e('Generate file', 'seatreg'); ?></button>
             </div>
         </div>
     </div>

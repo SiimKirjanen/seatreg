@@ -1018,7 +1018,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	$row_count2 = count($bookings2);
 	$project_name = str_replace(' ', '_', $project_name_original);
 	$usingSeats = $seatregData->using_seats === '1';
-	
+	$zipExtensionLoaded = extension_loaded('zip');
+
 	?>
 		<div class='management-header'>
 			<?php if($calendarDate) : ?>
@@ -1050,7 +1051,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		</div>
 
 		<a href="<?php echo get_site_url() . '?seatreg=pdf&code=' . esc_attr($code); ?>" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a>
-    	<a href="<?php echo get_site_url() . '?seatreg=xlsx&code=' . esc_attr($code); ?>" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a>
+    	<a href="<?php echo get_site_url() . '?seatreg=xlsx&code=' . esc_attr($code); ?>" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx" data-zip-is-enabled="<?php echo $zipExtensionLoaded ? 'true': 'false'; ?>"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a>
     	<a href="<?php echo get_site_url() . '?seatreg=text&code=' . esc_attr($code); ?>" class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a>
 
 		<div class="bg-color">

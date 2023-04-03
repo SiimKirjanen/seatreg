@@ -26,7 +26,7 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
     $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), $registrationName ) . "<br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg") . "<br><br>";
     $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 
-    wp_mail($adminEmail, "$registrationName has a new booking", $message, array(
+    wp_mail($adminEmail, sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName), $message, array(
         "Content-type: text/html",
         "FROM: $fromAddress"
     ));
@@ -99,7 +99,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         $message .= '<br><img src="cid:qrcode" />';
     }
     
-    $isSent = wp_mail($bookerEmail, "Your booking at $registrationName is approved", $message, array(
+    $isSent = wp_mail($bookerEmail, sprintf(esc_html__("Your booking at %s is approved", "seatreg"), $registrationName), $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"
     ));

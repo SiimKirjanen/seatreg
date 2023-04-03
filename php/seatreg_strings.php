@@ -150,6 +150,7 @@ function seatreg_generate_admin_strings() {
     $translations->pleaseEnterPayPalButtonId = esc_html__('Please enter PayPal button id', 'seatreg');
     $translations->pleaseEnterPayPalCurrencyCode = esc_html__('Please enter currency code', 'seatreg');
     $translations->pleaseEnterStripeApiKey = esc_html__('Please enter Stripe API key', 'seatreg');
+    $translations->pleaseProvideStripeApiSecretKey = esc_html__('Please provide Stripe API secret key', 'seatreg');
     $translations->pricesAdded = esc_html__('Prices added', 'seatreg');
     $translations->noSeatsSelected = esc_html__('No seats/places selected!', 'seatreg');
     $translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
@@ -168,6 +169,7 @@ function seatreg_generate_admin_strings() {
     $translations->setPassword = esc_html__('Set password', 'seatreg');
     $translations->changesApplied = esc_html__('Changes applied', 'seatreg');
     $translations->addPriceDescription = esc_html__('Please add price description', 'seatreg');
+    $translations->enableZipExtension = esc_html__('PHP Zip extension is needed for XLSX file generation', 'seatreg');
 
     return $translations;
 }

@@ -480,7 +480,7 @@ class SeatregDataValidation {
             return $validationStatus;
         }
      
-        if( !property_exists($personCustomField, 'value') || !preg_match('/^[\p{L}\p{N}\\s-]+$/u', $personCustomField->value)) {
+        if( !property_exists($personCustomField, 'value') || !preg_match('/^[\p{L}\p{N}\\s:\/.-]+$/u', $personCustomField->value)) {
             $validationStatus->setInvalid('Custom field value is missing or invalid');
             return $validationStatus;
         }
