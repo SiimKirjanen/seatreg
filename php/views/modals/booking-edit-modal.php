@@ -7,6 +7,14 @@
       </div>
       <div class="modal-body">
 		<form id="booking-edit-form">
+			
+			<?php if($calendarDate): ?>
+				<div class="edit-modal-input-wrap">
+					<label for="edit-date"><h5><?php esc_html_e('Date', 'seatreg'); ?></h5></label><br>
+					<input type="text" id="edit-date" name="edit-date" value="<?php echo esc_html($calendarDate); ?>"/> <span id="edit-date-error"></span>
+				</div>
+			<?php endif; ?>
+
 			<div class="edit-modal-input-wrap">
 				<label for="edit-seat">
 					<h5>

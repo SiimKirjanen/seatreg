@@ -1184,7 +1184,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		</div>
 	<?php
 	
-	seatreg_booking_edit_modal($usingSeats);
+	seatreg_booking_edit_modal($usingSeats, $calendarDate);
 	seatreg_add_booking_modal($usingSeats, $calendarDate);
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code);
@@ -1283,7 +1283,7 @@ function seatreg_add_booking_modal($usingSeats, $calendarDate) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/add-booking-modal.php' );
 }
 
-function seatreg_booking_edit_modal($usingSeats) {
+function seatreg_booking_edit_modal($usingSeats, $calendarDate) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/booking-edit-modal.php' );
 }
 
@@ -1598,6 +1598,22 @@ function seatreg_validate_edit_booking($code, $data) {
 	$layoutValidation = SeatregLayoutService::validateRoomAndSeatId($structure, $data->roomName, $data->seatId );
 	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->editCustomField, $registration->custom_fields, $registration->registration_code);
 
+	if( $registration->using_calendar ) {
+		if( !property_exists($data, 'calendarDate') ) {
+			$allCorrect = false;
+			$resp['status'] = 'date not provided';
+
+			return $resp;
+		}
+
+		if( !preg_match(CALENDAR_DATE_PICKER_REGEX, $data->calendarDate )  ) {
+			$allCorrect = false;
+			$resp['status'] = 'date not correct';
+
+			return $resp;
+		}
+	}
+
 	if( !$layoutValidation->valid ) {
 			$allCorrect = false;
 			$resp['status'] = $layoutValidation->searchStatus;
@@ -1616,7 +1632,7 @@ function seatreg_validate_edit_booking($code, $data) {
 		$resp['newSeatNr'] = $prefix . $seat->seat;
 		$resp['roomUUID'] = SeatregLayoutService::getRoomUUID($structure, $data->roomName);
 	}
-	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $code );
+	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $code, $data->calendarDate );
 	$notBooked = true;
 
 	foreach ($bookings as $booking) {
@@ -2100,7 +2116,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 }
 
 //edit booking
-function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_name, $booking_id, $seat_id, $id) {
+function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_name, $booking_id, $seat_id, $id, $calendarDate) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
@@ -2112,7 +2128,8 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 			'seat_nr' => $seat_nr,
 			'room_uuid' => $room_uuid,
 			'custom_field_data' => $custom_fields,
-			'seat_id' => $seat_id
+			'seat_id' => $seat_id,
+			'calendar_date' => $calendarDate
 		), 
 		array(
 			'booking_id' => $booking_id,
@@ -3073,11 +3090,12 @@ function seatreg_edit_booking_callback() {
 	$bookingEdit->bookingId = sanitize_text_field($_POST['bookingid']);
 	$bookingEdit->editCustomField = stripslashes_deep($_POST['customfield']);
 	$bookingEdit->id = sanitize_text_field($_POST['id']);
+	$bookingEdit->calendarDate = !empty($_POST['calendarDate']) ? sanitize_text_field($_POST['calendarDate']): null;
 
-	$statusArray = seatreg_validate_edit_booking(sanitize_text_field($_POST['code']), $bookingEdit );
+	$statusArray = seatreg_validate_edit_booking( sanitize_text_field($_POST['code']), $bookingEdit );
 
 	if ( $statusArray['status'] != 'ok' ) {
-		wp_send_json( array('status'=>$statusArray['status'], 'text'=> $statusArray['text'] ) );
+		wp_send_json( array('status' => $statusArray['status'], 'text'=> $statusArray['text'] ) );
 
 		die();
 	}
@@ -3090,7 +3108,8 @@ function seatreg_edit_booking_callback() {
 			$bookingEdit->lastName,
 			$bookingEdit->bookingId, 
 			$statusArray['newSeatId'],
-			$bookingEdit->id
+			$bookingEdit->id,
+			$bookingEdit->calendarDate
 		) !== false) {
 		seatreg_add_activity_log('booking', $bookingEdit->bookingId, 'Booking edited (Booking manager)');
 		wp_send_json( array(

@@ -171,6 +171,8 @@ function seatreg_generate_admin_strings() {
     $translations->addPriceDescription = esc_html__('Please add price description', 'seatreg');
     $translations->enableZipExtension = esc_html__('PHP Zip extension is needed for XLSX file generation', 'seatreg');
     $translations->reloadingPage = esc_html__('Reloading page. Please wait.', 'seatreg');
+    $translations->dateNotProvided = esc_html__('Date not provided', 'seatreg');
+    $translations->dateNotCorrect = esc_html__('Date not correct', 'seatreg');
 
     return $translations;
 }

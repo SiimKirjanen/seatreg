@@ -65,6 +65,7 @@
 					bookingid: editInfo.bookingId,
 					customfield: editInfo.customFieldData,
 					id: editInfo.id,
+					calendarDate: editInfo.calendarDate
 				}
 			});
 	}
@@ -256,6 +257,16 @@ function initBookingManagerCalendarDatePicer() {
 	});
 }
 initBookingManagerCalendarDatePicer();
+
+function initEditBookingCalendarDatePicker() {
+	$('#booking-edit-form #edit-date').datepicker({
+		dateFormat: 'yy-mm-dd',
+		onSelect: function(dateText) {
+			
+		}
+	});
+}
+initEditBookingCalendarDatePicker();
 
 $('#calendar-dates').multiDatesPicker({
 	dateFormat: 'yy-mm-dd',
@@ -676,6 +687,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	var modal = $('#edit-modal');
 	var modalCutsom = modal.find('.modal-body-custom');
 	modalCutsom.empty();
+	console.log(info.find('.f-name').val());
 	modal.find('#edit-seat').val(info.find('.seat-id').val());
 	modal.find('#edit-room').val(info.find('.seat-room-box').text());
 	modal.find('#edit-fname').val(info.find('.f-name').val());
@@ -855,12 +867,12 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 	var customFields = [];
 	var code = $('#seatreg-reg-code').val();
 	var seatId = modal.find('#edit-seat').val();
-	var seat_number = modal.find('#edit-booking-seat-nr').val();
 	var seat_room = modal.find('#edit-room').val(); 
 	var first_name = modal.find('#edit-fname').val();
 	var last_name = modal.find('#edit-lname').val();
+	var calendarMode = $('#edit-date').length >= 1;
 
-	$('#edit-room-error, #edit-seat-error').text('');
+	$('#edit-room-error, #edit-seat-error, #edit-date-error').text('');
 	if( seatId == '' ) {
 		$('#edit-seat-error').text('No seat');
 		subBtn.css('display','inline').next().css('display','none');
@@ -882,6 +894,12 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 	}
 	if(last_name == ''){
 		$('#edit-lname-error').text('Last name empty');
+		subBtn.css('display','inline').next().css('display','none');
+
+		return;
+	}
+	if(calendarMode && $('#edit-date').val() === '') {
+		$('#edit-date-error').text('Date is empty');
 		subBtn.css('display','inline').next().css('display','none');
 
 		return;
@@ -915,6 +933,7 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		'customFieldData': JSON.stringify(customFields),
 		'seatRoom': seat_room,
 		'id': $('#r-id').val(),
+		'calendarDate': $('#edit-date').val()
 	}
 
 	var promise = seatreg_edit_booking('seatreg_edit_booking', code, editInfo);
@@ -958,6 +977,11 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 					$(this).find('.custom-field-value').text(translator.translate('notSet'));
 				}
 			});
+
+			if( calendarMode && $('#edit-date').val() !== $('#booking-manager-calendar-date').val() ) {
+				//Calendar date change.Remove booking from current view
+				bookingInfo.remove();
+			}
 			alertify.success(translator.translate('bookingUpdated'));
 
 		}else {
@@ -979,6 +1003,12 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 			if(data.status == 'custom field validation failed') {
 				alert('Custom field validation failed');
 			}
+			if(data.status === 'date not provided') {
+				$('#edit-date-error').text(translator.translate('dateNotProvided'));
+			}
+			if(data.status === 'date not correct') {
+				$('#edit-date-error').text(translator.translate('dateNotCorrect'));
+			}	
 		}
 	});
 

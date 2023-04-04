@@ -63,3 +63,4 @@ define('SEATREG_TEMPLATE_BOOKING_ID', '[booking-id]');
 
 //Time related
 define('CALENDAR_DATE_FORMAT', 'Y-m-d');
+define('CALENDAR_DATE_PICKER_REGEX', '/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/');
