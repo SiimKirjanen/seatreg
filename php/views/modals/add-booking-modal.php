@@ -6,6 +6,14 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
       </div>
       <div class="modal-body">
+
+		<?php if($calendarDate): ?>
+			<div class="add-modal-calendar-date">
+				<i class="fa fa-calendar" aria-hidden="true"></i>
+				<?php echo sprintf(esc_html__('Selected date is %s', 'seatreg'), $calendarDate); ?>
+			</div>
+		<?php endif; ?>
+
 		<form id="add-booking-modal-form">
 			<div class="modal-body-items">
 				<div class="modal-body-item">
@@ -84,6 +92,7 @@
 					</label>
 				</div>
 			</div>
+			<input type="hidden" name="calendar-date" value="<?php echo esc_html($calendarDate); ?>" />
 			<input type="hidden" name="registration-code" id="add-booking-registration-id" />
 			<input type="hidden" name="action" value="seatreg_add_booking_with_manager" />
 	     </form>

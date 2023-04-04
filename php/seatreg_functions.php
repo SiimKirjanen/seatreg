@@ -1185,7 +1185,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	<?php
 	
 	seatreg_booking_edit_modal($usingSeats);
-	seatreg_add_booking_modal($usingSeats);
+	seatreg_add_booking_modal($usingSeats, $calendarDate);
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code);
 }
@@ -1279,7 +1279,7 @@ function seatreg_generate_payment_section($booking) {
 	echo seatreg_generate_payment_logs( SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id) );
 }
 
-function seatreg_add_booking_modal($usingSeats) {
+function seatreg_add_booking_modal($usingSeats, $calendarDate) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/add-booking-modal.php' );
 }
 
@@ -1547,7 +1547,7 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 	}
 }
 
-function seatreg_valdiate_add_booking_with_manager($code, $data) {
+function seatreg_valdiate_add_booking_with_manager($code, $data, $calendarDate) {
 	$registration = seatreg_get_options($code)[0];
 	$structure = json_decode($registration->registration_layout)->roomData;
 	$allCorrect = true;
@@ -1570,7 +1570,7 @@ function seatreg_valdiate_add_booking_with_manager($code, $data) {
 		$resp['roomUUID'] = SeatregLayoutService::getRoomUUID($structure, $data->roomName);
 	}
 
-	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode($code);
+	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode($code, $calendarDate);
 	$notBooked = true;
 
 	foreach ($bookings as $booking) {
@@ -2124,7 +2124,7 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 	return $status;
 }
 
-function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode) {
+function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode, $calendarDate = null) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 	$currentTimeStamp = time();
@@ -2148,6 +2148,7 @@ function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seat
 			'booker_email' => $email,
 			'conf_code' => $confCode, 
 			'status' => $bookingStatus,
+			'calendar_date' => $calendarDate
 		), 
 		'%s'	
 	);
@@ -2967,10 +2968,9 @@ function seatreg_add_booking_with_manager_callback() {
 		empty( $_POST['custom-fields'] ) ) {
 			wp_send_json_error( array('message'=> 'Missing parameters') );
 	}
-	global $wpdb;
-	global $seatreg_db_table_names;
 
 	$registrationCode = sanitize_text_field( $_POST['registration-code'] );
+	$calendarDate = isset( $_POST['calendar-date'] ) ? $_POST['calendar-date'] : null;
 	$bookingsToAdd = [];
 	$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
@@ -2996,7 +2996,7 @@ function seatreg_add_booking_with_manager_callback() {
 	}
 
 	foreach( $bookingsToAdd as $key => $bookingToAdd ) {
-		$statusArray = seatreg_valdiate_add_booking_with_manager( $registrationCode, $bookingToAdd );
+		$statusArray = seatreg_valdiate_add_booking_with_manager( $registrationCode, $bookingToAdd, $calendarDate );
 
 		if ( $statusArray['status'] !== 'ok' ) {
 			wp_send_json_error( array('message' => $statusArray['text'], 'status' => $statusArray['status'], 'index' => $key) );
@@ -3033,7 +3033,8 @@ function seatreg_add_booking_with_manager_callback() {
 			$registrationCode,
 			$booking->status,
 			$bookingId,
-			$confCode
+			$confCode,
+			$calendarDate
 		);
 	}
 	$successStatusCount = count(array_filter($addingStatus, function($status) {

@@ -9,6 +9,15 @@
         .modal-custom {
             margin-bottom: 12px;
         }
+        .add-modal-calendar-date {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .fa {
+                margin-right: 8px;
+            }
+        }
         .modal-body-items {
             display: flex;
             overflow-x: auto;
