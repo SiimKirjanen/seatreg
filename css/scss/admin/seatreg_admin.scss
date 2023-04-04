@@ -165,10 +165,18 @@ html {
 .seatreg-tabs-content .overview-calendar-wrap {
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	margin-bottom: 20px;
+
+	label {
+		margin-bottom: 0;
+		text-transform: uppercase;
+	}
 
 	input {
 		text-align: center;
+		margin-left: 12px;
+		width: 170px;
 	}
 }
 

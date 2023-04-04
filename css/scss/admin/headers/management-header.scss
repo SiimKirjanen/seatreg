@@ -36,10 +36,17 @@
 		width: 100%;
 		display: flex;
 		justify-content: center;
+		align-items: center;
 		margin-bottom: 12px;
+
+		label {
+			margin-bottom: 0;
+		}
 		
 		input {
 			text-align: center;
+			margin-left: 12px;
+			width: 170px;
 		}
 	}	
 }

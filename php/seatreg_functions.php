@@ -161,6 +161,15 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 	  		<?php echo '<div class="reg-overview" id="existing-regs">';?>
 	  			<input type="hidden" id="seatreg-reg-code" value="<?php esc_attr_e($registration->registration_code); ?>"/>
 
+				  <?php if($registration->using_calendar === '1') : ?>
+					<div class="overview-calendar-wrap">
+					<label for="overview-calendar-date"><?php esc_html_e('Date', 'seatreg'); ?> <i class="fa fa-calendar" aria-hidden="true"></i></label>
+						<input type="text" id="overview-calendar-date" class="" value="<?php echo $filterBookingsByDate; ?>" autocomplete="off" />
+
+						<input type='hidden' value='<?php echo $filterBookingsByDate; ?>' id='overview-calendar-date-value' />
+					</div>
+				<?php endif; ?>
+
 				<?php echo '<div class="reg-overview-top">';?>
 	  				<?php 
 	  					if($targetRoom == 'overview') {
@@ -214,12 +223,6 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 					?>
 	  				
 				<?php echo '</div>';?>
-				<?php if($registration->using_calendar === '1') : ?>
-					<div class="overview-calendar-wrap">
-						<input type="text" id="overview-calendar-date" class="" value="<?php echo $filterBookingsByDate; ?>" autocomplete="off" />
-						<input type='hidden' value='<?php echo $filterBookingsByDate; ?>' id='overview-calendar-date-value' />
-					</div>
-				<?php endif; ?>
 
 				<?php echo '<div class="reg-overview-middle-wrap">'; ?>			
 				<?php echo '<div class="reg-overview-aside">';?>
@@ -1024,6 +1027,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		<div class='management-header'>
 			<?php if($calendarDate) : ?>
 				<div class="booking-manager-calendar-wrap">
+					<label for="booking-manager-calendar-date"><?php esc_html_e('Date', 'seatreg'); ?> <i class="fa fa-calendar" aria-hidden="true"></i></label>
 					<input id="booking-manager-calendar-date" value="<?php echo esc_html($calendarDate); ?>" />
 				</div>
 			<?php endif; ?>
