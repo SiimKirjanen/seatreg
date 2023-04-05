@@ -605,10 +605,21 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	cursor: pointer;
+	
+	margin-bottom: 12px;
+	font-size: 18px;
+
+	label {
+		cursor: pointer;
+		text-align: center;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		padding: 10px;
+	}
 	
 	a {
 		text-decoration: none;
+		color:#000;
 	}
 }
 

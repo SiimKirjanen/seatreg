@@ -108,8 +108,10 @@
 
 					<?php if( $data->using_calendar ) : ?>	
 						<div id="calendar-date-selection">
-							<div><?php esc_html_e('Selected calendar date', 'seatreg'); ?></div>
-							<a href="#" class="calendar"><?php echo date('Y-m-d'); ?></a>
+							<label>
+								<?php esc_html_e('Selected calendar date', 'seatreg'); ?> <i class="fa fa-calendar" aria-hidden="true"></i><br>
+								<a href="#" class="calendar" id="calendar-date"><?php echo date('Y-m-d'); ?></a>
+							</label>
 						</div>
 					<?php endif; ?>
 
