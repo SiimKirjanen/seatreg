@@ -23,7 +23,7 @@
 								<?php $usingSeats ? esc_html_e('Seat ID', 'seatreg') : esc_html_e('Place ID', 'seatreg'); ?>
 								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php $usingSeats ? esc_html_e('ID can be seen in map-editor when hovering seats', 'seatreg') : esc_html_e('ID can be seen in map-editor when hovering places', 'seatreg'); ?>"></i>
 							</h5>
-							<input type="text" name="seat-id[]"/>
+							<input type="text" name="seat-id[]" autocomplete="off"/>
 							<div class="input-error"></div>
 						</label>
 					</div>
@@ -32,7 +32,7 @@
 							<h5>
 								<?php esc_html_e('Room', 'seatreg'); ?>
 							</h5>
-							<input type="text" name="room[]"/>
+							<input type="text" name="room[]" autocomplete="off"/>
 							<div class="input-error"></div>
 						</label>
 					</div>
@@ -41,7 +41,7 @@
 							<h5>
 								<?php esc_html_e('First name', 'seatreg'); ?>
 							</h5>
-							<input type="text" name="first-name[]"/>
+							<input type="text" name="first-name[]" autocomplete="off"/>
 							<div class="input-error"></div>
 						</label>
 					</div>
@@ -50,7 +50,7 @@
 							<h5>
 								<?php esc_html_e('Last name', 'seatreg'); ?>
 							</h5>
-							<input type="text" name="last-name[]"/>
+							<input type="text" name="last-name[]" autocomplete="off"/>
 							<div class="input-error"></div>
 						</label>
 					</div>
@@ -59,7 +59,7 @@
 							<h5>
 								<?php esc_html_e('Email', 'seatreg'); ?>
 							</h5>
-							<input type="text" name="email[]"/>
+							<input type="text" name="email[]" autocomplete="off"/>
 							<div class="input-error"></div>
 						</label>
 					</div>

@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
 		<form id="booking-edit-form">
-			
+
 			<?php if($calendarDate): ?>
 				<div class="edit-modal-input-wrap">
 					<label for="edit-date"><h5><?php esc_html_e('Date', 'seatreg'); ?></h5></label><br>
@@ -23,22 +23,22 @@
 				</label> 
 				<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php $usingSeats ? esc_html_e('ID can be seen in map-editor when hovering seats', 'seatreg') : esc_html_e('ID can be seen in map-editor when hovering places', 'seatreg'); ?>"></i>
 				<br>
-				<input type="text" id="edit-seat" name="seat-id"/></label> <span id="edit-seat-error"></span>
+				<input type="text" id="edit-seat" name="seat-id" autocomplete="off"/></label> <span id="edit-seat-error"></span>
 			</div>
 			
 			<div class="edit-modal-input-wrap">
 				<label for="edit-room"><h5><?php esc_html_e('Room', 'seatreg'); ?></h5></label><br>
-				<input type="text" id="edit-room" name="room"/> <span id="edit-room-error"></span>
+				<input type="text" id="edit-room" name="room" autocomplete="off"/> <span id="edit-room-error"></span>
 			</div>
 
 			<div class="edit-modal-input-wrap">
 				<label for="edit-fname"><h5><?php esc_html_e('First name', 'seatreg'); ?></h5></label><br>
-				<input type="text" id="edit-fname" name="first-name"/> <span id="edit-fname-error"></span>
+				<input type="text" id="edit-fname" name="first-name" autocomplete="off"/> <span id="edit-fname-error"></span>
 			</div>
 
 			<div class="edit-modal-input-wrap">
 				<label for="edit-lname"><h5><?php esc_html_e('Last name', 'seatreg'); ?></h5></label><br>
-				<input type="text" id="edit-lname" name="last-name"/></label> <span id="edit-lname-error"></span>
+				<input type="text" id="edit-lname" name="last-name" autocomplete="off"/></label> <span id="edit-lname-error"></span>
 			</div>
 	        <div class="modal-body-custom"></div>
 			<input type="hidden" id="modal-code">
