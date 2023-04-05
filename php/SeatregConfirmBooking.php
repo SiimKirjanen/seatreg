@@ -133,7 +133,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		}
 
 		//5 step. Check if seat/seats is already bron or taken
-		$seatsOpenCheck = $this->isAllSelectedSeatsOpen(); 
+		$seatsOpenCheck = $this->isAllSelectedSeatsOpen($this->_selectedBookingCalendarDate); 
 		if($seatsOpenCheck != 'ok') {
 			echo $seatsOpenCheck;
 

@@ -81,8 +81,7 @@
 		this.usingCalendar = window.usingCalendar === '1' ? true : false;
 		this.enabledCalendarDates = window.calendarDates ? window.calendarDates.split(',') : [];
 		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
-		this.currentDate = window.currentDate;
-		this.userSelectedCalendarDate = this.currentDate;
+		this.activeCalendarDate = window.activeCalendarDate;
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -205,7 +204,7 @@
 
 	SeatReg.prototype.isSelectedCalendarDateAvalidable = function() {
 		if(this.enabledCalendarDates.length) {
-			return this.enabledCalendarDates.includes(this.userSelectedCalendarDate);
+			return this.enabledCalendarDates.includes(this.activeCalendarDate);
 		}
 
 		return true;
@@ -214,12 +213,13 @@
 	SeatReg.prototype.initCalendar = function() {
 		if( this.usingCalendar ) {
 			var seatregScope = this;
+			$('#calendar-date').text(this.activeCalendarDate);
 
 			$('#calendar-date-selection').pignoseCalendar({
 				modal: true,
 				theme: 'blue',
 				format: 'YYYY-MM-DD',
-				date: this.currentDate,
+				date: this.activeCalendarDate,
 				buttons: true,
 				enabledDates: this.enabledCalendarDates,
 				apply(date, context) {
@@ -233,8 +233,9 @@
 	};
 
 	SeatReg.prototype.calendarDateChange = function( selectedCalendarDate ) {
-		this.userSelectedCalendarDate = selectedCalendarDate;
-		$('#calendar-date-selection .calendar').text(this.userSelectedCalendarDate);
+		this.activeCalendarDate = selectedCalendarDate;
+		$('#calendar-date-selection .calendar').text(this.activeCalendarDate);
+		setCalendarDateUrlParam(this.activeCalendarDate);
 		this.hideRegistrationMessage();
 		this.fetchBookings();
 	};
@@ -248,7 +249,7 @@
 			type: 'GET',
 			url: window.ajaxUrl,
 			data: {
-				date: this.userSelectedCalendarDate,
+				date: this.activeCalendarDate,
 				'registration-code': getRegistrationCode(),
 				action: 'seatreg_fetch_bookings_and_info'
 			},
@@ -784,7 +785,7 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 		var selectedCalendarDate = null;
 
 		if( this.usingCalendar ) {
-			selectedCalendarDate = $('<input type="hidden" name="selected-calendar-date" value="' + this.userSelectedCalendarDate + '" />');
+			selectedCalendarDate = $('<input type="hidden" name="selected-calendar-date" value="' + this.activeCalendarDate + '" />');
 		}
 
 		checkItem.append(checkItemHeader, documentFragment2, seatId, seatNr, roomUUID, multiPriceUUID, selectedCalendarDate);

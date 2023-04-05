@@ -394,13 +394,6 @@ Booking manager
 	} 
 })();
 
-function setCalendarDateUrlParam(calendarDate) {
-	var queryParams = new URLSearchParams(window.location.search);
-
-	queryParams.set('calendar-date', calendarDate);
-	window.history.replaceState(null, null, '?' + queryParams.toString());
-}
-
 function managerSearch() {
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();

@@ -48,10 +48,11 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_script('iscroll-zoom', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/iscroll-zoom.js' , array(), '5.1.3', true);
 		wp_enqueue_script('jquery-powertip', SEATREG_PLUGIN_FOLDER_URL . 'js/jquery.powertip.js' , array(), '1.2.0', true);
 		wp_enqueue_script('pg-calendar', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/js/pignose.calendar.full.min.js' , array('jquery'), '1.4.31', false);
-		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip'), '1.9.0', true);
+		wp_enqueue_script('seatreg-utils', SEATREG_PLUGIN_FOLDER_URL . 'js/utils.js' , array(), '1.0.0', true);
+		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.9.0', true);
 
 		$data = seatreg_get_options_reg($_GET['c']);
-		$filterCalendarDate = SeatregCalendarService::getBookingFilteringDate($data->using_calendar);
+		$filterCalendarDate = SeatregCalendarService::getBookingFilteringDateForRegistrationView($data->using_calendar, assignIfNotEmpty($_GET['calendar-date'], null));
 		$seatsInfo = json_encode( SeatregLayoutService::getBookingsInfoForLayout($data->registration_layout, $data->registration_code, $filterCalendarDate) );
 		$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 		$selectedShowRegistrationData = $data->show_bookings_data_in_registration ? explode(',', $data->show_bookings_data_in_registration) : [];
@@ -82,7 +83,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var usingSeats = "'. esc_js( $data->using_seats ) . '";';
 			$inlineScript .= 'var usingCalendar = "'. esc_js( $data->using_calendar ) . '";';
 			$inlineScript .= 'var calendarDates = "'. esc_js( $data->calendar_dates ) . '";';
-			$inlineScript .= 'var currentDate = "'. date('Y-m-d') . '";';
+			$inlineScript .= 'var activeCalendarDate = "'. $filterCalendarDate . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";

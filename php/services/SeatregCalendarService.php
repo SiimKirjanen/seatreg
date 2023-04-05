@@ -17,4 +17,11 @@ class SeatregCalendarService {
     public static function getBookingFilteringDate($usingCalendar) {
         return $usingCalendar === "1" ? date(CALENDAR_DATE_FORMAT) : null;
     }
+
+    public static function getBookingFilteringDateForRegistrationView($usingCalendar, $calendarDate) {
+        if($usingCalendar && $calendarDate !== null) {
+            return $calendarDate;
+        }
+        return self::getBookingFilteringDate($usingCalendar);
+    }
 }

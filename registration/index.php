@@ -110,7 +110,7 @@
 						<div id="calendar-date-selection">
 							<label>
 								<?php esc_html_e('Selected calendar date', 'seatreg'); ?> <i class="fa fa-calendar" aria-hidden="true"></i><br>
-								<a href="#" class="calendar" id="calendar-date"><?php echo date('Y-m-d'); ?></a>
+								<a href="#" class="calendar" id="calendar-date"></a>
 							</label>
 						</div>
 					<?php endif; ?>
