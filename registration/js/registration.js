@@ -82,6 +82,7 @@
 		this.enabledCalendarDates = window.calendarDates ? window.calendarDates.split(',') : [];
 		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
 		this.activeCalendarDate = window.activeCalendarDate;
+		this.siteLanguage = window.siteLanguage;
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -222,9 +223,9 @@
 				date: this.activeCalendarDate,
 				buttons: true,
 				enabledDates: this.enabledCalendarDates,
+				lang: this.siteLanguage,
 				apply(date, context) {
 					if(date && date[0] !== null) {
-						console.log(date[0].format('YYYY-MM-DD') );
 						seatregScope.calendarDateChange( date[0].format('YYYY-MM-DD') );
 					}
 				}

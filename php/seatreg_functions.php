@@ -95,6 +95,10 @@ function assignIfNotEmpty(&$item, $default){
     return (!empty($item)) ? $item : $default;
 }
 
+function getSiteLanguage() {
+	return explode('-', get_bloginfo("language"))[0];
+}
+
 /*
 ==================================================================================================================================================================================================================
 Generating HTML stuff

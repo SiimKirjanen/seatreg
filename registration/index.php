@@ -255,7 +255,9 @@
 						
 			<div id="calendar-date-change-loading" class="dialog-box">
 				<div class="dialog-box-inner border-box">
-					Loading...
+					<p><?php esc_html_e('Please wait', 'seatreg'); ?></p>
+					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader_small.gif" alt="Loading">
+					<p><?php esc_html_e('Loading data', 'seatreg'); ?></p>
 				</div>
 			</div>
 
