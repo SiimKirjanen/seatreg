@@ -65,6 +65,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
             esc_html__('Name', 'seatreg') => 'string',
             esc_html__('Email', 'seatreg') => 'string',
             esc_html__('Registration date', 'seatreg') => 'string',
+            esc_html__('Calendar date', 'seatreg') => 'string',
             esc_html__('Booking id', 'seatreg') => 'string',
             esc_html__('Booking status', 'seatreg') => 'string',
             esc_html__('Booking approval date', 'seatreg') => 'string',
@@ -84,6 +85,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
                 esc_html($registration->first_name) . ' ' . esc_html($registration->last_name),  
                 esc_html($registration->email), 
                 $bookingDate,
+                esc_html($this->_calendarDate), 
                 $registration->booking_id,
                 $status
             );

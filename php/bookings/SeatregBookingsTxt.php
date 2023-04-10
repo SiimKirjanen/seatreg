@@ -38,6 +38,11 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
             echo esc_html__('Name', 'seatreg'), ': ', esc_html($registration->first_name), ' ', esc_html($registration->last_name), $this->lineBreak();
             echo esc_html__('Email', 'seatreg'), ': ', esc_html($registration->email), $this->lineBreak();
             echo esc_html__('Registration date', 'seatreg'), ': ', $bookingDate, $this->lineBreak();
+
+            if($this->_calendarDate) {
+                echo esc_html__('Calendar date', 'seatreg'), ': ',  $this->_calendarDate, $this->lineBreak();
+            }
+
             echo esc_html__('Booking id', 'seatreg'), ': ', esc_html($registration->booking_id), $this->lineBreak();
             echo esc_html__('Booking status', 'seatreg'), ': ', $status, $this->lineBreak();
 

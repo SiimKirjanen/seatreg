@@ -1114,6 +1114,9 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 							echo '<div class="more-info">';
 								echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl) ,'</a>';
 								echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html(date('M j Y h:i e', $row->booking_date)), '</span></div>';
+								if($row->calendar_date) {
+									echo '<div>', esc_html__('Calendar date', 'seatreg'), ': ', esc_html($row->calendar_date), '</div>';
+								}
 								echo '<div>', esc_html__('Email', 'seatreg'), ': ', esc_html($row->email), '</div>';
 							
 								for($i = 0; $i < $cus_length; $i++) {
@@ -1163,6 +1166,9 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 							echo '<div class="more-info">';
 								echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl), '</a>';
 								echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_date) ), '</span></div>';
+								if($row->calendar_date) {
+									echo '<div>', esc_html__('Calendar date', 'seatreg'), ': ', esc_html($row->calendar_date), '</div>';
+								}
 								echo '<div>', esc_html__('Approval date', 'seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_confirm_date ) ), '</span></div>';
 								echo '<div>Email: ', esc_html( $row->email ), '</div>';
 		
@@ -1379,6 +1385,10 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			}
 			echo '<div>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</div>';
 			echo '<div>', esc_html__('Booking status', 'seatreg'), ': ' , SeatregBookingService::getBookingStatusText($bookingStatus),'</div>';
+
+			if($bookings[0]->calendar_date) {
+				echo '<div>', esc_html__('Calendar date', 'seatreg'), ': ' , esc_html($bookings[0]->calendar_date),'</div>';
+			}
 			
 			echo '<div style="margin: 12px 0px">';
 			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);

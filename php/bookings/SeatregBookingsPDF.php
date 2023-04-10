@@ -70,6 +70,11 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             $this->pdf->Cell(20, 6, esc_html__('Name', 'seatreg') . ': ' . esc_html($registration->first_name) . ' ' . esc_html($registration->last_name), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Email', 'seatreg') . ': ' . $registration->email, 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Registration date', 'seatreg') . ': ' . $bookingDate, 0, 1, 'L');
+
+            if($this->_calendarDate) {
+                $this->pdf->Cell(20, 6, esc_html__('Calendar date', 'seatreg') . ': ' . $this->_calendarDate, 0, 1, 'L');
+            }
+
             $this->pdf->Cell(20, 6, esc_html__('Booking id', 'seatreg') . ': ' . esc_html($registration->booking_id), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Booking status', 'seatreg') . ': ' . $status, 0, 1, 'L');
 

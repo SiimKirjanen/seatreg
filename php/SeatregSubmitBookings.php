@@ -110,7 +110,6 @@ class SeatregSubmitBookings extends SeatregBooking {
 
 		//2.step
 		$this->isSeperateSeats();
-
 		if(!$this->_isValid) {
 			$this->response->setError(esc_html__('Error. Dublicated seats', 'seatreg'));
 
