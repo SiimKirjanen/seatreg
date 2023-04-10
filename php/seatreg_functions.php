@@ -1197,7 +1197,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	seatreg_booking_edit_modal($usingSeats, $calendarDate);
 	seatreg_add_booking_modal($usingSeats, $calendarDate);
 	seatreg_booking_activity_modal();
-	seatreg_bookings_file_modal($custom_fields, $code);
+	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
 }
 
 function seatreg_view_booking_activity_btn($booking) {
@@ -1317,7 +1317,7 @@ function seatreg_booking_activity_modal() {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/booking-activity-modal.php' );
 }
 
-function seatreg_bookings_file_modal($customFields, $registrationCode) {
+function seatreg_bookings_file_modal($customFields, $registrationCode, $calendarDate) {
 	if( !is_array($customFields) ) {
 		$customFields = [];
 	}

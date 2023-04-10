@@ -6,6 +6,12 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
             </div>
             <div class="modal-body">
+                <?php if($calendarDate): ?>
+                    <div class="date-info">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <?php echo sprintf(esc_html__('Selected date is %s', 'seatreg'), $calendarDate); ?>
+                    </div>
+                <?php endif; ?>
                 <form id="bookings-file-form">
                     <div class="form-fields">
                         <div class="mb-1">

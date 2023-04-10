@@ -1,5 +1,15 @@
 #seatreg-booking-manager {
     .bookings-file-modal{
+        .date-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+
+             .fa {
+                margin-right: 8px;
+             }
+        }
         input {
             margin-left: 8px;
         }
