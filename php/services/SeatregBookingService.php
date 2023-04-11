@@ -111,6 +111,7 @@ class SeatregBookingService {
             return $customField->label;
         }, is_array( $enteredCustomFieldData) ? $enteredCustomFieldData : [] );
         $spotName = $registration->using_seats ? __('Seat', 'seatreg') : __('Place', 'seatreg');
+        $hasCalendarDate = (boolean)$bookings[0]->calendar_date;
 
         $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;">
             <tr>
@@ -118,6 +119,10 @@ class SeatregBookingService {
             <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . $spotName . '</th>
             <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Room', 'seatreg') . '</th>
             <th style=";border:1px solid black;text-align: left;padding: 6px;"">' . __('Email', 'seatreg') . '</th>';
+
+        if($hasCalendarDate) {
+            $bookingTable .= '<th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Calendar date', 'seatreg') . '</th>';
+        }
         
         foreach($customFieldLabels as $customFieldLabel) {
             $bookingTable .= '<th style=";border:1px solid black;text-align: left;padding: 6px;">' . esc_html($customFieldLabel) . '</th>';
@@ -131,6 +136,10 @@ class SeatregBookingService {
                 <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->seat_nr) . '</td>
                 <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->room_name) . '</td>
                 <td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->email) . '</td>';
+
+                if($hasCalendarDate) {
+                    $bookingTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->calendar_date) . '</td>';
+                }
     
                 if( is_array($bookingCustomFields) ) {
                     foreach($bookingCustomFields as $bookingCustomField) {

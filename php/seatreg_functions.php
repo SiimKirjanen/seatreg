@@ -1386,10 +1386,6 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			echo '<div>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</div>';
 			echo '<div>', esc_html__('Booking status', 'seatreg'), ': ' , SeatregBookingService::getBookingStatusText($bookingStatus),'</div>';
 
-			if($bookings[0]->calendar_date) {
-				echo '<div>', esc_html__('Calendar date', 'seatreg'), ': ' , esc_html($bookings[0]->calendar_date),'</div>';
-			}
-			
 			echo '<div style="margin: 12px 0px">';
 			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 			echo '</div>';
