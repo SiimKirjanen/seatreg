@@ -2673,11 +2673,9 @@ add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_
 function seatreg_get_registration_layout_and_bookings() {
 	seatreg_ajax_security_check();
 
-	$registration = seatreg_get_registration_data(sanitize_text_field( $_POST['code']) );
-	$filterCalendarDate = SeatregCalendarService::getBookingFilteringDate($data->using_calendar);
-
-	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( sanitize_text_field($_POST['code']), $filterCalendarDate );
-	$uploadedImages = seatreg_get_registration_uploaded_images(sanitize_text_field($_POST['code']));
+	$registration = seatreg_get_registration_data( sanitize_text_field( $_POST['code']) );
+	$bookings = SeatregBookingRepository::getAllConfirmedAndApprovedBookingsByRegistrationCode( sanitize_text_field($_POST['code']) );
+	$uploadedImages = seatreg_get_registration_uploaded_images( sanitize_text_field($_POST['code']) );
 	$dataToSend = new stdClass();
 	$dataToSend->registration = $registration;
 	$dataToSend->bookings = $bookings;

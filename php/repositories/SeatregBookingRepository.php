@@ -26,9 +26,12 @@ class SeatregBookingRepository {
     }
     /**
      *
-     * Return confirmed and approved bookings by registration code
+     * Return confirmed and approved bookings by registration code. 
+     * If $filterCalendarDate provided then get bookings made with calendar mode
+     * If $filterCalendarDate null then get bookings made with normal mode (not calendar mode)
+     * 
      *
-     * @param string $registrationCode The code of registration
+     * @param string $registrationCode The code of the registration
      * @param string|null $filterCalendarDate Optional. Filter by calendar date
      *
      */
@@ -54,6 +57,25 @@ class SeatregBookingRepository {
                 $registrationCode,
             ) );
         }
+    } 
+
+    /**
+     *
+     * Return all confirmed and approved bookings made with both calendar mode and normal mode. 
+     * 
+     * @param string $registrationCode The code of the registration
+     *
+     */
+    public static function getAllConfirmedAndApprovedBookingsByRegistrationCode($registrationCode) {
+        global $wpdb;
+	    global $seatreg_db_table_names;
+
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+            WHERE registration_code = %s
+            AND (status = '1' OR status = '2')",
+            $registrationCode,
+        ) );
     } 
 
     /**

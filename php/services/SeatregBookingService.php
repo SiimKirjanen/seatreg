@@ -168,11 +168,11 @@ class SeatregBookingService {
         $bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
         $bookings = self::getBookingsCost($bookingId, $bookingData->registration_layout);
         $totalCost = 0;
-        $spotName = $bookingData->using_seats ? __('Sear nr', 'seatreg') : __('Place nr', 'seatreg');
+        $spotName = $bookingData->using_seats ? __('Seat', 'seatreg') : __('Place', 'seatreg');
         $paymentTable = '<table style="border: 1px solid black;border-collapse: collapse;">
             <tr>
                 <th style=";border:1px solid black;text-align: left;padding: 6px;">' . $spotName . '</th>
-                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Seat price', 'seatreg') . '</th>
+                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Price', 'seatreg') . '</th>
             </tr>';
 
         foreach($bookings as $booking) {
