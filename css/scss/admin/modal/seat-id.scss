@@ -1,0 +1,18 @@
+.seatreg-tabs-content {
+    .seat-id-modal {
+        h5 {
+            margin-top: 8px;
+        }
+        .seat-id-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            margin-left: 40px;
+            grid-column-gap: 30px;
+
+            .grid-title {
+                text-decoration: underline;
+                margin-bottom: 8px;
+            }
+        }
+    }
+}

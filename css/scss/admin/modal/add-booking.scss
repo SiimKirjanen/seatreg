@@ -5,6 +5,13 @@
         }
         .add-modal-input-wrap {
             margin-bottom: 12px;
+
+            .seat-id-search {
+                vertical-align: middle;
+                padding-top: 20px;
+                margin-left: 4px;
+                cursor: pointer;
+            }
         }
         .modal-custom {
             margin-bottom: 12px;

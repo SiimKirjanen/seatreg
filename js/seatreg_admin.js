@@ -743,6 +743,10 @@ $('#seatreg-booking-manager').on('click', '#generate-bookings-file', function() 
 	window.open(href + '&' + getParams +  calendarDateparam, '_blank');
 });
 
+$('#seatreg-booking-manager').on('click', '.seat-id-search', function() {
+	$('#seat-id-modal').modal('show');
+});
+
 $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' + '" alt="Loading..." class="ajax-load" />');
 	var subBtn = $(this);

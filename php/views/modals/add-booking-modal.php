@@ -25,7 +25,7 @@
 							</h5>
 							<input type="text" name="seat-id[]" autocomplete="off"/>
 							<div class="input-error"></div>
-						</label>
+						</label> <i class="fa fa-search seat-id-search" aria-hidden="true"></i>
 					</div>
 					<div class="add-modal-input-wrap">
 						<label>

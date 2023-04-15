@@ -1016,6 +1016,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
     $seatregData = $seatregData[0];
 	$code = $seatregData->registration_code;
 	$custom_fields = json_decode($seatregData->custom_fields, true);
+	$roomsData = json_decode($seatregData->registration_layout)->roomData;
 	$cus_length = count(is_array($custom_fields) ? $custom_fields : []);
 	$regId = $seatregData->id;
 	$project_name_original = $seatregData->registration_name;
@@ -1198,6 +1199,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	seatreg_add_booking_modal($usingSeats, $calendarDate);
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
+	seatreg_seat_id_modal($roomsData);
 }
 
 function seatreg_view_booking_activity_btn($booking) {
@@ -1322,6 +1324,10 @@ function seatreg_bookings_file_modal($customFields, $registrationCode, $calendar
 		$customFields = [];
 	}
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/bookings-file-modal.php' );
+}
+
+function seatreg_seat_id_modal($roomsData) {
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/seat-id-modal.php' );
 }
 
 //generate tabs
