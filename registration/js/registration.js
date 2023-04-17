@@ -18,7 +18,7 @@
 
 	var screenWidth = $(window).width();
 	var screenHeight = $(window).height();
-	var ctrlKeyDown = false;
+	var zKeyDown = false;
 
 	var rtime = new Date(1, 1, 2000, 12,00,00);
 	var timeout = false;
@@ -58,14 +58,14 @@
 	}
 
 	$(document).keydown(function(e){
-        if(e.which === 17){
-        	ctrlKeyDown = true;
+        if(e.which === 90){
+        	zKeyDown = true;
         } 
     });
 
     $(document).keyup(function(e){
-        if(e.which === 17){
-        	ctrlKeyDown = false;
+        if(e.which === 90){
+        	zKeyDown = false;
         } 
     });
 
@@ -96,7 +96,7 @@
 		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
 		this.activeCalendarDate = window.activeCalendarDate;
 		this.siteLanguage = window.siteLanguage;
-		this.ctrlScrollEnabled = window.ctrlScroll === '1';
+		this.controlledScrollEnabled = window.controlledScroll === '1';
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -1151,8 +1151,13 @@ function initLegendsScroll() {
 function initScroll(needHorizScroll, needVerticScroll) {
 
 	$('#box-wrap').on('mousewheel DOMMouseScroll', function(e) {
-		if( seatReg.ctrlScrollEnabled && !ctrlKeyDown ) {
+		//if ctrl scroll enabled prevent scroll without ctrl down
+		if( seatReg.controlledScrollEnabled && !zKeyDown ) {
 			e.stopPropagation();
+
+			if( !showingAlertNotification() ) {
+				displayNotificationMessage(translator.translate('controlledZoom'));
+			}
 		}
 	});	
 
@@ -1193,6 +1198,14 @@ function initScroll(needHorizScroll, needVerticScroll) {
 
 		$('#boxes').css({'cursor':"all-scroll"});
 	}
+}
+
+function displayNotificationMessage(message) {
+	alertify.log(message);
+}
+
+function showingAlertNotification() {
+	return $('.alertify-log-show').length > 0;
 }
 
 function zoomStart() {

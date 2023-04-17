@@ -566,12 +566,12 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="ctrl-scroll"><?php esc_html_e('CTRL scroll', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('By turning on CTRL scroll users need to hold CTRL key while zooming in/out using mouse scrollwheel. Helpful if shortcode conflicts with overall page scroll.', 'seatreg'); ?></p>
+				<label for="controlled-scroll"><?php esc_html_e('Controlled scroll', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('By turning on controlled scroll users need to hold Z key while zooming in/out with mouse scrollwheel. Helpful if shortcode conflicts with overall page scroll.', 'seatreg'); ?></p>
 				<div class="checkbox">
 			    	<label>
-			      		<input type="checkbox" id="ctrl-scroll" name="ctrl-scroll" value="1" <?php echo $options[0]->ctrl_scroll == '1' ? 'checked':'' ?> >
-			      		<?php esc_html_e('Enable CTRL scroll', 'seatreg'); ?>
+			      		<input type="checkbox" id="controlled-scroll" name="controlled-scroll" value="1" <?php echo $options[0]->controlled_scroll == '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Enable controlled scroll', 'seatreg'); ?>
 			    	</label>
 			  	</div>
 			</div>
@@ -1800,7 +1800,7 @@ function seatreg_set_up_db() {
 			booking_email_limit int(11) DEFAULT NULL,
 			using_calendar tinyint(1) NOT NULL DEFAULT 0,
 			calendar_dates text,
-			ctrl_scroll tinyint(0) NOT NULL DEFAULT 0,
+			controlled_scroll tinyint(0) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2567,10 +2567,10 @@ function seatreg_update() {
 		$_POST['bookings-email-limit'] = null;
 	}
 
-	if(!isset($_POST['ctrl-scroll'])) {
-		$_POST['ctrl-scroll'] = 0;
+	if(!isset($_POST['controlled-scroll'])) {
+		$_POST['controlled-scroll'] = 0;
 	}else {
-		$_POST['ctrl-scroll'] = 1;
+		$_POST['controlled-scroll'] = 1;
 	}
 
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
@@ -2612,7 +2612,7 @@ function seatreg_update() {
 			'booking_email_limit' => $_POST['bookings-email-limit'],
 			'using_calendar' => $_POST['using-calendar'],
 			'calendar_dates' => !empty($_POST['calendar-dates']) ? $_POST['calendar-dates'] : $oldOptions->calendar_dates,
-			'ctrl_scroll' => $_POST['ctrl-scroll']
+			'controlled_scroll' => $_POST['controlled-scroll']
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])

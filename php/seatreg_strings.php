@@ -64,6 +64,7 @@ function seatreg_generate_registration_strings() {
     $translations->pleaseEnterPassword = esc_html__('Please enter password', 'seatreg');
     $translations->passwordNotCorrect = esc_html__('Password is not correct', 'seatreg');
     $translations->closedPleaseChooseNewDate = esc_html__('Registration not open for today. Please choose another date', 'seatreg');
+    $translations->controlledZoom = esc_html__('Hold Z key also to zoom', 'seatreg');
 
 	return $translations;
 }
