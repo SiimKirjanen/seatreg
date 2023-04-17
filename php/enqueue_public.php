@@ -86,6 +86,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var calendarDates = "'. esc_js( $data->calendar_dates ) . '";';
 			$inlineScript .= 'var activeCalendarDate = "'. esc_js($filterCalendarDate) . '";';
 			$inlineScript .= 'var siteLanguage = "'. esc_js($siteLanguage) . '";';
+			$inlineScript .= 'var ctrlScroll = "'. esc_js($data->ctrl_scroll) . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";

@@ -18,6 +18,7 @@
 
 	var screenWidth = $(window).width();
 	var screenHeight = $(window).height();
+	var ctrlKeyDown = false;
 
 	var rtime = new Date(1, 1, 2000, 12,00,00);
 	var timeout = false;
@@ -56,6 +57,18 @@
 		return JSON.parse(JSON.stringify(object))
 	}
 
+	$(document).keydown(function(e){
+        if(e.which === 17){
+        	ctrlKeyDown = true;
+        } 
+    });
+
+    $(document).keyup(function(e){
+        if(e.which === 17){
+        	ctrlKeyDown = false;
+        } 
+    });
+
 	function SeatReg() {
 		this.rooms = (window.dataReg !== null) ? deepCopyObject(window.dataReg.roomData) : null;
 		this.seatLimit = seatLimit;
@@ -83,6 +96,7 @@
 		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
 		this.activeCalendarDate = window.activeCalendarDate;
 		this.siteLanguage = window.siteLanguage;
+		this.ctrlScrollEnabled = window.ctrlScroll === '1';
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -1135,6 +1149,13 @@ function initLegendsScroll() {
 }
 
 function initScroll(needHorizScroll, needVerticScroll) {
+
+	$('#box-wrap').on('mousewheel DOMMouseScroll', function(e) {
+		if( seatReg.ctrlScrollEnabled && !ctrlKeyDown ) {
+			e.stopPropagation();
+		}
+	});	
+
 	//destroy previous scroll
 	if(myScroll != null) {
 		myScroll.destroy();
