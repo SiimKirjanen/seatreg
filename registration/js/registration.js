@@ -1150,7 +1150,7 @@ function initLegendsScroll() {
 
 function initScroll(needHorizScroll, needVerticScroll) {
 
-	$('#box-wrap').on('mousewheel DOMMouseScroll', function(e) {
+	$('#box-wrap').off('mousewheel DOMMouseScroll').on('mousewheel DOMMouseScroll', function(e) {
 		//if ctrl scroll enabled prevent scroll without ctrl down
 		if( seatReg.controlledScrollEnabled && !zKeyDown ) {
 			e.stopPropagation();
