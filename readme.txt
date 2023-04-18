@@ -47,6 +47,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 = 1.34.0 =
 * Added seat ID lookup modal for booking manager.
 * Added controlled scroll feature to registration view.
+* Changed seat number field size in DB.
 
 = 1.33.0 =
 * Added calendar mode

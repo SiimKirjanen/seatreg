@@ -21,11 +21,11 @@
 						<label>
 							<h5>
 								<?php $usingSeats ? esc_html_e('Seat ID', 'seatreg') : esc_html_e('Place ID', 'seatreg'); ?>
-								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php $usingSeats ? esc_html_e('ID can be seen in map-editor when hovering seats', 'seatreg') : esc_html_e('ID can be seen in map-editor when hovering places', 'seatreg'); ?>"></i>
+								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php $usingSeats ? esc_html_e('ID can be seen in map-editor when hovering seats. Or you can use seat ID lookup', 'seatreg') : esc_html_e('ID can be seen in map-editor when hovering places', 'seatreg'); ?>"></i>
 							</h5>
 							<input type="text" name="seat-id[]" autocomplete="off"/>
 							<div class="input-error"></div>
-						</label> <i class="fa fa-search seat-id-search" aria-hidden="true"></i>
+						</label> <span class="seat-id-search"><?php esc_html_e('ID lookup', 'seatreg'); ?> <i class="fa fa-search" aria-hidden="true"></i></span>
 					</div>
 					<div class="add-modal-input-wrap">
 						<label>
