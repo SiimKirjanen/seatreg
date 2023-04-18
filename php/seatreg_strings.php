@@ -29,6 +29,7 @@ function seatreg_generate_registration_strings() {
 	$translations->emptyField = esc_html__('Empty field', 'seatreg');
 	$translations->remove = esc_html__('Remove', 'seatreg');
 	$translations->add_ = esc_html__('Add ', 'seatreg');
+	$translations->addToBooking = esc_html__('Add to Booking', 'seatreg');
 	$translations->openSeatsInRoom_ = esc_html__('Open seats in the room: ', 'seatreg');
     $translations->openPlacesInRoom_ = esc_html__('Open places in the room: ', 'seatreg');
 	$translations->pendingSeatInRoom_ = esc_html__('Pending bookings in the room: ', 'seatreg');
