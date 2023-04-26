@@ -954,17 +954,17 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 	if( !Array.isArray(price) ) {
 		//Not multi price
-		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="' + price + '">Add to booking</div>');
+		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="' + price + '">' + translator.translate('addToBooking') + '</div>');
 	}else if( this.isPaymentEnabled() ) {
 		//Multi price
 		$('#confirm-dialog-bottom').append('<div class="multi-price-title">Price selction</div><div class="multi-price-wrap"></div>');
 
 		price.forEach(function(price) {
-			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ price.price + ' ' + this.payPalCurrencyCode + '</strong> <span class="mullti-price-description">' + price.description  + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '" data-price-uuid="' + price.uuid + '">Add to booking</div>');
+			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ price.price + ' ' + this.payPalCurrencyCode + '</strong> <span class="mullti-price-description">' + price.description  + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '" data-price-uuid="' + price.uuid + '">' + translator.translate('addToBooking') + '</div>');
 		});
 	}else {
 		//Fallback
-		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="0">Add to booking</div>');
+		$('#confirm-dialog-bottom').append('<div class="seatreg-btn green-btn add-to-cart" data-price="0">' + translator.translate('addToBooking') + '</div>');
 	}
 
 	if(type != 'box') {
