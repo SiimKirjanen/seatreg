@@ -1801,6 +1801,9 @@ function seatreg_set_up_db() {
 			using_calendar tinyint(1) NOT NULL DEFAULT 0,
 			calendar_dates text,
 			controlled_scroll tinyint(0) NOT NULL DEFAULT 0,
+			custom_payment tinyint(0) NOT NULL DEFAULT 0,
+			custom_payment_title varchar(255) DEFAULT NULL,
+			custom_payment_description text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
