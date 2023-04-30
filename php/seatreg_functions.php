@@ -861,6 +861,31 @@ function seatreg_generate_settings_form() {
 				<?php endif; ?>
 			</div>
 
+			<div class="form-group">
+				<label for="custom-payment"><?php esc_html_e('Custom payment', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('This payment method is suitable for manual payments. Allows you to control to payment flow.', 'seatreg'); ?>
+				</p>
+
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="custom-payment" name="custom-payment" value="0" <?php echo $options[0]->custom_payment == '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Turn on custom payments', 'seatreg'); ?>
+					</label>
+				</div>
+	
+				<div class="payment-configuration">
+					<label for="custom-payment-title"><?php esc_html_e('Custom payment title', 'seatreg'); ?></label>
+					<p class="help-block">
+						<?php esc_html_e('Please enter custom payment title', 'seatreg'); ?>.
+					</p>
+					<input type="text" class="form-control" id="custom-payment-title" name="custom-payment-title" autocomplete="off" placeholder="<?php echo esc_html('Title', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->custom_payment_title); ?>"> 
+					<br>
+					<label for="custom-payment-description"><?php esc_html_e('Custom payment description', 'seatreg'); ?></label>
+					<p class="help-block"><?php esc_html_e('Please enter custom payment description', 'seatreg'); ?>.</p>
+					<textarea class="form-control" id="custom-payment-description" name="custom-payment-description" placeholder="<?php esc_html_e('Enter payment description', 'seatreg')?>"><?php echo esc_html($options[0]->custom_payment_description); ?></textarea>
+				</div>
+			</div>
 
 			<div class="form-group">
 				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
@@ -2576,6 +2601,12 @@ function seatreg_update() {
 		$_POST['controlled-scroll'] = 1;
 	}
 
+	if(!isset($_POST['custom-payment'])) {
+		$_POST['custom-payment'] = 0;
+	}else {
+		$_POST['custom-payment'] = 1;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 
 	$status1 = $wpdb->update(
@@ -2615,7 +2646,10 @@ function seatreg_update() {
 			'booking_email_limit' => $_POST['bookings-email-limit'],
 			'using_calendar' => $_POST['using-calendar'],
 			'calendar_dates' => !empty($_POST['calendar-dates']) ? $_POST['calendar-dates'] : $oldOptions->calendar_dates,
-			'controlled_scroll' => $_POST['controlled-scroll']
+			'controlled_scroll' => $_POST['controlled-scroll'],
+			'custom_payment' => $_POST['custom-payment'],
+			'custom_payment_title' => $_POST['custom-payment-title'],
+			'custom_payment_description' => $_POST['custom-payment-description'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
