@@ -28,4 +28,7 @@
         })
     });
 
+    $('.custom-payment-box').on('click', function() {
+        $('.payment-form-footer').show();
+    });
 })(jQuery);

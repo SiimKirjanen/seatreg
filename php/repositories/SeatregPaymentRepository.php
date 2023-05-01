@@ -36,4 +36,16 @@ class SeatregPaymentRepository {
             SEATREG_PAYMENT_COMPLETED
         ) );
     }
+
+    /**
+     *
+     * Return true of false. Check if at least one payment method is enabled
+     *
+     * @param object $bookingData The booking data
+     * @return boolean
+     *
+     */
+    public static function hasPaymentEnabled($bookingData) {
+        return $bookingData->paypal_payments === '1' || $bookingData->stripe_payments === '1' || $bookingData->custom_payment;
+    }
 }

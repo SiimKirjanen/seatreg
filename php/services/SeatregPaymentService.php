@@ -146,4 +146,12 @@ class SeatregPaymentService {
 			'%s'
 		);
     }
+
+    public static function generateCustomPaymentButton($bookingData) {
+        ?>
+            <div class="custom-payment-box">
+                <?php echo esc_html($bookingData->custom_payment_title); ?>
+            </div>
+        <?php
+    }
 }

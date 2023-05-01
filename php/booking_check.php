@@ -38,6 +38,22 @@
 		.payment-instructions {
 			margin: 24px 0 12px;
 		}
+		.custom-payment-box {
+			cursor: pointer;
+			min-width: 230px;
+			height: 56px;
+			line-height: 56px;
+			margin-top: 5px;
+			text-align: center;
+			border: 2px solid #b7b7b7;
+			border-radius: 6px;
+			font-size: 18px;
+		}
+		.payment-form-footer {
+			margin-top: 12px;
+			font-size: 18px;
+			font-weight: 600;
+		}
 	</style>
 	<?php wp_head(); ?>
 </head>
@@ -50,17 +66,18 @@
 			echo ' <button id="send-receipt" data-booking-id="'. $bookingId .'" data-registration-id="'. $registrationId .'">'. __('Send again', 'seatreg') .'</button><br>';
 		}
 
-		if( ($bookingData->paypal_payments === '1' || $bookingData->stripe_payments === '1') && $bookingData->payment_status === null ) {
+		if( SeatregPaymentRepository::hasPaymentEnabled($bookingData) && $bookingData->payment_status === null ) {
 			$bookingTotalCost = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
+			$bookingHasCost = $bookingTotalCost > 0;
 
-			if( $bookingTotalCost > 0 ) {
+			if( $bookingHasCost ) {
 				?>
 					<p class="payment-instructions"><?php esc_html_e('Pay for your booking', 'seatreg'); ?></p>
 					<div class="payment-forms">
 				<?php
 			}
 			
-			if( $bookingData->paypal_payments === '1' && $bookingTotalCost > 0 ) {
+			if( $bookingData->paypal_payments === '1' && $bookingHasCost ) {
 				$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
 				$returnUrl = SEATREG_PAYPAL_RETURN_URL . '&id=' . $bookingId;
 				$cancelUrl = SEATREG_PAYPAL_CANCEL_URL . '&registration=' . $registrationId . '&id=' . $bookingId;
@@ -76,11 +93,18 @@
 				);
 			}
 				
-			if( $bookingData->stripe_payments === '1' && $bookingTotalCost > 0 ) {
+			if( $bookingData->stripe_payments === '1' && $bookingHasCost ) {
 				echo SeatregPaymentService::generateStripeCheckoutForm($bookingId);
+			}
+
+			if( $bookingData->custom_payment === '1' && $bookingHasCost ) {
+				echo SeatregPaymentService::generateCustomPaymentButton($bookingData);
 			}
 			
 			?>
+				</div>
+				<div class="payment-form-footer" style="display: none">
+					<?php echo $bookingData->custom_payment_description; ?>
 				</div>
 			<?php
 			
@@ -96,6 +120,6 @@
 			esc_html_e('You payment has been reversed', 'seatreg');
 		}
 	?>
-	<?php wp_footer(); ?>	
+	<?php wp_footer(); ?>
 </body>
 </html>
