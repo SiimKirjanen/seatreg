@@ -860,6 +860,16 @@ html {
 	color: blue;
 }
 
+.seatreg-wp-admin .add-payment-log-wrap {
+	display: flex;
+	align-items: center;
+	margin-top: 12px;
+
+	input, select {
+		margin-right: 12px;
+	}
+}
+
 @media screen and (max-width: 1199px) {
 	.seatreg-tabs-content #my-regs {
 		width: 970px;

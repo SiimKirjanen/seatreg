@@ -114,6 +114,20 @@
 		});
 	}
 
+	function seatreg_create_payment_log(bookingId, logStatus, logMessage) {
+		return $.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'seatreg_create_payment_log',
+				security: WP_Seatreg.nonce,
+				logStatus: logStatus,
+				bookingId: bookingId,
+				logMessage: logMessage
+			}
+		});
+	}
+
 	function seatreg_admin_ajax_error(jqXHR, textStatus, errorThrown) {
 		console.log('error');
 		console.log(textStatus);
@@ -552,9 +566,36 @@ $('#seatreg-booking-manager').on('click', 'button[data-action=view-booking-activ
 
 $('.seatreg-registrations [data-action=view-registration-activity').on('click', function(e) {
 	e.preventDefault();
-	$registrationId = $(this).data('registration-id');
+	var registrationId = $(this).data('registration-id');
 	$('#registration-activity-modal').find('.activity-modal__logs').empty();
-	$('#registration-activity-modal').attr('data-registration-id', $registrationId).modal('show');
+	$('#registration-activity-modal').attr('data-registration-id', registrationId).modal('show');
+});
+
+$('#seatreg-booking-manager').on('click', 'button[data-action=add-payment-log]', function() {
+	var $this = $(this);
+	$this.prop('disabled', true);
+	var bookingId = $this.data('booking-id');
+	var logType = $this.closest('.add-payment-log-wrap').find('.payment-log-type').val();
+	var logMessage = $this.closest('.add-payment-log-wrap').find('.payment-log-message').val();
+	
+	var promise = seatreg_create_payment_log(bookingId, logType, logMessage);
+
+	promise.done(function(data) {
+		$this.removeAttr("disabled");
+		$logs = $this.closest('.more-info').find('.payment-log-wrap');
+		var logClass = '';
+
+		if(logType === 'error') {
+			logClass = 'error-log';
+		}else if(logType === 'info') {
+			logClass = 'info-log';
+		}
+
+		$logs.append('<div class="'+ logClass +'">'+ logType +'</div><div class="'+ logClass +'">' + 'moment ago' + '</div><div class="'+ logClass +'">'+ logMessage +'</div>');
+		$this.closest('.add-payment-log-wrap').find('.payment-log-message').val('');
+	});
+	
+	promise.fail = seatreg_admin_ajax_error;
 });
 
 //when search bookings

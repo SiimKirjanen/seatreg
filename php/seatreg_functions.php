@@ -1281,8 +1281,10 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 	}
 }
 
-function seatreg_generate_payment_logs($paymentLogs) {
-	echo '<div class="payment-log-wrap">';
+function seatreg_generate_payment_logs($paymentLogs, $bookingId) {
+	?>
+	<div class="payment-log-wrap">
+	<?php
 		foreach ($paymentLogs as $paymentLog) {
 			$logClassName = '';
 			
@@ -1304,13 +1306,24 @@ function seatreg_generate_payment_logs($paymentLogs) {
 				</div>
 			<?php
 		}
-	echo '</div>';
+		?>
+		</div>
+		<div class="add-payment-log-wrap">
+			<select class="payment-log-type">
+				<option value="<?php echo SEATREG_PAYMENT_LOG_OK; ?>"><?php esc_html_e('Ok', 'seatreg'); ?></option>
+				<option value="<?php echo SEATREG_PAYMENT_LOG_ERROR; ?>"><?php esc_html_e('Error', 'seatreg'); ?></option>
+				<option value="<?php echo SEATREG_PAYMENT_LOG_INFO; ?>"><?php esc_html_e('Info', 'seatreg'); ?></option>
+			</select>
+			<input type="text" class="payment-log-message" />
+			<button class="btn btn-outline-secondary btn-sm" data-action="add-payment-log" data-booking-id="<?php echo $bookingId; ?>"><?php esc_html_e('Add payment log', 'seatreg'); ?></button>
+		</div>
+		<?php
 }
 
 function seatreg_generate_payment_section($booking) {
 	if($booking->payment_status == null) {
 		echo '<br>';
-		esc_html_e('No payment info recorded. This means that this booking has no price or user has not started the payment process.', 'seatreg'); 
+		esc_html_e('No payment info recorded.', 'seatreg'); 
 
 		return;
 	}
@@ -1324,7 +1337,7 @@ function seatreg_generate_payment_section($booking) {
 	echo '<br>';
 	echo '<div><strong>', esc_html__('Payment logs', 'seatreg') ,'</strong></div><br>';
 	
-	echo seatreg_generate_payment_logs( SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id) );
+	echo seatreg_generate_payment_logs( SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id ), $booking->booking_id );
 }
 
 function seatreg_add_booking_modal($usingSeats, $calendarDate) {
@@ -3345,4 +3358,21 @@ function seatreg_get_registration_logs() {
 	$response->setData($activityLogs);
 
 	wp_send_json( $response );
+}
+
+add_action( 'wp_ajax_seatreg_create_payment_log', 'seatreg_create_payment_log');
+function seatreg_create_payment_log() {
+	seatreg_ajax_security_check();
+
+	if( empty($_POST['logStatus']) || empty($_POST['bookingId']) || empty($_POST['logMessage']) ) {
+		exit('Missing data');
+	}
+
+	$logInserted = SeatregPaymentLogService::log( $_POST['bookingId'], $_POST['logMessage'], $_POST['logStatus'] );
+
+	if( $logInserted ) {
+		wp_send_json('ok');
+	}else {
+		wp_send_json_error();
+	}
 }
