@@ -1160,7 +1160,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 								}
 								echo seatreg_view_booking_activity_btn($row);
-								echo seatreg_generate_payment_section($row);
+								echo seatreg_generate_payment_section($row, $seatregData);
 							echo '</div>';
 							echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
 							echo '<input type="hidden" class="seat-id" value='. esc_attr($row->seat_id) .' />';
@@ -1213,7 +1213,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 								}
 								echo seatreg_view_booking_activity_btn($row);
-								echo seatreg_generate_payment_section($row);
+								echo seatreg_generate_payment_section($row, $seatregData);
 							echo '</div>';
 							echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
 							echo '<input type="hidden" class="seat-id" value='. esc_attr($row->seat_id) .' />';
@@ -1240,6 +1240,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 
 function seatreg_view_booking_activity_btn($booking) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/buttons/view-booking-activity-btn.php' );
+	echo '<br>';
 }
 
 function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
@@ -1320,24 +1321,30 @@ function seatreg_generate_payment_logs($paymentLogs, $bookingId) {
 		<?php
 }
 
-function seatreg_generate_payment_section($booking) {
-	if($booking->payment_status == null) {
-		echo '<br>';
-		esc_html_e('No payment info recorded.', 'seatreg'); 
+function seatreg_generate_payment_section($booking, $optionsData) {
+	$hasPaymentEnabled = SeatregPaymentRepository::hasPaymentEnabled( $optionsData );
+	$paymentLogs = SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id );
 
-		return;
+	if( $booking->payment_status == null && $hasPaymentEnabled ) {
+		echo '<br>';
+		esc_html_e('No payment actions recorded.', 'seatreg');
+		echo '<br><br>'; 
 	}
-	echo '<br>';
-	echo '<div><strong>', sprintf(esc_html__('Payment is %s', 'seatreg'), esc_html($booking->payment_status)), '</strong></div>';
-	if($booking->payment_status === SEATREG_PAYMENT_COMPLETED || $booking->payment_status === SEATREG_PAYMENT_REVERSED || $booking->payment_status === SEATREG_PAYMENT_REFUNDED) {
-		echo '<div>', sprintf(esc_html__('Payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency")), '</div>';
-		echo '<div>', sprintf(esc_html__('Payment txn is %s', 'seatreg'), esc_html($booking->payment_txn_id)), '</div>';
-		echo '<div>', sprintf(esc_html__('Payment date is %s', 'seatreg'), esc_html($booking->payment_update_date)), '</div>';
+
+	if( $booking->payment_status != null ) {
+		echo '<div style="margin-bottom: 6px;"><strong>', sprintf(esc_html__('Payment is %s', 'seatreg'), esc_html($booking->payment_status)), '</strong></div>';
+		if($booking->payment_status === SEATREG_PAYMENT_COMPLETED || $booking->payment_status === SEATREG_PAYMENT_REVERSED || $booking->payment_status === SEATREG_PAYMENT_REFUNDED) {
+			echo '<div>', sprintf(esc_html__('Payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency")), '</div>';
+			echo '<div>', sprintf(esc_html__('Payment txn is %s', 'seatreg'), esc_html($booking->payment_txn_id)), '</div>';
+			echo '<div>', sprintf(esc_html__('Payment date is %s', 'seatreg'), esc_html($booking->payment_update_date)), '</div>';
+		}
+		echo '<br>';
 	}
-	echo '<br>';
-	echo '<div><strong>', esc_html__('Payment logs', 'seatreg') ,'</strong></div><br>';
 	
-	echo seatreg_generate_payment_logs( SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id ), $booking->booking_id );
+	if( $hasPaymentEnabled || count($paymentLogs) > 0 ) {
+		echo '<div style="margin-bottom: 6px;"><strong>', esc_html__('Payment logs', 'seatreg') ,'</strong></div>';
+		echo seatreg_generate_payment_logs( $paymentLogs, $booking->booking_id );
+	}
 }
 
 function seatreg_add_booking_modal($usingSeats, $calendarDate) {
