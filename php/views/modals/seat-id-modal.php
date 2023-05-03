@@ -15,7 +15,7 @@
 					<?php foreach($roomData->boxes as $box): ?>
 						<?php if($box->canRegister === 'true'): ?>
 							<div>
-								<?php echo $box->seat; ?>
+								<?php echo $box->prefix, $box->seat; ?>
 							</div>
 							<div>
 								<?php echo $box->id; ?>
