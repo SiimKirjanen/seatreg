@@ -864,7 +864,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="custom-payment"><?php esc_html_e('Custom payment', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('This payment method is suitable for manual payments. Allows you to control to payment flow.', 'seatreg'); ?>
+					<?php esc_html_e('This payment method is suitable for manual payments. Allows you to control the payment flow.', 'seatreg'); ?>
 				</p>
 
 				<div class="checkbox">
@@ -877,13 +877,13 @@ function seatreg_generate_settings_form() {
 				<div class="payment-configuration">
 					<label for="custom-payment-title"><?php esc_html_e('Custom payment title', 'seatreg'); ?></label>
 					<p class="help-block">
-						<?php esc_html_e('Please enter custom payment title', 'seatreg'); ?>.
+						<?php esc_html_e('Please enter custom payment title', 'seatreg'); ?>
 					</p>
 					<input type="text" class="form-control" id="custom-payment-title" name="custom-payment-title" autocomplete="off" placeholder="<?php echo esc_html('Title', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->custom_payment_title); ?>"> 
 					<br>
-					<label for="custom-payment-description"><?php esc_html_e('Custom payment description', 'seatreg'); ?></label>
-					<p class="help-block"><?php esc_html_e('Please enter custom payment description', 'seatreg'); ?>.</p>
-					<textarea class="form-control" id="custom-payment-description" name="custom-payment-description" placeholder="<?php esc_html_e('Enter payment description', 'seatreg')?>"><?php echo esc_html($options[0]->custom_payment_description); ?></textarea>
+					<label for="custom-payment-description"><?php esc_html_e('Custom payment instructions', 'seatreg'); ?></label>
+					<p class="help-block"><?php esc_html_e('Please enter custom payment instructions. Will be shown when customer chooses this payment method.', 'seatreg'); ?></p>
+					<textarea class="form-control" id="custom-payment-description" name="custom-payment-description" placeholder="<?php esc_html_e('Enter payment instructions', 'seatreg')?>"><?php echo esc_html($options[0]->custom_payment_description); ?></textarea>
 				</div>
 			</div>
 
