@@ -592,7 +592,7 @@ $('#seatreg-booking-manager').on('click', 'button[data-action=add-payment-log]',
 		}
 
 		$logsWrappers.each(function() {
-			$(this).append('<div class="'+ logClass +'">'+ logType +'</div><div class="'+ logClass +'">' + 'moment ago' + '</div><div class="'+ logClass +'">'+ logMessage +'</div>');
+			$(this).append('<div class="'+ logClass +'">'+ logType +'</div><div class="'+ logClass +'">' + translator.translate('momentAgo') + '</div><div class="'+ logClass +'">'+ logMessage +'</div>');
 		});
 		$this.closest('.add-payment-log-wrap').find('.payment-log-message').val('');
 	});

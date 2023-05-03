@@ -175,6 +175,7 @@ function seatreg_generate_admin_strings() {
     $translations->reloadingPage = esc_html__('Reloading page. Please wait.', 'seatreg');
     $translations->dateNotProvided = esc_html__('Date not provided', 'seatreg');
     $translations->dateNotCorrect = esc_html__('Date not correct', 'seatreg');
+    $translations->momentAgo = esc_html__('Moment ago', 'seatreg');
 
     return $translations;
 }
