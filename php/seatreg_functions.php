@@ -1135,7 +1135,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$myFormatForView = date("m-d-y", $row->booking_date);
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 						
-						echo '<div class="reg-seat-item">';
+						echo '<div class="reg-seat-item" data-booking-id="'. $booking .'">';
 							echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
 							echo '<div class="seat-room-box manager-box" title="',esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
 							echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
@@ -1187,7 +1187,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$myFormatForView = date("m-d-y", $row->booking_date);
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 		
-						echo '<div class="reg-seat-item">';
+						echo '<div class="reg-seat-item" data-booking-id="'. $booking .'">';
 							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
 							echo '<div class="seat-room-box manager-box" title="',esc_attr($row->room_name),'">', esc_html($row->room_name),'</div>';
 							echo '<div class="seat-name-box manager-box" title="'.esc_attr($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';

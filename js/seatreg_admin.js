@@ -580,9 +580,9 @@ $('#seatreg-booking-manager').on('click', 'button[data-action=add-payment-log]',
 	
 	var promise = seatreg_create_payment_log(bookingId, logType, logMessage);
 
-	promise.done(function(data) {
+	promise.done(function() {
 		$this.removeAttr("disabled");
-		$logs = $this.closest('.more-info').find('.payment-log-wrap');
+		var $logsWrappers = $('#seatreg-booking-manager .reg-seat-item[data-booking-id="'+ bookingId +'"]').find('.payment-log-wrap');
 		var logClass = '';
 
 		if(logType === 'error') {
@@ -591,7 +591,9 @@ $('#seatreg-booking-manager').on('click', 'button[data-action=add-payment-log]',
 			logClass = 'info-log';
 		}
 
-		$logs.append('<div class="'+ logClass +'">'+ logType +'</div><div class="'+ logClass +'">' + 'moment ago' + '</div><div class="'+ logClass +'">'+ logMessage +'</div>');
+		$logsWrappers.each(function() {
+			$(this).append('<div class="'+ logClass +'">'+ logType +'</div><div class="'+ logClass +'">' + 'moment ago' + '</div><div class="'+ logClass +'">'+ logMessage +'</div>');
+		});
 		$this.closest('.add-payment-log-wrap').find('.payment-log-message').val('');
 	});
 	
