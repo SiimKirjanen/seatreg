@@ -333,7 +333,7 @@
 						
 						<div id="seat-cart-items"></div>
 						
-						<?php if($data->paypal_payments === '1' || $data->stripe_payments === '1') : ?>
+						<?php if($data->paypal_payments === '1' || $data->stripe_payments === '1' || $data->custom_payment === '1') : ?>
 							<div id="booking-total-price" data-booking-price="0"></div>
 						<?php endif; ?>
 
