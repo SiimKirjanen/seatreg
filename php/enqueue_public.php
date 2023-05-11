@@ -43,7 +43,7 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_style('pg-calendar-style', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/css/pignose.calendar.css', array(), '1.4.31', 'all');
 		wp_enqueue_style('alertify-core', SEATREG_PLUGIN_FOLDER_URL . 'css/alertify.core.css', array(), '1.0.0', 'all');
 		wp_enqueue_style('alertify-default', SEATREG_PLUGIN_FOLDER_URL . 'css/alertify.default.css', array(), '1.0.0', 'all');
-		
+
 		wp_enqueue_script("jquery");
 		wp_enqueue_script('modernizr', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/modernizr.custom.89593.min.js' , array(), '2.8.3', false);
 		wp_enqueue_script('date-format', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/date.format.js' , array(), '1.0.0', true);
@@ -97,6 +97,12 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 
 		$inlineScript .= '}';
 
+		if( $data->custom_styles ) {
+			add_action('wp_head', function() use ($data) {
+				seatreg_add_custom_styles($data->custom_styles);
+			}, 100);
+		}
+		
 		wp_add_inline_script('seatreg-registration', $inlineScript, 'before');
 		wp_localize_script('seatreg-registration', 'WP_Seatreg', array(
 			'SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH' => SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH,
@@ -116,4 +122,9 @@ function seatreg_public_scripts_and_styles() {
 			'errorMessage' => __('Something went wrong!', 'seatreg'),
 		));
 	}
+}
+
+function seatreg_add_custom_styles($customStyles) {
+	$customStyles = str_replace( '&gt;', '>', esc_html($customStyles) );
+	echo "<style type=\"text/css\">\n" . $customStyles . "\n</style>\n";
 }

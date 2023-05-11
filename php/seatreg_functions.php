@@ -977,8 +977,8 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('You can enter custom CSS rules for registration and booking status page', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter custom CSS rules', 'seatreg')?>"><?php echo esc_attr($options[0]->custom_styles); ?></textarea>
+				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
+				<textarea class="form-control" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
 			</div>
 
 			<input type='hidden' name='action' value='seatreg-form-submit' />
