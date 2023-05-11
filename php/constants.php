@@ -64,3 +64,14 @@ define('SEATREG_TEMPLATE_BOOKING_ID', '[booking-id]');
 //Time related
 define('CALENDAR_DATE_FORMAT', 'Y-m-d');
 define('CALENDAR_DATE_PICKER_REGEX', '/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/');
+
+//SeatReg actions
+define('SEATREG_ACTION_BOOKING_SUBMITTED', 'seatreg_action_booking_submitted');
+define('SEATREG_ACTION_BOOKING_MANUALLY_ADDED', 'seatreg_action_booking_manually_added');
+define('SEATREG_ACTION_BOOKING_PENDING', 'seatreg_action_booking_pending');
+define('SEATREG_ACTION_BOOKING_APPROVED', 'seatreg_action_booking_approved');
+define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
+define('SEATREG_ACTION_BOOKING_CHANGED', 'seatreg_action_booking_changed');
+define('SEATREG_ACTION_BOOKING_PAYMENT_COMPLETED', 'seatreg_action_booking_payment_completed');
+define('SEATREG_ACTION_BOOKING_EMAIL_CONFIRMED', 'seatreg_action_booking_email_confirmed');
+
