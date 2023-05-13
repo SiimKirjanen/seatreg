@@ -46,6 +46,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.36.0 =
 * Added option to add custom styles to registration page
+* Added plugin related actions for developers to hook custom code into.
 
 = 1.35.2 =
 * Display custom payment booking price in registration view

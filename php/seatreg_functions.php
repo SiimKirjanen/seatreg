@@ -2162,6 +2162,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 	global $wpdb;
 
 	if($action->action == 'conf') {
+
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array( 
@@ -2173,7 +2174,10 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s'
 		);
 		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved (Booking manager)');
+		SeatregActionsService::triggerBookingApprovedAction($action->booking_id);
+
 	}else if($action->action == 'del') {
+
 		$wpdb->delete( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array(
@@ -2183,7 +2187,10 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s'
 		);
 		seatreg_add_activity_log('booking', $action->booking_id, sprintf('Seat %s from room %s deleted from booking (Booking manager)', $action->seat_nr, $action->room_name));
+		SeatregActionsService::triggerBookingRemovedAction($action->booking_id);
+
 	}else if($action->action == 'unapprove') {
+
 		$wpdb->update( 
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array( 
@@ -2195,6 +2202,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			'%s'
 		);
 		seatreg_add_activity_log('booking', $action->booking_id, 'Booking unapproved (Booking manager)');
+		SeatregActionsService::triggerBookingPendingAction($action->booking_id);
 	}
 }
 
@@ -3167,6 +3175,7 @@ function seatreg_add_booking_with_manager_callback() {
 	}));
 	$addingStatusCount = count($addingStatus);
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
+	SeatregActionsService::triggerBookingManuallyAddedAction($bookingId);
 	
 	if( $successStatusCount === $addingStatusCount ) {
 		$selectedStatus = $bookingStatus === '1' ? 'pending' : 'approved';
