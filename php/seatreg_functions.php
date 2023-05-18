@@ -907,6 +907,7 @@ function seatreg_generate_settings_form() {
 									if($custFields[$i]->type == 'sel') {
 										$optLen = count($custFields[$i]->options);
 										echo '<div class="custom-container" data-type="sel" data-label="'. $custFields[$i]->label .'">';
+											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
 											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>';
 												echo '<select>';
 
@@ -922,6 +923,7 @@ function seatreg_generate_settings_form() {
 									}else if($custFields[$i]->type == 'text'){
 										?>
 											<div class="custom-container" data-type="text" data-label="<?php echo $custFields[$i]->label; ?>">
+												<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>
 												<label><span class="l-text"><?php echo esc_html($custFields[$i]->label); ?> </span>
 													<input type="text" />
 												</label>
@@ -932,6 +934,7 @@ function seatreg_generate_settings_form() {
 
 									}else if($custFields[$i]->type == 'check') {
 										echo '<div class="custom-container" data-type="check" data-label="'. $custFields[$i]->label .'">';
+											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
 											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span> <input type="checkbox" /></label><i class="fa fa-times-circle remove-cust-item"></i>';
 										echo '</div>';
 									}
