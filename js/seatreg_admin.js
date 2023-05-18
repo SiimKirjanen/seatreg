@@ -1133,10 +1133,10 @@ function seatreg_insert_custom_field(label,type,options, placeToPut) {
 		containerDiv.append(move_down);
 
 		if(type == 'field') {
-			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label> <span class="seatreg-ui-tooltip" title="Prevents booking when same input value provided">Unique value required</span> <input type="checkbox" class="unique-input" /> <i class="fa fa-times-circle remove-cust-item"></i>'); 
+			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label> <div class="custom-container-controls"><span class="seatreg-ui-tooltip" title="Prevents booking when same input value provided">Unique</span> <input type="checkbox" class="unique-input" /> <i class="fa fa-times-circle remove-cust-item"></i></div>'); 
 			containerDiv.attr('data-type','text').append(cusLabel);
 		}else if(type == 'checkbox') {
-			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="checkbox"/></label><i class="fa fa-times-circle remove-cust-item"></i>'); 
+			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="checkbox"/></label><div class="custom-container-controls"><i class="fa fa-times-circle remove-cust-item"></i></div>'); 
 			containerDiv.attr('data-type','check').append(cusLabel);
 
 		}else if(type == 'select') {
@@ -1147,7 +1147,7 @@ function seatreg_insert_custom_field(label,type,options, placeToPut) {
 			for(var i = 0; i < arrlen;i++) {
 				sel.append('<option>' + options[i] + '</option>');
 			}
-			var remBtn = '<i class="fa fa-times-circle remove-cust-item"></i>';
+			var remBtn = '<div class="custom-container-controls"><i class="fa fa-times-circle remove-cust-item"></i></div>';
 			lab.append(sel,remBtn);
 			containerDiv.attr('data-type','sel').append(lab);
 		}	

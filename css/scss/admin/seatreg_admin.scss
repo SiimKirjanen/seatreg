@@ -695,26 +695,47 @@ html {
 	
 }
 .seatreg-tabs-content .custom-container {
+	display: flex;
+	align-items: center;
+	column-gap: 6px;
 	margin-bottom: 4px;
 	margin-left: 24px;
-	border:1px solid #ccc;
-	border-radius:4px
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 12px;
+
+	label {
+		margin-bottom: 0;
+		display: flex;
+		align-items: center;
+	}
+
+	.custom-container-controls {
+		display: flex;
+		align-items: center;
+		column-gap: 4px;
+		margin-left: auto;
+	}
+
+	.l-text {
+		display: inline-block;
+		min-width: 76px;
+		max-width: 76px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }
 
 .seatreg-tabs-content .custom-container-move{
 	border:1px solid #ccc;
 	border-radius:4px;
-	padding:2px
+	padding:2px;
+	cursor: pointer;
 }
 .seatreg-tabs-content .custom-container-move:hover{
-	background-color:#e74c3c
+	background-color:#ccc;
 }
-.seatreg-tabs-content .custom-container-move-up{
-	margin-left:5px
-}
-.seatreg-tabs-content .custom-container-move-down{
-	margin-right:5px
-}
+
 .seatreg-tabs-content .custom-container-move-highlight{
 	background-color:#ee0
 }
