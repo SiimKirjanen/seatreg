@@ -1127,6 +1127,10 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 
 function seatreg_insert_custom_field(label,type,options, placeToPut) {
 		var containerDiv = $('<div class="custom-container" data-label="'+ label +'"></div>');
+		var move_up = $('<i class="custom-container-move custom-container-move-up">▲</i>');
+		var move_down = $('<i class="custom-container-move custom-container-move-down">▼</i>');
+		containerDiv.append(move_up);
+		containerDiv.append(move_down);
 
 		if(type == 'field') {
 			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label> <span class="seatreg-ui-tooltip" title="Prevents booking when same input value provided">Unique value required</span> <input type="checkbox" class="unique-input" /> <i class="fa fa-times-circle remove-cust-item"></i>'); 
@@ -1150,8 +1154,6 @@ function seatreg_insert_custom_field(label,type,options, placeToPut) {
 		placeToPut.append(containerDiv);
 		initTooltips();
 }
-
-
 
 $('.seatreg_page_seatreg-options .custom-field-select').on('change', function() {
 	var createBox = $('.seatreg_page_seatreg-options .cust-field-create');
@@ -1179,7 +1181,6 @@ $('.seatreg_page_seatreg-options .add-select-option').on('click', function(e) {
 		$(this).prev().prev().append('<li class="select-option"><span class="option-value">'+ $(this).prev().find('.option-name').val() +'</span><i class="fa fa-times-circle remove-cust-item"></i></li>');
 });
 
-
 $('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.remove-cust-item', function() {
 	if(window.confirm(translator.translate('areYouSure'))) {
 		$(this).closest('.custom-container').remove();
@@ -1191,6 +1192,33 @@ $('.seatreg_page_seatreg-options .cust-field-create').on('click','.remove-cust-i
 		$(this).parent().remove();
 	}
 });
+
+$('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.custom-container-move-up', function() {
+	var $item = $( this ).parent();
+	var $prevItem = $item.prev();
+
+	if ($prevItem.hasClass('custom-container')){
+		$item.insertBefore($item.prev());
+		highlight_moved_item($item);
+	}
+});
+
+$('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.custom-container-move-down', function() {
+    var $item = $( this ).parent();
+
+    if ( !$item.is(':last-child') )
+        $item.insertAfter($item.next());
+		highlight_moved_item($item);
+});
+
+function highlight_moved_item(moved_item){
+	let css_class = 'custom-container-move-highlight';
+	moved_item.addClass(css_class);
+	setTimeout(function() {
+		moved_item.removeClass(css_class)
+	  }, 1500); // 1500ms = 1,5 seconds
+	moved_item.focus();
+}
 
 function SeatregCustomField(label, type, options, unique = false) {
 		this.label = label.trim();
@@ -1333,5 +1361,3 @@ function initTooltips() {
 initTooltips();
 
 })(jQuery);
-
-
