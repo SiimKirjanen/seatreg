@@ -684,7 +684,6 @@ html {
 
 }
 
-
 .seatreg-tabs-content .select-radio-create {
 	display: none;
 }
@@ -698,7 +697,28 @@ html {
 .seatreg-tabs-content .custom-container {
 	margin-bottom: 4px;
 	margin-left: 24px;
+	border:1px solid #ccc;
+	border-radius:4px
 }
+
+.seatreg-tabs-content .custom-container-move{
+	border:1px solid #ccc;
+	border-radius:4px;
+	padding:2px
+}
+.seatreg-tabs-content .custom-container-move:hover{
+	background-color:#e74c3c
+}
+.seatreg-tabs-content .custom-container-move-up{
+	margin-left:5px
+}
+.seatreg-tabs-content .custom-container-move-down{
+	margin-right:5px
+}
+.seatreg-tabs-content .custom-container-move-highlight{
+	background-color:#ee0
+}
+
 .seatreg-tabs-content .existing-custom-fields{
 	margin-left: 24px;
 }
