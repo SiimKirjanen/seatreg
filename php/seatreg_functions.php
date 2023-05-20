@@ -641,6 +641,14 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="email-verification-subject"><?php esc_html_e('Booking email verification subject', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('You can customize the verification email subject. Leave empty for default subject', 'seatreg'); ?>.
+				</p>
+				<input type="text" class="form-control" id="email-verification-subject" name="email-verification-subject" placeholder="<?php echo esc_html('Using default email subject', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->verification_email_subject ); ?>">
+			</div>
+
+			<div class="form-group">
 				<label for="email-verification-template"><?php esc_html_e('Booking email verification template', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('You can customize the verification email.', 'seatreg'); ?>
@@ -661,6 +669,14 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Use pending', 'seatreg'); ?>
 			    	</label>
 			  	</div>
+			</div>
+
+			<div class="form-group">
+				<label for="pending-booking-email-subject"><?php esc_html_e('Pending booking email subject', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('You can customize the pending booking email subject. Leave empty for default subject', 'seatreg'); ?>.
+				</p>
+				<input type="text" class="form-control" id="pending-booking-email-subject" name="pending-booking-email-subject" placeholder="<?php esc_html_e('Using default email subject', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->pending_booking_email_subject ); ?>">
 			</div>
 
 			<div class="form-group">
@@ -713,6 +729,14 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Send approved booking email', 'seatreg'); ?>
 			    	</label>
 			  	</div>
+			</div>
+
+			<div class="form-group">
+				<label for="approved-booking-email-subject"><?php esc_html_e('Approved booking email subject', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('You can customize the approved booking email subject. Leave empty for default subject', 'seatreg'); ?>.
+				</p>
+				<input type="text" class="form-control" id="approved-booking-email-subject" name="approved-booking-email-subject" placeholder="<?php esc_html_e('Using default email subject', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->approved_booking_email_subject); ?>">
 			</div>
 
 			<div class="form-group">
@@ -1851,8 +1875,11 @@ function seatreg_set_up_db() {
 			paypal_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
 			payment_completed_set_booking_confirmed tinyint(1) NOT NULL DEFAULT 0,
 			pending_expiration int(11) DEFAULT NULL,
+			verification_email_subject varchar(255) DEFAULT NULL,
 			email_verification_template text,
+			pending_booking_email_subject varchar(255) DEFAULT NULL,
 			pending_booking_email_template text,
+			approved_booking_email_subject varchar(255) DEFAULT NULL,
 			approved_booking_email_template text,
 			stripe_payments tinyint(1) NOT NULL DEFAULT 0,
 			stripe_api_key varchar(255) DEFAULT NULL,
