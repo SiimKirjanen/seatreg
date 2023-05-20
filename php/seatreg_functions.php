@@ -641,11 +641,11 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="email-verification-subject"><?php esc_html_e('Booking email verification subject', 'seatreg'); ?></label>
+				<label for="verification-email-subject"><?php esc_html_e('Booking email verification subject', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('You can customize the verification email subject. Leave empty for default subject', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="email-verification-subject" name="email-verification-subject" placeholder="<?php echo esc_html('Using default email subject', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->verification_email_subject ); ?>">
+				<input type="text" class="form-control" id="verification-email-subject" name="verification-email-subject" placeholder="<?php echo esc_html('Using default email subject', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->verification_email_subject ); ?>">
 			</div>
 
 			<div class="form-group">
@@ -2716,8 +2716,11 @@ function seatreg_update() {
 			'send_approved_booking_email' => $_POST['approved-booking-email'],
 			'send_approved_booking_email_qr_code' => ( !isset($_POST['approved-booking-email-qr-code']) || $_POST['approved-booking-email-qr-code'] === '') ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
 			'pending_expiration' => $_POST['pending-expiration'],
+			'verification_email_subject' => $_POST['verification-email-subject'] === '' ? null : $_POST['verification-email-subject'],
 			'email_verification_template' => $_POST['email-verification-template'] === '' ? null : $_POST['email-verification-template'],
+			'pending_booking_email_subject' => $_POST['pending-booking-email-subject'] === '' ? null : $_POST['pending-booking-email-subject'],
 			'pending_booking_email_template' => $_POST['pendin-booking-email-template'] === '' ? null : $_POST['pendin-booking-email-template'],
+			'approved_booking_email_subject' => $_POST['approved-booking-email-subject'] === '' ? null : $_POST['approved-booking-email-subject'],
 			'approved_booking_email_template' => $_POST['approved-booking-email-template'] === '' ? null : $_POST['approved-booking-email-template'],
 			'stripe_payments' => $_POST['stripe-payments'],
 			'stripe_api_key' => $_POST['stripe-api-key'],
