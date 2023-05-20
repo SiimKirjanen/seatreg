@@ -47,6 +47,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     $registrationName = $registration->registration_name;
     $bookerEmail = $bookings[0]->booker_email;
     $bookingStatusUrl = seatreg_get_registration_status_url($registration->registration_code, $bookingId);
+    $emailSubject = $registration->approved_booking_email_subject ? $registration->approved_booking_email_subject : sprintf(esc_html__("Your booking at %s is approved", "seatreg"), $registrationName);
 
     if(!$bookerEmail) {
         //No booker email detected. Booker email column was added with version 1.7.0.
@@ -99,7 +100,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         $message .= '<br><img src="cid:qrcode" />';
     }
     
-    $isSent = wp_mail($bookerEmail, sprintf(esc_html__("Your booking at %s is approved", "seatreg"), $registrationName), $message, array(
+    $isSent = wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"
     ));
@@ -112,10 +113,11 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     return false;
 }
 
-function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template, $emailFromAddress) {
+function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template, $emailFromAddress, $customEmailSubject) {
     $confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
     $fromEmail = getEmailFromAddress($emailFromAddress);
     $message = '';
+    $emailSubject = $customEmailSubject ? $customEmailSubject : esc_html__('Booking email verification', 'seatreg');
 
     if($template) {
         $message = SeatregTemplateService::emailVerificationTemplateProcessing($template, $confirmationURL);
@@ -125,16 +127,17 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
         <a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
         ('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>';
     }
-    
-    return wp_mail($bookerEmail, esc_html__('Booking email verification', 'seatreg'), $message, array(
+
+    return wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"
     ));
 }
 
-function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template, $emailFromAddress) {
+function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template, $emailFromAddress, $customEmailSubject) {
     $fromEmail = getEmailFromAddress($emailFromAddress);
     $message = '';
+    $emailSubject = $customEmailSubject ? $customEmailSubject : esc_html__('Booking update', 'seatreg');
 
     if($template) {
         $message = SeatregTemplateService::pendingBookingTemplateProcessing($template, $bookingCheckURL);
@@ -144,7 +147,7 @@ function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bo
         '<a href="' .  esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) . '</a>';
     }
     
-    return wp_mail($bookerEmail, esc_html__('Booking update', 'seatreg'), $message, array(
+    return wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"
     ));

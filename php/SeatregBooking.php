@@ -21,8 +21,11 @@ class SeatregBooking {
 	protected $_registrationStartTimestamp;
 	protected $_gmailNeeded = false;  //require gmail address from registrants
 	protected $_createdCustomFields;
+	protected $_emailVerificationSubject;
 	protected $_emailVerificationTemplate;
+	protected $_pendingBookingSubject;
 	protected $_pendingBookingTemplate;
+	protected $_approvedBookingSubject;
 	protected $_approvedBookingTemplate;
 	protected $_sendApprovedBookingEmail;
 	protected $_seatPasswords; //seat passwords provided by seat registration
@@ -251,8 +254,11 @@ class SeatregBooking {
 		$this->_maxSeats = $result->seats_at_once;
 		$this->_requireBookingEmailConfirm = $result->booking_email_confirm;
 		$this->_createdCustomFields = json_decode($result->custom_fields);
+		$this->_emailVerificationSubject = $result->verification_email_subject;
 		$this->_emailVerificationTemplate = $result->email_verification_template;
+		$this->_pendingBookingSubject = $result->pending_booking_email_subject;
 		$this->_pendingBookingTemplate = $result->pending_booking_email_template;
+		$this->_approvedBookingSubject = $result->approved_booking_email_subject;
 		$this->_approvedBookingTemplate = $result->approved_booking_email_template;
 		$this->_sendApprovedBookingEmail = $result->send_approved_booking_email;
 		$this->_emailFromAddress = $result->email_from_address;
