@@ -35,6 +35,7 @@ require( 'php/services/SeatregOptionsService.php' );
 require( 'php/services/SeatregCustomFieldService.php' );
 require( 'php/services/SeatregCalendarService.php' );
 require( 'php/services/SeatregActionsService.php' );
+require( 'php/services/SeatregPublicApiService.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );
@@ -81,3 +82,6 @@ require( 'php/seatreg_shortcode.php' );
 if ( ! wp_next_scheduled( 'seatreg_pending_booking_expiration' ) ) {
     wp_schedule_event( time(), 'seatreg_expiration_schedult', 'seatreg_pending_booking_expiration' );
 }
+
+//public API
+require( 'php/public_api.php' );
