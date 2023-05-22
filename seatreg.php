@@ -23,6 +23,7 @@ require( 'php/repositories/SeatregPaymentRepository.php' );
 require( 'php/repositories/SeatregOptionsRepository.php' );
 require( 'php/repositories/SeatregActivityLogRepository.php' );
 require( 'php/repositories/SeatregPaymentLogRepository.php' );
+require( 'php/repositories/SeatregApiTokenRepository.php' );
 require( 'php/services/SeatregRegistrationService.php' );
 require( 'php/services/SeatregBookingService.php' );
 require( 'php/services/SeatregPaymentService.php' );

@@ -71,3 +71,6 @@ define('SEATREG_ACTION_BOOKING_MANUALLY_ADDED', 'seatreg_action_booking_manually
 define('SEATREG_ACTION_BOOKING_PENDING', 'seatreg_action_booking_pending');
 define('SEATREG_ACTION_BOOKING_APPROVED', 'seatreg_action_booking_approved');
 define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
+
+//API
+define('SEATREG_API_OK_MESSAGE', 'ok');
