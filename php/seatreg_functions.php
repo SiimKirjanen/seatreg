@@ -13,7 +13,8 @@ $seatreg_db_table_names->table_seatreg_options = $wpdb->prefix . "seatreg_option
 $seatreg_db_table_names->table_seatreg_bookings = $wpdb->prefix . "seatreg_bookings";
 $seatreg_db_table_names->table_seatreg_payments = $wpdb->prefix . "seatreg_payments";
 $seatreg_db_table_names->table_seatreg_payments_log = $wpdb->prefix . "seatreg_payments_log";
-$seatreg_db_table_names->table_seatreg_activity_log= $wpdb->prefix . "seatreg_activity_log";
+$seatreg_db_table_names->table_seatreg_activity_log = $wpdb->prefix . "seatreg_activity_log";
+$seatreg_db_table_names->table_seatreg_api_tokens = $wpdb->prefix . "seatreg_api_tokens";
 
 /*
    Useful functions
@@ -1017,6 +1018,20 @@ function seatreg_generate_settings_form() {
 				<textarea class="form-control" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
 			</div>
 
+			<div class="form-group">
+				<label for="public-api"><?php esc_html_e('Public API', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Public API', 'seatreg'); ?>
+				</p>
+
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="public-api" name="public-api" value="0" <?php echo $options[0]->public_api_enabled == '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Turn on public API', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
 			<input type='hidden' name='action' value='seatreg-form-submit' />
 			<input type="hidden" name="registration_code" value="<?php echo esc_attr($options[0]->registration_code); ?>"/>
 
@@ -1895,6 +1910,7 @@ function seatreg_set_up_db() {
 			custom_payment_title varchar(255) DEFAULT NULL,
 			custom_payment_description text,
 			custom_styles text,
+			public_api_enabled tinyint(0) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -1959,6 +1975,16 @@ function seatreg_set_up_db() {
 		) $charset_collate;";
 
 		dbDelta( $sql6 );
+
+		$sql7 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_api_tokens (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			registration_code varchar(40) NOT NULL,
+			api_token varchar(255) NOT NULL,
+			create_date TIMESTAMP DEFAULT NOW(),
+			PRIMARY KEY  (id)
+		) $charset_collate;";
+
+		dbDelta( $sql7 );
 
 		update_option( "seatreg_db_current_version", SEATREG_DB_VERSION );
 	}
@@ -2688,6 +2714,12 @@ function seatreg_update() {
 		$_POST['custom-styles'] = null;
 	}
 
+	if( !isset($_POST['public-api']) ) {
+		$_POST['public-api'] = 0;
+	}else {
+		$_POST['public-api'] = 1;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 
 	$status1 = $wpdb->update(
@@ -2735,6 +2767,7 @@ function seatreg_update() {
 			'custom_payment_title' => $_POST['custom-payment-title'],
 			'custom_payment_description' => $_POST['custom-payment-description'],
 			'custom_styles' => $_POST['custom-styles'],
+			'public_api_enabled' => $_POST['public-api'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
