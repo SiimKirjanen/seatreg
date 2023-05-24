@@ -100,6 +100,14 @@ function getSiteLanguage() {
 	return explode('-', get_bloginfo("language"))[0];
 }
 
+function showFirstLetters($inputString, $lettersToShow) {
+	$firstFourLetters = substr($inputString, 0, $lettersToShow);
+    $remainingLetters = substr($inputString, $lettersToShow);
+    $convertedString = $firstFourLetters . str_repeat('●', strlen($remainingLetters));
+
+    return $convertedString;
+}
+
 /*
 ==================================================================================================================================================================================================================
 Generating HTML stuff
@@ -468,6 +476,8 @@ function seatreg_generate_settings_form() {
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
+	 $publicApiTokens = SeatregApiTokenRepository::getRegistrationApiTokens($options[0]->registration_code);
+
 	?>
 		<h4 class="settings-heading">
 			<?php echo sprintf( __('%s settings', 'seatreg'),  $options[0]->registration_name); ?> 
@@ -1029,6 +1039,23 @@ function seatreg_generate_settings_form() {
 						<input type="checkbox" id="public-api" name="public-api" value="0" <?php echo $options[0]->public_api_enabled == '1' ? 'checked':'' ?> >
 						<?php esc_html_e('Turn on public API', 'seatreg'); ?>
 					</label>
+				</div>
+
+				<div id="public-api-tokens">				
+					<?php foreach($publicApiTokens as $publicApiToken): ?>
+						<div class="token-box" data-token="<?php echo $publicApiToken->api_token; ?>" data-token-hidden="<?php echo showFirstLetters($publicApiToken->api_token, 2); ?>">
+							<div class="token">
+								<?php echo showFirstLetters($publicApiToken->api_token, 2); ?>
+							</div>
+							<button class="btn btn-default btn-sm toggle-token">Show token</button>
+							<div class="token-actions">
+								<i class="fa fa-times-circle remove-token"></i>
+							</diV>
+						</div>
+					<?php endforeach; ?>
+				</div>
+				<div style="margin-left: 24px; margin-bottom: 12px;">
+					<button class="btn btn-default btn-sm"><?php esc_html_e('Create token', 'seatreg'); ?></button>
 				</div>
 			</div>
 

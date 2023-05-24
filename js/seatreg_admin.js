@@ -1227,6 +1227,23 @@ function SeatregCustomField(label, type, options, unique = false) {
 		this.unique = unique;
 }
 
+$('#seatreg-settings-form #public-api-tokens').on('click', '.remove-token', function() {
+	if( window.confirm(translator.translate('areYouSure')) ) {
+
+	}
+});
+
+$('#seatreg-settings-form #public-api-tokens').on('click', '.toggle-token', function() {
+	$tokenBox = $(this).closest('.token-box');
+	$token = $tokenBox.find('.token');
+
+	if( $token.text().includes('●') ) {
+		$token.text($tokenBox.data('token'));
+	}else {
+		$token.text($tokenBox.data('token-hidden'));
+	}
+});
+
 //when user submits seatreg settings. Do validation, generate #custom-fields hidden input value. 
 $('#seatreg-settings-submit').on('click', function(e) {
 	var customFieldArray = [];  //array to store custom inputs

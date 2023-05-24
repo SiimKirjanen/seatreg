@@ -1,0 +1,22 @@
+#seatreg-settings-form #public-api-tokens{
+    margin-left: 24px;
+    margin-bottom: 12px;
+
+    .token-box {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        padding: 12px;
+        border-radius: 4px;
+        column-gap: 6px;
+    
+        .token-actions {
+            margin-left: auto;
+    
+            .remove-token {
+                color: red;
+                cursor: pointer;
+            }
+        }
+    }
+}

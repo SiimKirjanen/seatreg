@@ -16,4 +16,15 @@ class SeatregApiTokenRepository {
             $apiToken
         ) );
     }
+
+    public static function getRegistrationApiTokens($registrationCode) {
+        global $seatreg_db_table_names;
+	    global $wpdb;
+
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg_api_tokens
+            WHERE registration_code = %s",
+            $registrationCode
+        ) );
+    }
 }
