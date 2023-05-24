@@ -1055,7 +1055,7 @@ function seatreg_generate_settings_form() {
 					<?php endforeach; ?>
 				</div>
 				<div style="margin-left: 24px; margin-bottom: 12px;">
-					<button class="btn btn-default btn-sm"><?php esc_html_e('Create token', 'seatreg'); ?></button>
+					<button class="btn btn-default btn-sm" id="create-api-token"><?php esc_html_e('Create API token', 'seatreg'); ?></button>
 				</div>
 			</div>
 
@@ -3087,6 +3087,30 @@ function seatreg_delete_api_token() {
 		wp_send_json_error();
 	}
 }
+
+add_action('wp_ajax_seatreg_create_api_token', 'seatreg_create_api_token');
+function seatreg_create_api_token() {
+	seatreg_ajax_security_check();
+
+	if( empty( $_POST[ 'code' ] ) ) {
+		wp_die('Missing data');
+	}
+
+	$token = SeatregRandomGenerator::generateApiToken();
+	$hiddenToken = showFirstLetters($token, 3);
+
+	if( SeatregPublicApiService::insertApiToken( $_POST[ 'code' ], $token) ) {
+		wp_send_json_success(
+			(object) [
+				'token' => $token,
+				'hiddenToken' => $hiddenToken
+			]
+		);
+	}else {
+		wp_send_json_error();
+	}
+}
+
 
 add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_callback' );
 function seatreg_get_booking_manager_callback() {

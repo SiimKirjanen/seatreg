@@ -52,6 +52,20 @@ class SeatregPublicApiService {
         ];
     }
 
+    public static function insertApiToken($registrationCode, $apiToken) {
+        global $seatreg_db_table_names;
+	    global $wpdb;
+
+        return $wpdb->insert(
+    		$seatreg_db_table_names->table_seatreg_api_tokens,
+    		array(
+    			'registration_code' => $registrationCode,
+                'api_token' => $apiToken
+    		),
+    		'%s'
+    	);
+    }
+
     public static function deleteApiToken($apiToken) {
         global $seatreg_db_table_names;
 	    global $wpdb;

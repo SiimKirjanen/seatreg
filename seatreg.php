@@ -37,6 +37,7 @@ require( 'php/services/SeatregCustomFieldService.php' );
 require( 'php/services/SeatregCalendarService.php' );
 require( 'php/services/SeatregActionsService.php' );
 require( 'php/services/SeatregPublicApiService.php' );
+require( 'php/services/SeatregRandomGenerator.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );
