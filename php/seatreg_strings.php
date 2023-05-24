@@ -176,6 +176,8 @@ function seatreg_generate_admin_strings() {
     $translations->dateNotProvided = esc_html__('Date not provided', 'seatreg');
     $translations->dateNotCorrect = esc_html__('Date not correct', 'seatreg');
     $translations->momentAgo = esc_html__('Moment ago', 'seatreg');
-
+    $translations->somethingWentWrong = esc_html__('Something went wrong. Please try again', 'seatreg');
+    $translations->tokenRemoved = esc_html__('API token removed', 'seatreg');
+    
     return $translations;
 }

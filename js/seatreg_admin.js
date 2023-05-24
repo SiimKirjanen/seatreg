@@ -1228,19 +1228,38 @@ function SeatregCustomField(label, type, options, unique = false) {
 }
 
 $('#seatreg-settings-form #public-api-tokens').on('click', '.remove-token', function() {
-	if( window.confirm(translator.translate('areYouSure')) ) {
+	var tokenBox = $(this).closest('.token-box');
+	var code = $('input[name="registration_code"]').val();
+	var token = $(this).closest('.token-box').data('token');
 
+	if( window.confirm(translator.translate('areYouSure')) ) {
+		var promise = seaterg_admin_ajax2('seatreg_delete_api_token', code, {
+			'api-token': token,
+		});
+
+		promise.done(function(data) {
+			if(data.success === true) {
+				tokenBox.remove();
+				alertify.success(translator.translate('tokenRemoved'));
+			}else {
+				alertify.error(translator.translate('somethingWentWrong'));
+			}
+		});
+		promise.fail = seatreg_admin_ajax_error;
 	}
 });
 
-$('#seatreg-settings-form #public-api-tokens').on('click', '.toggle-token', function() {
+$('#seatreg-settings-form #public-api-tokens').on('click', '.toggle-token', function(e) {
+	e.preventDefault();
 	$tokenBox = $(this).closest('.token-box');
 	$token = $tokenBox.find('.token');
 
 	if( $token.text().includes('●') ) {
 		$token.text($tokenBox.data('token'));
+		$(this).text('Hide token');
 	}else {
 		$token.text($tokenBox.data('token-hidden'));
+		$(this).text('Show token');
 	}
 });
 

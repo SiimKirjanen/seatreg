@@ -1047,7 +1047,7 @@ function seatreg_generate_settings_form() {
 							<div class="token">
 								<?php echo showFirstLetters($publicApiToken->api_token, 2); ?>
 							</div>
-							<button class="btn btn-default btn-sm toggle-token">Show token</button>
+							<button class="btn btn-default btn-sm toggle-token" type="button">Show token</button>
 							<div class="token-actions">
 								<i class="fa fa-times-circle remove-token"></i>
 							</diV>
@@ -3071,6 +3071,21 @@ function seatreg_new_captcha_callback() {
 	echo '<img src="' . SEATREG_PLUGIN_FOLDER_URL . 'registration/php/image.php?dummy='. esc_html($r) .'" id="captcha-img" />';
 
 	die();
+}
+
+add_action('wp_ajax_seatreg_delete_api_token', 'seatreg_delete_api_token');
+function seatreg_delete_api_token() {
+	seatreg_ajax_security_check();
+
+	if( empty( $_POST[ 'code' ] ) || empty( $_POST['data'][ 'api-token' ] ) ) {
+		wp_die('Missing data');
+	}
+
+	if( SeatregPublicApiService::deleteApiToken( $_POST['data'][ 'api-token' ] )) {
+		wp_send_json_success();
+	}else {
+		wp_send_json_error();
+	}
 }
 
 add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_callback' );

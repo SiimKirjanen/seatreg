@@ -51,4 +51,15 @@ class SeatregPublicApiService {
             'bookings' => $bookings
         ];
     }
+
+    public static function deleteApiToken($apiToken) {
+        global $seatreg_db_table_names;
+	    global $wpdb;
+
+        return $wpdb->delete( 
+			$seatreg_db_table_names->table_seatreg_api_tokens,
+			array('api_token' => $apiToken), 
+			'%s'
+		);
+    }
 }
