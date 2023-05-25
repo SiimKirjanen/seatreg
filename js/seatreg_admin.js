@@ -1266,10 +1266,12 @@ $('#seatreg-settings-form #public-api-tokens').on('click', '.toggle-token', func
 $('#seatreg-settings-form #create-api-token').on('click', function(e) {
 	e.preventDefault();
 	var code = $('input[name="registration_code"]').val();
-	
-	var promise = seaterg_admin_ajax2('seatreg_create_api_token', code);
+	var $this = $(this);
+	$this.text(translator.translate('loading'));
 
+	var promise = seaterg_admin_ajax2('seatreg_create_api_token', code);
 	promise.done(function(data) {
+		$this.text(translator.translate('createApiToken'));
 		if(data.success === true) {
 			var token = data.data.token;
 			var hiddenToken = data.data.hiddenToken;
