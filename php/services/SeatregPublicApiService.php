@@ -45,7 +45,6 @@ class SeatregPublicApiService {
         }
         return (object) [
             'message' => SEATREG_API_OK_MESSAGE,
-            'siteUrl' => get_site_url(),
             'apiToken' => $apiTokenOrError->api_token,
             'id' => $apiTokenOrError->id,
         ];
