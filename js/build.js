@@ -1171,6 +1171,13 @@
 		}
 	};
 
+	//Get current Box color
+	Registration.prototype.getBoxColor = function() {
+		// if multiple boxes selected always the first box color is taken
+		var box = this.rooms[this.currentRoom].findAndReturnBox(this.activeBoxArray[0]);
+		return box.color;
+	};
+
 	//Change background color of a box. In case of text-box change font color
 	Registration.prototype.changeBoxColor = function(colorRGBA) {
 		if(this.action == 1) {
@@ -2811,7 +2818,7 @@
 		alpha: true,
 		editor: true,
 		editorFormat: 'rgb',
-		color: '#0072CE',
+		color: '#61B329',
 		onDone: function (color) {
 			reg.changeBoxColor(color.rgbaString);
 			$('#color-dialog').modal('toggle');
@@ -3299,7 +3306,9 @@
 	//palette icon click
 	$('.palette-call').on('click', function(){
 		if(reg.activeBoxArray.length > 0) {
-			$("#color-dialog").modal("toggle");
+		//preset color with current seat color
+		seatColorPicker.setColor(reg.getBoxColor());		
+		$("#color-dialog").modal("toggle");
 		}else {
 			var palleteGuide = '<div><div class="guide-block">'+ translator.translate('toSelectOneBox_') +'<div class="guide-item guide-item-mouse"></div></div><br><div class="guide-block">'+ translator.translate('toSelectMultiBox_') +'<div class="guide-item guide-item-lasso"></div></div>';
 			alertify.set({ 
