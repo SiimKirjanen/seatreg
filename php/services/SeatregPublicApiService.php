@@ -47,6 +47,7 @@ class SeatregPublicApiService {
             'message' => SEATREG_API_OK_MESSAGE,
             'apiToken' => $apiTokenOrError->api_token,
             'id' => $apiTokenOrError->id,
+            'registrationName' => $apiTokenOrError->registration_name
         ];
     }
 
