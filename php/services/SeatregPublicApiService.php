@@ -23,7 +23,7 @@ class SeatregPublicApiService {
         $apiToken = SeatregApiTokenRepository::getApiToken($apiTokenParam);
 
         if( !$apiToken ) {
-            return new WP_Error( 'token_not_found', 'Token '. $apiTokenParam  .' not found', array( 'status' => 401 ) );
+            return new WP_Error( 'token_not_found', 'Token not valid', array( 'status' => 401 ) );
         }
 
         if( !$apiToken->public_api_enabled ) {
