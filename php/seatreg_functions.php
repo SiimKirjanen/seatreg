@@ -2008,7 +2008,8 @@ function seatreg_set_up_db() {
 			registration_code varchar(40) NOT NULL,
 			api_token varchar(255) NOT NULL,
 			create_date TIMESTAMP DEFAULT NOW(),
-			PRIMARY KEY  (id)
+			PRIMARY KEY  (id),
+			UNIQUE KEY api_token (api_token)
 		) $charset_collate;";
 
 		dbDelta( $sql7 );
