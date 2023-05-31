@@ -27,7 +27,7 @@ class SeatregPublicApiService {
         }
 
         if( !$apiToken->public_api_enabled ) {
-            return new WP_Error( 'public_api_not_enabled', 'Public API not enabled', array( 'status' => 403 ) );
+            return new WP_Error( 'public_api_not_enabled', 'SeatReg public API not enabled', array( 'status' => 403 ) );
         }
 
         return $apiToken;

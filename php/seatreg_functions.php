@@ -1029,9 +1029,9 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="public-api"><?php esc_html_e('Public API', 'seatreg'); ?></label>
+				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Public API', 'seatreg'); ?>
+					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>
 				</p>
 
 				<div class="checkbox">
