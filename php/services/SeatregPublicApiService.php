@@ -22,12 +22,12 @@ class SeatregPublicApiService {
 
         $apiToken = SeatregApiTokenRepository::getApiToken($apiTokenParam);
 
-        if( !$apiToken->public_api_enabled ) {
-            return new WP_Error( 'public_api_not_enabled', 'Public API not enabled', array( 'status' => 403 ) );
-        }
-
         if( !$apiToken ) {
             return new WP_Error( 'token_not_found', 'Token not found', array( 'status' => 401 ) );
+        }
+
+        if( !$apiToken->public_api_enabled ) {
+            return new WP_Error( 'public_api_not_enabled', 'Public API not enabled', array( 'status' => 403 ) );
         }
 
         return $apiToken;
