@@ -6,7 +6,7 @@
 	Author: Siim Kirjanen
 	Author URI: https://github.com/SiimKirjanen
 	Text Domain: seatreg
-	Version: 1.37.0
+	Version: 1.38.0
 	Requires at least: 5.3
 	Requires PHP: 7.2.28
 	License: GPLv2 or later
@@ -23,6 +23,7 @@ require( 'php/repositories/SeatregPaymentRepository.php' );
 require( 'php/repositories/SeatregOptionsRepository.php' );
 require( 'php/repositories/SeatregActivityLogRepository.php' );
 require( 'php/repositories/SeatregPaymentLogRepository.php' );
+require( 'php/repositories/SeatregApiTokenRepository.php' );
 require( 'php/services/SeatregRegistrationService.php' );
 require( 'php/services/SeatregBookingService.php' );
 require( 'php/services/SeatregPaymentService.php' );
@@ -35,6 +36,8 @@ require( 'php/services/SeatregOptionsService.php' );
 require( 'php/services/SeatregCustomFieldService.php' );
 require( 'php/services/SeatregCalendarService.php' );
 require( 'php/services/SeatregActionsService.php' );
+require( 'php/services/SeatregPublicApiService.php' );
+require( 'php/services/SeatregRandomGenerator.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );
@@ -81,3 +84,6 @@ require( 'php/seatreg_shortcode.php' );
 if ( ! wp_next_scheduled( 'seatreg_pending_booking_expiration' ) ) {
     wp_schedule_event( time(), 'seatreg_expiration_schedult', 'seatreg_pending_booking_expiration' );
 }
+
+//public API
+require( 'php/public_api.php' );

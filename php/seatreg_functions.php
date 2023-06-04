@@ -13,7 +13,8 @@ $seatreg_db_table_names->table_seatreg_options = $wpdb->prefix . "seatreg_option
 $seatreg_db_table_names->table_seatreg_bookings = $wpdb->prefix . "seatreg_bookings";
 $seatreg_db_table_names->table_seatreg_payments = $wpdb->prefix . "seatreg_payments";
 $seatreg_db_table_names->table_seatreg_payments_log = $wpdb->prefix . "seatreg_payments_log";
-$seatreg_db_table_names->table_seatreg_activity_log= $wpdb->prefix . "seatreg_activity_log";
+$seatreg_db_table_names->table_seatreg_activity_log = $wpdb->prefix . "seatreg_activity_log";
+$seatreg_db_table_names->table_seatreg_api_tokens = $wpdb->prefix . "seatreg_api_tokens";
 
 /*
    Useful functions
@@ -97,6 +98,14 @@ function assignIfNotEmpty(&$item, $default){
 
 function getSiteLanguage() {
 	return explode('-', get_bloginfo("language"))[0];
+}
+
+function showFirstLetters($inputString, $lettersToShow) {
+	$firstFourLetters = substr($inputString, 0, $lettersToShow);
+    $remainingLetters = substr($inputString, $lettersToShow);
+    $convertedString = $firstFourLetters . str_repeat('●', strlen($remainingLetters));
+
+    return $convertedString;
 }
 
 /*
@@ -467,6 +476,8 @@ function seatreg_generate_settings_form() {
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
+	 $publicApiTokens = SeatregApiTokenRepository::getRegistrationApiTokens($options[0]->registration_code);
+
 	?>
 		<h4 class="settings-heading">
 			<?php echo sprintf( __('%s settings', 'seatreg'),  $options[0]->registration_name); ?> 
@@ -1015,6 +1026,37 @@ function seatreg_generate_settings_form() {
 				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
 				<textarea class="form-control" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>
+				</p>
+
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="public-api" name="public-api" value="0" <?php echo $options[0]->public_api_enabled == '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Turn on public API', 'seatreg'); ?>
+					</label>
+				</div>
+
+				<div id="public-api-tokens">				
+					<?php foreach($publicApiTokens as $publicApiToken): ?>
+						<div class="token-box" data-token="<?php echo $publicApiToken->api_token; ?>" data-token-hidden="<?php echo showFirstLetters($publicApiToken->api_token, 2); ?>">
+							<div class="token">
+								<?php echo showFirstLetters($publicApiToken->api_token, 2); ?>
+							</div>
+							<button class="btn btn-default btn-sm toggle-token" type="button">Show token</button>
+							<div class="token-actions">
+								<i class="fa fa-times-circle remove-token"></i>
+							</diV>
+						</div>
+					<?php endforeach; ?>
+				</div>
+				<div style="margin-left: 24px; margin-bottom: 12px;">
+					<button class="btn btn-default btn-sm" id="create-api-token"><?php esc_html_e('Create API token', 'seatreg'); ?></button>
+				</div>
 			</div>
 
 			<input type='hidden' name='action' value='seatreg-form-submit' />
@@ -1895,6 +1937,7 @@ function seatreg_set_up_db() {
 			custom_payment_title varchar(255) DEFAULT NULL,
 			custom_payment_description text,
 			custom_styles text,
+			public_api_enabled tinyint(0) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -1959,6 +2002,17 @@ function seatreg_set_up_db() {
 		) $charset_collate;";
 
 		dbDelta( $sql6 );
+
+		$sql7 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_api_tokens (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			registration_code varchar(40) NOT NULL,
+			api_token varchar(255) NOT NULL,
+			create_date TIMESTAMP DEFAULT NOW(),
+			PRIMARY KEY  (id),
+			UNIQUE KEY api_token (api_token)
+		) $charset_collate;";
+
+		dbDelta( $sql7 );
 
 		update_option( "seatreg_db_current_version", SEATREG_DB_VERSION );
 	}
@@ -2688,6 +2742,12 @@ function seatreg_update() {
 		$_POST['custom-styles'] = null;
 	}
 
+	if( !isset($_POST['public-api']) ) {
+		$_POST['public-api'] = 0;
+	}else {
+		$_POST['public-api'] = 1;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 
 	$status1 = $wpdb->update(
@@ -2735,6 +2795,7 @@ function seatreg_update() {
 			'custom_payment_title' => $_POST['custom-payment-title'],
 			'custom_payment_description' => $_POST['custom-payment-description'],
 			'custom_styles' => $_POST['custom-styles'],
+			'public_api_enabled' => $_POST['public-api'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
@@ -3012,6 +3073,45 @@ function seatreg_new_captcha_callback() {
 
 	die();
 }
+
+add_action('wp_ajax_seatreg_delete_api_token', 'seatreg_delete_api_token');
+function seatreg_delete_api_token() {
+	seatreg_ajax_security_check();
+
+	if( empty( $_POST[ 'code' ] ) || empty( $_POST['data'][ 'api-token' ] ) ) {
+		wp_die('Missing data');
+	}
+
+	if( SeatregPublicApiService::deleteApiToken( $_POST['data'][ 'api-token' ] )) {
+		wp_send_json_success();
+	}else {
+		wp_send_json_error();
+	}
+}
+
+add_action('wp_ajax_seatreg_create_api_token', 'seatreg_create_api_token');
+function seatreg_create_api_token() {
+	seatreg_ajax_security_check();
+
+	if( empty( $_POST[ 'code' ] ) ) {
+		wp_die('Missing data');
+	}
+
+	$token = SeatregRandomGenerator::generateApiToken();
+	$hiddenToken = showFirstLetters($token, 3);
+
+	if( SeatregPublicApiService::insertApiToken( $_POST[ 'code' ], $token) ) {
+		wp_send_json_success(
+			(object) [
+				'token' => $token,
+				'hiddenToken' => $hiddenToken
+			]
+		);
+	}else {
+		wp_send_json_error();
+	}
+}
+
 
 add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_callback' );
 function seatreg_get_booking_manager_callback() {

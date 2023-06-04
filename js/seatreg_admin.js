@@ -1227,6 +1227,70 @@ function SeatregCustomField(label, type, options, unique = false) {
 		this.unique = unique;
 }
 
+$('#seatreg-settings-form #public-api-tokens').on('click', '.remove-token', function() {
+	var tokenBox = $(this).closest('.token-box');
+	var code = $('input[name="registration_code"]').val();
+	var token = $(this).closest('.token-box').data('token');
+
+	if( window.confirm(translator.translate('areYouSure')) ) {
+		var promise = seaterg_admin_ajax2('seatreg_delete_api_token', code, {
+			'api-token': token,
+		});
+
+		promise.done(function(data) {
+			if(data.success === true) {
+				tokenBox.remove();
+				alertify.success(translator.translate('tokenRemoved'));
+			}else {
+				alertify.error(translator.translate('somethingWentWrong'));
+			}
+		});
+		promise.fail = seatreg_admin_ajax_error;
+	}
+});
+
+$('#seatreg-settings-form #public-api-tokens').on('click', '.toggle-token', function(e) {
+	e.preventDefault();
+	$tokenBox = $(this).closest('.token-box');
+	$token = $tokenBox.find('.token');
+
+	if( $token.text().includes('●') ) {
+		$token.text($tokenBox.data('token'));
+		$(this).text('Hide token');
+	}else {
+		$token.text($tokenBox.data('token-hidden'));
+		$(this).text('Show token');
+	}
+});
+
+$('#seatreg-settings-form #create-api-token').on('click', function(e) {
+	e.preventDefault();
+	var code = $('input[name="registration_code"]').val();
+	var $this = $(this);
+	$this.text(translator.translate('loading'));
+
+	var promise = seaterg_admin_ajax2('seatreg_create_api_token', code);
+	promise.done(function(data) {
+		$this.text(translator.translate('createApiToken'));
+		if(data.success === true) {
+			var token = data.data.token;
+			var hiddenToken = data.data.hiddenToken;
+
+			$('#public-api-tokens').append(
+				'<div class="token-box" data-token="'+ token +'" data-token-hidden="'+ hiddenToken +'">' +
+					'<div class="token">'+ hiddenToken +'</div>' +
+					'<button class="btn btn-default btn-sm toggle-token" type="button">Show token</button>' +
+					'<div class="token-actions"><i class="fa fa-times-circle remove-token"></i></div>' +
+				'</div>'
+			);
+			alertify.success(translator.translate('tokenCreated'));
+		}else {
+			alertify.error(translator.translate('somethingWentWrong'));
+		}
+	});
+	promise.fail = seatreg_admin_ajax_error;
+});
+
 //when user submits seatreg settings. Do validation, generate #custom-fields hidden input value. 
 $('#seatreg-settings-submit').on('click', function(e) {
 	var customFieldArray = [];  //array to store custom inputs

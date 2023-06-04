@@ -5,7 +5,7 @@ define('SEATREG_HOME_PAGE', admin_url('/admin.php?page=seatreg-welcome'));
 define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 
 // DB
-define('SEATREG_DB_VERSION', '1.24');
+define('SEATREG_DB_VERSION', '1.26');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr'));
@@ -71,3 +71,7 @@ define('SEATREG_ACTION_BOOKING_MANUALLY_ADDED', 'seatreg_action_booking_manually
 define('SEATREG_ACTION_BOOKING_PENDING', 'seatreg_action_booking_pending');
 define('SEATREG_ACTION_BOOKING_APPROVED', 'seatreg_action_booking_approved');
 define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
+
+//API
+define('SEATREG_API_OK_MESSAGE', 'ok');
+define('SEATREG_VERSION_WITH_PUBLIC_API_SUPPORT', '1.38.0');
