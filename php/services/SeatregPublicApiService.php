@@ -15,6 +15,7 @@ class SeatregPublicApiService {
     */
     public static function validateApiRequest(WP_REST_Request $request) {
         $apiTokenParam = $request->get_param( 'api_token' );
+        $pluginVersion = self::getPluginVersion();
 
         if( !$apiTokenParam ) {
             return new WP_Error( 'no_token', 'Token not provided', array( 'status' => 401 ) );
@@ -24,6 +25,10 @@ class SeatregPublicApiService {
 
         if( !$apiToken ) {
             return new WP_Error( 'token_not_found', 'Token not valid', array( 'status' => 401 ) );
+        }
+
+        if( (float)$pluginVersion < (float)SEATREG_VERSION_WITH_PUBLIC_API_SUPPORT ) {
+            return new WP_Error( 'plugin_version_not_supported', 'The installed version ('. $pluginVersion .') of the plugin is lower than the required version ('. SEATREG_VERSION_WITH_PUBLIC_API_SUPPORT .')', array( 'status' => 401 ) );
         }
 
         if( !$apiToken->public_api_enabled ) {
@@ -57,10 +62,13 @@ class SeatregPublicApiService {
         if( is_wp_error( $apiTokenOrError ) ) {
             return $apiTokenOrError;
         }
-
-        $bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode($apiTokenOrError->registration_code);
+        if( empty($_GET['calendar_date']) ) {
+            return new WP_Error( 'calendar_date_not_provided', 'Calendar date not provided', array( 'status' => 400 ) );
+        }
         $options = SeatregOptionsRepository::getOptionsByRegistrationCode($apiTokenOrError->registration_code);
-
+        $calendarDate = $options->using_calendar === '1' ? $_GET['calendar_date'] : null;
+        $bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode($apiTokenOrError->registration_code, $calendarDate);
+        
         return (object) [
             'message' => SEATREG_API_OK_MESSAGE,
             'bookings' => $bookings,
@@ -95,4 +103,11 @@ class SeatregPublicApiService {
 			'%s'
 		);
     }
+
+    public static function getPluginVersion() {
+        $mainFilePath = WP_PLUGIN_DIR  . '/seatreg/seatreg.php';
+        $pluginData = get_file_data($mainFilePath, array( 'Version' => 'Version' ) );
+
+        return $pluginData['Version'];
+    } 
 }

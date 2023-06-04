@@ -74,3 +74,4 @@ define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
 
 //API
 define('SEATREG_API_OK_MESSAGE', 'ok');
+define('SEATREG_VERSION_WITH_PUBLIC_API_SUPPORT', '1.37.0');
