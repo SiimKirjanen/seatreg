@@ -59,10 +59,15 @@ class SeatregPublicApiService {
         }
 
         $bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode($apiTokenOrError->registration_code);
+        $options = SeatregOptionsRepository::getOptionsByRegistrationCode($apiTokenOrError->registration_code);
 
         return (object) [
             'message' => SEATREG_API_OK_MESSAGE,
-            'bookings' => $bookings
+            'bookings' => $bookings,
+            'options' => (object)[
+                'usingCalendar' => $options->using_calendar,
+                'calendarDates' => $options->calendar_dates,
+            ]
         ];
     }
 
