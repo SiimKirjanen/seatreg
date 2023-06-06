@@ -3242,7 +3242,7 @@ function seatreg_add_booking_with_manager_callback() {
 	}
 
 	$registrationCode = sanitize_text_field( $_POST['registration-code'] );
-	$calendarDate = isset( $_POST['calendar-date'] ) ? $_POST['calendar-date'] : null;
+	$calendarDate = !empty( $_POST['calendar-date'] ) ? $_POST['calendar-date'] : null;
 	$bookingsToAdd = [];
 	$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
