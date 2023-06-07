@@ -73,20 +73,26 @@ function seatreg_create_welcome() {
 		  <h2 class="main-heading"><?php esc_html_e('Create and manage online registrations', 'seatreg'); ?></h2>
 		  <p class="jumbotron-text"><?php esc_html_e('Design your own registration scheme and manage bookings.', 'seatreg'); ?></p>
 	    </div>
-		<div class="donate-wrap">
-			<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/donate.svg'; ?>" alt="Donate a little" width="160" />
-			<form action="https://www.paypal.com/donate" method="post" target="_blank">
-				<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
-				<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-			</form>
+
+		<div class="home-content">
+			<div class='container-fluid'>
+				<?php 
+					echo seatreg_create_registration_from(); 
+					echo seatreg_generate_my_registrations_section();
+				?>
+			</div>
+			<div class="donate-wrap">
+				<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/donate.svg'; ?>" alt="Donate a little" width="160" />
+				<form action="https://www.paypal.com/donate" method="post" target="_blank">
+					<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
+					<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+				</form>
+				<a class="buy-me-coffee-link" href="https://www.buymeacoffee.com/siimkirjanq" target="_blank"><img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/buy-me-coffee.png'; ?>" alt="Buy me a coffee"></a>
+			</div>
 		</div>
-	   <?php 
-	   		echo "<div class='container-fluid' style='margin-top:-12px'>";
-				seatreg_create_registration_from(); 
-				seatreg_generate_my_registrations_section();
-			echo "</div>";
-			echo seatreg_registration_logs_modal();  
-	   	?>
+
+		<?php echo seatreg_registration_logs_modal();  ?>
+
 	   <div class="seatreg-builder-popup">
 			<i class="fa fa-times-circle builder-popup-close"></i>
 			<div class="seatreg-builder-popup-content">

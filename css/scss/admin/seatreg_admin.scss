@@ -50,22 +50,30 @@ html {
 .seatreg-wp-admin {
 	font-family: 'Open Sans', sans-serif;
 }
+.seatreg-wp-admin .home-content {
+	display: flex;
+
+}
 .seatreg-wp-admin .jumbotron {
 	background-image: url(../img/chairs_med.jpg);
     background-size: cover;
 	margin-left: -20px;
-	margin-bottom: 0;
+	margin-bottom: 42px;
 }
 .seatreg-wp-admin .donate-wrap {
 	display: flex;
-	justify-content: end;
-	margin-top: 12px;
-	margin-bottom: 12px;
+	flex-direction: column;
 	padding: 0 15px;
-	text-align: right;
-	
-	img {
+	align-items: center;
+	row-gap: 12px;
+
+	> img {
 		margin-right: 12px;
+	}
+	.buy-me-coffee-link {
+		img {
+			width: 120px;
+		}
 	}
 }
 .seatreg-wp-admin .your-registrations-header {
