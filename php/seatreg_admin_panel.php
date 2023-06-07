@@ -87,7 +87,6 @@ function seatreg_create_welcome() {
 					<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
 					<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
 				</form>
-				<a class="buy-me-coffee-link" href="https://www.buymeacoffee.com/siimkirjanq" target="_blank"><img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/buy-me-coffee.png'; ?>" alt="Buy me a coffee"></a>
 			</div>
 		</div>
 
