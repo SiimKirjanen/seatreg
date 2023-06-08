@@ -827,7 +827,7 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 
 	if(arrLen == 1 && this.gmailNeeded == 1) {
 		$('#checkout-input-area .field-input[data-field="Email"]').prev().text('Email (Gmail required)');
-	}	
+	}
 };
 
 SeatReg.prototype.generateField = function(fieldName, isLastCheckItem) {
