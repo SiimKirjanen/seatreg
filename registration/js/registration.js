@@ -859,6 +859,7 @@ SeatReg.prototype.generateField = function(fieldName, isLastCheckItem) {
 SeatReg.prototype.generateCustomFooterFextField = function (customFooterText) {
 	var decodedcustomFooterText = $("<div/>").html(customFooterText).text();
 	var div = $('<div class="field-label custom-footer-text">'+ decodedcustomFooterText + '</div>');
+	div.find('script').remove();
 	return div;
 };
 
