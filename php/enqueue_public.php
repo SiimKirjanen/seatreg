@@ -75,7 +75,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var gmail = ' . esc_js($data->gmail_required) . ';';
 			$inlineScript .= 'var dataReg = jQuery.parseJSON(' . wp_json_encode(SeatregLayoutService::hideSensitiveData($data->registration_layout)) . ');';
 			$inlineScript .= 'var roomsInfo = jQuery.parseJSON(' . wp_json_encode($seatsInfo) . ');';
-			$inlineScript .= 'var custF = jQuery.parseJSON(' . wp_json_encode($data->custom_fields) . ');';
+			$inlineScript .= 'var custF = jQuery.parseJSON(' . wp_json_encode($data->custom_fields) . ');';			
 			$inlineScript .= 'var regTime = "' . esc_js($registrationTime) . '";';
 			$inlineScript .= 'var registrations = jQuery.parseJSON(' . wp_json_encode($registrations) . ');';
 			$inlineScript .= 'var ajaxUrl = "'. admin_url('admin-ajax.php') . '";';
@@ -91,6 +91,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var activeCalendarDate = "'. esc_js($filterCalendarDate) . '";';
 			$inlineScript .= 'var siteLanguage = "'. esc_js($siteLanguage) . '";';
 			$inlineScript .= 'var controlledScroll = "'. esc_js($data->controlled_scroll) . '";';
+			$inlineScript .= 'var customFooterText = "'. esc_js($data->custom_footer_text) . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";

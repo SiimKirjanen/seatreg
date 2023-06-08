@@ -594,6 +594,21 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="custom-footer-text"><?php esc_html_e('Custom footer text', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Set registration custom footer text. Will be displayed in registration page above the confim button e.g. for GDPR', 'seatreg'); ?>.</p>
+				<?php
+				/* Add placeholder text? placeholder="<?php esc_html_e('Enter custom footer text here', 'seatreg'); ?>" */
+				$customFooterTextEditorSettings = array(
+				    'wpautop' => true, // enable auto paragraph
+				    'textarea_name' => 'custom-footer-text',
+				    'textarea_rows' => 4,
+				    'media_buttons' => false,
+				);
+				wp_editor($options[0]->custom_footer_text, 'customFooterTextEditor', $customFooterTextEditorSettings)
+				?>
+			</div>
+
+			<div class="form-group">
 				<label for="registration-max-seats">
 					<?php $options[0]->using_seats == '1' ? esc_html_e('Max seats per booking', 'seatreg') : esc_html_e('Max places per booking', 'seatreg'); ?>
 				</label>
@@ -1938,6 +1953,7 @@ function seatreg_set_up_db() {
 			custom_payment_description text,
 			custom_styles text,
 			public_api_enabled tinyint(0) NOT NULL DEFAULT 0,
+			custom_footer_text text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2748,6 +2764,12 @@ function seatreg_update() {
 		$_POST['public-api'] = 1;
 	}
 
+	if( !empty($_POST['custom-footer-text']) ) {
+	    $_POST['custom-footer-text'] = wp_kses_post(wpautop($_POST['custom-footer-text']));
+	}else {
+		$_POST['custom-footer-text'] = null;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 
 	$status1 = $wpdb->update(
@@ -2796,6 +2818,7 @@ function seatreg_update() {
 			'custom_payment_description' => $_POST['custom-payment-description'],
 			'custom_styles' => $_POST['custom-styles'],
 			'public_api_enabled' => $_POST['public-api'],
+			'custom_footer_text' => $_POST['custom-footer-text'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])

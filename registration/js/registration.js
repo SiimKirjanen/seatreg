@@ -98,6 +98,7 @@
 		this.activeCalendarDate = window.activeCalendarDate;
 		this.siteLanguage = window.siteLanguage;
 		this.controlledScrollEnabled = window.controlledScroll === '1';
+		this.customFooterText = customFooterText;
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -817,12 +818,16 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 
 		documentFragment.append(primaryMail);
 	}
+	
+    //Custom footer text field
+	var field = this.generateCustomFooterFextField(this.customFooterText);
+	documentFragment.append(field);
 
 	$('#checkout-input-area').append(documentFragment);
 
 	if(arrLen == 1 && this.gmailNeeded == 1) {
 		$('#checkout-input-area .field-input[data-field="Email"]').prev().text('Email (Gmail required)');
-	}
+	}	
 };
 
 SeatReg.prototype.generateField = function(fieldName, isLastCheckItem) {
@@ -848,6 +853,12 @@ SeatReg.prototype.generateField = function(fieldName, isLastCheckItem) {
 	
 	var errorText = $('<span class="field-error">error</span>');
 	label.append(fieldInput, errorText);
+	return label;
+};
+
+SeatReg.prototype.generateCustomFooterFextField = function (customFooterText) {
+	var decodedcustomFooterText = $("<div/>").html(customFooterText).text();
+	var label = $('<label class="field-label custom-footer-text" data-label="custom-footer-text"><span class="l-text">' + decodedcustomFooterText + '</span></label>');
 	return label;
 };
 
