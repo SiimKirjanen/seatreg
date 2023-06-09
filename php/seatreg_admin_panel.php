@@ -87,6 +87,14 @@ function seatreg_create_welcome() {
 					<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
 					<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
 				</form>
+				<p style="text-align:center">
+					I also created an Android companion application for this plugin.<br>
+					<a href="https://play.google.com/store/apps/details?id=com.seatreg" target="_blank">
+						<i class="fa fa-android" aria-hidden="true" style="color: #A4C639"></i>
+						<?php esc_html_e('SeatReg Android application'); ?>
+					<a/>
+				</p>
+				
 			</div>
 		</div>
 

@@ -1046,8 +1046,14 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>
+					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>.
 				</p>
+				<div style="margin-bottom:25px;">
+					<a href="https://play.google.com/store/apps/details?id=com.seatreg" target="_blank">
+						<i class="fa fa-android" aria-hidden="true" style="color: #A4C639"></i>
+						<?php esc_html_e('SeatReg Android application'); ?>
+					<a/>
+				</div>
 
 				<div class="checkbox">
 					<label>
