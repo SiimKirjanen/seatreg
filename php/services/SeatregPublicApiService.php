@@ -65,9 +65,14 @@ class SeatregPublicApiService {
         if( empty($_GET['calendar_date']) ) {
             return new WP_Error( 'calendar_date_not_provided', 'Calendar date not provided', array( 'status' => 400 ) );
         }
+        $layOut = SeatregRegistrationRepository::getRegistrationLayout($apiTokenOrError->registration_code);
         $options = SeatregOptionsRepository::getOptionsByRegistrationCode($apiTokenOrError->registration_code);
         $calendarDate = $options->using_calendar === '1' ? $_GET['calendar_date'] : null;
         $bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode($apiTokenOrError->registration_code, $calendarDate);
+
+        foreach ($bookings as $booking) {
+            $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($layOut->roomData, $booking->room_uuid);
+        }
         
         return (object) [
             'message' => SEATREG_API_OK_MESSAGE,
