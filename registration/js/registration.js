@@ -98,6 +98,7 @@
 		this.activeCalendarDate = window.activeCalendarDate;
 		this.siteLanguage = window.siteLanguage;
 		this.controlledScrollEnabled = window.controlledScroll === '1';
+		this.customFooterText = customFooterText;
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -817,6 +818,10 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 
 		documentFragment.append(primaryMail);
 	}
+	
+    //Custom footer text field
+	var field = this.generateCustomFooterFextField(this.customFooterText);
+	documentFragment.append(field);
 
 	$('#checkout-input-area').append(documentFragment);
 
@@ -849,6 +854,13 @@ SeatReg.prototype.generateField = function(fieldName, isLastCheckItem) {
 	var errorText = $('<span class="field-error">error</span>');
 	label.append(fieldInput, errorText);
 	return label;
+};
+
+SeatReg.prototype.generateCustomFooterFextField = function (customFooterText) {
+	var decodedcustomFooterText = $("<div/>").html(customFooterText).text();
+	var div = $('<div class="field-label custom-footer-text">'+ decodedcustomFooterText + '</div>');
+	div.find('script').remove();
+	return div;
 };
 
 SeatReg.prototype.generateCustomField = function(custom) {
