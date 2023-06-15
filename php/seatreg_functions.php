@@ -472,7 +472,7 @@ function seatreg_generate_settings_form() {
 	 	return;
 	 }
 
-	 $custFields = json_decode($options[0]->custom_fields);
+	 $custFields = json_decode( isset($options[0]->custom_fields) ? $options[0]->custom_fields : "[]");
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
@@ -1156,7 +1156,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 
     $seatregData = $seatregData[0];
 	$code = $seatregData->registration_code;
-	$custom_fields = json_decode($seatregData->custom_fields, true);
+	$custom_fields = json_decode( isset($seatregData->custom_fields) ? $seatregData->custom_fields : '[]', true);
 	$roomsData = json_decode($seatregData->registration_layout)->roomData;
 	$cus_length = count(is_array($custom_fields) ? $custom_fields : []);
 	$regId = $seatregData->id;

@@ -8,8 +8,8 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/tfpdf/tfpdf.php' );
 class SeatregPDF extends tFPDF {
     private $title = null;
     private $currentDate = null;
-    private $fileName = null;
-
+    private $currentTimestamp = null;
+    
     public function __construct($title, $currentTimestamp) {
         parent::__construct();
         $this->title = $title;
@@ -38,6 +38,7 @@ class SeatregPDF extends tFPDF {
 
 class SeatregBookingsPDF extends SeatregBookingsFile {
     private $pdf = null;
+    private $fileName = null;
 
     public function __construct($showPending, $showConfirmed, $registrationCode, $calendarDate) {
         parent::__construct($showPending, $showConfirmed, $registrationCode, $calendarDate);
