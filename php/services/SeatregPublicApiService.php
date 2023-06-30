@@ -84,6 +84,34 @@ class SeatregPublicApiService {
         ];
     }
 
+    public static function getNotificationBookings( WP_REST_Request $request ) {
+        $apiTokenOrError = self::validateApiRequest($request);
+
+        if( is_wp_error( $apiTokenOrError ) ) {
+            return $apiTokenOrError;
+        }
+        $layOut = SeatregRegistrationRepository::getRegistrationLayout($apiTokenOrError->registration_code);
+        $options = SeatregOptionsRepository::getOptionsByRegistrationCode($apiTokenOrError->registration_code);
+        $calendarModeActivated = $options->using_calendar === '1';
+        $bookings = [];
+
+        if($calendarModeActivated) {
+            $bookings = SeatregBookingRepository::getCalendarModeBookings($apiTokenOrError->registration_code);
+        }else {
+            $bookings = SeatregBookingRepository::getNormalModeBookings($apiTokenOrError->registration_code);
+        }
+
+        foreach ($bookings as $booking) {
+            $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($layOut->roomData, $booking->room_uuid);
+        }
+
+        return (object) [
+            'message' => SEATREG_API_OK_MESSAGE,
+            'bookings' => $bookings,
+        ];
+
+    }
+
     public static function insertApiToken($registrationCode, $apiToken) {
         global $seatreg_db_table_names;
 	    global $wpdb;
