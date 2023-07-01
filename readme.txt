@@ -44,6 +44,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 == Changelog ==
 
+= 1.39.1 =
+* Local notification support for Android app
+
 = 1.39.0 =
 * Added option to add custom markup to registration page. Will be displayed above the confirm booking button
 
