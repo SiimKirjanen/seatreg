@@ -157,8 +157,8 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 1 GROUP BY room_uuid");
 		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 2 GROUP BY room_uuid");
 	}else {
-		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = null AND status = 1 GROUP BY room_uuid");
-		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = null AND status = 2 GROUP BY room_uuid");
+		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date IS NULL AND status = 1 GROUP BY room_uuid");
+		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date IS NULL AND status = 2 GROUP BY room_uuid");
 	}
 	
 	$regStats = seatreg_get_room_seat_info($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
