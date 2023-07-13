@@ -36,28 +36,74 @@ class SeatregBookingRepository {
      *
      */
     public static function getConfirmedAndApprovedBookingsByRegistrationCode($registrationCode, $filterCalendarDate = null) {
-        global $wpdb;
-	    global $seatreg_db_table_names;
-
         if( $filterCalendarDate ) {
-            return $wpdb->get_results( $wpdb->prepare(
-                "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-                WHERE registration_code = %s
-                AND (status = '1' OR status = '2')
-                AND calendar_date = %s",
-                $registrationCode,
-                $filterCalendarDate
-            ) );
+            return self::getCalendarModeBookingsAtDate($registrationCode, $filterCalendarDate);
         }else {
-            return $wpdb->get_results( $wpdb->prepare(
-                "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
-                WHERE registration_code = %s
-                AND (status = '1' OR status = '2')
-                AND calendar_date IS NULL",
-                $registrationCode,
-            ) );
+            return self::getNormalModeBookings($registrationCode);
         }
-    } 
+    }
+    
+    /**
+     *
+     * Return all confirmed and approved bookings made with normal mode. 
+     * 
+     * @param string $registrationCode The code of the registration
+     *
+     */
+    public static function getNormalModeBookings($registrationCode) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+            WHERE registration_code = %s
+            AND (status = '1' OR status = '2')
+            AND calendar_date IS NULL",
+            $registrationCode,
+        ) );
+    }
+
+    /**
+     *
+     * Return all confirmed and approved bookings made with calendar mode. 
+     * 
+     * @param string $registrationCode The code of the registration
+     *
+     */
+    public static function getCalendarModeBookings($registrationCode) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+            WHERE registration_code = %s
+            AND (status = '1' OR status = '2')
+            AND calendar_date IS NOT NULL",
+            $registrationCode,
+        ) );
+    }
+
+    /**
+     *
+     * Return all confirmed and approved bookings made with calendar mode and in sepcific date. 
+     * 
+     * @param string $registrationCode The code of the registration
+     * @param string $filterCalendarDate. Filter by calendar date
+     *
+     */
+    public static function getCalendarModeBookingsAtDate($registrationCode, $filterCalendarDate) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+        
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
+            WHERE registration_code = %s
+            AND (status = '1' OR status = '2')
+            AND calendar_date = %s",
+            $registrationCode,
+            $filterCalendarDate
+        ) );
+    }
 
     /**
      *

@@ -27,8 +27,8 @@ class SeatregPublicApiService {
             return new WP_Error( 'token_not_found', 'Token not valid', array( 'status' => 401 ) );
         }
 
-        if( (float)$pluginVersion < (float)SEATREG_VERSION_WITH_PUBLIC_API_SUPPORT ) {
-            return new WP_Error( 'plugin_version_not_supported', 'The installed version ('. $pluginVersion .') of the plugin is lower than the required version ('. SEATREG_VERSION_WITH_PUBLIC_API_SUPPORT .')', array( 'status' => 401 ) );
+        if( version_compare($pluginVersion, $_GET['seatreg_api'], '<') ){
+            return new WP_Error( 'plugin_version_not_supported', 'The installed version ('. $pluginVersion .') of the plugin is lower than the required version ('. $_GET['seatreg_api'] .')', array( 'status' => 401 ) );
         }
 
         if( !$apiToken->public_api_enabled ) {
@@ -82,6 +82,34 @@ class SeatregPublicApiService {
                 'calendarDates' => $options->calendar_dates,
             ]
         ];
+    }
+
+    public static function getNotificationBookings( WP_REST_Request $request ) {
+        $apiTokenOrError = self::validateApiRequest($request);
+
+        if( is_wp_error( $apiTokenOrError ) ) {
+            return $apiTokenOrError;
+        }
+        $layOut = SeatregRegistrationRepository::getRegistrationLayout($apiTokenOrError->registration_code);
+        $options = SeatregOptionsRepository::getOptionsByRegistrationCode($apiTokenOrError->registration_code);
+        $calendarModeActivated = $options->using_calendar === '1';
+        $bookings = [];
+
+        if($calendarModeActivated) {
+            $bookings = SeatregBookingRepository::getCalendarModeBookings($apiTokenOrError->registration_code);
+        }else {
+            $bookings = SeatregBookingRepository::getNormalModeBookings($apiTokenOrError->registration_code);
+        }
+
+        foreach ($bookings as $booking) {
+            $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($layOut->roomData, $booking->room_uuid);
+        }
+
+        return (object) [
+            'message' => SEATREG_API_OK_MESSAGE,
+            'bookings' => $bookings,
+        ];
+
     }
 
     public static function insertApiToken($registrationCode, $apiToken) {

@@ -16,4 +16,9 @@ add_action( 'rest_api_init', function () {
       'callback' => array('SeatregPublicApiService', 'getBookings'),
       'permission_callback' => '__return_true',
     ) );
+    register_rest_route( 'seatreg/v1', '/notification-bookings', array(
+      'methods' => 'GET',
+      'callback' => array('SeatregPublicApiService', 'getNotificationBookings'),
+      'permission_callback' => '__return_true',
+    ) );
 });
