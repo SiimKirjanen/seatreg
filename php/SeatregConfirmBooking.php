@@ -15,6 +15,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 	protected $_registrationOwnerEmail;
 	protected $_bookerEmail; //confirm email is send to this address
 	protected $_selectedBookingCalendarDate; //in calendar mode user selected calendar date
+	private $_bookingId;
 	
 	public function __construct($code){
 		$this->_confirmationCode = $code;
