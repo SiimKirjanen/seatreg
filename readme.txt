@@ -3,8 +3,8 @@ Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source
 Tags: seat registration, booking, booking seats, booking events, seat map, booking management, registration
 Requires at least: 5.3
 Requires PHP: 7.2.28
-Tested up to: 6.1.0
-Stable tag: 1.39.2
+Tested up to: 6.2.2
+Stable tag: 1.39.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -43,6 +43,10 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.39.3 =
+* PHP warning fixes
+* Updated PDF and XLSX generation libs
 
 = 1.39.2 =
 * Fixed bug in overview page
