@@ -26,7 +26,9 @@ class SeatregStripePayment extends SeatregPaymentBase {
     public function run() {
         if($this->webhookSignatureCheck()) {
             if($this->statusCheck()) {
-                if($this->currencyAndAmountCheck($this->_webhookData->currency , $this->_webhookData->amount / 100)) {
+                $amount = in_array( strtoupper($this->_webhookData->currency), SEATREG_STRIPE_ZERO_DECIMAL_CURRENCIES ) ? $this->_webhookData->amount : $this->_webhookData->amount / 100;
+
+                if($this->currencyAndAmountCheck($this->_webhookData->currency , $amount)) {
                     if($this->paymentDoneCheck()) {
                         $this->insertPayment($this->_webhookData->payment_intent);
                         http_response_code(200);
