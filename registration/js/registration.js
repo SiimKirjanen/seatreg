@@ -993,7 +993,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		$('#confirm-dialog-bottom').append('<div class="multi-price-title">Price selction</div><div class="multi-price-wrap"></div>');
 
 		price.forEach(function(price) {
-			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ price.price + ' ' + this.payPalCurrencyCode + '</strong> <span class="mullti-price-description">' + price.description  + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '" data-price-uuid="' + price.uuid + '">' + translator.translate('addToBooking') + '</div>');
+			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ getCurrencySymbolFromISO(this.payPalCurrencyCode) + price.price + '</strong> <span class="mullti-price-description">' + price.description  + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '" data-price-uuid="' + price.uuid + '">' + translator.translate('addToBooking') + '</div>');
 		});
 	}else {
 		//Fallback
