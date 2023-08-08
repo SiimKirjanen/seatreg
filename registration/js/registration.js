@@ -57,6 +57,26 @@
 		return JSON.parse(JSON.stringify(object))
 	}
 
+	function getCurrencySymbolFromISO(isoCode) {
+		try {
+			const currencyFormatter = new Intl.NumberFormat(undefined, {
+				style: 'currency',
+				currency: isoCode,
+				currencyDisplay: 'symbol'
+			});
+	
+			const exampleValue = 0;
+			const formattedValue = currencyFormatter.format(exampleValue);
+	
+			const currencySymbol = formattedValue.replace(/\d/g, '').replace('.', '').trim();
+
+			return currencySymbol;
+		} catch (error) {
+
+			return isoCode;
+		}
+	}
+
 	$(document).keydown(function(e){
         if(e.which === 90){
         	zKeyDown = true;
@@ -686,7 +706,7 @@ SeatReg.prototype.addSeatToCart = function() {
 			var totalPrice = scope.selectedSeats.reduce(function(accumulator, currentValue) {
 				return currentValue.price + accumulator;
 			}, 0);
-			$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + totalPrice + ' ' + scope.payPalCurrencyCode);
+			$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + getCurrencySymbolFromISO(scope.payPalCurrencyCode) + totalPrice);
 			$('#booking-total-price').attr('data-booking-price', totalPrice);
 		}
 		$('.seats-in-cart').text(scope.selectedSeats.length);
@@ -699,7 +719,7 @@ SeatReg.prototype.addSeatToCart = function() {
 		return currentValue.price + accumulator;
 	}, 0);
 
-	$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + totalPrice + ' ' + scope.payPalCurrencyCode );
+	$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + getCurrencySymbolFromISO(scope.payPalCurrencyCode) + totalPrice);
 	$('#booking-total-price').attr('data-booking-price', totalPrice);
 
 	this.closeSeatDialog();
@@ -1004,7 +1024,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 					if(this.isPaymentEnabled() && this.payPalCurrencyCode && price > 0) {
 						var placeCostText = this.usingSeats ? translator.translate('seatCosts_') : translator.translate('placeCosts_');
 
-						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + placeCostText + '<strong>' + price + ' ' + this.payPalCurrencyCode + '</strong></p>');
+						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + placeCostText + '<strong>' +  getCurrencySymbolFromISO(this.payPalCurrencyCode) + price + '</strong></p>');
 					}
 				}else {
 					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + this.spotName + ' ' + nr + translator.translate('_fromRoom_')  + room + '</h5></div>');
