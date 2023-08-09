@@ -548,7 +548,6 @@ SeatReg.prototype.paintRoomLegends = function() {
 			$('#legend-wrapper').css('display','none');
 			$('.mobile-legend').css('display','inline-block');
 		}else {
-			$('.mobile-legend').css('display','none');
 			$('#legend-wrapper').css('display','inline-block');
 		}
 	}else {
