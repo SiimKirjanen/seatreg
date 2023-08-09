@@ -1044,6 +1044,14 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="seat-selection-btn-text"><?php esc_html_e('Seat selection button text', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('By default the button that opens seat selection has text "open". You can change it if needed.', 'seatreg'); ?>
+				</p>
+				<input type="text" class="form-control" id="seat-selection-btn-text" name="seat-selection-btn-text" autocomplete="off" placeholder="<?php echo esc_html('Enter button text', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->seat_selection_btn_text); ?>"> 
+			</div>
+
+			<div class="form-group">
 				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>.
@@ -1960,6 +1968,7 @@ function seatreg_set_up_db() {
 			custom_styles text,
 			public_api_enabled tinyint(0) NOT NULL DEFAULT 0,
 			custom_footer_text text,
+			seat_selection_btn_text varchar(255) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2825,6 +2834,7 @@ function seatreg_update() {
 			'custom_styles' => $_POST['custom-styles'],
 			'public_api_enabled' => $_POST['public-api'],
 			'custom_footer_text' => $_POST['custom-footer-text'],
+			'seat_selection_btn_text' => !empty($_POST['seat-selection-btn-text']) ? $_POST['seat-selection-btn-text'] : null,
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
