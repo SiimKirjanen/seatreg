@@ -539,16 +539,17 @@ SeatReg.prototype.paintRoomInfo = function() {
 
 SeatReg.prototype.paintRoomLegends = function() {
 	//paint legend boxes
-	$('#legends').empty();
-	var arrLen = this.rooms[this.currentRoom].room.legends.length;
+	var legendsCount = this.rooms[this.currentRoom].room.legends.length;
 
-	if(arrLen > 0) {
+	$('#legends').empty();
+
+	if(legendsCount > 0) {
 		if(this.mobileview) {
 			$('#legend-wrapper').css('display','none');
-			$('#bottom-wrapper .mobile-legend').css('display','inline-block');
+			$('.mobile-legend').css('display','inline-block');
 		}else {
-			$('#legend-wrapper, .mobile-legend').css('display','none');
-			$('#bottom-wrapper .mobile-legend').css('display','inline-block');
+			$('.mobile-legend').css('display','none');
+			$('#legend-wrapper').css('display','inline-block');
 		}
 	}else {
 		$('#legend-wrapper, .mobile-legend').css('display','none');
@@ -556,7 +557,7 @@ SeatReg.prototype.paintRoomLegends = function() {
 
 	var documentFragment = $(document.createDocumentFragment());
 
-	for(var i = 0; i < arrLen; i++) {
+	for(var i = 0; i < legendsCount; i++) {
 		documentFragment.append($('<div class="legend-div" data-target-legend='+ this.rooms[this.currentRoom].room.legends[i].text.replace(/\s+/g, '_').toLowerCase() +'></div>').append('<div class="legend-box" style="background-color:'+ this.rooms[this.currentRoom].room.legends[i].color +'"></div>', '<div class="legend-name">'+ this.rooms[this.currentRoom].room.legends[i].text +'</div>'));
 	}
 
@@ -1099,7 +1100,8 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 	var navHeight = $('#room-nav-wrap').outerHeight(true);
 	var infoHeight = $('.top-info-bar').outerHeight(true) || 0;
 	var poweredByHeight = $('#powered-by').outerHeight(true);
-	var cartWidth = $('#seat-cart').outerWidth(true);
+	var cartWidth = $('#controls-wrapper').outerWidth(true);
+	var legendWidth = 0;
 	var spaceForMiddleWidth = screenWidth - 20; //how much room for seat map
 	var spaceForMiddleHeight = screenHeight - 30 - 30 - navHeight - $('#bottom-wrapper').outerHeight(true) - $('#zoom-controller').outerHeight(true);  // - header height, -legend height, navbar height, -spacing  --default mobile
 	var needHorizScroll = false;
@@ -1109,19 +1111,10 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 
 	if(screenWidth >= 1024) {
 		//ok i have bigger screen. set legends area left and seatcart right
-		var legendWidth = 0;
-
+		
 		if($('#legend-wrapper').is(':visible')) {
 			legendWidth = $('#legend-wrapper').outerWidth(true);
-
-			if(legendWidth > cartWidth) {
-				$('#seat-cart').css('margin-left', (legendWidth - cartWidth) + 10);
-				cartWidth = $('#seat-cart').outerWidth(true);
-			}else {
-				$('#legend-wrapper').css('margin-right', (cartWidth - legendWidth) + 5);
-				legendWidth = $('#legend-wrapper').outerWidth(true);
-			}
-			spaceForMiddleWidth = spaceForMiddleWidth - legendWidth - cartWidth - 20;
+			spaceForMiddleWidth = spaceForMiddleWidth - Math.max(legendWidth, cartWidth) * 2 - 20;
 		}else {
 			spaceForMiddleWidth = spaceForMiddleWidth - cartWidth * 2;
 		}
@@ -1137,12 +1130,14 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 		$('#box-wrap').css('width', spaceForMiddleWidth- 20);
 	}
 
+	console.log('spaceForMiddleWidth:', spaceForMiddleWidth);
+
 	$('#boxes').removeAttr('style');
 	//width of middle
 	if(roomSizeWidth > spaceForMiddleWidth) {
 		//roomsize is too wide
 		needHorizScroll = true;
-		$('#box-wrap').css('width', spaceForMiddleWidth - 20);
+		$('#box-wrap').css('width', spaceForMiddleWidth - 40);
 		$('#boxes').css('width',roomSizeWidth + 15);
 
 	}else {
