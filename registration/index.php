@@ -165,7 +165,7 @@
 						<div class="seat-cart-right">
 							<div id="cart-checkout-btn" class="border-box">
 								<?php 
-									esc_html_e('Open', 'seatreg');
+									echo $data->seat_selection_btn_text ? esc_html($data->seat_selection_btn_text) : esc_html__('Open', 'seatreg');
 								?>
 							</div>
 						</div>
@@ -381,7 +381,9 @@
 					</div>
 					<div class="bottom-btn-wrap">
 						<div class="bottom-btn">
-							<?php esc_html_e('Open', 'seatreg'); ?>
+							<?php 
+								echo $data->seat_selection_btn_text ? esc_html($data->seat_selection_btn_text) : esc_html__('Open', 'seatreg');
+							?>
 						</div>
 					</div>
 				</div>
