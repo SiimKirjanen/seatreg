@@ -594,8 +594,8 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label><?php esc_html_e('Registration custom footer area', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Set registration custom footer text. Will be displayed in registration page above the confim button e.g. for GDPR', 'seatreg'); ?>.</p>
+				<label><?php esc_html_e('Custom footer area for booking confirm dialog', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Will be displayed at the last step of booking process in registration page.', 'seatreg'); ?></p>
 				<?php
 				/* Add placeholder text? placeholder="<?php esc_html_e('Enter custom footer text here', 'seatreg'); ?>" */
 				$customFooterTextEditorSettings = array(
