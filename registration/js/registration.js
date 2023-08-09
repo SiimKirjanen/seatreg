@@ -1130,8 +1130,6 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 		$('#box-wrap').css('width', spaceForMiddleWidth- 20);
 	}
 
-	console.log('spaceForMiddleWidth:', spaceForMiddleWidth);
-
 	$('#boxes').removeAttr('style');
 	//width of middle
 	if(roomSizeWidth > spaceForMiddleWidth) {
