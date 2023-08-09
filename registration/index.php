@@ -154,34 +154,36 @@
 						<div id="legends"></div>
 					</div>
 
-					<div id="seat-cart" class="border-box no-select">
-						<div class="seat-cart-left">
-							<div id="cart-text">
-								<div class="seats-in-cart">0</div>
-								<div><?php $usingSeats ? esc_html_e('seats selected', 'seatreg') : esc_html_e('places selected', 'seatreg'); ?></div> 
+					<div id="controls-wrapper">
+						<div class="room-nav-extra-info-btn big-display-btn">
+							<i class="fa fa-info-circle"></i>
+						</div>
+						
+						<div id="seat-cart" class="border-box no-select">
+							<div class="seat-cart-left">
+								<div id="cart-text">
+									<div class="seats-in-cart">0</div>
+									<div><?php $usingSeats ? esc_html_e('seats selected', 'seatreg') : esc_html_e('places selected', 'seatreg'); ?></div> 
+								</div>
+							</div>
+
+							<div class="seat-cart-right">
+								<div id="cart-checkout-btn" class="border-box">
+									<?php 
+										echo $data->seat_selection_btn_text ? esc_html($data->seat_selection_btn_text) : esc_html__('Open', 'seatreg');
+									?>
+								</div>
 							</div>
 						</div>
 
-						<div class="seat-cart-right">
-							<div id="cart-checkout-btn" class="border-box">
-								<?php 
-									echo $data->seat_selection_btn_text ? esc_html($data->seat_selection_btn_text) : esc_html__('Open', 'seatreg');
-								?>
-							</div>
+						<div id="zoom-controller" class="no-select">
+							<i class="fa fa-arrow-circle-up move-action" data-move="up"></i><br>
+							<i class="fa fa-arrow-circle-left move-action" data-move="left"></i>
+							<i class="fa fa-arrow-circle-right move-action" data-move="right"></i><br>
+							<i class="fa fa-arrow-circle-down move-action" data-move="down"></i><br><br>
+							<i class="fa fa-plus zoom-action" data-zoom="in"></i><br>
+							<i class="fa fa-minus zoom-action" data-zoom="out"></i>
 						</div>
-					</div>
-
-					<div id="zoom-controller" class="no-select">
-						<i class="fa fa-arrow-circle-up move-action" data-move="up"></i><br>
-						<i class="fa fa-arrow-circle-left move-action" data-move="left"></i>
-						<i class="fa fa-arrow-circle-right move-action" data-move="right"></i><br>
-						<i class="fa fa-arrow-circle-down move-action" data-move="down"></i><br><br>
-						<i class="fa fa-plus zoom-action" data-zoom="in"></i><br>
-						<i class="fa fa-minus zoom-action" data-zoom="out"></i>
-					</div>
-
-					<div class="room-nav-extra-info-btn big-display-btn">
-						<i class="fa fa-info-circle"></i>
 					</div>
 				</div>
 
