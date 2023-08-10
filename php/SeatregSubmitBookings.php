@@ -317,15 +317,21 @@ class SeatregSubmitBookings extends SeatregBooking {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system (No email verification)', false);
 					SeatregActionsService::triggerBookingPendingAction($this->_bookingId);
 
-					$pendingBookingEmailSent = seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate, $this->_emailFromAddress, $this->_pendingBookingSubject);
-
-					if($pendingBookingEmailSent) {
-						seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking email sent', false);
+					if ($this->_sendNewPendingBookingNotificationBookerEmail) {
+						$pendingBookingEmailSent = seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate, $this->_emailFromAddress, $this->_pendingBookingSubject);
+						
+						if($pendingBookingEmailSent) {
+							seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking email sent', false);
+							$this->response->setText('bookings-confirmed-status-1');
+							$this->response->setData($bookingCheckURL);
+						}else {
+							seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking email sending failed', false);
+							$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out booking email. Please notify the site administrator.', 'seatreg'));
+						}
+					} else {
+						seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking', false);
 						$this->response->setText('bookings-confirmed-status-1');
 						$this->response->setData($bookingCheckURL);
-					}else {
-						seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking email sending failed', false);
-						$this->response->setError(esc_html__('Oops.. the system encountered a problem while sending out booking email. Please notify the site administrator.', 'seatreg'));
 					}
 					
 				}else if($this->_insertState === SEATREG_BOOKING_APPROVED) {

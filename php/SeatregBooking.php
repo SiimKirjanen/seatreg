@@ -14,6 +14,7 @@ class SeatregBooking {
 	protected $_insertState = 1;  //all bookings will have status = 1 (pending). if 2 then (confirmed)
 	protected $_registrationName;
 	protected $_sendNewBookingNotificationEmail = null; //send notification to admin that someone has booked a seat
+	protected $_sendNewPendingBookingNotificationBookerEmail = null; //send notification to booker that the booking is pending
 	protected $_maxSeats = 1;  //how many seats per booking can be booked
 	protected $_isRegistrationOpen = true; //is registration open
 	protected $_registrationPassword = null;  //registration password if set. null default
@@ -283,5 +284,7 @@ class SeatregBooking {
         }
 
 		$this->_sendNewBookingNotificationEmail = $result->notify_new_bookings;
+
+		$this->_sendNewPendingBookingNotificationBookerEmail = $result->notify_booker_pending_booking;
 	}
 }

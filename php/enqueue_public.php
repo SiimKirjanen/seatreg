@@ -73,6 +73,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= "var seatregTranslations = jQuery.parseJSON('" .  wp_json_encode( seatreg_generate_registration_strings() ) . "');";
 			$inlineScript .= 'var seatLimit = ' . esc_js($data->seats_at_once) . ';';
 			$inlineScript .= 'var gmail = ' . esc_js($data->gmail_required) . ';';
+			$inlineScript .= 'var NotifyBookerPendingBooking = ' . esc_js($data->notify_booker_pending_booking) . ';';
 			$inlineScript .= 'var dataReg = jQuery.parseJSON(' . wp_json_encode(SeatregLayoutService::hideSensitiveData($data->registration_layout)) . ');';
 			$inlineScript .= 'var roomsInfo = jQuery.parseJSON(' . wp_json_encode($seatsInfo) . ');';
 			$inlineScript .= 'var custF = jQuery.parseJSON(' . wp_json_encode($data->custom_fields) . ');';

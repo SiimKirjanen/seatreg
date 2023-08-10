@@ -82,6 +82,7 @@ class SeatregRegistrationService {
                 'use_pending' => $registrationData->use_pending,
                 'registration_password' => $registrationData->registration_password,
                 'notify_new_bookings' => $registrationData->notify_new_bookings,
+                'notify_booker_pending_booking' => $registrationData->notify_booker_pending_booking,
                 'show_bookings' => $registrationData->show_bookings,
                 'payment_text' => $registrationData->payment_text,
                 'info' => $registrationData->info,
