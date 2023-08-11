@@ -104,6 +104,7 @@
 		this.selectedSeats = [];
 		this.customF = [];
 		this.gmailNeeded = gmail;
+		this.NotifyBookerPendingBooking = NotifyBookerPendingBooking;
 		this.status = regTime;
 		this.emailConfirmEnabled = emailConfirmRequired;
 		this.payPalEnabled = window.payPalEnabled === '1' ? true : false;
@@ -1468,6 +1469,7 @@ function bookingsConfirmedInfo(data, status) {
 		if( seatReg.isPaymentEnabled() && bookingTotalPrice > 0) {
 			$('#booking-confirmed-text').text(translator.translate('payForBookingLink'));
 		}
+		if ( !seatReg.NotifyBookerPendingBooking ) { $('#should-receive-update-email-text').css('display','none'); }
 	}else if (status === 2) {
 		$('#should-receive-update-email-text').css('display', 'none');
 		

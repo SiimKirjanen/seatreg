@@ -698,6 +698,19 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="booker-pending-booking-notification"><?php esc_html_e('Booker pending booking notification', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Send out email to booker when booking is pending.', 'seatreg'); ?>
+				</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="booker-pending-booking-notification" name="booker-pending-booking-notification" value="1" <?php echo $options[0]->notify_booker_pending_booking == '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Send pending notification to booker', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
 				<label for="pending-booking-email-subject"><?php esc_html_e('Pending booking email subject', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('You can customize the pending booking email subject. Leave empty for default subject', 'seatreg'); ?>.
@@ -1931,6 +1944,7 @@ function seatreg_set_up_db() {
 			use_pending tinyint(1) NOT NULL DEFAULT 1,
 			registration_password varchar(255) DEFAULT NULL,
 			notify_new_bookings tinyint(1) NOT NULL DEFAULT 1,
+			notify_booker_pending_booking tinyint(1) NOT NULL DEFAULT 1,
 			send_approved_booking_email tinyint(1) NOT NULL DEFAULT 1,
 			send_approved_booking_email_qr_code varchar(255) DEFAULT NULL,
 			show_bookings tinyint(1) NOT NULL DEFAULT 0,
@@ -2798,6 +2812,7 @@ function seatreg_update() {
 			'use_pending' => sanitize_text_field($_POST['use-pending']),
 			'registration_password' => $_POST['registration-password'] == '' ? null : sanitize_text_field($_POST['registration-password']),
 			'notify_new_bookings' => $_POST['booking-notification'] ? sanitize_text_field($_POST['booking-notification']) : null,
+			'notify_booker_pending_booking' => $_POST['booker-pending-booking-notification'] ? sanitize_text_field($_POST['booker-pending-booking-notification']) : null,
 			'show_bookings_data_in_registration' => $selectedShowBookingData,
 			'payment_text' => $_POST['payment-instructions'] == '' ? null : $_POST['payment-instructions'],
 			'info' => sanitize_text_field($_POST['registration-info-text']),
