@@ -338,7 +338,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system (No email verification)', false);
 					SeatregActionsService::triggerBookingApprovedAction($this->_bookingId);
 
-					if($this->_sendApprovedBookingEmail) {
+					if($this->_sendApprovedBookingEmail === '1') {
 						$approvedEmailSent = seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode, $this->_approvedBookingTemplate);
 
 						if($approvedEmailSent) {
