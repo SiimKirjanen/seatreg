@@ -3603,17 +3603,3 @@ function seatreg_create_payment_log() {
 		wp_send_json_error();
 	}
 }
-
-register_activation_hook(__FILE__, 'add_plugin_capabilities_on_activation');
-function add_plugin_capabilities_on_activation() {
-    $role = get_role('administrator');
-    $role->add_cap('seatreg_manage_events');
-    $role->add_cap('seatreg_manage_bookings');
-}
-
-register_deactivation_hook(__FILE__, 'remove_plugin_capabilities');
-function remove_plugin_capabilities() {
-	$role = get_role('administrator');
-	$role->remove_cap('seatreg_manage_events');
-	$role->remove_cap('seatreg_manage_bookings');
-}

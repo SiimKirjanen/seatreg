@@ -63,6 +63,10 @@ require( 'php/seatreg_actions.php' );
 register_activation_hook( __FILE__, 'seatreg_plugin_activate' );
 function seatreg_plugin_activate() {
 	seatreg_set_up_db();
+
+	$role = get_role('administrator');
+	$role->add_cap('seatreg_manage_events');
+	$role->add_cap('seatreg_manage_bookings');
 }
 
 register_deactivation_hook( __FILE__, 'seatreg_plugin_deactivate' );
@@ -72,6 +76,10 @@ function seatreg_plugin_deactivate() {
 	if($timestamp) {
 		wp_unschedule_event( $timestamp, 'seatreg_pending_booking_expiration' );
 	}
+	
+	$role = get_role('administrator');
+	$role->remove_cap('seatreg_manage_events');
+	$role->remove_cap('seatreg_manage_bookings');
 }	
 
 //Filters
