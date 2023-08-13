@@ -114,7 +114,7 @@ function seatreg_update_routine( $seatreg_db_stored_version ) {
 		seatreg_capabilities_add();
 	}
 }
-$seatreg_db_stored_version = get_option('SEATREG_DB_VERSION');
+$seatreg_db_stored_version = get_option('seatreg_db_current_version');
 if ($seatreg_db_stored_version !== SEATREG_DB_VERSION) {
 	seatreg_update_routine($seatreg_db_stored_version);
 }
