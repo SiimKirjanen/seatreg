@@ -49,29 +49,31 @@ define('SEATREG_BOOKING_DEFAULT', 0);
 define('SEATREG_BOOKING_PENDING', 1);
 define('SEATREG_BOOKING_APPROVED', 2);
 
-//Directory
+// Directory
 $up_dir = wp_upload_dir();
 define('SEATREG_TEMP_FOLDER_DIR', $up_dir['basedir'].'/seatreg');
 define('SEATREG_TEMP_FOLDER_URL', $up_dir['baseurl'].'/seatreg');
 
-//Email template keywords
+// Email template keywords
 define('SEATREG_TEMPLATE_STATUS_LINK', '[status-link]');
 define('SEATREG_TEMPLATE_EMAIL_VERIFICATION_LINK', '[verification-link]');
 define('SEATREG_TEMPLATE_BOOKING_TABLE', '[booking-table]');
 define('SEATREG_TEMPLATE_PAYMENT_TABLE', '[payment-table]');
 define('SEATREG_TEMPLATE_BOOKING_ID', '[booking-id]');
 
-
-//Time related
+// Time related
 define('CALENDAR_DATE_FORMAT', 'Y-m-d');
 define('CALENDAR_DATE_PICKER_REGEX', '/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/');
 
-//SeatReg actions
+// SeatReg actions
 define('SEATREG_ACTION_BOOKING_SUBMITTED', 'seatreg_action_booking_submitted');
 define('SEATREG_ACTION_BOOKING_MANUALLY_ADDED', 'seatreg_action_booking_manually_added');
 define('SEATREG_ACTION_BOOKING_PENDING', 'seatreg_action_booking_pending');
 define('SEATREG_ACTION_BOOKING_APPROVED', 'seatreg_action_booking_approved');
 define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
 
-//API
+// API
 define('SEATREG_API_OK_MESSAGE', 'ok');
+
+// Capabilities
+define('SEATREG_TRIGGER_SIDE_EFFECT', '1');

@@ -109,12 +109,8 @@ function seatreg_capabilities_remove() {
 		$role->remove_cap('seatreg_manage_bookings');
 	}
 }
-function seatreg_update_routine( $seatreg_db_stored_version ) {
-	if ( version_compare($seatreg_db_stored_version, '1.28', '>') ) {
-		seatreg_capabilities_add();
-	}
-}
-$seatreg_db_stored_version = get_option('seatreg_db_current_version');
-if ($seatreg_db_stored_version !== SEATREG_DB_VERSION) {
-	seatreg_update_routine($seatreg_db_stored_version);
+$seatreg_trigger_side_effect = get_option('seatreg_trigger_side_effect');
+if ($seatreg_trigger_side_effect !== SEATREG_TRIGGER_SIDE_EFFECT) {
+	seatreg_capabilities_add();
+	update_option( 'seatreg_trigger_side_effect', SEATREG_TRIGGER_SIDE_EFFECT );
 }
