@@ -3238,9 +3238,11 @@ function seatreg_confirm_del_bookings_callback() {
 
 			if($value->action == 'conf' && !in_array($value->booking_id, $approvalBookingEmailProcessed)) {
 				$bookingData = SeatregBookingRepository::getDataRelatedToBooking($value->booking_id);
-				$mailSent = seatreg_send_approved_booking_email( $value->booking_id, $code, $bookingData->approved_booking_email_template );
-				if($mailSent) {
-					$approvalBookingEmailProcessed[] = $value->booking_id;
+				if($bookingData->_sendApprovedBookingEmail === '1') {
+					$mailSent = seatreg_send_approved_booking_email( $value->booking_id, $code, $bookingData->approved_booking_email_template );
+					if($mailSent) {
+						$approvalBookingEmailProcessed[] = $value->booking_id;
+					}
 				}
 			}
 		}
