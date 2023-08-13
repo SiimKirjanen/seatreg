@@ -63,10 +63,7 @@ require( 'php/seatreg_actions.php' );
 register_activation_hook( __FILE__, 'seatreg_plugin_activate' );
 function seatreg_plugin_activate() {
 	seatreg_set_up_db();
-
-	$role = get_role('administrator');
-	$role->add_cap('seatreg_manage_events');
-	$role->add_cap('seatreg_manage_bookings');
+	seatreg_capabilities_add();
 }
 
 register_deactivation_hook( __FILE__, 'seatreg_plugin_deactivate' );
@@ -76,10 +73,7 @@ function seatreg_plugin_deactivate() {
 	if($timestamp) {
 		wp_unschedule_event( $timestamp, 'seatreg_pending_booking_expiration' );
 	}
-	
-	$role = get_role('administrator');
-	$role->remove_cap('seatreg_manage_events');
-	$role->remove_cap('seatreg_manage_bookings');
+	seatreg_capabilities_remove();
 }	
 
 //Filters
@@ -95,3 +89,32 @@ if ( ! wp_next_scheduled( 'seatreg_pending_booking_expiration' ) ) {
 
 //public API
 require( 'php/public_api.php' );
+
+//Capabilities
+function seatreg_capabilities_add() {
+	$role = get_role('administrator');
+	if ( !$role->has_cap('seatreg_manage_events') ) {
+		$role->add_cap('seatreg_manage_events');
+	}
+	if ( !$role->has_cap('seatreg_manage_bookings') ) {
+		$role->add_cap('seatreg_manage_bookings');
+	}
+}
+function seatreg_capabilities_remove() {
+	$role = get_role('administrator');
+	if ( $role->has_cap('seatreg_manage_events') ) {
+		$role->remove_cap('seatreg_manage_events');
+	}
+	if ( $role->has_cap('seatreg_manage_bookings') ) {
+		$role->remove_cap('seatreg_manage_bookings');
+	}
+}
+function seatreg_update_routine( $seatreg_db_stored_version ) {
+	if ( version_compare($seatreg_db_stored_version, '1.28', '>') ) {
+		seatreg_capabilities_add();
+	}
+}
+$seatreg_db_stored_version = get_option('SEATREG_DB_VERSION');
+if ($seatreg_db_stored_version !== SEATREG_DB_VERSION) {
+	seatreg_update_routine($seatreg_db_stored_version);
+}
