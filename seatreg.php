@@ -91,24 +91,6 @@ if ( ! wp_next_scheduled( 'seatreg_pending_booking_expiration' ) ) {
 require( 'php/public_api.php' );
 
 //Capabilities
-function seatreg_capabilities_add() {
-	$role = get_role('administrator');
-	if ( !$role->has_cap('seatreg_manage_events') ) {
-		$role->add_cap('seatreg_manage_events');
-	}
-	if ( !$role->has_cap('seatreg_manage_bookings') ) {
-		$role->add_cap('seatreg_manage_bookings');
-	}
-}
-function seatreg_capabilities_remove() {
-	$role = get_role('administrator');
-	if ( $role->has_cap('seatreg_manage_events') ) {
-		$role->remove_cap('seatreg_manage_events');
-	}
-	if ( $role->has_cap('seatreg_manage_bookings') ) {
-		$role->remove_cap('seatreg_manage_bookings');
-	}
-}
 $seatreg_trigger_side_effect = get_option('seatreg_trigger_side_effect');
 if ($seatreg_trigger_side_effect !== SEATREG_TRIGGER_SIDE_EFFECT) {
 	seatreg_capabilities_add();

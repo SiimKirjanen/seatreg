@@ -3603,3 +3603,28 @@ function seatreg_create_payment_log() {
 		wp_send_json_error();
 	}
 }
+
+/*
+====================================================================================================================================================================================
+Capabilities
+====================================================================================================================================================================================
+*/
+
+function seatreg_capabilities_add() {
+	$role = get_role('administrator');
+	if ( !$role->has_cap('seatreg_manage_events') ) {
+		$role->add_cap('seatreg_manage_events');
+	}
+	if ( !$role->has_cap('seatreg_manage_bookings') ) {
+		$role->add_cap('seatreg_manage_bookings');
+	}
+}
+function seatreg_capabilities_remove() {
+	$role = get_role('administrator');
+	if ( $role->has_cap('seatreg_manage_events') ) {
+		$role->remove_cap('seatreg_manage_events');
+	}
+	if ( $role->has_cap('seatreg_manage_bookings') ) {
+		$role->remove_cap('seatreg_manage_bookings');
+	}
+}
