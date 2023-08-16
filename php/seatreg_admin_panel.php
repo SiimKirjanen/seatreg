@@ -37,6 +37,7 @@ function seatreg_add_plugin_menu() {
 		sprintf(esc_html__('%s Overview', 'seatreg'), 'SeatReg'),  //page title
 		esc_html__('Overview', 'seatreg'),  //menu title
 		'seatreg_manage_events',  //capability
+		'manage_options',  //capability
 		'seatreg-overview',   //slug
 		'seatreg_create_overview'  //callback
 	);
