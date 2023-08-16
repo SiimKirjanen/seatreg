@@ -474,6 +474,7 @@ function seatreg_generate_settings_form() {
 
 	 $custFields = json_decode( isset($options[0]->custom_fields) ? $options[0]->custom_fields : "[]");
 	 $custLen = count(is_array($custFields) ? $custFields : []);
+	 $customPayments = json_decode( isset($options[0]->custom_payments) ?  $options[0]->custom_payments : "[]");
 	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
 	 $publicApiTokens = SeatregApiTokenRepository::getRegistrationApiTokens($options[0]->registration_code);
@@ -925,7 +926,7 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="custom-payment"><?php esc_html_e('Custom payment', 'seatreg'); ?></label>
+				<label for="custom-payment"><?php esc_html_e('Custom payment (legacy)', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('This payment method is suitable for manual payments. Allows you to control the payment flow.', 'seatreg'); ?>
 				</p>
@@ -947,6 +948,34 @@ function seatreg_generate_settings_form() {
 					<label for="custom-payment-description"><?php esc_html_e('Custom payment instructions', 'seatreg'); ?></label>
 					<p class="help-block"><?php esc_html_e('Please enter custom payment instructions. Will be shown when customer chooses this payment method.', 'seatreg'); ?></p>
 					<textarea class="form-control" id="custom-payment-description" name="custom-payment-description" placeholder="<?php esc_html_e('Enter payment instructions', 'seatreg')?>"><?php echo esc_html($options[0]->custom_payment_description); ?></textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label><?php esc_html_e('Custom payments', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('These payment methods are suitable for manual payments. Allows you to control the payment flow.', 'seatreg'); ?>
+				</p>
+				<div id="custom-payments">
+					<div class="existing-custom-payments">
+						<?php foreach($customPayments as $customPayment): ?>
+							<div class="custom-payment">
+								<p><?php echo esc_html('Title', 'seatreg'); ?></p>
+								<input value="<?php echo $customPayment->title; ?>" />
+
+								<p><?php echo esc_html('Description', 'seatreg'); ?></p>
+								<textarea><?php echo $customPayment->description; ?></textarea>
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<div id="new-custom-payment">
+						<div style="margin-bottom: 6px"><?php esc_html_e('Create new custom payment', 'seatreg'); ?></div>
+						<input type="text" class="form-control" id="new-custom-payment-title" autocomplete="off" placeholder="<?php echo esc_html('Enter payment title', 'seatreg'); ?>">
+						<br>
+						<textarea class="form-control" id="new-custom-payment-description" placeholder="<?php esc_html_e('Enter payment instructions', 'seatreg')?>"></textarea>
+						<br> 
+						<button class="btn btn-default btn-sm" id="create-custom-payment" type="button"><?php esc_html_e('Add custom payment', 'seatreg'); ?></button>
+					</div>
 				</div>
 			</div>
 
@@ -1983,6 +2012,7 @@ function seatreg_set_up_db() {
 			public_api_enabled tinyint(0) NOT NULL DEFAULT 0,
 			custom_footer_text text,
 			seat_selection_btn_text varchar(255) DEFAULT NULL,
+			custom_payments text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  

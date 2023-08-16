@@ -1,0 +1,22 @@
+#seatreg-settings-form{
+    #custom-payments {
+        margin-left: 24px;
+
+        .custom-payment {
+            border: 1px solid #ccc;
+            padding: 12px;
+            border-radius: 4px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            row-gap: 12px;
+            column-gap: 24px;
+            row-gap: 12px;
+            margin-bottom: 24px;
+
+            &__controls {
+                text-align: center;
+                grid-column: span 2;
+            }
+        }
+    }
+}

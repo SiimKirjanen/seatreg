@@ -1227,6 +1227,32 @@ function SeatregCustomField(label, type, options, unique = false) {
 		this.unique = unique;
 }
 
+$('#seatreg-settings-form #create-custom-payment').on('click', function() {
+	var customFieldTitle = $('#new-custom-payment-title').val();
+	var customFieldDescription = $('#new-custom-payment-description').val();
+
+	if( customFieldTitle === '' ) {
+		alertify.error(translator.translate('enterCustomPaymentTitle'));
+		return;
+	}
+	if( customFieldDescription === '' ) {
+		alertify.error(translator.translate('enterCustomPaymentTitle'));
+		return;
+	}
+
+	$('#custom-payments .existing-custom-payments').append(
+		'<div class="custom-payment">' +
+			'<p>' + translator.translate('title') + '</p>' +
+			'<input value="'+ customFieldTitle +'" />' +
+			'<p>' + translator.translate('description') + '</p>' +
+			'<textarea>'+ customFieldDescription +'</textarea>' +
+			'<div class="custom-payment__controls">' +
+				'<button class="btn btn-danger btn-sm">Remove</button>' + 
+			'</div>' + 
+		'</div>'
+	);
+});
+
 $('#seatreg-settings-form #public-api-tokens').on('click', '.remove-token', function() {
 	var tokenBox = $(this).closest('.token-box');
 	var code = $('input[name="registration_code"]').val();
