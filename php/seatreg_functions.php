@@ -474,7 +474,7 @@ function seatreg_generate_settings_form() {
 
 	 $custFields = json_decode( isset($options[0]->custom_fields) ? $options[0]->custom_fields : "[]");
 	 $custLen = count(is_array($custFields) ? $custFields : []);
-	 $customPayments = json_decode( isset($options[0]->custom_payments) ?  $options[0]->custom_payments : "[]");
+	 $customPayments = json_decode( $options[0]->custom_payments ? $options[0]->custom_payments : "[]");
 	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
 	 $publicApiTokens = SeatregApiTokenRepository::getRegistrationApiTokens($options[0]->registration_code);
@@ -960,22 +960,30 @@ function seatreg_generate_settings_form() {
 					<div class="existing-custom-payments">
 						<?php foreach($customPayments as $customPayment): ?>
 							<div class="custom-payment">
-								<p><?php echo esc_html('Title', 'seatreg'); ?></p>
-								<input value="<?php echo $customPayment->title; ?>" />
+								<p><?php esc_html_e('Title', 'seatreg'); ?></p>
+								<input value="<?php echo esc_attr($customPayment->title); ?>" data-id="custom-payment-title" />
 
-								<p><?php echo esc_html('Description', 'seatreg'); ?></p>
-								<textarea><?php echo $customPayment->description; ?></textarea>
+								<p><?php esc_html_e('Description', 'seatreg'); ?></p>
+								<textarea data-id="custom-payment-description"><?php echo esc_textarea($customPayment->description); ?></textarea>
+								<div class="custom-payment__controls">
+									<button class="btn btn-danger btn-sm" data-action="remove-custom-payment"><?php esc_html_e('Remove', 'seatreg'); ?></button>
+								</div>
 							</div>
 						<?php endforeach; ?>
 					</div>
 					<div id="new-custom-payment">
 						<div style="margin-bottom: 6px"><?php esc_html_e('Create new custom payment', 'seatreg'); ?></div>
-						<input type="text" class="form-control" id="new-custom-payment-title" autocomplete="off" placeholder="<?php echo esc_html('Enter payment title', 'seatreg'); ?>">
+						<p class="help-block">
+							<?php esc_html_e('Please enter custom payment title', 'seatreg'); ?>
+						</p>
+						<input type="text" class="form-control" data-id="new-custom-payment-title" autocomplete="off" placeholder="<?php echo esc_html('Title', 'seatreg'); ?>">
 						<br>
-						<textarea class="form-control" id="new-custom-payment-description" placeholder="<?php esc_html_e('Enter payment instructions', 'seatreg')?>"></textarea>
+						<p class="help-block"><?php esc_html_e('Please enter custom payment instructions. Will be shown when customer chooses this payment method.', 'seatreg'); ?></p>
+						<textarea class="form-control" data-id="new-custom-payment-description" placeholder="<?php esc_html_e('Enter payment instructions', 'seatreg')?>"></textarea>
 						<br> 
 						<button class="btn btn-default btn-sm" id="create-custom-payment" type="button"><?php esc_html_e('Add custom payment', 'seatreg'); ?></button>
 					</div>
+					<input type="hidden" name="custom-payments" />
 				</div>
 			</div>
 
@@ -2709,6 +2717,8 @@ function seatreg_update() {
 		wp_die($customFiledsValidation->errorMessage);
 	}
 
+	$customPayments = stripslashes_deep( $_POST['custom-payments'] );
+
 	if(!isset($_POST['gmail-required'])) {
 		$_POST['gmail-required'] = 0;
 	}else {
@@ -2880,6 +2890,7 @@ function seatreg_update() {
 			'public_api_enabled' => $_POST['public-api'],
 			'custom_footer_text' => $_POST['custom-footer-text'],
 			'seat_selection_btn_text' => !empty($_POST['seat-selection-btn-text']) ? $_POST['seat-selection-btn-text'] : null,
+			'custom_payments' => $customPayments,
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])

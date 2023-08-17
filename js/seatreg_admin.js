@@ -1227,31 +1227,41 @@ function SeatregCustomField(label, type, options, unique = false) {
 		this.unique = unique;
 }
 
+function SeatregCustomPayment(title, description) {
+	this.title = title;
+	this.description = description;
+}
+
 $('#seatreg-settings-form #create-custom-payment').on('click', function() {
-	var customFieldTitle = $('#new-custom-payment-title').val();
-	var customFieldDescription = $('#new-custom-payment-description').val();
+	var customFieldTitle = $('#new-custom-payment [data-id="new-custom-payment-title"]').val();
+	var customFieldDescription = $('#new-custom-payment [data-id="new-custom-payment-description"]').val();
 
 	if( customFieldTitle === '' ) {
 		alertify.error(translator.translate('enterCustomPaymentTitle'));
 		return;
 	}
 	if( customFieldDescription === '' ) {
-		alertify.error(translator.translate('enterCustomPaymentTitle'));
+		alertify.error(translator.translate('enterCustomPaymentdescription'));
 		return;
 	}
 
 	$('#custom-payments .existing-custom-payments').append(
 		'<div class="custom-payment">' +
 			'<p>' + translator.translate('title') + '</p>' +
-			'<input value="'+ customFieldTitle +'" />' +
+			'<input value="'+ customFieldTitle +'" data-id="custom-payment-title" />' +
 			'<p>' + translator.translate('description') + '</p>' +
-			'<textarea>'+ customFieldDescription +'</textarea>' +
+			'<textarea data-id="custom-payment-description">'+ customFieldDescription +'</textarea>' +
 			'<div class="custom-payment__controls">' +
 				'<button class="btn btn-danger btn-sm">Remove</button>' + 
 			'</div>' + 
 		'</div>'
 	);
 });
+
+$('#seatreg-settings-form #custom-payments').on('click', '[data-action="remove-custom-payment"]', function() {
+	$(this).closest('.custom-payment').remove();
+});
+
 
 $('#seatreg-settings-form #public-api-tokens').on('click', '.remove-token', function() {
 	var tokenBox = $(this).closest('.token-box');
@@ -1320,6 +1330,7 @@ $('#seatreg-settings-form #create-api-token').on('click', function(e) {
 //when user submits seatreg settings. Do validation, generate #custom-fields hidden input value. 
 $('#seatreg-settings-submit').on('click', function(e) {
 	var customFieldArray = [];  //array to store custom inputs
+	var customPayments = [];
 
 	if($('#stripe').is(":checked")) {
 		if($('#stripe-api-key').val() === "") {
@@ -1414,6 +1425,15 @@ $('#seatreg-settings-submit').on('click', function(e) {
  			}	
  	}); 
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
+
+	$('#seatreg-settings-form .existing-custom-payments .custom-payment').each(function() {
+		customPayments.push(new SeatregCustomPayment( 
+			$(this).find('[data-id="custom-payment-title"]').val(),
+			$(this).find('[data-id="custom-payment-description"]').val()
+		));
+
+	});
+	$('#custom-payments input[name="custom-payments"]').val(JSON.stringify( customPayments ));
 });
 
 $('#seatreg-send-test-email').on('click', function(e) {

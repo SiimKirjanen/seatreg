@@ -181,7 +181,7 @@ function seatreg_generate_admin_strings() {
     $translations->tokenCreated = esc_html__('API token created', 'seatreg');
     $translations->createApiToken = esc_html__('Create API token', 'seatreg');
     $translations->enterCustomPaymentTitle = esc_html__('Please enter custom payment title', 'seatreg');
-    $translations->enterCustomPaymentTitle = esc_html__('Please enter custom payment description', 'seatreg');
+    $translations->enterCustomPaymentdescription = esc_html__('Please enter custom payment description', 'seatreg');
     $translations->title = esc_html__('Title', 'seatreg');
     $translations->description = esc_html__('Description', 'seatreg');
     
