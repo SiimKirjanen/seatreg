@@ -367,6 +367,40 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
+    public static function validateCustomPaymentCreation($customPayments) {
+        $validationStatus = new SeatregValidationStatus();
+
+        try {
+            $customPaymentsDecoded = json_decode($customPayments);
+
+            if( !is_array($customPaymentsDecoded) ) {
+                $validationStatus->setInvalid('Custom payments not array');
+
+                return $validationStatus;
+            }
+
+            foreach($customPaymentsDecoded as $customPaymentDecoded) {
+                if( !property_exists($customPaymentDecoded, 'title') || !is_string($customPaymentDecoded->title) || !preg_match('/^[\p{L}\p{N}+\s]+$/u', $customPaymentDecoded->title) ) {
+                    $validationStatus->setInvalid('Custom payment title is missing or invalid');
+
+                    return $validationStatus;
+                }
+
+                if( !property_exists($customPaymentDecoded, 'description') || !is_string($customPaymentDecoded->description) || !preg_match('/^[\p{L}\p{N}+\s]+$/u', $customPaymentDecoded->description) ) {
+                    $validationStatus->setInvalid('Custom payment description is missing or invalid');
+
+                    return $validationStatus;
+                }
+            }
+
+
+        }catch(Exception $error) {
+            $validationStatus->setInvalid('Unexpected error occured while validating custom payments');
+        }
+
+        return $validationStatus;
+    }
+
     public static function validateCustomFieldCreation($customFields) {
         $validationStatus = new SeatregValidationStatus();
 

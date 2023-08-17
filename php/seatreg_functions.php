@@ -2718,6 +2718,11 @@ function seatreg_update() {
 	}
 
 	$customPayments = stripslashes_deep( $_POST['custom-payments'] );
+	$customPaymentsValidation = SeatregDataValidation::validateCustomPaymentCreation($customPayments);
+
+	if( !$customPaymentsValidation->valid ) {
+		wp_die($customPaymentsValidation->errorMessage);
+	}
 
 	if(!isset($_POST['gmail-required'])) {
 		$_POST['gmail-required'] = 0;
