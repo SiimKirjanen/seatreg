@@ -15,6 +15,7 @@
 	$registrationId = sanitize_text_field($_GET['registration']);
 	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
+	$customPayments = json_decode( isset($bookingData->custom_payments) ? $bookingData->custom_payments : "[]" );
 ?>
 
 <!DOCTYPE html>
@@ -32,9 +33,6 @@
 			flex-wrap: wrap;
 			gap: 12px;
 		}
-		.payment-forms form {
-			
-		}
 		.payment-instructions {
 			margin: 24px 0 12px;
 		}
@@ -49,7 +47,7 @@
 			border-radius: 6px;
 			font-size: 18px;
 		}
-		.payment-form-footer {
+		#custom-payment-descriptions {
 			margin-top: 12px;
 			font-size: 18px;
 			font-weight: 600;
@@ -69,6 +67,7 @@
 		if( SeatregPaymentRepository::hasPaymentEnabled($bookingData) && $bookingData->payment_status === null ) {
 			$bookingTotalCost = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
 			$bookingHasCost = $bookingTotalCost > 0;
+			$legacyCustomPaymentId = "legacy-custom-payment-id";
 
 			if( $bookingHasCost ) {
 				?>
@@ -98,13 +97,29 @@
 			}
 
 			if( $bookingData->custom_payment === '1' && $bookingHasCost ) {
-				echo SeatregPaymentService::generateCustomPaymentButton($bookingData);
+				echo SeatregPaymentService::generateCustomPaymentButton($bookingData->custom_payment_title, $legacyCustomPaymentId);
+			}
+
+			foreach($customPayments as $customPayment) {
+				echo SeatregPaymentService::generateCustomPaymentButton($customPayment->title, $customPayment->paymentId);
 			}
 			
 			?>
 				</div>
-				<div class="payment-form-footer" style="display: none">
-					<?php echo $bookingData->custom_payment_description; ?>
+				<div id="custom-payment-descriptions">
+
+					<?php if($bookingData->custom_payment_description) : ?>
+						<div data-payment-id="<?php echo esc_attr($legacyCustomPaymentId); ?>" style="display: none">
+							<?php echo esc_html($bookingData->custom_payment_description); ?>
+						</div>
+					<?php endif; ?>
+
+					<?php foreach($customPayments as $customPayment): ?>
+						<div data-payment-id="<?php echo esc_attr($customPayment->paymentId); ?>" style="display: none">
+							<?php echo esc_html($customPayment->description); ?>
+						</div>
+					<?php endforeach; ?>
+
 				</div>
 			<?php
 			

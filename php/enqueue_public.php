@@ -117,7 +117,7 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_script("jquery");
 		wp_enqueue_script('alertify', plugins_url('js/alertify.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
-		wp_enqueue_script('seatreg-booking-check', SEATREG_PLUGIN_FOLDER_URL . 'js/seatreg_booking_check.js' , array('jquery'), '1.1.0', true);
+		wp_enqueue_script('seatreg-booking-check', SEATREG_PLUGIN_FOLDER_URL . 'js/seatreg_booking_check.js' , array('jquery'), '1.2.0', true);
 		wp_localize_script('seatreg-booking-check', 'WP_Seatreg', array(
 			'ajaxUrl' => admin_url('admin-ajax.php'),
 			'successMessage' => __('Receipt sent', 'seatreg'),

@@ -152,6 +152,13 @@
 		return timeStampText;
 	}
 
+	function generateUniqueString() {
+		const timestamp = new Date().getTime().toString(36);
+		const randomStr = Math.random().toString(36).substring(2, 7); // Adjusted indexes
+
+		return timestamp + randomStr;
+	}
+
 	$('#create-registration-form').on('submit', function(e) {
 		var newRegistrationName = $('#new-registration-name').val();
 
@@ -1227,9 +1234,10 @@ function SeatregCustomField(label, type, options, unique = false) {
 		this.unique = unique;
 }
 
-function SeatregCustomPayment(title, description) {
+function SeatregCustomPayment(title, description, paymentId) {
 	this.title = title;
 	this.description = description;
+	this.paymentId = paymentId;
 }
 
 $('#seatreg-settings-form #create-custom-payment').on('click', function() {
@@ -1246,7 +1254,7 @@ $('#seatreg-settings-form #create-custom-payment').on('click', function() {
 	}
 
 	$('#custom-payments .existing-custom-payments').append(
-		'<div class="custom-payment">' +
+		'<div class="custom-payment" data-payment-id="' + generateUniqueString() + '">' +
 			'<p>' + translator.translate('title') + '</p>' +
 			'<input value="'+ customFieldTitle +'" data-id="custom-payment-title" />' +
 			'<p>' + translator.translate('description') + '</p>' +
@@ -1429,9 +1437,9 @@ $('#seatreg-settings-submit').on('click', function(e) {
 	$('#seatreg-settings-form .existing-custom-payments .custom-payment').each(function() {
 		customPayments.push(new SeatregCustomPayment( 
 			$(this).find('[data-id="custom-payment-title"]').val(),
-			$(this).find('[data-id="custom-payment-description"]').val()
+			$(this).find('[data-id="custom-payment-description"]').val(),
+			$(this).data('payment-id')
 		));
-
 	});
 	$('#custom-payments input[name="custom-payments"]').val(JSON.stringify( customPayments ));
 });

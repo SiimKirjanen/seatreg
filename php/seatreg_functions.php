@@ -959,7 +959,7 @@ function seatreg_generate_settings_form() {
 				<div id="custom-payments">
 					<div class="existing-custom-payments">
 						<?php foreach($customPayments as $customPayment): ?>
-							<div class="custom-payment">
+							<div class="custom-payment" data-payment-id="<?php echo esc_attr($customPayment->paymentId); ?>">
 								<p><?php esc_html_e('Title', 'seatreg'); ?></p>
 								<input value="<?php echo esc_attr($customPayment->title); ?>" data-id="custom-payment-title" />
 
