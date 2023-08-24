@@ -29,6 +29,9 @@ Triggered when booking gets approved status. Gets booking ID as parameter.
 Triggered when booking gets removed. Gets booking ID as parameter.
 
 
+## Translations
+Translations are taken from https://translate.wordpress.org/projects/wp-plugins/seatreg/
+
 ## NPM Scripts
 
 ### registration-styles
