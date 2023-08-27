@@ -1395,7 +1395,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	<?php
 	
 	seatreg_booking_edit_modal($usingSeats, $calendarDate);
-	seatreg_add_booking_modal($usingSeats, $calendarDate);
+	seatreg_add_booking_modal($usingSeats, $calendarDate, $roomsData);
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
 	seatreg_seat_id_modal($roomsData);
@@ -1510,7 +1510,10 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 	}
 }
 
-function seatreg_add_booking_modal($usingSeats, $calendarDate) {
+function seatreg_add_booking_modal($usingSeats, $calendarDate, $roomsData) {
+	$roomNames = array_map(function($roomData) {
+		return $roomData->room->name;
+	}, $roomsData);
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/add-booking-modal.php' );
 }
 

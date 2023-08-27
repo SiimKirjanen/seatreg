@@ -32,7 +32,11 @@
 							<h5>
 								<?php esc_html_e('Room', 'seatreg'); ?>
 							</h5>
-							<input type="text" name="room[]" autocomplete="off"/>
+							<select name="room[]">
+								<?php foreach($roomNames as $roomName) : ?>
+									<option value="<?php echo esc_attr($roomName); ?>"><?php echo esc_html($roomName); ?></option>
+								<?php endforeach; ?>	
+							</select>
 							<div class="input-error"></div>
 						</label>
 					</div>
