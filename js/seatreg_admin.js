@@ -1,6 +1,7 @@
 (function($) {
 	var canvasSupport = ($('html').hasClass('no-canvas') ? false : true);
 	var bookingOrderInManager = null;
+	var bookingManagerActiveAddBookingIdLookupIndex = 0;
 		
 	//console.log('jQuery version: ' + $.fn.jquery);
 	//console.log('jQUery UI version ' + $.ui.version);
@@ -795,8 +796,15 @@ $('#seatreg-booking-manager').on('click', '#generate-bookings-file', function() 
 });
 
 $('#seatreg-booking-manager').on('click', '.seat-id-search', function() {
+	bookingManagerActiveAddBookingIdLookupIndex = $(this).closest('.modal-body-item').index();
 	$('#seat-id-modal').modal('show');
 });
+
+$('#seatreg-booking-manager .seat-id-grid [data-action="select-id"]').on('click', function() {
+	$('#seatreg-booking-manager #add-booking-modal-form .modal-body-item').eq(bookingManagerActiveAddBookingIdLookupIndex).find('[name="seat-id[]"]').val( $(this).data('seat-id') );
+	$('#seat-id-modal').modal('hide');
+});
+
 
 $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' + '" alt="Loading..." class="ajax-load" />');

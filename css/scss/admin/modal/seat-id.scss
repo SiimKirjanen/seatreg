@@ -5,7 +5,8 @@
         }
         .seat-id-grid {
             display: grid;
-            grid-template-columns: auto 1fr;
+            row-gap: 8px;
+            grid-template-columns: auto 1fr 1fr;
             margin-left: 40px;
             grid-column-gap: 30px;
 
