@@ -508,7 +508,7 @@
 		$('#boxes').html(documentFragment);
 
 		if(this.rooms[this.currentRoom].room.backgroundImage !== null && this.rooms[this.currentRoom].room.backgroundImage.indexOf('.') !== -1) {  //dose room have a background image?
-			$('#boxes').append('<img class="room-image" src="' + seatregPluginFolder + 'uploads/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room.backgroundImage + '" />');
+			$('#boxes').append('<img class="room-image" src="' + WP_Seatreg.uploads_url + '/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room.backgroundImage + '" />');
 		}
 
 		$('#boxes .box[data-powertip]').powerTip({

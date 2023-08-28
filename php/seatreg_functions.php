@@ -2155,7 +2155,7 @@ function seatreg_get_data_related_to_booking($bookingId) {
 //return uploaded images
 function seatreg_get_registration_uploaded_images($code) {
 	$uploadedImages = array();
-	$filePath = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . $code . '/'; 
+	$filePath = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . $code . '/'; 
 
 	if(file_exists($filePath)) {
 		$dir = opendir($filePath);
@@ -3500,7 +3500,7 @@ function seatreg_upload_image_callback() {
 	}
 
 	$code = sanitize_text_field($_POST['code']);
-	$registration_upload_dir = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . $code . '/';
+	$registration_upload_dir = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . $code . '/';
 	$target_file = $registration_upload_dir . basename(sanitize_file_name($_FILES["fileToUpload"]["name"]));
 	$target_dimentsions = null;
 	$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);

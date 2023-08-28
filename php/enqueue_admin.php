@@ -59,12 +59,13 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.0.0', true);
 		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg_admin_chart', 'seatreg-utils'), '1.7.0', true);
 		wp_enqueue_script('jstz', plugins_url('js/jstz-1.0.4.min.js', dirname(__FILE__) ), array(), '1.0.4', true);
-		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip'), '1.8.1', true);
+		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip'), '1.9.0', true);
 
 		wp_localize_script('seatreg_admin', 'WP_Seatreg', array(
 			'nonce' => wp_create_nonce('seatreg-admin-nonce'),
 			'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
 			'translations' => seatreg_generate_admin_strings(), 
+			'uploads_url' => SEATREG_TEMP_FOLDER_URL,
 		));
 	}
 }
