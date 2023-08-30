@@ -3500,62 +3500,19 @@ function seatreg_upload_image_callback() {
 	}
 
 	$code = sanitize_text_field($_POST['code']);
-	$registration_upload_dir = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . $code . '/';
-	$target_file = $registration_upload_dir . basename(sanitize_file_name($_FILES["fileToUpload"]["name"]));
-	$target_dimentsions = null;
-	$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-	$allowedFileTypes = array('jpg', 'png', 'jpeg', 'gif');
 
-	// Check if image file is a actual image or fake image
-	$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+	try {
+		$imageUploadService = new SeatregImageUploadService('/room_images/' . $code . '/');
+		$status = $imageUploadService->uploadImage($_FILES["fileToUpload"]);
 
-	if($check == false) {
-		$resp->setError('File is not an image');
+		$resp->setText($status->text);
+		$resp->setData($status->basename);
+		$resp->setExtraData($status->imageDimentsions);
 		$resp->echoData();
 
 		die();
-	}
-	$target_dimentsions = $check[0] . ',' . $check[1];
-
-	// Check if file already exists
-	if (file_exists($target_file)) {
-		$resp->setError('Sorry, picture already exists');
-		$resp->echoData();
-
-		die();
-
-	}
-
-	// Check file size                    
-	if ($_FILES["fileToUpload"]["size"] > 2120000 ) {
-		$resp->setError('Sorry, your file is too large');
-		$resp->echoData();
-
-		die();		
-	}
-
-	// Allow certain file formats
-	if( !in_array($imageFileType, $allowedFileTypes)  ) {
-		$resp->setError('Sorry, only JPG, JPEG, PNG & GIF files are allowed');
-		$resp->echoData();
-
-		die();
-	}
-
-	//check if folder exists
-	if (!file_exists($registration_upload_dir)) {
-		mkdir($registration_upload_dir, 0755, true); //create folder
-	}
-			
-	if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-		$resp->setText("The picture ". basename( sanitize_file_name($_FILES["fileToUpload"]["name"]) ). " has been uploaded.");
-		$resp->setData(basename( sanitize_file_name($_FILES["fileToUpload"]["name"]) ));
-		$resp->setExtraData($target_dimentsions);
-		$resp->echoData();
-
-		die();
-	} else {
-		$resp->setError('Sorry, there was an error uploading your file');
+	} catch(Exception $e) {
+		$resp->setError($e->getMessage());
 		$resp->echoData();
 
 		die();
@@ -3570,7 +3527,7 @@ function seatreg_remove_img_callback() {
 
 	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {
 		//check if file exists
-		$imgPath = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . sanitize_text_field($_POST['code']) . '/' . sanitize_text_field($_POST['imgName']);
+		$imgPath = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . sanitize_text_field($_POST['code']) . '/' . sanitize_text_field($_POST['imgName']);
 		
 		if(file_exists($imgPath)) {
 			unlink($imgPath);
