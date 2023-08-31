@@ -129,6 +129,23 @@
 		});
 	}
 
+	function seatreg_upload_custom_payment_icon(regCode, file) {
+		var formData = new FormData();
+
+		formData.append('file', file);
+		formData.append('code', regCode);
+		formData.append('action', 'seatreg_custom_payment_icon_upload');
+		formData.append('security', WP_Seatreg.nonce);
+
+		return $.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: formData,
+			contentType: false,
+			processData: false,
+		});
+	}
+
 	function seatreg_admin_ajax_error(jqXHR, textStatus, errorThrown) {
 		console.log('error');
 		console.log(textStatus);
@@ -1276,6 +1293,31 @@ $('#seatreg-settings-form #create-custom-payment').on('click', function() {
 
 $('#seatreg-settings-form #custom-payments').on('click', '[data-action="remove-custom-payment"]', function() {
 	$(this).closest('.custom-payment').remove();
+});
+
+$('#seatreg-settings-form #custom-payments').on('change', '[data-action="custom-payment-icon-upload"]', function() {
+	var $this = $(this);
+	var regCode = $this.data('code');
+	var file = $this[0].files[0];
+	var $loading = $this.siblings('.custom-payment-icon-upload__loading');
+	$loading.css('display', 'block');
+	var promise = seatreg_upload_custom_payment_icon(regCode, file);
+	
+
+	promise.always(function() {
+		$loading.css('display', '');
+	});
+	promise.done(function(data) {
+		var resp = JSON.parse(data);
+		$this.val(null);
+
+		if(resp.type === 'ok') {
+			alertify.success(translator.translate('paymentIconUploaded'));
+		}else {
+			alertify.error(translator.translate('paymentIconUploadedFail'));
+		}
+	});
+	promise.fail = seatreg_admin_ajax_error;
 });
 
 

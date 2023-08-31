@@ -960,11 +960,33 @@ function seatreg_generate_settings_form() {
 					<div class="existing-custom-payments">
 						<?php foreach($customPayments as $customPayment): ?>
 							<div class="custom-payment" data-payment-id="<?php echo esc_attr($customPayment->paymentId); ?>">
+								<?php 
+									$hasCustomPaymentIcon = property_exists($customPayment, 'paymentIcon');
+									$IconUploadStlyes = !$hasCustomPaymentIcon ? 'style="display: block;"' : 'style="display: none;"';
+								?>
 								<p><?php esc_html_e('Title', 'seatreg'); ?></p>
 								<input value="<?php echo esc_attr($customPayment->title); ?>" data-id="custom-payment-title" />
 
 								<p><?php esc_html_e('Description', 'seatreg'); ?></p>
 								<textarea data-id="custom-payment-description"><?php echo esc_textarea($customPayment->description); ?></textarea>
+								<p><?php esc_html_e('Payment icon', 'seatreg'); ?></p>
+
+								<div>
+									<div class="current-custom-payment-icon">
+										<?php if( $hasCustomPaymentIcon ): ?>
+											<image src="<?php echo esc_attr($paymentIconURl . $customPayment->paymentIcon); ?>" />
+											<i class="fa fa-times-circle"></i>
+										<?php endif; ?>
+									</div>
+									<div class="custom-payment-icon-upload" <?php echo $IconUploadStlyes; ?> >
+										<div class="custom-payment-icon-upload__loading">
+											<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader_small.gif" alt="Loading...">
+										</div>
+										<input type="file" name="custom-payment-icon" data-action="custom-payment-icon-upload" data-code="<?php echo $active_tab; ?>" />
+										<p class="custom-payment-icon-upload__error"></p>
+									</div>
+								</div>
+							
 								<div class="custom-payment__controls">
 									<button class="btn btn-danger btn-sm" data-action="remove-custom-payment"><?php esc_html_e('Remove', 'seatreg'); ?></button>
 								</div>
@@ -3189,6 +3211,37 @@ function seatreg_delete_api_token() {
 		wp_send_json_success();
 	}else {
 		wp_send_json_error();
+	}
+}
+
+add_action('wp_ajax_seatreg_custom_payment_icon_upload', 'seatreg_custom_payment_icon_upload');
+function seatreg_custom_payment_icon_upload() {
+	seatreg_ajax_security_check();
+	$resp = new SeatregJsonResponse();
+
+	if(empty($_FILES["file"]) || empty($_POST['code'])) {
+		$resp->setError('Missing data');
+		$resp->echoData();
+
+		die();
+	}
+	$code = sanitize_text_field($_POST['code']);
+
+	try {
+		$imageUploadService = new SeatregImageUploadService('/custom_payment_icons/' . $code . '/');
+		$status = $imageUploadService->uploadImage($_FILES["file"]);
+
+		$resp->setText($status->text);
+		$resp->setData($status->basename);
+		$resp->setExtraData($status->imageDimentsions);
+		$resp->echoData();
+
+		die();
+	} catch(Exception $e) {
+		$resp->setError($e->getMessage());
+		$resp->echoData();
+
+		die();
 	}
 }
 
