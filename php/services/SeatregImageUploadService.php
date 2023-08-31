@@ -9,9 +9,11 @@ class SeatregImageUploadService {
     protected $_baseName;
     protected $_targetFile;
     protected $_imageDimentsions;
+    protected $_imageMaxSize;
 
-    public function __construct($imageDestinationFolder) {
+    public function __construct($imageDestinationFolder, $imageMaxSize = SEATREG_BACKGROUND_IMAGE_MAX_SIZE) {
         $this->_uploadsDir = SEATREG_TEMP_FOLDER_DIR . $imageDestinationFolder;
+        $this->_imageMaxSize = $imageMaxSize;
     }
 
     protected function imageCheck() {
@@ -30,7 +32,7 @@ class SeatregImageUploadService {
     }
 
     protected function fileSizeCheck() {
-        if ( $this->_uploadedFile["size"] > 2120000 ) {
+        if ( $this->_uploadedFile["size"] > $this->_imageMaxSize ) {
             throw new Exception('Picture is too large');	
         }
     }
