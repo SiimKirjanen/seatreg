@@ -465,6 +465,7 @@ function seatreg_generate_settings_form() {
 	}
 
 	 $options = seatreg_get_options($active_tab);
+	 $active_tab = $options[0]->registration_code;
 
 	 if( count($options) == 0 ) {
 		 seatreg_no_registration_created_info();
