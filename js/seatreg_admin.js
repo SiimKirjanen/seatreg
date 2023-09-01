@@ -1259,10 +1259,11 @@ function SeatregCustomField(label, type, options, unique = false) {
 		this.unique = unique;
 }
 
-function SeatregCustomPayment(title, description, paymentId) {
+function SeatregCustomPayment(title, description, paymentId, paymentIcon) {
 	this.title = title;
 	this.description = description;
 	this.paymentId = paymentId;
+	this.paymentIcon = paymentIcon;
 }
 
 $('#seatreg-settings-form #create-custom-payment').on('click', function() {
@@ -1312,9 +1313,13 @@ $('#seatreg-settings-form #custom-payments').on('change', '[data-action="custom-
 		$this.val(null);
 
 		if(resp.type === 'ok') {
+			$('.custom-payment-icon-upload').css('display', 'none');
+			var paymentLogoUrl = WP_Seatreg.uploads_url + '/custom_payment_icons/' + regCode + '/' + resp.data;
+
+			$('.current-custom-payment-icon').append('<image class="current-custom-payment-icon__img" src="'+ paymentLogoUrl +'" data-name="'+ resp.data +'"/><i class="fa fa-times-circle current-custom-payment-icon__delete"></i>');
 			alertify.success(translator.translate('paymentIconUploaded'));
 		}else {
-			alertify.error(translator.translate('paymentIconUploadedFail'));
+			alertify.error(resp.text);
 		}
 	});
 	promise.fail = seatreg_admin_ajax_error;
@@ -1485,10 +1490,13 @@ $('#seatreg-settings-submit').on('click', function(e) {
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
 
 	$('#seatreg-settings-form .existing-custom-payments .custom-payment').each(function() {
+		var paymentIcon = $('.current-custom-payment-icon img').length ? $('.current-custom-payment-icon img').data('name') : null;
+
 		customPayments.push(new SeatregCustomPayment( 
 			$(this).find('[data-id="custom-payment-title"]').val(),
 			$(this).find('[data-id="custom-payment-description"]').val(),
-			$(this).data('payment-id')
+			$(this).data('payment-id'),
+			paymentIcon
 		));
 	});
 	$('#custom-payments input[name="custom-payments"]').val(JSON.stringify( customPayments ));

@@ -963,6 +963,7 @@ function seatreg_generate_settings_form() {
 								<?php 
 									$hasCustomPaymentIcon = property_exists($customPayment, 'paymentIcon');
 									$IconUploadStlyes = !$hasCustomPaymentIcon ? 'style="display: block;"' : 'style="display: none;"';
+									$paymentIconLocationURl = SeatregUploadsRepository::getCustomPaymentIconLocationURL($active_tab);
 								?>
 								<p><?php esc_html_e('Title', 'seatreg'); ?></p>
 								<input value="<?php echo esc_attr($customPayment->title); ?>" data-id="custom-payment-title" />
@@ -974,8 +975,8 @@ function seatreg_generate_settings_form() {
 								<div>
 									<div class="current-custom-payment-icon">
 										<?php if( $hasCustomPaymentIcon ): ?>
-											<image src="<?php echo esc_attr($paymentIconURl . $customPayment->paymentIcon); ?>" />
-											<i class="fa fa-times-circle"></i>
+											<image class="current-custom-payment-icon__img" src="<?php echo esc_attr($paymentIconLocationURl . '/' . $customPayment->paymentIcon); ?>" data-name="<?php echo esc_attr($customPayment->paymentIcon); ?>" />
+											<i class="fa fa-times-circle current-custom-payment-icon__delete"></i>
 										<?php endif; ?>
 									</div>
 									<div class="custom-payment-icon-upload" <?php echo $IconUploadStlyes; ?> >

@@ -11,7 +11,7 @@ class SeatregUploadsRepository {
      *
      */
     public static function getCustomPaymentIconLocationURL($registrationCode) {
-        return SEATREG_TEMP_FOLDER_URL . '/' . $registrationCode;
+        return SEATREG_TEMP_FOLDER_URL . '/custom_payment_icons/' . $registrationCode;
     }
 
 }
