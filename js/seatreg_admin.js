@@ -1269,6 +1269,7 @@ function SeatregCustomPayment(title, description, paymentId, paymentIcon) {
 $('#seatreg-settings-form #create-custom-payment').on('click', function() {
 	var customFieldTitle = $('#new-custom-payment [data-id="new-custom-payment-title"]').val();
 	var customFieldDescription = $('#new-custom-payment [data-id="new-custom-payment-description"]').val();
+	var registrationCode = $('#seatreg-settings-form input[name="registration_code"]').val();
 
 	if( customFieldTitle === '' ) {
 		alertify.error(translator.translate('enterCustomPaymentTitle'));
@@ -1285,8 +1286,20 @@ $('#seatreg-settings-form #create-custom-payment').on('click', function() {
 			'<input value="'+ customFieldTitle +'" data-id="custom-payment-title" />' +
 			'<p>' + translator.translate('description') + '</p>' +
 			'<textarea data-id="custom-payment-description">'+ customFieldDescription +'</textarea>' +
+			'<p>' + translator.translate('paymentIcon') + '</p>' +
+			'<div>' +
+				'<div class="current-custom-payment-icon">' +
+				'</div>' +
+				'<div class="custom-payment-icon-upload">' +
+					'<div class="custom-payment-icon-upload__loading">' +
+						'<img src="'+ WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif" alt="Loading...">' +
+					'</div>' +
+					'<input type="file" name="custom-payment-icon" data-action="custom-payment-icon-upload" data-code="'+ registrationCode +'" />' +
+					'<p class="custom-payment-icon-upload__error"></p>' +
+				'</div>' +
+			'</div>' +
 			'<div class="custom-payment__controls">' +
-				'<button class="btn btn-danger btn-sm">Remove</button>' + 
+				'<button class="btn btn-danger btn-sm">'+ translator.translate('remove') +'</button>' + 
 			'</div>' + 
 		'</div>'
 	);
@@ -1298,13 +1311,13 @@ $('#seatreg-settings-form #custom-payments').on('click', '[data-action="remove-c
 
 $('#seatreg-settings-form #custom-payments').on('change', '[data-action="custom-payment-icon-upload"]', function() {
 	var $this = $(this);
+	var $customPayment = $this.closest('.custom-payment');
 	var regCode = $this.data('code');
 	var file = $this[0].files[0];
 	var $loading = $this.siblings('.custom-payment-icon-upload__loading');
 	$loading.css('display', 'block');
 	var promise = seatreg_upload_custom_payment_icon(regCode, file);
 	
-
 	promise.always(function() {
 		$loading.css('display', '');
 	});
@@ -1313,10 +1326,10 @@ $('#seatreg-settings-form #custom-payments').on('change', '[data-action="custom-
 		$this.val(null);
 
 		if(resp.type === 'ok') {
-			$('.custom-payment-icon-upload').css('display', 'none');
 			var paymentLogoUrl = WP_Seatreg.uploads_url + '/custom_payment_icons/' + regCode + '/' + resp.data;
+			$customPayment.find('.custom-payment-icon-upload').css('display', 'none');
 
-			$('.current-custom-payment-icon').append('<image class="current-custom-payment-icon__img" src="'+ paymentLogoUrl +'" data-name="'+ resp.data +'"/><i class="fa fa-times-circle current-custom-payment-icon__delete"></i>');
+			$customPayment.find('.current-custom-payment-icon').append('<image class="current-custom-payment-icon__img" src="'+ paymentLogoUrl +'" data-name="'+ resp.data +'"/><i class="fa fa-times-circle current-custom-payment-icon__delete"></i>');
 			alertify.success(translator.translate('paymentIconUploaded'));
 		}else {
 			alertify.error(resp.text);
@@ -1490,7 +1503,7 @@ $('#seatreg-settings-submit').on('click', function(e) {
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
 
 	$('#seatreg-settings-form .existing-custom-payments .custom-payment').each(function() {
-		var paymentIcon = $('.current-custom-payment-icon img').length ? $('.current-custom-payment-icon img').data('name') : null;
+		var paymentIcon = $(this).find('.current-custom-payment-icon img').length ? $(this).find('.current-custom-payment-icon img').data('name') : null;
 
 		customPayments.push(new SeatregCustomPayment( 
 			$(this).find('[data-id="custom-payment-title"]').val(),

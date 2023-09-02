@@ -962,8 +962,8 @@ function seatreg_generate_settings_form() {
 						<?php foreach($customPayments as $customPayment): ?>
 							<div class="custom-payment" data-payment-id="<?php echo esc_attr($customPayment->paymentId); ?>">
 								<?php 
-									$hasCustomPaymentIcon = property_exists($customPayment, 'paymentIcon');
-									$IconUploadStlyes = !$hasCustomPaymentIcon ? 'style="display: block;"' : 'style="display: none;"';
+									$hasCustomPaymentIcon = property_exists($customPayment, 'paymentIcon') && $customPayment->paymentIcon !== null;
+									$IconUploadStlyes = !$hasCustomPaymentIcon ? 'style="display: flex;"' : 'style="display: none;"';
 									$paymentIconLocationURl = SeatregUploadsRepository::getCustomPaymentIconLocationURL($active_tab);
 								?>
 								<p><?php esc_html_e('Title', 'seatreg'); ?></p>
