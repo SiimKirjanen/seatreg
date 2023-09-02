@@ -109,8 +109,10 @@
 				echo SeatregPaymentService::generateCustomPaymentButton($bookingData->custom_payment_title, $legacyCustomPaymentId, $registrationId);
 			}
 
-			foreach($customPayments as $customPayment) {
-				echo SeatregPaymentService::generateCustomPaymentButton($customPayment->title, $customPayment->paymentId, $registrationId, $customPayment->paymentIcon);
+			if( $bookingHasCost ) {
+				foreach($customPayments as $customPayment) {
+					echo SeatregPaymentService::generateCustomPaymentButton($customPayment->title, $customPayment->paymentId, $registrationId, $customPayment->paymentIcon);
+				}
 			}
 			
 			?>

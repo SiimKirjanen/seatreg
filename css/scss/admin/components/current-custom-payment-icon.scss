@@ -1,5 +1,8 @@
 #seatreg-settings-form {
     .current-custom-payment-icon {
+        display: flex;
+        align-items: center;
+        
         &__img {
             height: 74px;
             margin-right: 12px;
@@ -7,6 +10,9 @@
         &__delete {
             cursor: pointer;
             color: red;
+        }
+        &__loading {
+            display: none;
         }
     }
 }

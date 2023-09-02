@@ -978,6 +978,7 @@ function seatreg_generate_settings_form() {
 										<?php if( $hasCustomPaymentIcon ): ?>
 											<image class="current-custom-payment-icon__img" src="<?php echo esc_attr($paymentIconLocationURl . '/' . $customPayment->paymentIcon); ?>" data-name="<?php echo esc_attr($customPayment->paymentIcon); ?>" />
 											<i class="fa fa-times-circle current-custom-payment-icon__delete"></i>
+											<img class="current-custom-payment-icon__loading" src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader_small.gif" alt="Loading...">
 										<?php endif; ?>
 									</div>
 									<div class="custom-payment-icon-upload" <?php echo $IconUploadStlyes; ?> >

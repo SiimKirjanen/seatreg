@@ -1309,6 +1309,25 @@ $('#seatreg-settings-form #custom-payments').on('click', '[data-action="remove-c
 	$(this).closest('.custom-payment').remove();
 });
 
+$('#seatreg-settings-form #custom-payments').on('click', '.current-custom-payment-icon__delete', function() {
+	var $customPayment = $(this).closest('.custom-payment');
+	var registrationCode = $('#seatreg-settings-form input[name="registration_code"]').val();
+	var imageName = $(this).siblings('img[data-name]').data('name');
+
+	$customPayment.find('.current-custom-payment-icon__delete').css('display', 'none');
+	$customPayment.find('.current-custom-payment-icon__loading').css('display', 'block');
+	var promise = seaterg_admin_ajax('seatreg_remove_custom_payment_img', registrationCode, imageName);
+
+	promise.done(function() {
+		$customPayment.find('.current-custom-payment-icon__loading').css('display', '');
+		$customPayment.find('.current-custom-payment-icon__delete').css('display', 'block');
+		$customPayment.find('.current-custom-payment-icon').empty();
+		$customPayment.find('.custom-payment-icon-upload').css('display', 'flex');
+	});
+	
+	promise.fail = seatreg_admin_ajax_error;
+});
+
 $('#seatreg-settings-form #custom-payments').on('change', '[data-action="custom-payment-icon-upload"]', function() {
 	var $this = $(this);
 	var $customPayment = $this.closest('.custom-payment');
@@ -1329,7 +1348,11 @@ $('#seatreg-settings-form #custom-payments').on('change', '[data-action="custom-
 			var paymentLogoUrl = WP_Seatreg.uploads_url + '/custom_payment_icons/' + regCode + '/' + resp.data;
 			$customPayment.find('.custom-payment-icon-upload').css('display', 'none');
 
-			$customPayment.find('.current-custom-payment-icon').append('<image class="current-custom-payment-icon__img" src="'+ paymentLogoUrl +'" data-name="'+ resp.data +'"/><i class="fa fa-times-circle current-custom-payment-icon__delete"></i>');
+			$customPayment.find('.current-custom-payment-icon').append(
+				'<image class="current-custom-payment-icon__img" src="'+ paymentLogoUrl +'" data-name="'+ resp.data +'"/>' +
+				'<i class="fa fa-times-circle current-custom-payment-icon__delete"></i>' +
+				'<img class="current-custom-payment-icon__loading" src="'+ WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif" alt="Loading..." />'
+				);
 			alertify.success(translator.translate('paymentIconUploaded'));
 		}else {
 			alertify.error(resp.text);

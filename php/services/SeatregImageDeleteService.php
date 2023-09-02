@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class SeatregImageDeleteService {
     public static function deleteCustomPaymentImage($registrationCode, $fileName) {
-        $customPaymentLocation = SeatregUploadsRepository::getCustomPaymentIconLocationURL($registrationCode);
+        $customPaymentLocation = SeatregUploadsRepository::getCustomPaymentIconLocationDir($registrationCode);
         $imgPath = $customPaymentLocation . '/' . $fileName;
 		
 		return unlink($imgPath);
