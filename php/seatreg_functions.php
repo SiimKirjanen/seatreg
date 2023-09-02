@@ -3596,6 +3596,24 @@ function seatreg_remove_img_callback() {
 	}
 }
 
+add_action( 'wp_ajax_seatreg_remove_custom_payment_img', 'seatreg_remove_custom_payment_img_callback' );
+function seatreg_remove_custom_payment_img_callback() {
+	seatreg_ajax_security_check();
+
+	if( empty($_POST['code']) || empty($_POST['data']) ) {
+		wp_send_json_error();
+	}
+
+	try {
+		SeatregImageDeleteService::deleteCustomPaymentImage( $_POST['code'], $_POST['data'] );
+
+		wp_send_json_success();
+
+	}catch(Exception $e) {
+		wp_send_json_error();
+	}
+}
+
 add_action( 'wp_ajax_seatreg_send_test_email', 'seatreg_send_test_email');
 function seatreg_send_test_email() {
 	seatreg_ajax_security_check();
