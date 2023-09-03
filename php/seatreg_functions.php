@@ -465,6 +465,7 @@ function seatreg_generate_settings_form() {
 	}
 
 	 $options = seatreg_get_options($active_tab);
+	 $active_tab = $options[0]->registration_code;
 
 	 if( count($options) == 0 ) {
 		 seatreg_no_registration_created_info();
@@ -960,11 +961,35 @@ function seatreg_generate_settings_form() {
 					<div class="existing-custom-payments">
 						<?php foreach($customPayments as $customPayment): ?>
 							<div class="custom-payment" data-payment-id="<?php echo esc_attr($customPayment->paymentId); ?>">
+								<?php 
+									$hasCustomPaymentIcon = property_exists($customPayment, 'paymentIcon') && $customPayment->paymentIcon !== null;
+									$IconUploadStlyes = !$hasCustomPaymentIcon ? 'style="display: flex;"' : 'style="display: none;"';
+									$paymentIconLocationURl = SeatregUploadsRepository::getCustomPaymentIconLocationURL($active_tab);
+								?>
 								<p><?php esc_html_e('Title', 'seatreg'); ?></p>
 								<input value="<?php echo esc_attr($customPayment->title); ?>" data-id="custom-payment-title" />
 
 								<p><?php esc_html_e('Description', 'seatreg'); ?></p>
 								<textarea data-id="custom-payment-description"><?php echo esc_textarea($customPayment->description); ?></textarea>
+								<p><?php esc_html_e('Payment icon', 'seatreg'); ?></p>
+
+								<div>
+									<div class="current-custom-payment-icon">
+										<?php if( $hasCustomPaymentIcon ): ?>
+											<image class="current-custom-payment-icon__img" src="<?php echo esc_attr($paymentIconLocationURl . '/' . $customPayment->paymentIcon); ?>" data-name="<?php echo esc_attr($customPayment->paymentIcon); ?>" />
+											<i class="fa fa-times-circle current-custom-payment-icon__delete"></i>
+											<img class="current-custom-payment-icon__loading" src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader_small.gif" alt="Loading...">
+										<?php endif; ?>
+									</div>
+									<div class="custom-payment-icon-upload" <?php echo $IconUploadStlyes; ?> >
+										<div class="custom-payment-icon-upload__loading">
+											<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader_small.gif" alt="Loading...">
+										</div>
+										<input type="file" name="custom-payment-icon" data-action="custom-payment-icon-upload" data-code="<?php echo $active_tab; ?>" />
+										<p class="custom-payment-icon-upload__error"></p>
+									</div>
+								</div>
+							
 								<div class="custom-payment__controls">
 									<button class="btn btn-danger btn-sm" data-action="remove-custom-payment"><?php esc_html_e('Remove', 'seatreg'); ?></button>
 								</div>
@@ -3192,6 +3217,37 @@ function seatreg_delete_api_token() {
 	}
 }
 
+add_action('wp_ajax_seatreg_custom_payment_icon_upload', 'seatreg_custom_payment_icon_upload');
+function seatreg_custom_payment_icon_upload() {
+	seatreg_ajax_security_check();
+	$resp = new SeatregJsonResponse();
+
+	if(empty($_FILES["file"]) || empty($_POST['code'])) {
+		$resp->setError('Missing data');
+		$resp->echoData();
+
+		die();
+	}
+	$code = sanitize_text_field($_POST['code']);
+
+	try {
+		$imageUploadService = new SeatregImageUploadService('/custom_payment_icons/' . $code . '/');
+		$status = $imageUploadService->uploadImage($_FILES["file"]);
+
+		$resp->setText($status->text);
+		$resp->setData($status->basename);
+		$resp->setExtraData($status->imageDimentsions);
+		$resp->echoData();
+
+		die();
+	} catch(Exception $e) {
+		$resp->setError($e->getMessage());
+		$resp->echoData();
+
+		die();
+	}
+}
+
 add_action('wp_ajax_seatreg_create_api_token', 'seatreg_create_api_token');
 function seatreg_create_api_token() {
 	seatreg_ajax_security_check();
@@ -3500,62 +3556,19 @@ function seatreg_upload_image_callback() {
 	}
 
 	$code = sanitize_text_field($_POST['code']);
-	$registration_upload_dir = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . $code . '/';
-	$target_file = $registration_upload_dir . basename(sanitize_file_name($_FILES["fileToUpload"]["name"]));
-	$target_dimentsions = null;
-	$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-	$allowedFileTypes = array('jpg', 'png', 'jpeg', 'gif');
 
-	// Check if image file is a actual image or fake image
-	$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+	try {
+		$imageUploadService = new SeatregImageUploadService('/room_images/' . $code . '/');
+		$status = $imageUploadService->uploadImage($_FILES["fileToUpload"]);
 
-	if($check == false) {
-		$resp->setError('File is not an image');
+		$resp->setText($status->text);
+		$resp->setData($status->basename);
+		$resp->setExtraData($status->imageDimentsions);
 		$resp->echoData();
 
 		die();
-	}
-	$target_dimentsions = $check[0] . ',' . $check[1];
-
-	// Check if file already exists
-	if (file_exists($target_file)) {
-		$resp->setError('Sorry, picture already exists');
-		$resp->echoData();
-
-		die();
-
-	}
-
-	// Check file size                    
-	if ($_FILES["fileToUpload"]["size"] > 2120000 ) {
-		$resp->setError('Sorry, your file is too large');
-		$resp->echoData();
-
-		die();		
-	}
-
-	// Allow certain file formats
-	if( !in_array($imageFileType, $allowedFileTypes)  ) {
-		$resp->setError('Sorry, only JPG, JPEG, PNG & GIF files are allowed');
-		$resp->echoData();
-
-		die();
-	}
-
-	//check if folder exists
-	if (!file_exists($registration_upload_dir)) {
-		mkdir($registration_upload_dir, 0755, true); //create folder
-	}
-			
-	if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-		$resp->setText("The picture ". basename( sanitize_file_name($_FILES["fileToUpload"]["name"]) ). " has been uploaded.");
-		$resp->setData(basename( sanitize_file_name($_FILES["fileToUpload"]["name"]) ));
-		$resp->setExtraData($target_dimentsions);
-		$resp->echoData();
-
-		die();
-	} else {
-		$resp->setError('Sorry, there was an error uploading your file');
+	} catch(Exception $e) {
+		$resp->setError($e->getMessage());
 		$resp->echoData();
 
 		die();
@@ -3570,7 +3583,7 @@ function seatreg_remove_img_callback() {
 
 	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {
 		//check if file exists
-		$imgPath = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . sanitize_text_field($_POST['code']) . '/' . sanitize_text_field($_POST['imgName']);
+		$imgPath = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . sanitize_text_field($_POST['code']) . '/' . sanitize_text_field($_POST['imgName']);
 		
 		if(file_exists($imgPath)) {
 			unlink($imgPath);
@@ -3581,6 +3594,24 @@ function seatreg_remove_img_callback() {
 		$resp->echoData();
 		
 		die();
+	}
+}
+
+add_action( 'wp_ajax_seatreg_remove_custom_payment_img', 'seatreg_remove_custom_payment_img_callback' );
+function seatreg_remove_custom_payment_img_callback() {
+	seatreg_ajax_security_check();
+
+	if( empty($_POST['code']) || empty($_POST['data']) ) {
+		wp_send_json_error();
+	}
+
+	try {
+		SeatregImageDeleteService::deleteCustomPaymentImage( $_POST['code'], $_POST['data'] );
+
+		wp_send_json_success();
+
+	}catch(Exception $e) {
+		wp_send_json_error();
 	}
 }
 

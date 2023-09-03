@@ -147,10 +147,17 @@ class SeatregPaymentService {
 		);
     }
 
-    public static function generateCustomPaymentButton($title, $paymentId) {
+    public static function generateCustomPaymentButton($title, $paymentId, $registrationId, $paymentIcon = null) {
+        $paymentIconsDIrUrl = SeatregUploadsRepository::getCustomPaymentIconLocationURL($registrationId);
+
         ?>
             <div class="custom-payment-box" data-payment-id="<?php echo esc_attr($paymentId); ?>">
-                <?php echo esc_html($title); ?>
+                <?php if($paymentIcon) : ?>
+                    <img class="custom-payment-box__img" src="<?php echo esc_attr($paymentIconsDIrUrl . '/' .$paymentIcon); ?>" />
+                <?php endif; ?>
+                <span class="custom-payment-box__text">
+                    <?php echo esc_html($title); ?>
+                </span>
             </div>
         <?php
     }

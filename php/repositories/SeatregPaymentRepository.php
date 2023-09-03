@@ -46,6 +46,8 @@ class SeatregPaymentRepository {
      *
      */
     public static function hasPaymentEnabled($bookingData) {
-        return $bookingData->paypal_payments === '1' || $bookingData->stripe_payments === '1' || $bookingData->custom_payment;
+        $customPayments = json_decode($bookingData->custom_payments);
+
+        return $bookingData->paypal_payments === '1' || $bookingData->stripe_payments === '1' || $bookingData->custom_payment || count($customPayments) > 0;
     }
 }

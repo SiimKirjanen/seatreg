@@ -75,3 +75,6 @@ define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
 
 //API
 define('SEATREG_API_OK_MESSAGE', 'ok');
+
+//Images
+define('SEATREG_BACKGROUND_IMAGE_MAX_SIZE', 2120000);

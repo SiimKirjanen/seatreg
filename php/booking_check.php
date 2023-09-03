@@ -37,15 +37,24 @@
 			margin: 24px 0 12px;
 		}
 		.custom-payment-box {
+			display: flex;
+			align-items: center;
 			cursor: pointer;
 			min-width: 230px;
 			height: 56px;
+			padding: 0 6px;
 			line-height: 56px;
 			margin-top: 5px;
 			text-align: center;
 			border: 2px solid #b7b7b7;
 			border-radius: 6px;
 			font-size: 18px;
+		}
+		.custom-payment-box__img {
+			height: 47px;
+		}
+		.custom-payment-box__text {
+			flex-grow: 1;
 		}
 		#custom-payment-descriptions {
 			margin-top: 12px;
@@ -97,11 +106,13 @@
 			}
 
 			if( $bookingData->custom_payment === '1' && $bookingHasCost ) {
-				echo SeatregPaymentService::generateCustomPaymentButton($bookingData->custom_payment_title, $legacyCustomPaymentId);
+				echo SeatregPaymentService::generateCustomPaymentButton($bookingData->custom_payment_title, $legacyCustomPaymentId, $registrationId);
 			}
 
-			foreach($customPayments as $customPayment) {
-				echo SeatregPaymentService::generateCustomPaymentButton($customPayment->title, $customPayment->paymentId);
+			if( $bookingHasCost ) {
+				foreach($customPayments as $customPayment) {
+					echo SeatregPaymentService::generateCustomPaymentButton($customPayment->title, $customPayment->paymentId, $registrationId, $customPayment->paymentIcon);
+				}
 			}
 			
 			?>

@@ -1,0 +1,12 @@
+#seatreg-settings-form {
+    .custom-payment-icon-upload {
+        display: flex;
+        &__error {
+            color: red;
+        }
+        &__loading {
+            margin-right: 8px;
+            display: none;
+        }
+    }
+}
