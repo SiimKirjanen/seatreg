@@ -10,6 +10,9 @@ Create and manage online registrations. Design your own registration scheme and 
 Clone this project to your local WordPress installation plugins directory. Make sure you name the folder as seatreg.
 Activate the plugin through the ‘Plugins’ menu in WordPress. You can also download it directly from WordPress plugins directory https://wordpress.org/plugins/seatreg/
 
+## Translations
+Translations are taken from https://translate.wordpress.org/projects/wp-plugins/seatreg/
+
 ## Plugin actions
 SeatReg exposes couple of actions you can hook into to run your own code
 
@@ -27,10 +30,6 @@ Triggered when booking gets approved status. Gets booking ID as parameter.
 
 **seatreg_action_booking_removed**
 Triggered when booking gets removed. Gets booking ID as parameter.
-
-
-## Translations
-Translations are taken from https://translate.wordpress.org/projects/wp-plugins/seatreg/
 
 ## NPM Scripts
 
