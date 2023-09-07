@@ -12,14 +12,22 @@
 				<div class="seat-id-grid">
 					<div class="grid-title"><?php esc_html_e('No.', 'seatreg'); ?></div>
 					<div class="grid-title"><?php esc_html_e('ID', 'seatreg'); ?></div>
+					<div class="grid-title"><?php esc_html_e('Action', 'seatreg'); ?></div>
 					<?php foreach($roomData->boxes as $box): ?>
+						<?php 
+							$seatNumber = $box->prefix . $box->seat;
+						?>
 						<?php if($box->canRegister === 'true'): ?>
 							<div>
-								<?php echo $box->prefix, $box->seat; ?>
+								<?php echo $seatNumber; ?>
 							</div>
 							<div>
 								<?php echo $box->id; ?>
 							</div>
+
+							<button class="btn btn-outline-secondary btn-sm" data-action="select-id" data-seat-id="<?php echo esc_attr($box->id); ?>">
+								<?php echo esc_html('Select ID', 'seatreg'); ?>
+							</button>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>

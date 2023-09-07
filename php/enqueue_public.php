@@ -51,7 +51,7 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_script('jquery-powertip', SEATREG_PLUGIN_FOLDER_URL . 'js/jquery.powertip.js' , array(), '1.2.0', true);
 		wp_enqueue_script('pg-calendar', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/js/pignose.calendar.full.min.js' , array('jquery'), '1.4.31', false);
 		wp_enqueue_script('seatreg-utils', SEATREG_PLUGIN_FOLDER_URL . 'js/utils.js' , array(), '1.0.0', true);
-		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.14.0', true);
+		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.15.0', true);
 		wp_enqueue_script('alertify', SEATREG_PLUGIN_FOLDER_URL . 'js/alertify.js', array('jquery'), '1.0.0', true);
 
 		$data = seatreg_get_options_reg($_GET['c']);
@@ -109,6 +109,7 @@ function seatreg_public_scripts_and_styles() {
 		wp_localize_script('seatreg-registration', 'WP_Seatreg', array(
 			'SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH' => SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH,
 			'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
+			'uploads_url' => SEATREG_TEMP_FOLDER_URL,
 		));
 	}
 
@@ -117,7 +118,7 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_script("jquery");
 		wp_enqueue_script('alertify', plugins_url('js/alertify.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
-		wp_enqueue_script('seatreg-booking-check', SEATREG_PLUGIN_FOLDER_URL . 'js/seatreg_booking_check.js' , array('jquery'), '1.1.0', true);
+		wp_enqueue_script('seatreg-booking-check', SEATREG_PLUGIN_FOLDER_URL . 'js/seatreg_booking_check.js' , array('jquery'), '1.2.0', true);
 		wp_localize_script('seatreg-booking-check', 'WP_Seatreg', array(
 			'ajaxUrl' => admin_url('admin-ajax.php'),
 			'successMessage' => __('Receipt sent', 'seatreg'),

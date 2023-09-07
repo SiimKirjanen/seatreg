@@ -466,6 +466,7 @@ function seatreg_generate_settings_form() {
 	}
 
 	 $options = seatreg_get_options($active_tab);
+	 $active_tab = $options[0]->registration_code;
 
 	 if( count($options) == 0 ) {
 		 seatreg_no_registration_created_info();
@@ -475,6 +476,7 @@ function seatreg_generate_settings_form() {
 
 	 $custFields = json_decode( isset($options[0]->custom_fields) ? $options[0]->custom_fields : "[]");
 	 $custLen = count(is_array($custFields) ? $custFields : []);
+	 $customPayments = json_decode( $options[0]->custom_payments ? $options[0]->custom_payments : "[]");
 	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
 	 $publicApiTokens = SeatregApiTokenRepository::getRegistrationApiTokens($options[0]->registration_code);
@@ -926,7 +928,7 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="custom-payment"><?php esc_html_e('Custom payment', 'seatreg'); ?></label>
+				<label for="custom-payment"><?php esc_html_e('Custom payment (legacy)', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('This payment method is suitable for manual payments. Allows you to control the payment flow.', 'seatreg'); ?>
 				</p>
@@ -948,6 +950,66 @@ function seatreg_generate_settings_form() {
 					<label for="custom-payment-description"><?php esc_html_e('Custom payment instructions', 'seatreg'); ?></label>
 					<p class="help-block"><?php esc_html_e('Please enter custom payment instructions. Will be shown when customer chooses this payment method.', 'seatreg'); ?></p>
 					<textarea class="form-control" id="custom-payment-description" name="custom-payment-description" placeholder="<?php esc_html_e('Enter payment instructions', 'seatreg')?>"><?php echo esc_html($options[0]->custom_payment_description); ?></textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label><?php esc_html_e('Custom payments', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('These payment methods are suitable for manual payments. Allows you to control the payment flow.', 'seatreg'); ?>
+				</p>
+				<div id="custom-payments">
+					<div class="existing-custom-payments">
+						<?php foreach($customPayments as $customPayment): ?>
+							<div class="custom-payment" data-payment-id="<?php echo esc_attr($customPayment->paymentId); ?>">
+								<?php 
+									$hasCustomPaymentIcon = property_exists($customPayment, 'paymentIcon') && $customPayment->paymentIcon !== null;
+									$IconUploadStlyes = !$hasCustomPaymentIcon ? 'style="display: flex;"' : 'style="display: none;"';
+									$paymentIconLocationURl = SeatregUploadsRepository::getCustomPaymentIconLocationURL($active_tab);
+								?>
+								<p><?php esc_html_e('Title', 'seatreg'); ?></p>
+								<input value="<?php echo esc_attr($customPayment->title); ?>" data-id="custom-payment-title" />
+
+								<p><?php esc_html_e('Description', 'seatreg'); ?></p>
+								<textarea data-id="custom-payment-description"><?php echo esc_textarea($customPayment->description); ?></textarea>
+								<p><?php esc_html_e('Payment icon', 'seatreg'); ?></p>
+
+								<div>
+									<div class="current-custom-payment-icon">
+										<?php if( $hasCustomPaymentIcon ): ?>
+											<image class="current-custom-payment-icon__img" src="<?php echo esc_attr($paymentIconLocationURl . '/' . $customPayment->paymentIcon); ?>" data-name="<?php echo esc_attr($customPayment->paymentIcon); ?>" />
+											<i class="fa fa-times-circle current-custom-payment-icon__delete"></i>
+											<img class="current-custom-payment-icon__loading" src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader_small.gif" alt="Loading...">
+										<?php endif; ?>
+									</div>
+									<div class="custom-payment-icon-upload" <?php echo $IconUploadStlyes; ?> >
+										<div class="custom-payment-icon-upload__loading">
+											<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader_small.gif" alt="Loading...">
+										</div>
+										<input type="file" name="custom-payment-icon" data-action="custom-payment-icon-upload" data-code="<?php echo $active_tab; ?>" />
+										<p class="custom-payment-icon-upload__error"></p>
+									</div>
+								</div>
+							
+								<div class="custom-payment__controls">
+									<button class="btn btn-danger btn-sm" data-action="remove-custom-payment"><?php esc_html_e('Remove', 'seatreg'); ?></button>
+								</div>
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<div id="new-custom-payment">
+						<div style="margin-bottom: 6px"><?php esc_html_e('Create new custom payment', 'seatreg'); ?></div>
+						<p class="help-block">
+							<?php esc_html_e('Please enter custom payment title', 'seatreg'); ?>
+						</p>
+						<input type="text" class="form-control" data-id="new-custom-payment-title" autocomplete="off" placeholder="<?php echo esc_html('Title', 'seatreg'); ?>">
+						<br>
+						<p class="help-block"><?php esc_html_e('Please enter custom payment instructions. Will be shown when customer chooses this payment method.', 'seatreg'); ?></p>
+						<textarea class="form-control" data-id="new-custom-payment-description" placeholder="<?php esc_html_e('Enter payment instructions', 'seatreg')?>"></textarea>
+						<br> 
+						<button class="btn btn-default btn-sm" id="create-custom-payment" type="button"><?php esc_html_e('Add custom payment', 'seatreg'); ?></button>
+					</div>
+					<input type="hidden" name="custom-payments" />
 				</div>
 			</div>
 
@@ -1068,7 +1130,8 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>.
+					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>.<br />
+					<?php echo sprintf( esc_html__( 'Your connection URl is %s', 'seatreg' ), '<strong>' . site_url() . '</strong>'); ?>
 				</p>
 				<div style="margin-bottom:25px;">
 					<a href="https://play.google.com/store/apps/details?id=com.seatreg" target="_blank">
@@ -1359,7 +1422,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	<?php
 	
 	seatreg_booking_edit_modal($usingSeats, $calendarDate);
-	seatreg_add_booking_modal($usingSeats, $calendarDate);
+	seatreg_add_booking_modal($usingSeats, $calendarDate, $roomsData);
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
 	seatreg_seat_id_modal($roomsData);
@@ -1474,7 +1537,10 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 	}
 }
 
-function seatreg_add_booking_modal($usingSeats, $calendarDate) {
+function seatreg_add_booking_modal($usingSeats, $calendarDate, $roomsData) {
+	$roomNames = array_map(function($roomData) {
+		return $roomData->room->name;
+	}, $roomsData);
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/add-booking-modal.php' );
 }
 
@@ -1984,6 +2050,7 @@ function seatreg_set_up_db() {
 			public_api_enabled tinyint(0) NOT NULL DEFAULT 0,
 			custom_footer_text text,
 			seat_selection_btn_text varchar(255) DEFAULT NULL,
+			custom_payments text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2115,7 +2182,7 @@ function seatreg_get_data_related_to_booking($bookingId) {
 //return uploaded images
 function seatreg_get_registration_uploaded_images($code) {
 	$uploadedImages = array();
-	$filePath = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . $code . '/'; 
+	$filePath = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . $code . '/'; 
 
 	if(file_exists($filePath)) {
 		$dir = opendir($filePath);
@@ -2680,6 +2747,13 @@ function seatreg_update() {
 		wp_die($customFiledsValidation->errorMessage);
 	}
 
+	$customPayments = stripslashes_deep( $_POST['custom-payments'] );
+	$customPaymentsValidation = SeatregDataValidation::validateCustomPaymentCreation($customPayments);
+
+	if( !$customPaymentsValidation->valid ) {
+		wp_die($customPaymentsValidation->errorMessage);
+	}
+
 	if(!isset($_POST['gmail-required'])) {
 		$_POST['gmail-required'] = 0;
 	}else {
@@ -2851,6 +2925,7 @@ function seatreg_update() {
 			'public_api_enabled' => $_POST['public-api'],
 			'custom_footer_text' => $_POST['custom-footer-text'],
 			'seat_selection_btn_text' => !empty($_POST['seat-selection-btn-text']) ? $_POST['seat-selection-btn-text'] : null,
+			'custom_payments' => $customPayments,
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
@@ -3141,6 +3216,37 @@ function seatreg_delete_api_token() {
 		wp_send_json_success();
 	}else {
 		wp_send_json_error();
+	}
+}
+
+add_action('wp_ajax_seatreg_custom_payment_icon_upload', 'seatreg_custom_payment_icon_upload');
+function seatreg_custom_payment_icon_upload() {
+	seatreg_ajax_security_check();
+	$resp = new SeatregJsonResponse();
+
+	if(empty($_FILES["file"]) || empty($_POST['code'])) {
+		$resp->setError('Missing data');
+		$resp->echoData();
+
+		die();
+	}
+	$code = sanitize_text_field($_POST['code']);
+
+	try {
+		$imageUploadService = new SeatregImageUploadService('/custom_payment_icons/' . $code . '/');
+		$status = $imageUploadService->uploadImage($_FILES["file"]);
+
+		$resp->setText($status->text);
+		$resp->setData($status->basename);
+		$resp->setExtraData($status->imageDimentsions);
+		$resp->echoData();
+
+		die();
+	} catch(Exception $e) {
+		$resp->setError($e->getMessage());
+		$resp->echoData();
+
+		die();
 	}
 }
 
@@ -3452,62 +3558,19 @@ function seatreg_upload_image_callback() {
 	}
 
 	$code = sanitize_text_field($_POST['code']);
-	$registration_upload_dir = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . $code . '/';
-	$target_file = $registration_upload_dir . basename(sanitize_file_name($_FILES["fileToUpload"]["name"]));
-	$target_dimentsions = null;
-	$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-	$allowedFileTypes = array('jpg', 'png', 'jpeg', 'gif');
 
-	// Check if image file is a actual image or fake image
-	$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+	try {
+		$imageUploadService = new SeatregImageUploadService('/room_images/' . $code . '/');
+		$status = $imageUploadService->uploadImage($_FILES["fileToUpload"]);
 
-	if($check == false) {
-		$resp->setError('File is not an image');
+		$resp->setText($status->text);
+		$resp->setData($status->basename);
+		$resp->setExtraData($status->imageDimentsions);
 		$resp->echoData();
 
 		die();
-	}
-	$target_dimentsions = $check[0] . ',' . $check[1];
-
-	// Check if file already exists
-	if (file_exists($target_file)) {
-		$resp->setError('Sorry, picture already exists');
-		$resp->echoData();
-
-		die();
-
-	}
-
-	// Check file size                    
-	if ($_FILES["fileToUpload"]["size"] > 2120000 ) {
-		$resp->setError('Sorry, your file is too large');
-		$resp->echoData();
-
-		die();		
-	}
-
-	// Allow certain file formats
-	if( !in_array($imageFileType, $allowedFileTypes)  ) {
-		$resp->setError('Sorry, only JPG, JPEG, PNG & GIF files are allowed');
-		$resp->echoData();
-
-		die();
-	}
-
-	//check if folder exists
-	if (!file_exists($registration_upload_dir)) {
-		mkdir($registration_upload_dir, 0755, true); //create folder
-	}
-			
-	if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-		$resp->setText("The picture ". basename( sanitize_file_name($_FILES["fileToUpload"]["name"]) ). " has been uploaded.");
-		$resp->setData(basename( sanitize_file_name($_FILES["fileToUpload"]["name"]) ));
-		$resp->setExtraData($target_dimentsions);
-		$resp->echoData();
-
-		die();
-	} else {
-		$resp->setError('Sorry, there was an error uploading your file');
+	} catch(Exception $e) {
+		$resp->setError($e->getMessage());
 		$resp->echoData();
 
 		die();
@@ -3522,7 +3585,7 @@ function seatreg_remove_img_callback() {
 
 	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {
 		//check if file exists
-		$imgPath = SEATREG_PLUGIN_FOLDER_DIR . 'uploads/room_images/' . sanitize_text_field($_POST['code']) . '/' . sanitize_text_field($_POST['imgName']);
+		$imgPath = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . sanitize_text_field($_POST['code']) . '/' . sanitize_text_field($_POST['imgName']);
 		
 		if(file_exists($imgPath)) {
 			unlink($imgPath);
@@ -3533,6 +3596,24 @@ function seatreg_remove_img_callback() {
 		$resp->echoData();
 		
 		die();
+	}
+}
+
+add_action( 'wp_ajax_seatreg_remove_custom_payment_img', 'seatreg_remove_custom_payment_img_callback' );
+function seatreg_remove_custom_payment_img_callback() {
+	seatreg_ajax_security_check();
+
+	if( empty($_POST['code']) || empty($_POST['data']) ) {
+		wp_send_json_error();
+	}
+
+	try {
+		SeatregImageDeleteService::deleteCustomPaymentImage( $_POST['code'], $_POST['data'] );
+
+		wp_send_json_success();
+
+	}catch(Exception $e) {
+		wp_send_json_error();
 	}
 }
 

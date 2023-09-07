@@ -6,10 +6,22 @@
 	Author: Siim Kirjanen
 	Author URI: https://github.com/SiimKirjanen
 	Text Domain: seatreg
-	Version: 1.40.0
+	Version: 1.43.0
 	Requires at least: 5.3
 	Requires PHP: 7.2.28
 	License: GPLv2 or later
+*/
+
+/*
+SeatReg is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+any later version.
+
+SeatReg is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,6 +36,7 @@ require( 'php/repositories/SeatregOptionsRepository.php' );
 require( 'php/repositories/SeatregActivityLogRepository.php' );
 require( 'php/repositories/SeatregPaymentLogRepository.php' );
 require( 'php/repositories/SeatregApiTokenRepository.php' );
+require( 'php/repositories/SeatregUploadsRepository.php' );
 require( 'php/services/SeatregRegistrationService.php' );
 require( 'php/services/SeatregBookingService.php' );
 require( 'php/services/SeatregPaymentService.php' );
@@ -37,6 +50,8 @@ require( 'php/services/SeatregCustomFieldService.php' );
 require( 'php/services/SeatregCalendarService.php' );
 require( 'php/services/SeatregActionsService.php' );
 require( 'php/services/SeatregPublicApiService.php' );
+require( 'php/services/SeatregImageUploadService.php' );
+require( 'php/services/SeatregImageDeleteService.php' );
 require( 'php/services/SeatregRandomGenerator.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );

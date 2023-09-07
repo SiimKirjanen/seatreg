@@ -31,4 +31,8 @@
     $('.custom-payment-box').on('click', function() {
         $('.payment-form-footer').show();
     });
+    $('.payment-forms .custom-payment-box').on('click', function() {
+        $('#custom-payment-descriptions div').css('display', 'none');
+        $('#custom-payment-descriptions div[data-payment-id="'+ $(this).data('payment-id') +'"]').show();
+    });
 })(jQuery);

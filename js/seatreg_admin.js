@@ -1,6 +1,7 @@
 (function($) {
 	var canvasSupport = ($('html').hasClass('no-canvas') ? false : true);
 	var bookingOrderInManager = null;
+	var bookingManagerActiveAddBookingIdLookupIndex = 0;
 		
 	//console.log('jQuery version: ' + $.fn.jquery);
 	//console.log('jQUery UI version ' + $.ui.version);
@@ -128,6 +129,23 @@
 		});
 	}
 
+	function seatreg_upload_custom_payment_icon(regCode, file) {
+		var formData = new FormData();
+
+		formData.append('file', file);
+		formData.append('code', regCode);
+		formData.append('action', 'seatreg_custom_payment_icon_upload');
+		formData.append('security', WP_Seatreg.nonce);
+
+		return $.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: formData,
+			contentType: false,
+			processData: false,
+		});
+	}
+
 	function seatreg_admin_ajax_error(jqXHR, textStatus, errorThrown) {
 		console.log('error');
 		console.log(textStatus);
@@ -150,6 +168,13 @@
 		}
 		
 		return timeStampText;
+	}
+
+	function generateUniqueString() {
+		const timestamp = new Date().getTime().toString(36);
+		const randomStr = Math.random().toString(36).substring(2, 7); // Adjusted indexes
+
+		return timestamp + randomStr;
 	}
 
 	$('#create-registration-form').on('submit', function(e) {
@@ -788,8 +813,15 @@ $('#seatreg-booking-manager').on('click', '#generate-bookings-file', function() 
 });
 
 $('#seatreg-booking-manager').on('click', '.seat-id-search', function() {
+	bookingManagerActiveAddBookingIdLookupIndex = $(this).closest('.modal-body-item').index();
 	$('#seat-id-modal').modal('show');
 });
+
+$('#seatreg-booking-manager .seat-id-grid [data-action="select-id"]').on('click', function() {
+	$('#seatreg-booking-manager #add-booking-modal-form .modal-body-item').eq(bookingManagerActiveAddBookingIdLookupIndex).find('[name="seat-id[]"]').val( $(this).data('seat-id') );
+	$('#seat-id-modal').modal('hide');
+});
+
 
 $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 	$(this).css('display','none').after('<img src="' + WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' + '" alt="Loading..." class="ajax-load" />');
@@ -1227,6 +1259,109 @@ function SeatregCustomField(label, type, options, unique = false) {
 		this.unique = unique;
 }
 
+function SeatregCustomPayment(title, description, paymentId, paymentIcon) {
+	this.title = title;
+	this.description = description;
+	this.paymentId = paymentId;
+	this.paymentIcon = paymentIcon;
+}
+
+$('#seatreg-settings-form #create-custom-payment').on('click', function() {
+	var customFieldTitle = $('#new-custom-payment [data-id="new-custom-payment-title"]').val();
+	var customFieldDescription = $('#new-custom-payment [data-id="new-custom-payment-description"]').val();
+	var registrationCode = $('#seatreg-settings-form input[name="registration_code"]').val();
+
+	if( customFieldTitle === '' ) {
+		alertify.error(translator.translate('enterCustomPaymentTitle'));
+		return;
+	}
+	if( customFieldDescription === '' ) {
+		alertify.error(translator.translate('enterCustomPaymentdescription'));
+		return;
+	}
+
+	$('#custom-payments .existing-custom-payments').append(
+		'<div class="custom-payment" data-payment-id="' + generateUniqueString() + '">' +
+			'<p>' + translator.translate('title') + '</p>' +
+			'<input value="'+ customFieldTitle +'" data-id="custom-payment-title" />' +
+			'<p>' + translator.translate('description') + '</p>' +
+			'<textarea data-id="custom-payment-description">'+ customFieldDescription +'</textarea>' +
+			'<p>' + translator.translate('paymentIcon') + '</p>' +
+			'<div>' +
+				'<div class="current-custom-payment-icon">' +
+				'</div>' +
+				'<div class="custom-payment-icon-upload">' +
+					'<div class="custom-payment-icon-upload__loading">' +
+						'<img src="'+ WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif" alt="Loading...">' +
+					'</div>' +
+					'<input type="file" name="custom-payment-icon" data-action="custom-payment-icon-upload" data-code="'+ registrationCode +'" />' +
+					'<p class="custom-payment-icon-upload__error"></p>' +
+				'</div>' +
+			'</div>' +
+			'<div class="custom-payment__controls">' +
+				'<button class="btn btn-danger btn-sm">'+ translator.translate('remove') +'</button>' + 
+			'</div>' + 
+		'</div>'
+	);
+});
+
+$('#seatreg-settings-form #custom-payments').on('click', '[data-action="remove-custom-payment"]', function() {
+	$(this).closest('.custom-payment').remove();
+});
+
+$('#seatreg-settings-form #custom-payments').on('click', '.current-custom-payment-icon__delete', function() {
+	var $customPayment = $(this).closest('.custom-payment');
+	var registrationCode = $('#seatreg-settings-form input[name="registration_code"]').val();
+	var imageName = $(this).siblings('img[data-name]').data('name');
+
+	$customPayment.find('.current-custom-payment-icon__delete').css('display', 'none');
+	$customPayment.find('.current-custom-payment-icon__loading').css('display', 'block');
+	var promise = seaterg_admin_ajax('seatreg_remove_custom_payment_img', registrationCode, imageName);
+
+	promise.done(function() {
+		$customPayment.find('.current-custom-payment-icon__loading').css('display', '');
+		$customPayment.find('.current-custom-payment-icon__delete').css('display', 'block');
+		$customPayment.find('.current-custom-payment-icon').empty();
+		$customPayment.find('.custom-payment-icon-upload').css('display', 'flex');
+	});
+	
+	promise.fail = seatreg_admin_ajax_error;
+});
+
+$('#seatreg-settings-form #custom-payments').on('change', '[data-action="custom-payment-icon-upload"]', function() {
+	var $this = $(this);
+	var $customPayment = $this.closest('.custom-payment');
+	var regCode = $this.data('code');
+	var file = $this[0].files[0];
+	var $loading = $this.siblings('.custom-payment-icon-upload__loading');
+	$loading.css('display', 'block');
+	var promise = seatreg_upload_custom_payment_icon(regCode, file);
+	
+	promise.always(function() {
+		$loading.css('display', '');
+	});
+	promise.done(function(data) {
+		var resp = JSON.parse(data);
+		$this.val(null);
+
+		if(resp.type === 'ok') {
+			var paymentLogoUrl = WP_Seatreg.uploads_url + '/custom_payment_icons/' + regCode + '/' + resp.data;
+			$customPayment.find('.custom-payment-icon-upload').css('display', 'none');
+
+			$customPayment.find('.current-custom-payment-icon').append(
+				'<image class="current-custom-payment-icon__img" src="'+ paymentLogoUrl +'" data-name="'+ resp.data +'"/>' +
+				'<i class="fa fa-times-circle current-custom-payment-icon__delete"></i>' +
+				'<img class="current-custom-payment-icon__loading" src="'+ WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif" alt="Loading..." />'
+				);
+			alertify.success(translator.translate('paymentIconUploaded'));
+		}else {
+			alertify.error(resp.text);
+		}
+	});
+	promise.fail = seatreg_admin_ajax_error;
+});
+
+
 $('#seatreg-settings-form #public-api-tokens').on('click', '.remove-token', function() {
 	var tokenBox = $(this).closest('.token-box');
 	var code = $('input[name="registration_code"]').val();
@@ -1294,6 +1429,7 @@ $('#seatreg-settings-form #create-api-token').on('click', function(e) {
 //when user submits seatreg settings. Do validation, generate #custom-fields hidden input value. 
 $('#seatreg-settings-submit').on('click', function(e) {
 	var customFieldArray = [];  //array to store custom inputs
+	var customPayments = [];
 
 	if($('#stripe').is(":checked")) {
 		if($('#stripe-api-key').val() === "") {
@@ -1388,6 +1524,18 @@ $('#seatreg-settings-submit').on('click', function(e) {
  			}	
  	}); 
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
+
+	$('#seatreg-settings-form .existing-custom-payments .custom-payment').each(function() {
+		var paymentIcon = $(this).find('.current-custom-payment-icon img').length ? $(this).find('.current-custom-payment-icon img').data('name') : null;
+
+		customPayments.push(new SeatregCustomPayment( 
+			$(this).find('[data-id="custom-payment-title"]').val(),
+			$(this).find('[data-id="custom-payment-description"]').val(),
+			$(this).data('payment-id'),
+			paymentIcon
+		));
+	});
+	$('#custom-payments input[name="custom-payments"]').val(JSON.stringify( customPayments ));
 });
 
 $('#seatreg-send-test-email').on('click', function(e) {
