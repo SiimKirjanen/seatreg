@@ -67,8 +67,8 @@ function seatreg_nonce_check() {
 }
 
 //capability check
-function seatreg_check_user_capabilities() {
-	if( !current_user_can(SEATREG_MANAGE_BOOKINGS_CAPABILITY) ) {	
+function seatreg_check_user_capabilities($requiredCapability) {
+	if( !current_user_can($requiredCapability) ) {	
 		wp_die('You are not allowed to do this');	
 	}
 }
@@ -2976,7 +2976,7 @@ function seatreg_update() {
 //handle settings form submit
 add_action('admin_post_seatreg-form-submit', 'seatreg_form_submit_handle'); 
 function seatreg_form_submit_handle() {
-	seatreg_check_user_capabilities();
+	seatreg_check_user_capabilities(SEATREG_MANAGE_EVENTS_CAPABILITY);
 	check_admin_referer('seatreg-options-submit', 'seatreg-options-nonce');
 
 	if( seatreg_update() === false) {
@@ -2995,8 +2995,8 @@ Ajax stuff
 ====================================================================================================================================================================================
 */
 
-function seatreg_ajax_security_check() {
-	seatreg_check_user_capabilities();
+function seatreg_ajax_security_check($requiredCapability) {
+	seatreg_check_user_capabilities($requiredCapability);
 	seatreg_check_ajax_nonce();
 }
 
@@ -3009,7 +3009,7 @@ function seatreg_check_ajax_nonce() {
 
 add_action('wp_ajax_get_seatreg_layout_and_bookings', 'seatreg_get_registration_layout_and_bookings');
 function seatreg_get_registration_layout_and_bookings() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 
 	$registration = seatreg_get_registration_data( sanitize_text_field( $_POST['code']) );
 	$bookings = SeatregBookingRepository::getAllConfirmedAndApprovedBookingsByRegistrationCode( sanitize_text_field($_POST['code']) );
@@ -3025,7 +3025,7 @@ function seatreg_get_registration_layout_and_bookings() {
 
 add_action('wp_ajax_seatreg_update_layout', 'seatreg_update_layout');
 function seatreg_update_layout() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 	$response = new SeatregJsonResponse();
 
 	if( !SeatregDataValidation::updateLayoutDataExists() ) {
@@ -3188,7 +3188,7 @@ function seatreg_resend_receipt_callback() {
 
 add_action( 'wp_ajax_seatreg_get_room_stats', 'seatreg_get_room_stats_callback' );
 function seatreg_get_room_stats_callback() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 
 	seatreg_generate_overview_section_html($_POST['data']['target'], sanitize_text_field($_POST['code']), $_POST['data']['calendarDate']);
 
@@ -3206,7 +3206,7 @@ function seatreg_new_captcha_callback() {
 
 add_action('wp_ajax_seatreg_delete_api_token', 'seatreg_delete_api_token');
 function seatreg_delete_api_token() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 
 	if( empty( $_POST[ 'code' ] ) || empty( $_POST['data'][ 'api-token' ] ) ) {
 		wp_die('Missing data');
@@ -3221,7 +3221,7 @@ function seatreg_delete_api_token() {
 
 add_action('wp_ajax_seatreg_custom_payment_icon_upload', 'seatreg_custom_payment_icon_upload');
 function seatreg_custom_payment_icon_upload() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 	$resp = new SeatregJsonResponse();
 
 	if(empty($_FILES["file"]) || empty($_POST['code'])) {
@@ -3252,7 +3252,7 @@ function seatreg_custom_payment_icon_upload() {
 
 add_action('wp_ajax_seatreg_create_api_token', 'seatreg_create_api_token');
 function seatreg_create_api_token() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 
 	if( empty( $_POST[ 'code' ] ) ) {
 		wp_die('Missing data');
@@ -3276,7 +3276,7 @@ function seatreg_create_api_token() {
 
 add_action( 'wp_ajax_seatreg_get_booking_manager', 'seatreg_get_booking_manager_callback' );
 function seatreg_get_booking_manager_callback() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 	if( empty( $_POST[ 'code' ] ) || empty( $_POST['data']['orderby'] ) || !isSet( $_POST['data']['searchTerm'] ) ) {
 		wp_die('Missing data');
 	}
@@ -3310,7 +3310,7 @@ function seatreg_get_booking_manager_callback() {
 
 add_action( 'wp_ajax_seatreg_confirm_del_bookings', 'seatreg_confirm_del_bookings_callback' );
 function seatreg_confirm_del_bookings_callback() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 
 	$data = json_decode( stripslashes_deep($_POST['data']['actionData']) );
 	$calendarDate = assignIfNotEmpty( $_POST['data']['calendarDate'], null );
@@ -3372,7 +3372,7 @@ function seatreg_confirm_del_bookings_callback() {
 
 add_action( 'wp_ajax_seatreg_search_bookings', 'seatreg_search_bookings_callback' );
 function seatreg_search_bookings_callback() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 	$order = 'date';
 	$searchTerm = '';
 	$calendarDate = assignIfNotEmpty($_POST['data']['calendarDate'], null);
@@ -3391,7 +3391,7 @@ function seatreg_search_bookings_callback() {
 
 add_action( 'wp_ajax_seatreg_add_booking_with_manager', 'seatreg_add_booking_with_manager_callback' );
 function seatreg_add_booking_with_manager_callback() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 
 	if( empty( $_POST['first-name'] ) || 
 		empty( $_POST['last-name'] ) || 
@@ -3499,7 +3499,7 @@ function seatreg_add_booking_with_manager_callback() {
 
 add_action( 'wp_ajax_seatreg_edit_booking', 'seatreg_edit_booking_callback' );
 function seatreg_edit_booking_callback() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 
 	$bookingEdit = new stdClass();
 	$bookingEdit->firstName = sanitize_text_field($_POST['fname']);
@@ -3546,7 +3546,7 @@ function seatreg_edit_booking_callback() {
 
 add_action( 'wp_ajax_seatreg_upload_image', 'seatreg_upload_image_callback' );
 function seatreg_upload_image_callback() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 
 	$resp = new SeatregJsonResponse();
 
@@ -3579,7 +3579,7 @@ function seatreg_upload_image_callback() {
 
 add_action( 'wp_ajax_seatreg_remove_img', 'seatreg_remove_img_callback' );
 function seatreg_remove_img_callback() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 
 	$resp = new SeatregJsonResponse();
 
@@ -3601,7 +3601,7 @@ function seatreg_remove_img_callback() {
 
 add_action( 'wp_ajax_seatreg_remove_custom_payment_img', 'seatreg_remove_custom_payment_img_callback' );
 function seatreg_remove_custom_payment_img_callback() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 
 	if( empty($_POST['code']) || empty($_POST['data']) ) {
 		wp_send_json_error();
@@ -3619,7 +3619,7 @@ function seatreg_remove_custom_payment_img_callback() {
 
 add_action( 'wp_ajax_seatreg_send_test_email', 'seatreg_send_test_email');
 function seatreg_send_test_email() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 
 	if(empty($_POST['email'])) {
 		exit('Missing data');
@@ -3643,7 +3643,7 @@ function seatreg_send_test_email() {
 
 add_action( 'wp_ajax_seatreg_get_booking_logs', 'seatreg_get_booking_logs');
 function seatreg_get_booking_logs() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 
 	if(empty($_GET['bookingId'])) {
 		exit('Missing data');
@@ -3658,7 +3658,7 @@ function seatreg_get_booking_logs() {
 
 add_action( 'wp_ajax_seatreg_get_registration_logs', 'seatreg_get_registration_logs');
 function seatreg_get_registration_logs() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
 
 	if(empty($_GET['registrationId'])) {
 		exit('Missing data');
@@ -3673,7 +3673,7 @@ function seatreg_get_registration_logs() {
 
 add_action( 'wp_ajax_seatreg_create_payment_log', 'seatreg_create_payment_log');
 function seatreg_create_payment_log() {
-	seatreg_ajax_security_check();
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 
 	if( empty($_POST['logStatus']) || empty($_POST['bookingId']) || empty($_POST['logMessage']) ) {
 		exit('Missing data');
