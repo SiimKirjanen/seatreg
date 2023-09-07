@@ -15,7 +15,7 @@ function seatreg_add_plugin_menu() {
 	add_menu_page(
 		'SeatReg',  //header title
 		'SeatReg',  //menu title
-		'seatreg_manage_events',  //capability,
+		SEATREG_MANAGE_EVENTS_CAPABILITY,  //capability,
 		'seatreg-welcome',   //slug, 
 		'seatreg_create_welcome',  //callback
 		plugins_url('img/setting_icon.png', dirname(__FILE__) ),     //custom icon. 
@@ -27,7 +27,7 @@ function seatreg_add_plugin_menu() {
 		'seatreg-welcome',
 		sprintf(esc_html__('%s Home', 'seatreg'), 'SeatReg'),
 		esc_html__('Home', 'seatreg'),
-		'seatreg_manage_events',
+		SEATREG_MANAGE_EVENTS_CAPABILITY,
 		'seatreg-welcome',
 		'seatreg_create_welcome'
 	);
@@ -36,7 +36,7 @@ function seatreg_add_plugin_menu() {
 		/* translators: %s: Name of the registration */
 		sprintf(esc_html__('%s Overview', 'seatreg'), 'SeatReg'),  //page title
 		esc_html__('Overview', 'seatreg'),  //menu title
-		'seatreg_manage_events',  //capability
+		SEATREG_MANAGE_EVENTS_CAPABILITY,  //capability
 		'seatreg-overview',   //slug
 		'seatreg_create_overview'  //callback
 	);
@@ -44,7 +44,7 @@ function seatreg_add_plugin_menu() {
 		'seatreg-welcome',   //slug 
 		sprintf(esc_html__('%s Settings', 'seatreg'), 'SeatReg'),  //page title
 		esc_html__('Settings', 'seatreg'),  //menu title
-		'seatreg_manage_events',  //capability
+		SEATREG_MANAGE_EVENTS_CAPABILITY,  //capability
 		'seatreg-options',   //slug
 		'seatreg_create_options'
 	);
@@ -52,7 +52,7 @@ function seatreg_add_plugin_menu() {
 		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
 		sprintf(esc_html__('%s Bookings', 'seatreg'), 'SeatReg'),  //page title
 		esc_html__('Bookings', 'seatreg'),  //menu title
-		'seatreg_manage_bookings',  //capability
+		SEATREG_MANAGE_BOOKINGS_CAPABILITY,  //capability
 		'seatreg-management',   //slug
 		'seatreg_create_management'
 	);
@@ -60,7 +60,7 @@ function seatreg_add_plugin_menu() {
 		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
 		esc_html__('SeatReg tools', 'seatreg'),  //page title
 		esc_html__('Tools', 'seatreg'),  //menu title
-		'seatreg_manage_events',  //capability
+		SEATREG_MANAGE_EVENTS_CAPABILITY,  //capability
 		'seatreg-tools',   //slug
 		'seatreg_create_tools'
 	);

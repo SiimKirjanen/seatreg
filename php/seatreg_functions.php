@@ -40,7 +40,7 @@ function seatreg_is_user_logged_in_and_has_permissions() {
 		exit();
 	}
 
-	if( !current_user_can('seatreg_manage_bookings') ) {
+	if( !current_user_can(SEATREG_MANAGE_BOOKINGS_CAPABILITY) ) {
 		esc_html_e('No permissions', 'seatreg');
 
 		exit();
@@ -61,14 +61,14 @@ function seatreg_nonce_check() {
 	    wp_die('Nonce validation failed!');
 	}
 
-	if( !current_user_can('seatreg_manage_events') ) {
+	if( !current_user_can(SEATREG_MANAGE_EVENTS_CAPABILITY) ) {
 		 wp_die('You are not allowed to do this');
 	}
 }
 
 //capability check
 function seatreg_check_user_capabilities() {
-	if( !current_user_can('seatreg_manage_bookings') ) {	
+	if( !current_user_can(SEATREG_MANAGE_BOOKINGS_CAPABILITY) ) {	
 		wp_die('You are not allowed to do this');	
 	}
 }
@@ -3696,20 +3696,20 @@ Capabilities
 
 function seatreg_capabilities_add() {
 	$role = get_role('administrator');
-	if ( !$role->has_cap('seatreg_manage_events') ) {
-		$role->add_cap('seatreg_manage_events');
+	if ( !$role->has_cap(SEATREG_MANAGE_EVENTS_CAPABILITY) ) {
+		$role->add_cap(SEATREG_MANAGE_EVENTS_CAPABILITY);
 	}
-	if ( !$role->has_cap('seatreg_manage_bookings') ) {
-		$role->add_cap('seatreg_manage_bookings');
+	if ( !$role->has_cap(SEATREG_MANAGE_BOOKINGS_CAPABILITY) ) {
+		$role->add_cap(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 	}
 }
 function seatreg_capabilities_remove() {
 	$role = get_role('administrator');
-	if ( $role->has_cap('seatreg_manage_events') ) {
-		$role->remove_cap('seatreg_manage_events');
+	if ( $role->has_cap(SEATREG_MANAGE_EVENTS_CAPABILITY) ) {
+		$role->remove_cap(SEATREG_MANAGE_EVENTS_CAPABILITY);
 	}
-	if ( $role->has_cap('seatreg_manage_bookings') ) {
-		$role->remove_cap('seatreg_manage_bookings');
+	if ( $role->has_cap(SEATREG_MANAGE_BOOKINGS_CAPABILITY) ) {
+		$role->remove_cap(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 	}
 
 }

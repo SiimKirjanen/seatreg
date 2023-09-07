@@ -80,3 +80,5 @@ define('SEATREG_BACKGROUND_IMAGE_MAX_SIZE', 2120000);
 
 // Capabilities
 define('SEATREG_TRIGGER_SIDE_EFFECT', '1');
+define('SEATREG_MANAGE_BOOKINGS_CAPABILITY', 'seatreg_manage_bookings');
+define('SEATREG_MANAGE_EVENTS_CAPABILITY', 'seatreg_manage_events');
