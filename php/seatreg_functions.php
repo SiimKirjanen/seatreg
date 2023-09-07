@@ -40,7 +40,7 @@ function seatreg_is_user_logged_in_and_has_permissions() {
 		exit();
 	}
 
-	if( !current_user_can('seatreg_manage_events') ) {
+	if( !current_user_can('seatreg_manage_bookings') ) {
 		esc_html_e('No permissions', 'seatreg');
 
 		exit();
