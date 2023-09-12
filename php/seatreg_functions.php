@@ -1131,7 +1131,7 @@ function seatreg_generate_settings_form() {
 				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>.<br />
-					<?php echo sprintf( esc_html__( 'Your connection URl is %s', 'seatreg' ), '<strong>' . site_url() . '</strong>'); ?>
+					<?php echo sprintf( esc_html__( 'Use %s when making a connection using Android application.', 'seatreg' ), '<strong>' . site_url() . '</strong>'); ?>
 				</p>
 				<div style="margin-bottom:25px;">
 					<a href="https://play.google.com/store/apps/details?id=com.seatreg" target="_blank">

@@ -88,13 +88,24 @@ function seatreg_create_welcome() {
 					<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
 				</form>
 				<p style="text-align:center">
+					Don't forget to leave a 
+					<a href="https://wordpress.org/support/plugin/seatreg/reviews/" target="_blank">
+						review
+					<a/>
+				</p>
+				<p style="text-align:center">
+					Found a problem or have some ideas how to improve? Don't hesitate to write to
+					<a href="https://wordpress.org/support/plugin/seatreg/" target="_blank">
+						support forum
+					<a/>
+				</p>
+				<p style="text-align:center">
 					I also created an Android companion application for this plugin.<br>
 					<a href="https://play.google.com/store/apps/details?id=com.seatreg" target="_blank">
 						<i class="fa fa-android" aria-hidden="true" style="color: #A4C639"></i>
-						<?php esc_html_e('SeatReg Android application'); ?>
+						SeatReg Android application
 					<a/>
 				</p>
-				
 			</div>
 		</div>
 
