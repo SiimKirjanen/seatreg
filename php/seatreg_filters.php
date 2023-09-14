@@ -73,6 +73,12 @@ function seatreg_custom_pages() {
 		die();
 	}
 
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-pdf' ) {
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/pages/booking_pdf.php';
+
+		die();
+	}
+
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'payment-return' ) {
 		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/return_to_merchant.php';
 
