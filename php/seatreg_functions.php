@@ -1618,7 +1618,8 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 		$bookings = SeatregBookingRepository::getBookingsByRegistrationCodeAndBookingId($registrationCode, $bookingId);
 		$roomData = json_decode($registration->registration_layout)->roomData;
 		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
-		$registrationCustomFields = json_decode($registration->custom_fields);
+
+		$registrationCustomFields = json_decode( isset($registration->custom_fields) ? $registration->custom_fields : '[]');
 	
 		foreach ($bookings as $booking) {
 			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
