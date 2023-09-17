@@ -200,7 +200,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 					<?php
 						if($targetRoom == 'overview') {
 							echo "<div class='reg-overview-top-bron-notify'>";
-								echo $registration->using_seats === '1' ? sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']) : sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats']);
+								echo $registration->using_seats === '1' ? sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']) : sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats']), '!';
 							echo '</div>';
 						}else {
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
@@ -1313,7 +1313,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		
 					if($row_count == 0) {
 						echo '<div class="notify-text">';
-							$usingSeats ? esc_html_e('No pending seats', 'seatreg') : esc_html_e('No pending places', 'seatreg');
+							$usingSeats ? esc_html_e('No pending bookings', 'seatreg') : esc_html_e('No pending places', 'seatreg');
 						echo '</div>';
 					}			
 		
@@ -1366,7 +1366,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 					echo '<div id="', sha1($project_name),'taken" class="tab_container active">';
 		
 					if($row_count2 == 0) {
-						echo '<div class="notify-text">', esc_html__('No approved seats', 'seatreg'), '</div>';
+						echo '<div class="notify-text">', esc_html__('No approved bookings', 'seatreg'), '</div>';
 					}
 		
 					foreach ($bookings2 as $row) {
@@ -3346,7 +3346,7 @@ function seatreg_confirm_del_bookings_callback() {
 
 			if($value->action == 'conf' && !in_array($value->booking_id, $approvalBookingEmailProcessed)) {
 				$bookingData = SeatregBookingRepository::getDataRelatedToBooking($value->booking_id);
-				
+
 				if($bookingData->send_approved_booking_email === '1') {
 					$mailSent = seatreg_send_approved_booking_email( $value->booking_id, $code, $bookingData->approved_booking_email_template );
 					if($mailSent) {
