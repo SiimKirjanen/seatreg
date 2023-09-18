@@ -50,6 +50,7 @@ class SeatregPaymentBase {
 			$this->changeBookingStatus(SEATREG_BOOKING_APPROVED);
 			seatreg_add_activity_log('booking', $this->_bookingId, "Booking set to approved state by the system ($this->_paymentMethod)", false);
 			seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode, $bookingData->approved_booking_email_template);
+			SeatregActionsService::triggerBookingApprovedAction($this->_bookingId);
 		}
 	}
 
