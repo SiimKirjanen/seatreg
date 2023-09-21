@@ -87,6 +87,13 @@ function seatreg_is_booking_check_page() {
 	return false;
 }
 
+function seatreg_is_booking_confirm_page() {
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-confirm' ) {
+		return true;
+	}
+	return false;
+}
+
 function seatreg_validate_bookings_file_input() {
 	if(empty($_GET['code'])) {
 		wp_die('Missing code');
@@ -1119,7 +1126,10 @@ function seatreg_generate_settings_form() {
 				<textarea class="form-control mb-2" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
 
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking status page', 'seatreg'); ?>.</p>
-				<textarea class="form-control" name="booking-status-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_status_page_custom_styles); ?></textarea>
+				<textarea class="form-control mb-2" name="booking-status-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_status_page_custom_styles); ?></textarea>
+
+				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking confirm page', 'seatreg'); ?>.</p>
+				<textarea class="form-control" name="booking-confirm-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_confirm_page_custom_styles); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -2056,6 +2066,7 @@ function seatreg_set_up_db() {
 			seat_selection_btn_text varchar(255) DEFAULT NULL,
 			custom_payments text,
 			booking_status_page_custom_styles text,
+			booking_confirm_page_custom_styles text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2867,6 +2878,13 @@ function seatreg_update() {
 		$_POST['booking-status-custom-styles'] = null;
 	}
 
+	if( !empty($_POST['booking_confirm_page_custom_styles']) ) {
+		$_POST['booking_confirm_page_custom_styles'] = wp_kses($_POST['booking_confirm_page_custom_styles'], array( '\'', '\"' ));
+	}else {
+		$_POST['booking_confirm_page_custom_styles'] = null;
+	}
+	
+
 	if( !empty($_POST['custom-styles']) ) {
 		$_POST['custom-styles'] = wp_kses($_POST['custom-styles'], array( '\'', '\"' ));
 	}else {
@@ -2938,6 +2956,7 @@ function seatreg_update() {
 			'seat_selection_btn_text' => !empty($_POST['seat-selection-btn-text']) ? $_POST['seat-selection-btn-text'] : null,
 			'custom_payments' => $customPayments,
 			'booking_status_page_custom_styles' => $_POST['booking-status-custom-styles'],
+			'booking_confirm_page_custom_styles' => $_POST['booking-confirm-custom-styles'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])

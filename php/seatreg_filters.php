@@ -61,13 +61,13 @@ function seatreg_custom_pages() {
 		die();
 	}
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-confirm' ) {
-		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/booking_confirm.php';
+	if( seatreg_is_booking_confirm_page() ) {
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/pages/booking_confirm.php';
 
 		die();
 	}
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-status' ) {
+	if( seatreg_is_booking_check_page() ) {
 		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/pages/booking_status.php';
 
 		die();

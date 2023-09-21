@@ -15,6 +15,11 @@ function seatreg_remove_all_styles() {
 		$allowedToLoad = array('alertify-core', 'alertify-default');
     	$wp_styles->queue = $allowedToLoad;
 	}
+	if( seatreg_is_booking_confirm_page() ) {
+		global $wp_styles;
+		$allowedToLoad = array();
+    	$wp_styles->queue = $allowedToLoad;
+	}
 }
 
 //only allow spesific scripts to load on registration view page
@@ -28,6 +33,11 @@ function seatreg_remove_all_scripts() {
 	if( seatreg_is_booking_check_page() ) {
 		global $wp_scripts;
 		$allowedToLoad = array('jquery', 'alertify', 'seatreg-booking-check');
+		$wp_scripts->queue = $allowedToLoad;
+	}
+	if( seatreg_is_booking_confirm_page() ) {
+		global $wp_scripts;
+		$allowedToLoad = array();
 		$wp_scripts->queue = $allowedToLoad;
 	}
 }
@@ -130,6 +140,16 @@ function seatreg_public_scripts_and_styles() {
 		if( $bookingData->booking_status_page_custom_styles ) {
 			add_action('wp_head', function() use ($bookingData) {
 				seatreg_add_custom_styles($bookingData->booking_status_page_custom_styles);
+			}, 100);
+		}
+	}
+
+	if( seatreg_is_booking_confirm_page() && !empty( $_GET['confirmation-code'] ) ) {
+		$options = SeatregOptionsRepository::getOptionsByConfirmationCode( sanitize_text_field($_GET['confirmation-code']) );
+
+		if( $options->booking_confirm_page_custom_styles ) {
+			add_action('wp_head', function() use ($options) {
+				seatreg_add_custom_styles($options->booking_confirm_page_custom_styles);
 			}, 100);
 		}
 	}
