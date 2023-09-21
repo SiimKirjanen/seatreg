@@ -104,7 +104,7 @@ function seatreg_public_scripts_and_styles() {
 				seatreg_add_custom_styles($data->custom_styles);
 			}, 100);
 		}
-		
+
 		wp_add_inline_script('seatreg-registration', $inlineScript, 'before');
 		wp_localize_script('seatreg-registration', 'WP_Seatreg', array(
 			'SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH' => SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH,
@@ -114,6 +114,8 @@ function seatreg_public_scripts_and_styles() {
 	}
 
 	if( seatreg_is_booking_check_page() && !empty($_GET['registration']) && !empty($_GET['id']) ) {
+		$bookingData = SeatregBookingRepository::getDataRelatedToBooking( $_GET['id'] );
+
 		wp_enqueue_style('alertify-core', plugins_url('css/alertify.core.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_script("jquery");
@@ -124,6 +126,12 @@ function seatreg_public_scripts_and_styles() {
 			'successMessage' => __('Receipt sent', 'seatreg'),
 			'errorMessage' => __('Something went wrong!', 'seatreg'),
 		));
+
+		if( $bookingData->booking_status_page_custom_styles ) {
+			add_action('wp_head', function() use ($bookingData) {
+				seatreg_add_custom_styles($bookingData->booking_status_page_custom_styles);
+			}, 100);
+		}
 	}
 }
 

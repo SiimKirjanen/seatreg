@@ -1116,7 +1116,10 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
+				<textarea class="form-control mb-2" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
+
+				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking status page', 'seatreg'); ?>.</p>
+				<textarea class="form-control" name="booking-status-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_status_page_custom_styles); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -2052,6 +2055,7 @@ function seatreg_set_up_db() {
 			custom_footer_text text,
 			seat_selection_btn_text varchar(255) DEFAULT NULL,
 			custom_payments text,
+			booking_status_page_custom_styles text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2857,6 +2861,12 @@ function seatreg_update() {
 		$_POST['custom-payment'] = 1;
 	}
 
+	if( !empty($_POST['booking-status-custom-styles']) ) {
+		$_POST['booking-status-custom-styles'] = wp_kses($_POST['booking-status-custom-styles'], array( '\'', '\"' ));
+	}else {
+		$_POST['booking-status-custom-styles'] = null;
+	}
+
 	if( !empty($_POST['custom-styles']) ) {
 		$_POST['custom-styles'] = wp_kses($_POST['custom-styles'], array( '\'', '\"' ));
 	}else {
@@ -2927,6 +2937,7 @@ function seatreg_update() {
 			'custom_footer_text' => $_POST['custom-footer-text'],
 			'seat_selection_btn_text' => !empty($_POST['seat-selection-btn-text']) ? $_POST['seat-selection-btn-text'] : null,
 			'custom_payments' => $customPayments,
+			'booking_status_page_custom_styles' => $_POST['booking-status-custom-styles'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
