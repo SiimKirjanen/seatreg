@@ -1639,10 +1639,10 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 					echo '<h3 style="color:red">', sprintf(esc_html__('This pending booking will be deleted in about %s minutes if not approved', 'seatreg'), $bookingTimeToLive), '</h3>';
 				}
 			}
-			echo '<div>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</div>';
-			echo '<div>', esc_html__('Booking status', 'seatreg'), ': ' , SeatregBookingService::getBookingStatusText($bookingStatus),'</div>';
+			echo '<div style="margin-bottom: 6px"><strong>', esc_html__('Booking id', 'seatreg'), '</strong>: ' , esc_html($bookingId),'</div>';
+			echo '<div><strong>', esc_html__('Booking status', 'seatreg'), '</strong>: ' , SeatregBookingService::getBookingStatusText($bookingStatus),'</div>';
 
-			echo '<div style="margin: 12px 0px">';
+			echo '<div style="margin: 16px 0px 20px">';
 			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 			echo '</div>';
 

@@ -68,7 +68,7 @@ function seatreg_custom_pages() {
 	}
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-status' ) {
-		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/booking_check.php';
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/pages/booking_status.php';
 
 		die();
 	}
