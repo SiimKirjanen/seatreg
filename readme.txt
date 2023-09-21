@@ -4,7 +4,7 @@ Tags: seat registration, booking, booking seats, booking events, seat map, booki
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.2.2
-Stable tag: 1.44.1
+Stable tag: 1.45.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -44,64 +44,68 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 == Changelog ==
 
+= 1.45.0 =
+* Added option to add custom styles for booking status page.
+* Trigger 'seatreg_action_booking_approved' event also with payments. 
+
 = 1.44.1 =
-* Fixed missue with missing approved emails
+* Fixed missue with missing approved emails.
 
 = 1.44.0 =
-* Added bookings and events capability. Allows to control who has access to bookings and events in admin area. Administrators have both capabilities by default. 
+* Added bookings and events capability. Allows to control who has access to bookings and events in admin area. Administrators have both capabilities by default.
 
 = 1.43.0 =
-* Custom payment icons added
+* Custom payment icons added.
 
 = 1.42.0 =
-* Seat ID lookup can now fill seat ID
-* Room name selection for add booking in booking manager
-* Changed registration background image locations. Will fix issue where plugin update deleted existing background images
+* Seat ID lookup can now fill seat ID.
+* Room name selection for add booking in booking manager.
+* Changed registration background image locations. Will fix issue where plugin update deleted existing background images.
 
 = 1.41.0 =
-* Added option to add multiple custom payments
-* Added option to control if pending booking notification is sent out to the booker
-* Smaller fixes/improvements
+* Added option to add multiple custom payments.
+* Added option to control if pending booking notification is sent out to the booker.
+* Smaller fixes/improvements.
 
 = 1.40.0 =
-* Added option to customize button text that opens seat selection in registration view
-* Registration view now displays currency symbols instead of currency code
+* Added option to customize button text that opens seat selection in registration view.
+* Registration view now displays currency symbols instead of currency code.
 
 = 1.39.4 =
-* Fix for Stripe zero decimal currencies
+* Fix for Stripe zero decimal currencies.
 
 = 1.39.3 =
 * PHP warning fixes
-* Updated PDF and XLSX generation libs
+* Updated PDF and XLSX generation libs.
 
 = 1.39.2 =
-* Fixed bug in overview page
+* Fixed bug in overview page.
 
 = 1.39.1 =
-* Local notification support for Android app
+* Local notification support for Android app.
 
 = 1.39.0 =
-* Added option to add custom markup to registration page. Will be displayed above the confirm booking button
+* Added option to add custom markup to registration page. Will be displayed above the confirm booking button.
 
 = 1.38.1 =
-* Booking manager add booking feature fix
+* Booking manager add booking feature fix.
 
 = 1.38.0 =
-* Added public API
+* Added public API.
 
 = 1.37.0 =
-* Added possibility to change custom fields order
-* Added options to add custom email subjects
+* Added possibility to change custom fields order.
+* Added options to add custom email subjects.
 
 = 1.36.0 =
-* Added option to add custom styles to registration page
+* Added option to add custom styles to registration page.
 * Added plugin related actions for developers to hook custom code into.
 
 = 1.35.2 =
-* Display custom payment booking price in registration view
+* Display custom payment booking price in registration view.
 
 = 1.35.1 =
-* Enabled custom payments in registration view
+* Enabled custom payments in registration view.
 
 = 1.35.0 =
 * Added custom payments option.
@@ -113,33 +117,33 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 * Changed seat number field size in DB.
 
 = 1.33.0 =
-* Added calendar mode
+* Added calendar mode.
 
 = 1.32.3 =
-* Made booking related email subjects translatable
-* Allow more characters with custom fields
-* Added Stripe API key validation
+* Made booking related email subjects translatable.
+* Allow more characters with custom fields.
+* Added Stripe API key validation.
 
 = 1.32.2 =
 * Fixed bug that only allowed to open PDF file generation.
 
 = 1.32.1 =
-* Bug fix on multi price validation
-* PHP warning fix
-* Minor improvements
+* Bug fix on multi price validation.
+* PHP warning fix.
+* Minor improvements.
 
 = 1.32.0 =
-* Added setting to add limit how many bookings can be made with the same email
+* Added setting to add limit how many bookings can be made with the same email.
 * Added option to make text custom field unique.
 
 = 1.31.1 =
-* Fixed issue where locked seat text was not showing
+* Fixed issue where locked seat text was not showing.
 
 = 1.31.0 =
 * Added option to set FROM email address for SeatReg system related emails.
 
 = 1.30.1 =
-* Fixed DB table issue caused by multi price selection
+* Fixed DB table issue caused by multi price selection.
 
 = 1.30.0 =
 * Added possibility to add multiple prices to seat.
@@ -148,11 +152,11 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 * Fixed issue that was caused when creating a seat outside of builder grid.
 
 = 1.29.3 =
-* Allow space character usage in bookings
-* Minor improvements (PHP warnings removed, redirect to settings page when settings saved)
+* Allow space character usage in bookings.
+* Minor improvements (PHP warnings removed, redirect to settings page when settings saved).
 
 = 1.29.2 =
-* Fixed issue with older PHP version (trailing comma)
+* Fixed issue with older PHP version (trailing comma).
 
 = 1.29.1 =
 * Fixed issue with custom seat numbers in scheme editor.
