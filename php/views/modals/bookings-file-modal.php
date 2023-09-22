@@ -23,11 +23,15 @@
                         </div>
 
                         <div class="mb-1">
-                            <label><?php esc_html_e('Show pending bookins', 'seatreg'); ?><input type='checkbox' name='s1' checked></label>
+                            <label><?php esc_html_e('Show pending bookings', 'seatreg'); ?><input type='checkbox' name='s1' checked></label>
                         </div>
 
                         <div class="mb-1">
                             <label><?php esc_html_e('Show approved bookings', 'seatreg'); ?><input type='checkbox' name='s2' checked></label>
+                        </div>
+
+                        <div class="mb-1">
+                            <label><?php esc_html_e('Separate First name and Last name', 'seatreg'); ?><input type='checkbox' name='s3'></label>
                         </div>
                     </div>
                     <hr>

@@ -146,8 +146,9 @@ function seatreg_generate_admin_strings() {
     $translations->imageNameIllegalChar = esc_html__('Image name contains illegal characters', 'seatreg');
     $translations->addToRoomBackground = esc_html__('Add to room background', 'seatreg');
     $translations->remove = esc_html__('Remove', 'seatreg');
-    $translations->showPendingBookings = esc_html__('Show pending bookins', 'seatreg');
+    $translations->showPendingBookings = esc_html__('Show pending bookings', 'seatreg');
     $translations->showApprovedBookings = esc_html__('Show approved bookings', 'seatreg');
+    $translations->separateFirstandLastName = esc_html__('Separate First name and Last name', 'seatreg');
     $translations->pleaseEnterPayPalBusinessEmail = esc_html__('Please enter PayPal business email', 'seatreg');
     $translations->pleaseEnterPayPalButtonId = esc_html__('Please enter PayPal button id', 'seatreg');
     $translations->pleaseEnterPayPalCurrencyCode = esc_html__('Please enter currency code', 'seatreg');

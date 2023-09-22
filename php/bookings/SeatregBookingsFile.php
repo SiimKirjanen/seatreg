@@ -14,8 +14,9 @@ class SeatregBookingsFile {
     protected $_currentTimestamp = null;
     protected $_usingSeats = true;
     protected $_calendarDate = null;
+    protected $_separateFirstandLastName = false;
 
-    public function __construct($showPending, $showConfirmed, $registrationCode, $calendarDate) {
+    public function __construct($showPending, $showConfirmed, $separateFirstandLastName, $registrationCode, $calendarDate) {
         $this->_registrationCode = $registrationCode;
         $this->_currentTimestamp = time();
 
@@ -24,6 +25,9 @@ class SeatregBookingsFile {
         }
         if( $showConfirmed && !$showPending ) {
             $this->_showWhat = 'confirmed';
+        }
+        if ( $separateFirstandLastName ) {
+            $this->_separateFirstandLastName = true;
         }
         if( $calendarDate ) {
             $this->_calendarDate = $calendarDate;
