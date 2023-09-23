@@ -52,8 +52,8 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('alertify', plugins_url('js/alertify.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('easytabs', plugins_url('js/jquery.easytabs.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('vanilla_picker', plugins_url('js/vanilla-picker/dist/vanilla-picker.js', dirname(__FILE__) ), array('jquery'), '2.12.1', true);
+		wp_enqueue_script('clock-timepicker', plugins_url('js/jquery-clock-timepicker/jquery-clock-timepicker.min.js', dirname(__FILE__) ), array('jquery'), '2.6.4', true);
 		wp_enqueue_script('powertip', plugins_url('js/jquery.powertip.js', dirname(__FILE__) ), array('jquery'), '1.2.0', true);
-
 		wp_enqueue_script('date-format', plugins_url('js/date.format.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('seatreg_admin_chart', plugins_url('js/Chart.min.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.0.0', true);
