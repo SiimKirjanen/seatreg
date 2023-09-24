@@ -6,8 +6,8 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsFile.php'
 
 class SeatregBookingsTxt extends SeatregBookingsFile {
 
-    public function __construct($showPending, $showConfirmed, $registrationCode, $calendarDate) {
-        parent::__construct($showPending, $showConfirmed, $registrationCode, $calendarDate);
+    public function __construct($showPending, $showConfirmed, $separateFirstandLastName, $registrationCode, $calendarDate) {
+        parent::__construct($showPending, $showConfirmed, $separateFirstandLastName, $registrationCode, $calendarDate);
 
         $this->setupTxt();
 	}
@@ -35,7 +35,12 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
 
             echo $placeNumberText, ': ', esc_html($registration->seat_nr), $this->lineBreak();
             echo esc_html__('Room', 'seatreg'), ': ', esc_html($registration->room_name), $this->lineBreak();
-            echo esc_html__('Name', 'seatreg'), ': ', esc_html($registration->first_name), ' ', esc_html($registration->last_name), $this->lineBreak();
+            if ( $this->_separateFirstandLastName ) {
+                echo esc_html__('First name', 'seatreg'), ': ', esc_html($registration->first_name), $this->lineBreak();
+                echo esc_html__('Last name', 'seatreg'), ': ', esc_html($registration->last_name), $this->lineBreak();
+            } else {
+                echo esc_html__('Name', 'seatreg'), ': ', esc_html($registration->first_name), ' ', esc_html($registration->last_name), $this->lineBreak();
+            }
             echo esc_html__('Email', 'seatreg'), ': ', esc_html($registration->email), $this->lineBreak();
             echo esc_html__('Registration date', 'seatreg'), ': ', $bookingDate, $this->lineBreak();
 
