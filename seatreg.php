@@ -53,6 +53,7 @@ require( 'php/services/SeatregPublicApiService.php' );
 require( 'php/services/SeatregImageUploadService.php' );
 require( 'php/services/SeatregImageDeleteService.php' );
 require( 'php/services/SeatregRandomGenerator.php' );
+require( 'php/services/SeatregTimeService.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );

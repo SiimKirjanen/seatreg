@@ -221,6 +221,23 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
+		//11. start time check
+		$startTimeCheck = $this->registrationStartTimeCheck();
+		if($startTimeCheck !== 'ok') {
+			$this->response->setError($startTimeCheck);
+
+			return;
+		}
+
+		//12. end time check
+		$endTimeCheck = $this->registrationEndTimeCheck();
+		if($endTimeCheck !== 'ok') {
+			$this->response->setError($endTimeCheck);
+
+			return;
+		}
+
+
 		$this->insertRegistration();
 	}
 

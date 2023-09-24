@@ -35,6 +35,8 @@ class SeatregBooking {
 	protected $_usingCalendar = false; //is registration calendar mode activated?
 	protected $_calendarDates = []; // dates for calendar mode
 	protected $_userSelectedCalendarDate = null;
+	protected $_registrationStartTime = null;
+	protected $_registrationEndTime = null;
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -242,11 +244,44 @@ class SeatregBooking {
 
 		return $status;
     }
+
+	protected function registrationStartTimeCheck() {
+		$statusReport = 'ok';
+
+		if( $this->_registrationStartTime === null ) {
+			return $statusReport;
+		}
+		$currentTime = SeatregTimeService::getCurrent24TimeString();
+		$time1Minutes = SeatregTimeService::getMinutesOutOf24TimeString($currentTime);
+		$time2Minutes = SeatregTimeService::getMinutesOutOf24TimeString($this->_registrationStartTime);
+
+		if( $time1Minutes < $time2Minutes ) {
+			$statusReport = esc_html__('Registration has not yet started today', 'seatreg');
+		}
+
+		return $statusReport;
+	}
+
+	protected function registrationEndTimeCheck() {
+		$statusReport = 'ok';
+
+		if( $this->_registrationEndTime === null ) {
+			return $statusReport;
+		}
+		$currentTime = SeatregTimeService::getCurrent24TimeString();
+		$time1Minutes = SeatregTimeService::getMinutesOutOf24TimeString($currentTime);
+		$time2Minutes = SeatregTimeService::getMinutesOutOf24TimeString($this->_registrationEndTime);
+
+		if( $time1Minutes > $time2Minutes ) {
+			$statusReport = esc_html__('Registration has ended for today', 'seatreg');
+		}
+
+		return $statusReport;
+	}
     
     protected function getRegistrationAndOptions() {
 		$result = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($this->_registrationCode);
 		
-
 		$this->_registrationStartTimestamp = $result->registration_start_timestamp;
 		$this->_registrationEndTimestamp = $result->registration_end_timestamp;
 		$this->_registrationLayout = json_decode($result->registration_layout)->roomData;
@@ -266,6 +301,8 @@ class SeatregBooking {
 		$this->_bookingSameEmailLimit = is_null($result->booking_email_limit) ? null : (int)$result->booking_email_limit;
 		$this->_usingCalendar = $result->using_calendar === '1';
 		$this->_calendarDates = $result->calendar_dates ? explode(',', $result->calendar_dates) : [];
+		$this->_registrationStartTime = $result->registration_start_time;
+		$this->_registrationEndTime = $result->registration_end_time;
 
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;
