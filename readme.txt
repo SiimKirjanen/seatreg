@@ -46,7 +46,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.45.0 =
 * Added option to add custom styles for booking status and booking confirm page.
-* Trigger 'seatreg_action_booking_approved' event also with payments. 
+* Trigger 'seatreg_action_booking_approved' event also with payments.
+* Added option to separate first and last names when generating text, xlsx and pdf files. 
+* Added time restrictions to settings.
 
 = 1.44.1 =
 * Fixed missue with missing approved emails.
