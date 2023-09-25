@@ -210,6 +210,22 @@ class SeatregConfirmBooking extends SeatregBooking {
 			}
 		}
 
+		//11. start time check
+		$startTimeCheck = $this->registrationStartTimeCheck();
+		if($startTimeCheck !== 'ok') {
+			echo $startTimeCheck;
+
+			return;
+		}
+
+		//12. end time check
+		$endTimeCheck = $this->registrationEndTimeCheck();
+		if($endTimeCheck !== 'ok') {
+			echo $endTimeCheck;
+
+			return;
+		}
+	
 		$this->confirmBookings();
 	}
 }

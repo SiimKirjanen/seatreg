@@ -552,17 +552,29 @@ function seatreg_generate_settings_form() {
 			</div>
 		
 			<div class="form-group">
-				<label for="registration-start-timestamp"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:3px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
+				<label for="registration-start-timestamp"><i class="fa fa-calendar" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
 				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
 				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_start_timestamp); ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
 			</div>
 
 			<div class="form-group">
-				<label for="registration-end-timestamp"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:3px"></i><?php esc_html_e('Registration end date', 'seatreg'); ?></label>
+				<label for="registration-start-time"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start time', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Set registration start time (24 hours time format)', 'seatreg'); ?>.</p>
+				<input id="registration-start-time" name="registration-start-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_start_time); ?>" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-end-timestamp"><i class="fa fa-calendar" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end date', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
 				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
 				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_end_timestamp); ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-end-time"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end time', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Set registration end time (24 hours time format)', 'seatreg'); ?>.</p>
+				<input id="registration-end-time" name="registration-end-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_end_time); ?>"  />
 			</div>
 
 			<div class="form-group">
@@ -2067,6 +2079,8 @@ function seatreg_set_up_db() {
 			custom_payments text,
 			booking_status_page_custom_styles text,
 			booking_confirm_page_custom_styles text,
+			registration_start_time text,
+			registration_end_time text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2957,6 +2971,8 @@ function seatreg_update() {
 			'custom_payments' => $customPayments,
 			'booking_status_page_custom_styles' => $_POST['booking-status-custom-styles'],
 			'booking_confirm_page_custom_styles' => $_POST['booking-confirm-custom-styles'],
+			'registration_start_time' => $_POST['registration-start-time'] === '' ? null : $_POST['registration-start-time'],
+			'registration_end_time' => $_POST['registration-end-time'] === '' ? null : $_POST['registration-end-time'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])

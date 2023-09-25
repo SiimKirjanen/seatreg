@@ -20,8 +20,10 @@
 
 	$showPwdForm = false;
 	$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
+	$registrationTimeRestoriction = SeatregTimeRepository::getTimeInfoForRegistrationView($data->registration_start_time, $data->registration_end_time);
+	$hasFailedTimeRestriction = !$registrationTimeRestoriction->registrationStartCheck  || !$registrationTimeRestoriction->registrationEndCheck;
 	$usingSeats = $data->using_seats === '1';
-
+	
 	if($data->registration_password != null ) {
 		//registration password is set
 		if(empty($_POST['reg_pwd'])) {
@@ -291,10 +293,8 @@
 					<div id="confirm-dialog-mob-hover" class="confirm-dialog-mob-block"></div>
 					<div id="confirm-dialog-mob-text"></div>
 
-					<?php if($registrationTime == 'run') : ?>
-
+					<?php if( $registrationTime == 'run' && !$hasFailedTimeRestriction ) : ?>
 						<div id="confirm-dialog-bottom"></div>
-
 					<?php endif; ?>
 
 					<input type="hidden" id="selected-seat">
@@ -319,7 +319,7 @@
 							esc_html_e('Cart', 'seatreg');
 						?>
 					</div>
-					<?php if($registrationTime == 'run') : ?>
+					<?php if( $registrationTime == 'run' && !$hasFailedTimeRestriction ) : ?>
 						<div id="seat-cart-rows">
 							<div class="row-nr">
 								<?php
@@ -488,6 +488,28 @@
 									echo '<h4>', esc_html__('Registration ended', 'seatreg'), ': <span class="time">', esc_html($data->registration_end_timestamp), '</span></h4>';
 								}
 							?>
+						</div>
+					</div>
+			<?php elseif ( $hasFailedTimeRestriction ) : ?>
+				<div class="modal-bg"></div>
+					<div id="time-notify" class="dialog-box" style="display:block">
+						<div class="dialog-box-inner border-box">
+							<div id="close-time" class="close-btn">
+								<div class="close-btn-bg"></div>
+								<i class="fa fa-times-circle"></i>
+							</div>
+							<div>
+								<p>
+									<?php if( $registrationTimeRestoriction->registrationStartCheck === false ) : ?>
+										<?php esc_html_e('Registration has not yet started today', 'seatreg'); ?>
+									<?php else: ?>
+										<?php esc_html_e('Registration has ended for today', 'seatreg'); ?>
+									<?php endif; ?>
+								</p>
+								<p>
+									<?php echo $registrationTimeRestoriction->registrationOpenClosingText; ?>
+								</p>
+							</div>
 						</div>
 					</div>
 			<?php endif; ?>	
