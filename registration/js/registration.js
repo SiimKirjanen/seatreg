@@ -106,6 +106,7 @@
 		this.gmailNeeded = gmail;
 		this.NotifyBookerPendingBooking = NotifyBookerPendingBooking;
 		this.status = regTime;
+		this.timeRestrictions = registrationTimeRestrictions;
 		this.emailConfirmEnabled = emailConfirmRequired;
 		this.payPalEnabled = window.payPalEnabled === '1' ? true : false;
 		this.stripeEnabled = window.stripeEnabled === '1' ? true : false;
@@ -726,13 +727,17 @@ SeatReg.prototype.addSeatToCart = function() {
 	this.closeSeatDialog();
 };
 
+SeatReg.prototype.hasFailedTimeRestrictions = function() {
+	return !this.timeRestrictions.registrationStartCheck || !this.timeRestrictions.registrationEndCheck; 
+}
+
 SeatReg.prototype.openSeatCart = function() {
 	var selected = this.selectedSeats.length;
 	var cartHeaderText = this.usingSeats ? translator.translate('selectionIsEmpty') : translator.translate('selectionIsEmptyPlace');
 	var cartEmptyText = this.usingSeats ? translator.translate('selectingGuide') : translator.translate('selectingGuidePlace');
 
 	if(selected == 0) {	
-		if(this.status == 'run') {
+		if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
 			$('#seat-cart-info').html('<h3>'+ cartHeaderText +'</h3><p>' + cartEmptyText + '</p>');
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
@@ -1017,7 +1022,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 					'<div id="password-check-loader" class="d-none">'+ '<img alt="Loading..." src="'+ WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' +'" />' +'</div>');
 			}else if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
 
-				if(this.status == 'run') {
+				if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
 					var maxPlacesText = this.usingSeats ? translator.translate('maxSeatsToAdd') : translator.translate('maxPlacesToAdd');
 					
 					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + seatPrefix + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ maxPlacesText + ' ' + this.seatLimit +'</p>' + '</div>');
