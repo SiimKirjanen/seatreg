@@ -560,7 +560,10 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="registration-start-time"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start time', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Set registration start time (24 hours time format)', 'seatreg'); ?>.</p>
+				<p class="help-block">
+					<?php esc_html_e('Set registration start time (24 hours time format)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
 				<input id="registration-start-time" name="registration-start-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_start_time); ?>" />
 			</div>
 
@@ -573,7 +576,10 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="registration-end-time"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end time', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Set registration end time (24 hours time format)', 'seatreg'); ?>.</p>
+				<p class="help-block">
+					<?php esc_html_e('Set registration end time (24 hours time format)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
 				<input id="registration-end-time" name="registration-end-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_end_time); ?>"  />
 			</div>
 
