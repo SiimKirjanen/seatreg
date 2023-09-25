@@ -179,7 +179,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-primary" role="alert" id="enable-paypal-alert">
-					<?php esc_html_e('You need to enable PayPal or Stripe payments in settings to turn on pricing functionality.', 'seatreg'); ?>
+					<?php esc_html_e('You need to enable PayPal, Stripe, or custom payment options in the settings to activate pricing functionality.', 'seatreg'); ?>
 				</div>
 				<div class="set-price-wrap">
 					<div><label for="price-for-all-selected"><?php esc_html_e('Fill price to all selected seats', 'seatreg'); ?></label></div>

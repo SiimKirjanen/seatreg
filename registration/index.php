@@ -335,7 +335,7 @@
 						
 						<div id="seat-cart-items"></div>
 						
-						<?php if($data->paypal_payments === '1' || $data->stripe_payments === '1' || $data->custom_payment === '1') : ?>
+						<?php if( SeatregPaymentRepository::hasPaymentEnabled($data) ) : ?>
 							<div id="booking-total-price" data-booking-price="0"></div>
 						<?php endif; ?>
 
