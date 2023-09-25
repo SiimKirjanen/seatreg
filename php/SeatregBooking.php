@@ -248,14 +248,7 @@ class SeatregBooking {
 	protected function registrationStartTimeCheck() {
 		$statusReport = 'ok';
 
-		if( $this->_registrationStartTime === null ) {
-			return $statusReport;
-		}
-		$currentTime = SeatregTimeService::getCurrent24TimeString();
-		$time1Minutes = SeatregTimeService::getMinutesOutOf24TimeString($currentTime);
-		$time2Minutes = SeatregTimeService::getMinutesOutOf24TimeString($this->_registrationStartTime);
-
-		if( $time1Minutes < $time2Minutes ) {
+		if( !SeatregTimeService::registrationStartTimeCheck($this->_registrationStartTime) ) {
 			$statusReport = esc_html__('Registration has not yet started today', 'seatreg');
 		}
 
@@ -265,14 +258,7 @@ class SeatregBooking {
 	protected function registrationEndTimeCheck() {
 		$statusReport = 'ok';
 
-		if( $this->_registrationEndTime === null ) {
-			return $statusReport;
-		}
-		$currentTime = SeatregTimeService::getCurrent24TimeString();
-		$time1Minutes = SeatregTimeService::getMinutesOutOf24TimeString($currentTime);
-		$time2Minutes = SeatregTimeService::getMinutesOutOf24TimeString($this->_registrationEndTime);
-
-		if( $time1Minutes > $time2Minutes ) {
+		if( !SeatregTimeService::registrationEndTimeCheck($this->_registrationEndTime) ) {
 			$statusReport = esc_html__('Registration has ended for today', 'seatreg');
 		}
 
