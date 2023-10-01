@@ -26,7 +26,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		$rows = SeatregBookingRepository::getBookingByConfCode($this->_confirmationCode);
 
 		if( !$rows ) {
-			$this->reply = esc_html__('This booking is already confirmed/expired/deleted', 'seaterg');
+			$this->reply = esc_html__('This booking is already confirmed/expired/deleted', 'seatreg');
 			$this->_valid = false;
 		}else {
 			$registration = SeatregRegistrationRepository::getRegistrationByCode($rows[0]->registration_code);
@@ -116,7 +116,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		
 		//3 step. Is registtration open?
 		if(!$this->_isRegistrationOpen) {
-			esc_html_e('Registration is closed at the moment', 'seaterg');
+			esc_html_e('Registration is closed at the moment', 'seatreg');
 
 			return;
 		}
