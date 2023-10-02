@@ -1520,7 +1520,7 @@ $('#checkout').on('click', function() {
 	seatReg.openCheckOut();
 });
 
-$('#checkout-input-area').on('keyup','.field-input', function() {
+$('#checkout-input-area').on('keyup change input','.field-input', function() {
 	validateInput($(this));
 });
 
