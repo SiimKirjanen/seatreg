@@ -470,7 +470,7 @@
 				</div>
 			</div>
 
-			<?php if($registrationTime == 'wait' || $registrationTime == 'end') : ?>
+			<?php if($registrationTime === 'wait' || $registrationTime === 'end') : ?>
 					<div class="modal-bg"></div>
 					<div id="time-notify" class="dialog-box" style="display:block">
 						<div class="dialog-box-inner border-box">
@@ -481,11 +481,23 @@
 					
 							<?php
 								if($registrationTime == 'wait') {
+									$startTime = '';
+
+									if( $registrationTimeRestoriction->registrationStartTime  ) {
+										$startTime = $registrationTimeRestoriction->registrationStartTime . ' (' . $registrationTimeRestoriction->timezone . ')';
+									}
+									
 									echo '<h3>', esc_html__('Not open yet', 'seatreg'), '</h3>';
-									echo '<h4>', esc_html__('Registration starts', 'seatreg'), ': <span class="time">', esc_html($data->registration_start_timestamp), '</span></h4>';
+									echo '<h4>', esc_html__('Registration starts', 'seatreg'), ': <span class="time">', esc_html($data->registration_start_timestamp), '</span> ', $startTime  ,'</h4>';
 								}else if($registrationTime == 'end') {
+									$endTime = '';
+
+									if( $registrationTimeRestoriction->registrationEndtTime  ) {
+										$endTime = $registrationTimeRestoriction->registrationEndtTime . ' (' . $registrationTimeRestoriction->timezone . ')';
+									}
+
 									echo '<h3>', esc_html__('Closed', 'seatreg'), '</h3>';
-									echo '<h4>', esc_html__('Registration ended', 'seatreg'), ': <span class="time">', esc_html($data->registration_end_timestamp), '</span></h4>';
+									echo '<h4>', esc_html__('Registration ended', 'seatreg'), ': <span class="time">', esc_html($data->registration_end_timestamp), '</span> ', $endTime , '</h4>';
 								}
 							?>
 						</div>

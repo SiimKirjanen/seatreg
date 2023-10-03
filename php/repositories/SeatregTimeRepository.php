@@ -29,7 +29,8 @@ class SeatregTimeRepository {
             'registrationEndtTime' => $registrationEndTime,
             'registrationStartCheck' => SeatregTimeService::registrationStartTimeCheck($registrationStartTime),
             'registrationEndCheck' => SeatregTimeService::registrationEndTimeCheck($registrationEndTime),
-            'registrationOpenClosingText' => $registrationOpenClosingText
+            'registrationOpenClosingText' => $registrationOpenClosingText,
+            'timezone' => $timeZoneString
         ];
     }
 

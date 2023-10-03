@@ -13,7 +13,7 @@
 
 	$('.time').each(function() {
 		var date = new Date(parseInt($(this).text()));
-		$(this).text(date.format("d.M.Y H:i"));
+		$(this).text(date.format("d.M.Y"));
 	});
 
 	var screenWidth = $(window).width();
