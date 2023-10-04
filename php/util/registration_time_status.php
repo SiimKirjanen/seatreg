@@ -1,37 +1,40 @@
 <?php 
 
 function seatreg_registration_time_status($startUnix, $endUnix) {
-    $unix = round(microtime(true) * 1000);
+    $startDate = SeatregTimeService::getLocalDateTimeOutOfUnix($startUnix);
+    $endDate = SeatregTimeService::getLocalDateTimeOutOfUnix($endUnix);
+    $currentDateTime = SeatregTimeService::getCurrentDateTime();
+    $currentDate = $currentDateTime->setTime(0, 0);
 
-    if($startUnix == null && $endUnix == null) {
+    if( $startDate === null && $endDate === null ) {
         return 'run';
     }
 
-    if($endUnix == null && $unix > $startUnix) {
+    if( $endDate === null && $currentDate > $startDate ) {
         return 'run';
     }
 
-    if($endUnix == null && $unix < $startUnix) {
+    if( $endDate === null && $currentDate < $startDate ) {
         return 'wait';
     }
 
-    if($startUnix == null && $unix < $endUnix) {
+    if( $startDate === null && $currentDate <= $endDate ) {
         return 'run';
     }
 
-    if($startUnix == null && $unix > $endUnix) {
+    if( $startDate === null && $currentDate > $endDate ) {
         return 'end';
     }
-
-    if($startUnix < $unix && $endUnix > $unix) {
+ 
+    if( $startDate <= $currentDate && $endDate >= $currentDate ) {
         return 'run';
     }
 
-    if($unix > $endUnix) {
+    if( $currentDate > $endDate ) {
         return 'end';
     }
 
-    if($startUnix > $unix) {
+    if( $startDate > $currentDate ) {
         return 'wait';
-    }
+    } 
 }

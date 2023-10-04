@@ -17,6 +17,16 @@ class SeatregTimeService {
 
     /**
      *
+     * Get current WordPress DateTime
+     * @return DateTimeImmutable
+     *
+    */
+    public static function getCurrentDateTime() {
+        return current_datetime();
+    }
+
+    /**
+     *
      * Get minutes out of 24h time string
      * @param string $time String representation of 24h time ('H:i')
      * @return int Return number of minutes
@@ -33,7 +43,6 @@ class SeatregTimeService {
      * @return bool Return true when start time check passes. Otherwise false.
      *
     */
-
     public static function registrationStartTimeCheck($registrationStartTime) {
 
         if( $registrationStartTime === null ) {
@@ -74,5 +83,16 @@ class SeatregTimeService {
 		}
 
         return true;
+    }
+
+    public static function getLocalDateTimeOutOfUnix($unixTimeStamp) {
+        if($unixTimeStamp === null) {
+            return null;
+        }
+        $datetime = new DateTime();
+        $datetime->setTimestamp($unixTimeStamp / 1000);
+        $datetime->setTimezone(new DateTimeZone( wp_timezone_string() ));
+
+        return $datetime;
     }
 }
