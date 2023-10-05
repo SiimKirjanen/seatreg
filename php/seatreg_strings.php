@@ -90,14 +90,14 @@ function seatreg_generate_admin_strings() {
     $translations->lagendNameMissing = esc_html__('Legend name missing!', 'seatreg');
     $translations->legendColorTaken = esc_html__('Legend color is taken. Choose another', 'seatreg');
     $translations->legendAddedTo = esc_html__('Legend added to', 'seatreg');
-    $translations->oneRoomNeeded = esc_html__('You must have at least on room', 'seatreg');
+    $translations->oneRoomNeeded = esc_html__('You must have at least one room', 'seatreg');
     $translations->alreadyInRoom = esc_html__('Already in this room', 'seatreg');
     $translations->allRoomsNeedName = esc_html__('All rooms must have name', 'seatreg');
     $translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
     $translations->missingName = esc_html__('Name missing', 'seatreg');
     $translations->cantDelRoom_ = esc_html__('You can\'t delete room ', 'seatreg');
     $translations->_cantDelRoomBecause = esc_html__(' because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg');
-    $translations->roomNameMissing = esc_html__('Room name missing', 'seatreg');
+    $translations->roomNameMissing = esc_html__('Room name is missing', 'seatreg');
     $translations->roomNameExists = esc_html__('Room name already exists. You must choose another', 'seatreg');
     $translations->youHaveSelected = esc_html__('You have selected', 'seatreg');
     $translations->_boxesSpanLi = esc_html__(' box/boxes</span></li>', 'seatreg');
