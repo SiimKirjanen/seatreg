@@ -22,6 +22,23 @@ class SeatregOptionsRepository {
 			$registrationCode
 		) );
     }
+     /**
+     *
+     * Return options by confirmation code
+     *
+     * @param string $confirmationCode The code for confirming booking
+     *
+     */
+    public static function getOptionsByConfirmationCode($confirmationCode) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_row( $wpdb->prepare(
+			"SELECT * FROM $seatreg_db_table_names->table_seatreg_options
+			WHERE registration_code = (SELECT registration_code FROM $seatreg_db_table_names->table_seatreg_bookings WHERE conf_code = %s LIMIT 1)",
+			$confirmationCode
+		) );
+    }
 
     /**
      *

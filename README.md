@@ -13,8 +13,17 @@ Activate the plugin through the ‘Plugins’ menu in WordPress. You can also do
 ## Translations
 Translations are taken from https://translate.wordpress.org/projects/wp-plugins/seatreg/
 
+## Capabilities
+The plugin utilizes two capabilities to control access to admin area. Administrators have these capabilities out of the box. 
+
+**seatreg_manage_bookings**\
+Has access to admin areas to manage bookings.
+
+**seatreg_manage_events**\
+Has access to admin areas to manage events.
+
 ## Plugin actions
-SeatReg exposes couple of actions you can hook into to run your own code
+SeatReg exposes couple of actions you can hook into to run your own code.
 
 **seatreg_action_booking_submitted**\
 Triggered when booking is submitted with registration page. Gets booking ID as parameter.

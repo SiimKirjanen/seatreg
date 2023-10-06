@@ -40,8 +40,8 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
     private $pdf = null;
     private $fileName = null;
 
-    public function __construct($showPending, $showConfirmed, $registrationCode, $calendarDate) {
-        parent::__construct($showPending, $showConfirmed, $registrationCode, $calendarDate);
+    public function __construct($showPending, $showConfirmed, $separateFirstandLastName, $registrationCode, $calendarDate) {
+        parent::__construct($showPending, $showConfirmed, $separateFirstandLastName, $registrationCode, $calendarDate);
 
         $this->setupPDF();
 	}
@@ -68,7 +68,12 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
 
             $this->pdf->Cell(20, 6, $placeNumberText . ': ' . esc_html($registration->seat_nr), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($registration->room_name), 0, 1, 'L');
-            $this->pdf->Cell(20, 6, esc_html__('Name', 'seatreg') . ': ' . esc_html($registration->first_name) . ' ' . esc_html($registration->last_name), 0, 1, 'L');
+            if ( $this->_separateFirstandLastName ) {
+                $this->pdf->Cell(20, 6, esc_html__('First name', 'seatreg') . ': ' . esc_html($registration->first_name), 0, 1, 'L');
+                $this->pdf->Cell(20, 6, esc_html__('Last name', 'seatreg') . ': ' . esc_html($registration->last_name), 0, 1, 'L');
+            } else {
+                $this->pdf->Cell(20, 6, esc_html__('Name', 'seatreg') . ': ' . esc_html($registration->first_name) . ' ' . esc_html($registration->last_name), 0, 1, 'L');
+            }
             $this->pdf->Cell(20, 6, esc_html__('Email', 'seatreg') . ': ' . $registration->email, 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Registration date', 'seatreg') . ': ' . $bookingDate, 0, 1, 'L');
 

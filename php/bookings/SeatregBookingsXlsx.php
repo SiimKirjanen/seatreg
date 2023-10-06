@@ -6,8 +6,8 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsFile.php'
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/xlsxwriter.class.php' );
 
 class SeatregBookingsXlsx extends SeatregBookingsFile {
-    public function __construct($showPending, $showConfirmed, $registrationCode, $calendarDate) {
-        parent::__construct($showPending, $showConfirmed, $registrationCode, $calendarDate);
+    public function __construct($showPending, $showConfirmed, $separateFirstandLastName, $registrationCode, $calendarDate) {
+        parent::__construct($showPending, $showConfirmed, $separateFirstandLastName, $registrationCode, $calendarDate);
 
         $this->setupXlsx();
 	}
@@ -59,18 +59,32 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
     public function printXlsx() {
         $placeNumberText = $this->_usingSeats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
         
-        $header = array(
-            $placeNumberText => 'string',
-            esc_html__('Room name', 'seatreg') => 'string',
-            esc_html__('Name', 'seatreg') => 'string',
-            esc_html__('Email', 'seatreg') => 'string',
-            esc_html__('Registration date', 'seatreg') => 'string',
-            esc_html__('Calendar date', 'seatreg') => 'string',
-            esc_html__('Booking id', 'seatreg') => 'string',
-            esc_html__('Booking status', 'seatreg') => 'string',
-            esc_html__('Booking approval date', 'seatreg') => 'string',
-            esc_html__('Payment status', 'seatreg') => 'string',
+        $nameHeader = $this->_separateFirstandLastName
+            ? array(
+                esc_html__('First name', 'seatreg') => 'string',
+                esc_html__('Last name', 'seatreg') => 'string',
+              )
+            : array(
+                esc_html__('Name', 'seatreg') => 'string',
+              );
+
+        $header = array_merge(
+            array(
+                $placeNumberText => 'string',
+                esc_html__('Room name', 'seatreg') => 'string',
+            ),
+            $nameHeader,
+            array(
+                esc_html__('Email', 'seatreg') => 'string',
+                esc_html__('Registration date', 'seatreg') => 'string',
+                esc_html__('Calendar date', 'seatreg') => 'string',
+                esc_html__('Booking id', 'seatreg') => 'string',
+                esc_html__('Booking status', 'seatreg') => 'string',
+                esc_html__('Booking approval date', 'seatreg') => 'string',
+                esc_html__('Payment status', 'seatreg') => 'string',
+            )
         );
+
         $customFieldsLength = count($this->_customFields);
         $data = array();
 
@@ -79,15 +93,23 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
             $status = $this->getStatus($registration->status);
             $bookingDate = $this->getBookingDate($registration->booking_date);
 
-            $registrationData = array(
-                esc_html($registration->seat_nr),
-                esc_html($registration->room_name), 
-                esc_html($registration->first_name) . ' ' . esc_html($registration->last_name),  
-                esc_html($registration->email), 
-                $bookingDate,
-                esc_html($this->_calendarDate), 
-                $registration->booking_id,
-                $status
+            $nameField = $this->_separateFirstandLastName 
+                ? array(esc_html($registration->first_name), esc_html($registration->last_name))
+                : array(esc_html($registration->first_name) . ' ' . esc_html($registration->last_name));
+
+            $registrationData = array_merge(
+                array(
+                    esc_html($registration->seat_nr),
+                    esc_html($registration->room_name),
+                ),
+                $nameField,
+                array(
+                    esc_html($registration->email),
+                    $bookingDate,
+                    esc_html($this->_calendarDate),
+                    $registration->booking_id,
+                    $status,
+                )
             );
 
             if($status === "Approved") {

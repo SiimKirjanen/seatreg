@@ -209,7 +209,7 @@ class SeatregDataValidation {
             }
 
             if( !property_exists($roomData->room, 'name') || !is_string($roomData->room->name) ) {
-                $validationStatus->setInvalid('room name missing or invalid');
+                $validationStatus->setInvalid('room name is missing or invalid');
                 return $validationStatus;
             }
 

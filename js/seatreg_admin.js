@@ -264,6 +264,8 @@ $('#registration-start-timestamp').datepicker({
 	}
 });
 
+$('#registration-start-time').clockTimePicker();
+
 $('#registration-end-timestamp').datepicker({
 	altField: '#end-timestamp',
 	altFormat: '@',
@@ -273,6 +275,8 @@ $('#registration-end-timestamp').datepicker({
 		$('#end-timestamp').val('');
 	}
 });
+
+$('#registration-end-time').clockTimePicker();
 
 function initOverviewCalendarDatePicker() {
 	$('#overview-calendar-date').datepicker({

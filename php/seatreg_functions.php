@@ -87,6 +87,13 @@ function seatreg_is_booking_check_page() {
 	return false;
 }
 
+function seatreg_is_booking_confirm_page() {
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-confirm' ) {
+		return true;
+	}
+	return false;
+}
+
 function seatreg_validate_bookings_file_input() {
 	if(empty($_GET['code'])) {
 		wp_die('Missing code');
@@ -200,7 +207,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 					<?php
 						if($targetRoom == 'overview') {
 							echo "<div class='reg-overview-top-bron-notify'>";
-								echo $registration->using_seats === '1' ? sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']) : sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats']);
+								echo $registration->using_seats === '1' ? sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']) : sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats']), '!';
 							echo '</div>';
 						}else {
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
@@ -545,17 +552,41 @@ function seatreg_generate_settings_form() {
 			</div>
 		
 			<div class="form-group">
-				<label for="registration-start-timestamp"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:3px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
+				<label for="registration-start-timestamp"><i class="fa fa-calendar" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
 				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
 				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_start_timestamp); ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
 			</div>
 
 			<div class="form-group">
-				<label for="registration-end-timestamp"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:3px"></i><?php esc_html_e('Registration end date', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.</p>
+				<label for="registration-start-time"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start time', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration start time (24 hours time format)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input id="registration-start-time" name="registration-start-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_start_time); ?>" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-end-timestamp"><i class="fa fa-calendar" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end date', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
 				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
 				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_end_timestamp); ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-end-time"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end time', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration end time (24 hours time format)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input id="registration-end-time" name="registration-end-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_end_time); ?>"  />
 			</div>
 
 			<div class="form-group">
@@ -1116,7 +1147,13 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
-				<textarea class="form-control" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
+				<textarea class="form-control mb-2" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
+
+				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking status page', 'seatreg'); ?>.</p>
+				<textarea class="form-control mb-2" name="booking-status-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_status_page_custom_styles); ?></textarea>
+
+				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking confirm page', 'seatreg'); ?>.</p>
+				<textarea class="form-control" name="booking-confirm-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_confirm_page_custom_styles); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -1313,7 +1350,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		
 					if($row_count == 0) {
 						echo '<div class="notify-text">';
-							$usingSeats ? esc_html_e('No pending seats', 'seatreg') : esc_html_e('No pending places', 'seatreg');
+							$usingSeats ? esc_html_e('No pending bookings', 'seatreg') : esc_html_e('No pending places', 'seatreg');
 						echo '</div>';
 					}			
 		
@@ -1366,7 +1403,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 					echo '<div id="', sha1($project_name),'taken" class="tab_container active">';
 		
 					if($row_count2 == 0) {
-						echo '<div class="notify-text">', esc_html__('No approved seats', 'seatreg'), '</div>';
+						echo '<div class="notify-text">', esc_html__('No approved bookings', 'seatreg'), '</div>';
 					}
 		
 					foreach ($bookings2 as $row) {
@@ -1618,7 +1655,8 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 		$bookings = SeatregBookingRepository::getBookingsByRegistrationCodeAndBookingId($registrationCode, $bookingId);
 		$roomData = json_decode($registration->registration_layout)->roomData;
 		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
-		$registrationCustomFields = json_decode($registration->custom_fields);
+
+		$registrationCustomFields = json_decode( isset($registration->custom_fields) ? $registration->custom_fields : '[]');
 	
 		foreach ($bookings as $booking) {
 			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
@@ -1638,10 +1676,10 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 					echo '<h3 style="color:red">', sprintf(esc_html__('This pending booking will be deleted in about %s minutes if not approved', 'seatreg'), $bookingTimeToLive), '</h3>';
 				}
 			}
-			echo '<div>', esc_html__('Booking id', 'seatreg'), ': ' , esc_html($bookingId),'</div>';
-			echo '<div>', esc_html__('Booking status', 'seatreg'), ': ' , SeatregBookingService::getBookingStatusText($bookingStatus),'</div>';
+			echo '<div style="margin-bottom: 6px"><strong>', esc_html__('Booking id', 'seatreg'), '</strong>: ' , esc_html($bookingId),'</div>';
+			echo '<div><strong>', esc_html__('Booking status', 'seatreg'), '</strong>: ' , SeatregBookingService::getBookingStatusText($bookingStatus),'</div>';
 
-			echo '<div style="margin: 12px 0px">';
+			echo '<div style="margin: 16px 0px 20px">';
 			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 			echo '</div>';
 
@@ -2051,6 +2089,10 @@ function seatreg_set_up_db() {
 			custom_footer_text text,
 			seat_selection_btn_text varchar(255) DEFAULT NULL,
 			custom_payments text,
+			booking_status_page_custom_styles text,
+			booking_confirm_page_custom_styles text,
+			registration_start_time text,
+			registration_end_time text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2856,6 +2898,19 @@ function seatreg_update() {
 		$_POST['custom-payment'] = 1;
 	}
 
+	if( !empty($_POST['booking-status-custom-styles']) ) {
+		$_POST['booking-status-custom-styles'] = wp_kses($_POST['booking-status-custom-styles'], array( '\'', '\"' ));
+	}else {
+		$_POST['booking-status-custom-styles'] = null;
+	}
+
+	if( !empty($_POST['booking_confirm_page_custom_styles']) ) {
+		$_POST['booking_confirm_page_custom_styles'] = wp_kses($_POST['booking_confirm_page_custom_styles'], array( '\'', '\"' ));
+	}else {
+		$_POST['booking_confirm_page_custom_styles'] = null;
+	}
+	
+
 	if( !empty($_POST['custom-styles']) ) {
 		$_POST['custom-styles'] = wp_kses($_POST['custom-styles'], array( '\'', '\"' ));
 	}else {
@@ -2926,6 +2981,10 @@ function seatreg_update() {
 			'custom_footer_text' => $_POST['custom-footer-text'],
 			'seat_selection_btn_text' => !empty($_POST['seat-selection-btn-text']) ? $_POST['seat-selection-btn-text'] : null,
 			'custom_payments' => $customPayments,
+			'booking_status_page_custom_styles' => $_POST['booking-status-custom-styles'],
+			'booking_confirm_page_custom_styles' => $_POST['booking-confirm-custom-styles'],
+			'registration_start_time' => $_POST['registration-start-time'] === '' ? null : $_POST['registration-start-time'],
+			'registration_end_time' => $_POST['registration-end-time'] === '' ? null : $_POST['registration-end-time'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
@@ -3345,7 +3404,8 @@ function seatreg_confirm_del_bookings_callback() {
 
 			if($value->action == 'conf' && !in_array($value->booking_id, $approvalBookingEmailProcessed)) {
 				$bookingData = SeatregBookingRepository::getDataRelatedToBooking($value->booking_id);
-				if($bookingData->_sendApprovedBookingEmail === '1') {
+
+				if($bookingData->send_approved_booking_email === '1') {
 					$mailSent = seatreg_send_approved_booking_email( $value->booking_id, $code, $bookingData->approved_booking_email_template );
 					if($mailSent) {
 						$approvalBookingEmailProcessed[] = $value->booking_id;

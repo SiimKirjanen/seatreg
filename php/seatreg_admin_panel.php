@@ -159,7 +159,7 @@ function seatreg_create_management() {
 	?>
 		<div class="seatreg-wp-admin wrap" id="seatreg-booking-manager">
 			<h1><i class="fa fa-book" aria-hidden="true"></i> <?php esc_html_e('Booking manager'); ?></h1>
-			<p><?php esc_html_e('Manage seat bookings', 'seatreg'); ?>.</p>
+			<p><?php esc_html_e('Manage bookings', 'seatreg'); ?>.</p>
 			<?php
 				seatreg_generate_tabs('seatreg-management');	
 			?>
@@ -184,7 +184,7 @@ function seatreg_create_tools() {
 					<?php esc_html_e('Email testing','seatreg'); ?>
 				</h4>
 				<p>
-					<?php esc_html_e('Send a test email to verify that email sending works. If it doesn\'t then most likely your WordPress hosting is not configured to send out emails. In that case you can use some WordPress SMTP email plugin like WP Mail SMTP by WPForms','seatreg'); ?>
+					<?php esc_html_e('Send a test email to verify that email sending works. If it doesn\'t then most likely your WordPress hosting is not configured to send out emails. In that case you can use some WordPress SMTP email plugin like WP Mail SMTP by WPForms','seatreg'); ?>.
 				</p>
 				<label for="test-email-address">
 					<?php esc_html_e('Enter your email address','seatreg'); ?>
