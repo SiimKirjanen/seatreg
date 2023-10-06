@@ -534,7 +534,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="using-calendar"><?php esc_html_e('Registration calendar', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Check if you want to turn on calendar functionality', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php esc_html_e('Please check if you want to enable calendar functionality, as it allows registration to reset on each day.', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="using-calendar" name="using-calendar" value="1" <?php echo $options[0]->using_calendar == '1' ? 'checked="checked"':''; ?> >
