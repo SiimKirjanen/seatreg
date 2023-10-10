@@ -826,6 +826,27 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label><?php esc_html_e('Booking PDF', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php
+						esc_html_e('Configures when to show booking details PDF in booking status page.', 'seatreg');
+					?>
+				</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="show-pending-booking-pdf" name="show-pending-booking-pdf" value="0" <?php echo $options[0]->show_pending_booking_pdf == '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Show booking PDF if booking status is pending', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="show-approved-booking-pdf" name="show-approved-booking-pdf" value="0" <?php echo $options[0]->show_approved_booking_pdf == '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Show booking PDF if booking status is approved', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
 				<label for="approved-booking-email-qr-code"><?php esc_html_e('Approved booking receipt email QR code', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
@@ -2093,6 +2114,8 @@ function seatreg_set_up_db() {
 			booking_confirm_page_custom_styles text,
 			registration_start_time text,
 			registration_end_time text,
+			show_pending_booking_pdf tinyint(1) NOT NULL DEFAULT 0,
+			show_approved_booking_pdf tinyint(1) NOT NULL DEFAULT 1,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2929,6 +2952,18 @@ function seatreg_update() {
 		$_POST['custom-footer-text'] = null;
 	}
 
+	if( !isset($_POST['show-pending-booking-pdf']) ) {
+		$_POST['show-pending-booking-pdf'] = 0;
+	}else {
+		$_POST['show-pending-booking-pdf'] = 1;
+	}
+
+	if( !isset($_POST['show-approved-booking-pdf']) ) {
+		$_POST['show-approved-booking-pdf'] = 0;
+	}else {
+		$_POST['show-approved-booking-pdf'] = 1;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 
 	$status1 = $wpdb->update(
@@ -2985,6 +3020,8 @@ function seatreg_update() {
 			'booking_confirm_page_custom_styles' => $_POST['booking-confirm-custom-styles'],
 			'registration_start_time' => $_POST['registration-start-time'] === '' ? null : $_POST['registration-start-time'],
 			'registration_end_time' => $_POST['registration-end-time'] === '' ? null : $_POST['registration-end-time'],
+			'show_pending_booking_pdf' => $_POST['show-pending-booking-pdf'],
+			'show_approved_booking_pdf' => $_POST['show-approved-booking-pdf'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
