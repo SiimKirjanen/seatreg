@@ -18,6 +18,15 @@ class SeatregBookingPDF extends tFPDF {
         $this->setUp();
     }
 
+    function Header() {
+        $this->SetFont('Arial','B',14);
+        $this->Cell(30, 0, $this->_bookingData->registration_name , 0, 1, 'L');
+        $this->Ln(6);
+        $this->SetFont('Arial','',10);   
+        $this->Cell(30, 0, $this->getCurrenctDate() , 0, 1, 'L');
+        $this->Ln(10);
+    }
+
     public function setUp() {
         $this->SetTitle( 'Test' );
         $this->SetAuthor('SeatReg WordPress');
@@ -36,6 +45,10 @@ class SeatregBookingPDF extends tFPDF {
         
         $this->_payment = SeatregPaymentRepository::getPaymentByBookingId( $this->_bookingId );
         $this->_customFields = ($this->_bookingData->custom_fields !== null) ? json_decode( $this->_bookingData->custom_fields, true ) : [];
+    }
+
+    public function getCurrenctDate() {
+        return date(get_option('date_format'));
     }
 
     public function printPDF() {
@@ -70,7 +83,6 @@ class SeatregBookingPDF extends tFPDF {
                 $this->Cell(20, 6, esc_html__('Payment status', 'seatreg') . ': ' . $paymentStatus, 0, 1, 'L');
 
                 if( $paymentStatus == SEATREG_PAYMENT_COMPLETED ) {
-                    $this->Cell(20, 6, esc_html__('Payment txn id', 'seatreg') . ': ' . $this->_payment->payment_txn_id, 0, 1, 'L');
                     $this->Cell(20, 6, esc_html__('Payment received', 'seatreg') . ': ' . $this->_payment->payment_total_price . ' ' . $this->_payment->payment_currency, 0, 1, 'L');
                 }
             }
@@ -82,7 +94,7 @@ class SeatregBookingPDF extends tFPDF {
             $this->Ln(10);
         }
 
-        $this->Output('test.pdf', 'I');	
+        $this->Output($this->_bookingData->registration_name . '_' .  $this->_bookingId . '.pdf', 'I');	
     }
 
     protected function getBookingDate($timestamp) {
