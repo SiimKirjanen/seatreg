@@ -55,6 +55,7 @@ require( 'php/services/SeatregImageUploadService.php' );
 require( 'php/services/SeatregImageDeleteService.php' );
 require( 'php/services/SeatregRandomGenerator.php' );
 require( 'php/services/SeatregTimeService.php' );
+require( 'php/services/SeatregQRCodeService.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );
@@ -112,4 +113,9 @@ $seatreg_trigger_side_effect = get_option('seatreg_trigger_side_effect');
 if ($seatreg_trigger_side_effect !== SEATREG_TRIGGER_SIDE_EFFECT) {
 	seatreg_capabilities_add();
 	update_option( 'seatreg_trigger_side_effect', SEATREG_TRIGGER_SIDE_EFFECT );
+}
+
+//Uploads
+if (!file_exists(SEATREG_TEMP_FOLDER_DIR)) {
+	mkdir(SEATREG_TEMP_FOLDER_DIR, 0775, true);
 }

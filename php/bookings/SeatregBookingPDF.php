@@ -90,10 +90,17 @@ class SeatregBookingPDF extends tFPDF {
             foreach ( $this->_customFields as $customField ) {
                 $this->Cell(20, 6, $this->customFieldsWithValues($customField, $registrantCustomData), 0, 1);
             }
-            
+
             $this->Ln(10);
         }
 
+        if( $this->_bookingData->send_approved_booking_email_qr_code ) {
+            $qrContent = SeatregRegQRCodeService::getQRCodeContent( $this->_bookingId, $this->_bookingData->registration_code, $this->_bookingData->send_approved_booking_email_qr_code );
+            SeatregRegQRCodeService::generateQRCodeImage( $qrContent, $this->_bookingId );
+            
+            $this->image(SEATREG_TEMP_FOLDER_DIR. '/' . $this->_bookingId . '.png');
+        }
+        
         $this->Output($this->_bookingData->registration_name . '_' .  $this->_bookingId . '.pdf', 'I');	
     }
 
