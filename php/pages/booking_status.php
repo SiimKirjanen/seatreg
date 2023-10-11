@@ -76,6 +76,19 @@
 		<?php
 			seatreg_echo_booking($registrationId, $bookingId);
 
+			if( SeatregOptionsRepository::shouldAllowPdfGeneration($bookings, $bookingData) ) {
+				?>
+					<a href="<?php echo get_site_url(), '/?seatreg=booking-pdf&id=', $bookingId; ?>" target="_blank">
+						<img width="60" src="<?php echo SEATREG_PLUGIN_FOLDER_URL . '/img/pdf_logo.png'; ?>" alt="PDF" />
+					</a>
+				<?php
+			}
+
+			if( $bookingData && $bookingData->payment_text ) {
+				echo '<h3>', esc_html__('Payment info', 'seatreg'), '</h3>';
+				echo '<p>', nl2br(esc_html($bookingData->payment_text)) ,'</p>';
+			}
+
 			if($bookingData->send_approved_booking_email === '1' && $bookings[0]->status === '2' ) {
 				esc_html_e('Did not receive booking receipt? Click the button to send it again.', 'seatreg');
 				echo ' <button id="send-receipt" data-booking-id="'. $bookingId .'" data-registration-id="'. $registrationId .'">'. __('Send again', 'seatreg') .'</button><br>';

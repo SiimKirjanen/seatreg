@@ -82,4 +82,27 @@ class SeatregOptionsRepository {
 
         return $results->stripe_webhook_secret;
     }
+
+    /**
+     *
+     * Is it allowed to generate booking PDF?
+     *
+     * @param string $bookings Array of bookings
+     * @param object $bookingData Object of booking data
+     * @return boolean
+     *
+     */
+    public static function shouldAllowPdfGeneration($bookings, $bookingData) {
+        if(!$bookings) {
+            return false;
+        }
+    
+        if( $bookings[0]->status === '1' &&  $bookingData->show_pending_booking_pdf === '0' ) {
+            return false;
+        }else if( $bookings[0]->status === '2' && $bookingData->show_approved_booking_pdf === '0' ) {
+            return false;
+        }
+    
+        return true;
+    }
 }

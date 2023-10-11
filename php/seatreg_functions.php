@@ -1723,11 +1723,6 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 				echo SeatregBookingService::generatePaymentTable($bookingId);
 				echo '<br>';
 			}
-
-			if($options && $options->payment_text) {
-				echo '<h3>', esc_html__('Payment info', 'seatreg'), '</h3>';
-				echo '<p>', nl2br(esc_html($options->payment_text)) ,'</p>';
-			}
 		}else {
 			esc_html_e('Booking not found.', 'seatreg');
 			die();
