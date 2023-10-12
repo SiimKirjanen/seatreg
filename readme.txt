@@ -4,7 +4,7 @@ Tags: seat registration, booking, booking seats, booking events, seat map, booki
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.3.1
-Stable tag: 1.46.0
+Stable tag: 1.47.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -43,6 +43,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.47.0 =
+* Added booking PDF to booking status page. In settings you can control when the PDF is displayed.
 
 = 1.46.0 =
 * Registration start and end date now use WordPress timezone
