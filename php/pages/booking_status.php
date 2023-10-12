@@ -78,9 +78,11 @@
 
 			if( SeatregOptionsRepository::shouldAllowPdfGeneration($bookings, $bookingData) ) {
 				?>
+				<div style="margin-bottom: 6px;">
 					<a href="<?php echo get_site_url(), '/?seatreg=booking-pdf&id=', $bookingId; ?>" target="_blank">
 						<img width="60" src="<?php echo SEATREG_PLUGIN_FOLDER_URL . '/img/pdf_logo.png'; ?>" alt="PDF" />
 					</a>
+				</div>
 				<?php
 			}
 
