@@ -19,10 +19,10 @@ class SeatregBookingPDF extends tFPDF {
     }
 
     function Header() {
-        $this->SetFont('Arial','B',14);
+        $this->SetFont('DejaVu','',14);
         $this->Cell(30, 0, $this->_bookingData->registration_name , 0, 1, 'L');
         $this->Ln(6);
-        $this->SetFont('Arial','',10);   
+        $this->SetFont('DejaVu','',10);  
         $this->Cell(30, 0, $this->getCurrenctDate() , 0, 1, 'L');
         $this->Ln(10);
     }
