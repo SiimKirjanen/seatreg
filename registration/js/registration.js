@@ -389,6 +389,7 @@
 			if(legend !== 'noLegend') {
 				box.setAttribute('data-legend',legend);
 				box.setAttribute('data-leg',legend.replace(/\s+/g, '_').toLowerCase());
+				box.classList.add( sanitizeClassName( legend ) );
 				tooltipContent = '<div class="seatreg-tooltip-row">' + legend + '</div>';
 				clickable = true;
 			}
@@ -1493,6 +1494,11 @@ function bookingsConfirmedInfo(data, status) {
 
 function getRegistrationCode() {
 	return qs['c'];
+}
+
+function sanitizeClassName(inputString) {
+	// Replace characters that are not valid in class names with underscores
+	return inputString.replace(/[^a-zA-Z0-9_-]/g, '_');
 }
 
 $('#room-nav-btn').on('click', function() {	
