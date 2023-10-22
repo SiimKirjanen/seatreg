@@ -502,8 +502,13 @@
 
 		for(var i = 0; i < arrLen; i++) {
 			if(this.selectedSeats[i].room == roomName) {
-				//add selected seat mark				
-				documentFragment.querySelector('.box[data-seat="' + this.selectedSeats[i].id + '"]').setAttribute('data-selectedbox','true');
+				var selectedSeatId = this.selectedSeats[i].id;
+				var selectedElement = documentFragment.querySelector('.box[data-seat="' + selectedSeatId + '"]');
+
+				if(selectedElement) {
+					selectedElement.setAttribute('data-selectedbox','true');
+					selectedElement.classList.add('selected-box'); 
+				}
 			}
 		}
 		$('#boxes').html(documentFragment);
@@ -667,7 +672,7 @@ SeatReg.prototype.addSeatToCart = function() {
 	
 	$('.seats-in-cart').text(this.selectedSeats.length);
 	var boxColor = $('#boxes .box[data-seat="' + seatId + '"]').css('background-color');
-	$('#boxes .box[data-seat="' + seatId + '"]').attr('data-selectedBox','true').css("--animationColor", boxColor);
+	$('#boxes .box[data-seat="' + seatId + '"]').attr('data-selectedBox','true').css("--animationColor", boxColor).addClass('selected-box');
 
 	//add to seat cart popup
 	var cartItem = $('<div class="cart-item" data-cart-id="' + seatId + '" data-room-uuid="'+ roomUUID +'"></div>');
@@ -688,7 +693,7 @@ SeatReg.prototype.addSeatToCart = function() {
 			}
 		}
 		item.remove();
-		$('#boxes .box[data-seat="'+ removeId +'"]').removeAttr('data-selectedbox');
+		$('#boxes .box[data-seat="'+ removeId +'"]').removeAttr('data-selectedbox').removeClass('selected-box');
 
 		if(scope.selectedSeats.length == 0) {
 			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('youCanAdd_') + scope.spotName + translator.translate('_toCartClickTab') + '</p>');
