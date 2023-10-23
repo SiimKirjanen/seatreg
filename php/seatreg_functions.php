@@ -1403,12 +1403,13 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$time = strtotime($row->booking_date);
 						$myFormatForView = date("m-d-y", $row->booking_date);
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
+						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
 						
 						echo '<div class="reg-seat-item" data-booking-id="'. $booking .'">';
 							echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
 							echo '<div class="seat-room-box manager-box" title="',esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
 							echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
-							echo '<div class="seat-date-box manager-box" title="', esc_html(date('M j Y h:i e', $row->booking_date)),'">',esc_html($myFormatForView),'</div>';
+							echo '<div class="seat-date-box manager-box" title="', $bookingDateString,'">',esc_html($myFormatForView),'</div>';
 							echo "<div class='booking-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
 							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
 							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
@@ -1419,7 +1420,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		
 							echo '<div class="more-info">';
 								echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl) ,'</a>';
-								echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html(date('M j Y h:i e', $row->booking_date)), '</span></div>';
+
+								echo '<div>', esc_html__('Booking date','seatreg'), ': <span class="time-string">', $bookingDateString, '</span></div>';
 								if($row->calendar_date) {
 									echo '<div>', esc_html__('Calendar date', 'seatreg'), ': ', esc_html($row->calendar_date), '</div>';
 								}
@@ -1455,12 +1457,13 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$time = strtotime($row->booking_date);
 						$myFormatForView = date("m-d-y", $row->booking_date);
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
+						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
 		
 						echo '<div class="reg-seat-item" data-booking-id="'. $booking .'">';
 							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
 							echo '<div class="seat-room-box manager-box" title="',esc_attr($row->room_name),'">', esc_html($row->room_name),'</div>';
 							echo '<div class="seat-name-box manager-box" title="'.esc_attr($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
-							echo '<div class="seat-date-box manager-box" title="', esc_html(date('M j Y h:i e', $row->booking_date)),'">',esc_html($myFormatForView),'</div>';
+							echo '<div class="seat-date-box manager-box" title="', $bookingDateString,'">',esc_html($myFormatForView),'</div>';
 							echo "<div class='booking-id-box manager-box' title='",esc_attr($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
 							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
 							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
@@ -1471,11 +1474,11 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		
 							echo '<div class="more-info">';
 								echo esc_html__('Status page','seatreg'), ': ', '<a href="', $bookingStatusUrl ,'" target="_blank">', esc_url($bookingStatusUrl), '</a>';
-								echo '<div>', esc_html__('Registration date','seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_date) ), '</span></div>';
+								echo '<div>', esc_html__('Booking date','seatreg'), ': <span class="time-string">', $bookingDateString, '</span></div>';
 								if($row->calendar_date) {
 									echo '<div>', esc_html__('Calendar date', 'seatreg'), ': ', esc_html($row->calendar_date), '</div>';
 								}
-								echo '<div>', esc_html__('Approval date', 'seatreg'), ': <span class="time-string">', esc_html( date('M j Y h:i e', $row->booking_confirm_date ) ), '</span></div>';
+								echo '<div>', esc_html__('Approval date', 'seatreg'), ': <span class="time-string">', SeatregTimeService::getDateStringFromUnix( $row->booking_confirm_date ), '</span></div>';
 								echo '<div>Email: ', esc_html( $row->email ), '</div>';
 		
 								for($i = 0; $i < $cus_length; $i++) {

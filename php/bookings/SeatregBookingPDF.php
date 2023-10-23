@@ -23,7 +23,7 @@ class SeatregBookingPDF extends tFPDF {
         $this->Cell(30, 0, $this->_bookingData->registration_name , 0, 1, 'L');
         $this->Ln(6);
         $this->SetFont('DejaVu','',10);  
-        $this->Cell(30, 0, $this->getCurrenctDate() , 0, 1, 'L');
+        $this->Cell(30, 0, sprintf( esc_html('File generated: %s', 'seatreg'), SeatregTimeService::getDateStringFromUnix( time() ) ), 0, 1, 'L');
         $this->Ln(10);
     }
 
@@ -47,15 +47,11 @@ class SeatregBookingPDF extends tFPDF {
         $this->_customFields = ($this->_bookingData->custom_fields !== null) ? json_decode( $this->_bookingData->custom_fields, true ) : [];
     }
 
-    public function getCurrenctDate() {
-        return date(get_option('date_format'));
-    }
-
     public function printPDF() {
 
         foreach( $this->_bookings as $booking ) {
             $placeNumberText = $this->_bookingData->using_seats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
-            $bookingDate = $this->getBookingDate($booking->booking_date);
+            $bookingDate = SeatregTimeService::getDateStringFromUnix($booking->booking_date);
             $status = $this->getStatus($booking->status);
             $paymentStatus = $this->_payment->payment_status ?? null;
             $registrantCustomData = json_decode($booking->custom_field_data, true);
@@ -64,7 +60,7 @@ class SeatregBookingPDF extends tFPDF {
             $this->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($booking->room_name), 0, 1, 'L');
             $this->Cell(20, 6, esc_html__('Name', 'seatreg') . ': ' . esc_html($booking->first_name) . ' ' . esc_html($booking->last_name), 0, 1, 'L');
             $this->Cell(20, 6, esc_html__('Email', 'seatreg') . ': ' . $booking->email, 0, 1, 'L');
-            $this->Cell(20, 6, esc_html__('Registration date', 'seatreg') . ': ' . $bookingDate, 0, 1, 'L');
+            $this->Cell(20, 6, esc_html__('Booking time', 'seatreg') . ': ' . $bookingDate, 0, 1, 'L');
 
             if( $booking->calendar_date ) {
                 $this->Cell(20, 6, esc_html__('Calendar date', 'seatreg') . ': ' . $booking->calendar_date, 0, 1, 'L');
@@ -74,9 +70,9 @@ class SeatregBookingPDF extends tFPDF {
             $this->Cell(20, 6, esc_html__('Booking status', 'seatreg') . ': ' . $status, 0, 1, 'L');
 
             if($status =='Approved') {
-                $confirmDate = $this->getBookingDate( $booking->booking_confirm_date );
+                $confirmDate = SeatregTimeService::getDateStringFromUnix( $booking->booking_confirm_date );
 
-                $this->Cell(20, 6, esc_html__('Booking approval date', 'seatreg') . ': ' . $confirmDate, 0, 1, 'L');
+                $this->Cell(20, 6, esc_html__('Booking approval time', 'seatreg') . ': ' . $confirmDate, 0, 1, 'L');
             }
 
             if( $paymentStatus !== null ) {
@@ -102,10 +98,6 @@ class SeatregBookingPDF extends tFPDF {
         }
         
         $this->Output($this->_bookingData->registration_name . '_' .  $this->_bookingId . '.pdf', 'I');	
-    }
-
-    protected function getBookingDate($timestamp) {
-        return date('M j Y h:i e', $timestamp);
     }
 
     protected function getStatus($status) {

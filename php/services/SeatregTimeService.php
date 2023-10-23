@@ -90,9 +90,20 @@ class SeatregTimeService {
             return null;
         }
         $datetime = new DateTime();
-        $datetime->setTimestamp($unixTimeStamp / 1000);
+        $timestamp = (strlen($unixTimeStamp) === 13) ? ($unixTimeStamp / 1000) : $unixTimeStamp;
+        $datetime->setTimestamp($timestamp);
         $datetime->setTimezone(new DateTimeZone( wp_timezone_string() ));
 
         return $datetime;
+    }
+
+    public static function getDateStringFromUnix( $unixTimeStamp ) {
+        $dateTime = self::getLocalDateTimeOutOfUnix( $unixTimeStamp );
+
+        if($dateTime) {
+            return $dateTime->format('M j Y H:i e');
+        }
+
+        return null;
     }
 }
