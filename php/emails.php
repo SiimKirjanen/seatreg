@@ -15,7 +15,7 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
     $roomData = json_decode($registration->registration_layout)->roomData;
     $registrationCustomFields = json_decode($registration->custom_fields);
-    $adminEmail = get_option( 'admin_email' );
+    $emailToSend = $registration->notification_email ?? get_option( 'admin_email' );
     $fromAddress = getEmailFromAddress($registration->email_from_address);
     $registrationName = esc_html($registration->registration_name);
 
@@ -26,7 +26,7 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
     $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), $registrationName ) . "<br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg") . "<br><br>";
     $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 
-    wp_mail($adminEmail, sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName), $message, array(
+    wp_mail($emailToSend, sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName), $message, array(
         "Content-type: text/html",
         "FROM: $fromAddress"
     ));

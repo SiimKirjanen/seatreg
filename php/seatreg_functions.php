@@ -774,11 +774,7 @@ function seatreg_generate_settings_form() {
 				<label for="booking-notification"><?php esc_html_e('Booking notification', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
-						printf(
-							/* translators: %s: email address */
-							esc_html__( 'Send a notification to %s when you got a new booking.', 'seatreg' ),
-							esc_html($adminEmail)
-						);
+						esc_html_e('Get notified when you got a new booking.', 'seatreg' );
 					?>
 				</p>
 				<div class="checkbox">
@@ -787,6 +783,16 @@ function seatreg_generate_settings_form() {
 			      		<?php esc_html_e('Send notifications', 'seatreg'); ?>
 			    	</label>
 			  	</div>
+				<p class="help-block">
+					<?php
+						printf(
+							/* translators: %s: email address */
+							esc_html__( 'By default notification will be sent to %s. You can configure it below.', 'seatreg' ),
+							esc_html($adminEmail)
+						);
+					?>
+				</p>
+				<input type="text" class="form-control" id="notification-email" name="notification-email" autocomplete="off" placeholder="<?php echo esc_html('Use default email', 'seatreg'); ?>" value="<?php echo ($options[0]->notification_email) ? esc_html($options[0]->notification_email) : ''; ?>" />
 			</div>
 
 			<div class="form-group">
@@ -2127,6 +2133,7 @@ function seatreg_set_up_db() {
 			show_pending_booking_pdf tinyint(1) NOT NULL DEFAULT 0,
 			show_approved_booking_pdf tinyint(1) NOT NULL DEFAULT 1,
 			booking_qr_code_input varchar(255) DEFAULT 'booking-id',
+			notification_email varchar(255) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3034,6 +3041,7 @@ function seatreg_update() {
 			'show_pending_booking_pdf' => $_POST['show-pending-booking-pdf'],
 			'show_approved_booking_pdf' => $_POST['show-approved-booking-pdf'],
 			'booking_qr_code_input' => $_POST['booking-qr-code-input'],
+			'notification_email' => $_POST['notification-email'],
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
