@@ -85,13 +85,16 @@ function seatreg_create_welcome() {
 				<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/donate.svg'; ?>" alt="Donate a little" width="160" />
 				<form action="https://www.paypal.com/donate" method="post" target="_blank">
 					<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
-					<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+					<input type="image" class="donate-img" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
 				</form>
 				<p style="text-align:center">
 					Don't forget to leave a 
 					<a href="https://wordpress.org/support/plugin/seatreg/reviews/" target="_blank">
 						review
 					<a/>
+				</p>
+				<p>
+					Thank you to all who have donated and left a review. It means a lot, as it confirms that what I do makes a difference and motivates me to add new features.
 				</p>
 				<p style="text-align:center">
 					Found a problem or have some ideas how to improve? Don't hesitate to write to

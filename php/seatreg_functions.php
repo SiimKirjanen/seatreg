@@ -909,7 +909,7 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="paypal"><?php esc_html_e('PayPal payments', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create a Buy Now button in Paypal. When creating a button only fill item name. Don\'t add price, shipping etc.', 'seatreg'); ?>
+					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create a Buy Now button in Paypal (https://www.paypal.com/buttons/). Button price and currency fields will be overriden by the plugin (just add something as they are required).', 'seatreg'); ?>
 				</p>
 				<?php if(extension_loaded('curl')): ?>
 					<div class="checkbox">

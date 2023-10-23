@@ -11,6 +11,7 @@
 @import "components/custom-payments";
 @import "components/custom-payment-icon-upload";
 @import "components/current-custom-payment-icon";
+@import "../animations.scss";
 
 html {
 	font-size: 100%;
@@ -64,14 +65,23 @@ html {
 	margin-bottom: 42px;
 }
 .seatreg-wp-admin .donate-wrap {
+	max-width: 500px;
 	display: flex;
 	flex-direction: column;
 	padding: 0 15px;
 	align-items: center;
+	text-align: center;
 	row-gap: 12px;
+
+	p {
+		margin-bottom: 0.6rem;
+	}
 
 	> img {
 		margin-right: 12px;
+	}
+	.donate-img {
+		animation: shake 0.5s; 
 	}
 	.buy-me-coffee-link {
 		img {
@@ -201,10 +211,7 @@ html {
 	min-height: 180px;
 	margin-bottom: 20px;
 	position: relative;
-	
-	overflow: auto;
-	
-	
+	overflow: auto;	
 }
 .seatreg-tabs-content .room-list {
 	list-style: none;
@@ -227,9 +234,6 @@ html {
 .seatreg-tabs-content .room-list-item:hover {
 	cursor: pointer;
 	color: #F47A37;
-}
-.seatreg-tabs-content .room-list-item-active {
-	
 }
 
 .seatreg-tabs-content .reg-overview-top-header {
