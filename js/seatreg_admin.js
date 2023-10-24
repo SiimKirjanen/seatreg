@@ -647,7 +647,8 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
 	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
-	var queryParams = new URLSearchParams(window.location.search); 
+	var queryParams = new URLSearchParams(window.location.search);
+	var calendarDate = queryParams.get('calendar-date');
 
 	wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
 	button.parent().find('.reg-seat-item').each(function() {
@@ -685,7 +686,7 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 		searchTerm: searchTerm,
 		orderby: bookingOrderInManager, 
 		actionData: JSON.stringify(data),
-		calendarDate: queryParams.get('calendar-date')
+		calendarDate: calendarDate
 	});
 
 	promise.done(function(data) {
@@ -694,6 +695,9 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 				animate: false,
 				animationSpeed: 0
 			});
+			if(calendarDate) {
+				initBookingManagerCalendarDatePicer();
+			}
 			alertify.success(translator.translate('bookingStatusUpdated'));
 		});
 	});

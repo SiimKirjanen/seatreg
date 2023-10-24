@@ -1831,8 +1831,7 @@ function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrat
 	return $statsArray;
 }
 
-//check if room and seat exist in structure and are not already booked
-function seatreg_validate_del_conf_booking($code, $bookingActions) {
+function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate) {
 	$registration = seatreg_get_registration_data($code)[0];
 	$structure = json_decode($registration->registration_layout)->roomData;
 	$bookingActionLength = count($bookingActions);
@@ -1856,12 +1855,11 @@ function seatreg_validate_del_conf_booking($code, $bookingActions) {
 
 	
 	if(!$allCorrect) {
-
 		return $resp;
 	}
 
 	//step2. check whether seat is already pending or confirmed
-	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $code );
+	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $code, $calendarDate );
 	foreach($bookings as $booking) {
 		$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($structure, $booking->room_uuid);
 	}
@@ -2449,7 +2447,7 @@ function seatreg_create_new_registration($newRegistrationName) {
 }
 
 //confirm, delete booking
-function seatreg_confirm_or_delete_booking($action, $regCode) {
+function seatreg_confirm_or_delete_booking($action, $regCode, $calendarDate) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
@@ -2461,7 +2459,10 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 				'status' => SEATREG_BOOKING_APPROVED,
 				'booking_confirm_date' => time()
 			), 
-			array('booking_id' => $action->booking_id), 
+			array(
+				'booking_id' => $action->booking_id, 
+				'calendar_date' => $calendarDate
+			), 
 			'%s',
 			'%s'
 		);
@@ -2474,7 +2475,8 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array(
 				'booking_id' => $action->booking_id, 
-				'seat_id' => $action->seat_id
+				'seat_id' => $action->seat_id,
+				'calendar_date' => $calendarDate
 			), 
 			'%s'
 		);
@@ -2489,7 +2491,10 @@ function seatreg_confirm_or_delete_booking($action, $regCode) {
 				'status' => SEATREG_BOOKING_PENDING,
 				'booking_confirm_date' => null
 			), 
-			array('booking_id' => $action->booking_id), 
+			array(
+				'booking_id' => $action->booking_id,
+				'calendar_date' => $calendarDate
+			), 
 			'%s',
 			'%s'
 		);
@@ -3431,10 +3436,10 @@ add_action( 'wp_ajax_seatreg_confirm_del_bookings', 'seatreg_confirm_del_booking
 function seatreg_confirm_del_bookings_callback() {
 	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 
-	$data = json_decode( stripslashes_deep($_POST['data']['actionData']) );
+	$actionData = json_decode( stripslashes_deep($_POST['data']['actionData']) );
 	$calendarDate = assignIfNotEmpty( $_POST['data']['calendarDate'], null );
 	$code = sanitize_text_field( $_POST['code'] );
-	$statusArray = seatreg_validate_del_conf_booking( $code, $data );
+	$statusArray = seatreg_validate_del_conf_booking( $code, $actionData, $calendarDate );
 
 	if ( $statusArray['status'] != 'ok' ) {
 		$errorText = '';
@@ -3459,8 +3464,8 @@ function seatreg_confirm_del_bookings_callback() {
 	}else {
 		$approvalBookingEmailProcessed = [];
 
-		foreach ($data as $key => $value) {
-			seatreg_confirm_or_delete_booking( $value, $code);
+		foreach ($actionData as $key => $value) {
+			seatreg_confirm_or_delete_booking( $value, $code, $calendarDate);
 
 			if($value->action == 'conf' && !in_array($value->booking_id, $approvalBookingEmailProcessed)) {
 				$bookingData = SeatregBookingRepository::getDataRelatedToBooking($value->booking_id);
