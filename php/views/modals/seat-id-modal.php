@@ -7,17 +7,24 @@
       </div>
       <div class="modal-body">
 			<?php foreach($roomsData as $roomData): ?>
+				<?php
+					 $openSeatCounter = 0;
+				?>
 				<h5><?php echo $roomData->room->name; ?></h5>
 
 				<div class="seat-id-grid">
 					<div class="grid-title"><?php esc_html_e('No.', 'seatreg'); ?></div>
 					<div class="grid-title"><?php esc_html_e('ID', 'seatreg'); ?></div>
 					<div class="grid-title"><?php esc_html_e('Action', 'seatreg'); ?></div>
+
 					<?php foreach($roomData->boxes as $box): ?>
 						<?php 
 							$seatNumber = $box->prefix . $box->seat;
 						?>
-						<?php if($box->canRegister === 'true'): ?>
+						<?php if($box->canRegister === 'true' && !in_array($box->id, $bookingIds)): ?>
+							<?php 
+								$openSeatCounter++;
+							?>
 							<div>
 								<?php echo $seatNumber; ?>
 							</div>
@@ -31,6 +38,9 @@
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>
+				<?php if($openSeatCounter === 0): ?>
+					<div class="alert alert-info"><?php echo sprintf(esc_html('No open seats in %s', 'seatreg'), $roomData->room->name); ?></div>
+				<?php endif; ?>
 			<?php endforeach; ?>
       </div>
       <div class="modal-footer">
