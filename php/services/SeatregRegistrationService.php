@@ -101,7 +101,23 @@ class SeatregRegistrationService {
                 'pending_booking_email_template' => $registrationData->pending_booking_email_template,
                 'approved_booking_email_template' => $registrationData->approved_booking_email_template,
                 'payment_completed_set_booking_confirmed_stripe' => $registrationData->payment_completed_set_booking_confirmed_stripe,
-                'stripe_api_key' => $registrationData->stripe_api_key
+                'stripe_api_key' => $registrationData->stripe_api_key,
+                'seat_selection_btn_text' => $registrationData->seat_selection_btn_text,
+                'custom_styles' => $registrationData->custom_styles,
+                'booking_status_page_custom_styles' => $registrationData->booking_status_page_custom_styles,
+                'booking_confirm_page_custom_styles' => $registrationData->booking_confirm_page_custom_styles,
+                'notification_email' => $registrationData->notification_email,
+                'custom_footer_text' => $registrationData->custom_footer_text,
+                'custom_payments' => $registrationData->custom_payments,
+                'custom_payment' => $registrationData->custom_payment,
+                'custom_payment_title' => $registrationData->custom_payment_title,
+                'custom_payment_description' => $registrationData->custom_payment_description,
+                'booking_qr_code_input' => $registrationData->booking_qr_code_input,
+                'show_pending_booking_pdf' => $registrationData->show_pending_booking_pdf,
+                'show_approved_booking_pdf' => $registrationData->show_approved_booking_pdf,
+                'using_seats' => $registrationData->using_seats,
+                'controlled_scroll' => $registrationData->controlled_scroll,
+                'booking_email_limit' => $registrationData->booking_email_limit
             ),
     		'%s'
     	);
