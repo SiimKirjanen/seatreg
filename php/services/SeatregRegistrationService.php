@@ -74,8 +74,6 @@ class SeatregRegistrationService {
     		$seatreg_db_table_names->table_seatreg_options,
     		array(
                 'registration_code' => $generatedCode,
-                'registration_start_timestamp' => $registrationData->registration_start_timestamp,
-                'registration_end_timestamp' => $registrationData->registration_end_timestamp,
                 'seats_at_once' => $registrationData->seats_at_once,
                 'gmail_required' => $registrationData->gmail_required,
                 'registration_open' => $registrationData->registration_open,
