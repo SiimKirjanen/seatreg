@@ -94,7 +94,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var emailConfirmRequired = "'. esc_js($data->booking_email_confirm) . '";';
 			$inlineScript .= 'var payPalEnabled = "'. esc_js($data->paypal_payments) . '";';
 			$inlineScript .= 'var stripeEnabled = "'. esc_js($data->stripe_payments) . '";';
-			$inlineScript .= 'var customPaymentEnabled = "'. esc_js($data->custom_payment) . '";';
+			$inlineScript .= 'var customPaymentEnabled = "'. esc_js($data->custom_payment || SeatregPaymentRepository::hasCustomPayments($data)) . '";';
 			$inlineScript .= 'var payPalCurrencyCode = "'. esc_js($data->paypal_currency_code) . '";';
 			$inlineScript .= 'var receiptEnabled = "'. esc_js( $data->send_approved_booking_email) . '";';
 			$inlineScript .= 'var usingSeats = "'. esc_js( $data->using_seats ) . '";';

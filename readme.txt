@@ -45,7 +45,8 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 == Changelog ==
 
 = 1.48.3 =
-* Copy more settings when copying registration
+* Copy more settings when copying registration.
+* Fixed issue where seat price was not showing in booking confirmation modal when using only custom payments.
 
 = 1.48.2 =
 * ID lookup for add booking (booking manager) now displays only open seats.

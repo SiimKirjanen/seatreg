@@ -39,15 +39,27 @@ class SeatregPaymentRepository {
 
     /**
      *
-     * Return true of false. Check if at least one payment method is enabled
+     * Check if there are custom payments. Return true or false.
+     *
+     * @param object $bookingData The booking data
+     * @return boolean
+     *
+     */
+    public static function hasCustomPayments($bookingData) {
+        $customPayments  = json_decode( isset($bookingData->custom_payments) ? $bookingData->custom_payments : "[]");
+
+        return count($customPayments) > 0;
+    }
+
+    /**
+     *
+     * Check if at least one payment method is enabled. Return true or false.
      *
      * @param object $bookingData The booking data
      * @return boolean
      *
      */
     public static function hasPaymentEnabled($bookingData) {
-        $customPayments  = json_decode( isset($bookingData->custom_payments) ? $bookingData->custom_payments : "[]");
-
-        return $bookingData->paypal_payments === '1' || $bookingData->stripe_payments === '1' || $bookingData->custom_payment === '1' || count($customPayments) > 0;
+        return $bookingData->paypal_payments === '1' || $bookingData->stripe_payments === '1' || $bookingData->custom_payment === '1' || self::hasCustomPayments($bookingData);
     }
 }
