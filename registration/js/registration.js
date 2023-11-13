@@ -1532,6 +1532,9 @@ $('#checkout').on('click', function() {
 });
 
 $('#checkout-input-area').on('keyup change input','.field-input', function() {
+	if( $(this).attr('data-field') === 'Email' ) {
+		$(this).val( $(this).val().trim() );
+	}
 	validateInput($(this));
 });
 
