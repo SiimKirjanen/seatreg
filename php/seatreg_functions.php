@@ -1384,7 +1384,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						<div class="seat-room-box manager-box manager-box-link" data-order="room"><?php esc_html_e('Room', 'seatreg'); ?></div>
 						<div class="seat-name-box manager-box manager-box-link" data-order="name"><?php esc_html_e('Name', 'seatreg'); ?></div>
 						<div class="seat-name-box manager-box manager-box-link" data-order="date"><?php esc_html_e('Date', 'seatreg'); ?></div>
-						<div class="seat-date-box manager-box manager-box-link" data-order="id"><?php esc_html_e('Booking id', 'seatreg'); ?></div>	
+						<div class="seat-date-box manager-box manager-box-link" data-order="id"><?php esc_html_e('Booking id', 'seatreg'); ?></div>
+						<div class="booking-status-box manager-box manager-box-link" data-order="payment-status"><?php esc_html_e('Payment status', 'seatreg'); ?></div>	
 					</div>
 
 				<?php
@@ -1411,6 +1412,9 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 							echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
 							echo '<div class="seat-date-box manager-box" title="', $bookingDateString,'">',esc_html($myFormatForView),'</div>';
 							echo "<div class='booking-id-box manager-box' title='",esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
+							echo "<div class='manager-box payment-status-box'>";
+								echo $row->payment_status ? $row->payment_status : __('None', 'seatreg');
+							echo "</div>";
 							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
 							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
 							echo '<div class="action-select">';
@@ -1465,6 +1469,9 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 							echo '<div class="seat-name-box manager-box" title="'.esc_attr($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
 							echo '<div class="seat-date-box manager-box" title="', $bookingDateString,'">',esc_html($myFormatForView),'</div>';
 							echo "<div class='booking-id-box manager-box' title='",esc_attr($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
+							echo "<div class='manager-box payment-status-box'>";
+								echo $row->payment_status ? $row->payment_status : __('None', 'seatreg');
+							echo "</div>";
 							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
 							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
 							echo '<div class="action-select">';
