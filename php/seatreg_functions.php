@@ -2319,6 +2319,9 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 		case 'id':
 			$order = 'booking_id, seat_nr';
 			break;
+		case 'payment-status':
+			$order = 'payment_status';
+			break;
 	}
 
 	if( $calendarDate ) {
@@ -3431,7 +3434,7 @@ function seatreg_get_booking_manager_callback() {
 	}
 
 	if( !in_array($order, SEATREG_MANAGER_ALLOWED_ORDER) ) {
-		wp_die('Too long search');
+		wp_die('Search not allowed');
 	}
 
 	seatreg_generate_booking_manager_html(

@@ -42,7 +42,7 @@ class SeatregPaymentBase {
 
     protected function insertPayment($txnId) {
 		SeatregPaymentService::insertOrUpdatePayment($this->_bookingId, SEATREG_PAYMENT_COMPLETED, $txnId, $this->_currency, $this->_price);
-		$this->log(sprintf(esc_html__('Payment for %s is completed via %s', 'seatreg'), "$this->_price $this->_currency", $this->_paymentMethod));
+		$this->log(sprintf(esc_html__('Payment of %s is completed via %s', 'seatreg'), "$this->_price $this->_currency", $this->_paymentMethod));
 
 		if($this->_setBookingConfirmed === '1') {
 			$bookingData = SeatregBookingRepository::getDataRelatedToBooking($this->_bookingId);
