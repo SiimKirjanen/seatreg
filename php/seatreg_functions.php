@@ -1605,7 +1605,18 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 	$paymentLogs = SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id );
 	$bookingPaymentStatus = SeatregPaymentRepository::getBookingPaymentSatatus($booking);
 
-	echo '<div style="margin-bottom: 6px;"><strong>', sprintf(esc_html__('Payment status: %s', 'seatreg'), $bookingPaymentStatus->text), '</strong></div>';
+	?>
+		<div style="margin-bottom: 6px;">
+			<strong>
+				<?php esc_html_e('Payment status: ', 'seatreg'); ?>
+			</strong>
+			<span data-place="payment-status">
+				<?php echo $bookingPaymentStatus->text; ?>
+			</span>
+		</div>
+	<?php
+
+	
 
 	if( $bookingPaymentStatus->status === SEATREG_PAYMENT_COMPLETED || $bookingPaymentStatus->status === SEATREG_PAYMENT_REVERSED || $bookingPaymentStatus->status === SEATREG_PAYMENT_REFUNDED ) {
 		?>
@@ -1629,7 +1640,7 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 				<?php esc_html_e('You can change the payment status manually if needed. PayPal and Stripe payments will do it automatically.', 'seatreg'); ?>
 			</p>
 			<div style="display:flex;gap:12px;" class="mb-4">
-				<select class="form-control" style="width: 250px">
+				<select class="form-control" style="width: 250px" name="payment-status">
 					<option value="<?php echo SEATREG_PAYMENT_COMPLETED; ?>"><?php esc_html_e('Completed', 'seatreg'); ?></option>
 					<option value="<?php echo SEATREG_PAYMENT_PROCESSING; ?>"><?php esc_html_e('Processing', 'seatreg'); ?></option>
 					<option value="<?php echo SEATREG_PAYMENT_REFUNDED; ?>"><?php esc_html_e('Refunded', 'seatreg'); ?></option>
@@ -1637,7 +1648,7 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 					<option value="<?php echo SEATREG_PAYMENT_ERROR; ?>"><?php esc_html_e('Error', 'seatreg'); ?></option>
 					<option value="<?php echo SEATREG_PAYMENT_VALIDATION_FAILED; ?>"><?php esc_html_e('Validation failure', 'seatreg'); ?></option>
 				</select>
-				<button class="btn btn-default btn-sm"><?php esc_html_e('Change status', 'seatreg'); ?></button>
+				<button class="btn btn-default btn-sm" data-action="change-payment-status" data-booking-id><?php esc_html_e('Change status', 'seatreg'); ?></button>
 			</div>
 		</form>
 	<?php
@@ -3831,6 +3842,23 @@ function seatreg_get_registration_logs() {
 	$response->setData($activityLogs);
 
 	wp_send_json( $response );
+}
+
+add_action( 'wp_ajax_seatreg_booking_payment_status_change', 'seatreg_booking_payment_status_change');
+function seatreg_booking_payment_status_change() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
+
+	if( empty($_POST['data']) || empty($_POST['code']) || empty($_POST['data']['bookingStatus']) ) {
+		wp_send_json_error('Missing data', 422);
+	}
+
+	$done = SeatregPaymentService::insertOrUpdatePayment( $_POST['code'], $_POST['data']['bookingStatus'] );
+
+	if($done) {
+		wp_send_json('ok');
+	}else {
+		wp_send_json_error();
+	}
 }
 
 add_action( 'wp_ajax_seatreg_create_payment_log', 'seatreg_create_payment_log');

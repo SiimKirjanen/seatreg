@@ -188,6 +188,7 @@ function seatreg_generate_admin_strings() {
     $translations->paymentIconUploaded = esc_html__('Custom payment icon uploaded', 'seatreg');
     $translations->paymentIconUploadedFail = esc_html__('Custom payment icon upload failed', 'seatreg');
     $translations->paymentIcon = esc_html__('Payment icon', 'seatreg');
+    $translations->paymentStatusUpdated = esc_html__('Payment status updated', 'seatreg');
     
     return $translations;
 }

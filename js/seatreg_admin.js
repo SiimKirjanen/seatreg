@@ -601,6 +601,37 @@ $('.seatreg-registrations [data-action=view-registration-activity').on('click', 
 	$('#registration-activity-modal').attr('data-registration-id', registrationId).modal('show');
 });
 
+$('#seatreg-booking-manager').on('click', 'button[data-action=change-payment-status]', function(e) {
+	e.preventDefault();
+	var $this = $(this);
+	var bookingId = $this.closest('.reg-seat-item').data('booking-id');
+	var selectedStatus = $this.siblings('select[name="payment-status"]').val();
+	var selectedStatusText = $this.siblings('select[name="payment-status"]').find(":selected").text();
+
+	$this.prop('disabled', true);
+
+	var promise = seaterg_admin_ajax('seatreg_booking_payment_status_change', bookingId, {
+		bookingStatus: selectedStatus
+	});
+
+	promise.done(function() {
+		var $bookingItems = $('.reg-seat-item[data-booking-id="'+ bookingId +'"]');
+
+		$bookingItems.each(function() {
+			$(this).find('.payment-status-box').text( selectedStatusText );
+			$(this).find('[data-place="payment-status"]').text(selectedStatusText);
+		});
+
+		alertify.success(translator.translate('paymentStatusUpdated'));
+	});
+
+	promise.always(function() {
+		$this.removeAttr("disabled");
+	});
+
+	promise.fail = seatreg_admin_ajax_error;
+});
+
 $('#seatreg-booking-manager').on('click', 'button[data-action=add-payment-log]', function() {
 	var $this = $(this);
 	$this.prop('disabled', true);

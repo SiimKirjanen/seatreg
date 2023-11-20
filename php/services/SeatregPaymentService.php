@@ -29,7 +29,7 @@ class SeatregPaymentService {
         }
     }
 
-    public static function insertOrUpdatePayment($bookingId, $status, $txnId, $paymentCurrency, $paymentTotalPrice) {
+    public static function insertOrUpdatePayment($bookingId, $status, $txnId = null, $paymentCurrency = null, $paymentTotalPrice = null) {
         global $seatreg_db_table_names;
         global $wpdb;
 
