@@ -1603,22 +1603,44 @@ function seatreg_generate_payment_logs($paymentLogs, $bookingId) {
 function seatreg_generate_payment_section($booking, $optionsData) {
 	$hasPaymentEnabled = SeatregPaymentRepository::hasPaymentEnabled( $optionsData );
 	$paymentLogs = SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id );
+	$bookingPaymentStatus = SeatregPaymentRepository::getBookingPaymentSatatus($booking);
 
-	if( $booking->payment_status == null && $hasPaymentEnabled ) {
-		echo '<br>';
-		esc_html_e('No payment actions recorded.', 'seatreg');
-		echo '<br><br>'; 
+	echo '<div style="margin-bottom: 6px;"><strong>', sprintf(esc_html__('Payment status: %s', 'seatreg'), $bookingPaymentStatus->text), '</strong></div>';
+
+	if( $bookingPaymentStatus->status === SEATREG_PAYMENT_COMPLETED || $bookingPaymentStatus->status === SEATREG_PAYMENT_REVERSED || $bookingPaymentStatus->status === SEATREG_PAYMENT_REFUNDED ) {
+		?>
+			<div>
+				<?php echo sprintf(esc_html__('Payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency")); ?>
+			</div>
+
+			<div>
+				<?php echo sprintf(esc_html__('Payment txn is %s', 'seatreg'), esc_html($booking->payment_txn_id)); ?> 
+			</div>
+
+			<div class="mb-2">
+				<?php echo sprintf(esc_html__('Payment date is %s', 'seatreg'), esc_html($booking->payment_update_date)); ?>
+			</div>
+		<?php
 	}
 
-	if( $booking->payment_status != null ) {
-		echo '<div style="margin-bottom: 6px;"><strong>', sprintf(esc_html__('Payment is %s', 'seatreg'), esc_html($booking->payment_status)), '</strong></div>';
-		if($booking->payment_status === SEATREG_PAYMENT_COMPLETED || $booking->payment_status === SEATREG_PAYMENT_REVERSED || $booking->payment_status === SEATREG_PAYMENT_REFUNDED) {
-			echo '<div>', sprintf(esc_html__('Payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency")), '</div>';
-			echo '<div>', sprintf(esc_html__('Payment txn is %s', 'seatreg'), esc_html($booking->payment_txn_id)), '</div>';
-			echo '<div>', sprintf(esc_html__('Payment date is %s', 'seatreg'), esc_html($booking->payment_update_date)), '</div>';
-		}
-		echo '<br>';
-	}
+	?>
+		<form>
+			<p>
+				<?php esc_html_e('You can change the payment status manually if needed. PayPal and Stripe payments will do it automatically.', 'seatreg'); ?>
+			</p>
+			<div style="display:flex;gap:12px;" class="mb-4">
+				<select class="form-control" style="width: 250px">
+					<option value="<?php echo SEATREG_PAYMENT_COMPLETED; ?>"><?php esc_html_e('Completed', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_PROCESSING; ?>"><?php esc_html_e('Processing', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_REFUNDED; ?>"><?php esc_html_e('Refunded', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_REVERSED; ?>"><?php esc_html_e('Reversed', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_ERROR; ?>"><?php esc_html_e('Error', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_VALIDATION_FAILED; ?>"><?php esc_html_e('Validation failure', 'seatreg'); ?></option>
+				</select>
+				<button class="btn btn-default btn-sm"><?php esc_html_e('Change status', 'seatreg'); ?></button>
+			</div>
+		</form>
+	<?php
 	
 	if( $hasPaymentEnabled || count($paymentLogs) > 0 ) {
 		echo '<div style="margin-bottom: 6px;"><strong>', esc_html__('Payment logs', 'seatreg') ,'</strong></div>';
