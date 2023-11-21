@@ -1641,12 +1641,13 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 			</p>
 			<div style="display:flex;gap:12px;" class="mb-4">
 				<select class="form-control" style="width: 250px" name="payment-status">
-					<option value="<?php echo SEATREG_PAYMENT_COMPLETED; ?>"><?php esc_html_e('Completed', 'seatreg'); ?></option>
-					<option value="<?php echo SEATREG_PAYMENT_PROCESSING; ?>"><?php esc_html_e('Processing', 'seatreg'); ?></option>
-					<option value="<?php echo SEATREG_PAYMENT_REFUNDED; ?>"><?php esc_html_e('Refunded', 'seatreg'); ?></option>
-					<option value="<?php echo SEATREG_PAYMENT_REVERSED; ?>"><?php esc_html_e('Reversed', 'seatreg'); ?></option>
-					<option value="<?php echo SEATREG_PAYMENT_ERROR; ?>"><?php esc_html_e('Error', 'seatreg'); ?></option>
-					<option value="<?php echo SEATREG_PAYMENT_VALIDATION_FAILED; ?>"><?php esc_html_e('Validation failure', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_COMPLETED; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_COMPLETED ? 'selected' : '';?>><?php esc_html_e('Completed', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_PROCESSING; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_PROCESSING ? 'selected' : '';?>><?php esc_html_e('Processing', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_REFUNDED; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_REFUNDED ? 'selected' : '';?>><?php esc_html_e('Refunded', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_REVERSED; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_REVERSED ? 'selected' : '';?>><?php esc_html_e('Reversed', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_ERROR; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_ERROR ? 'selected' : '';?>><?php esc_html_e('Error', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_VALIDATION_FAILED; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_VALIDATION_FAILED ? 'selected' : '';?>><?php esc_html_e('Validation failure', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_NONE; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_NONE ? 'selected' : '';?>><?php esc_html_e('None', 'seatreg'); ?></option>
 				</select>
 				<button class="btn btn-default btn-sm" data-action="change-payment-status" data-booking-id><?php esc_html_e('Change status', 'seatreg'); ?></button>
 			</div>
@@ -3855,6 +3856,10 @@ function seatreg_booking_payment_status_change() {
 	$done = SeatregPaymentService::insertOrUpdatePayment( $_POST['code'], $_POST['data']['bookingStatus'] );
 
 	if($done) {
+		$current_user = wp_get_current_user();
+		$current_user_displayname = $current_user->data->display_name;
+		$current_user_id = $current_user->data->ID;
+		SeatregPaymentLogService::log($_POST['code'], 'Booking status changed to ' . $_POST['data']['bookingStatus'] . ' by ' . $current_user_displayname . ' (id ' . $current_user_id .')');
 		wp_send_json('ok');
 	}else {
 		wp_send_json_error();

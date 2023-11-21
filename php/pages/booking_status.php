@@ -96,7 +96,7 @@
 				echo ' <button id="send-receipt" data-booking-id="'. $bookingId .'" data-registration-id="'. $registrationId .'">'. __('Send again', 'seatreg') .'</button><br>';
 			}
 
-			if( SeatregPaymentRepository::hasPaymentEnabled($bookingData) && $bookingData->payment_status === null ) {
+			if( SeatregPaymentRepository::hasPaymentEnabled($bookingData) && ($bookingData->payment_status === null || $bookingData->payment_status === SEATREG_PAYMENT_NONE) ) {
 				$bookingTotalCost = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
 				$bookingHasCost = $bookingTotalCost > 0;
 				$legacyCustomPaymentId = "legacy-custom-payment-id";
