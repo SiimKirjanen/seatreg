@@ -3119,14 +3119,16 @@ function seatreg_update() {
 		'%s'
 	);
 
-	if( $oldOptions->stripe_payments === '0' && $_POST['stripe-payments'] === 1) {
-		//Stripe payments is turned on
+	$turningOnStripePaymentsDetected = $oldOptions->stripe_payments === '0' && $_POST['stripe-payments'] === 1;
+	$stripeAPiKeyChangeDetected = $oldOptions->stripe_payments === '1' && $_POST['stripe-payments'] === 1 && $oldOptions->stripe_api_key !== $_POST['stripe-api-key'];
+
+	if( $turningOnStripePaymentsDetected || $stripeAPiKeyChangeDetected ) {
 		if( !StripeWebhooksService::isStripeWebhookCreatedForCurrentSite($_POST['stripe-api-key']) ) {
 			//Create a new Stripe webhook
 			$webhook = StripeWebhooksService::createStripeWebhook($_POST['stripe-api-key']);
 			SeatregOptionsService::updateStripeWebhookSecret($webhook->secret, sanitize_text_field($_POST['registration_code']));
 		}else {
-			//webhook already created. Set stripe_webhook secret fro existing webhook
+			//Webhook already created for this site. Set stripe_webhook secret from existing working webhook
 			SeatregOptionsService::updateStripeWebhookSecret(
 				SeatregOptionsRepository::getActiveStripeWebhookSecret($_POST['stripe-api-key']),
 				sanitize_text_field($_POST['registration_code'])
@@ -3134,13 +3136,8 @@ function seatreg_update() {
 		}
 	}else if( $oldOptions->stripe_payments === '1' &&  $_POST['stripe-payments'] === 0) {
 		//Turning off Stripe payment
-		$activeStripeKeyCount = SeatregOptionsRepository::getActiveStripeKeyUsage($_POST['stripe-api-key']);
 		SeatregOptionsService::updateStripeWebhookSecret(null, sanitize_text_field($_POST['registration_code']));
-
-		if( $activeStripeKeyCount === 0 ) {
-			//Remove the webhook if not used anymore
-            StripeWebhooksService::removeStripeWebhook($_POST['stripe-api-key']);
-        }
+		StripeWebhooksService::removeNotUsedStripeAPiWebhook($_POST['stripe-api-key']);
 	}
 
 	return ($status1 !== false && $status2 !== false);

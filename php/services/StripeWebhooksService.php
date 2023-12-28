@@ -84,4 +84,19 @@ class StripeWebhooksService {
         //$resp->jsonSerialize();
         return true;
     }
+
+    /**
+     *
+     * Remove Stripe API key webhook if not used
+     * @param string $stripeAPIKey secret Stripe API key
+     * 
+    */
+    public static function removeNotUsedStripeAPiWebhook($stripeAPIKey) {
+        $activeStripeKeyCount = SeatregOptionsRepository::getActiveStripeKeyUsage($stripeAPIKey);
+
+		if( $activeStripeKeyCount === 0 ) {
+			//Remove the webhook if not used anymore
+            StripeWebhooksService::removeStripeWebhook($stripeAPIKey);
+        }
+    }
 }
