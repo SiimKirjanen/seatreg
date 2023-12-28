@@ -917,7 +917,7 @@ html {
 .seatreg-wp-admin .payment-log-wrap {
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: 40px 140px 1fr;
+  grid-template-columns: minmax(40px, auto) 140px 1fr;
   color: forestgreen;
 }
 

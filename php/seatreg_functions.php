@@ -1568,7 +1568,7 @@ function seatreg_generate_payment_logs($paymentLogs, $bookingId) {
 		foreach ($paymentLogs as $paymentLog) {
 			$logClassName = '';
 			
-			if($paymentLog->log_status === SEATREG_PAYMENT_LOG_ERROR) {
+			if($paymentLog->log_status === SEATREG_PAYMENT_LOG_ERROR || $paymentLog->log_status === SEATREG_PAYMENT_VALIDATION_FAILED) {
 				$logClassName = 'error-log';
 			}else if($paymentLog->log_status === SEATREG_PAYMENT_LOG_INFO) {
 				$logClassName = 'info-log';
@@ -2229,7 +2229,7 @@ function seatreg_set_up_db() {
 			booking_id varchar(40) NOT NULL,
 			log_date TIMESTAMP DEFAULT NOW(),
 			log_message text,
-			log_status enum('ok', 'error', 'info') NOT NULL,
+			log_status enum('ok', 'error', 'info', 'validation_failure') NOT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
