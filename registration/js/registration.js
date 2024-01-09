@@ -1114,7 +1114,7 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 	var cartWidth = $('#controls-wrapper').outerWidth(true);
 	var legendWidth = 0;
 	var spaceForMiddleWidth = screenWidth - 20; //how much room for seat map
-	var spaceForMiddleHeight = screenHeight - 30 - 30 - navHeight - $('#bottom-wrapper').outerHeight(true) - $('#zoom-controller').outerHeight(true);  // - header height, -legend height, navbar height, -spacing  --default mobile
+	var spaceForMiddleHeight = screenHeight - 30 - 70 - navHeight - $('#bottom-wrapper').outerHeight(true) - $('#zoom-controller').outerHeight(true);  // - header height, -legend height, navbar height, -spacing  --default mobile
 	var needHorizScroll = false;
 	var needVerticScroll = false;
 
@@ -1129,6 +1129,10 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 		}else {
 			spaceForMiddleWidth = spaceForMiddleWidth - cartWidth * 2;
 		}
+
+		/* console.log('Screen height: ', screenHeight);
+		console.log('navHeight height: ', navHeight);
+		console.log('infoHeight height: ', infoHeight); */
 
 		spaceForMiddleHeight = screenHeight - 30 - navHeight - infoHeight - 30 - poweredByHeight;  //- header height, - navbar height, -footer if needed
 
