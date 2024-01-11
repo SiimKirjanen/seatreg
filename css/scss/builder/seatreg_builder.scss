@@ -899,15 +899,16 @@
 .seatreg-map-builder-page .update-wrapper {
 	text-align: center;
 	position: relative;
+	display: flex;
+	justify-content: center;
+	gap: 6px;
 }
 
 .seatreg-map-builder-page #update-data {
-	border: 0;
 	padding: 10px 20px;
 	background-color: #f37936;
 	color: #fff;
 	cursor: pointer;
-	line-height: 17px;
 }
 
 .seatreg-map-builder-page #update-data:hover {
@@ -932,6 +933,7 @@
 }
 
 .seatreg-map-builder-page #server-response {
+	text-align: center;
 	margin-top: 10px;
 }
 .seatreg-map-builder-page .bold-text {
@@ -1197,15 +1199,11 @@
 }
 
 .seatreg-map-builder-page #build-section-message-wrap {
-	position: absolute;
-	left: 90px;
-	text-align: right;
-	line-height: 41px;
 	font-size: 16px;
 	display: none;
-	/*float: right;*/
 	cursor: pointer;
-	
+	text-align: center;
+	margin-bottom: 12px;
 }
 .seatreg-map-builder-page .message-text {
 	font-size: 18px;

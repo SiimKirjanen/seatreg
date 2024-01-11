@@ -68,26 +68,19 @@
 
 	<div class="build-controls">
 		<div class="legends"></div>
+		<div id="build-section-message-wrap" data-toggle="modal" data-target="#limit-dialog">
+			<span class="message-text"><span style="vertical-align:middle"><?php esc_html_e('Pending and booked seats can\'t be deleted', 'seatreg');?></span><span class="more-message-btn"></span></span>
+		</div>
 		<div class="update-wrapper">
-			<div id="build-section-message-wrap" data-toggle="modal" data-target="#limit-dialog">
-				<span class="message-text"><span style="vertical-align:middle"><?php esc_html_e('Pending and booked seats can\'t be deleted', 'seatreg');?></span><span class="more-message-btn"></span></span>
-			</div>
-
-			<div id="build-head-stats-2">
-				<div class="build-head-stats-2-icon"></div>
-				<div class="build-head-stats-2-text"></div>
-			</div>
-
-			<button id="update-data">
+			<div id="update-data">
 				<i class="fa fa-floppy-o"></i>
 				<span style="margin-left:4px" class="save-text"><?php esc_html_e('Save', 'seatreg');?></span>
-			</button>
+			</div>
 			<a id="registration-link" class="save-check view-btn" target="_blank" href="<?php echo get_site_url(); ?>">
 				<span style="margin-left:4px" class="link-text"><?php esc_html_e('View registration', 'seatreg');?></span>
 			</a>
-			<div id="server-response"></div>
 		</div>
-		
+		<div id="server-response"></div>
 	</div><!-- end of build-controls -->
 
 	<div class="build-footer"></div>
