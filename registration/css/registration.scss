@@ -1113,12 +1113,18 @@ body {
 		grid-row-gap: 6px;
 		margin: 0 60px;
 		align-items: baseline;
-
+		max-height: 400px;
+		overflow-y: auto;
+		
 		.multi-price-description {
 			margin-right: 8px;
 		}
+
+		@media only screen and (max-width: 720px) {
+			grid-template-columns: 1fr;
+			margin: 0;
+		}
 	}
-	
 }
 .green-btn:hover {
 	background-color: #51A816;
