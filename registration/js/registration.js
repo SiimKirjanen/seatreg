@@ -1525,7 +1525,6 @@ $('#dialog-close-btn').on('click', function() {
 });
 
 $('#confirm-dialog-bottom').on('click', '.add-to-cart', function() {
-	console.log('click');
 	$('#selected-seat-price').val( $(this).data('price') );
 	$('#selected-multi-price-uuid').val( $(this).data('price-uuid') || '' );
 	seatReg.addSeatToCart();
