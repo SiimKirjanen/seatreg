@@ -482,10 +482,13 @@
 			}
 					
 			if (!this.ie8){
-				box.addEventListener('tap',function() {
+				box.addEventListener('touchstart',function(e) {
+					e.preventDefault();
 					scope.openSeatDialog(this);
-					
-				},false);
+				});
+				box.addEventListener('click',function() {
+					scope.openSeatDialog(this);
+				});
 			}else{
 				//IE
 				box.attachEvent('onclick',function(evt) {
@@ -1522,6 +1525,7 @@ $('#dialog-close-btn').on('click', function() {
 });
 
 $('#confirm-dialog-bottom').on('click', '.add-to-cart', function() {
+	console.log('click');
 	$('#selected-seat-price').val( $(this).data('price') );
 	$('#selected-multi-price-uuid').val( $(this).data('price-uuid') || '' );
 	seatReg.addSeatToCart();
