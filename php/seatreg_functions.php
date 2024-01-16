@@ -1647,6 +1647,7 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 					<option value="<?php echo SEATREG_PAYMENT_REVERSED; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_REVERSED ? 'selected' : '';?>><?php esc_html_e('Reversed', 'seatreg'); ?></option>
 					<option value="<?php echo SEATREG_PAYMENT_ERROR; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_ERROR ? 'selected' : '';?>><?php esc_html_e('Error', 'seatreg'); ?></option>
 					<option value="<?php echo SEATREG_PAYMENT_VALIDATION_FAILED; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_VALIDATION_FAILED ? 'selected' : '';?>><?php esc_html_e('Validation failure', 'seatreg'); ?></option>
+					<option value="<?php echo SEATREG_PAYMENT_DEPOSIT_PAYED; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_DEPOSIT_PAYED ? 'selected' : '';?>><?php esc_html_e('Deposit Payed', 'seatreg'); ?></option>
 					<option value="<?php echo SEATREG_PAYMENT_NONE; ?>" <?php echo $bookingPaymentStatus->status === SEATREG_PAYMENT_NONE ? 'selected' : '';?>><?php esc_html_e('None', 'seatreg'); ?></option>
 				</select>
 				<button class="btn btn-default btn-sm" data-action="change-payment-status" data-booking-id><?php esc_html_e('Change status', 'seatreg'); ?></button>

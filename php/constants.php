@@ -22,6 +22,7 @@ define('SEATREG_PAYMENT_REVERSED', 'reversed');
 define('SEATREG_PAYMENT_REFUNDED', 'refunded');
 define('SEATREG_PAYMENT_ERROR', 'error');
 define('SEATREG_PAYMENT_NONE', 'none');
+define('SEATREG_PAYMENT_DEPOSIT_PAYED', 'deposit_payed');
 define('SEATREG_PAYMENT_LOG_ERROR', 'error');
 define('SEATREG_PAYMENT_LOG_OK', 'ok');
 define('SEATREG_PAYMENT_LOG_INFO', 'info');

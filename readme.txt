@@ -46,6 +46,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.49.3 =
 * Fixed registration view issue with mobile touch event and multi price selection.
+* Added deposit payed option to payment status.
 
 = 1.49.2 =
 * Minor style changes on registration page.
