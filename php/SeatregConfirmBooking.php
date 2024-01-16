@@ -79,7 +79,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		}
 		
 		printf(
-			esc_html__('You can look your booking status at the following link %s', 'seatreg'), 
+			esc_html__('You can see your booking status at the following link %s', 'seatreg'), 
 			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"
 		);
 
