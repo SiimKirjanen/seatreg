@@ -386,7 +386,7 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($customPaymentDecoded, 'description') || !is_string($customPaymentDecoded->description) || !preg_match('/^[\p{L}\p{N}+\s]+$/u', $customPaymentDecoded->description) ) {
+                if( !property_exists($customPaymentDecoded, 'description') || !is_string($customPaymentDecoded->description) || !preg_match(SEATREG_CUSTOM_PAYMENT_DESCRIPTION, $customPaymentDecoded->description) ) {
                     $validationStatus->setInvalid('Custom payment description is missing or invalid');
 
                     return $validationStatus;
