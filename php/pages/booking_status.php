@@ -24,7 +24,7 @@
 	<meta charset="UTF-8">
 	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
 	<title>
-		<?php esc_html_e('Booking check', 'seatreg'); ?>
+		<?php esc_html_e('Booking status', 'seatreg'); ?>
 	</title>
 	<style>
 		.page-wrap {

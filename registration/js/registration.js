@@ -121,6 +121,7 @@
 		this.siteLanguage = window.siteLanguage;
 		this.controlledScrollEnabled = window.controlledScroll === '1';
 		this.customFooterText = customFooterText;
+		this.bookingRedirectToStatusPage = window.bookingRedirectToStatusPage === '1';
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -1403,10 +1404,7 @@ function sendData(customFieldBack, registrationCode) {
 		type: 'POST',
 		url: ajaxUrl,
 		data: $('#checkoput-area-inner').serialize() + '&custom=' + encodeURIComponent(customFieldBack) +'&action=' + 'seatreg_booking_submit' + '&c=' + registrationCode + '&em=' + mailToSend + '&pw=' + $('#sub-pwd').val() + '&passwords=' + encodeURIComponent(seatPasswords),
-
 		success: function(data) {
-			$('#checkoput-area-inner .ajax-load').css('display','none');
-
 			var is_JSON = true;
 			
 			try {
@@ -1415,6 +1413,12 @@ function sendData(customFieldBack, registrationCode) {
 				is_JSON = false;
 			}
 			if(is_JSON) {
+				if( resp.type == 'ok' && seatReg.bookingRedirectToStatusPage) {
+					window.location.href = resp.data;
+					return;
+				}
+				$('#checkoput-area-inner .ajax-load').css('display','none');
+
 				if(resp.type == 'ok' && resp.text == 'mail') {	
 					$('#email-send').text(mailToSend);
 					needMailCheckInfo();
@@ -1441,6 +1445,7 @@ function sendData(customFieldBack, registrationCode) {
 					$('#checkout-confirm-btn').css('display','inline-block');
 				}
 			}else {
+				$('#checkoput-area-inner .ajax-load').css('display','none');
 				$('#checkout-area').css('display','none');
 				showErrorAlertDialog(translator.translate('somethingWentWrong'));
 				$('#checkout-confirm-btn').css('display','inline-block');
