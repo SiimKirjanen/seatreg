@@ -672,6 +672,17 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="booking-redirect-status-page"><?php esc_html_e('Booking redirect to status page', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Redirect automatically to booking status page after booking was made', 'seatreg'); ?>.</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="booking-redirect-status-page" name="booking-redirect-status-page" value="0" <?php echo $options[0]->booking_redirect_status_page == '1' ? 'checked':'' ?> > 
+			      		<?php esc_html_e('Redirect to status page', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
 				<label for="registration-password"><?php esc_html_e('Password', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
@@ -2182,6 +2193,7 @@ function seatreg_set_up_db() {
 			show_approved_booking_pdf tinyint(1) NOT NULL DEFAULT 1,
 			booking_qr_code_input varchar(255) DEFAULT 'booking-id',
 			notification_email varchar(255) DEFAULT NULL,
+			booking_redirect_status_page tinyint(1) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3040,6 +3052,12 @@ function seatreg_update() {
 		$_POST['show-approved-booking-pdf'] = 1;
 	}
 
+	if( !isset($_POST['booking-redirect-status-page']) ) {
+		$_POST['booking-redirect-status-page'] = 0;
+	}else {
+		$_POST['booking-redirect-status-page'] = 1;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 
 	$status1 = $wpdb->update(
@@ -3100,6 +3118,7 @@ function seatreg_update() {
 			'show_approved_booking_pdf' => $_POST['show-approved-booking-pdf'],
 			'booking_qr_code_input' => $_POST['booking-qr-code-input'],
 			'notification_email' => $_POST['notification-email'],
+			'booking_redirect_status_page' => $_POST['booking-redirect-status-page']
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
