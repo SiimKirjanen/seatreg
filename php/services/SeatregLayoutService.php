@@ -183,7 +183,11 @@ class SeatregLayoutService {
      *
     */
     public static function getSeatPriceFromLayout($booking, $roomsData) {
-        $price = 0;
+        $priceObject = (object)array(
+            'price' => null,
+            'description' => null,
+            'uuid' => null
+        );
 
         foreach($roomsData as $roomData) {
             if($roomData->room->uuid === $booking->room_uuid) {
@@ -193,11 +197,13 @@ class SeatregLayoutService {
                             //multy price selection
                             foreach($box->price as $multyPrice) {
                                 if($multyPrice->uuid === $booking->multi_price_selection) {
-                                    $price = $multyPrice->price;
+                                    $priceObject->price = $multyPrice->price;
+                                    $priceObject->description = $multyPrice->description;
+                                    $priceObject->uuid = $multyPrice->uuid;
                                 }
                             } 
                         }else {
-                            $price = $box->price;
+                            $priceObject->price = $box->price;
                         }
                         
                         break 2;
@@ -206,7 +212,7 @@ class SeatregLayoutService {
             }
         }
 
-	    return $price;
+	    return $priceObject;
     }
 
     public static function getBookingsInfoForLayout($structure, $code, $filterCalendarDate) {
