@@ -32,6 +32,7 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
             $registrantCustomData = json_decode($registration->custom_field_data, true);
             $status = $this->getStatus($registration->status);
             $bookingDate = $this->getBookingDate($registration->booking_date);
+            $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($registration, $this->_roomData);
 
             echo $placeNumberText, ': ', esc_html($registration->seat_nr), $this->lineBreak();
             echo esc_html__('Room', 'seatreg'), ': ', esc_html($registration->room_name), $this->lineBreak();
@@ -43,6 +44,11 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
             }
             echo esc_html__('Email', 'seatreg'), ': ', esc_html($registration->email), $this->lineBreak();
             echo esc_html__('Registration date', 'seatreg'), ': ', $bookingDate, $this->lineBreak();
+
+            if( $seatPrice ) {
+                $priceDescription = $seatPrice->description ? '('. $seatPrice->description . ')' : '';
+                echo esc_html__('Price', 'seatreg'), ': ', $seatPrice->price, ' ', $this->_registrationInfo->paypal_currency_code, ' ', $priceDescription, $this->lineBreak();
+            }
 
             if($this->_calendarDate) {
                 echo esc_html__('Calendar date', 'seatreg'), ': ',  $this->_calendarDate, $this->lineBreak();

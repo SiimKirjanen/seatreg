@@ -1489,6 +1489,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$myFormatForView = date("m-d-y", $row->booking_date);
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
+						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
 		
 						echo '<div class="reg-seat-item" data-booking-id="'. $booking .'">';
 							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
