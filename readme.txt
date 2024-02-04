@@ -44,6 +44,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 == Changelog ==
 
+= 1.51.0 =
+* Added booking seat price to booking manager and also to PDF, XLSX and text files.
+
 = 1.50.1 =
 * Increased custom field max length to 100 characters.
 * Allow comma character in custom fields.
