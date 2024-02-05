@@ -65,6 +65,7 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             $status = $this->getStatus($registration->status);
             $bookingDate = SeatregTimeService::getDateStringFromUnix($registration->booking_date);
             $placeNumberText = $this->_usingSeats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
+            $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($registration, $this->_roomData);
 
             $this->pdf->Cell(20, 6, $placeNumberText . ': ' . esc_html($registration->seat_nr), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($registration->room_name), 0, 1, 'L');
@@ -76,6 +77,11 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             }
             $this->pdf->Cell(20, 6, esc_html__('Email', 'seatreg') . ': ' . $registration->email, 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Booking time', 'seatreg') . ': ' . $bookingDate, 0, 1, 'L');
+
+            if( $seatPrice ) {
+                $priceDescription = $seatPrice->description ? '('. $seatPrice->description . ')' : '';
+                $this->pdf->Cell(20, 6, esc_html__('Price', 'seatreg') . ': ' . $seatPrice->price . ' ' . $this->_registrationInfo->paypal_currency_code . ' ' . $priceDescription, 0, 1, 'L');
+            }
 
             if($this->_calendarDate) {
                 $this->pdf->Cell(20, 6, esc_html__('Calendar date', 'seatreg') . ': ' . $this->_calendarDate, 0, 1, 'L');

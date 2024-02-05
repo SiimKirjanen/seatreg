@@ -17,7 +17,7 @@ class SeatregBookingService {
     
         foreach($bookings as $booking) {
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($booking, $roomsData);
-            $totalCost += $seatPrice;
+            $totalCost += $seatPrice->price;
         }
     
         return $totalCost;
@@ -47,7 +47,7 @@ class SeatregBookingService {
             return (object)[
                 'seatId' => $booking->seat_id,
                 'seatNr' => $booking->seat_nr,
-                'price' => $seatPrice,
+                'price' => $seatPrice->price,
                 'description' => $priceDescription
             ];
         }, $bookings);

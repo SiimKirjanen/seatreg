@@ -8,6 +8,7 @@ class SeatregBookingPDF extends tFPDF {
     private $_payment;
     private $_usingSeats;
     private $_customFields;
+    private $_roomData;
 
     public function __construct($bookingId, $bookings, $bookingData) {
         parent::__construct();
@@ -36,10 +37,10 @@ class SeatregBookingPDF extends tFPDF {
         $this->SetFont('DejaVu','',10);
 
        if( $this->_bookingData->registration_layout !== null ) {
-            $roomData = json_decode( $this->_bookingData->registration_layout )->roomData;
+            $this->_roomData = json_decode( $this->_bookingData->registration_layout )->roomData;
     
             foreach($this->_bookings as $booking) {
-                $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
+                $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($this->_roomData, $booking->room_uuid);
             }
         }
         
@@ -55,12 +56,18 @@ class SeatregBookingPDF extends tFPDF {
             $status = $this->getStatus($booking->status);
             $paymentStatus = $this->_payment->payment_status ?? null;
             $registrantCustomData = json_decode($booking->custom_field_data, true);
+            $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($booking, $this->_roomData);
 
             $this->Cell(20, 6, $placeNumberText . ': ' . esc_html($booking->seat_nr), 0, 1, 'L');
             $this->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($booking->room_name), 0, 1, 'L');
             $this->Cell(20, 6, esc_html__('Name', 'seatreg') . ': ' . esc_html($booking->first_name) . ' ' . esc_html($booking->last_name), 0, 1, 'L');
             $this->Cell(20, 6, esc_html__('Email', 'seatreg') . ': ' . $booking->email, 0, 1, 'L');
             $this->Cell(20, 6, esc_html__('Booking time', 'seatreg') . ': ' . $bookingDate, 0, 1, 'L');
+
+            if( $seatPrice ) {
+                $priceDescription = $seatPrice->description ? '('. $seatPrice->description . ')' : '';
+                $this->Cell(20, 6, esc_html__('Price', 'seatreg') . ': ' . $seatPrice->price . ' ' . $this->_bookingData->paypal_currency_code . ' ' . $priceDescription, 0, 1, 'L');
+            }
 
             if( $booking->calendar_date ) {
                 $this->Cell(20, 6, esc_html__('Calendar date', 'seatreg') . ': ' . $booking->calendar_date, 0, 1, 'L');

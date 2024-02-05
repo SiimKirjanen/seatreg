@@ -15,6 +15,7 @@ class SeatregBookingsFile {
     protected $_usingSeats = true;
     protected $_calendarDate = null;
     protected $_separateFirstandLastName = false;
+    protected $_roomData = null;
 
     public function __construct($showPending, $showConfirmed, $separateFirstandLastName, $registrationCode, $calendarDate) {
         $this->_registrationCode = $registrationCode;
@@ -42,6 +43,7 @@ class SeatregBookingsFile {
         $this->_registrations = $this->filtering( seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat, $this->_calendarDate) );
         $this->_registrationName = esc_html($this->_registrationInfo->registration_name);
         $this->_usingSeats = $this->_registrationInfo->using_seats === '1';
+        $this->_roomData = json_decode( $this->_registrationInfo->registration_layout )->roomData;
     }
 
     protected function customFieldsWithValues($customField, $customData) {
