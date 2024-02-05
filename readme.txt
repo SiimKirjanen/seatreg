@@ -46,6 +46,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.51.0 =
 * Added booking seat price to booking manager and also to PDF, XLSX and text files.
+* Open payment gateways in separate tab in booking status page. Prevents issues when using shortcode.
 
 = 1.50.1 =
 * Increased custom field max length to 100 characters.
