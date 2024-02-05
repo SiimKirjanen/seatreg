@@ -91,7 +91,7 @@ class SeatregPaymentService {
     */
     public static function generatePayPalPayNowForm($formAction, $bookingData, $amount, $returnUrl, $cancelUrl, $notifyUrl, $bookingId) {
         ?>
-            <form method="post" action="<?php echo $formAction; ?>">
+            <form method="post" action="<?php echo $formAction; ?>" target="_blank">
                 <input type="hidden" name="cmd" value="_xclick" />
                 <input type="hidden" name="business" value="<?php echo esc_html($bookingData->paypal_business_email); ?>" />
                 <input type="hidden" name="item_name" value="<?php echo esc_html($bookingData->registration_name) . " booking " . $bookingId; ?>" />
@@ -115,7 +115,7 @@ class SeatregPaymentService {
     */
     public static function generateStripeCheckoutForm($bookingId) {
         ?>
-            <form action="<?php echo get_site_url(); ?>">
+            <form action="<?php echo get_site_url(); ?>" target="_blank">
                 <input type="hidden" name="seatreg" value="stripe-checkout-session" />
                 <input type="hidden" name="booking-id" value="<?php echo $bookingId; ?>" />
                 <input type="image" src="<?php echo plugins_url('../img/stripe.png', dirname(__FILE__) )?>" border="0" name="submit" alt="Stripe" style="margin-top: -4px" />
