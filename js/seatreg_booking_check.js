@@ -1,4 +1,6 @@
 (function($) {
+    var pageLostFocus = false;
+
     $('#send-receipt').on('click', function() {
         $this = $(this);
         $this.attr("disabled", true);
@@ -34,5 +36,16 @@
     $('.payment-forms .custom-payment-box').on('click', function() {
         $('#custom-payment-descriptions div').css('display', 'none');
         $('#custom-payment-descriptions div[data-payment-id="'+ $(this).data('payment-id') +'"]').show();
+    });
+
+    document.addEventListener("visibilitychange", function() {
+        if (document.hidden) {
+            pageLostFocus = true;
+        } else {
+            if(pageLostFocus) {
+                $('.page-wrap').text(WP_Seatreg.updatingPageContent);
+                location.reload(); 
+            }
+        }
     });
 })(jQuery);
