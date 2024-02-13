@@ -37,6 +37,7 @@ class SeatregBooking {
 	protected $_userSelectedCalendarDate = null;
 	protected $_registrationStartTime = null;
 	protected $_registrationEndTime = null;
+	protected $_require_wp_login = null;
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -289,6 +290,7 @@ class SeatregBooking {
 		$this->_calendarDates = $result->calendar_dates ? explode(',', $result->calendar_dates) : [];
 		$this->_registrationStartTime = $result->registration_start_time;
 		$this->_registrationEndTime = $result->registration_end_time;
+		$this->_require_wp_login = $result->require_wp_login;
 
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;
