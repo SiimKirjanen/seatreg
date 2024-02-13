@@ -306,7 +306,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 						'booker_email' => $this->_bookerEmail,
 						'seat_passwords' => json_encode($this->_seatPasswords),
 						'multi_price_selection' => $multiPriceSelection,
-						'calendar_date' => $this->_userSelectedCalendarDate
+						'calendar_date' => $this->_userSelectedCalendarDate,
+						'logged_in_user_id' => SeatregAuthService::getCurrentUserId()
 					), 
 					'%s'	
 				);

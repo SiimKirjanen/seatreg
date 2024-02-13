@@ -1468,6 +1468,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 										</div>
 									<?php
 								}
+								echo '<div>', esc_html__('WP user ID', 'seatreg'), ': ', $row->logged_in_user_id ? esc_html($row->logged_in_user_id) : esc_html__('None', 'seatreg'), '</div>';
 							
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
@@ -1541,6 +1542,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 										</div>
 									<?php
 								}
+								echo '<div>', esc_html__('WP user ID', 'seatreg'), ': ', $row->logged_in_user_id ? esc_html($row->logged_in_user_id) : esc_html__('None', 'seatreg'), '</div>';
 		
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
@@ -2262,6 +2264,7 @@ function seatreg_set_up_db() {
 			seat_passwords text,
 			multi_price_selection varchar(255) DEFAULT NULL,
 			calendar_date DATE DEFAULT NULL,
+			logged_in_user_id int DEFAULT null
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
