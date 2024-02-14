@@ -533,6 +533,16 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="wp-user-booking-limit">
+					<?php esc_html_e('Max bookings per WordPress user', 'seatreg'); ?>
+				</label>
+				<p class="help-block">
+					<?php esc_html_e('Set limit on how many bookings can one WordPress user make. Leave empty for no limit', 'seatreg'); ?>.
+				</p>
+				<input type="number" class="form-control" id="wp-user-booking-limit" name="wp-user-booking-limit" value="<?php echo esc_html($options[0]->wp_user_booking_limit); ?>">
+			</div>
+
+			<div class="form-group">
 				<label for="using-seats"><?php esc_html_e('Registration is using seats', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Uncheck if your registration is not dealing with seats. More generic place will be used', 'seatreg'); ?>.</p>
 				<div class="checkbox">
@@ -2240,6 +2250,7 @@ function seatreg_set_up_db() {
 			notification_email varchar(255) DEFAULT NULL,
 			booking_redirect_status_page tinyint(1) NOT NULL DEFAULT 0,
 			require_wp_login tinyint(0) NOT NULL DEFAULT 0,
+			wp_user_booking_limit INT DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3172,7 +3183,8 @@ function seatreg_update() {
 			'booking_qr_code_input' => $_POST['booking-qr-code-input'],
 			'notification_email' => $_POST['notification-email'],
 			'booking_redirect_status_page' => $_POST['booking-redirect-status-page'],
-			'require_wp_login' => $_POST['require-wp-login']
+			'require_wp_login' => $_POST['require-wp-login'],
+			'wp_user_booking_limit' => (int)$_POST['wp-user-booking-limit'] > 0 ? (int)$_POST['wp-user-booking-limit'] : null
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
