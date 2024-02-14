@@ -246,6 +246,16 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
+		//13. WP user booking limit restriction.
+		if( $this->_wp_user_booking_limit !== null && SeatregAuthService::isLoggedIn() ) {
+			$wpUserLimitStatus = $this->wpUserLimitCheck( SeatregAuthService::getCurrentUserId(), $this->_registrationCode );
+
+			if( $wpUserLimitStatus !== 'ok' ) {
+				$this->response->setError($wpUserLimitStatus);
+
+				return;
+			}
+		}
 
 		$this->insertRegistration();
 	}

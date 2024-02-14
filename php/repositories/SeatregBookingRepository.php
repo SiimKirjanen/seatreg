@@ -353,4 +353,29 @@ class SeatregBookingRepository {
             ) );
         }
     }
+
+    /**
+     *
+     * Return count of how many bookings a WP user has made
+     *
+     * @param int $userId The user ID
+     * @param string $registrationCode Code of the registration
+     * @return int Number of bookings
+     *
+     */
+    public static function getUserBookings($userId, $registrationCode) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return (int)$wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_bookings
+            WHERE logged_in_user_id = %s
+            AND registration_code = %s
+            AND (status = %d OR status = %d)",
+            $userId,
+            $registrationCode,
+            SEATREG_BOOKING_APPROVED,
+            SEATREG_BOOKING_PENDING
+        ) );
+    }
 }

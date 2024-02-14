@@ -38,6 +38,7 @@ class SeatregBooking {
 	protected $_registrationStartTime = null;
 	protected $_registrationEndTime = null;
 	protected $_require_wp_login = null;
+	protected $_wp_user_booking_limit = null;
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -265,6 +266,17 @@ class SeatregBooking {
 
 		return $statusReport;
 	}
+
+	protected function wpUserLimitCheck($userId, $registrationCode) {
+		$statusReport = 'ok';
+		$bookingsByUser = SeatregBookingRepository::getUserBookings($userId, $registrationCode);
+
+		if( $bookingsByUser > $this->_wp_user_booking_limit ) {
+			$statusReport = sprintf(esc_html__('Allowed number of bookings per user is %s', 'seatreg'), $this->_wp_user_booking_limit);
+		}
+
+		return $statusReport;
+	}
     
     protected function getRegistrationAndOptions() {
 		$result = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($this->_registrationCode);
@@ -291,6 +303,7 @@ class SeatregBooking {
 		$this->_registrationStartTime = $result->registration_start_time;
 		$this->_registrationEndTime = $result->registration_end_time;
 		$this->_require_wp_login = $result->require_wp_login;
+		$this->_wp_user_booking_limit = $result->wp_user_booking_limit ? (int)$result->wp_user_booking_limit: null;
 
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;
