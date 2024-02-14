@@ -2264,7 +2264,7 @@ function seatreg_set_up_db() {
 			seat_passwords text,
 			multi_price_selection varchar(255) DEFAULT NULL,
 			calendar_date DATE DEFAULT NULL,
-			logged_in_user_id int DEFAULT null
+			logged_in_user_id int DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
