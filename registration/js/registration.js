@@ -122,6 +122,8 @@
 		this.controlledScrollEnabled = window.controlledScroll === '1';
 		this.customFooterText = customFooterText;
 		this.bookingRedirectToStatusPage = window.bookingRedirectToStatusPage === '1';
+		this.requireWPLogin = window.requireWPLogin === '1';
+		this.isLoggedIn = window.isLoggedIn === '1';
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -747,7 +749,9 @@ SeatReg.prototype.openSeatCart = function() {
 	var cartEmptyText = this.usingSeats ? translator.translate('selectingGuide') : translator.translate('selectingGuidePlace');
 
 	if(selected == 0) {	
-		if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
+		if(this.requireWPLogin && !this.isLoggedIn) {
+			$('#seat-cart-info').html('<h3>'+ translator.translate('wpLoginRequired') +'</h3>');
+		}else if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
 			$('#seat-cart-info').html('<h3>'+ cartHeaderText +'</h3><p>' + cartEmptyText + '</p>');
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
@@ -1032,7 +1036,12 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 					'<div id="password-check-loader" class="d-none">'+ '<img alt="Loading..." src="'+ WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif' +'" />' +'</div>');
 			}else if(type == 'rbox' && this.selectedSeats.length < this.seatLimit ) {
 
-				if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
+				if( this.requireWPLogin && !this.isLoggedIn ) {
+					var text = translator.translate('wpLoginRequired');
+	
+					$('#confirm-dialog-bottom').empty();
+					$('#confirm-dialog-mob-text').html('<div class="seat-taken-notify">' + text + '</div>');
+				}else if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
 					var maxPlacesText = this.usingSeats ? translator.translate('maxSeatsToAdd') : translator.translate('maxPlacesToAdd');
 					
 					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + seatPrefix + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ maxPlacesText + ' ' + this.seatLimit +'</p>' + '</div>');
@@ -1631,6 +1640,9 @@ $('#captcha-ref').on('click', function() {
 
 $('#close-time').on('click', function() {
 	$('#time-notify, .modal-bg').css('display','none');
+});
+$('#login-notify .close-btn').on('click', function() {
+	$('#login-notify, .modal-bg').css('display','none');
 });
 
 $('.room-nav-extra-info-btn, #main-header').on('click', function() {

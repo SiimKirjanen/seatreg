@@ -522,6 +522,17 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label for="require-wp-login"><?php esc_html_e('Require WordPress login', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Only logged in WordPress users can make a booking', 'seatreg'); ?>.</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="require-wp-login" name="require-wp-login" value="0" <?php echo $options[0]->require_wp_login == '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Require login', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
 				<label for="using-seats"><?php esc_html_e('Registration is using seats', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Uncheck if your registration is not dealing with seats. More generic place will be used', 'seatreg'); ?>.</p>
 				<div class="checkbox">
@@ -1457,6 +1468,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 										</div>
 									<?php
 								}
+								echo '<div>', esc_html__('WP user ID', 'seatreg'), ': ', $row->logged_in_user_id ? esc_html($row->logged_in_user_id) : esc_html__('None', 'seatreg'), '</div>';
 							
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
@@ -1530,6 +1542,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 										</div>
 									<?php
 								}
+								echo '<div>', esc_html__('WP user ID', 'seatreg'), ': ', $row->logged_in_user_id ? esc_html($row->logged_in_user_id) : esc_html__('None', 'seatreg'), '</div>';
 		
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
@@ -2226,6 +2239,7 @@ function seatreg_set_up_db() {
 			booking_qr_code_input varchar(255) DEFAULT 'booking-id',
 			notification_email varchar(255) DEFAULT NULL,
 			booking_redirect_status_page tinyint(1) NOT NULL DEFAULT 0,
+			require_wp_login tinyint(0) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2250,6 +2264,7 @@ function seatreg_set_up_db() {
 			seat_passwords text,
 			multi_price_selection varchar(255) DEFAULT NULL,
 			calendar_date DATE DEFAULT NULL,
+			logged_in_user_id int DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -3090,6 +3105,12 @@ function seatreg_update() {
 		$_POST['booking-redirect-status-page'] = 1;
 	}
 
+	if( !isset($_POST['require-wp-login']) ) {
+		$_POST['require-wp-login'] = 0;
+	}else {
+		$_POST['require-wp-login'] = 1;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 
 	$status1 = $wpdb->update(
@@ -3150,7 +3171,8 @@ function seatreg_update() {
 			'show_approved_booking_pdf' => $_POST['show-approved-booking-pdf'],
 			'booking_qr_code_input' => $_POST['booking-qr-code-input'],
 			'notification_email' => $_POST['notification-email'],
-			'booking_redirect_status_page' => $_POST['booking-redirect-status-page']
+			'booking_redirect_status_page' => $_POST['booking-redirect-status-page'],
+			'require_wp_login' => $_POST['require-wp-login']
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])

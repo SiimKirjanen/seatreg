@@ -100,6 +100,15 @@ class SeatregSubmitBookings extends SeatregBooking {
 			}
 		}
 
+		//WP logged in check if needed
+		if( $this->_require_wp_login ) {
+			if( !SeatregAuthService::isLoggedIn() ) {
+				$this->response->setError(esc_html__('Please log in to make a booking', 'seatreg'));
+
+				return;
+			}
+		}
+
 		//1.step
 		//Selected seat limit check
 		if(!$this->seatsLimitCheck()) {
@@ -306,7 +315,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 						'booker_email' => $this->_bookerEmail,
 						'seat_passwords' => json_encode($this->_seatPasswords),
 						'multi_price_selection' => $multiPriceSelection,
-						'calendar_date' => $this->_userSelectedCalendarDate
+						'calendar_date' => $this->_userSelectedCalendarDate,
+						'logged_in_user_id' => SeatregAuthService::getCurrentUserId()
 					), 
 					'%s'	
 				);

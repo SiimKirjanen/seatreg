@@ -23,7 +23,9 @@
 	$registrationTimeRestoriction = SeatregTimeRepository::getTimeInfoForRegistrationView($data->registration_start_time, $data->registration_end_time);
 	$hasFailedTimeRestriction = !$registrationTimeRestoriction->registrationStartCheck  || !$registrationTimeRestoriction->registrationEndCheck;
 	$usingSeats = $data->using_seats === '1';
-	
+	$requireWPLogin = $data->require_wp_login === '1';
+	$needsToLogIn = $requireWPLogin && !SeatregAuthService::isLoggedIn();
+
 	if($data->registration_password != null ) {
 		//registration password is set
 		if(empty($_POST['reg_pwd'])) {
@@ -319,7 +321,7 @@
 							esc_html_e('Cart', 'seatreg');
 						?>
 					</div>
-					<?php if( $registrationTime == 'run' && !$hasFailedTimeRestriction ) : ?>
+					<?php if( $registrationTime == 'run' && !$hasFailedTimeRestriction && !$needsToLogIn) : ?>
 						<div id="seat-cart-rows">
 							<div class="row-nr">
 								<?php
@@ -504,26 +506,41 @@
 					</div>
 			<?php elseif ( $hasFailedTimeRestriction ) : ?>
 				<div class="modal-bg"></div>
-					<div id="time-notify" class="dialog-box" style="display:block">
-						<div class="dialog-box-inner border-box">
-							<div id="close-time" class="close-btn">
-								<div class="close-btn-bg"></div>
-								<i class="fa fa-times-circle"></i>
-							</div>
-							<div>
-								<p>
-									<?php if( $registrationTimeRestoriction->registrationStartCheck === false ) : ?>
-										<?php esc_html_e('Registration has not yet started today', 'seatreg'); ?>
-									<?php else: ?>
-										<?php esc_html_e('Registration has ended for today', 'seatreg'); ?>
-									<?php endif; ?>
-								</p>
-								<p>
-									<?php echo $registrationTimeRestoriction->registrationOpenClosingText; ?>
-								</p>
-							</div>
+				<div id="time-notify" class="dialog-box" style="display:block">
+					<div class="dialog-box-inner border-box">
+						<div id="close-time" class="close-btn">
+							<div class="close-btn-bg"></div>
+							<i class="fa fa-times-circle"></i>
+						</div>
+						<div>
+							<p>
+								<?php if( $registrationTimeRestoriction->registrationStartCheck === false ) : ?>
+									<?php esc_html_e('Registration has not yet started today', 'seatreg'); ?>
+								<?php else: ?>
+									<?php esc_html_e('Registration has ended for today', 'seatreg'); ?>
+								<?php endif; ?>
+							</p>
+							<p>
+								<?php echo $registrationTimeRestoriction->registrationOpenClosingText; ?>
+							</p>
 						</div>
 					</div>
+				</div>
+			<?php elseif ( $needsToLogIn ) : ?>
+				<div class="modal-bg"></div>
+				<div id="login-notify" class="dialog-box" style="display:block">
+					<div class="dialog-box-inner border-box">
+						<div class="close-btn">
+							<div class="close-btn-bg"></div>
+							<i class="fa fa-times-circle"></i>
+						</div>
+						<div>
+							<p>
+								<?php esc_html_e('Please log in to make a booking', 'seatreg'); ?>
+							</p>
+						</div>
+					</div>
+				</div>
 			<?php endif; ?>	
 
 			<?php wp_footer(); ?>	
