@@ -46,6 +46,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.52.0 =
 * Added option that requires users to be logged in to make a booking.
+* Added option to limit how many bookings can one logged in user make.
 
 = 1.51.1 =
 * Added auto page refresh to booking status page when page regains focus.
