@@ -16,6 +16,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 	protected $_bookerEmail; //confirm email is send to this address
 	protected $_selectedBookingCalendarDate; //in calendar mode user selected calendar date
 	private $_bookingId;
+	protected $_wpUserId = null;
 	
 	public function __construct($code){
 		$this->_confirmationCode = $code;
@@ -40,6 +41,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			$this->_bookerEmail = $this->_bookings[0]->booker_email;
 			$this->_seatPasswords = json_decode(stripslashes_deep($this->_bookings[0]->seat_passwords));
 			$this->_selectedBookingCalendarDate = $this->_bookings[0]->calendar_date;
+			$this->_wpUserId = $this->_bookings[0]->logged_in_user_id;
 		}
 	}
 
@@ -224,6 +226,17 @@ class SeatregConfirmBooking extends SeatregBooking {
 			echo $endTimeCheck;
 
 			return;
+		}
+
+		//13. WP user booking limit restriction.
+		if( $this->_wp_user_booking_limit !== null && $this->_wpUserId ) {
+			$wpUserLimitStatus = $this->wpUserLimitCheck( $this->_wpUserId, $this->_registrationCode );
+
+			if( $wpUserLimitStatus !== 'ok' ) {
+				echo $wpUserLimitStatus;
+
+				return;
+			}
 		}
 	
 		$this->confirmBookings();
