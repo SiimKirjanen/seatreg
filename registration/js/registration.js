@@ -107,7 +107,7 @@
 		this.NotifyBookerPendingBooking = NotifyBookerPendingBooking;
 		this.status = regTime;
 		this.timeRestrictions = registrationTimeRestrictions;
-		this.emailConfirmEnabled = emailConfirmRequired;
+		this.emailConfirmEnabled = window.emailConfirmRequired === '1' ? true: false;
 		this.payPalEnabled = window.payPalEnabled === '1' ? true : false;
 		this.stripeEnabled = window.stripeEnabled === '1' ? true : false;
 		this.customPaymentEnabled = window.customPaymentEnabled === '1' ? true : false;
@@ -1422,7 +1422,7 @@ function sendData(customFieldBack, registrationCode) {
 				is_JSON = false;
 			}
 			if(is_JSON) {
-				if( resp.type == 'ok' && seatReg.bookingRedirectToStatusPage) {
+				if( resp.type == 'ok' && seatReg.bookingRedirectToStatusPage && !seatReg.emailConfirmEnabled) {
 					window.location.href = resp.data;
 					return;
 				}
