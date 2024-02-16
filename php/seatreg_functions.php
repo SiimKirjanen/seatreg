@@ -704,7 +704,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="booking-redirect-status-page"><?php esc_html_e('Booking redirect to status page', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Redirect automatically to booking status page after booking was made', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php esc_html_e('Redirect automatically to booking status page after booking was made. This wont be applied when booking email verification is turned on', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="booking-redirect-status-page" name="booking-redirect-status-page" value="0" <?php echo $options[0]->booking_redirect_status_page == '1' ? 'checked':'' ?> > 
