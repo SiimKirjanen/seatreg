@@ -272,19 +272,19 @@ class SeatregBooking {
 		$statusReport = 'ok';
 		$bookingsByUser = SeatregBookingRepository::getUserBookings($userId, $registrationCode);
 
-		if( $bookingsByUser > $this->_wp_user_booking_limit ) {
+		if( $bookingsByUser >= $this->_wp_user_booking_limit ) {
 			$statusReport = sprintf(esc_html__('Allowed number of bookings per user is %s', 'seatreg'), $this->_wp_user_booking_limit);
 		}
 
 		return $statusReport;
 	}
 
-	protected function wpUserBookingsSeatLimitCheck($userId, $registrationCode) {
+	protected function wpUserBookingsSeatLimitCheck($userId, $registrationCode, $newBookingsLength) {
 		$statusReport = 'ok';
 		$bookingsByUser = SeatregBookingRepository::getUserBookings($userId, $registrationCode);
 
-		if( $bookingsByUser > $this->_wp_user_bookings_seat_limit ) {
-			$statusReport = sprintf(esc_html__('Allowed number of total booked seats per user is %s. You have reached the limit.', 'seatreg'), $this->_wp_user_bookings_seat_limit);
+		if( ($bookingsByUser + $newBookingsLength) > $this->_wp_user_bookings_seat_limit ) {
+			$statusReport = sprintf(esc_html__('Allowed number of total booked seats per user is %s. You have booked previously %s ', 'seatreg'), $this->_wp_user_bookings_seat_limit, $bookingsByUser);
 		}
 
 		return $statusReport;

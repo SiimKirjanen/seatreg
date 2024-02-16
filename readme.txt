@@ -45,7 +45,8 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 == Changelog ==
 
 = 1.53.0 =
-* Added option to limit how many total seats can user make across all their bookings. 
+* Added option to limit how many total seats can user make across all their bookings.
+* Fix user limit check. 
 
 = 1.52.0 =
 * Added option that requires users to be logged in to make a booking.

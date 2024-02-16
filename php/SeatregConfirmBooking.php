@@ -241,7 +241,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 		//14. WP user bookings seats limit restriction.
 		if( $this->_wp_user_bookings_seat_limit !== null && $this->_wpUserId ) {
-			$wpUserBookingsSeatsLimitStatus = $this->wpUserBookingsSeatLimitCheck( $this->_wpUserId, $this->_registrationCode );
+			$wpUserBookingsSeatsLimitStatus = $this->wpUserBookingsSeatLimitCheck( $this->_wpUserId, $this->_registrationCode, count($this->bookings) );
 
 			if( $wpUserBookingsSeatsLimitStatus !== 'ok' ) {
 				echo $wpUserBookingsSeatsLimitStatus;
