@@ -534,12 +534,32 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="wp-user-booking-limit">
-					<?php esc_html_e('Max bookings per WordPress user', 'seatreg'); ?>
+					<?php esc_html_e('Booking limit per WordPress user', 'seatreg'); ?>
 				</label>
 				<p class="help-block">
-					<?php esc_html_e('Set limit on how many bookings can one WordPress user make. Leave empty for no limit', 'seatreg'); ?>.
+					<?php esc_html_e('Limit how many times can one WordPress user make a booking. Leave empty for no limit', 'seatreg'); ?>.
 				</p>
 				<input type="number" class="form-control" id="wp-user-booking-limit" name="wp-user-booking-limit" value="<?php echo esc_html($options[0]->wp_user_booking_limit); ?>">
+			</div>
+
+			<div class="form-group">
+				<label for="wp-user-bookings-seat-limit">
+					<?php esc_html_e('Total number of seats WordPress user can book', 'seatreg'); ?>
+				</label>
+				<p class="help-block">
+					<?php esc_html_e('Set limit on how many seats can one WordPress user book across all their bookings. Leave empty for no limit', 'seatreg'); ?>.
+				</p>
+				<input type="number" class="form-control" id="wp-user-bookings-seat-limit" name="wp-user-bookings-seat-limit" value="<?php echo esc_html($options[0]->wp_user_bookings_seat_limit); ?>">
+			</div>
+
+			<div class="form-group">
+				<label for="registration-max-seats">
+					<?php esc_html_e('Max seats per booking', 'seatreg'); ?>
+				</label>
+				<p class="help-block">
+					<?php esc_html_e('Set how many seats can be added to the booking', 'seatreg'); ?>.
+				</p>
+				<input type="number" class="form-control" id="registration-max-seats" name="registration-max-seats" value="<?php echo esc_html($options[0]->seats_at_once); ?>">
 			</div>
 
 			<div class="form-group">
@@ -661,16 +681,6 @@ function seatreg_generate_settings_form() {
 				);
 				wp_editor($options[0]->custom_footer_text, 'customFooterTextEditor', $customFooterTextEditorSettings)
 				?>
-			</div>
-
-			<div class="form-group">
-				<label for="registration-max-seats">
-					<?php $options[0]->using_seats == '1' ? esc_html_e('Max seats per booking', 'seatreg') : esc_html_e('Max places per booking', 'seatreg'); ?>
-				</label>
-				<p class="help-block">
-					<?php $options[0]->using_seats == '1' ? esc_html_e('Set how many seats can be added to the booking', 'seatreg') : esc_html_e('Set how many places can be added to the booking', 'seatreg'); ?>.
-				</p>
-				<input type="number" class="form-control" id="registration-max-seats" name="registration-max-seats" value="<?php echo esc_html($options[0]->seats_at_once); ?>">
 			</div>
 
 			<div class="form-group">
@@ -2251,6 +2261,7 @@ function seatreg_set_up_db() {
 			booking_redirect_status_page tinyint(1) NOT NULL DEFAULT 0,
 			require_wp_login tinyint(0) NOT NULL DEFAULT 0,
 			wp_user_booking_limit INT DEFAULT NULL,
+			wp_user_bookings_seat_limit INT DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3184,7 +3195,8 @@ function seatreg_update() {
 			'notification_email' => $_POST['notification-email'],
 			'booking_redirect_status_page' => $_POST['booking-redirect-status-page'],
 			'require_wp_login' => $_POST['require-wp-login'],
-			'wp_user_booking_limit' => (int)$_POST['wp-user-booking-limit'] > 0 ? (int)$_POST['wp-user-booking-limit'] : null
+			'wp_user_booking_limit' => (int)$_POST['wp-user-booking-limit'] > 0 ? (int)$_POST['wp-user-booking-limit'] : null,
+			'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
