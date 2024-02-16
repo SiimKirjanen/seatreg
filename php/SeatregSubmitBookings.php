@@ -251,7 +251,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			$wpUserLimitStatus = $this->wpUserLimitCheck( SeatregAuthService::getCurrentUserId(), $this->_registrationCode );
 
 			if( $wpUserLimitStatus !== 'ok' ) {
-				$this->response->setError($wpUserLimitStatus);
+				$this->response->setValidationError($wpUserLimitStatus);
 
 				return;
 			}
