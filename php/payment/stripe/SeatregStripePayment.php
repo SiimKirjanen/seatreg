@@ -73,8 +73,6 @@ class SeatregStripePayment extends SeatregPaymentBase {
             return true;
         }else if ( $this->_event->type === 'charge.failed' ) {
             $this->changePaymentStatus(SEATREG_PAYMENT_ERROR);
-			$this->changeBookingStatus(SEATREG_BOOKING_DEFAULT);
-			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to 0 state by the system (Stripe payment error)', false);
 			$this->log(esc_html__('Payment failed', 'seatreg'), SEATREG_PAYMENT_LOG_ERROR);
 
             return false;
