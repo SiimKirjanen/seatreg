@@ -76,7 +76,7 @@
 				<i class="fa fa-floppy-o"></i>
 				<span style="margin-left:4px" class="save-text"><?php esc_html_e('Save', 'seatreg');?></span>
 			</div>
-			<a id="registration-link" class="save-check view-btn" target="_blank" href="<?php echo get_site_url(); ?>">
+			<a id="registration-link" class="save-check view-btn" target="_blank" href="<?php echo SeatregLinksService::getRegistrationURL(); ?>">
 				<span style="margin-left:4px" class="link-text"><?php esc_html_e('View registration', 'seatreg');?></span>
 			</a>
 		</div>

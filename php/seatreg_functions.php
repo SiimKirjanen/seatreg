@@ -418,9 +418,9 @@ function seatreg_generate_my_registrations_section() {
 	foreach($registrations as $key=>$registration) {
 		?>
 			<div class="mb-4" data-item="registration" style="margin-right: 52px">
-				<h5><a class="registration-name-link" href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h5>
+				<h5><a class="registration-name-link" href="<?php echo SeatregLinksService::getRegistrationURL(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h5>
 
-				<a href="<?php echo get_site_url(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
+				<a href="<?php echo SeatregLinksService::getRegistrationURL(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
 
 				<br>
 
