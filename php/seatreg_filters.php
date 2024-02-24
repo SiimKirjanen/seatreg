@@ -25,6 +25,13 @@ function seatreg_page_template( $page_template ){
     return $page_template;
 }
 
+add_action('template_redirect', 'custom_http_status_code');
+function custom_http_status_code() {
+    if ( seatreg_is_registration_view_page() ) {
+        status_header(200);
+    }
+}
+
 add_filter('init', 'seatreg_custom_pages');
 function seatreg_custom_pages() {
 
