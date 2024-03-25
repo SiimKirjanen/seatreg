@@ -43,6 +43,7 @@ $checkout_session = \Stripe\Checkout\Session::create([
     'quantity' => 1,
   ]],
   'mode' => 'payment',
+  'allow_promotion_codes' => (bool)$bookingData->stripe_allow_promotion_codes,
   'success_url' => SEATREG_STRIPE_WEBHOOK_SUCCESS_URL . '&id=' . $bookingId,
   'cancel_url' => SEATREG_STRIPE_WEBHOOK_CANCEL_URL . '&registration=' . $bookingData->registration_code . '&id=' . $bookingId,
   'payment_intent_data' => [
