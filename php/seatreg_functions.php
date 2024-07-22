@@ -420,7 +420,7 @@ function seatreg_generate_my_registrations_section() {
 			<div class="mb-4" data-item="registration" style="margin-right: 52px">
 				<h5><a class="registration-name-link" href="<?php echo SeatregLinksService::getRegistrationURL(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h5>
 
-				<a href="<?php echo SeatregLinksService::getRegistrationURL(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
+				<a href="<?php echo SeatregLinksService::getRegistrationURL(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>&page_id=<?php echo SEATREG_PAGE_ID; ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
 
 				<br>
 
@@ -4002,4 +4002,20 @@ function seatreg_capabilities_remove() {
 		$role->remove_cap(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 	}
 
+}
+
+/*
+====================================================================================================================================================================================
+.htaccess
+====================================================================================================================================================================================
+*/
+
+function seatreg_add_rewrite_rule() {
+	$content = array(
+		'<IfModule mod_rewrite.c>',
+		'RewriteEngine On',
+		'RewriteRule ^seatreg/?$ index.php [L,QSA]',
+		'</IfModule>',
+	);
+	insert_with_markers(ABSPATH . '.htaccess', SEATREG_MARKER, $content);
 }
