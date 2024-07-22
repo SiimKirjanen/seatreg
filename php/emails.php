@@ -14,7 +14,7 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
     $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
     $roomData = json_decode($registration->registration_layout)->roomData;
-    $registrationCustomFields = json_decode($registration->custom_fields);
+    $registrationCustomFields = json_decode($registration->custom_fields ?? '[]');
     $emailToSend = $registration->notification_email ?? get_option( 'admin_email' );
     $fromAddress = getEmailFromAddress($registration->email_from_address);
     $registrationName = esc_html($registration->registration_name);

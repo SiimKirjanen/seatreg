@@ -300,7 +300,7 @@ class SeatregBooking {
         $this->_registrationName = $result->registration_name;
 		$this->_maxSeats = $result->seats_at_once;
 		$this->_requireBookingEmailConfirm = $result->booking_email_confirm;
-		$this->_createdCustomFields = json_decode($result->custom_fields);
+		$this->_createdCustomFields = json_decode($result->custom_fields ?? '[]');
 		$this->_emailVerificationSubject = $result->verification_email_subject;
 		$this->_emailVerificationTemplate = $result->email_verification_template;
 		$this->_pendingBookingSubject = $result->pending_booking_email_subject;
