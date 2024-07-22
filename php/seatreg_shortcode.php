@@ -7,6 +7,6 @@
         ), $atts );
         $site_url = SeatregLinksService::getRegistrationURL();
         
-        return "<iframe style='width:100%;height:". (int)$shortcodeAtts['height'] . 'px' ."' src='". $site_url ."?seatreg=registration&c=". $shortcodeAtts['code'] ."'></iframe>";
+        return "<iframe style='width:100%;height:". (int)$shortcodeAtts['height'] . 'px' ."' src='". $site_url ."?seatreg=registration&c=". $shortcodeAtts['code'] . '&page_id=' . SEATREG_PAGE_ID ."'></iframe>";
     }
     add_shortcode( 'seatreg', 'seatreg_shortcode' );
