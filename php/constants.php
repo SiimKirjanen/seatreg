@@ -3,6 +3,7 @@ define('SEATREG_PLUGIN_FOLDER_DIR', plugin_dir_path( dirname( __FILE__ ) ));
 define('SEATREG_PLUGIN_FOLDER_URL', plugin_dir_url( dirname( __FILE__ ) ));
 define('SEATREG_HOME_PAGE', admin_url('/admin.php?page=seatreg-welcome'));
 define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
+define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
 define('SEATREG_DB_VERSION', '1.43');
@@ -85,3 +86,6 @@ define('SEATREG_BACKGROUND_IMAGE_MAX_SIZE', 2120000);
 define('SEATREG_TRIGGER_SIDE_EFFECT', '1');
 define('SEATREG_MANAGE_BOOKINGS_CAPABILITY', 'seatreg_manage_bookings');
 define('SEATREG_MANAGE_EVENTS_CAPABILITY', 'seatreg_manage_events');
+
+//.htaccess
+define('SEATREG_MARKER', 'SeatReg WordPress plugin');

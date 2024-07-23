@@ -340,7 +340,7 @@ $('#using-calendar').on('click', function() {
 $('#registration-link').on('click', function() {
 	var href = $(this).attr('href').split('?')[0];
 	
-	$(this).attr('href', href + '?seatreg=registration&c=' + seatreg.selectedRegistration);
+	$(this).attr('href', href + '?seatreg=registration&c=' + seatreg.selectedRegistration + '&page_id=' + WP_Seatreg.seatreg_page_id);
 });
 
 $('.tab-container').easytabs({

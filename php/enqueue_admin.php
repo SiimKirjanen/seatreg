@@ -57,7 +57,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('date-format', plugins_url('js/date.format.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('seatreg_admin_chart', plugins_url('js/Chart.min.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.0.0', true);
-		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg_admin_chart', 'seatreg-utils'), '1.9.1', true);
+		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg_admin_chart', 'seatreg-utils'), '1.10.0', true);
 		wp_enqueue_script('jstz', plugins_url('js/jstz-1.0.4.min.js', dirname(__FILE__) ), array(), '1.0.4', true);
 		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip'), '1.9.0', true);
 
@@ -66,6 +66,7 @@ function seatreg_load_admin_scripts($hook) {
 			'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
 			'translations' => seatreg_generate_admin_strings(), 
 			'uploads_url' => SEATREG_TEMP_FOLDER_URL,
+			'seatreg_page_id' => SEATREG_PAGE_ID
 		));
 	}
 }

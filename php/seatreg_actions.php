@@ -51,3 +51,6 @@ add_action( 'seatreg_pending_booking_expiration', 'seatreg_pending_bookings_expi
 function seatreg_pending_bookings_expiration_time_job() {
 	SeatregJobService::pendingBookingExpirationTimeJob();
 }
+
+//.htaccess
+add_action( 'admin_init', 'seatreg_add_rewrite_rule' );
