@@ -1411,6 +1411,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		<a href="<?php echo get_site_url() . '?seatreg=pdf&code=' . esc_attr($code); ?>" target="_blank" class="file-type-link pdf-link" data-file-type="pdf"><i class="fa fa-file-pdf-o" style="color:#D81313"></i> PDF</a>
     	<a href="<?php echo get_site_url() . '?seatreg=xlsx&code=' . esc_attr($code); ?>" target="_blank" class="file-type-link xlsx-link" data-file-type="xlsx" data-zip-is-enabled="<?php echo $zipExtensionLoaded ? 'true': 'false'; ?>"><i class="fa fa-file-excel-o" style="color:#6FAA19"></i> XLSX</a>
     	<a href="<?php echo get_site_url() . '?seatreg=text&code=' . esc_attr($code); ?>" class="file-type-link text-link" data-file-type="text"><i class="fa fa-file-text-o" style="color:#000"></i> Text</a>
+		<a href="<?php echo get_site_url() . '?seatreg=csv&code=' . esc_attr($code); ?>" target="_blank" class="file-type-link csv-link" data-file-type="csv"><i class="fa fa-file-text-o" style="color:#008000"></i> CSV</a>
 
 		<div class="bg-color">
 			<div class="tab-container">

@@ -68,6 +68,17 @@ function seatreg_custom_pages() {
 		die();
 	}
 
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'csv' ) {
+		seatreg_is_user_logged_in_and_has_permissions();
+		seatreg_validate_bookings_file_input();	
+		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsCSV.php' );
+
+		$txt = new SeatregBookingsTxt( isset($_GET['s1']), isset($_GET['s2']), isset($_GET['s3']), $_GET['code'], assignIfNotEmpty($_GET['calendar-date'], null) );
+		$txt->printCsv();
+
+		die();
+	}
+
 	if( seatreg_is_booking_confirm_page() ) {
 		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/pages/booking_confirm.php';
 
