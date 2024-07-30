@@ -781,6 +781,44 @@ $('#seatreg-booking-manager').on('click', '.add-booking', function() {
 	});
 	modal.modal('show');
 });
+$('#seatreg-booking-manager .import-bookings').on('click', function() {
+	var modal = $('#import-bookings-modal');
+
+	modal.modal('show');
+});
+
+$('#import-bookings-modal input[name="csv-file"]').on('change', function() {
+	var file = this.files[0];
+
+	if(file) {
+		var formData = new FormData();
+
+		formData.append('csv-file', file);
+		formData.append('seatreg-code', $('#import-bookings-modal input[name="seatreg-code"]').val());
+		formData.append('security', WP_Seatreg.nonce);
+		formData.append('action', 'seatreg_inspect_booking_csv');
+
+		$.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: formData,
+            processData: false, // Prevent jQuery from automatically transforming the data into a query string
+            contentType: false, // Prevent jQuery from setting the content type
+            dataType: 'json', // Specify the type of data expected back from the server
+            success: function(response) {
+                console.log('File uploaded successfully');
+                // Handle the JSON response from the server
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('File upload failed');
+                // Handle any errors
+            }
+        });
+	}
+});
+
+
+
 
 //booking edit click. Show edit modal
 $('#seatreg-booking-manager').on('click', '.edit-btn',function() {

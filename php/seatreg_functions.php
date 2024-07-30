@@ -1397,6 +1397,10 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 					<span><?php esc_html_e('Add booking', 'seatreg'); ?></span>
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 				</div>
+				<div class="import-bookings">
+					<span><?php esc_html_e('Import bookings', 'seatreg'); ?></span>
+					<i class="fa fa-toggle-down fa-lg" aria-hidden="true"></i>
+				</div>
 			</div>
 		</div>
 
@@ -1592,6 +1596,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
 	seatreg_seat_id_modal($roomsData, $bookings1, $bookings2);
+	seatreg_import_bookings_modal($code);
 }
 
 function seatreg_view_booking_activity_btn($booking) {
@@ -1783,6 +1788,10 @@ function seatreg_seat_id_modal($roomsData, $pendingBookings, $approvedBookings) 
 	}, $combinedBookings);
 
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/seat-id-modal.php' );
+}
+
+function seatreg_import_bookings_modal($seatregCode) {
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/import-bookings-modal.php' );
 }
 
 //generate tabs
@@ -3979,6 +3988,18 @@ function seatreg_create_payment_log() {
 	}
 }
 
+add_action('wp_ajax_seatreg_inspect_booking_csv', 'seatreg_inspect_booking_csv');
+function seatreg_inspect_booking_csv() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
+
+	$validation = SeatregCSVService::validateCSV($_FILES['csv-file']);
+
+	if( !$validation->isValid ) {
+		wp_send_json_error($validation->message);
+	}
+
+	wp_send_json('ok');
+}
 /*
 ====================================================================================================================================================================================
 Capabilities

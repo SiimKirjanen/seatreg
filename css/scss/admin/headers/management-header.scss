@@ -18,12 +18,25 @@
 		color: #E0635D;
 	}
 	.management-extra-actions {
+		display: flex;		
+		gap: 12px;
 		text-transform: none;
 
 		.add-booking {
 			cursor: pointer;
 			.fa-plus-circle {
 				color: #61B329;
+			}
+			&:hover {
+				span {
+					text-decoration: underline;
+				}
+			}
+		}
+		.import-bookings {
+			cursor: pointer;
+			.fa {
+				color: #2271b1;
 			}
 			&:hover {
 				span {

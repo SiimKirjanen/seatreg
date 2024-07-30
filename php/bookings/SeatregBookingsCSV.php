@@ -18,7 +18,11 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
     }
 
     private function cleanJSONForCsv($json) {
-        return json_encode($json, JSON_HEX_APOS | JSON_HEX_QUOT);
+        if ($json === null) {
+            return '';
+        }
+        
+        return $json;
     }
     
     public function printCsv() {
@@ -37,7 +41,7 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
                 $registration->room_uuid,
                 $registration->booking_date,
                 $registration->booking_confirm_date,
-                $this->cleanJSONForCsv($registration->custom_field_data, JSON_HEX_APOS | JSON_HEX_QUOT),
+                $this->cleanJSONForCsv($registration->custom_field_data),
                 $registration->status,
                 $booking_id,
                 $registration->booker_email,
