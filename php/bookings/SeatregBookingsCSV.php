@@ -31,23 +31,22 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
 
         foreach ($this->_registrations as $registration) {
             $booking_id = sha1(mt_rand(10000,99999).time().$registration->booker_email);
+            $csvRow = array_fill(0, 14, '');
 
-            $csvRow = array(
-                $registration->first_name,
-                $registration->last_name,
-                $registration->email,
-                $registration->seat_id,
-                $registration->seat_nr,
-                $registration->room_uuid,
-                $registration->booking_date,
-                $registration->booking_confirm_date,
-                $this->cleanJSONForCsv($registration->custom_field_data),
-                $registration->status,
-                $booking_id,
-                $registration->booker_email,
-                $this->cleanJSONForCsv($registration->multi_price_selection),
-                $registration->logged_in_user_id,
-            );
+            $csvRow[SEATREG_COL_FIRST_NAME] = $registration->first_name;
+            $csvRow[SEATREG_COL_LAST_NAME] = $registration->last_name;
+            $csvRow[SEATREG_COL_EMAIL] = $registration->email;
+            $csvRow[SEATREG_COL_SEAT_ID] = $registration->seat_id;
+            $csvRow[SEATREG_COL_SEAT_NR] = $registration->seat_nr;
+            $csvRow[SEATREG_COL_ROOM_UUID] = $registration->room_uuid;
+            $csvRow[SEATREG_COL_BOOKING_DATE] = $registration->booking_date;
+            $csvRow[SEATREG_COL_BOOKING_CONFIRM_DATE] = $registration->booking_confirm_date;
+            $csvRow[SEATREG_COL_CUSTOM_FIELD_DATA] = $this->cleanJSONForCsv($registration->custom_field_data);
+            $csvRow[SEATREG_COL_STATUS] = $registration->status;
+            $csvRow[SEATREG_COL_BOOKING_ID] = $booking_id;
+            $csvRow[SEATREG_COL_BOOKER_EMAIL] = $registration->booker_email;
+            $csvRow[SEATREG_COL_MULTI_PRICE_SELECTION] = $this->cleanJSONForCsv($registration->multi_price_selection);
+            $csvRow[SEATREG_COL_LOGGED_IN_USER_ID] = $registration->logged_in_user_id;
 
             fputcsv($output, $csvRow);
         }

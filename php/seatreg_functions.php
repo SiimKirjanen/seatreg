@@ -3992,13 +3992,22 @@ add_action('wp_ajax_seatreg_inspect_booking_csv', 'seatreg_inspect_booking_csv')
 function seatreg_inspect_booking_csv() {
 	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
 
-	$validation = SeatregCSVService::validateCSV($_FILES['csv-file']);
+	if( empty($_POST['seatreg-code']) || empty($_FILES['csv-file']) ) {
+		wp_send_json_error('Missing data');
+	}
+	
+	$csvService = new SeatregCSVService($_POST['seatreg-code']);
+	$validation = $csvService->validateCSV($_FILES['csv-file']);
 
 	if( !$validation->isValid ) {
 		wp_send_json_error($validation->message);
 	}
 
-	wp_send_json('ok');
+	$validationData = $csvService->validateData($_FILES['csv-file']);
+
+	wp_send_json(array(
+		'data' => $validationData,
+	));
 }
 /*
 ====================================================================================================================================================================================

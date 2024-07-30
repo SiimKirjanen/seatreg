@@ -3,6 +3,7 @@
 class ValidationResult {
     public $isValid;
     public $message;
+    public $data;
 
     public function __construct($isValid, $message) {
         $this->isValid = $isValid;
@@ -11,20 +12,25 @@ class ValidationResult {
 }
 
 class SeatregCSVService {
-    public static function validateCSV($file) {
-        $file_extension = self::getExtension($file);
+    private $seatregCode;
+    private $registrationData;
+    private $roomData;
+
+    public function __construct($code) {
+        $this->seatregCode = $code;
+        $this->registrationData = SeatregRegistrationRepository::getRegistrationByCode($this->seatregCode);
+        $this->roomData = json_decode($this->registrationData->registration_layout)->roomData;
+    }
+
+    public function validateCSV($file) {
+        $file_extension = $this->getExtension($file);
         if ($file_extension != 'csv') {
             return new ValidationResult(false, 'Invalid file extension. Please upload a CSV file.');
         }
 
-        $mime_type = self::getMimeType($file);
+        $mime_type = $this->getMimeType($file);
         if ($mime_type !== 'text/csv') {
-            return new ValidationResult(false, 'Invalid file type. Please upload a CSV file..');
-        }
-
-        $file_content = self::getContent($file);
-        if (strpos($file_content, ',') === false) {
-            return new ValidationResult(false, 'Invalid file type. Please upload a CSV file..');
+            return new ValidationResult(false, 'Invalid mime type. Please upload a CSV file..');
         }
 
         // Validate that each row has the correct number of columns
@@ -35,7 +41,7 @@ class SeatregCSVService {
             $rowCount = count($row);
             if ($rowCount  != $expectedColumnCount) {
                 fclose($file_handle);
-                return new ValidationResult(false, 'Each row must contain exactly ' . $expectedColumnCount . ' columns. But got ' . $rowCount . ' columns.');
+                return new ValidationResult(false, 'Each row must contain exactly ' . $expectedColumnCount . ' columns. But got ' . $rowCount . ' columns. ' . json_encode($row));
             }
         }
 
@@ -43,23 +49,43 @@ class SeatregCSVService {
 
         return new ValidationResult(true, 'ok');
     }
+
+    public function validateData($file) {
+        $validatedData = array();
+        $file_handle = fopen($file['tmp_name'], 'r');
+
+        while (($row = fgetcsv($file_handle)) !== false) {
+            $obj = (object) ['csv_row' => $row, 'is_valid' => true, 'messages' => array()];
+
+            $roomName = SeatregRegistrationService::getRoomNameFromLayout($this->roomData, $row[SEATREG_CSV_COL_ROOM_UUID]);
+            if($roomName == null) {
+                $obj->is_valid = false;
+                $obj->messages[] = 'Invalid room UUID';
+            }
+
+            $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $row[SEATREG_CSV_COL_SEAT_ID], $row[SEATREG_CSV_COL_SEAT_NR]);
+            if( !$seatAndRoomValidation->valid ) {
+                $obj->is_valid = false;
+                $obj->messages[] = $seatAndRoomValidation->errorText;
+            }
+
+            $validatedData[] = $obj;
+        }
+
+        fclose($file_handle);
+
+        return $validatedData;
+    }
     
-    public static function getExtension($file) {
+    public function getExtension($file) {
         return pathinfo($file['name'], PATHINFO_EXTENSION);
     }
 
-    public static function getMimeType($file) {
+    public function getMimeType($file) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime_type = finfo_file($finfo, $file['tmp_name']);
         finfo_close($finfo);
 
         return $mime_type;
     }
-
-    public static function getContent($file) {
-        return file_get_contents($file['tmp_name']);
-
-  
-
-    } 
 }
