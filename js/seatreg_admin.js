@@ -816,8 +816,10 @@ $('#import-bookings-modal input[name="csv-file"]').on('change', function() {
 			},
             success: function(response) {
 				$loader.hide();
-              
-                // Handle the JSON response from the server
+				$('#import-bookings-modal').modal('hide');
+				$('#import-bookings-finalization-modal').trigger('generate.markup', response);
+				$('#import-bookings-finalization-modal').modal('show');
+              				
             },
             error: function(jqXHR, textStatus, errorThrown) {
 				$loader.hide();
@@ -836,8 +838,40 @@ $('#import-bookings-modal input[name="csv-file"]').on('change', function() {
 	}
 });
 
+$('#import-bookings-finalization-modal').on('generate.markup', function (event, response) {
+    var $modal = $(this);
+	var $bookingsWrap = $modal.find('[data-element="modal-bookings-wrap"]');
+
+    if (response && response.data) {
+		var csvData = response.data.sort(function(a, b) {
+			return a.is_valid - b.is_valid;
+		});
+		console.log(csvData)
+		var problematicRowsCount = csvData.reduce(function(count, row) {
+            return count + (row.is_valid ? 0 : 1);
+        }, 0);
 
 
+        $modal.find('[data-element="modal-info"]').html(
+			'<p>You are trying to import total of ' + csvData.length + ' bookings. '  + problematicRowsCount + ' of those have import issues</p>'
+		);
+
+		csvData.forEach(function(row) {
+			$bookingsWrap.append(seatregGenerateImportBookingBox(row));
+		});
+    }
+    
+});
+
+function seatregGenerateImportBookingBox(row) {
+	var $div = $('<div></div>').addClass('booking-box') .text('Booking'); 
+
+	return $div;
+}
+
+$('#import-bookings-finalization-modal').on('show.bs.modal', function (event) {
+   
+});
 
 //booking edit click. Show edit modal
 $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
