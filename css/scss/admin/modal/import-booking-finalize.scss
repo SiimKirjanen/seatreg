@@ -1,10 +1,24 @@
-.seatreg-wp-admin {
-    .import-bookings-modal-finalize {
-        &__form {
-            text-align: center;
+#seatreg-booking-manager {
+    .import-bookings-finalization-modal {
+        &__body {
+            max-height: 70vh;
+            overflow-y: scroll;
         }
-        &__bookings {
+        &__booking {
             display: flex;
+            border: 1px solid #ccc;
+            padding: 8px;
+            gap: 6px;
+            margin-bottom: 8px;
+
+            &--invalid{
+                border-color: #d10516;
+            }
+        }
+
+        .warn-text {
+            color: #d10516;
+            font-weight: bold;
         }
     }
 }

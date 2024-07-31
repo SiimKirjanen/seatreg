@@ -30,8 +30,8 @@ class SeatregCSVService {
 
         $mime_type = $this->getMimeType($file);
         if ($mime_type !== 'text/csv') {
-            return new ValidationResult(false, 'Invalid mime type. Please upload a CSV file generated at the booking manager.');
-        }
+            return new ValidationResult(false, "Invalid mime type $mime_type. Please upload a CSV file generated at the booking manager.");
+        } 
 
         // Validate that each row has the correct number of columns
         $file_handle = fopen($file['tmp_name'], 'r');

@@ -853,7 +853,7 @@ $('#import-bookings-finalization-modal').on('generate.markup', function (event, 
 
 
         $modal.find('[data-element="modal-info"]').html(
-			'<p>You are trying to import total of ' + csvData.length + ' bookings. '  + problematicRowsCount + ' of those have import issues</p>'
+			'<p>You are trying to import total of ' + csvData.length + ' bookings. <span class="warn-text">'  + problematicRowsCount + '</span> of those have import issues and cant be imported</p>'
 		);
 
 		csvData.forEach(function(row) {
@@ -864,9 +864,22 @@ $('#import-bookings-finalization-modal').on('generate.markup', function (event, 
 });
 
 function seatregGenerateImportBookingBox(row) {
-	var $div = $('<div></div>').addClass('booking-box') .text('Booking'); 
+	var csvRow = row.csv_row;
+	var $bookingWrap = $('<div class="import-bookings-finalization-modal__booking"></div>'); 
 
-	return $div;
+	if(!row.is_valid) {
+		$bookingWrap.addClass('import-bookings-finalization-modal__booking--invalid');
+	}
+	
+	$bookingWrap.append('<div data-id="first_name">' + csvRow[WP_Seatreg.SEATREG_CSV_COL_FIRST_NAME] + '</div>');
+	$bookingWrap.append('<div data-id="last_name">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_LAST_NAME] + '</div>');
+	//$bookingWrap.append('<div data-id="email">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_EMAIL] + '</div>');
+	//$bookingWrap.append('<div data-id="seat_id">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_SEAT_ID] + '</div>');
+	$bookingWrap.append('<div data-id="seat_nr">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_SEAT_NR] + '</div>');
+	//$bookingWrap.append('<div data-id="booking_status">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_STATUS] + '</div>');
+	//$bookingWrap.append('<div data-id="booker_email">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_BOOKER_EMAIL] + '</div>');           
+	
+	return $bookingWrap;
 }
 
 $('#import-bookings-finalization-modal').on('show.bs.modal', function (event) {
