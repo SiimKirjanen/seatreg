@@ -14,10 +14,13 @@
             </div>
             <input type="hidden" name="seatreg-code" value="<?php echo esc_attr($seatregCode); ?>"/>
         </form>
+        <div class="import-booking-modal-loading" style="display:none">
+          <img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader.gif" alt="Loading..."><?php esc_html_e('Loading...', 'seatreg'); ?>
+        </div>
+        <div class="import-booking-modal-error"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>
-       <!--  <button type="button" class="btn btn-primary" id="upload-csv"><?php esc_html_e('Add booking', 'seatreg'); ?></button> -->
       </div>
     </div>
   </div>

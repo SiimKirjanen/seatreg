@@ -784,6 +784,9 @@ $('#seatreg-booking-manager').on('click', '.add-booking', function() {
 $('#seatreg-booking-manager .import-bookings').on('click', function() {
 	var modal = $('#import-bookings-modal');
 
+	$('#import-bookings-modal .import-booking-modal-error').empty();
+	$('#import-bookings-modal input[name="csv-file"]').val('');
+
 	modal.modal('show');
 });
 
@@ -792,6 +795,8 @@ $('#import-bookings-modal input[name="csv-file"]').on('change', function() {
 
 	if(file) {
 		var formData = new FormData();
+		var $loader = $('#import-bookings-modal .import-booking-modal-loading');
+		var $error = $('#import-bookings-modal .import-booking-modal-error')
 
 		formData.append('csv-file', file);
 		formData.append('seatreg-code', $('#import-bookings-modal input[name="seatreg-code"]').val());
@@ -805,13 +810,27 @@ $('#import-bookings-modal input[name="csv-file"]').on('change', function() {
             processData: false, // Prevent jQuery from automatically transforming the data into a query string
             contentType: false, // Prevent jQuery from setting the content type
             dataType: 'json', // Specify the type of data expected back from the server
+			beforeSend: function() {
+				$loader.show();
+				$error.hide();
+			},
             success: function(response) {
-                console.log('File uploaded successfully');
+				$loader.hide();
+              
                 // Handle the JSON response from the server
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error('File upload failed');
-                // Handle any errors
+				$loader.hide();
+
+				try {
+					var responsePayload = JSON.parse(jqXHR.responseText);
+
+					$error.text(responsePayload.data);
+					$error.show();
+				} catch (e) {
+					$error.text('Error analyzing CSV file');
+					$error.show();
+				}
             }
         });
 	}

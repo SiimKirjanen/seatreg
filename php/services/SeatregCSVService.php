@@ -25,12 +25,12 @@ class SeatregCSVService {
     public function validateCSV($file) {
         $file_extension = $this->getExtension($file);
         if ($file_extension != 'csv') {
-            return new ValidationResult(false, 'Invalid file extension. Please upload a CSV file.');
+            return new ValidationResult(false, 'Invalid file extension. Please upload a CSV file generated at the booking manager.');
         }
 
         $mime_type = $this->getMimeType($file);
         if ($mime_type !== 'text/csv') {
-            return new ValidationResult(false, 'Invalid mime type. Please upload a CSV file..');
+            return new ValidationResult(false, 'Invalid mime type. Please upload a CSV file generated at the booking manager.');
         }
 
         // Validate that each row has the correct number of columns
