@@ -853,11 +853,17 @@ $('#import-bookings-finalization-modal').on('generate.markup', function (event, 
 
 
         $modal.find('[data-element="modal-info"]').html(
-			'<p>You are trying to import total of ' + csvData.length + ' bookings. <span class="warn-text">'  + problematicRowsCount + '</span> of those have import issues and cant be imported</p>'
+			'<p>You are trying to import total of ' + csvData.length + ' bookings. <span class="warn-text">'  + problematicRowsCount + '</span> of those have conflicts and cant be imported</p>'
 		);
 
 		csvData.forEach(function(row) {
 			$bookingsWrap.append(seatregGenerateImportBookingBox(row));
+		});
+
+		$('#import-bookings-finalization-modal [data-powertip]').powerTip({
+			followMouse : false,
+			placement: 'sw',
+			popupClass: 'import-bookings-finalization-modal__popup'
 		});
     }
     
@@ -867,7 +873,7 @@ function seatregGenerateImportBookingBox(row) {
 	var csvRow = row.csv_row;
 	var $bookingWrap = $('<div class="import-bookings-finalization-modal__booking"></div>'); 
 
-	if(!row.is_valid) {
+	if( !row.is_valid ) {
 		$bookingWrap.addClass('import-bookings-finalization-modal__booking--invalid');
 	}
 	
@@ -876,6 +882,12 @@ function seatregGenerateImportBookingBox(row) {
 	//$bookingWrap.append('<div data-id="email">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_EMAIL] + '</div>');
 	//$bookingWrap.append('<div data-id="seat_id">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_SEAT_ID] + '</div>');
 	$bookingWrap.append('<div data-id="seat_nr">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_SEAT_NR] + '</div>');
+
+	if( !row.is_valid ) {
+		$bookingWrap.append('<i class="fa fa-exclamation-triangle import-bookings-finalization-modal__warning-icon" aria-hidden="true" data-powertip="' +  row.messages.join(', ')  + '"></i>');
+	}
+	
+
 	//$bookingWrap.append('<div data-id="booking_status">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_STATUS] + '</div>');
 	//$bookingWrap.append('<div data-id="booker_email">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_BOOKER_EMAIL] + '</div>');           
 	

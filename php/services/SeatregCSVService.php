@@ -15,11 +15,13 @@ class SeatregCSVService {
     private $seatregCode;
     private $registrationData;
     private $roomData;
+    private $existingBookings;
 
     public function __construct($code) {
         $this->seatregCode = $code;
         $this->registrationData = SeatregRegistrationRepository::getRegistrationByCode($this->seatregCode);
         $this->roomData = json_decode($this->registrationData->registration_layout)->roomData;
+        $this->existingBookings = SeatregBookingRepository::getAllConfirmedAndApprovedBookingsByRegistrationCode($this->seatregCode);
     }
 
     public function validateCSV($file) {
@@ -67,6 +69,13 @@ class SeatregCSVService {
             if( !$seatAndRoomValidation->valid ) {
                 $obj->is_valid = false;
                 $obj->messages[] = $seatAndRoomValidation->errorText;
+            }
+
+            $seatBookedValidation = SeatregBookingService::checkIfSeatAlreadyBooked($row, $this->existingBookings);
+
+            if( !$seatBookedValidation->is_valid ) {
+                $obj->is_valid = false;
+                $obj->messages = array_merge($obj->messages, $seatBookedValidation->messages);
             }
 
             $validatedData[] = $obj;

@@ -6,14 +6,24 @@
         }
         &__booking {
             display: flex;
-            border: 1px solid #ccc;
-            padding: 8px;
+            align-items: center;
+            border: 1px solid hsl(0, 0%, 80%);
+            padding: 8px 12px;
             gap: 6px;
             margin-bottom: 8px;
 
             &--invalid{
                 border-color: #d10516;
             }
+        }
+        &__warning-icon {
+            margin-left: auto;
+            color: #f00;
+            cursor: pointer;
+            display: block;
+        }
+        &__popup {
+            max-width: 400px;
         }
 
         .warn-text {
