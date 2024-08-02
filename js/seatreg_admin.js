@@ -846,11 +846,9 @@ $('#import-bookings-finalization-modal').on('generate.markup', function (event, 
 		var csvData = response.data.sort(function(a, b) {
 			return a.is_valid - b.is_valid;
 		});
-		console.log(csvData)
 		var problematicRowsCount = csvData.reduce(function(count, row) {
             return count + (row.is_valid ? 0 : 1);
         }, 0);
-
 
         $modal.find('[data-element="modal-info"]').html(
 			'<p>You are trying to import total of ' + csvData.length + ' bookings. <span class="warn-text">'  + problematicRowsCount + '</span> of those have conflicts and cant be imported</p>'
@@ -865,6 +863,12 @@ $('#import-bookings-finalization-modal').on('generate.markup', function (event, 
 			placement: 'sw',
 			popupClass: 'import-bookings-finalization-modal__popup'
 		});
+
+		if( csvData.length > problematicRowsCount )  {
+			$modal.find('button[data-action="start-booking-import"]').prop('disabled', false); 
+		}else {
+			$modal.find('button[data-action="start-booking-import"]').prop('disabled', true);
+		}
     }
     
 });
@@ -875,27 +879,94 @@ function seatregGenerateImportBookingBox(row) {
 
 	if( !row.is_valid ) {
 		$bookingWrap.addClass('import-bookings-finalization-modal__booking--invalid');
+	}else {
+		$bookingWrap.attr('data-is-valid', 'true');
 	}
 	
 	$bookingWrap.append('<div data-id="first_name">' + csvRow[WP_Seatreg.SEATREG_CSV_COL_FIRST_NAME] + '</div>');
 	$bookingWrap.append('<div data-id="last_name">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_LAST_NAME] + '</div>');
-	//$bookingWrap.append('<div data-id="email">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_EMAIL] + '</div>');
-	//$bookingWrap.append('<div data-id="seat_id">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_SEAT_ID] + '</div>');
 	$bookingWrap.append('<div data-id="seat_nr">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_SEAT_NR] + '</div>');
 
 	if( !row.is_valid ) {
 		$bookingWrap.append('<i class="fa fa-exclamation-triangle import-bookings-finalization-modal__warning-icon" aria-hidden="true" data-powertip="' +  row.messages.join(', ')  + '"></i>');
+	}else {
+		$bookingWrap.append('<i class="fa fa-trash-o import-bookings-finalization-modal__trash-icon" data-action="remove-row" aria-hidden="true" data-powertip="Remove from import"></i>');
 	}
-	
 
-	//$bookingWrap.append('<div data-id="booking_status">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_STATUS] + '</div>');
-	//$bookingWrap.append('<div data-id="booker_email">'+ csvRow[WP_Seatreg.SEATREG_CSV_COL_BOOKER_EMAIL] + '</div>');           
+	var hiddenInputs = [
+		'<input type="hidden" data-name="first_name" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_FIRST_NAME] + '" />',
+		'<input type="hidden" data-name="last_name" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_LAST_NAME] + '" />',
+		'<input type="hidden" data-name="email" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_EMAIL] + '" />',
+		'<input type="hidden" data-name="seat_id" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_SEAT_ID] + '" />',
+		'<input type="hidden" data-name="seat_nr" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_SEAT_NR] + '" />',
+		'<input type="hidden" data-name="room_uuid" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_ROOM_UUID] + '" />',
+		'<input type="hidden" data-name="booking_date" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_BOOKING_DATE] + '" />',
+		'<input type="hidden" data-name="booking_confirm_date" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_BOOKING_CONFIRM_DATE] + '" />',
+		'<input type="hidden" data-name="custom_field_data" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_CUSTOM_FIELD_DATA] + '" />',
+		'<input type="hidden" data-name="status" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_STATUS] + '" />',
+		'<input type="hidden" data-name="booking_id" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_BOOKING_ID] + '" />',
+		'<input type="hidden" data-name="booker_email" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_BOOKER_EMAIL] + '" />',
+		'<input type="hidden" data-name="multi_price_selection" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_MULTI_PRICE_SELECTION] + '" />',
+		'<input type="hidden" data-name="logged_in_user_id" value="' + csvRow[WP_Seatreg.SEATREG_CSV_COL_LOGGED_IN_USER_ID] + '" />'
+	].join('');
 	
+	$bookingWrap.append(hiddenInputs);
+        	
 	return $bookingWrap;
 }
 
-$('#import-bookings-finalization-modal').on('show.bs.modal', function (event) {
-   
+$('#import-bookings-finalization-modal').on('click', '[data-action="remove-row"]', function() {
+	if (window.confirm("Are you sure you want to remove this import?")) {
+		$(this).closest('.import-bookings-finalization-modal__booking').remove();
+	}
+});
+
+$('#import-bookings-finalization-modal button[data-action="start-booking-import"]').on('click', function (event) {
+	var bookingsImportData = [];
+	var $importBtn = $('#import-bookings-finalization-modal button[data-action="start-booking-import"]');
+	var importBtnText = $importBtn.text();
+
+	$('#import-bookings-finalization-modal .import-bookings-finalization-modal__booking[data-is-valid="true"]').each(function() {
+		var $booking = $(this);
+		var bookingData = {
+			first_name: $booking.find('[data-name="first_name"]').val(),
+			last_name: $booking.find('[data-name="last_name"]').val(),
+			seat_nr: $booking.find('[data-name="seat_nr"]').val(),
+			seat_id: $booking.find('[data-name="seat_id"]').val(),
+			room_uuid: $booking.find('[data-name="room_uuid"]').val(),
+			booking_date: $booking.find('[data-name="booking_date"]').val(),
+			booking_confirm_date: $booking.find('[data-name="booking_confirm_date"]').val(),
+			custom_field_data: $booking.find('[data-name="custom_field_data"]').val(),
+			status: $booking.find('[data-name="status"]').val(),
+			booking_id: $booking.find('[data-name="booking_id"]').val(),
+			booker_email: $booking.find('[data-name="booker_email"]').val(),
+			multi_price_selection: $booking.find('[data-name="multi_price_selection"]').val(),
+			logged_in_user_id: $booking.find('[data-name="logged_in_user_id"]').val()
+		};
+		bookingsImportData.push(bookingData);
+	});
+
+	$.ajax({
+		url: ajaxurl,
+		type: 'POST',
+		data: {
+			action: 'seatreg_import_bookings',
+			security: WP_Seatreg.nonce,
+			bookingsImport: JSON.stringify(bookingsImportData),
+			code: $importBtn.data('code')
+		},
+		dataType: 'json',
+		beforeSend: function() {
+			$importBtn.prop('disabled', true).text('Importing...');
+		},
+		success: function(response) {
+			$importBtn.prop('disabled', false).text(importBtnText);
+						
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$importBtn.prop('disabled', false).text(importBtnText);
+		}
+	});
 });
 
 //booking edit click. Show edit modal

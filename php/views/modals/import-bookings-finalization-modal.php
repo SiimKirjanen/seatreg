@@ -11,7 +11,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>
-        <button type="button" class="btn btn-primary" ><?php esc_html_e('Start import', 'seatreg'); ?></button>
+        <button type="button" class="btn btn-primary" data-action="start-booking-import" data-code="<?php echo $seatregCode; ?>"><?php esc_html_e('Start import', 'seatreg'); ?></button>
       </div>
     </div>
   </div>

@@ -20,7 +20,11 @@
             margin-left: auto;
             color: #f00;
             cursor: pointer;
-            display: block;
+        }
+        &__trash-icon {
+            margin-left: auto;
+            color: #f00;
+            cursor: pointer;
         }
         &__popup {
             max-width: 400px;

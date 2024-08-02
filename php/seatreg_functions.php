@@ -1597,7 +1597,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
 	seatreg_seat_id_modal($roomsData, $bookings1, $bookings2);
 	seatreg_import_bookings_modal($code);
-	seatreg_import_bookings_finalization_modal();
+	seatreg_import_bookings_finalization_modal($code);
 }
 
 function seatreg_view_booking_activity_btn($booking) {
@@ -1795,7 +1795,7 @@ function seatreg_import_bookings_modal($seatregCode) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/import-bookings-modal.php' );
 }
 
-function seatreg_import_bookings_finalization_modal() {
+function seatreg_import_bookings_finalization_modal($seatregCode) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/import-bookings-finalization-modal.php' );
 }
 
@@ -4013,6 +4013,21 @@ function seatreg_inspect_booking_csv() {
 	wp_send_json(array(
 		'data' => $validationData,
 	));
+}
+
+add_action('wp_ajax_seatreg_import_bookings', 'seatreg_import_bookings');
+function seatreg_import_bookings() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
+
+	if( empty($_POST['code']) || empty($_POST['bookingsImport']) ) {
+		wp_send_json_error('Missing data', 400);
+	}
+
+	if( $imported ) {
+		wp_send_json('ok');
+	}else {
+		wp_send_json_error('Import failed', 400);
+	}
 }
 /*
 ====================================================================================================================================================================================
