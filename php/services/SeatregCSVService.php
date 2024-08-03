@@ -30,10 +30,10 @@ class SeatregCSVService {
             return new ValidationResult(false, 'Invalid file extension. Please upload a CSV file generated at the booking manager.');
         }
 
-        $mime_type = $this->getMimeType($file);
+       /* $mime_type = $this->getMimeType($file);
         if ($mime_type !== 'text/csv') {
             return new ValidationResult(false, "Invalid mime type $mime_type. Please upload a CSV file generated at the booking manager.");
-        } 
+        }  */
 
         // Validate that each row has the correct number of columns
         $file_handle = fopen($file['tmp_name'], 'r');
@@ -71,7 +71,7 @@ class SeatregCSVService {
                 $obj->messages[] = $seatAndRoomValidation->errorText;
             }
 
-            $seatBookedValidation = SeatregBookingService::checkIfSeatAlreadyBooked($row, $this->existingBookings);
+            $seatBookedValidation = SeatregBookingService::checkIfSeatAlreadyBooked($row[SEATREG_CSV_COL_SEAT_ID], $row[SEATREG_CSV_COL_SEAT_NR], $this->existingBookings);
 
             if( !$seatBookedValidation->is_valid ) {
                 $obj->is_valid = false;

@@ -781,7 +781,7 @@ $('#seatreg-booking-manager').on('click', '.add-booking', function() {
 	});
 	modal.modal('show');
 });
-$('#seatreg-booking-manager .import-bookings').on('click', function() {
+$('#seatreg-booking-manager').on('click', '.import-bookings', function() {
 	var modal = $('#import-bookings-modal');
 
 	$('#import-bookings-modal .import-booking-modal-error').empty();
@@ -931,6 +931,7 @@ $('#import-bookings-finalization-modal button[data-action="start-booking-import"
 		var bookingData = {
 			first_name: $booking.find('[data-name="first_name"]').val(),
 			last_name: $booking.find('[data-name="last_name"]').val(),
+			email: $booking.find('[data-name="email"]').val(),
 			seat_nr: $booking.find('[data-name="seat_nr"]').val(),
 			seat_id: $booking.find('[data-name="seat_id"]').val(),
 			room_uuid: $booking.find('[data-name="room_uuid"]').val(),
@@ -949,18 +950,26 @@ $('#import-bookings-finalization-modal button[data-action="start-booking-import"
 	$.ajax({
 		url: ajaxurl,
 		type: 'POST',
+		dataType: 'json',
 		data: {
 			action: 'seatreg_import_bookings',
 			security: WP_Seatreg.nonce,
 			bookingsImport: JSON.stringify(bookingsImportData),
 			code: $importBtn.data('code')
 		},
-		dataType: 'json',
 		beforeSend: function() {
 			$importBtn.prop('disabled', true).text('Importing...');
 		},
 		success: function(response) {
 			$importBtn.prop('disabled', false).text(importBtnText);
+			$('#import-bookings-finalization-modal .import-bookings-finalization-modal__bookings').empty();
+
+			if(response.success) {
+				$('.import-bookings-finalization-modal__info').html('<p>Imported ' + response.successImports.length + ' bookings</p>');
+				$importBtn.css('display', 'none');
+			}else {
+				$('.import-bookings-finalization-modal__info').html('<p>Failed to import ' + response.failedImports.length + ' bookings</p>');
+			}
 						
 		},
 		error: function(jqXHR, textStatus, errorThrown) {

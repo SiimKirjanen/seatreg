@@ -8,14 +8,17 @@
       <div class="modal-body">
 		    <form>
             <h6><?php esc_html_e('Upload bookings CSV file', 'seatreg'); ?></h6>
-            <p><?php esc_html_e('Bookings CSV file generation can be found in the booking manager', 'seatreg'); ?><p>
+            <p>
+              <?php esc_html_e('You can generate bookings CSV file in the booking manager.', 'seatreg'); ?>
+              <?php esc_html_e('Before importing make sure you also copied the correct registration schema.', 'seatreg'); ?>
+            <p>
             <div class="form-group">   
                 <input type="file" class="form-control-file" name="csv-file" accept=".csv"/>
             </div>
             <input type="hidden" name="seatreg-code" value="<?php echo esc_attr($seatregCode); ?>"/>
         </form>
         <div class="import-booking-modal-loading" style="display:none">
-          <img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader.gif" alt="Loading..."><?php esc_html_e('Uploading and analyzing CSV', 'seatreg'); ?>
+          <img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader.gif" alt="Loading..."><h6><?php esc_html_e('Uploading and analyzing CSV', 'seatreg'); ?></h6>
         </div>
         <div class="import-booking-modal-error"></div>
       </div>

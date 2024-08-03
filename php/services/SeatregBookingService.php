@@ -234,15 +234,15 @@ class SeatregBookingService {
         return false;
     }
 
-    public static function checkIfSeatAlreadyBooked($csvRow, $existingBookings) {	
+    public static function checkIfSeatAlreadyBooked($seatId, $seatNr, $existingBookings) {	
             $statusReport = (object) ['is_valid' => true, 'messages' => []];
             $bookingsLength = count($existingBookings);
     
             for($i = 0; $i < $bookingsLength; $i++) {
             
-                if( $existingBookings[$i]->seat_id == $csvRow[SEATREG_CSV_COL_SEAT_ID]) {
+                if( $existingBookings[$i]->seat_id == $seatId) {
                     $statusReport->is_valid = false;
-                    $statusReport->messages[] = 'Seat '. esc_html($csvRow[SEATREG_CSV_COL_SEAT_NR]) . ' with ID ' . $csvRow[SEATREG_CSV_COL_SEAT_ID] . ' is already booked';
+                    $statusReport->messages[] = 'Seat '. esc_html($seatNr) . ' with ID ' . $seatId . ' is already booked';
     
                     break;
                 }

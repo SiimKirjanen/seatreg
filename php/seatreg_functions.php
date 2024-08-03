@@ -4023,11 +4023,16 @@ function seatreg_import_bookings() {
 		wp_send_json_error('Missing data', 400);
 	}
 
-	if( $imported ) {
-		wp_send_json('ok');
-	}else {
-		wp_send_json_error('Import failed', 400);
-	}
+	$importService = new SeatregImportService($_POST['code']);
+	$import = $importService->importBookings($_POST['bookingsImport']);
+
+	wp_send_json(
+		array(
+			'success' => $import->success,
+			'failedImports' => $import->failedImports,
+			'successImports' => $import->successfulImports,
+		)
+	);
 }
 /*
 ====================================================================================================================================================================================
