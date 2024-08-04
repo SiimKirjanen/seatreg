@@ -18,29 +18,29 @@ class SeatregImportService {
 
     private function validateData($bookingData) {
         $validation = (object) [
-            'isValid' => true,
+            'is_valid' => true,
             'messages' => array()
         ];
         
         $roomName = SeatregRegistrationService::getRoomNameFromLayout($this->roomData, $bookingData->room_uuid);
 
         if($roomName == null) {
-            $obj->is_valid = false;
-            $obj->messages[] = 'Invalid room UUID';
+            $validation->is_valid = false;
+            $validation->messages[] = 'Invalid room UUID';
 
             return $validation;
         }
 
         $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $bookingData->seat_id, $bookingData->seat_nr);
         if( !$seatAndRoomValidation->valid ) {
-            $obj->is_valid = false;
-            $obj->messages[] = $seatAndRoomValidation->errorText;
+            $validation->is_valid = false;
+            $validation->messages[] = $seatAndRoomValidation->errorText;
         }
 
         $seatBookedValidation = SeatregBookingService::checkIfSeatAlreadyBooked($bookingData->seat_id, $bookingData->seat_nr, $this->existingBookings);
         if( !$seatBookedValidation->is_valid ) {
-            $obj->is_valid = false;
-            $obj->messages = array_merge($obj->messages, $seatBookedValidation->messages);
+            $validation->is_valid = false;
+            $validation->messages = array_merge($validation->messages, $seatBookedValidation->messages);
         }
 
         return $validation;
@@ -63,23 +63,23 @@ class SeatregImportService {
     }
 
     public function importBookings($importedBookingsData) {
-
         $importedBookings = json_decode(stripslashes($importedBookingsData));
-
         $this->importCount = count($importedBookings);
 
         foreach( $importedBookings as $importedBooking ) {
             try {
                 $validation = $this->validateData($importedBooking );
 
-                if( $validation->isValid ) {
+                if( $validation->is_valid ) {
                     $inserted = $this->insertData($importedBooking);
 
                     if( $inserted ) {
-                        $this->successfulImports[] = $importedBooking;
+                        $this->successfulImports[] = (object)['bookingData' => $importedBooking, 'is_valid' => true, 'messages' => []]; 
+                    }else {
+                        $this->failedImports[] = (object)['bookingData' => $importedBooking, 'is_valid' => false, 'messages' => ['Failed to insert booking']]; 
                     }
                 }else {
-                    $this->failedImports[] = $importedBooking;
+                    $this->failedImports[] = (object)['bookingData' => $importedBooking, 'is_valid' => false, 'messages' => $validation->messages]; 
                 }
             }catch(Exception $e) {
                 $this->failedImports[] = $importedBooking;
