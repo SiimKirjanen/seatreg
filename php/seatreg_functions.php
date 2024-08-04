@@ -1363,7 +1363,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
     $seatregData = $seatregData[0];
 	$code = $seatregData->registration_code;
 	$custom_fields = json_decode( isset($seatregData->custom_fields) ? $seatregData->custom_fields : '[]', true);
-	$roomsData = json_decode($seatregData->registration_layout)->roomData;
+	$roomsData = json_decode($seatregData->registration_layout ?? '{}')->roomData ?? null;
 	$cus_length = count(is_array($custom_fields) ? $custom_fields : []);
 	$regId = $seatregData->id;
 	$project_name_original = $seatregData->registration_name;
@@ -1745,6 +1745,10 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 }
 
 function seatreg_add_booking_modal($usingSeats, $calendarDate, $roomsData) {
+	if(!$roomsData) {
+		return;
+	}
+
 	$roomNames = array_map(function($roomData) {
 		return $roomData->room->name;
 	}, $roomsData);
