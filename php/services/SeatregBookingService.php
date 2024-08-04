@@ -233,4 +233,22 @@ class SeatregBookingService {
 
         return false;
     }
+
+    public static function checkIfSeatAlreadyBooked($seatId, $seatNr, $existingBookings) {	
+            $statusReport = (object) ['is_valid' => true, 'messages' => []];
+            $bookingsLength = count($existingBookings);
+    
+            for($i = 0; $i < $bookingsLength; $i++) {
+            
+                if( $existingBookings[$i]->seat_id == $seatId) {
+                    $statusReport->is_valid = false;
+                    $statusReport->messages[] = 'Seat '. esc_html($seatNr) . ' with ID ' . $seatId . ' is already booked';
+    
+                    break;
+                }
+                
+            } 
+    
+            return $statusReport;
+        }
 }

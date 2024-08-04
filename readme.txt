@@ -46,6 +46,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.54.0 =
 * Added bookings CSV export
+* Added bookings CSV import
 
 = 1.53.3 =
 * Added support for WordPress Plain permalinks.

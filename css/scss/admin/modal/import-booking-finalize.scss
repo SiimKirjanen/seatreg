@@ -1,0 +1,38 @@
+#seatreg-booking-manager {
+    .import-bookings-finalization-modal {
+        &__body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        &__booking {
+            display: flex;
+            align-items: center;
+            border: 1px solid hsl(0, 0%, 80%);
+            padding: 8px 12px;
+            gap: 6px;
+            margin-bottom: 8px;
+
+            &--invalid{
+                border-color: #d10516;
+            }
+        }
+        &__warning-icon {
+            margin-left: auto;
+            color: #f00;
+            cursor: pointer;
+        }
+        &__trash-icon {
+            margin-left: auto;
+            color: #f00;
+            cursor: pointer;
+        }
+        &__popup {
+            max-width: 400px;
+        }
+
+        .warn-text {
+            color: #d10516;
+            font-weight: bold;
+        }
+    }
+}

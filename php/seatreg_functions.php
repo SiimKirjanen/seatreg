@@ -1363,7 +1363,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
     $seatregData = $seatregData[0];
 	$code = $seatregData->registration_code;
 	$custom_fields = json_decode( isset($seatregData->custom_fields) ? $seatregData->custom_fields : '[]', true);
-	$roomsData = json_decode($seatregData->registration_layout)->roomData;
+	$roomsData = json_decode($seatregData->registration_layout ?? '{}')->roomData ?? null;
 	$cus_length = count(is_array($custom_fields) ? $custom_fields : []);
 	$regId = $seatregData->id;
 	$project_name_original = $seatregData->registration_name;
@@ -1396,6 +1396,10 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 				<div class="add-booking" data-custom-fields='<?php echo json_encode($custom_fields); ?>' data-registration-code="<?php echo $code; ?>">
 					<span><?php esc_html_e('Add booking', 'seatreg'); ?></span>
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+				</div>
+				<div class="import-bookings">
+					<span><?php esc_html_e('Import bookings', 'seatreg'); ?></span>
+					<i class="fa fa-toggle-down fa-lg" aria-hidden="true"></i>
 				</div>
 			</div>
 		</div>
@@ -1479,7 +1483,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									?>
 										<div> 
 											<?php
-												echo esc_html__('Price', 'seatreg'), ': ',  esc_html($seatPrice->price), ' ' ,esc_html($seatregData->paypal_currency_code);
+												echo esc_html__('Price', 'seatreg'), ': ',  esc_html($seatPrice->price), ' ', esc_html($seatregData->paypal_currency_code);
 
 												if($seatPrice->description) {
 													echo ' (', esc_html($seatPrice->description) , ')';
@@ -1592,6 +1596,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
 	seatreg_seat_id_modal($roomsData, $bookings1, $bookings2);
+	seatreg_import_bookings_modal($code, $seatregData);
+	seatreg_import_bookings_finalization_modal($code);
 }
 
 function seatreg_view_booking_activity_btn($booking) {
@@ -1739,6 +1745,10 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 }
 
 function seatreg_add_booking_modal($usingSeats, $calendarDate, $roomsData) {
+	if(!$roomsData) {
+		return;
+	}
+
 	$roomNames = array_map(function($roomData) {
 		return $roomData->room->name;
 	}, $roomsData);
@@ -1783,6 +1793,14 @@ function seatreg_seat_id_modal($roomsData, $pendingBookings, $approvedBookings) 
 	}, $combinedBookings);
 
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/seat-id-modal.php' );
+}
+
+function seatreg_import_bookings_modal($seatregCode, $seatregData) {
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/import-bookings-modal.php' );
+}
+
+function seatreg_import_bookings_finalization_modal($seatregCode) {
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/import-bookings-finalization-modal.php' );
 }
 
 //generate tabs
@@ -2661,7 +2679,7 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 	return $status;
 }
 
-function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode, $calendarDate = null) {
+function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode, $calendarDate = null, $multiPriceSelection = null) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 	$currentTimeStamp = time();
@@ -2685,7 +2703,8 @@ function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seat
 			'booker_email' => $email,
 			'conf_code' => $confCode, 
 			'status' => $bookingStatus,
-			'calendar_date' => $calendarDate
+			'calendar_date' => $calendarDate,
+			'multi_price_selection' => $multiPriceSelection
 		), 
 		'%s'	
 	);
@@ -3979,6 +3998,47 @@ function seatreg_create_payment_log() {
 	}
 }
 
+add_action('wp_ajax_seatreg_inspect_booking_csv', 'seatreg_inspect_booking_csv');
+function seatreg_inspect_booking_csv() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
+
+	if( empty($_POST['seatreg-code']) || empty($_FILES['csv-file']) ) {
+		wp_send_json_error('Missing data', 400);
+	}
+	
+	$csvService = new SeatregCSVService($_POST['seatreg-code']);
+	$validation = $csvService->validateCSV($_FILES['csv-file']);
+
+	if( !$validation->isValid ) {
+		wp_send_json_error($validation->message, 400);
+	}
+
+	$validationData = $csvService->validateData($_FILES['csv-file']);
+
+	wp_send_json(array(
+		'data' => $validationData,
+	));
+}
+
+add_action('wp_ajax_seatreg_import_bookings', 'seatreg_import_bookings');
+function seatreg_import_bookings() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
+
+	if( empty($_POST['code']) || empty($_POST['bookingsImport']) ) {
+		wp_send_json_error('Missing data', 400);
+	}
+
+	$importService = new SeatregImportService($_POST['code']);
+	$import = $importService->importBookings($_POST['bookingsImport']);
+
+	wp_send_json(
+		array(
+			'success' => $import->success,
+			'failedImports' => $import->failedImports,
+			'successImports' => $import->successfulImports,
+		)
+	);
+}
 /*
 ====================================================================================================================================================================================
 Capabilities

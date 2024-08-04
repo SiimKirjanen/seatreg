@@ -72,7 +72,7 @@ class SeatregLayoutService {
        return json_encode($layout);
     }
 
-    public static function validateRoomAndSeatId($layout, $bookingRoomName, $bookingSeatId) {
+    public static function validateRoomAndSeatId($layout, $bookingRoomName, $bookingSeatId, $seatNr = null) {
         $status = (object) [
             'valid' => false,
             'searchStatus' => '',
@@ -86,10 +86,15 @@ class SeatregLayoutService {
     
             if( $room->name == $bookingRoomName ) {
                 $status->searchStatus = 'seat-id-searching';
-                $status->errorText = sprintf( esc_html__('Seat id %s does not exist in %s', 'seatreg'),  esc_html($bookingSeatId), esc_html($bookingRoomName) );
+
+                if ($seatNr !== null) {
+                    $status->errorText = sprintf(esc_html__('Seat id %s with number %s does not exist in %s', 'seatreg'), esc_html($bookingSeatId), esc_html($seatNr), esc_html($bookingRoomName));
+                } else {
+                    $status->errorText = sprintf(esc_html__('Seat id %s does not exist in %s', 'seatreg'), esc_html($bookingSeatId), esc_html($bookingRoomName));
+                }
                 
                 foreach( $layoutData->boxes as $box ) {    
-                    if( $box->canRegister == 'true' && $box->id == $bookingSeatId ) {
+                    if( $box->canRegister == 'true' && $box->id == $bookingSeatId && ( $seatNr === null || $box->seat == $seatNr ) ) {
                         $status->errorText = '';
                         $status->valid = true;
 

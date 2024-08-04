@@ -73,7 +73,7 @@ function seatreg_custom_pages() {
 		seatreg_validate_bookings_file_input();	
 		require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingsCSV.php' );
 
-		$txt = new SeatregBookingsTxt( isset($_GET['s1']), isset($_GET['s2']), isset($_GET['s3']), $_GET['code'], assignIfNotEmpty($_GET['calendar-date'], null) );
+		$txt = new SeatregBookingsCSV( isset($_GET['s1']), isset($_GET['s2']), isset($_GET['s3']), $_GET['code'], assignIfNotEmpty($_GET['calendar-date'], null) );
 		$txt->printCsv();
 
 		die();
