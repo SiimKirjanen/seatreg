@@ -58,7 +58,9 @@ class SeatregImportService {
             $this->seatregCode,
             $bookingData->status,
             $bookingData->booking_id,
-            SeatregRandomGenerator::generateRandom($bookingData->email)
+            SeatregRandomGenerator::generateRandom($bookingData->email),
+            null,
+            $bookingData->multi_price_selection
         );
     }
 

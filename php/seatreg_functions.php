@@ -1483,7 +1483,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									?>
 										<div> 
 											<?php
-												echo esc_html__('Price', 'seatreg'), ': ',  esc_html($seatPrice->price), ' ' ,esc_html($seatregData->paypal_currency_code);
+												echo esc_html__('Price', 'seatreg'), ': ',  esc_html($seatPrice->price), ' ', esc_html($seatregData->paypal_currency_code);
 
 												if($seatPrice->description) {
 													echo ' (', esc_html($seatPrice->description) , ')';
@@ -2675,7 +2675,7 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 	return $status;
 }
 
-function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode, $calendarDate = null) {
+function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode, $calendarDate = null, $multiPriceSelection = null) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 	$currentTimeStamp = time();
@@ -2699,7 +2699,8 @@ function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seat
 			'booker_email' => $email,
 			'conf_code' => $confCode, 
 			'status' => $bookingStatus,
-			'calendar_date' => $calendarDate
+			'calendar_date' => $calendarDate,
+			'multi_price_selection' => $multiPriceSelection
 		), 
 		'%s'	
 	);
