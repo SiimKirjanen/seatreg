@@ -1596,7 +1596,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
 	seatreg_seat_id_modal($roomsData, $bookings1, $bookings2);
-	seatreg_import_bookings_modal($code);
+	seatreg_import_bookings_modal($code, $seatregData);
 	seatreg_import_bookings_finalization_modal($code);
 }
 
@@ -1791,7 +1791,7 @@ function seatreg_seat_id_modal($roomsData, $pendingBookings, $approvedBookings) 
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/seat-id-modal.php' );
 }
 
-function seatreg_import_bookings_modal($seatregCode) {
+function seatreg_import_bookings_modal($seatregCode, $seatregData) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/import-bookings-modal.php' );
 }
 

@@ -790,7 +790,7 @@ $('#seatreg-booking-manager').on('click', '.import-bookings', function() {
 	modal.modal('show');
 });
 
-$('#import-bookings-modal input[name="csv-file"]').on('change', function() {
+$('#seatreg-booking-manager').on('change', 'input[name="csv-file"]', function() {
 	var file = this.files[0];
 
 	if(file) {
@@ -857,7 +857,7 @@ $('#import-bookings-finalization-modal').on('generate.markup', function (event, 
 		csvData.forEach(function(row) {
 			var data = normalizeImportData(row.csv_row);
 
-			$bookingsWrap.append(seatregGenerateImportBookingBox(data, {is_valid: row.is_valid, messages: row.messages}));
+			$bookingsWrap.append(seatregGenerateImportBookingBox(data, {is_valid: row.is_valid, messages: row.messages, room_name: row.room_name}));
 		});
 
 		$('#import-bookings-finalization-modal [data-powertip]').powerTip({
@@ -884,16 +884,20 @@ function seatregGenerateImportBookingBox(bookingData, validationData) {
 		$bookingWrap.attr('data-is-valid', 'true');
 	}
 	
-	$bookingWrap.append('<div data-id="first_name">' + bookingData.first_name + '</div>');
-	$bookingWrap.append('<div data-id="last_name">' + bookingData.last_name + '</div>');
-	$bookingWrap.append('<div data-id="seat_nr">' + bookingData.seat_nr + '</div>');
+	$bookingWrap.append('<div><b>Name: </b>' + bookingData.first_name + ',</div>');
+	$bookingWrap.append('<div>' + bookingData.last_name + ',</div>');
+	$bookingWrap.append('<div><b>Seat: </b>' + bookingData.seat_nr + '</div>');
+
+	if(validationData.room_name) {
+		$bookingWrap.append('<div><b>Room: </b>' + validationData.room_name + '</div>');
+	}
 
 	if( !validationData.is_valid ) {
 		$bookingWrap.append('<i class="fa fa-exclamation-triangle import-bookings-finalization-modal__warning-icon" aria-hidden="true" data-powertip="' +  validationData.messages.join(', ')  + '"></i>');
 	}else {
-		$bookingWrap.append('<i class="fa fa-trash-o import-bookings-finalization-modal__trash-icon" data-action="remove-row" aria-hidden="true" data-powertip="Remove from import"></i>');
+		$bookingWrap.append('<i class="fa fa-trash-o import-bookings-finalization-modal__trash-icon" data-action="remove-row" aria-hidden="true" data-powertip="Remove from the import"></i>');
 	}
-
+	console.log(bookingData.custom_field_data)
 	var hiddenInputs = [
 		'<input type="hidden" data-name="first_name" value="' + bookingData.first_name + '" />',
 		'<input type="hidden" data-name="last_name" value="' + bookingData.last_name + '" />',
@@ -903,7 +907,7 @@ function seatregGenerateImportBookingBox(bookingData, validationData) {
 		'<input type="hidden" data-name="room_uuid" value="' + bookingData.room_uuid + '" />',
 		'<input type="hidden" data-name="booking_date" value="' + bookingData.booking_date + '" />',
 		'<input type="hidden" data-name="booking_confirm_date" value="' + bookingData.booking_confirm_date + '" />',
-		'<input type="hidden" data-name="custom_field_data" value="' + bookingData.custom_field_data + '" />',
+		'<input type="hidden" data-name="custom_field_data" value=\'' + bookingData.custom_field_data + '\' />',
 		'<input type="hidden" data-name="status" value="' + bookingData.status + '" />',
 		'<input type="hidden" data-name="booking_id" value="' + bookingData.booking_id + '" />',
 		'<input type="hidden" data-name="booker_email" value="' + bookingData.booker_email + '" />',
@@ -985,7 +989,7 @@ $('#import-bookings-finalization-modal button[data-action="start-booking-import"
 			$('#import-bookings-finalization-modal .import-bookings-finalization-modal__bookings').empty();
 
 			if(response.success) {
-				$('.import-bookings-finalization-modal__info').html('<p>Imported ' + response.successImports.length + ' bookings</p>');
+				$('.import-bookings-finalization-modal__info').html('<h6>Import of ' + response.successImports.length + ' bookings completed. Please refresh the page.</h6>');
 				$importBtn.css('display', 'none');
 			}else {
 				$('.import-bookings-finalization-modal__info').html('<p>Failed to import ' + response.failedImports.length + ' bookings</p>');

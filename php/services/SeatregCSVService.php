@@ -30,11 +30,6 @@ class SeatregCSVService {
             return new ValidationResult(false, 'Invalid file extension. Please upload a CSV file generated at the booking manager.');
         }
 
-       /* $mime_type = $this->getMimeType($file);
-        if ($mime_type !== 'text/csv') {
-            return new ValidationResult(false, "Invalid mime type $mime_type. Please upload a CSV file generated at the booking manager.");
-        }  */
-
         // Validate that each row has the correct number of columns
         $file_handle = fopen($file['tmp_name'], 'r');
         $expectedColumnCount = 14;
@@ -57,14 +52,14 @@ class SeatregCSVService {
         $file_handle = fopen($file['tmp_name'], 'r');
 
         while (($row = fgetcsv($file_handle)) !== false) {
-            $obj = (object) ['csv_row' => $row, 'is_valid' => true, 'messages' => array()];
+            $obj = (object) ['csv_row' => $row, 'is_valid' => true, 'messages' => array(), 'room_name' => null];
 
             $roomName = SeatregRegistrationService::getRoomNameFromLayout($this->roomData, $row[SEATREG_CSV_COL_ROOM_UUID]);
             if($roomName == null) {
                 $obj->is_valid = false;
                 $obj->messages[] = 'Invalid room UUID';
             }
-
+            $obj->room_name = $roomName;
             $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $row[SEATREG_CSV_COL_SEAT_ID], $row[SEATREG_CSV_COL_SEAT_NR]);
             if( !$seatAndRoomValidation->valid ) {
                 $obj->is_valid = false;

@@ -51,7 +51,7 @@ class SeatregImportService {
             $bookingData->first_name,
             $bookingData->last_name,
             $bookingData->email,
-            $bookingData->custom_field_data,
+            json_decode($bookingData->custom_field_data),
             $bookingData->seat_nr,
             $bookingData->seat_id,
             $bookingData->room_uuid,
