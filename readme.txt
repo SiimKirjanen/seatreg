@@ -4,7 +4,7 @@ Tags: seat registration, booking seats, booking events, seat map, booking manage
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.6
-Stable tag: 1.54.0
+Stable tag: 1.54.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -13,19 +13,17 @@ Create and manage online registrations. Design your own registration scheme and 
 
 == Description ==
 
-Create and manage online registrations. Design your own registration scheme and manage bookings. 
+Create and manage online registrations with ease. Design your own registration scheme and manage bookings.
 
 SeatReg is a plugin that offers the following and more to build and manage online registrations.
  
-* Map builder helps you design your registration scheme. Create, delete, resize, move around, add price, add custom legends, add custom seat numbers, add hover text and change color of your seats. Add custom text to seat map.
-* Each registration can have as many seats and rooms you wish.
-* With manager you keep an eye on your bookings. You can view, search, remove, confirm, change, add and download (PDF, XLSX, text) them. 
-* Get an overview of your registrations. See how many open, approved or pending bookings you have.
-* Many settings to control the booking flow. For example you can create custom fields that allow customers to enter extra data.
-* Email templates.
-* Calendar mode
-* Scrollable and resizable registration view that can be provided to people via direct link or by inserting it to your website pages via shortcode (example of shortcode: [seatreg code=d0ca254995]).
-* Paypal and Stripe payments support.
+* Map Builder: Design your registration scheme with a versatile map builder. Easily create, delete, resize, and move elements. Add prices, legends, seat numbers, hover text, customize colors, and more.
+* Registration Overview: Get a overview of your registrations. Track the number of open, approved, or pending bookings.
+* Customizable Settings: Control the booking flow with numerous settings. Create custom fields to collect additional data from customers.
+* Email Templates: Utilize customizable email templates.
+* Calendar Mode: Manage bookings with an integrated calendar mode.
+* Responsive Registration View: Provide a scrollable and resizable registration view via a direct link or embed it into your website pages using a shortcode (example shortcode: [seatreg code=d0ca254995]).
+* Payment Integration: Support for PayPal and Stripe payments.
   
 == Installation ==
  
@@ -43,6 +41,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.54.1 =
+* Fixed compability issue with Redirect 404 Homepage plugin
 
 = 1.54.0 =
 * Added bookings CSV export
