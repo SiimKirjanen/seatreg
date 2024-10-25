@@ -631,4 +631,8 @@ class SeatregDataValidation {
     public static function validateEmailAddress($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
+
+    public static function validateCurrencyCode($currencyCode) {
+        return in_array(strtoupper($currencyCode), SEATREG_VALID_CURRENCY_CODES);
+    }
 }

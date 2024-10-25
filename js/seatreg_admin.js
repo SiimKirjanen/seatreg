@@ -2,6 +2,25 @@
 	var canvasSupport = ($('html').hasClass('no-canvas') ? false : true);
 	var bookingOrderInManager = null;
 	var bookingManagerActiveAddBookingIdLookupIndex = 0;
+	var validCurrencyCodes = [
+		'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN',
+		'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND', 'BOB', 'BOV',
+		'BRL', 'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHE', 'CHF',
+		'CHW', 'CLF', 'CLP', 'CNY', 'COP', 'COU', 'CRC', 'CUC', 'CUP', 'CVE',
+		'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'EUR', 'FJD',
+		'FKP', 'FOK', 'GBP', 'GEL', 'GGP', 'GHS', 'GIP', 'GMD', 'GNF', 'GTQ',
+		'GYD', 'HKD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'IMP', 'INR',
+		'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'JPY', 'KES', 'KGS', 'KHR', 'KID',
+		'KMF', 'KRW', 'KWD', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL',
+		'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP', 'MRU', 'MUR',
+		'MVR', 'MWK', 'MXN', 'MXV', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK',
+		'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG',
+		'QAR', 'RON', 'RSD', 'CNY', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG',
+		'SEK', 'SGD', 'SHP', 'SLL', 'SOS', 'SRD', 'SSP', 'STN', 'SYP', 'SZL',
+		'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TVD', 'TWD', 'TZS',
+		'UAH', 'UGX', 'USD', 'UYI', 'UYU', 'UYW', 'UZS', 'VES', 'VND', 'VUV',
+		'WST', 'XAF', 'XCD', 'XDR', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW', 'ZWL'
+	];
 		
 	//console.log('jQuery version: ' + $.fn.jquery);
 	//console.log('jQUery UI version ' + $.ui.version);
@@ -175,6 +194,10 @@
 		const randomStr = Math.random().toString(36).substring(2, 7); // Adjusted indexes
 
 		return timestamp + randomStr;
+	}
+
+	function validateCurrencyCode(currencyCode) {
+		return validCurrencyCodes.includes(currencyCode.toUpperCase());
 	}
 
 	$('#create-registration-form').on('submit', function(e) {
@@ -1694,6 +1717,7 @@ $('#seatreg-settings-form #create-api-token').on('click', function(e) {
 $('#seatreg-settings-submit').on('click', function(e) {
 	var customFieldArray = [];  //array to store custom inputs
 	var customPayments = [];
+	var currencyCode = $('#paypal-currency-code').val();
 
 	if($('#stripe').is(":checked")) {
 		if($('#stripe-api-key').val() === "") {
@@ -1702,9 +1726,16 @@ $('#seatreg-settings-submit').on('click', function(e) {
 
 			return true;
 		}
-		if($('#paypal-currency-code').val() === "") {
+		if(currencyCode === "") {
 			e.preventDefault();
 			alertify.error(translator.translate('pleaseEnterPayPalCurrencyCode'));
+
+			return true;
+		}
+
+		if(!validateCurrencyCode(currencyCode)) {
+			e.preventDefault();
+			alertify.error(translator.translate('currencyCodeNotCorrect'));
 
 			return true;
 		}
@@ -1737,9 +1768,15 @@ $('#seatreg-settings-submit').on('click', function(e) {
 
 			return true;
 		}
-		if($('#paypal-currency-code').val() === "") {
+		if(currencyCode === "") {
 			e.preventDefault();
 			alertify.error(translator.translate('pleaseEnterPayPalCurrencyCode'));
+
+			return true;
+		}
+		if(!validateCurrencyCode(currencyCode)) {
+			e.preventDefault();
+			alertify.error(translator.translate('currencyCodeNotCorrect'));
 
 			return true;
 		}
