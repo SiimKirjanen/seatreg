@@ -2962,6 +2962,10 @@ function seatreg_update() {
 		wp_die('From email not valid');
 	}
 
+	if( !empty($_POST['paypal-currency-code']) && !SeatregDataValidation::validateCurrencyCode($_POST['paypal-currency-code']) ) {
+		wp_die('Currency code not valid');
+	}
+
 	if( !SeatregDataValidation::calendarDatesValdiation($_POST) ) {
 		wp_die('Calendar dates are not valid');
 	}
