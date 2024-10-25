@@ -94,7 +94,7 @@ function seatreg_create_welcome() {
 					<a/>
 				</p>
 				<p>
-					Thank you to all who have donated and left a review. It means a lot, as it confirms that what I do makes a difference and motivates me to add new features.
+					Thank you if you have already donated and left a review. It means a lot, as it confirms that what I do makes a difference and motivates me to maintain and add new features.
 				</p>
 				<p style="text-align:center">
 					Found a problem or have some ideas how to improve? Don't hesitate to write to
@@ -108,6 +108,11 @@ function seatreg_create_welcome() {
 						<i class="fa fa-android" aria-hidden="true" style="color: #A4C639"></i>
 						SeatReg Android application
 					<a/>
+				</p>
+				<p>
+					Also take a look at my other plugin QuickTasker. It is a task management plugin. <br />
+					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . "img/quicktasker-icon.png"; ?>" />
+					<a href="https://wordpress.org/plugins/quicktasker/" target="_blank">QuickTasker</a>
 				</p>
 			</div>
 		</div>

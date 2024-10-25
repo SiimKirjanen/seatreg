@@ -1,6 +1,6 @@
 === SeatReg ===
 Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source=url
-Tags: seat registration, booking seats, booking events, seat map, booking management
+Tags: seat registration, seat booking, seat management, seat map, booking manager
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.6
@@ -43,7 +43,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 == Changelog ==
 
 = 1.54.1 =
-* Fixed compability issue with Redirect 404 Homepage plugin
+* Fixed compatibility issue with Redirect 404 Homepage plugin
 
 = 1.54.0 =
 * Added bookings CSV export

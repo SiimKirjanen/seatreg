@@ -72,7 +72,7 @@
 
 			return currencySymbol;
 		} catch (error) {
-
+			console.error(error);
 			return isoCode;
 		}
 	}
