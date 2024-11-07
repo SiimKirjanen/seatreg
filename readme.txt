@@ -1,6 +1,6 @@
 === SeatReg ===
 Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source=url
-Tags: seat registration, seat booking, seat management, seat map, booking manager
+Tags: registration, booking, event management, registration map, floor plan
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.6
@@ -21,8 +21,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 * Registration Overview: Get a overview of your registrations. Track the number of open, approved, or pending bookings.
 * Customizable Settings: Control the booking flow with numerous settings. Create custom fields to collect additional data from customers.
 * Email Templates: Utilize customizable email templates.
+* Export: Export bookings to different file formats (PDF, XLSX, TEXT).
 * Calendar Mode: Manage bookings with an integrated calendar mode.
-* Responsive Registration View: Provide a scrollable and resizable registration view via a direct link or embed it into your website pages using a shortcode (example shortcode: [seatreg code=d0ca254995]).
+* Responsive Registration View: Provide a scrollable and resizable registration view via a direct link or embed it into your website pages using a shortcode.
 * Payment Integration: Support for PayPal and Stripe payments.
   
 == Installation ==
