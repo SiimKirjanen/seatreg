@@ -447,6 +447,10 @@ body {
 	overflow-y: auto;
 }
 
+.display-none {
+	display: none;
+}
+
 @font-face {
 	font-family: 'icomoon';
 	src:url('../fonts/icomoon.eot?-h7well');
@@ -1264,6 +1268,15 @@ body {
 		right: 0;
 		top: 50%;
 		transform: translateY(-50%);
+	}
+}
+.checkout-settings {
+	margin-bottom: 16px;
+
+	&__copy {
+		display: flex;
+		justify-content: center;
+		gap: 6px;
 	}
 }
 .field-label {

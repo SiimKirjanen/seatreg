@@ -361,6 +361,16 @@
 							esc_html_e('Contact information', 'seatreg');
 						?>
 					</div>
+					<div class="checkout-settings display-none">
+						<div class="checkout-settings__copy">
+							<label>
+								<input type="checkbox" />
+								<?php
+									esc_html_e('Sync first entry values to others', 'seatreg');
+								?>
+							</label>
+						</div>
+					</div>
 					<div id="checkout-input-area"></div>
 					<button type="submit" id="checkout-confirm-btn" class="seatreg-btn green-btn">
 						<?php 
