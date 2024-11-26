@@ -1231,6 +1231,17 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
+				<p class="help-block">
+					<?php esc_html_e('For example:', 'seatreg'); ?><br />
+					<?php esc_html_e('Change pending box color', 'seatreg'); ?>
+					<code>.box[data-status=bron]{background-color:#6495ED !important;}</code><br />
+					<?php esc_html_e('Change approved box color', 'seatreg'); ?>
+					<code>.box[data-status=tak]{background-color:#1cdff2 !important;}</code><br />
+					<?php esc_html_e('For round seats', 'seatreg'); ?>				
+					<code>.box[data-seat] {border-radius:50%}</code>
+	
+				</p>
+
 				<textarea class="form-control mb-2" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
 
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking status page', 'seatreg'); ?>.</p>
