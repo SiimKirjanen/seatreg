@@ -813,6 +813,11 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 	$('#checkout-input-area').empty();
 	var documentFragment = $(document.createDocumentFragment());
 	var arrLen3 = this.customF.length;
+	var hasMultipleSeatsSelected = arrLen > 1;
+
+	if( hasMultipleSeatsSelected ) {
+		$('#checkout-area .checkout-settings').removeClass('display-none');
+	}
 
 	for(var i = 0; i < arrLen; i++) {
 		var checkItem = $('<div class="check-item"></div>');
@@ -911,7 +916,7 @@ SeatReg.prototype.generateCustomField = function(custom) {
 	}else if(custom.type == 'check') {
 		var fieldInput = $('<input type="checkbox" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type + '" value="'+ custom.label +'">');
 	}else if(custom.type == 'sel') {
-		var fieldInput = $('<select name="'+ custom.label +'[]" class="field-input" data-type="' + custom.type + '"></select>');
+		var fieldInput = $('<select name="'+ custom.label +'[]" class="field-input" data-type="' + custom.type + '" data-field="' + custom.label + '"></select>');
 		var arrLen = custom.options.length;
 
 		for(var i = 0; i < arrLen; i++) {
@@ -1365,6 +1370,27 @@ function validateInput(inputField) {
 	return true;
 }
 
+function duplicateBookingFirstEntryValue(fieldName) {
+	var firstInput = $('#checkout-input-area .check-item').first().find('.field-input[data-field="' + fieldName + '"]');
+    var value, isChecked;
+
+    if (firstInput.is(':checkbox')) {
+        isChecked = firstInput.is(':checked');
+    } else {
+        value = firstInput.val();
+    }
+
+	$('#checkout-input-area .check-item').each(function() {
+		var targetInput = $(this).find('.field-input[data-field="' + fieldName + '"]');
+
+		if (targetInput.is(':checkbox')) {
+            targetInput.prop('checked', isChecked);
+        } else {
+            targetInput.val(value);
+        }
+	});
+}
+
 function CustomData(label, value) {
 	this.label = label;
 	this.value = value;
@@ -1552,10 +1578,27 @@ $('#checkout').on('click', function() {
 	seatReg.openCheckOut();
 });
 
+$('#checkout-area').on('click', '.checkout-settings__copy input[type="checkbox"]', function() {
+	if( $(this).is(':checked') ) {
+		$('#checkout-input-area .check-item').first().find('.field-input').each(function() {
+			var fieldName = $(this).attr('data-field');
+			duplicateBookingFirstEntryValue(fieldName);
+		});
+	}
+});
+
 $('#checkout-input-area').on('keyup change input','.field-input', function() {
+	var isFirstEntrySyncEnabled = $('#checkout-area .checkout-settings__copy input[type="checkbox"]').is(':checked');
+
 	if( $(this).attr('data-field') === 'Email' ) {
 		$(this).val( $(this).val().trim() );
 	}
+
+	if( isFirstEntrySyncEnabled ) {
+		var fieldName = $(this).attr('data-field');
+		duplicateBookingFirstEntryValue(fieldName);
+	}
+
 	validateInput($(this));
 });
 
