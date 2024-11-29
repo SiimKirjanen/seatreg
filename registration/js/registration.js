@@ -68,7 +68,7 @@
 			const exampleValue = 0;
 			const formattedValue = currencyFormatter.format(exampleValue);
 	
-			const currencySymbol = formattedValue.replace(/\d/g, '').replace('.', '').trim();
+			const currencySymbol = formattedValue.replace(/[\d.,\s]/g, '').trim();
 
 			return currencySymbol;
 		} catch (error) {
