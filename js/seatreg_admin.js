@@ -1375,6 +1375,30 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 	promise.fail = seatreg_admin_ajax_error;
 });
 
+$('#seatreg-booking-manager').on('click', '[data-action="save-approved-email-template-text"]', function(e) {
+	e.preventDefault();
+	var $this = $(this);
+	var bookingId = $this.closest('.reg-seat-item').data('booking-id');
+	var emailTemplateText = $this.siblings('[data-taget="custom-text-approved-email"]').val();
+
+	$this.prop('disabled', true);
+
+	var promise = seaterg_admin_ajax('seatreg_save_booking_approved_email_custom_text', bookingId, {
+		emailTemplateText: emailTemplateText
+	});
+
+	promise.done(function(rep) {
+		alertify.success(translator.translate('saved'));
+	});
+
+	promise.always(function() {
+		$this.removeAttr("disabled");
+	});
+
+	promise.fail = seatreg_admin_ajax_error;
+});
+
+
 //text, xlsx and pdf 
 $('.seatreg_page_seatreg-management').on('click', '.file-type-link', function(e) {
 	e.preventDefault();

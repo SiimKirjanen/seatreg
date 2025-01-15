@@ -1509,6 +1509,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 								}
+								echo seatreg_custom_approved_email_text($row);
 								echo seatreg_view_booking_activity_btn($row);
 								echo seatreg_generate_payment_section($row, $seatregData);
 							echo '</div>';
@@ -1614,6 +1615,10 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 function seatreg_view_booking_activity_btn($booking) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/buttons/view-booking-activity-btn.php' );
 	echo '<br>';
+}
+
+function seatreg_custom_approved_email_text($booking) {
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/sections/approved-booking-email-text.php' );
 }
 
 function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
@@ -2317,6 +2322,7 @@ function seatreg_set_up_db() {
 			multi_price_selection varchar(255) DEFAULT NULL,
 			calendar_date DATE DEFAULT NULL,
 			logged_in_user_id int DEFAULT NULL,
+			custom_text_for_approved_email text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -3845,6 +3851,29 @@ function seatreg_edit_booking_callback() {
 		wp_send_json( array('status'=>'update failed') );
 
 		die();
+	}
+}
+
+add_action( 'wp_ajax_seatreg_save_booking_approved_email_custom_text', 'seatreg_save_booking_approved_email_custom_text' );
+function seatreg_save_booking_approved_email_custom_text() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
+	$resp = new SeatregJsonResponse();
+
+	if( empty($_POST['code']) || empty($_POST['data']['emailTemplateText']) ) {
+		wp_send_json_error();
+
+		die();
+	}
+
+	$bookingService = new SeatregBookingService();
+	$code = sanitize_text_field($_POST['code']);
+	$customEmailTemplateText = sanitize_text_field($_POST['data']['emailTemplateText']);
+	$rowsUpdated = $bookingService->updateBookingCustomTextForApprovedEmail($code, $customEmailTemplateText);
+	
+	if( $rowsUpdated !== false ) {
+		wp_send_json_success();
+	}else {
+		wp_send_json_error();
 	}
 }
 

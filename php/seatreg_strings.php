@@ -191,6 +191,8 @@ function seatreg_generate_admin_strings() {
     $translations->paymentIcon = esc_html__('Payment icon', 'seatreg');
     $translations->paymentStatusUpdated = esc_html__('Payment status updated', 'seatreg');
     $translations->currencyCodeNotCorrect = esc_html__('Currency code in not valid', 'seatreg');
+    $translations->textSaved = esc_html__('Text saved', 'seatreg');
+    $translations->errorSavingText = esc_html__('Error at saving text', 'seatreg');
     
     return $translations;
 }

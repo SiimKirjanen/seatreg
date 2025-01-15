@@ -249,6 +249,22 @@ class SeatregBookingService {
                 
             } 
     
-            return $statusReport;
-        }
+        return $statusReport;
+    }
+
+    public static function updateBookingCustomTextForApprovedEmail($bookingId, $customText) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->update( 
+            $seatreg_db_table_names->table_seatreg_bookings,
+            array( 
+                'custom_text_for_approved_email' => $customText,
+            ), 
+            array(
+                'booking_id' => $bookingId
+            ),
+            '%s'
+        );
+    }
 }
