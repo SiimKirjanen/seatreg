@@ -912,7 +912,8 @@ SeatReg.prototype.generateCustomField = function(custom) {
 	var label = $('<label class="field-label custom-input" data-label="' + custom.label + '"><span class="l-text">' + custom.label +  '</span></label>');
 
 	if(custom.type == 'text') {
-		var fieldInput = $('<input type="text" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type +'" maxlength="'+ WP_Seatreg.SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH +'">');
+		var optional = custom.optional === true ? true : false;
+		var fieldInput = $('<input type="text" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type +'" data-optional="' +  optional +'" maxlength="'+ WP_Seatreg.SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH +'">');
 	}else if(custom.type == 'check') {
 		var fieldInput = $('<input type="checkbox" name="'+ custom.label +'[]" class="field-input" data-field="' + custom.label + '" data-type="' +  custom.type + '" value="'+ custom.label +'">');
 	}else if(custom.type == 'sel') {
@@ -1307,10 +1308,10 @@ function validateInput(inputField) {
 	var gmailReg = /^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/;
 	var customFieldRegExp = new RegExp("^[\\p{L}1234567890\\s:\/.,-:;?]{1," + WP_Seatreg.SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH + "}$", "u");
 	var inputReg = new RegExp("^[\\p{L}1234567890\\s-]{1,100}$", "u");
-
+	var isOptional = inputField.attr('data-optional') === 'true';
 	var value = inputField.val();
 
-	if(value == '') {
+	if(value == '' && !isOptional) {
 		inputField.parent().siblings('.field-error').text(translator.translate('emptyField')).css('display','block');
 
 		return false;
@@ -1357,6 +1358,9 @@ function validateInput(inputField) {
 			var customFieldType = inputField.attr('data-type');
 
 			if(customFieldType === 'text' || customFieldType === 'sel') {
+				if (isOptional) {
+					return true;	
+				}
 				if( customFieldRegExp.test(value)) {				
 					inputField.parent().siblings('.field-error').css('display','none');	
 				}else {	

@@ -1563,11 +1563,12 @@ function highlight_moved_item(moved_item){
 	moved_item.focus();
 }
 
-function SeatregCustomField(label, type, options, unique = false) {
+function SeatregCustomField(label, type, options, unique = false, optional = false) {
 		this.label = label.trim();
 		this.type = type;
 		this.options = options;
 		this.unique = unique;
+		this.optional = optional;
 }
 
 function SeatregCustomPayment(title, description, paymentId, paymentIcon) {
@@ -1836,8 +1837,9 @@ $('#seatreg-settings-submit').on('click', function(e) {
 	$('#seatreg-settings-form .custom-container').each(function() {
  			if($(this).attr('data-type') != 'sel') {
 				var isUnique = $(this).find('.unique-input').is(':checked');
+				var isOptional = $(this).find('.optional-input').is(':checked');
 
- 				customFieldArray.push(new SeatregCustomField($(this).find('.l-text').text(), $(this).attr('data-type'), [], isUnique));
+ 				customFieldArray.push(new SeatregCustomField($(this).find('.l-text').text(), $(this).attr('data-type'), [], isUnique, isOptional));
  			}else {
  				var optArr = [];
 
