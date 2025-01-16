@@ -869,6 +869,7 @@ function seatreg_generate_settings_form() {
 					<code>[booking-id]</code> <?php esc_html_e('(optional) will be converted to booking id', 'seatreg'); ?> <br>
 					<code>[booking-table]</code> <?php esc_html_e('(optional) will be converted to booking table', 'seatreg'); ?> <br>
 					<code>[payment-table]</code> <?php esc_html_e('(optional) will be converted to payment table', 'seatreg'); ?> <br>
+					<code><?php echo SEATREG_TEMPLATE_BOOKING_APPROVED_EMAIL_CUSTOM_TEXT;?></code> <?php esc_html_e('(optional) will be converted to text added to booking in booking-manager. Useful if you want to provide custom text specific to the booking.', 'seatreg'); ?> <br>
 				</p>
 				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->approved_booking_email_template); ?></textarea>
 			</div>
@@ -1509,7 +1510,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 								}
-								echo seatreg_custom_approved_email_text($row);
+								echo seatreg_custom_approved_email_text($row, $seatregData);
 								echo seatreg_view_booking_activity_btn($row);
 								echo seatreg_generate_payment_section($row, $seatregData);
 							echo '</div>';
@@ -1617,7 +1618,7 @@ function seatreg_view_booking_activity_btn($booking) {
 	echo '<br>';
 }
 
-function seatreg_custom_approved_email_text($booking) {
+function seatreg_custom_approved_email_text($booking, $seatregData) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/sections/approved-booking-email-text.php' );
 }
 

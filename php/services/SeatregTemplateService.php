@@ -61,6 +61,12 @@ class SeatregTemplateService {
         return str_replace(SEATREG_TEMPLATE_PAYMENT_TABLE, $paymentTable, $template);
     }
 
+    public static function replaceCustomApprovedEmailText($template, $bookings) {
+        $customText = $bookings[0]->custom_text_for_approved_email ?? '';
+
+        return str_replace(SEATREG_TEMPLATE_BOOKING_APPROVED_EMAIL_CUSTOM_TEXT, $customText, $template);
+    }
+
     public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $registrationCustomFields, $bookingId, $registration) {
         $template = self::sanitizeTemplate($template);
         $template = self::replaceLineBreaksWithBrTags($template);
@@ -68,7 +74,8 @@ class SeatregTemplateService {
         $template = self::replaceBookingTable($template, $bookings, $registrationCustomFields, $registration);
         $template = self::replaceBookingId($template, $bookingId);
         $template = self::replacePaymentTable($template, $bookingId);
-
+        $template = self::replaceCustomApprovedEmailText($template, $bookings);
+        
         $message = $template;
 
         return $message;
