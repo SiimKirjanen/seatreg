@@ -1,0 +1,19 @@
+#seatreg-booking-manager {
+    .approved-booking-email-text {
+        margin-top: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 6px;
+
+        &__input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        &__warning {
+            color: red;
+        }
+    }
+}

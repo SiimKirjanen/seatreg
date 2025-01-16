@@ -6,7 +6,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.43');
+define('SEATREG_DB_VERSION', '1.44');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));
@@ -64,6 +64,7 @@ define('SEATREG_TEMPLATE_EMAIL_VERIFICATION_LINK', '[verification-link]');
 define('SEATREG_TEMPLATE_BOOKING_TABLE', '[booking-table]');
 define('SEATREG_TEMPLATE_PAYMENT_TABLE', '[payment-table]');
 define('SEATREG_TEMPLATE_BOOKING_ID', '[booking-id]');
+define('SEATREG_TEMPLATE_BOOKING_APPROVED_EMAIL_CUSTOM_TEXT', '[custom-approved-email-text]');
 
 // Time related
 define('CALENDAR_DATE_FORMAT', 'Y-m-d');
