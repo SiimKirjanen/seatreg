@@ -508,14 +508,32 @@ class SeatregDataValidation {
 
     public static function validateSingleCustomFieldSubmit($personCustomField, $personCustomFields, $createdCustomFields, $registrationCode) {
         $validationStatus = new SeatregValidationStatus();
+        $assosiatedCustomField = SeatregFindCustomField($personCustomField->label, $createdCustomFields);
+
+        if( !$assosiatedCustomField ) {
+            $validationStatus->setInvalid('Entered custom field was not found');
+            return $validationStatus;
+        }
+        $isOptional = $assosiatedCustomField->optional ?? false;
+        $customFieldValue = trim($personCustomField->value);
 
         if( !property_exists($personCustomField, 'label') || !is_string($personCustomField->label) ) {
             $validationStatus->setInvalid('Custom field label is missing or invalid');
             return $validationStatus;
         }
      
-        if( !property_exists($personCustomField, 'value') || !preg_match('/^[\p{L}\p{N}\\s:\/.,-:;?]+$/u', $personCustomField->value)) {
-            $validationStatus->setInvalid('Custom field value is missing or invalid');
+        if( !property_exists($personCustomField, 'value') ) {
+            $validationStatus->setInvalid('Custom field value is missing');
+            return $validationStatus;
+        }
+
+        if (!$isOptional && $customFieldValue === '') {
+            $validationStatus->setInvalid('Custom field value is required');
+            return $validationStatus;
+        }
+
+        if( $customFieldValue !== '' && !preg_match('/^[\p{L}\p{N}\\s:\/.,-:;?]+$/u', $customFieldValue) ) {
+            $validationStatus->setInvalid('Custom field value is invalid');
             return $validationStatus;
         }
 
@@ -525,13 +543,6 @@ class SeatregDataValidation {
 
         if( count($duplicates) > 1) {
             $validationStatus->setInvalid('Duplicate label detected');
-            return $validationStatus;
-        }
-
-        $assosiatedCustomField = SeatregFindCustomField($personCustomField->label, $createdCustomFields);
-
-        if( !$assosiatedCustomField ) {
-            $validationStatus->setInvalid('Entered custom field was not found');
             return $validationStatus;
         }
 

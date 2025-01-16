@@ -1173,7 +1173,9 @@ function seatreg_generate_settings_form() {
 													<input type="text" />
 												</label>
 												<div class="custom-container-controls">
-													<span class="seatreg-ui-tooltip" title="<?php esc_html_e('Prevents booking when same input value already provided', 'seatreg');?>"><?php esc_html_e('Unique', 'seatreg');?></span> <input type="checkbox" class="unique-input" <?php echo $custFields[$i]->unique ? 'checked' : ''; ?> />
+													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Prevents booking when same input value already provided', 'seatreg');?>"><?php esc_html_e('Unique', 'seatreg');?></span> <input type="checkbox" class="unique-input" <?php echo $custFields[$i]->unique ? 'checked' : ''; ?> />
+													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Make field optional', 'seatreg');?>"><?php esc_html_e('Optional', 'seatreg');?></span> 
+													<input type="checkbox" class="optional-input" <?php echo isset($custFields[$i]->optional) && $custFields[$i]->optional ? 'checked' : ''; ?> />
 													<i class="fa fa-times-circle remove-cust-item"></i>
 												</div>
 
