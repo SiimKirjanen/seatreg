@@ -1,10 +1,10 @@
 === SeatReg ===
 Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source=url
-Tags: registration, booking, event management, registration map, floor plan
+Tags: reservation, online booking, event management, online registration, seat plan
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.7
-Stable tag: 1.55.1
+Stable tag: 1.56.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -42,6 +42,11 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.56.0 =
+* Added question mark support for custom fields.
+* Added option to make text custom fields optional.
+* Added feature to add booking specific text to approved booking receipt email.  
 
 = 1.55.1 =
 * Fixed issue where a comma was appearing after the currency symbol in registration page.
