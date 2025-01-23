@@ -82,7 +82,7 @@ function seatreg_create_welcome() {
 				?>
 			</div>
 			<div class="donate-wrap">
-				<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/donate.svg'; ?>" alt="Donate a little" width="160" />
+				<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . 'img/donate.svg'); ?>" alt="Donate a little" width="160" />
 				<form action="https://www.paypal.com/donate" method="post" target="_blank">
 					<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
 					<input type="image" class="donate-img" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
@@ -111,7 +111,7 @@ function seatreg_create_welcome() {
 				</p>
 				<p>
 					Also take a look at my other plugin QuickTasker. It is a task management plugin. <br />
-					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . "img/quicktasker-icon.png"; ?>" />
+					<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . "img/quicktasker-icon.png"); ?>" />
 					<a href="https://wordpress.org/plugins/quicktasker/" target="_blank">QuickTasker</a>
 				</p>
 			</div>
@@ -227,7 +227,7 @@ function seatreg_create_tools() {
 							<?php
 						}
 					?>
-					<img src="<?php echo SEATREG_TEMP_FOLDER_URL .'/seatreg-qr-code-test.png'; ?>" />
+					<img src="<?php echo esc_url(SEATREG_TEMP_FOLDER_URL .'/seatreg-qr-code-test.png'); ?>" />
 				<?php else : ?>
 					<div class="alert alert-primary" role="alert">
 						<?php esc_html_e('PHP gd extension is required to generate QR codes.', 'seatreg'); ?>	

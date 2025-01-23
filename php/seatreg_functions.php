@@ -50,7 +50,7 @@ function seatreg_is_user_logged_in_and_has_permissions() {
 //generating nonce fields without html id attribute
 function seatrag_generate_nonce_field($action) {
 	?>
-		<input type="hidden" name="<?php echo $action; ?>" value="<?php echo wp_create_nonce( $action ); ?>" />
+		<input type="hidden" name="<?php echo esc_attr($action); ?>" value="<?php echo esc_attr(wp_create_nonce( $action )); ?>" />
 		<?php echo wp_referer_field( false ); ?>
 	<?php
 }
@@ -133,7 +133,7 @@ function seatreg_generate_overview_section($targetRoom) {
 		$validation = SeatregDataValidation::validateTabData($active_tab);
 
 		if( !$validation->valid ) {
-			wp_die($validation->errorMessage);
+			wp_die( esc_html($validation->errorMessage) );
 		}
 	} 
 	$registration = seatreg_get_options( $active_tab )[0];
@@ -185,9 +185,9 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 				  <?php if($registration->using_calendar === '1') : ?>
 					<div class="overview-calendar-wrap">
 					<label for="overview-calendar-date"><?php esc_html_e('Date', 'seatreg'); ?> <i class="fa fa-calendar" aria-hidden="true"></i></label>
-						<input type="text" id="overview-calendar-date" class="" value="<?php echo $filterBookingsByDate; ?>" autocomplete="off" />
+						<input type="text" id="overview-calendar-date" class="" value="<?php echo esc_attr($filterBookingsByDate); ?>" autocomplete="off" />
 
-						<input type='hidden' value='<?php echo $filterBookingsByDate; ?>' id='overview-calendar-date-value' />
+						<input type='hidden' value='<?php echo esc_html($filterBookingsByDate); ?>' id='overview-calendar-date-value' />
 					</div>
 				<?php endif; ?>
 
@@ -340,11 +340,11 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 								<span class="legend-block-percent" style="color:#61B329">
 									<?php 
 										if($targetRoom == 'overview') {
-											echo round(($regStats['openSeats'] / $regStats['seatsTotal']  ) * 100), '%'; 
+											echo esc_html( round(($regStats['openSeats'] / $regStats['seatsTotal']  ) * 100) ), '%'; 
 										}else if($roomLoactionInStats >= 0) {
 
 											if($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'] > 0) {
-												echo round(($regStats['roomsInfo'][$roomLoactionInStats]['roomOpenSeats'] / $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']  ) * 100, 2), '%'; 
+												echo esc_html( round(($regStats['roomsInfo'][$roomLoactionInStats]['roomOpenSeats'] / $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']  ) * 100, 2)), '%'; 
 											}else {
 												echo '0%';
 											}
@@ -356,11 +356,11 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 								<span class="legend-block-percent" style="color:red">
 									<?php 
 										if($targetRoom == 'overview') {
-											echo round(($regStats['takenSeats'] / $regStats['seatsTotal']  ) * 100), '%'; 
+											echo esc_html(round(($regStats['takenSeats'] / $regStats['seatsTotal']  ) * 100)), '%'; 
 										}else if($roomLoactionInStats >= 0) {
 
 											if($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'] > 0) {
-												echo round(($regStats['roomsInfo'][$roomLoactionInStats]['roomTakenSeats'] / $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']  ) * 100, 2), '%'; 
+												echo esc_html(round(($regStats['roomsInfo'][$roomLoactionInStats]['roomTakenSeats'] / $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']  ) * 100, 2)), '%'; 
 											}else {
 												echo '0%';
 											}
@@ -372,11 +372,11 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 								<span class="legend-block-percent" style="color:#26a6d1">
 									<?php 
 										if($targetRoom == 'overview') {
-											echo round(($regStats['bronSeats'] / $regStats['seatsTotal']  ) * 100), '%'; 
+											echo esc_html(round(($regStats['bronSeats'] / $regStats['seatsTotal']  ) * 100)), '%'; 
 										}else if($roomLoactionInStats >= 0) {
 
 											if($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'] > 0) {
-												echo round(($regStats['roomsInfo'][$roomLoactionInStats]['roomBronSeats'] / $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'] ) * 100, 2), '%'; 
+												echo esc_html(round(($regStats['roomsInfo'][$roomLoactionInStats]['roomBronSeats'] / $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'] ) * 100, 2)), '%'; 
 											}else {
 												echo '0%';
 											}											
@@ -416,9 +416,11 @@ function seatreg_generate_my_registrations_section() {
 	echo '<div class="seatreg-registrations">';
 
 	foreach($registrations as $key=>$registration) {
+		$registrationLink = SeatregLinksService::getRegistrationURL() . '?seatreg=registration&c=' . esc_html($registration->registration_code);
+		
 		?>
 			<div class="mb-4" data-item="registration" style="margin-right: 52px">
-				<h5><a class="registration-name-link" href="<?php echo SeatregLinksService::getRegistrationURL(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h5>
+				<h5><a class="registration-name-link" href="<?php echo esc_url($registrationLink); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h5>
 
 				<a href="<?php echo SeatregLinksService::getRegistrationURL(); ?>?seatreg=registration&c=<?php echo esc_html($registration->registration_code); ?>&page_id=<?php echo SEATREG_PAGE_ID; ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
 

@@ -22,7 +22,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
+	<link rel="icon" href="<?php echo esc_url(get_site_icon_url()); ?>" />
 	<title>
 		<?php esc_html_e('Booking status', 'seatreg'); ?>
 	</title>
@@ -77,10 +77,12 @@
 			seatreg_echo_booking($registrationId, $bookingId);
 
 			if( SeatregOptionsRepository::shouldAllowPdfGeneration($bookings, $bookingData) ) {
+				$pdfFileUrl = get_site_url() . '/?seatreg=booking-pdf&id=' . $bookingId;
+
 				?>
 				<div style="margin-bottom: 6px;">
-					<a href="<?php echo get_site_url(), '/?seatreg=booking-pdf&id=', $bookingId; ?>" target="_blank">
-						<img width="60" src="<?php echo SEATREG_PLUGIN_FOLDER_URL . '/img/pdf_logo.png'; ?>" alt="PDF" />
+					<a href="<?php echo esc_url($pdfFileUrl); ?>" target="_blank">
+						<img width="60" src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL) . '/img/pdf_logo.png'; ?>" alt="PDF" />
 					</a>
 				</div>
 				<?php
@@ -93,7 +95,7 @@
 
 			if($bookingData->send_approved_booking_email === '1' && $bookings[0]->status === '2' ) {
 				esc_html_e('Did not receive booking receipt? Click the button to send it again.', 'seatreg');
-				echo ' <button id="send-receipt" data-booking-id="'. $bookingId .'" data-registration-id="'. $registrationId .'">'. __('Send again', 'seatreg') .'</button><br>';
+				echo ' <button id="send-receipt" data-booking-id="'. esc_html($bookingId) .'" data-registration-id="'. esc_html($registrationId) .'">'. __('Send again', 'seatreg') .'</button><br>';
 			}
 
 			if( SeatregPaymentRepository::hasPaymentEnabled($bookingData) && ($bookingData->payment_status === null || $bookingData->payment_status === SEATREG_PAYMENT_NONE) ) {
@@ -110,8 +112,8 @@
 				
 				if( $bookingData->paypal_payments === '1' && $bookingHasCost ) {
 					$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
-					$returnUrl = SEATREG_PAYPAL_RETURN_URL . '&id=' . $bookingId;
-					$cancelUrl = SEATREG_PAYPAL_CANCEL_URL . '&registration=' . $registrationId . '&id=' . $bookingId;
+					$returnUrl = SEATREG_PAYPAL_RETURN_URL . '&id=' . esc_html($bookingId);
+					$cancelUrl = SEATREG_PAYPAL_CANCEL_URL . '&registration=' . esc_html($registrationId) . '&id=' . esc_html($bookingId);
 				
 					echo SeatregPaymentService::generatePayPalPayNowForm(
 						$payPalFromAction, 

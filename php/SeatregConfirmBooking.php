@@ -132,7 +132,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		//4 step. Check if all selected seats are ok
 		$seatsStatusCheck = $this->doSeatsExistInRegistrationLayoutCheck();
 		if($seatsStatusCheck != 'ok') {
-			echo $seatsStatusCheck;
+			echo esc_html($seatsStatusCheck);
 
 			return;
 		}
@@ -140,7 +140,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		//5 step. Check if seat/seats is already bron or taken
 		$seatsOpenCheck = $this->isAllSelectedSeatsOpen($this->_selectedBookingCalendarDate); 
 		if($seatsOpenCheck != 'ok') {
-			echo $seatsOpenCheck;
+			echo esc_html($seatsOpenCheck);
 
 			exit();
 		}
@@ -148,7 +148,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		//6 step. Seat/seats lock check
 		$lockStatus = $this->seatLockCheck();
 		if($lockStatus != 'ok') {
-			echo $lockStatus;
+			echo esc_html($lockStatus);
 
 			return;
 		}
@@ -156,7 +156,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		//7 step. Seat/seats password check
 		$passwordStatus = $this->seatPasswordCheck();
 		if($passwordStatus != 'ok') {
-			echo $passwordStatus;
+			echo esc_html($passwordStatus);
 
 			return;
 		}
@@ -166,7 +166,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			$sameEmailBookingCheckStatus = $this->sameEmailBookingCheck($this->_bookerEmail, $this->_bookingSameEmailLimit);
 
 			if($sameEmailBookingCheckStatus != 'ok') {
-				echo $sameEmailBookingCheckStatus;
+				echo esc_html($sameEmailBookingCheckStatus);
 	
 				return;
 			}
@@ -183,7 +183,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		$bookingCustomFieldsEncoded = json_encode($bookingCustomFields);
 		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($bookingCustomFieldsEncoded, $this->_maxSeats, $this->_createdCustomFields, $this->_registrationCode);
 		if( !$customFieldValidation->valid ) {
-			echo $customFieldValidation->errorMessage;
+			echo esc_html($customFieldValidation->errorMessage);
 
 			return false;
 		}
@@ -192,21 +192,21 @@ class SeatregConfirmBooking extends SeatregBooking {
 		if( $this->_usingCalendar ) {
 			$calendarDateFormatCheck = $this->calendarDateFormatCheck( $this->_selectedBookingCalendarDate );
 			if($calendarDateFormatCheck != 'ok') {
-				echo $calendarDateFormatCheck;
+				echo esc_html($calendarDateFormatCheck);
 
 				return;
 			}
 
 			$calendarDateCheck = $this->calendarDateValidation( $this->_selectedBookingCalendarDate );
 			if($calendarDateCheck != 'ok') {
-				echo $calendarDateCheck;
+				echo esc_html($calendarDateCheck);
 
 				return;
 			}
 
 			$calendarDatePastCheck = $this->calendarDatePastDateCheck( $this->_selectedBookingCalendarDate );
 			if($calendarDatePastCheck != 'ok') {
-				echo $calendarDatePastCheck;
+				echo esc_html($calendarDatePastCheck);
 
 				return;
 			}
@@ -215,7 +215,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		//11. start time check
 		$startTimeCheck = $this->registrationStartTimeCheck();
 		if($startTimeCheck !== 'ok') {
-			echo $startTimeCheck;
+			echo esc_html($startTimeCheck);
 
 			return;
 		}
@@ -223,7 +223,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		//12. end time check
 		$endTimeCheck = $this->registrationEndTimeCheck();
 		if($endTimeCheck !== 'ok') {
-			echo $endTimeCheck;
+			echo esc_html($endTimeCheck);
 
 			return;
 		}
@@ -233,7 +233,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			$wpUserLimitStatus = $this->wpUserLimitCheck( $this->_wpUserId, $this->_registrationCode );
 
 			if( $wpUserLimitStatus !== 'ok' ) {
-				echo $wpUserLimitStatus;
+				echo esc_html($wpUserLimitStatus);
 
 				return;
 			}
@@ -244,7 +244,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			$wpUserBookingsSeatsLimitStatus = $this->wpUserBookingsSeatLimitCheck( $this->_wpUserId, $this->_registrationCode, count($this->bookings) );
 
 			if( $wpUserBookingsSeatsLimitStatus !== 'ok' ) {
-				echo $wpUserBookingsSeatsLimitStatus;
+				echo esc_html($wpUserBookingsSeatsLimitStatus);
 
 				return;
 			}

@@ -164,5 +164,5 @@ function seatreg_public_scripts_and_styles() {
 
 function seatreg_add_custom_styles($customStyles) {
 	$customStyles = str_replace( '&gt;', '>', esc_html($customStyles) );
-	echo "<style type=\"text/css\">\n" . $customStyles . "\n</style>\n";
+	echo "<style type=\"text/css\">\n" . esc_html($customStyles) . "\n</style>\n";
 }

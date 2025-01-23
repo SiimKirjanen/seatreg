@@ -10,7 +10,7 @@
 				<?php
 					 $openSeatCounter = 0;
 				?>
-				<h5><?php echo $roomData->room->name; ?></h5>
+				<h5><?php echo esc_html($roomData->room->name); ?></h5>
 
 				<div class="seat-id-grid">
 					<div class="grid-title"><?php esc_html_e('No.', 'seatreg'); ?></div>
@@ -26,10 +26,10 @@
 								$openSeatCounter++;
 							?>
 							<div>
-								<?php echo $seatNumber; ?>
+								<?php echo esc_html($seatNumber); ?>
 							</div>
 							<div>
-								<?php echo $box->id; ?>
+								<?php echo esc_html($box->id); ?>
 							</div>
 
 							<button class="btn btn-outline-secondary btn-sm" data-action="select-id" data-seat-id="<?php echo esc_attr($box->id); ?>">
@@ -39,7 +39,7 @@
 					<?php endforeach; ?>
 				</div>
 				<?php if($openSeatCounter === 0): ?>
-					<div class="alert alert-info"><?php echo sprintf(esc_html('No open seats in %s', 'seatreg'), $roomData->room->name); ?></div>
+					<div class="alert alert-info"><?php echo sprintf(esc_html('No open seats in %s', 'seatreg'), esc_html($roomData->room->name)); ?></div>
 				<?php endif; ?>
 			<?php endforeach; ?>
       </div>

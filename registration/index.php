@@ -46,7 +46,7 @@
 	<meta charset="UTF-8">
 	<title><?php echo esc_html( $data->registration_name ); ?></title>
 	
-	<link rel="icon" href="<?php echo get_site_icon_url(); ?>" />
+	<link rel="icon" href="<?php echo esc_url(get_site_icon_url()); ?>" />
 
 	<?php if($data->registration_open !== 1) : ?>	
 		<style>
@@ -262,7 +262,7 @@
 			<div id="calendar-date-change-loading" class="dialog-box">
 				<div class="dialog-box-inner border-box">
 					<p><?php esc_html_e('Please wait', 'seatreg'); ?></p>
-					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader_small.gif" alt="Loading">
+					<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . 'img/ajax_loader_small.gif'); ?>" alt="Loading">
 					<p><?php esc_html_e('Loading data', 'seatreg'); ?></p>
 				</div>
 			</div>
@@ -377,7 +377,7 @@
 							esc_html_e('Book', 'seatreg');
 						?>
 					</button>
-					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader.gif" alt="Loading" class="ajax-load">
+					<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . 'img/ajax_loader.gif'); ?>" alt="Loading" class="ajax-load">
 					<div id="request-error"></div>
 					<?php seatrag_generate_nonce_field('seatreg-booking-submit'); ?>
 				</form>
@@ -419,7 +419,7 @@
 			<div id="powered-by" class="powered-by">
 				<a href="https://wordpress.org/plugins/seatreg/" target="_blank" class="powered-by__link">
 					<span class="powered-by__text"><?php esc_html_e('Powered by', 'seatreg'); ?></span>
-					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . '/img/seatreg_logo.png'?>" class="powered-by__logo" alt="SeatReg" />	
+					<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . '/img/seatreg_logo.png'); ?>" class="powered-by__logo" alt="SeatReg" />	
 				</a>		
 			</div>
 
@@ -472,7 +472,7 @@
 							esc_html_e('Error', 'seatreg');
 						?>
 					</h2>
-					<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . '/img/monkey.png'?>" alt="monkey" />
+					<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . '/img/monkey.png'); ?>" alt="monkey" />
 					<p id="error-text"></p>
 					<button class="refresh-btn">
 						<?php 
@@ -500,7 +500,7 @@
 									}
 									
 									echo '<h3>', esc_html__('Not open yet', 'seatreg'), '</h3>';
-									echo '<h4>', esc_html__('Registration starts', 'seatreg'), ': <span class="time">', esc_html($data->registration_start_timestamp), '</span> ', $startTime  ,'</h4>';
+									echo '<h4>', esc_html__('Registration starts', 'seatreg'), ': <span class="time">', esc_html($data->registration_start_timestamp), '</span> ', esc_html($startTime), '</h4>';
 								}else if($registrationTime == 'end') {
 									$endTime = '';
 
@@ -509,7 +509,7 @@
 									}
 
 									echo '<h3>', esc_html__('Closed', 'seatreg'), '</h3>';
-									echo '<h4>', esc_html__('Registration ended', 'seatreg'), ': <span class="time">', esc_html($data->registration_end_timestamp), '</span> ', $endTime , '</h4>';
+									echo '<h4>', esc_html__('Registration ended', 'seatreg'), ': <span class="time">', esc_html($data->registration_end_timestamp), '</span> ', esc_html($endTime), '</h4>';
 								}
 							?>
 						</div>
@@ -531,7 +531,7 @@
 								<?php endif; ?>
 							</p>
 							<p>
-								<?php echo $registrationTimeRestoriction->registrationOpenClosingText; ?>
+								<?php echo esc_html($registrationTimeRestoriction->registrationOpenClosingText); ?>
 							</p>
 						</div>
 					</div>

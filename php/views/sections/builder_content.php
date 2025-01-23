@@ -58,7 +58,7 @@
 	
 		<div class="build-area-wrapper" data-cursor="1">
 			<div id="build-area-loading-wrap">
-				<img src="<?php echo SEATREG_PLUGIN_FOLDER_URL . 'img/loading.png'; ?>" id="loading-img" alt="Loading...">
+				<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . 'img/loading.png'); ?>" id="loading-img" alt="Loading...">
 				<span class='loading-text'><?php esc_html_e('Loading...', 'seatreg');?></span>
 			</div>
 			<div class="build-area dragger" draggable="false">
@@ -76,7 +76,7 @@
 				<i class="fa fa-floppy-o"></i>
 				<span style="margin-left:4px" class="save-text"><?php esc_html_e('Save', 'seatreg');?></span>
 			</div>
-			<a id="registration-link" class="save-check view-btn" target="_blank" href="<?php echo SeatregLinksService::getRegistrationURL(); ?>">
+			<a id="registration-link" class="save-check view-btn" target="_blank" href="<?php echo esc_url(SeatregLinksService::getRegistrationURL()); ?>">
 				<span style="margin-left:4px" class="link-text"><?php esc_html_e('View registration', 'seatreg');?></span>
 			</a>
 		</div>
@@ -279,7 +279,7 @@
 			<div class="legend-dialog-slide">
 				<div>
 					<label for="new-legend-text" class="legend-dialog-label-step"> 
-						<span class="legend-step"><?php esc_html_e('Step 1.', 'seatreg');?> </span> <span><?php _e('Enter legend name', 'seatreg');?>:</span>
+						<span class="legend-step"><?php esc_html_e('Step 1.', 'seatreg');?> </span> <span><?php esc_html_e('Enter legend name', 'seatreg');?>:</span>
 					</label>
 				</div>
 				<input type="text" id="new-legend-text" class="form-control"><br>
@@ -335,7 +335,7 @@
 				</div>
 
 				<div class="legend-change-preview change-wrap-section">	
-					<div><?php _e('Change legend', 'seatreg');?></div>
+					<div><?php esc_html_e('Change legend', 'seatreg');?></div>
 					<div class="change-dummy">
 						<div class="legend-box-2"></div>
 						<span class="dialog-legend-text-2"></span>
@@ -548,7 +548,7 @@
 					<br>
 
 					<h4><?php esc_html_e('Upload image', 'seatreg');?> (2MB)</h4>
-					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
+					<form action="<?php echo esc_url(admin_url( 'admin-ajax.php' )); ?>" method="post" enctype="multipart/form-data" id="room-image-submit">
 						<input type="file" name="fileToUpload" id="img-upload" class="file-select"><br>
 						<input type="hidden" name="code" id="urlCode"  value="">
 						<input type="hidden" name="action" value="seatreg_upload_image">
