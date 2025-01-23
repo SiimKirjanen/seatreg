@@ -646,4 +646,14 @@ class SeatregDataValidation {
     public static function validateCurrencyCode($currencyCode) {
         return in_array(strtoupper($currencyCode), SEATREG_VALID_CURRENCY_CODES);
     }
+
+    public static function validateRegistrationCode($registrationCode) {
+        $pattern = '/^[a-zA-Z0-9]{10}$/';
+
+        return preg_match($pattern, $registrationCode);
+    }
+
+    public static function validateNumberic($number) {
+        return preg_match('/^[0-9]+$/', $number);
+    }
 }

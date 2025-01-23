@@ -1,12 +1,21 @@
 <?php
     function seatreg_shortcode( $atts ){
-        $registrations = SeatregRegistrationRepository::getRegistrations();
-        $shortcodeAtts = shortcode_atts( array(
-            'code' =>  (is_array($registrations) && count($registrations)) ? $registrations[0]->registration_code : null,
-            'height' => '700',
-        ), $atts );
-        $site_url = SeatregLinksService::getRegistrationURL();
+        if ( !isset($atts['code']) || !isset($atts['height']) ) {
+            return "Invalid shortcode attributes";
+        }
+
+        if (!SeatregDataValidation::validateRegistrationCode( $atts['code'] )) {
+            return "Invalid registration code";
+        }
+
+        if (!SeatregDataValidation::validateNumberic( $atts['height'] )) {
+            return "Invalid height value";
+        }
         
-        return "<iframe style='width:100%;height:". (int)$shortcodeAtts['height'] . 'px' ."' src='". $site_url ."?seatreg=registration&c=". $shortcodeAtts['code'] . '&page_id=' . SEATREG_PAGE_ID ."'></iframe>";
+        $seatregRegistrationUrl = esc_url(SeatregLinksService::getRegistrationURL() . "?seatreg=registration&c=". $atts['code']);
+        $height = esc_attr($atts['height']);
+        $pageId = esc_attr(SEATREG_PAGE_ID);
+        
+        return "<iframe style='width:100%;height:". $height . 'px' ."' src='". $seatregRegistrationUrl . '&page_id=' . $pageId ."'></iframe>";
     }
     add_shortcode( 'seatreg', 'seatreg_shortcode' );
