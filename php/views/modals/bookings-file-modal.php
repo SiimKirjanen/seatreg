@@ -9,7 +9,7 @@
                 <?php if($calendarDate): ?>
                     <div class="date-info">
                         <i class="fa fa-calendar" aria-hidden="true"></i>
-                        <?php echo sprintf(esc_html__('Selected date is %s', 'seatreg'), $calendarDate); ?>
+                        <?php echo sprintf(esc_html__('Selected date is %s', 'seatreg'), esc_html($calendarDate)); ?>
                     </div>
                 <?php endif; ?>
                 <form id="bookings-file-form">

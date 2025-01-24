@@ -95,7 +95,7 @@
 
 			if($bookingData->send_approved_booking_email === '1' && $bookings[0]->status === '2' ) {
 				esc_html_e('Did not receive booking receipt? Click the button to send it again.', 'seatreg');
-				echo ' <button id="send-receipt" data-booking-id="'. esc_html($bookingId) .'" data-registration-id="'. esc_html($registrationId) .'">'. __('Send again', 'seatreg') .'</button><br>';
+				echo ' <button id="send-receipt" data-booking-id="'. esc_html($bookingId) .'" data-registration-id="'. esc_html($registrationId) .'">'. esc_html__('Send again', 'seatreg') .'</button><br>';
 			}
 
 			if( SeatregPaymentRepository::hasPaymentEnabled($bookingData) && ($bookingData->payment_status === null || $bookingData->payment_status === SEATREG_PAYMENT_NONE) ) {

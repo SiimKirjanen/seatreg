@@ -28,7 +28,7 @@
             <input type="hidden" name="seatreg-code" value="<?php echo esc_attr($seatregCode); ?>"/>
           </form>
           <div class="import-booking-modal-loading" style="display:none">
-            <img src="<?php echo SEATREG_PLUGIN_FOLDER_URL; ?>img/ajax_loader.gif" alt="Loading..."><h6><?php esc_html_e('Uploading and analyzing CSV', 'seatreg'); ?></h6>
+            <img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . 'img/ajax_loader.gif'); ?>" alt="Loading..."><h6><?php esc_html_e('Uploading and analyzing CSV', 'seatreg'); ?></h6>
           </div>
           <div class="import-booking-modal-error"></div>
 

@@ -10,7 +10,7 @@
 		<?php if($calendarDate): ?>
 			<div class="add-modal-calendar-date">
 				<i class="fa fa-calendar" aria-hidden="true"></i>
-				<?php echo sprintf(esc_html__('Selected date is %s', 'seatreg'), $calendarDate); ?>
+				<?php echo sprintf(esc_html__('Selected date is %s', 'seatreg'), esc_html($calendarDate)); ?>
 			</div>
 		<?php endif; ?>
 

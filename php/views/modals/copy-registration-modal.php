@@ -1,4 +1,4 @@
-<div class="modal fade copy-registration-modal" tabindex="-1" role="dialog" aria-hidden="true" data-registration-id="<?php echo $registrationCode; ?>">
+<div class="modal fade copy-registration-modal" tabindex="-1" role="dialog" aria-hidden="true" data-registration-id="<?php echo esc_attr($registrationCode); ?>">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,13 +6,13 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
             </div>
             <div class="modal-body">
-                <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post">
-                    <label for="copy-registration-<?php echo $registrationCode; ?>">
+                <form action="<?php echo esc_url(get_admin_url() . 'admin-post.php'); ?>" method="post">
+                    <label for="copy-registration-<?php echo esc_attr($registrationCode); ?>">
                         <?php esc_html_e('Enter new registration name','seatreg'); ?>
                     </label>
-                    <input type="text" name="new-registration-name" id="copy-registration-<?php echo $registrationCode; ?>" style="margin-left: 12px" maxlength="<?php echo SEATREG_REGISTRATION_NAME_MAX_LENGTH; ?>">
+                    <input type="text" name="new-registration-name" id="copy-registration-<?php echo esc_attr($registrationCode); ?>" style="margin-left: 12px" maxlength="<?php echo esc_attr(SEATREG_REGISTRATION_NAME_MAX_LENGTH); ?>">
                     <input type='hidden' name='action' value='seatreg_copy_registration' />
-                    <input type='hidden' name='registration_code' value='<?php echo $registrationCode; ?>' />
+                    <input type='hidden' name='registration_code' value='<?php echo esc_attr($registrationCode); ?>' />
                     <?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
                     <br><br>
                     <p>
