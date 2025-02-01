@@ -44,7 +44,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 == Changelog ==
 
 = 1.56.2 =
-* Added character restrictions to email temaplates.
+* Added character restrictions to email templates.
 
 = 1.56.1 =
 * Security fixes and improvements.
