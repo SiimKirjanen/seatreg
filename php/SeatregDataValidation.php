@@ -615,11 +615,15 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
+    public static function validateEmailTemplatePattern($emailTemplate) {
+        return preg_match(SEATREG_CUSTOM_EMAIL_TEMPLATE_PATTERN, $emailTemplate);
+    }
+
     public static function validateEmailVerificationTemplate() {
         if( !$_POST['email-verification-template'] ) {
             return true;
         }else {
-            return strpos($_POST['email-verification-template'], SEATREG_TEMPLATE_EMAIL_VERIFICATION_LINK) !== false;
+            return strpos($_POST['email-verification-template'], SEATREG_TEMPLATE_EMAIL_VERIFICATION_LINK) !== false && self::validateEmailTemplatePattern($_POST['email-verification-template']);
         }
     }
 
@@ -627,7 +631,7 @@ class SeatregDataValidation {
         if( !$_POST['pendin-booking-email-template'] ) {
             return true;
         }else {
-            return strpos($_POST['pendin-booking-email-template'], SEATREG_TEMPLATE_STATUS_LINK) !== false;
+            return strpos($_POST['pendin-booking-email-template'], SEATREG_TEMPLATE_STATUS_LINK) !== false && self::validateEmailTemplatePattern($_POST['pendin-booking-email-template']);
         }
     }
 
@@ -635,7 +639,7 @@ class SeatregDataValidation {
         if( !$_POST['approved-booking-email-template'] ) {
             return true;
         }else {
-            return strpos($_POST['approved-booking-email-template'], SEATREG_TEMPLATE_STATUS_LINK) !== false;
+            return strpos($_POST['approved-booking-email-template'], SEATREG_TEMPLATE_STATUS_LINK) !== false && self::validateEmailTemplatePattern($_POST['approved-booking-email-template']);
         }
     }
 

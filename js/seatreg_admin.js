@@ -21,6 +21,7 @@
 		'UAH', 'UGX', 'USD', 'UYI', 'UYU', 'UYW', 'UZS', 'VES', 'VND', 'VUV',
 		'WST', 'XAF', 'XCD', 'XDR', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW', 'ZWL'
 	];
+	var customEmailTemplatePattern = new RegExp("^[\\p{L}1234567890\\s:/.,\\-:;?\\[\\]]+$", "u");
 		
 	//console.log('jQuery version: ' + $.fn.jquery);
 	//console.log('jQUery UI version ' + $.ui.version);
@@ -1808,6 +1809,13 @@ $('#seatreg-settings-submit').on('click', function(e) {
 	}
 
 	if($('#approved-booking-email-template').val()) {
+		if (!customEmailTemplatePattern.test($('#approved-booking-email-template').val())) {
+			e.preventDefault();
+			alertify.error(translator.translate('approvedBookingEmailTemplateIllegalCharacter'));
+
+			return true;
+		}
+
 		if($('#approved-booking-email-template').val().indexOf('[status-link]') === -1) {
 			e.preventDefault();
 			alertify.error(translator.translate('emailTemplateNotCorrect'));
@@ -1817,6 +1825,13 @@ $('#seatreg-settings-submit').on('click', function(e) {
 	}
 
 	if($('#pendin-booking-email-template').val()) {
+		if (!customEmailTemplatePattern.test($('#pendin-booking-email-template').val())) {
+			e.preventDefault();
+			alertify.error(translator.translate('pendingBookingEmailTemplateIllegalCharacter'));
+
+			return true;
+		}
+
 		if($('#pendin-booking-email-template').val().indexOf('[status-link]') === -1) {
 			e.preventDefault();
 			alertify.error(translator.translate('emailTemplateNotCorrect'));
@@ -1826,6 +1841,12 @@ $('#seatreg-settings-submit').on('click', function(e) {
 	}
 
 	if($('#email-verification-template').val()) {
+		if (!customEmailTemplatePattern.test($('#email-verification-template').val())) {
+			e.preventDefault();
+			alertify.error(translator.translate('emailVerificationEmailTemplateIllegalCharacter'));
+
+			return true;
+		}
 		if($('#email-verification-template').val().indexOf('[verification-link]') === -1) {
 			e.preventDefault();
 			alertify.error(translator.translate('emailTemplateNotCorrect'));

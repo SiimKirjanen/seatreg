@@ -169,6 +169,9 @@ function seatreg_generate_admin_strings() {
     $translations->newBookingWasAddedRefreshingThaPage = esc_html__('Booking was added. Page will refresh in a second', 'seatreg');
     $translations->duplicateSeatDetected = esc_html__('Duplicate seat detected!', 'seatreg');
     $translations->emailTemplateNotCorrect = esc_html__('Email template is missing required keywords', 'seatreg');
+    $translations->approvedBookingEmailTemplateIllegalCharacter = esc_html__('The approved booking email template contains disallowed characters.', 'seatreg');
+    $translations->pendingBookingEmailTemplateIllegalCharacter = esc_html__('The pending booking email template contains disallowed characters.', 'seatreg');
+    $translations->emailVerificationEmailTemplateIllegalCharacter = esc_html__('The email verification template contains disallowed characters.', 'seatreg');
     $translations->lockSeat = esc_html__('Lock seat', 'seatreg');
     $translations->setPassword = esc_html__('Set password', 'seatreg');
     $translations->changesApplied = esc_html__('Changes applied', 'seatreg');
