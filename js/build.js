@@ -270,7 +270,7 @@
 		roomData['room'] = {
 			id: this.roomId,
 			uuid: this.uuid,
-			name: this.title,
+			name: this.title.trim(),
 			text: this.roomText,
 			legends: roomLegendArray,
 			width: this.roomWidth + 10,
