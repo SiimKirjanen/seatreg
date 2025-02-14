@@ -921,7 +921,7 @@ function seatregGenerateImportBookingBox(bookingData, validationData) {
 	}else {
 		$bookingWrap.append('<i class="fa fa-trash-o import-bookings-finalization-modal__trash-icon" data-action="remove-row" aria-hidden="true" data-powertip="Remove from the import"></i>');
 	}
-	console.log(bookingData.custom_field_data)
+
 	var hiddenInputs = [
 		'<input type="hidden" data-name="first_name" value="' + bookingData.first_name + '" />',
 		'<input type="hidden" data-name="last_name" value="' + bookingData.last_name + '" />',
@@ -1037,7 +1037,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	var modal = $('#edit-modal');
 	var modalCutsom = modal.find('.modal-body-custom');
 	modalCutsom.empty();
-	console.log(info.find('.f-name').val());
+
 	modal.find('#edit-seat').val(info.find('.seat-id').val());
 	modal.find('#edit-room').val(info.find('.seat-room-box').text());
 	modal.find('#edit-fname').val(info.find('.f-name').val());
