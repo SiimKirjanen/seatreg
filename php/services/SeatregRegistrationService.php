@@ -134,9 +134,16 @@ class SeatregRegistrationService {
         if( $insertStatus ) {
             $insertStatus = self::insertRegistrationOptions($generatedCode, $registrationData);
             if($insertStatus) {
-                wp_redirect( SEATREG_HOME_PAGE );
+                $insertStatus = SeatregImageCopyService::copyRegistrationRoomImages($registrationCode, $generatedCode);
 
-                die();
+                if($insertStatus) {
+                    wp_redirect( SEATREG_HOME_PAGE );
+
+                    die();
+                }else {
+                    wp_die( esc_html_e('Something went wrong while coping a registration layout images', 'seatreg') );
+                }
+           
             }else {
                 wp_die( esc_html_e('Something went wrong while coping a registration settings', 'seatreg') );
             }
@@ -144,4 +151,5 @@ class SeatregRegistrationService {
             wp_die( esc_html_e('Something went wrong while coping a registration', 'seatreg') );
         }
     }
+
 }

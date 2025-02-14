@@ -23,4 +23,13 @@ class SeatregUploadsRepository {
         return SEATREG_TEMP_FOLDER_DIR . '/custom_payment_icons/' . $registrationCode;
     }
 
+    /**
+     *
+     * Returns DIR of the directory where custom room images are stored
+     *
+     */
+    public static function getCustomRoomImagesLocationDir($registrationCode) {
+        return SEATREG_TEMP_FOLDER_DIR . '/room_images/' . $registrationCode;
+    }
+
 }
