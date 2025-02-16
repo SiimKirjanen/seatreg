@@ -46,6 +46,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 = 1.56.3 =
 * Fixed an issue where copying a registration did not include the target registration's layout background images.
 * Trimmed layout room names to prevent issues.
+* Added space between custom payment icon and description.
 
 = 1.56.2 =
 * Added character restrictions to email templates.
