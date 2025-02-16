@@ -46,6 +46,7 @@
 		.custom-payment-box {
 			display: flex;
 			align-items: center;
+			gap: 8px;
 			cursor: pointer;
 			min-width: 230px;
 			height: 56px;
