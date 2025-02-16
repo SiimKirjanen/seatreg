@@ -71,7 +71,7 @@ function seatreg_create_welcome() {
 	<div class="seatreg-wp-admin seatreg_page_seatreg-builder">
 		<div class="jumbotron">
 		  <h2 class="main-heading"><?php esc_html_e('Create and manage online registrations', 'seatreg'); ?></h2>
-		  <p class="jumbotron-text"><?php esc_html_e('Design your own registration scheme and manage bookings.', 'seatreg'); ?></p>
+		  <p class="jumbotron-text"><?php esc_html_e('Design your own registration layout and manage bookings.', 'seatreg'); ?></p>
 	    </div>
 
 		<div class="home-content">

@@ -8,16 +8,16 @@ Stable tag: 1.56.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
-Create and manage online registrations. Design your own registration scheme and manage bookings.
+Create and manage online registrations. Design your own registration layout and manage bookings.
  
 
 == Description ==
 
-Create and manage online registrations with ease. Design your own registration scheme and manage bookings.
+Create and manage online registrations with ease. Design your own registration layout and manage bookings.
 
 SeatReg is a plugin that offers the following and more to build and manage online registrations.
  
-* Map Builder: Design your registration scheme with a versatile map builder. Easily create, delete, resize, and move elements. Add prices, legends, seat numbers, hover text, customize colors, and more.
+* Map Builder: Design your registration layout with a versatile map builder. Easily create, delete, resize, and move elements. Add prices, legends, seat numbers, hover text, customize colors, and more.
 * Registration Overview: Get a overview of your registrations. Track the number of open, approved, or pending bookings.
 * Customizable Settings: Control the booking flow with numerous settings. Create custom fields to collect additional data from customers.
 * Email Templates: Utilize customizable email templates.

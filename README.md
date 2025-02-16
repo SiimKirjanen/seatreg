@@ -4,7 +4,7 @@
 
 
 # SeatReg - Create and manage online registrations
-Create and manage online registrations. Design your own registration scheme and manage bookings.
+Create and manage online registrations. Design your own registration layout and manage bookings.
 
 ## Install
 Clone this project to your local WordPress installation plugins directory. Make sure you name the folder as seatreg.

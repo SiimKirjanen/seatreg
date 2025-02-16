@@ -426,7 +426,7 @@ function seatreg_generate_my_registrations_section() {
 
 				<br>
 
-				<button type="button" class="btn btn-link seatreg-map-popup-btn" data-registration-name="<?php echo esc_attr($registration->registration_name); ?>" data-map-code="<?php echo esc_attr($registration->registration_code); ?>"><?php esc_html_e('Edit scheme', 'seatreg'); ?></button>
+				<button type="button" class="btn btn-link seatreg-map-popup-btn" data-registration-name="<?php echo esc_attr($registration->registration_name); ?>" data-map-code="<?php echo esc_attr($registration->registration_code); ?>"><?php esc_html_e('Layout', 'seatreg'); ?></button>
 
 				<br>
 
