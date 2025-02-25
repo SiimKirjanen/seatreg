@@ -873,7 +873,7 @@ function seatreg_generate_settings_form() {
 					<code>[payment-table]</code> <?php esc_html_e('(optional) will be converted to payment table', 'seatreg'); ?> <br>
 					<code><?php echo esc_html(SEATREG_TEMPLATE_BOOKING_APPROVED_EMAIL_CUSTOM_TEXT); ?></code> <?php esc_html_e('(optional) will be converted to text added to booking in booking-manager. Useful if you want to provide custom text specific to the booking.', 'seatreg'); ?> <br>
 				</p>
-				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->approved_booking_email_template); ?></textarea>
+				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_textarea($options[0]->approved_booking_email_template); ?></textarea>
 			</div>
 
 			<div class="form-group">
