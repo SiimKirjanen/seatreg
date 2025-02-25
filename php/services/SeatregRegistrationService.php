@@ -134,7 +134,7 @@ class SeatregRegistrationService {
         if( $insertStatus ) {
             $insertStatus = self::insertRegistrationOptions($generatedCode, $registrationData);
             if($insertStatus) {
-                $insertStatus = SeatregImageCopyService::copyRegistrationRoomImages($registrationCode, $generatedCode);
+                $insertStatus = SeatregImageCopyService::copyAllRegistrationImages($registrationCode, $generatedCode);
 
                 if($insertStatus) {
                     wp_redirect( SEATREG_HOME_PAGE );
