@@ -12,6 +12,12 @@ class SeatregImageCopyService {
      * @return bool True on success, false on failure.
      */
     private static function copyFiles($sourceDir, $destinationDir) {
+
+        if ( !file_exists($sourceDir) ) {
+            // If the source directory does not exist, return true as nothing to copy
+            return true;
+        }
+
         if ( !file_exists($destinationDir) ) {
             $dirCreated = mkdir($destinationDir, 0755, true);
 
