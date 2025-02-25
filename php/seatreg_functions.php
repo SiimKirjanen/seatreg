@@ -873,7 +873,7 @@ function seatreg_generate_settings_form() {
 					<code>[payment-table]</code> <?php esc_html_e('(optional) will be converted to payment table', 'seatreg'); ?> <br>
 					<code><?php echo esc_html(SEATREG_TEMPLATE_BOOKING_APPROVED_EMAIL_CUSTOM_TEXT); ?></code> <?php esc_html_e('(optional) will be converted to text added to booking in booking-manager. Useful if you want to provide custom text specific to the booking.', 'seatreg'); ?> <br>
 				</p>
-				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->approved_booking_email_template); ?></textarea>
+				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_textarea($options[0]->approved_booking_email_template); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -3207,11 +3207,11 @@ function seatreg_update() {
 			'send_approved_booking_email_qr_code' => ( !isset($_POST['approved-booking-email-qr-code']) || $_POST['approved-booking-email-qr-code'] === '') ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
 			'pending_expiration' => $_POST['pending-expiration'],
 			'verification_email_subject' => $_POST['verification-email-subject'] === '' ? null : $_POST['verification-email-subject'],
-			'email_verification_template' => $_POST['email-verification-template'] === '' ? null : $_POST['email-verification-template'],
+			'email_verification_template' => $_POST['email-verification-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['email-verification-template']),
 			'pending_booking_email_subject' => $_POST['pending-booking-email-subject'] === '' ? null : $_POST['pending-booking-email-subject'],
-			'pending_booking_email_template' => $_POST['pendin-booking-email-template'] === '' ? null : $_POST['pendin-booking-email-template'],
+			'pending_booking_email_template' => $_POST['pendin-booking-email-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['pendin-booking-email-template']),
 			'approved_booking_email_subject' => $_POST['approved-booking-email-subject'] === '' ? null : $_POST['approved-booking-email-subject'],
-			'approved_booking_email_template' => $_POST['approved-booking-email-template'] === '' ? null : $_POST['approved-booking-email-template'],
+			'approved_booking_email_template' => $_POST['approved-booking-email-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['approved-booking-email-template']),
 			'stripe_payments' => $_POST['stripe-payments'],
 			'stripe_api_key' => $_POST['stripe-api-key'],
 			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],

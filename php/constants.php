@@ -16,7 +16,6 @@ define('SEATREG_CUSTOM_FIELD_TYPES', array('text', 'check', 'sel'));
 define('SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH', 100);
 define('SEATREG_DEFAULT_INPUT_MAX_LENGHT', 100);
 define('SEATREG_CUSTOM_PAYMENT_DESCRIPTION', '/^[\p{L}\p{N}+\s.:\/]+$/u');
-define('SEATREG_CUSTOM_EMAIL_TEMPLATE_PATTERN', '/^[\p{L}\p{N}\\s:\/.,\-:;?\[\]]+$/u');
 
 // Payments
 define('SEATREG_PAYMENT_PROCESSING', 'processing');
