@@ -409,6 +409,7 @@ class SeatregDataValidation {
 
             if( !is_array($customFieldsDecoded) ) {
                 $validationStatus->setInvalid('Custom fields not array');
+                return $validationStatus;
             }
 
             foreach($customFieldsDecoded as $customFieldDecoded) {
