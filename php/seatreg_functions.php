@@ -1037,6 +1037,16 @@ function seatreg_generate_settings_form() {
 								<?php esc_html_e('Set approved', 'seatreg'); ?>
 							</label>
 						</div>
+						<label for="allow-promotion-codes-stripe"><?php esc_html_e('Allow promotion codes', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Allow for Stripe promotion codes to be used when paying', 'seatreg'); ?>
+						</p>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="allow-promotion-codes-stripe" name="allow-promotion-codes-stripe" value="0" <?php echo $options[0]->stripe_allow_promotion_codes == '1' ? 'checked' : ''; ?> >
+								<?php esc_html_e('Allow promotion codes', 'seatreg'); ?>
+							</label>
+						</div>
 					</div>
 				<?php else: ?>
 					<div class="alert alert-primary" role="alert">
@@ -2300,6 +2310,7 @@ function seatreg_set_up_db() {
 			require_wp_login tinyint(0) NOT NULL DEFAULT 0,
 			wp_user_booking_limit INT DEFAULT NULL,
 			wp_user_bookings_seat_limit INT DEFAULT NULL,
+			stripe_allow_promotion_codes tinyint(1) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3240,7 +3251,8 @@ function seatreg_update() {
 			'booking_redirect_status_page' => $_POST['booking-redirect-status-page'],
 			'require_wp_login' => $_POST['require-wp-login'],
 			'wp_user_booking_limit' => (int)$_POST['wp-user-booking-limit'] > 0 ? (int)$_POST['wp-user-booking-limit'] : null,
-			'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null
+			'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null,
+			'stripe_allow_promotion_codes' => $_POST['allow-promotion-codes-stripe']
  		),
 		array(
 			'registration_code' => sanitize_text_field($_POST['registration_code'])
