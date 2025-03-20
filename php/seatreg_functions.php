@@ -3178,89 +3178,113 @@ function seatreg_update() {
 	}
 
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
+	$dbUpdated = true;
 
-	$status1 = $wpdb->update(
-		"$seatreg_db_table_names->table_seatreg_options",
-		array(
-			'registration_start_timestamp' => $_POST['start-timestamp'] == '' ? null : sanitize_text_field($_POST['start-timestamp']),
-			'registration_end_timestamp' => $_POST['end-timestamp'] == '' ? null : sanitize_text_field($_POST['end-timestamp']),
-			'seats_at_once' => sanitize_text_field($_POST['registration-max-seats']),
-			'gmail_required' => sanitize_text_field($_POST['gmail-required']),
-			'registration_open' => sanitize_text_field($_POST['registration-status']),
-			'use_pending' => sanitize_text_field($_POST['use-pending']),
-			'registration_password' => $_POST['registration-password'] == '' ? null : sanitize_text_field($_POST['registration-password']),
-			'notify_new_bookings' => $_POST['booking-notification'] ? sanitize_text_field($_POST['booking-notification']) : null,
-			'notify_booker_pending_booking' => $_POST['booker-pending-booking-notification'] ? sanitize_text_field($_POST['booker-pending-booking-notification']) : null,
-			'show_bookings_data_in_registration' => $selectedShowBookingData,
-			'payment_text' => $_POST['payment-instructions'] == '' ? null : $_POST['payment-instructions'],
-			'info' => sanitize_text_field($_POST['registration-info-text']),
-			'registration_close_reason' => sanitize_text_field($_POST['registration-close-reason']),
-			'custom_fields' => $customFileds,
-			'booking_email_confirm' => sanitize_text_field($_POST['email-confirm']),
-			'paypal_payments' => $_POST['paypal-payments'],
-			'paypal_business_email' => sanitize_text_field($_POST['paypal-business-email']),
-			'paypal_button_id' => sanitize_text_field($_POST['paypal-button-id']),
-			'paypal_currency_code' => sanitize_text_field(strtoupper($_POST['paypal-currency-code'])),
-			'paypal_sandbox_mode' => $_POST['paypal-sandbox-mode'],
-			'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
-			'send_approved_booking_email' => $_POST['approved-booking-email'],
-			'send_approved_booking_email_qr_code' => ( !isset($_POST['approved-booking-email-qr-code']) || $_POST['approved-booking-email-qr-code'] === '') ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
-			'pending_expiration' => $_POST['pending-expiration'],
-			'verification_email_subject' => $_POST['verification-email-subject'] === '' ? null : $_POST['verification-email-subject'],
-			'email_verification_template' => $_POST['email-verification-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['email-verification-template']),
-			'pending_booking_email_subject' => $_POST['pending-booking-email-subject'] === '' ? null : $_POST['pending-booking-email-subject'],
-			'pending_booking_email_template' => $_POST['pendin-booking-email-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['pendin-booking-email-template']),
-			'approved_booking_email_subject' => $_POST['approved-booking-email-subject'] === '' ? null : $_POST['approved-booking-email-subject'],
-			'approved_booking_email_template' => $_POST['approved-booking-email-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['approved-booking-email-template']),
-			'stripe_payments' => $_POST['stripe-payments'],
-			'stripe_api_key' => $_POST['stripe-api-key'],
-			'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
-			'using_seats' => $_POST['using-seats'],
-			'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null,
-			'booking_email_limit' => $_POST['bookings-email-limit'],
-			'using_calendar' => $_POST['using-calendar'],
-			'calendar_dates' => !empty($_POST['calendar-dates']) ? $_POST['calendar-dates'] : $oldOptions->calendar_dates,
-			'controlled_scroll' => $_POST['controlled-scroll'],
-			'custom_payment' => $_POST['custom-payment'],
-			'custom_payment_title' => $_POST['custom-payment-title'],
-			'custom_payment_description' => $_POST['custom-payment-description'],
-			'custom_styles' => $_POST['custom-styles'],
-			'public_api_enabled' => $_POST['public-api'],
-			'custom_footer_text' => $_POST['custom-footer-text'],
-			'seat_selection_btn_text' => !empty($_POST['seat-selection-btn-text']) ? $_POST['seat-selection-btn-text'] : null,
-			'custom_payments' => $customPayments,
-			'booking_status_page_custom_styles' => $_POST['booking-status-custom-styles'],
-			'booking_confirm_page_custom_styles' => $_POST['booking-confirm-custom-styles'],
-			'registration_start_time' => $_POST['registration-start-time'] === '' ? null : $_POST['registration-start-time'],
-			'registration_end_time' => $_POST['registration-end-time'] === '' ? null : $_POST['registration-end-time'],
-			'show_pending_booking_pdf' => $_POST['show-pending-booking-pdf'],
-			'show_approved_booking_pdf' => $_POST['show-approved-booking-pdf'],
-			'booking_qr_code_input' => $_POST['booking-qr-code-input'],
-			'notification_email' => $_POST['notification-email'],
-			'booking_redirect_status_page' => $_POST['booking-redirect-status-page'],
-			'require_wp_login' => $_POST['require-wp-login'],
-			'wp_user_booking_limit' => (int)$_POST['wp-user-booking-limit'] > 0 ? (int)$_POST['wp-user-booking-limit'] : null,
-			'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null
- 		),
-		array(
-			'registration_code' => sanitize_text_field($_POST['registration_code'])
-		),
-		'%s',
-		'%s'
-	);
+	try {
+        $wpdb->query('START TRANSACTION');
 
-	$status2 = $wpdb->update(
-		"$seatreg_db_table_names->table_seatreg",
-		array(
-			'registration_name' => $registrationName,
-		),
-		array(
-			'registration_code' => sanitize_text_field($_POST['registration_code'])
-		),
-		'%s',
-		'%s'
-	);
+		$status1 = $wpdb->update(
+			"$seatreg_db_table_names->table_seatreg_options",
+			array(
+				'registration_start_timestamp' => $_POST['start-timestamp'] == '' ? null : sanitize_text_field($_POST['start-timestamp']),
+				'registration_end_timestamp' => $_POST['end-timestamp'] == '' ? null : sanitize_text_field($_POST['end-timestamp']),
+				'seats_at_once' => sanitize_text_field($_POST['registration-max-seats']),
+				'gmail_required' => sanitize_text_field($_POST['gmail-required']),
+				'registration_open' => sanitize_text_field($_POST['registration-status']),
+				'use_pending' => sanitize_text_field($_POST['use-pending']),
+				'registration_password' => $_POST['registration-password'] == '' ? null : sanitize_text_field($_POST['registration-password']),
+				'notify_new_bookings' => $_POST['booking-notification'] ? sanitize_text_field($_POST['booking-notification']) : null,
+				'notify_booker_pending_booking' => $_POST['booker-pending-booking-notification'] ? sanitize_text_field($_POST['booker-pending-booking-notification']) : null,
+				'show_bookings_data_in_registration' => $selectedShowBookingData,
+				'payment_text' => $_POST['payment-instructions'] == '' ? null : $_POST['payment-instructions'],
+				'info' => sanitize_text_field($_POST['registration-info-text']),
+				'registration_close_reason' => sanitize_text_field($_POST['registration-close-reason']),
+				'custom_fields' => $customFileds,
+				'booking_email_confirm' => sanitize_text_field($_POST['email-confirm']),
+				'paypal_payments' => $_POST['paypal-payments'],
+				'paypal_business_email' => sanitize_text_field($_POST['paypal-business-email']),
+				'paypal_button_id' => sanitize_text_field($_POST['paypal-button-id']),
+				'paypal_currency_code' => sanitize_text_field(strtoupper($_POST['paypal-currency-code'])),
+				'paypal_sandbox_mode' => $_POST['paypal-sandbox-mode'],
+				'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
+				'send_approved_booking_email' => $_POST['approved-booking-email'],
+				'send_approved_booking_email_qr_code' => ( !isset($_POST['approved-booking-email-qr-code']) || $_POST['approved-booking-email-qr-code'] === '') ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
+				'pending_expiration' => $_POST['pending-expiration'],
+				'verification_email_subject' => $_POST['verification-email-subject'] === '' ? null : $_POST['verification-email-subject'],
+				'email_verification_template' => $_POST['email-verification-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['email-verification-template']),
+				'pending_booking_email_subject' => $_POST['pending-booking-email-subject'] === '' ? null : $_POST['pending-booking-email-subject'],
+				'pending_booking_email_template' => $_POST['pendin-booking-email-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['pendin-booking-email-template']),
+				'approved_booking_email_subject' => $_POST['approved-booking-email-subject'] === '' ? null : $_POST['approved-booking-email-subject'],
+				'approved_booking_email_template' => $_POST['approved-booking-email-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['approved-booking-email-template']),
+				'stripe_payments' => $_POST['stripe-payments'],
+				'stripe_api_key' => $_POST['stripe-api-key'],
+				'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
+				'using_seats' => $_POST['using-seats'],
+				'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null,
+				'booking_email_limit' => $_POST['bookings-email-limit'],
+				'using_calendar' => $_POST['using-calendar'],
+				'calendar_dates' => !empty($_POST['calendar-dates']) ? $_POST['calendar-dates'] : $oldOptions->calendar_dates,
+				'controlled_scroll' => $_POST['controlled-scroll'],
+				'custom_payment' => $_POST['custom-payment'],
+				'custom_payment_title' => $_POST['custom-payment-title'],
+				'custom_payment_description' => $_POST['custom-payment-description'],
+				'custom_styles' => $_POST['custom-styles'],
+				'public_api_enabled' => $_POST['public-api'],
+				'custom_footer_text' => $_POST['custom-footer-text'],
+				'seat_selection_btn_text' => !empty($_POST['seat-selection-btn-text']) ? $_POST['seat-selection-btn-text'] : null,
+				'custom_payments' => $customPayments,
+				'booking_status_page_custom_styles' => $_POST['booking-status-custom-styles'],
+				'booking_confirm_page_custom_styles' => $_POST['booking-confirm-custom-styles'],
+				'registration_start_time' => $_POST['registration-start-time'] === '' ? null : $_POST['registration-start-time'],
+				'registration_end_time' => $_POST['registration-end-time'] === '' ? null : $_POST['registration-end-time'],
+				'show_pending_booking_pdf' => $_POST['show-pending-booking-pdf'],
+				'show_approved_booking_pdf' => $_POST['show-approved-booking-pdf'],
+				'booking_qr_code_input' => $_POST['booking-qr-code-input'],
+				'notification_email' => $_POST['notification-email'],
+				'booking_redirect_status_page' => $_POST['booking-redirect-status-page'],
+				'require_wp_login' => $_POST['require-wp-login'],
+				'wp_user_booking_limit' => (int)$_POST['wp-user-booking-limit'] > 0 ? (int)$_POST['wp-user-booking-limit'] : null,
+				'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null
+			 ),
+			array(
+				'registration_code' => sanitize_text_field($_POST['registration_code'])
+			),
+			'%s',
+			'%s'
+		);
 
+		if ($status1 === false) {
+            throw new Exception('Settings update failed: ' . $wpdb->last_error);
+        }
+
+		$status2 = $wpdb->update(
+			"$seatreg_db_table_names->table_seatreg",
+			array(
+				'registration_name' => $registrationName,
+			),
+			array(
+				'registration_code' => sanitize_text_field($_POST['registration_code'])
+			),
+			'%s',
+			'%s'
+		);
+
+		if ($status2 === false) {
+            throw new Exception('Name update update failed: ' . $wpdb->last_error);
+        }
+
+		$wpdb->query('COMMIT');
+
+	} catch (Exception $e) {
+		$wpdb->query('ROLLBACK');
+		error_log($e->getMessage());
+		$dbUpdated = false;
+	}
+
+	if( $dbUpdated === false ) {
+		return false;
+	}
+	
 	$turningOnStripePaymentsDetected = $oldOptions->stripe_payments === '0' && $_POST['stripe-payments'] === 1;
 	$stripeAPiKeyChangeDetected = $oldOptions->stripe_payments === '1' && $_POST['stripe-payments'] === 1 && $oldOptions->stripe_api_key !== $_POST['stripe-api-key'];
 
@@ -3281,8 +3305,6 @@ function seatreg_update() {
 		SeatregOptionsService::updateStripeWebhookSecret(null, sanitize_text_field($_POST['registration_code']));
 		StripeWebhooksService::removeNotUsedStripeAPiWebhook($_POST['stripe-api-key']);
 	}
-
-	return ($status1 !== false && $status2 !== false);
 }
 
 //handle settings form submit
