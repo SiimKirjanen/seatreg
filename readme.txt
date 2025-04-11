@@ -43,7 +43,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 == Changelog ==
 
-= 1.57.0
+= 1.57.0 =
 * Added the 'One Person Checkout' option, which simplifies booking checkout by requiring details for only one seat.
 * Added support for apostrophes in registration names.
 
