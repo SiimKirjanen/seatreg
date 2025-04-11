@@ -124,6 +124,7 @@
 		this.bookingRedirectToStatusPage = window.bookingRedirectToStatusPage === '1';
 		this.requireWPLogin = window.requireWPLogin === '1';
 		this.isLoggedIn = window.isLoggedIn === '1';
+		this.onePersonCheckout = window.onePersonCheckout === '1';
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -795,7 +796,6 @@ SeatReg.prototype.openCheckOut = function() {
 	this.generateCheckout(arrLen);
 	$('#checkout-area').css('display','block');
 	$('#modal-bg').css('display','block');
-
 };
 
 SeatReg.prototype.openInfo = function() {
@@ -814,8 +814,8 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 	var documentFragment = $(document.createDocumentFragment());
 	var arrLen3 = this.customF.length;
 	var hasMultipleSeatsSelected = arrLen > 1;
-
-	if( hasMultipleSeatsSelected ) {
+    var checkItemCounter = 1;
+	if( hasMultipleSeatsSelected && !this.onePersonCheckout ) {
 		$('#checkout-area .checkout-settings').removeClass('display-none');
 	}
 
@@ -824,11 +824,22 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 		var checkItemHeader = $('<div class="check-item-head">'+ this.spotName +' No. <span>' + this.selectedSeats[i].nr + '</span><br><span>' + this.selectedSeats[i].room + '</span></div>');
 		var documentFragment2 = $(document.createDocumentFragment());
 		var arrLen2 = this.selectedSeats[i].defFields.length;
-		var isLastCheckItem = i === arrLen - 1;
+		var isLastCheckItem = i === arrLen - 1 || this.onePersonCheckout;
+
+		if( this.onePersonCheckout ) {
+			checkItemHeader = null;
+
+			$('#checkoput-area-inner .checkout-settings__copy input').attr('checked', true);
+		}
+
+		if (checkItemCounter > 1 && this.onePersonCheckout) {
+			checkItem.css('display', 'none');
+		}
 
 		if( isLastCheckItem ) {
 			checkItem.addClass('check-item--last');
 		}
+
 		
 		for(var j = 0; j < arrLen2; j++) {
 			var field = this.generateField(this.selectedSeats[i].defFields[j], isLastCheckItem);
@@ -852,15 +863,16 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 
 		checkItem.append(checkItemHeader, documentFragment2, seatId, seatNr, roomUUID, multiPriceUUID, selectedCalendarDate);
 		documentFragment.append(checkItem);
+		checkItemCounter++;
 	}
 
-	if(arrLen > 1) {
+	if(arrLen > 1 && !this.onePersonCheckout) {
 		if(this.gmailNeeded == 1) {
 			var primaryMail = $('<div style="text-align:center;margin-top:16px"><label class="field-label">'+ translator.translate('confWillBeSentTogmail') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}else {
+			console.log('Gmail not needed!');
 			var primaryMail = $('<div style="text-align:center;margin-top:16px"><label class="field-label">'+ translator.translate('confWillBeSentTo') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}
-
 		documentFragment.append(primaryMail);
 	}
 	
@@ -1433,7 +1445,7 @@ function sendData(customFieldBack, registrationCode) {
 	var seatPasswords = JSON.stringify(seatReg.enteredSeatPasswords);
 	customFieldBack = JSON.stringify(customFieldBack);
 
-	if(seatReg.selectedSeats.length > 1) {
+	if(seatReg.selectedSeats.length > 1 && seatReg.onePersonCheckout === false) {
 		mailToSend = $('#prim-mail').val();
 	}else {
 		mailToSend = $('#checkout-input-area .check-item').first().find('.field-input[data-field="Email"]').val();

@@ -686,6 +686,17 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+			<label for="one-person-checkout"><?php esc_html_e('One person checkout', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e("By default, during booking checkout, information must be entered separately for each seat. The 'One Person Checkout' option simplifies this by requiring details for only one seat, and if multiple seats are selected, the same data will be copied to all seats behind the scenes.", 'seatreg'); ?></p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="one-person-checkout" name="one-person-checkout" value="0" <?php echo $options[0]->one_person_checkout === '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Enable one person checkout', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
 				<label for="bookings-email-limit"><?php esc_html_e('Booking email limit', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Specify how many bookings can be made with the same email. Leave empty for no limit', 'seatreg'); ?>.
@@ -2300,6 +2311,7 @@ function seatreg_set_up_db() {
 			require_wp_login tinyint(0) NOT NULL DEFAULT 0,
 			wp_user_booking_limit INT DEFAULT NULL,
 			wp_user_bookings_seat_limit INT DEFAULT NULL,
+			one_person_checkout tinyint(0) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3176,6 +3188,12 @@ function seatreg_update() {
 		$_POST['require-wp-login'] = 1;
 	}
 
+	if( !isset($_POST['one-person-checkout']) ) {
+		$_POST['one-person-checkout'] = 0;
+	}else {
+		$_POST['one-person-checkout'] = 1;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 	$dbUpdated = true;
 
@@ -3243,7 +3261,8 @@ function seatreg_update() {
 				'booking_redirect_status_page' => $_POST['booking-redirect-status-page'],
 				'require_wp_login' => $_POST['require-wp-login'],
 				'wp_user_booking_limit' => (int)$_POST['wp-user-booking-limit'] > 0 ? (int)$_POST['wp-user-booking-limit'] : null,
-				'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null
+				'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null,
+				'one_person_checkout' => $_POST['one-person-checkout'],
 			 ),
 			array(
 				'registration_code' => sanitize_text_field($_POST['registration_code'])
