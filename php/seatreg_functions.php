@@ -687,7 +687,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 			<label for="one-person-checkout"><?php esc_html_e('One person checkout', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e("By default, during booking checkout, information must be entered separately for each seat. The 'One Person Checkout' option simplifies this by requiring details for only one seat, and if multiple seats are selected, the same data will be copied to all seats.", 'seatreg'); ?></p>
+				<p class="help-block"><?php esc_html_e("By default, during booking checkout, information must be entered separately for each seat. The 'One Person Checkout' option simplifies this by requiring details for only one seat, and if multiple seats are selected, the same data will be copied to all seats behind the scenes.", 'seatreg'); ?></p>
 				<div class="checkbox">
 			    	<label>
 			      		<input type="checkbox" id="one-person-checkout" name="one-person-checkout" value="0" <?php echo $options[0]->one_person_checkout === '1' ? 'checked':'' ?> >
