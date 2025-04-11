@@ -420,7 +420,7 @@ function seatreg_generate_my_registrations_section() {
 		
 		?>
 			<div class="mb-4" data-item="registration" style="margin-right: 52px">
-				<h5><a class="registration-name-link" href="<?php echo esc_url($registrationLink); ?>" target="_blank"><?php echo esc_html( $registration->registration_name ); ?></a></h5>
+				<h5><a class="registration-name-link" href="<?php echo esc_url($registrationLink); ?>" target="_blank"><?php echo esc_html( wp_unslash($registration->registration_name) ); ?></a></h5>
 
 				<a href="<?php echo esc_url($registrationLink); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
 
@@ -492,7 +492,7 @@ function seatreg_generate_settings_form() {
 
 	?>
 		<h4 class="settings-heading">
-			<?php echo sprintf( esc_html__('%s settings', 'seatreg'), esc_html($options[0]->registration_name)); ?> 
+			<?php echo sprintf( esc_html__('%s settings', 'seatreg'), esc_html(wp_unslash($options[0]->registration_name))); ?> 
 		</h4>
 		<form action="<?php echo esc_url(get_admin_url() . 'admin-post.php'); ?>" method="post" id="seatreg-settings-form" class="seatreg-settings-form" style="max-width:600px">
 
@@ -501,7 +501,7 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('Change registration name', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo esc_attr(SEATREG_REGISTRATION_NAME_MAX_LENGTH); ?>" placeholder="<?php esc_html_e('Enter registration name', 'seatreg'); ?>" autocomplete="off" value="<?php echo esc_attr($options[0]->registration_name); ?>">
+				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo esc_attr(SEATREG_REGISTRATION_NAME_MAX_LENGTH); ?>" placeholder="<?php esc_html_e('Enter registration name', 'seatreg'); ?>" autocomplete="off" value="<?php echo esc_attr(wp_unslash($options[0]->registration_name)); ?>">
 			</div>
 
 			<div class="form-group">
@@ -1401,7 +1401,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 			<?php endif; ?>
 			
 			<div class='registration-name'>
-				<?php echo esc_html($project_name_original); ?>
+				<?php echo esc_html( wp_unslash($project_name_original) ); ?>
 			</div>
 			<?php if($row_count > 0): ?>
 				<div class="pending-bookings-count">
@@ -1845,7 +1845,7 @@ function seatreg_generate_tabs($targetPage) {
 	<h2 class="nav-tab-wrapper"> 
 		<?php foreach($registrations as $key => $value): ?>
 			<a href="?page=<?php echo esc_html($targetPage); ?>&tab=<?php echo esc_html($value->registration_code); ?>" class="nav-tab <?php echo $active_tab == $value->registration_code ? 'nav-tab-active' : ''; ?>">
-				<?php echo esc_html($value->registration_name); ?>
+				<?php echo esc_html( wp_unslash($value->registration_name) ); ?>
 			</a>
 		<?php endforeach; ?>
 	</h2>
@@ -1870,7 +1870,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 
 		if(count($bookings)) {
 			$bookingStatus = $bookings[0]->status;
-			echo '<h2>', esc_html($registration->registration_name), '</h2>';
+			echo '<h2>', esc_html( wp_unslash($registration->registration_name) ), '</h2>';
 			
 			if($options && $options->pending_expiration && $bookingStatus === '1') {
 				$hasPaymentEntry = SeatregBookingService::checkIfBookingHasPaymentEntry($bookings[0]->booking_id);
@@ -2586,7 +2586,6 @@ function seatreg_create_new_registration($newRegistrationName) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
-    $charset_collate = $wpdb->get_charset_collate();
     $registrationCode = seatreg_generate_registration_code();
     $status = $wpdb->insert(
     	$seatreg_db_table_names->table_seatreg,
@@ -2874,16 +2873,16 @@ Admin form submit stuff
 add_action('admin_post_seatreg_create_submit', 'seatreg_create_submit_handler'); 
 function seatreg_create_submit_handler() {
 	seatreg_nonce_check();
+	$registrationName = $_POST['new-registration-name']; 
 
-	if( empty($_POST['new-registration-name']) ) {
+	if( empty($registrationName) ) {
 		wp_die('Registration name not provided');
 	}
 
-	if( $_POST['new-registration-name'] === '' ) {
+	if( $registrationName === '' ) {
 		wp_die('Please provide registration name');
 	}
 
-	$registrationName = sanitize_text_field($_POST['new-registration-name']); 
 	$nameValidation = SeatregDataValidation::validateRegistrationName($registrationName);
 
 	if( !$nameValidation->valid ) {

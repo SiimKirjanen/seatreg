@@ -67,7 +67,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     if($template) {
         $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $registrationCustomFields, $bookingId, $registration);
     }else {
-        $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html($registrationName) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
+        $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html( wp_unslash($registrationName) ) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
         $message .= '<p>';
         $message .= esc_html__('Booking ID: ', 'seatreg') . ' <strong>'. esc_html($bookingId) .'</strong><br>';
         $message .= esc_html__('Booking status link:', 'seatreg') . ' <a href="'. $bookingStatusUrl .'" target="_blank">'. esc_url($bookingStatusUrl) .'</a>';
@@ -116,7 +116,7 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
     if($template) {
         $message = SeatregTemplateService::emailVerificationTemplateProcessing($template, $confirmationURL);
     }else {
-        $message =  '<p>' . sprintf(esc_html__('Thank you for booking at %s', 'seatreg'), $registrationName) . '</p>' .
+        $message =  '<p>' . sprintf( esc_html__('Thank you for booking at %s', 'seatreg'), esc_html( wp_unslash($registrationName) ) ) . '</p>' .
         '<p>' . esc_html__('Click on the link below to complete email verification', 'seatreg') . '</p>
         <a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>
         ('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>';

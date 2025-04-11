@@ -218,6 +218,8 @@
 
 		promise.done(function(data) {
 			if(data._response.type == 'ok') {
+				let registrationName = data._response.data.registration[0].registration_name.replace(/\\/g, '');
+
 				if(data._response.data.bookings.length > 0) {
 					var arrLen = data._response.data.bookings.length;
 
@@ -229,11 +231,10 @@
 				if(data._response.data.uploadedImages.length > 0) {
 					window.seatreg.uploadedImages = data._response.data.uploadedImages;
 				}
+				$('.reg-title-name').text(registrationName);
 				
 				if(data._response.data.registration[0].registration_layout == null) {
-					window.seatreg.selectedRegistration = code;
-					$('.reg-title-name').text(data._response.data.registration[0].registration_name);
-				
+					window.seatreg.selectedRegistration = code;				
 					$('.seatreg-builder-popup').css({'display': 'block'});
 					window.seatreg.builder.syncData(null);
 				}else {
@@ -244,7 +245,6 @@
 						custom_payment: data._response.data.registration[0].custom_payment,
 						using_seats: data._response.data.registration[0].using_seats
 					};
-					$('.reg-title-name').text(data._response.data.registration[0].registration_name);
 				
 					$('.seatreg-builder-popup').css({'display': 'block'});
 					window.seatreg.builder.syncData( $.parseJSON(data._response.data.registration[0].registration_layout) );

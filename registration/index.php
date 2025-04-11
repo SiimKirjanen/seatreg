@@ -18,6 +18,7 @@
 		wp_die(esc_html__('Registration not found', 'seatreg'));
 	}
 
+	$registrationName = esc_html(wp_unslash($data->registration_name));
 	$showPwdForm = false;
 	$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 	$registrationTimeRestoriction = SeatregTimeRepository::getTimeInfoForRegistrationView($data->registration_start_time, $data->registration_end_time);
@@ -44,7 +45,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo esc_html( $data->registration_name ); ?></title>
+	<title><?php echo $registrationName; ?></title>
 	
 	<link rel="icon" href="<?php echo esc_url(get_site_icon_url()); ?>" />
 
@@ -80,7 +81,7 @@
 						printf(
 							/* translators: %s: Name of the registration */
 							esc_html__( '%s is closed at the moment', 'seatreg' ),
-							esc_html($data->registration_name)
+							$registrationName
 						);
 					?>
 				</h2>
@@ -94,7 +95,7 @@
 
 			<?php if($data->registration_layout != null && $data->registration_layout !== '{}'): ?>
 				<header id="main-header">
-					<?php esc_html_e($data->registration_name); ?>
+					<?php echo $registrationName; ?>
 				</header>
 				<div id="room-nav-wrap" class="border-box no-select">
 					<div id="room-nav">
