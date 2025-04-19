@@ -20,6 +20,7 @@
 					<?php foreach($roomData->boxes as $box): ?>
 						<?php 
 							$seatNumber = $box->prefix . $box->seat;
+							$price = $box->price;
 						?>
 						<?php if($box->canRegister === 'true' && !in_array($box->id, $bookingIds)): ?>
 							<?php 
@@ -32,7 +33,7 @@
 								<?php echo esc_html($box->id); ?>
 							</div>
 
-							<button class="btn btn-outline-secondary btn-sm" data-action="select-id" data-seat-id="<?php echo esc_attr($box->id); ?>">
+							<button class="btn btn-outline-secondary btn-sm" data-action="select-id" data-seat-id="<?php echo esc_attr($box->id); ?>" data-seat-price="<?php echo esc_attr(json_encode($price)); ?>" data-seat-number="<?php echo esc_attr($seatNumber); ?>" data-room-name="<?php echo esc_attr($roomData->room->name); ?>">
 								<?php echo esc_html('Select ID', 'seatreg'); ?>
 							</button>
 						<?php endif; ?>

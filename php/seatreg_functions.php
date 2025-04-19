@@ -2735,7 +2735,7 @@ function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seat
 			'conf_code' => $confCode, 
 			'status' => $bookingStatus,
 			'calendar_date' => $calendarDate,
-			'multi_price_selection' => $multiPriceSelection
+			'multi_price_selection' => $multiPriceSelection ?? null,
 		), 
 		'%s'	
 	);
@@ -3744,6 +3744,7 @@ function seatreg_add_booking_with_manager_callback() {
 		empty( $_POST['room'] ) ||
 		empty( $_POST['registration-code'] ) ||
 		empty( $_POST['booking-status'] ) ||
+		empty( $_POST['seat-price'] ) ||
 		empty( $_POST['custom-fields'] ) ) {
 			wp_send_json_error( array('message'=> 'Missing parameters') );
 	}
@@ -3770,6 +3771,7 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingToAdd->customfield = $customFields[$key];
 		$bookingToAdd->email = sanitize_text_field($_POST['email'][$key]);
 		$bookingToAdd->status = $bookingStatus;
+		$bookingToAdd->multiPriceSelection = $_POST['seat-price'][$key] ?? null;
 
 		$bookingsToAdd[] = $bookingToAdd;
 	}
@@ -3813,7 +3815,8 @@ function seatreg_add_booking_with_manager_callback() {
 			$booking->status,
 			$bookingId,
 			$confCode,
-			$calendarDate
+			$calendarDate,
+			$booking->multiPriceSelection,
 		);
 	}
 	$successStatusCount = count(array_filter($addingStatus, function($status) {
