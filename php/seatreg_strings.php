@@ -196,6 +196,7 @@ function seatreg_generate_admin_strings() {
     $translations->currencyCodeNotCorrect = esc_html__('Currency code in not valid', 'seatreg');
     $translations->textSaved = esc_html__('Text saved', 'seatreg');
     $translations->errorSavingText = esc_html__('Error at saving text', 'seatreg');
+    $translations->price = esc_html__('Price', 'seatreg');
     
     return $translations;
 }
