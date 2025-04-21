@@ -762,8 +762,11 @@ $('#seatreg-booking-manager').on('click', '#add-modal-add-seat', function() {
 	var bookingItemsWrap = $(this).closest('form').find('.modal-body-items');
 	var bookingItems = bookingItemsWrap.find('.modal-body-item');
 	var newItem = bookingItems.first().clone();
+
+	newItem.find('input[name="seat-id[]"]').val('');
+	newItem.find('.add-modal-input-wrap[data-type="price-selection"]').remove();
 	
-	bookingItemsWrap .append(newItem);
+	bookingItemsWrap.append(newItem);
 });
 
 $('#seatreg-booking-manager').on('click', '#add-modal-remove-seat', function() {
@@ -1104,8 +1107,39 @@ $('#seatreg-booking-manager').on('click', '.seat-id-search', function() {
 });
 
 $('#seatreg-booking-manager .seat-id-grid [data-action="select-id"]').on('click', function() {
-	$('#seatreg-booking-manager #add-booking-modal-form .modal-body-item').eq(bookingManagerActiveAddBookingIdLookupIndex).find('[name="seat-id[]"]').val( $(this).data('seat-id') );
+	const $modalBodyItem = $('#seatreg-booking-manager #add-booking-modal-form .modal-body-item').eq(bookingManagerActiveAddBookingIdLookupIndex);
+
+	$modalBodyItem.find('[name="seat-id[]"]').val( $(this).data('seat-id') ).trigger('change');
 	$('#seat-id-modal').modal('hide');
+});
+
+$('#seatreg-booking-manager').on('change keyup', '#add-booking-modal-form input[name="seat-id[]"]', function() {
+    const seatPrice = $('#seat-id-modal .seat-id-grid').find('[data-seat-id="'+ $(this).val() +'"]').data('seat-price');
+	const $modalBodyItem = $('#seatreg-booking-manager #add-booking-modal-form .modal-body-item').eq(bookingManagerActiveAddBookingIdLookupIndex);
+	$modalBodyItem.find('.add-modal-input-wrap[data-type="price-selection"').remove();
+	$modalBodyItem.find('input[name="seat-multi-price[]"]').remove();
+
+	if(Array.isArray(seatPrice)) {
+		$modalBodyItem.find('.add-modal-input-wrap').last().after(`
+			<div class="add-modal-input-wrap" data-type="price-selection">
+				<label>
+					<h5>
+						${translator.translate('price')}
+					</h5>
+					<select name="seat-multi-price[]">
+						${seatPrice.map((price) => {
+							return `<option value="${price.uuid}">${price.price} (${price.description})</option>`;
+						}).join('')}
+					</select>
+					<div class="input-error"></div>
+				</label>
+			</div>
+		`);
+	}else {
+		$modalBodyItem.find('.add-modal-input-wrap').last().after(`
+			<input type="hidden" name="seat-multi-price[]" value="" />			
+		`);
+	}
 });
 
 
@@ -1213,6 +1247,9 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			}
 			if(data.status === 'duplicate-seat') {
 				alertify.error(translator.translate('duplicateSeatDetected'));
+			}
+			if(data.status === 'seat-price-not-found') {
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-multi-price[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('priceNotFound'));
 			}
 		}
 	});
