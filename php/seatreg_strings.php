@@ -197,6 +197,7 @@ function seatreg_generate_admin_strings() {
     $translations->textSaved = esc_html__('Text saved', 'seatreg');
     $translations->errorSavingText = esc_html__('Error at saving text', 'seatreg');
     $translations->price = esc_html__('Price', 'seatreg');
+    $translations->priceNotFound = esc_html__('Price not found', 'seatreg');
     
     return $translations;
 }

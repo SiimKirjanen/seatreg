@@ -2097,7 +2097,15 @@ function seatreg_valdiate_add_booking_with_manager($code, $data, $calendarDate) 
 			break;
 		}
 	}
-	
+
+	$data->room_uuid = $resp['roomUUID'];
+	$data->seat_id = $resp['seatId'];
+	$data->multi_price_selection = $data->multiPriceSelection;
+	if( $data->multiPriceSelection && SeatregLayoutService::checkIfMultiPriceUUIDExists($data, $structure) === false ) {
+		$resp['status'] = 'seat-price-not-found';
+		$resp['text'] = esc_html__('Selected price was not found', 'seatreg');
+	}
+
 	return $resp;
 }
 
@@ -3744,7 +3752,7 @@ function seatreg_add_booking_with_manager_callback() {
 		empty( $_POST['room'] ) ||
 		empty( $_POST['registration-code'] ) ||
 		empty( $_POST['booking-status'] ) ||
-		empty( $_POST['seat-price'] ) ||
+		empty( $_POST['seat-multi-price'] ) ||
 		empty( $_POST['custom-fields'] ) ) {
 			wp_send_json_error( array('message'=> 'Missing parameters') );
 	}
@@ -3771,7 +3779,7 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingToAdd->customfield = $customFields[$key];
 		$bookingToAdd->email = sanitize_text_field($_POST['email'][$key]);
 		$bookingToAdd->status = $bookingStatus;
-		$bookingToAdd->multiPriceSelection = $_POST['seat-price'][$key] ?? null;
+		$bookingToAdd->multiPriceSelection = $_POST['seat-multi-price'][$key] ?? null;
 
 		$bookingsToAdd[] = $bookingToAdd;
 	}
