@@ -122,6 +122,7 @@
 		this.controlledScrollEnabled = window.controlledScroll === '1';
 		this.customFooterText = customFooterText;
 		this.bookingRedirectToStatusPage = window.bookingRedirectToStatusPage === '1';
+		this.requireName = requireName === '1';
 		this.requireWPLogin = window.requireWPLogin === '1';
 		this.isLoggedIn = window.isLoggedIn === '1';
 		this.onePersonCheckout = window.onePersonCheckout === '1';
@@ -840,10 +841,19 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 			checkItem.addClass('check-item--last');
 		}
 
-		
-		for(var j = 0; j < arrLen2; j++) {
-			var field = this.generateField(this.selectedSeats[i].defFields[j], isLastCheckItem);
-			documentFragment2.append(field);
+		if (!this.requireName)
+		{
+			var firstName = '<input type="hidden" name="FirstName[]" data-field="FirstName">';
+			var lastName = '<input type="hidden" name="LastName[]" data-field="LastName">';
+			var email = this.generateField(this.selectedSeats[i].defFields[2], isLastCheckItem);
+			documentFragment2.append(firstName, lastName, email);
+		}
+		else
+		{
+			for(var j = 0; j < arrLen2; j++) {
+				var field = this.generateField(this.selectedSeats[i].defFields[j], isLastCheckItem);
+				documentFragment2.append(field);
+			}
 		}
 
 		for(var j = 0; j < arrLen3; j++) {

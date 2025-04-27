@@ -587,7 +587,7 @@ class SeatregDataValidation {
             return $validationStatus;
         }
 
-        if(!preg_match('/^[\p{L}\p{N}\\s-]+$/u', $firstName) || !preg_match('/^[\p{L}\p{N}\\s-]+$/u', $lastname)) {
+        if(!preg_match('/^[\p{L}\p{N}\\s-]*$/u', $firstName) || !preg_match('/^[\p{L}\p{N}\\s-]*$/u', $lastname)) {
             $validationStatus->setInvalid('Illegal characters in default inputs');
             return $validationStatus;
         }

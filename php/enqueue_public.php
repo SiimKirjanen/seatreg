@@ -110,6 +110,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var requireWPLogin = "'. esc_js($data->require_wp_login) . '";';
 			$inlineScript .= 'var isLoggedIn = "'. esc_js($isLoggedIn) . '";';
 			$inlineScript .= 'var onePersonCheckout = "'. esc_js($data->one_person_checkout) . '";';
+			$inlineScript .= 'var requireName = "' . esc_js($data->require_name ? '1' : '0') . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";

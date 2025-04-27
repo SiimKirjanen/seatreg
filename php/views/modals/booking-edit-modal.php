@@ -30,7 +30,8 @@
 				<label for="edit-room"><h5><?php esc_html_e('Room', 'seatreg'); ?></h5></label><br>
 				<input type="text" id="edit-room" name="room" autocomplete="off"/> <span id="edit-room-error"></span>
 			</div>
-
+			
+			<?php if ($requireName) : ?>
 			<div class="edit-modal-input-wrap">
 				<label for="edit-fname"><h5><?php esc_html_e('First name', 'seatreg'); ?></h5></label><br>
 				<input type="text" id="edit-fname" name="first-name" autocomplete="off"/> <span id="edit-fname-error"></span>
@@ -40,6 +41,10 @@
 				<label for="edit-lname"><h5><?php esc_html_e('Last name', 'seatreg'); ?></h5></label><br>
 				<input type="text" id="edit-lname" name="last-name" autocomplete="off"/></label> <span id="edit-lname-error"></span>
 			</div>
+			<?php else : ?>
+			<input type="hidden" name="first-name[]" autocomplete="off"/>
+			<input type="hidden" name="last-name[]" autocomplete="off"/>
+			<?php endif; ?>
 	        <div class="modal-body-custom"></div>
 			<input type="hidden" id="modal-code">
 			<input type="hidden" id="booking-id">
