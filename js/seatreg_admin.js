@@ -1166,16 +1166,23 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			subBtn.css('display','inline').next().css('display','none');
 			allFieldsValid = false;
 		}
-		if(booking.find('[name="first-name[]"]').val() === ''){
-			booking.find('[name="first-name[]"]').closest('.add-modal-input-wrap').find('.input-error').text('First name empty');
-			subBtn.css('display','inline').next().css('display','none');
-			allFieldsValid = false;
+		
+		if (WP_Seatreg.require_name)
+		{
+			if (booking.find('[name="first-name[]"]').val() === '')
+			{
+				booking.find('[name="first-name[]"]').closest('.add-modal-input-wrap').find('.input-error').text('First name empty');
+				subBtn.css('display', 'inline').next().css('display', 'none');
+				allFieldsValid = false;
+			}
+			if (booking.find('[name="last-name[]"]').val() === '')
+			{
+				booking.find('[name="last-name[]"]').closest('.add-modal-input-wrap').find('.input-error').text('Last name empty');
+				subBtn.css('display', 'inline').next().css('display', 'none');
+				allFieldsValid = false;
+			}
 		}
-		if(booking.find('[name="last-name[]"]').val() === ''){
-			booking.find('[name="last-name[]"]').closest('.add-modal-input-wrap').find('.input-error').text('Last name empty');
-			subBtn.css('display','inline').next().css('display','none');
-			allFieldsValid = false;
-		}
+		
 		if(booking.find('[name="email[]"]').val() === ''){
 			booking.find('[name="email[]"]').closest('.add-modal-input-wrap').find('.input-error').text('Email is empty');
 			subBtn.css('display','inline').next().css('display','none');
@@ -1282,18 +1289,24 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		return;
 	}
 
-	if(first_name == ''){
-		$('#edit-fname-error').text('First name empty');
-		subBtn.css('display','inline').next().css('display','none');
-
-		return;
+	if (WP_Seatreg.require_name)
+	{
+		if (first_name == '')
+		{
+			$('#edit-fname-error').text('First name empty');
+			subBtn.css('display', 'inline').next().css('display', 'none');
+			
+			return;
+		}
+		if (last_name == '')
+		{
+			$('#edit-lname-error').text('Last name empty');
+			subBtn.css('display', 'inline').next().css('display', 'none');
+			
+			return;
+		}
 	}
-	if(last_name == ''){
-		$('#edit-lname-error').text('Last name empty');
-		subBtn.css('display','inline').next().css('display','none');
-
-		return;
-	}
+	
 	if(calendarMode && $('#edit-date').val() === '') {
 		$('#edit-date-error').text('Date is empty');
 		subBtn.css('display','inline').next().css('display','none');

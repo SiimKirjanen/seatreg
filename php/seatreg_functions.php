@@ -501,7 +501,29 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('Change registration name', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo esc_attr(SEATREG_REGISTRATION_NAME_MAX_LENGTH); ?>" placeholder="<?php esc_html_e('Enter registration name', 'seatreg'); ?>" autocomplete="off" value="<?php echo esc_attr(wp_unslash($options[0]->registration_name)); ?>">
+				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo esc_attr(SEATREG_REGISTRATION_NAME_MAX_LENGTH); ?>" placeholder="<?php esc_html_e('Enter registration name', 'seatreg'); ?>" autocomplete="off" value="<?php echo esc_attr($options[0]->registration_name); ?>">
+			</div>
+			
+			<div class="form-group">
+				<label for="zoom-on-top"><?php esc_html_e('Zoom controls on top', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Show the zoom controls before the seat map, or after it', 'seatreg'); ?></label>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="zoom-on-top" name="zoom-on-top" value="0" <?php echo $options[0]->zoom_on_top == '1' ? 'checked':'' ?>>
+						<?php esc_html_e('Zoom controls on top', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="show-info-button"><?php esc_html_e('Show info button', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Set if the info button is shown on the booking page', 'seatreg'); ?></label>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="show-info-button" name="show-info-button" value="0" <?php echo $options[0]->show_info_button == '1' ? 'checked':'' ?>>
+						<?php esc_html_e('Show info button', 'seatreg'); ?>
+					</label>
+				</div>
 			</div>
 
 			<div class="form-group">
@@ -523,6 +545,17 @@ function seatreg_generate_settings_form() {
 				<textarea class="form-control" id="registration-close-reason" name="registration-close-reason" placeholder="<?php esc_html_e('Enter reason', 'seatreg'); ?>"><?php echo esc_attr($options[0]->registration_close_reason); ?></textarea>
 			</div>
 
+			<div class="form-group">
+				<label for="require-name"><?php esc_html_e('Require full name for booking (first & last)', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Controls whether first and last name are required when making a booking. When enabled, customers must provide their full name to complete the registration process.', 'seatreg'); ?></label>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="require-name" name="require-name" value="0" <?php echo $options[0]->require_name == '1' ? 'checked':'' ?>>
+						<?php esc_html_e('Require name', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+			
 			<div class="form-group">
 				<label for="require-wp-login"><?php esc_html_e('Require WordPress login', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Only logged in WordPress users can make a booking', 'seatreg'); ?>.</p>
@@ -1400,6 +1433,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	$row_count2 = count($bookings2);
 	$project_name = str_replace(' ', '_', $project_name_original);
 	$usingSeats = $seatregData->using_seats === '1';
+	$requireName = $seatregData->require_name;
 	$zipExtensionLoaded = extension_loaded('zip');
 
 	?>
@@ -1619,8 +1653,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		</div>
 	<?php
 	
-	seatreg_booking_edit_modal($usingSeats, $calendarDate);
-	seatreg_add_booking_modal($usingSeats, $calendarDate, $roomsData);
+	seatreg_booking_edit_modal($usingSeats, $calendarDate, $requireName);
+	seatreg_add_booking_modal($usingSeats, $calendarDate, $requireName, $roomsData);
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
 	seatreg_seat_id_modal($roomsData, $bookings1, $bookings2);
@@ -1774,7 +1808,7 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 	}
 }
 
-function seatreg_add_booking_modal($usingSeats, $calendarDate, $roomsData) {
+function seatreg_add_booking_modal($usingSeats, $calendarDate, $requireName, $roomsData) {
 	if(!$roomsData) {
 		return;
 	}
@@ -1785,7 +1819,7 @@ function seatreg_add_booking_modal($usingSeats, $calendarDate, $roomsData) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/add-booking-modal.php' );
 }
 
-function seatreg_booking_edit_modal($usingSeats, $calendarDate) {
+function seatreg_booking_edit_modal($usingSeats, $calendarDate, $requireName) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/booking-edit-modal.php' );
 }
 
@@ -2317,6 +2351,9 @@ function seatreg_set_up_db() {
 			notification_email varchar(255) DEFAULT NULL,
 			booking_redirect_status_page tinyint(1) NOT NULL DEFAULT 0,
 			require_wp_login tinyint(0) NOT NULL DEFAULT 0,
+			require_name tinyint(0) NOT NULL DEFAULT 1,
+			show_info_button tinyint(0) NOT NULL DEFAULT 1,
+			zoom_on_top tinyint(0) NOT NULL DEFAULT 0,
 			wp_user_booking_limit INT DEFAULT NULL,
 			wp_user_bookings_seat_limit INT DEFAULT NULL,
 			one_person_checkout tinyint(0) NOT NULL DEFAULT 0,
@@ -3076,9 +3113,15 @@ function seatreg_update() {
 	}
 
 	if(!isset($_POST['booking-notification'])) {
-		$_POST['booking-notification'] = 0;  
+		$_POST['booking-notification'] = 0;
 	}else {
 		$_POST['booking-notification'] = 1;
+	}
+
+	if(!isset($_POST['booker-pending-booking-notification'])) {
+		$_POST['booker-pending-booking-notification'] = 0;
+	}else {
+		$_POST['booker-pending-booking-notification'] = 1;
 	}
 
 	if(!isset($_POST['paypal-payments'])) {
@@ -3190,10 +3233,29 @@ function seatreg_update() {
 		$_POST['booking-redirect-status-page'] = 1;
 	}
 
+	if( !isset($_POST['show-info-button']) ) {
+		$_POST['show-info-button'] = 0;
+	}else {
+		$_POST['show-info-button'] = 1;
+	}
+
+	
+	if( !isset($_POST['zoom-on-top']) ) {
+		$_POST['zoom-on-top'] = 0;
+	}else {
+		$_POST['zoom-on-top'] = 1;
+	}
+	
 	if( !isset($_POST['require-wp-login']) ) {
 		$_POST['require-wp-login'] = 0;
 	}else {
 		$_POST['require-wp-login'] = 1;
+	}
+
+	if( !isset($_POST['require-name']) ) {
+		$_POST['require-name'] = 0;
+	}else {
+		$_POST['require-name'] = 1;
 	}
 
 	if( !isset($_POST['one-person-checkout']) ) {
@@ -3267,6 +3329,9 @@ function seatreg_update() {
 				'booking_qr_code_input' => $_POST['booking-qr-code-input'],
 				'notification_email' => $_POST['notification-email'],
 				'booking_redirect_status_page' => $_POST['booking-redirect-status-page'],
+				'require_name' => $_POST['require-name'],
+				'show_info_button' => $_POST['show-info-button'],
+				'zoom_on_top' => $_POST['zoom-on-top'],
 				'require_wp_login' => $_POST['require-wp-login'],
 				'wp_user_booking_limit' => (int)$_POST['wp-user-booking-limit'] > 0 ? (int)$_POST['wp-user-booking-limit'] : null,
 				'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null,
@@ -3476,10 +3541,21 @@ function seatreg_booking_submit_callback() {
 				
 		die();
 	}
+	
+	$data = seatreg_get_options($_POST['c']);
 
-	if( empty($_POST['FirstName']) || 
-		empty($_POST['LastName']) || 
-		empty($_POST['Email']) || 
+	if ($data->require_name)
+	{
+		if( empty($_POST['FirstName']) ||
+			empty($_POST['LastName'])) {
+				$resp->setError('Missing data');
+				$resp->echoData();
+				
+				die();
+			}
+	}
+
+	if( empty($_POST['Email']) ||
 		empty($_POST['item-id']) ||
 		empty($_POST['item-nr']) ||
 		empty($_POST['room-uuid']) ||

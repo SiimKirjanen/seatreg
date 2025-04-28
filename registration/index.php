@@ -25,6 +25,10 @@
 	$hasFailedTimeRestriction = !$registrationTimeRestoriction->registrationStartCheck  || !$registrationTimeRestoriction->registrationEndCheck;
 	$usingSeats = $data->using_seats === '1';
 	$requireWPLogin = $data->require_wp_login === '1';
+	$showInfoButton = $data->show_info_button === '1';
+	$requireName = $data->require_name === '1';
+	$zoom_on_top = $data->zoom_on_top === '1';
+	
 	$needsToLogIn = $requireWPLogin && !SeatregAuthService::isLoggedIn();
 
 	if($data->registration_password != null ) {
@@ -135,6 +139,16 @@
 						<?php esc_html_e($data->info); ?>
 					</div>
 				<?php endif; ?>
+				<?php if ($zoom_on_top) : ?>
+					<div id="zoom-controller" class="no-select">
+						<i class="fa fa-arrow-circle-up move-action" data-move="up"></i><br>
+						<i class="fa fa-arrow-circle-left move-action" data-move="left"></i>
+						<i class="fa fa-arrow-circle-right move-action" data-move="right"></i><br>
+						<i class="fa fa-arrow-circle-down move-action" data-move="down"></i><br><br>
+						<i class="fa fa-plus zoom-action" data-zoom="in"></i><br>
+						<i class="fa fa-minus zoom-action" data-zoom="out"></i>
+					</div>
+				<?php endif; ?>
 
 				<div id="middle" class="no-select">
 					<div id="view-wrap">
@@ -160,9 +174,11 @@
 					</div>
 
 					<div id="controls-wrapper">
+						<?php if ($showInfoButton): ?>
 						<div class="room-nav-extra-info-btn big-display-btn">
 							<i class="fa fa-info-circle"></i>
 						</div>
+						<?php endif ?>
 						
 						<div id="seat-cart" class="border-box no-select">
 							<div class="seat-cart-left">
@@ -181,6 +197,7 @@
 							</div>
 						</div>
 
+						<?php if (!$zoom_on_top) : ?>
 						<div id="zoom-controller" class="no-select">
 							<i class="fa fa-arrow-circle-up move-action" data-move="up"></i><br>
 							<i class="fa fa-arrow-circle-left move-action" data-move="left"></i>
@@ -189,6 +206,7 @@
 							<i class="fa fa-plus zoom-action" data-zoom="in"></i><br>
 							<i class="fa fa-minus zoom-action" data-zoom="out"></i>
 						</div>
+						<?php endif; ?>
 					</div>
 				</div>
 
@@ -402,9 +420,11 @@
 						</div>
 					</div>
 				</div>
+				<?php if ($showInfoButton): ?>
 				<div class="room-nav-extra-info-btn center-fix">
 					<i class="fa fa-info-circle"></i>
 				</div>
+				<?php endif; ?>
 				<div class="mobile-legend">
 					<?php 
 						esc_html_e('Show legends', 'seatreg');

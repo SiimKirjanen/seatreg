@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.7.1
-Stable tag: 1.57.1
+Stable tag: 1.58.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -42,6 +42,11 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.58.0 =
+* Added an option to make name fields optional when submitting a booking.
+* Added an option to change zoom controls position in registration view.
+* Added an option to hide info button in registration view.
 
 = 1.57.1 =
 * When adding a booking with the booking manager, if a selected seat has multiple prices, you can now select the desired price.

@@ -40,6 +40,7 @@
 							<div class="input-error"></div>
 						</label>
 					</div>
+					<?php if ($requireName) : ?>
 					<div class="add-modal-input-wrap">
 						<label>
 							<h5>
@@ -58,6 +59,10 @@
 							<div class="input-error"></div>
 						</label>
 					</div>
+					<?php else : ?>
+					<input type="hidden" name="first-name[]" autocomplete="off"/>
+					<input type="hidden" name="last-name[]" autocomplete="off"/>
+					<?php endif; ?>
 					<div class="add-modal-input-wrap">
 						<label>
 							<h5>
