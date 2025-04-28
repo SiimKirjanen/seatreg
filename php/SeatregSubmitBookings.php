@@ -47,7 +47,7 @@ class SeatregSubmitBookings extends SeatregBooking {
     	foreach ($firstname as $key => $value) {
 
 			//default field validation
-			$defaultFieldValidation = SeatregDataValidation::validateDefaultInputOnBookingSubmit($value, $lastname[$key], $email[$key]);
+			$defaultFieldValidation = SeatregDataValidation::validateDefaultInputOnBookingSubmit($value, $lastname[$key], $email[$key], $this->_require_name);
 
 			if( !$defaultFieldValidation->valid ) {
 				$this->response->setValidationError( $defaultFieldValidation->errorMessage );

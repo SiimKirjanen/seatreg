@@ -40,6 +40,7 @@ class SeatregBooking {
 	protected $_require_wp_login = null;
 	protected $_wp_user_booking_limit = null;
 	protected $_wp_user_bookings_seat_limit = null;
+	protected $_require_name = true; //require full name from registrants
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
@@ -317,6 +318,7 @@ class SeatregBooking {
 		$this->_require_wp_login = $result->require_wp_login;
 		$this->_wp_user_booking_limit = $result->wp_user_booking_limit ? (int)$result->wp_user_booking_limit: null;
 		$this->_wp_user_bookings_seat_limit = $result->wp_user_bookings_seat_limit ? (int)$result->wp_user_bookings_seat_limit: null;
+		$this->_require_name = $result->require_name === '1';
 		
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;

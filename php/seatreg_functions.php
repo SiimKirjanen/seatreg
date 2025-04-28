@@ -546,12 +546,12 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="require-name"><?php esc_html_e('Require name', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Set if the real name is required in booking information', 'seatreg'); ?></label>
+				<label for="require-name"><?php esc_html_e('Require full name for booking (first & last)', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Controls whether first and last name are required when making a booking. When enabled, customers must provide their full name to complete the registration process.', 'seatreg'); ?></label>
 				<div class="checkbox">
 					<label>
 						<input type="checkbox" id="require-name" name="require-name" value="0" <?php echo $options[0]->require_name == '1' ? 'checked':'' ?>>
-						<?php esc_html_e('Require real name', 'seatreg'); ?>
+						<?php esc_html_e('Require name', 'seatreg'); ?>
 					</label>
 				</div>
 			</div>

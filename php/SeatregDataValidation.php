@@ -579,7 +579,7 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
-    public static function validateDefaultInputOnBookingSubmit($firstName, $lastname, $email) {
+    public static function validateDefaultInputOnBookingSubmit($firstName, $lastname, $email, $requireName = true) {
         $validationStatus = new SeatregValidationStatus();
 
         if(strlen($firstName) > SEATREG_DEFAULT_INPUT_MAX_LENGHT || strlen($lastname) > SEATREG_DEFAULT_INPUT_MAX_LENGHT || strlen($email) > SEATREG_DEFAULT_INPUT_MAX_LENGHT ) {
@@ -587,9 +587,16 @@ class SeatregDataValidation {
             return $validationStatus;
         }
 
-        if(!preg_match('/^[\p{L}\p{N}\\s-]*$/u', $firstName) || !preg_match('/^[\p{L}\p{N}\\s-]*$/u', $lastname)) {
-            $validationStatus->setInvalid('Illegal characters in default inputs');
-            return $validationStatus;
+        if ( $requireName ) {
+            if(!preg_match('/^[\p{L}\p{N}\\s-]*$/u', $firstName) || !preg_match('/^[\p{L}\p{N}\\s-]*$/u', $lastname)) {
+                $validationStatus->setInvalid('Illegal characters in default inputs');
+                return $validationStatus;
+            }
+        }else {
+            if ($firstName !== '' || $lastname !== '') {
+                $validationStatus->setInvalid('First and last name must be empty when name is not required');
+                return $validationStatus;
+            }
         }
 
         if(!is_email($email)) {
