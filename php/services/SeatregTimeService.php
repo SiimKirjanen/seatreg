@@ -106,14 +106,14 @@ class SeatregTimeService {
         return $datetime;
     }
 
-    public static function getDateStringFromUnix( $unixTimeStamp ) {
+    public static function getDateStringFromUnix( $unixTimeStamp, $format = 'M j Y H:i' ) {
         $timestamp = self::normalizeUnixTimestamp( $unixTimeStamp );
 
         if ( $timestamp === null ) {
             return null;
         }
 
-        $localizedDate = date_i18n( 'M j Y H:i', $timestamp );
+        $localizedDate = date_i18n( $format, $timestamp );
     
         return $localizedDate;
     }
