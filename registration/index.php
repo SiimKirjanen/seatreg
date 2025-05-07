@@ -175,9 +175,9 @@
 
 					<div id="controls-wrapper">
 						<?php if ($showInfoButton): ?>
-						<div class="room-nav-extra-info-btn big-display-btn">
-							<i class="fa fa-info-circle"></i>
-						</div>
+							<div class="room-nav-extra-info-btn big-display-btn">
+								<i class="fa fa-info-circle"></i>
+							</div>
 						<?php endif ?>
 						
 						<div id="seat-cart" class="border-box no-select">
@@ -233,10 +233,10 @@
 										<div class="flag1"></div>
 										<?php 
 											esc_html_e('Registration starts', 'seatreg');
-										?>
-										<span class="time">
+										?>:
+										<span>
 											<?php
-												echo esc_html($data->registration_start_timestamp);
+												echo esc_html( SeatregTimeService::getDateStringFromUnix($data->registration_start_timestamp, 'M j Y') );
 											?>
 										</span>
 									</div>
@@ -249,10 +249,10 @@
 										<div class="flag2"></div>
 										<?php 
 											esc_html_e('Registration ends', 'seatreg');
-										?>
-										<span class="time">
+										?>:
+										<span>
 											<?php
-												echo esc_html($data->registration_end_timestamp);
+												echo esc_html( SeatregTimeService::getDateStringFromUnix($data->registration_end_timestamp, 'M j Y') );
 											?>
 										</span>
 									</div>
@@ -514,6 +514,7 @@
 					
 							<?php
 								if($registrationTime == 'wait') {
+									$startDate = SeatregTimeService::getDateStringFromUnix($data->registration_start_timestamp, 'M j Y');
 									$startTime = '';
 
 									if( $registrationTimeRestoriction->registrationStartTime  ) {
@@ -521,8 +522,9 @@
 									}
 									
 									echo '<h3>', esc_html__('Not open yet', 'seatreg'), '</h3>';
-									echo '<h4>', esc_html__('Registration starts', 'seatreg'), ': <span class="time">', esc_html($data->registration_start_timestamp), '</span> ', esc_html($startTime), '</h4>';
+									echo '<h4>', esc_html__('Registration starts', 'seatreg'), ': <span>', esc_html($startDate), '</span> ', esc_html($startTime), '</h4>';
 								}else if($registrationTime == 'end') {
+									$endDate = SeatregTimeService::getDateStringFromUnix($data->registration_end_timestamp, 'M j Y');
 									$endTime = '';
 
 									if( $registrationTimeRestoriction->registrationEndtTime  ) {
@@ -530,7 +532,7 @@
 									}
 
 									echo '<h3>', esc_html__('Closed', 'seatreg'), '</h3>';
-									echo '<h4>', esc_html__('Registration ended', 'seatreg'), ': <span class="time">', esc_html($data->registration_end_timestamp), '</span> ', esc_html($endTime), '</h4>';
+									echo '<h4>', esc_html__('Registration ended', 'seatreg'), ': <span>', esc_html($endDate), '</span> ', esc_html($endTime), '</h4>';
 								}
 							?>
 						</div>

@@ -85,25 +85,36 @@ class SeatregTimeService {
         return true;
     }
 
+    public static function normalizeUnixTimestamp( $unixTimeStamp ) {
+        if ( $unixTimeStamp === null ) {
+            return null;
+        }
+    
+        // Handle milliseconds (13 digits) vs seconds (10 digits)
+        return ( strlen( $unixTimeStamp ) === 13 ) ? (int) ( $unixTimeStamp / 1000 ) : (int) $unixTimeStamp;
+    }
+
     public static function getLocalDateTimeOutOfUnix($unixTimeStamp) {
         if($unixTimeStamp === null) {
             return null;
         }
         $datetime = new DateTime();
-        $timestamp = (strlen($unixTimeStamp) === 13) ? ($unixTimeStamp / 1000) : $unixTimeStamp;
+        $timestamp = self::normalizeUnixTimestamp( $unixTimeStamp );
         $datetime->setTimestamp($timestamp);
         $datetime->setTimezone(new DateTimeZone( wp_timezone_string() ));
 
         return $datetime;
     }
 
-    public static function getDateStringFromUnix( $unixTimeStamp ) {
-        $dateTime = self::getLocalDateTimeOutOfUnix( $unixTimeStamp );
+    public static function getDateStringFromUnix( $unixTimeStamp, $format = 'M j Y H:i' ) {
+        $timestamp = self::normalizeUnixTimestamp( $unixTimeStamp );
 
-        if($dateTime) {
-            return $dateTime->format('M j Y H:i e');
+        if ( $timestamp === null ) {
+            return null;
         }
 
-        return null;
+        $localizedDate = date_i18n( $format, $timestamp );
+    
+        return $localizedDate;
     }
 }
