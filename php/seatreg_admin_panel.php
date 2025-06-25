@@ -91,7 +91,7 @@ function seatreg_create_welcome() {
 					Don't forget to leave a 
 					<a href="https://wordpress.org/support/plugin/seatreg/reviews/" target="_blank">
 						review
-					<a/>
+					</a>
 				</p>
 				<p>
 					Thank you if you have already donated and left a review. It means a lot, as it confirms that what I do makes a difference and motivates me to maintain and add new features.
@@ -100,14 +100,15 @@ function seatreg_create_welcome() {
 					Found a problem or have some ideas how to improve? Don't hesitate to write to
 					<a href="https://wordpress.org/support/plugin/seatreg/" target="_blank">
 						support forum
-					<a/>
+					</a>
 				</p>
+				<p>Source code is located at <a href="https://github.com/SiimKirjanen/seatreg" target="_blank">GitHub</a></p>
 				<p style="text-align:center">
 					I also created an Android companion application for this plugin.<br>
 					<a href="https://play.google.com/store/apps/details?id=com.seatreg" target="_blank">
 						<i class="fa fa-android" aria-hidden="true" style="color: #A4C639"></i>
 						SeatReg Android application
-					<a/>
+					</a>
 				</p>
 				<p>
 					Also take a look at my other plugin QuickTasker. It is a task management plugin. <br />
