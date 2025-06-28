@@ -34,8 +34,14 @@ Triggered when booking is added with booking manager. Gets booking ID as paramet
 **seatreg_action_booking_pending**\
 Triggered when booking gets pending status. Gets booking ID as parameter.
 
+**seatreg_action_booking_pending_via_manager**\
+Triggered when booking gets pending status manually with booking manager. Gets booking ID as parameter.
+
 **seatreg_action_booking_approved**\
 Triggered when booking gets approved status. Gets booking ID as parameter.
+
+**seatreg_action_booking_approved_via_manager**\
+Triggered when booking gets approved status manually with booking manager. Gets booking ID as parameter.
 
 **seatreg_action_booking_removed**
 Triggered when booking gets removed. Gets booking ID as parameter.

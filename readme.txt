@@ -44,7 +44,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 == Changelog ==
 
 = 1.58.2 =
-* Trigger related action hooks when confirming booking via confirm link.
+* Changes related to action hooks. Trigger related action when confirming booking via confirm link. Separate actions with booking manager.
 * Added GitHub link to home page.
 
 = 1.58.1 =
