@@ -66,8 +66,12 @@ class SeatregConfirmBooking extends SeatregBooking {
 		}
 		$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
 
+		SeatregActionsService::triggerBookingSubmittedAction($this->_bookingId);
+
 		if($this->_insertState == 1) {
 			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to pending state by the system (Booking confirm link)', false);
+			SeatregActionsService::triggerBookingPendingAction($this->_bookingId);
+
 			if ($this->_sendNewPendingBookingNotificationBookerEmail) {
 				seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate, $this->_emailFromAddress, $this->_pendingBookingSubject);
 			}
@@ -75,11 +79,12 @@ class SeatregConfirmBooking extends SeatregBooking {
 			echo '.<br><br>';
 		}else {
 			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking set to approved state by the system (Booking confirm link)', false);
+			SeatregActionsService::triggerBookingApprovedAction($this->_bookingId);
 			seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode, $this->_approvedBookingTemplate);
 			esc_html_e('You booking is now confirmed', 'seatreg');
 			echo '<br><br>';
 		}
-		
+
 		printf(
 			esc_html__('You can see your booking status at the following link %s', 'seatreg'), 
 			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"

@@ -74,7 +74,9 @@ define('CALENDAR_DATE_PICKER_REGEX', '/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/');
 define('SEATREG_ACTION_BOOKING_SUBMITTED', 'seatreg_action_booking_submitted');
 define('SEATREG_ACTION_BOOKING_MANUALLY_ADDED', 'seatreg_action_booking_manually_added');
 define('SEATREG_ACTION_BOOKING_PENDING', 'seatreg_action_booking_pending');
+define('SEATREG_ACTION_BOOKING_PENDING_VIA_MANAGER', 'seatreg_action_booking_pending_via_manager');
 define('SEATREG_ACTION_BOOKING_APPROVED', 'seatreg_action_booking_approved');
+define('SEATREG_ACTION_BOOKING_APPROVED_VIA_MANAGER', 'seatreg_action_booking_approved_via_manager');
 define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
 
 // API

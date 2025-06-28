@@ -2693,7 +2693,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode, $calendarDate) {
 			'%s'
 		);
 		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved (Booking manager)');
-		SeatregActionsService::triggerBookingApprovedAction($action->booking_id);
+		SeatregActionsService::triggerBookingApprovedActionViaManager($action->booking_id);
 
 	}else if($action->action == 'del') {
 
@@ -2725,7 +2725,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode, $calendarDate) {
 			'%s'
 		);
 		seatreg_add_activity_log('booking', $action->booking_id, 'Booking unapproved (Booking manager)');
-		SeatregActionsService::triggerBookingPendingAction($action->booking_id);
+		SeatregActionsService::triggerBookingPendingActionViaManager($action->booking_id);
 	}
 }
 

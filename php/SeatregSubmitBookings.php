@@ -343,8 +343,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 				);
 			}
 			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking inserted to database', false);
-			SeatregActionsService::triggerBookingSubmittedAction($this->_bookingId);
-
+			
 			if($this->_requireBookingEmailConfirm) {
 				//send email with the confirm link
 				$emailVerificationMailSent = seatreg_sent_email_verification_email($confCode, $this->_bookerEmail, $this->_registrationName, $this->_emailVerificationTemplate, $this->_emailFromAddress, $this->_emailVerificationSubject);
@@ -358,6 +357,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 				}
 				
 			}else {
+				SeatregActionsService::triggerBookingSubmittedAction($this->_bookingId);
+
 				if($this->_sendNewBookingNotificationEmail) {
 					seatreg_send_booking_notification_email($this->_registrationCode, $this->_bookingId,  $this->_sendNewBookingNotificationEmail);
 				}
