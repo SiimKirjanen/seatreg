@@ -126,6 +126,7 @@
 		this.requireWPLogin = window.requireWPLogin === '1';
 		this.isLoggedIn = window.isLoggedIn === '1';
 		this.onePersonCheckout = window.onePersonCheckout === '1';
+		this.automaticBookingConfirmDialog = window.automaticBookingConfirmDialog === '1';
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -1593,7 +1594,12 @@ $('#dialog-close-btn').on('click', function() {
 $('#confirm-dialog-bottom').on('click', '.add-to-cart', function() {
 	$('#selected-seat-price').val( $(this).data('price') );
 	$('#selected-multi-price-uuid').val( $(this).data('price-uuid') || '' );
+
 	seatReg.addSeatToCart();
+
+	if ( seatReg.automaticBookingConfirmDialog ) {
+		seatReg.openSeatCart();
+	}
 });
 
 $('#room-nav-close').on('click', function() {

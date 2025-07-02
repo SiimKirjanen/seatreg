@@ -730,6 +730,17 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+			<label for="automatic-booking-confirm-dialog"><?php esc_html_e('Automatic booking confirm dialog', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e("By default, users need to manually open the seat selection menu to complete their booking. This option automatically displays the booking confirmation dialog immediately after seat is selected.", 'seatreg'); ?></p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="automatic-booking-confirm-dialog" name="automatic-booking-confirm-dialog" value="0" <?php echo $options[0]->automatic_booking_confirm_dialog  === '1' ? 'checked':'' ?> >
+			      		<?php esc_html_e('Open booking confirm dialog automatically', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group">
 				<label for="bookings-email-limit"><?php esc_html_e('Booking email limit', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Specify how many bookings can be made with the same email. Leave empty for no limit', 'seatreg'); ?>.
@@ -2357,6 +2368,7 @@ function seatreg_set_up_db() {
 			wp_user_booking_limit INT DEFAULT NULL,
 			wp_user_bookings_seat_limit INT DEFAULT NULL,
 			one_person_checkout tinyint(0) NOT NULL DEFAULT 0,
+			automatic_booking_confirm_dialog tinyint(0) NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3264,6 +3276,12 @@ function seatreg_update() {
 		$_POST['one-person-checkout'] = 1;
 	}
 
+	if( !isset($_POST['automatic-booking-confirm-dialog']) ) {
+		$_POST['automatic-booking-confirm-dialog'] = 0;
+	}else {
+		$_POST['automatic-booking-confirm-dialog'] = 1;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 	$dbUpdated = true;
 
@@ -3336,6 +3354,7 @@ function seatreg_update() {
 				'wp_user_booking_limit' => (int)$_POST['wp-user-booking-limit'] > 0 ? (int)$_POST['wp-user-booking-limit'] : null,
 				'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null,
 				'one_person_checkout' => $_POST['one-person-checkout'],
+				'automatic_booking_confirm_dialog' => $_POST['automatic-booking-confirm-dialog'],
 			 ),
 			array(
 				'registration_code' => sanitize_text_field($_POST['registration_code'])
