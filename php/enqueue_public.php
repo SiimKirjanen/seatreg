@@ -7,7 +7,7 @@ add_action('wp_print_styles', 'seatreg_remove_all_styles', 100);
 function seatreg_remove_all_styles() {
 	if( seatreg_is_registration_view_page() ) {
 		global $wp_styles;
-		$allowedToLoad = array('seatreg-registration-style', 'google-open-sans', 'pg-calendar-style', 'alertify-core', 'alertify-default');
+		$allowedToLoad = array('seatreg-registration-style', 'local-open-sans', 'pg-calendar-style', 'alertify-core', 'alertify-default');
     	$wp_styles->queue = $allowedToLoad;
 	}
 	if( seatreg_is_booking_check_page() ) {
@@ -48,11 +48,11 @@ function seatreg_public_scripts_and_styles() {
 		$manifestFileContents = file_get_contents(SEATREG_PLUGIN_FOLDER_DIR . 'rev-manifest.json');
 		$manifest = json_decode($manifestFileContents, true);
 
-		wp_enqueue_style('google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,700', array(), '1.0.0', 'all');
 		wp_enqueue_style('seatreg-registration-style', SEATREG_PLUGIN_FOLDER_URL . 'registration/css/' . $manifest['registration.min.css'] , array(), '1.6.0', 'all');
 		wp_enqueue_style('pg-calendar-style', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/css/pignose.calendar.css', array(), '1.4.31', 'all');
 		wp_enqueue_style('alertify-core', SEATREG_PLUGIN_FOLDER_URL . 'css/alertify.core.css', array(), '1.0.0', 'all');
 		wp_enqueue_style('alertify-default', SEATREG_PLUGIN_FOLDER_URL . 'css/alertify.default.css', array(), '1.0.0', 'all');
+		wp_enqueue_style('local-open-sans', SEATREG_PLUGIN_FOLDER_URL . 'fonts/open-sans/open-sans.css', array(), '1.0.0', 'all');
 
 		wp_enqueue_script("jquery");
 		wp_enqueue_script('modernizr', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/modernizr.custom.89593.min.js' , array(), '2.8.3', false);
