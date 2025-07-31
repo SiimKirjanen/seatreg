@@ -1603,6 +1603,67 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.custom-c
 		highlight_moved_item($item);
 });
 
+$('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-options', function() {
+    var selectId = $(this).data('select-id');
+    var selectElement = $('#' + selectId);
+    var options = selectElement.find('option');
+
+    // Create a dialog element
+    var dialog = document.createElement('dialog');
+    dialog.innerHTML = `
+        <h2>Edit Options</h2>
+        <ul id="options-list"></ul>
+        <input type="text" id="new-option" placeholder="New option">
+        <button class="add-option">Add</button>
+        <button id="save-options">Save Changes and Close</button>
+    `;
+
+    // Populate the dialog with existing options
+    options.each(function() {
+        var optionText = $(this).find('span.option-value').text();
+        $('#options-list', dialog).append('<li><input type="text" value="' + optionText + '"><button class="remove-option">Remove</button></li>');
+    });
+
+    // Add event listeners for adding, removing, and saving options
+    dialog.querySelector('.add-option').addEventListener('click', function() {
+        var newOptionText = dialog.querySelector('#new-option').value;
+        if (newOptionText !== '') {
+            $('#options-list', dialog).append('<li><input type="text" value="' + newOptionText + '"><button class="remove-option">Remove</button></li>');
+            dialog.querySelector('#new-option').value = ''; // Clear the input field
+        }
+    });
+
+    dialog.querySelector('.remove-option').addEventListener('click', function() {
+        $(this).closest('li').remove();
+    });
+
+    dialog.querySelector('#save-options').addEventListener('click', function() {
+        var newOptions = [];
+        $('#options-list li', dialog).each(function() {
+            newOptions.push($(this).find('input').val());
+        });
+
+        // Update the select element with new options
+        selectElement.empty();
+        $.each(newOptions, function(index, option) {
+            selectElement.append('<option><span class="option-value">' + option + '</span></option>');
+        });
+
+        dialog.close();
+    });
+
+    // Show the dialog
+    document.body.appendChild(dialog);
+    dialog.showModal();
+
+    // Handle closing the dialog
+    $(document).on('click', function(e) {
+        if (e.target === dialog) {
+            dialog.close();
+        }
+    });
+});
+
 function highlight_moved_item(moved_item){
 	let css_class = 'custom-container-move-highlight';
 	moved_item.addClass(css_class);

@@ -1208,16 +1208,16 @@ function seatreg_generate_settings_form() {
 										echo '<div class="custom-container" data-type="sel" data-label="'. esc_html($custFields[$i]->label) .'">';
 											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
 											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>';
-												echo '<select>';
+												echo '<select id="custom-select-'. $i .'">';
 
 													for($j = 0; $j < $optLen; $j++) {
 														echo '<option><span class="option-value">', esc_html($custFields[$i]->options[$j]) ,'</span></option>';
 													}
 
 												echo '</select>';
-											echo '</label>';
 											echo '<div class="custom-container-controls">';
-											echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
+												echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
+												echo ' <i class="fa fa-pencil edit-options" data-select-id="custom-select-'. $i .'"></i>';
 											echo '</div>';
 
 										echo '</div>';
