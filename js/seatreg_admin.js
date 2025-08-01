@@ -1623,7 +1623,7 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-op
 
     // Populate the dialog with existing options
     options.each(function() {
-        var optionText = $(this).find('span.option-value').text();
+        var optionText = $(this).text();
         $('#options-list', dialog).append('<li class="d-flex"><input type="text" value="' + optionText + '"><button class="remove-option btn btn-danger ml-2 w-100">Remove</button></li>');
     });
 
