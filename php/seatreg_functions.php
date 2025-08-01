@@ -1215,9 +1215,10 @@ function seatreg_generate_settings_form() {
 													}
 
 												echo '</select>';
+											echo '</label>';
 											echo '<div class="custom-container-controls">';
 												echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
-												echo ' <i class="fa fa-pencil edit-options" data-select-id="custom-select-'. $i .'"></i>';
+												echo ' <i class="fa fa-pencil edit-options ml-1 btn btn-primary" data-select-id="custom-select-'. $i .'"></i>';
 											echo '</div>';
 
 										echo '</div>';

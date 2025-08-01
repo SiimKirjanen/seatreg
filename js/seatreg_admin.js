@@ -1612,30 +1612,43 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-op
     var dialog = document.createElement('dialog');
     dialog.innerHTML = `
         <h2>Edit Options</h2>
-        <ul id="options-list"></ul>
-        <input type="text" id="new-option" placeholder="New option">
-        <button class="add-option">Add</button>
-        <button id="save-options">Save Changes and Close</button>
+        <ul id="options-list" class="mb-0"></ul>
+		<p id="error-message" class="text-danger d-none mb-2">You must have at least one option.</p>
+		<div class="d-flex">
+			<input type="text" id="new-option" placeholder="New option">
+			<button id="add-option" class="btn btn-primary ml-2 w-100">Add</button>
+		</div>
+        <button id="save-options" class="btn btn-success mt-2 w-100">Save Changes and Close</button>
     `;
 
     // Populate the dialog with existing options
     options.each(function() {
         var optionText = $(this).find('span.option-value').text();
-        $('#options-list', dialog).append('<li><input type="text" value="' + optionText + '"><button class="remove-option">Remove</button></li>');
+        $('#options-list', dialog).append('<li class="d-flex"><input type="text" value="' + optionText + '"><button class="remove-option btn btn-danger ml-2 w-100">Remove</button></li>');
     });
 
     // Add event listeners for adding, removing, and saving options
-    dialog.querySelector('.add-option').addEventListener('click', function() {
+    dialog.querySelector('#add-option').addEventListener('click', function() {
         var newOptionText = dialog.querySelector('#new-option').value;
         if (newOptionText !== '') {
-            $('#options-list', dialog).append('<li><input type="text" value="' + newOptionText + '"><button class="remove-option">Remove</button></li>');
+            $('#options-list', dialog).append('<li class="d-flex"><input type="text" value="' + newOptionText + '"><button class="remove-option btn btn-danger ml-2 w-100">Remove</button></li>');
             dialog.querySelector('#new-option').value = ''; // Clear the input field
         }
     });
 
-    dialog.querySelector('.remove-option').addEventListener('click', function() {
-        $(this).closest('li').remove();
-    });
+	dialog.addEventListener('click', function(e) {
+		if (e.target.classList.contains('remove-option')) {
+			var listItems = $('#options-list li', dialog);
+			if (listItems.length > 1) {
+				$(e.target).closest('li').remove();
+			} else {
+                $('#error-message', dialog).removeClass('d-none');
+                setTimeout(function() {
+                    $('#error-message', dialog).addClass('d-none');
+                }, 5000);
+			}
+		}
+	});
 
     dialog.querySelector('#save-options').addEventListener('click', function() {
         var newOptions = [];
@@ -1650,6 +1663,7 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-op
         });
 
         dialog.close();
+		dialog.remove();
     });
 
     // Show the dialog
@@ -1660,6 +1674,7 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-op
     $(document).on('click', function(e) {
         if (e.target === dialog) {
             dialog.close();
+			dialog.remove();
         }
     });
 });
