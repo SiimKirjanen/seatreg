@@ -1603,6 +1603,82 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.custom-c
 		highlight_moved_item($item);
 });
 
+$('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-options', function() {
+    var selectId = $(this).data('select-id');
+    var selectElement = $('#' + selectId);
+    var options = selectElement.find('option');
+
+    // Create a dialog element
+    var dialog = document.createElement('dialog');
+    dialog.innerHTML = `
+        <h2>Edit Options</h2>
+        <ul id="options-list" class="mb-0"></ul>
+		<p id="error-message" class="text-danger d-none mb-2">You must have at least one option.</p>
+		<div class="d-flex">
+			<input type="text" id="new-option" placeholder="New option">
+			<button id="add-option" class="btn btn-primary ml-2 w-100">Add</button>
+		</div>
+        <button id="save-options" class="btn btn-success mt-2 w-100">Save Changes and Close</button>
+    `;
+
+    // Populate the dialog with existing options
+    options.each(function() {
+        var optionText = $(this).text();
+        $('#options-list', dialog).append('<li class="d-flex"><input type="text" value="' + optionText + '"><button class="remove-option btn btn-danger ml-2 w-100">Remove</button></li>');
+    });
+
+    // Add event listeners for adding, removing, and saving options
+    dialog.querySelector('#add-option').addEventListener('click', function() {
+        var newOptionText = dialog.querySelector('#new-option').value;
+        if (newOptionText !== '') {
+            $('#options-list', dialog).append('<li class="d-flex"><input type="text" value="' + newOptionText + '"><button class="remove-option btn btn-danger ml-2 w-100">Remove</button></li>');
+            dialog.querySelector('#new-option').value = ''; // Clear the input field
+        }
+    });
+
+	dialog.addEventListener('click', function(e) {
+		if (e.target.classList.contains('remove-option')) {
+			var listItems = $('#options-list li', dialog);
+			if (listItems.length > 1) {
+				$(e.target).closest('li').remove();
+			} else {
+                $('#error-message', dialog).removeClass('d-none');
+                setTimeout(function() {
+                    $('#error-message', dialog).addClass('d-none');
+                }, 5000);
+			}
+		}
+	});
+
+    dialog.querySelector('#save-options').addEventListener('click', function() {
+        var newOptions = [];
+        $('#options-list li', dialog).each(function() {
+            newOptions.push($(this).find('input').val());
+        });
+
+        // Update the select element with new options
+        selectElement.empty();
+        $.each(newOptions, function(index, option) {
+            selectElement.append('<option><span class="option-value">' + option + '</span></option>');
+        });
+
+        dialog.close();
+		dialog.remove();
+    });
+
+    // Show the dialog
+    document.body.appendChild(dialog);
+    dialog.showModal();
+
+    // Handle closing the dialog
+    $(document).on('click', function(e) {
+        if (e.target === dialog) {
+            dialog.close();
+			dialog.remove();
+        }
+    });
+});
+
 function highlight_moved_item(moved_item){
 	let css_class = 'custom-container-move-highlight';
 	moved_item.addClass(css_class);
