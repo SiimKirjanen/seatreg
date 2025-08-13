@@ -258,7 +258,7 @@
 	SeatReg.prototype.initCalendar = function() {
 		if( this.usingCalendar ) {
 			var seatregScope = this;
-			$('#calendar-date').text(this.activeCalendarDate);
+			$('#calendar-date').text(this.formatCalendarDateForDisplay(this.activeCalendarDate));
 
 			$('#calendar-date-selection').pignoseCalendar({
 				modal: true,
@@ -268,7 +268,7 @@
 				buttons: true,
 				enabledDates: this.enabledCalendarDates,
 				lang: this.siteLanguage,
-				apply(date, context) {
+				apply: function(date, context) {
 					if(date && date[0] !== null) {
 						seatregScope.calendarDateChange( date[0].format('YYYY-MM-DD') );
 					}
@@ -277,9 +277,24 @@
 		}
 	};
 
+	SeatReg.prototype.formatCalendarDateForDisplay = function(isoDate) {
+		if (!isoDate || !/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) {
+			return isoDate;
+		}
+		var parts = isoDate.split('-'); // avoid timezone shift
+		var d = new Date(parts[0], parts[1] - 1, parts[2]);
+		var locale = (this.siteLanguage || 'en').replace('_', '-');
+		
+		try {
+			return new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'long', day: 'numeric' }).format(d);
+		} catch (e) {
+			return isoDate;
+		}
+	};
+
 	SeatReg.prototype.calendarDateChange = function( selectedCalendarDate ) {
 		this.activeCalendarDate = selectedCalendarDate;
-		$('#calendar-date-selection .calendar').text(this.activeCalendarDate);
+		$('#calendar-date').text(this.formatCalendarDateForDisplay(this.activeCalendarDate));
 		setCalendarDateUrlParam(this.activeCalendarDate);
 		this.hideRegistrationMessage();
 		this.fetchBookings();
