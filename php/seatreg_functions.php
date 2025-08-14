@@ -1454,6 +1454,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 				<div class="booking-manager-calendar-wrap">
 					<label for="booking-manager-calendar-date"><?php esc_html_e('Date', 'seatreg'); ?> <i class="fa fa-calendar" aria-hidden="true"></i></label>
 					<input id="booking-manager-calendar-date" value="<?php echo esc_html($calendarDate); ?>" />
+					<input type="hidden" id="booking-manager-calendar-date-value" value="<?php echo esc_html($calendarDate); ?>" />
 				</div>
 			<?php endif; ?>
 			
