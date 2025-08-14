@@ -306,21 +306,38 @@ function initOverviewCalendarDatePicker() {
 		altFormat: 'yy-mm-dd',
 		dateFormat: 'yy-mm-dd',
 		onSelect: function(dateText) {
+			$('#overview-calendar-date').val( seatregFormatCalendarDateForDisplay(dateText, WP_Seatreg.SITE_LANGUAGE) );
 			$('#existing-regs .room-list-item[data-active="true"]').trigger('click');
 		}
 	});
+
+	var initialInternal = $('#overview-calendar-date-value').val();
+    if (initialInternal) {
+        $('#overview-calendar-date').val(
+            seatregFormatCalendarDateForDisplay(initialInternal, WP_Seatreg.SITE_LANGUAGE)
+        );
+    }
 }
 initOverviewCalendarDatePicker();
 
 function initBookingManagerCalendarDatePicer() {
 	$('#booking-manager-calendar-date').datepicker({
+		altField: '#bookings-calendar-date-value',
+		altFormat: 'yy-mm-dd',
 		dateFormat: 'yy-mm-dd',
 		onSelect: function(dateText) {
 			setCalendarDateUrlParam(dateText);
+			$('#booking-manager-calendar-date').val( seatregFormatCalendarDateForDisplay(dateText, WP_Seatreg.SITE_LANGUAGE) );
 			alertify.success(translator.translate('reloadingPage'));
 			location.reload(); 
 		}
 	});
+	var initialInternal = $('#booking-manager-calendar-date').val();
+    if (initialInternal) {
+        $('#booking-manager-calendar-date').val(
+            seatregFormatCalendarDateForDisplay(initialInternal, WP_Seatreg.SITE_LANGUAGE)
+        );
+    }
 }
 initBookingManagerCalendarDatePicer();
 
