@@ -1290,6 +1290,22 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label><?php esc_html_e('Enable coupons', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Enables coupon codes so users can apply discounts during checkout', 'seatreg'); ?>.</p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="enable-coupons" name="enable_coupons" value="0" <?php echo $options[0]->enable_coupons == '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Turn on coupons', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label><?php esc_html_e('Coupons', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Create coupon codes for discounts', 'seatreg'); ?>.</p>
+			</div>
+
+			<div class="form-group">
 				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
 				<p class="help-block">
@@ -2371,6 +2387,8 @@ function seatreg_set_up_db() {
 			wp_user_bookings_seat_limit INT DEFAULT NULL,
 			one_person_checkout tinyint(0) NOT NULL DEFAULT 0,
 			automatic_booking_confirm_dialog tinyint(0) NOT NULL DEFAULT 0,
+			enable_coupons tinyint(0) NOT NULL DEFAULT 0,
+			coupons text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -2397,6 +2415,7 @@ function seatreg_set_up_db() {
 			calendar_date DATE DEFAULT NULL,
 			logged_in_user_id int DEFAULT NULL,
 			custom_text_for_approved_email text,
+			applied_coupons text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -3284,6 +3303,12 @@ function seatreg_update() {
 		$_POST['automatic-booking-confirm-dialog'] = 1;
 	}
 
+	if( !isset($_POST['enable_coupons']) ) {
+		$_POST['enable_coupons'] = 0;
+	}else {
+		$_POST['enable_coupons'] = 1;
+	}
+
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 	$dbUpdated = true;
 
@@ -3357,6 +3382,7 @@ function seatreg_update() {
 				'wp_user_bookings_seat_limit' => (int)$_POST['wp-user-bookings-seat-limit'] > 0 ? (int)$_POST['wp-user-bookings-seat-limit'] : null,
 				'one_person_checkout' => $_POST['one-person-checkout'],
 				'automatic_booking_confirm_dialog' => $_POST['automatic-booking-confirm-dialog'],
+				'enable_coupons' => $_POST['enable_coupons'],
 			 ),
 			array(
 				'registration_code' => sanitize_text_field($_POST['registration_code'])
