@@ -198,6 +198,11 @@ function seatreg_generate_admin_strings() {
     $translations->errorSavingText = esc_html__('Error at saving text', 'seatreg');
     $translations->price = esc_html__('Price', 'seatreg');
     $translations->priceNotFound = esc_html__('Price not found', 'seatreg');
-    
+    $translations->enterCouponCode = esc_html__('Please enter coupon code', 'seatreg');
+    $translations->enterCouponDiscount = esc_html__('Please enter coupon discount', 'seatreg');
+    $translations->couponcode = esc_html__('Coupon code', 'seatreg');
+    $translations->discount = esc_html__('Discount', 'seatreg');
+    $translations->delete = esc_html__('Delete', 'seatreg');
+
     return $translations;
 }

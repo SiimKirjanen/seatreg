@@ -1,0 +1,41 @@
+#seatreg-settings-form {
+    .existing-coupons {
+        margin-left: 24px;
+        margin-bottom: 10px;
+    }
+    .coupon-create {
+        margin-left: 24px;
+    }
+    .new-coupon {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        input[type="text"] {
+            width: 100px;
+        }
+        input[type="number"] {
+            width: 80px;
+        }
+
+        &__label {
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+
+    }
+    .coupon-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+
+        &__value {
+            font-weight: bold;
+        }
+
+        &__actions {
+            margin-left: 24px;
+        }
+    }
+}

@@ -1696,6 +1696,43 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-op
     });
 });
 
+$('.seatreg_page_seatreg-options .existing-coupons').on('click', '[data-action="delete-coupon"]', function() {
+    $(this).closest('.coupon-box').remove();
+});
+
+$('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on('click', function() {
+    var newCouponCode = $('#new-coupon-code').val().trim();
+	var newDiscountAmount = $('#new-coupon-discount').val().trim();
+
+	if (newCouponCode === '') {
+		alertify.error(translator.translate('enterCouponCode'));
+		$('#new-coupon-code').focus();
+
+		return;
+	}
+	if (newDiscountAmount === '') {
+		alertify.error(translator.translate('enterCouponDiscount'));
+		$('#new-coupon-discount').focus();
+
+		return;
+	}
+	// 
+	$('.seatreg_page_seatreg-options .existing-coupons').append(
+		'<div class="coupon-box">' +
+			'<div class="coupon-box__label">' + translator.translate('couponcode') + ':</div>' +
+			'<div class="coupon-box__value">' + newCouponCode + '</div>' +
+			'<div class="coupon-box__label">' + translator.translate('discount') + ':</div>' +
+			'<div class="coupon-box__value">- ' + newDiscountAmount + '</div>' +
+			'<div class="coupon-box__actions">' +
+				'<button class="btn btn-danger btn-sm" type="button" data-action="delete-coupon"> ' + translator.translate('delete') + ' </button>' +
+			'</div>' +
+		'</div>'
+	);
+
+	$('#new-coupon-code, #new-coupon-discount').val('');
+	
+});
+
 function highlight_moved_item(moved_item){
 	let css_class = 'custom-container-move-highlight';
 	moved_item.addClass(css_class);

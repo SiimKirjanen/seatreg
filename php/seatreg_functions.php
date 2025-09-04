@@ -486,6 +486,7 @@ function seatreg_generate_settings_form() {
 	 $custFields = json_decode( isset($options[0]->custom_fields) ? $options[0]->custom_fields : "[]");
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	 $customPayments = json_decode( $options[0]->custom_payments ? $options[0]->custom_payments : "[]");
+	 $coupons = json_decode( $options[0]->coupon_codes ? $options[0]->coupon_codes : "[]");
 	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
 	 $publicApiTokens = SeatregApiTokenRepository::getRegistrationApiTokens($options[0]->registration_code);
@@ -1303,6 +1304,38 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label><?php esc_html_e('Coupons', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Create coupon codes for discounts', 'seatreg'); ?>.</p>
+
+				<div class="existing-coupons">
+					<div style="margin-bottom: 6px"><?php esc_html_e('Existing coupons', 'seatreg'); ?></div>
+					<?php if( count($coupons) == 0 ): ?>
+						<p class="help-block"><?php esc_html_e('No coupons created', 'seatreg'); ?></p>
+					<?php endif; ?>
+
+					<?php foreach($coupons as $coupon): ?>
+						<div class="coupon-box">
+							<div class="coupon-box__label"><?php esc_html_e('Code', 'seatreg'); ?>:</div>
+							<div class="coupon-box__value"><?php echo esc_html($coupon->code); ?></div>
+							<div class="coupon-box__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</div>
+							<div class="coupon-box__value">- <?php echo esc_html($coupon->discount); ?></div>
+							<div class="coupon-box__actions">
+								<button class="btn btn-danger btn-sm" type="button" data-action="delete-coupon"><?php esc_html_e('Delete', 'seatreg'); ?></button>
+							</div>
+						</div>
+					<?php endforeach; ?>
+				</div>
+				
+				<div class="coupon-create">
+					<div style="margin-bottom: 6px"><?php esc_html_e('New coupon', 'seatreg'); ?></div>
+					<p><?php esc_html_e('Create a new coupon', 'seatreg'); ?></p>
+					<div class="new-coupon">
+						<label class="new-coupon__label"><?php esc_html_e('Coupon code', 'seatreg'); ?>:</label>
+						<input type="text" class="form-control" id="new-coupon-code">
+						<label class="new-coupon__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</label>
+						<input type="number" class="form-control" id="new-coupon-discount">
+						<button class="btn btn-default btn-sm" type="button" data-action="add-coupon"><?php esc_html_e('Add', 'seatreg'); ?></button>
+					</div>
+				</div>
+				
 			</div>
 
 			<div class="form-group">
