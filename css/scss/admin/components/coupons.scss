@@ -1,7 +1,7 @@
 #seatreg-settings-form {
     .existing-coupons {
         margin-left: 24px;
-        margin-bottom: 10px;
+        margin-bottom: 24px;
     }
     .coupon-create {
         margin-left: 24px;
@@ -27,11 +27,16 @@
     .coupon-box {
         display: flex;
         align-items: center;
-        gap: 12px;
         margin-bottom: 12px;
 
+         &__label {
+            margin-right: 8px;
+            font-size: 14px;
+         }
+
         &__value {
-            font-weight: bold;
+            font-weight: 600;
+            min-width: 80px;
         }
 
         &__actions {

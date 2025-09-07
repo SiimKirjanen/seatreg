@@ -1292,7 +1292,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label><?php esc_html_e('Enable coupons', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Enables coupon codes so users can apply discounts during checkout', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php esc_html_e('Allow users to enter a coupon code during booking checkout.', 'seatreg'); ?></p>
 				<div class="checkbox">
 					<label>
 						<input type="checkbox" id="enable-coupons" name="enable_coupons" value="0" <?php echo $options[0]->enable_coupons == '1' ? 'checked':'' ?> >
@@ -1306,17 +1306,17 @@ function seatreg_generate_settings_form() {
 				<p class="help-block"><?php esc_html_e('Create coupon codes for discounts', 'seatreg'); ?>.</p>
 
 				<div class="existing-coupons">
-					<div style="margin-bottom: 6px"><?php esc_html_e('Existing coupons', 'seatreg'); ?></div>
+					<div style="margin-bottom: 10px"><?php esc_html_e('Existing coupons', 'seatreg'); ?></div>
 					<?php if( count($coupons) == 0 ): ?>
 						<p class="help-block"><?php esc_html_e('No coupons created', 'seatreg'); ?></p>
 					<?php endif; ?>
 
 					<?php foreach($coupons as $coupon): ?>
 						<div class="coupon-box">
-							<div class="coupon-box__label"><?php esc_html_e('Code', 'seatreg'); ?>:</div>
-							<div class="coupon-box__value" data-target="coupon-code"><?php echo esc_html($coupon->couponCode); ?></div>
+							<div class="coupon-box__label"><?php esc_html_e('Coupon code', 'seatreg'); ?>:</div>
+							<div class="coupon-box__value"><span data-target="coupon-code"><?php echo esc_html($coupon->couponCode); ?></span></div>
 							<div class="coupon-box__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</div>
-							<div class="coupon-box__value" data-target="discount-value"><?php echo esc_html($coupon->discountValue); ?></div>
+							<div class="coupon-box__value">-<span data-target="discount-value"><?php echo esc_html($coupon->discountValue); ?></span></div>
 							<div class="coupon-box__actions">
 								<button class="btn btn-danger btn-sm" type="button" data-action="delete-coupon"><?php esc_html_e('Delete', 'seatreg'); ?></button>
 							</div>
@@ -1331,7 +1331,7 @@ function seatreg_generate_settings_form() {
 						<label class="new-coupon__label"><?php esc_html_e('Coupon code', 'seatreg'); ?>:</label>
 						<input type="text" class="form-control" id="new-coupon-code">
 						<label class="new-coupon__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</label>
-						<input type="number" class="form-control" id="new-coupon-discount">
+						<input type="number" class="form-control" id="new-coupon-discount" placeholder="1-100" min="1" oninput="this.value = Math.abs(this.value) || null">
 						<button class="btn btn-default btn-sm" type="button" data-action="add-coupon"><?php esc_html_e('Add', 'seatreg'); ?></button>
 					</div>
 				</div>

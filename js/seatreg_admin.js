@@ -1701,8 +1701,10 @@ $('.seatreg_page_seatreg-options .existing-coupons').on('click', '[data-action="
 });
 
 $('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on('click', function() {
-    var newCouponCode = $('#new-coupon-code').val().trim();
-	var newDiscountAmount = $('#new-coupon-discount').val().trim();
+    let newCouponCode = $('#new-coupon-code').val().trim();
+	let newDiscountAmount = $('#new-coupon-discount').val().trim();
+	let couponRegExp = /^[\p{L}\p{N}_-]{1,20}$/u;
+	let discountRegExp = /^(100|[0-9]{1,2})$/;
 
 	if (newCouponCode === '') {
 		alertify.error(translator.translate('enterCouponCode'));
@@ -1710,8 +1712,23 @@ $('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on(
 
 		return;
 	}
+	
+	if(!couponRegExp.test(newCouponCode)) {
+		alertify.error(translator.translate('illegalCharactersDetecCouponCode'));
+		$('#new-coupon-code').focus();
+
+		return;
+	}
+
 	if (newDiscountAmount === '') {
 		alertify.error(translator.translate('enterCouponDiscount'));
+		$('#new-coupon-discount').focus();
+
+		return;
+	}
+
+	if(!discountRegExp.test(newDiscountAmount)) {
+		alertify.error(translator.translate('illegalCharactersDetecDiscount'));
 		$('#new-coupon-discount').focus();
 
 		return;
@@ -1720,9 +1737,9 @@ $('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on(
 	$('.seatreg_page_seatreg-options .existing-coupons').append(
 		'<div class="coupon-box">' +
 			'<div class="coupon-box__label">' + translator.translate('couponcode') + ':</div>' +
-			'<div class="coupon-box__value" data-target="coupon-code">' + newCouponCode + '</div>' +
+			'<div class="coupon-box__value"><span data-target="coupon-code">' + newCouponCode + '</span></div>' +
 			'<div class="coupon-box__label">' + translator.translate('discount') + ':</div>' +
-			'<div class="coupon-box__value" data-target="discount-value">' + newDiscountAmount + '</div>' +
+			'<div class="coupon-box__value">-<span data-target="discount-value">' + newDiscountAmount + '</span></div>' +
 			'<div class="coupon-box__actions">' +
 				'<button class="btn btn-danger btn-sm" type="button" data-action="delete-coupon"> ' + translator.translate('delete') + ' </button>' +
 			'</div>' +

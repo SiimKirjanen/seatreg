@@ -95,6 +95,8 @@ function seatreg_generate_admin_strings() {
     $translations->alreadyInRoom = esc_html__('Already in this room', 'seatreg');
     $translations->allRoomsNeedName = esc_html__('All rooms must have name', 'seatreg');
     $translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
+    $translations->illegalCharactersDetecCouponCode = esc_html__('Illegal characters detected in coupon code', 'seatreg');
+    $translations->illegalCharactersDetecDiscount = esc_html__('Illegal characters detected in discount value', 'seatreg');
     $translations->missingName = esc_html__('Name missing', 'seatreg');
     $translations->cantDelRoom_ = esc_html__('You can\'t delete room ', 'seatreg');
     $translations->_cantDelRoomBecause = esc_html__(' because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg');
