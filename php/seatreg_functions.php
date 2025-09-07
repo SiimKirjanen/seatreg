@@ -486,7 +486,7 @@ function seatreg_generate_settings_form() {
 	 $custFields = json_decode( isset($options[0]->custom_fields) ? $options[0]->custom_fields : "[]");
 	 $custLen = count(is_array($custFields) ? $custFields : []);
 	 $customPayments = json_decode( $options[0]->custom_payments ? $options[0]->custom_payments : "[]");
-	 $coupons = json_decode( $options[0]->coupon_codes ? $options[0]->coupon_codes : "[]");
+	 $coupons = json_decode( isset($options[0]->coupons) ? $options[0]->coupons : "[]");
 	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
 	 $publicApiTokens = SeatregApiTokenRepository::getRegistrationApiTokens($options[0]->registration_code);
@@ -1301,7 +1301,7 @@ function seatreg_generate_settings_form() {
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group" id="coupon-management">
 				<label><?php esc_html_e('Coupons', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Create coupon codes for discounts', 'seatreg'); ?>.</p>
 
@@ -1314,9 +1314,9 @@ function seatreg_generate_settings_form() {
 					<?php foreach($coupons as $coupon): ?>
 						<div class="coupon-box">
 							<div class="coupon-box__label"><?php esc_html_e('Code', 'seatreg'); ?>:</div>
-							<div class="coupon-box__value"><?php echo esc_html($coupon->code); ?></div>
+							<div class="coupon-box__value" data-target="coupon-code"><?php echo esc_html($coupon->couponCode); ?></div>
 							<div class="coupon-box__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</div>
-							<div class="coupon-box__value">- <?php echo esc_html($coupon->discount); ?></div>
+							<div class="coupon-box__value" data-target="discount-value"><?php echo esc_html($coupon->discountValue); ?></div>
 							<div class="coupon-box__actions">
 								<button class="btn btn-danger btn-sm" type="button" data-action="delete-coupon"><?php esc_html_e('Delete', 'seatreg'); ?></button>
 							</div>
@@ -1335,7 +1335,7 @@ function seatreg_generate_settings_form() {
 						<button class="btn btn-default btn-sm" type="button" data-action="add-coupon"><?php esc_html_e('Add', 'seatreg'); ?></button>
 					</div>
 				</div>
-				
+				<input type="hidden" name="coupons" value='<?php echo esc_attr(json_encode($coupons)); ?>' />
 			</div>
 
 			<div class="form-group">
@@ -3142,6 +3142,13 @@ function seatreg_update() {
 		wp_die( esc_html($customPaymentsValidation->errorMessage) );
 	}
 
+	$coupons = stripslashes_deep( $_POST['coupons'] );
+	$couponsValidation = SeatregDataValidation::validateCouponCreation($coupons);
+
+	if( !$couponsValidation->valid ) {
+		wp_die( esc_html($couponsValidation->errorMessage) );
+	}
+
 	if(!isset($_POST['gmail-required'])) {
 		$_POST['gmail-required'] = 0;
 	}else {
@@ -3416,6 +3423,7 @@ function seatreg_update() {
 				'one_person_checkout' => $_POST['one-person-checkout'],
 				'automatic_booking_confirm_dialog' => $_POST['automatic-booking-confirm-dialog'],
 				'enable_coupons' => $_POST['enable_coupons'],
+				'coupons' => $coupons,
 			 ),
 			array(
 				'registration_code' => sanitize_text_field($_POST['registration_code'])

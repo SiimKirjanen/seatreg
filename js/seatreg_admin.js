@@ -1716,13 +1716,13 @@ $('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on(
 
 		return;
 	}
-	// 
+
 	$('.seatreg_page_seatreg-options .existing-coupons').append(
 		'<div class="coupon-box">' +
 			'<div class="coupon-box__label">' + translator.translate('couponcode') + ':</div>' +
-			'<div class="coupon-box__value">' + newCouponCode + '</div>' +
+			'<div class="coupon-box__value" data-target="coupon-code">' + newCouponCode + '</div>' +
 			'<div class="coupon-box__label">' + translator.translate('discount') + ':</div>' +
-			'<div class="coupon-box__value">- ' + newDiscountAmount + '</div>' +
+			'<div class="coupon-box__value" data-target="discount-value">' + newDiscountAmount + '</div>' +
 			'<div class="coupon-box__actions">' +
 				'<button class="btn btn-danger btn-sm" type="button" data-action="delete-coupon"> ' + translator.translate('delete') + ' </button>' +
 			'</div>' +
@@ -1730,7 +1730,6 @@ $('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on(
 	);
 
 	$('#new-coupon-code, #new-coupon-discount').val('');
-	
 });
 
 function highlight_moved_item(moved_item){
@@ -1917,10 +1916,10 @@ $('#seatreg-settings-form #create-api-token').on('click', function(e) {
 	promise.fail = seatreg_admin_ajax_error;
 });
 
-//when user submits seatreg settings. Do validation, generate #custom-fields hidden input value. 
 $('#seatreg-settings-submit').on('click', function(e) {
-	var customFieldArray = [];  //array to store custom inputs
+	var customFieldArray = [];
 	var customPayments = [];
+	var coupons = [];
 	var currencyCode = $('#paypal-currency-code').val();
 
 	if($('#stripe').is(":checked")) {
@@ -2030,6 +2029,18 @@ $('#seatreg-settings-submit').on('click', function(e) {
  			}	
  	}); 
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
+
+	$('#seatreg-settings-form .existing-coupons .coupon-box').each(function() {
+		let couponCode = $(this).find('[data-target="coupon-code"]').text().trim();
+		let discountValue = $(this).find('[data-target="discount-value"]').text().trim();
+
+ 		coupons.push({
+			couponCode: couponCode,
+			discountValue: discountValue
+		});
+ 	});
+
+	$('#coupon-management input[name="coupons"]').val(JSON.stringify( coupons ));
 
 	$('#seatreg-settings-form .existing-custom-payments .custom-payment').each(function() {
 		var paymentIcon = $(this).find('.current-custom-payment-icon img').length ? $(this).find('.current-custom-payment-icon img').data('name') : null;

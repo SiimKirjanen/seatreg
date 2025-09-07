@@ -449,6 +449,45 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
+    public static function validateCouponCreation($coupons) {
+        $validationStatus = new SeatregValidationStatus();
+
+        try {
+            $couponsDecoded = json_decode($coupons);
+
+            if( !is_array($couponsDecoded) ) {
+                $validationStatus->setInvalid('Coupons not array');
+                return $validationStatus;
+            }
+
+            foreach($couponsDecoded as $couponDecoded) {
+                $duplicates = array_filter($couponsDecoded, function($coup) use ($couponDecoded) {
+                    return $coup->couponCode === $couponDecoded->couponCode;
+                });
+
+                if( count($duplicates) > 1) {
+                    $validationStatus->setInvalid('Duplicate coupon code detected');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($couponDecoded, 'couponCode') || !is_string($couponDecoded->couponCode) || !preg_match('/^[\p{L}\p{N}_-]+$/u', $couponDecoded->couponCode) ) {
+                    $validationStatus->setInvalid('Coupon code is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($couponDecoded, 'discountValue') || !preg_match('/^[0-9]+$/', (string)$couponDecoded->discountValue) || intval($couponDecoded->discountValue) <= 0 ) {
+                    $validationStatus->setInvalid('Coupon discount is missing or invalid');
+                    return $validationStatus;
+                }
+            }
+
+        } catch (Exception $error) {
+            $validationStatus->setInvalid('Unexpected error occured');
+        }
+        
+        return $validationStatus;
+    }
+
     public static function validateCustomFieldManagerSubmit($editCustomFields, $existingCustomFields, $registrationCode) {
         $validationStatus = new SeatregValidationStatus();
 
