@@ -62,6 +62,7 @@ require( 'php/services/SeatregLinksService.php' );
 require( 'php/services/SeatregCSVService.php' );
 require( 'php/services/SeatregImportService.php' );
 require( 'php/services/SeatregSanitizationService.php' );
+require( 'php/services/SeatregCouponService.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );

@@ -1329,7 +1329,7 @@ function seatreg_generate_settings_form() {
 					<p><?php esc_html_e('Create a new coupon', 'seatreg'); ?></p>
 					<div class="new-coupon">
 						<label class="new-coupon__label"><?php esc_html_e('Coupon code', 'seatreg'); ?>:</label>
-						<input type="text" class="form-control" id="new-coupon-code">
+						<input type="text" class="form-control" id="new-coupon-code" maxlength="20">
 						<label class="new-coupon__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</label>
 						<input type="number" class="form-control" id="new-coupon-discount" placeholder="1-100" min="1" oninput="this.value = Math.abs(this.value) || null">
 						<button class="btn btn-default btn-sm" type="button" data-action="add-coupon"><?php esc_html_e('Add', 'seatreg'); ?></button>
@@ -1576,6 +1576,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
+						$appliedCoponsString = SeatregCouponService::getAppliedCouponsString($row->applied_coupons);
 						
 						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
 							echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
@@ -1617,7 +1618,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									<?php
 								}
 								echo '<div>', esc_html__('WP user ID', 'seatreg'), ': ', $row->logged_in_user_id ? esc_html($row->logged_in_user_id) : esc_html__('None', 'seatreg'), '</div>';
-							
+								echo '<div>', esc_html__('Used coupons', 'seatreg'), ': ', esc_html($appliedCoponsString), '</div>';
+
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 								}
@@ -1651,6 +1653,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
+						$appliedCoponsString = SeatregCouponService::getAppliedCouponsString($row->applied_coupons);
 		
 						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
 							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
@@ -1692,7 +1695,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									<?php
 								}
 								echo '<div>', esc_html__('WP user ID', 'seatreg'), ': ', $row->logged_in_user_id ? esc_html($row->logged_in_user_id) : esc_html__('None', 'seatreg'), '</div>';
-		
+								echo '<div>', esc_html__('Used coupons', 'seatreg'), ': ', esc_html($appliedCoponsString), '</div>';
+								
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
 								}

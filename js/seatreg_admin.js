@@ -1703,7 +1703,7 @@ $('.seatreg_page_seatreg-options .existing-coupons').on('click', '[data-action="
 $('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on('click', function() {
     let newCouponCode = $('#new-coupon-code').val().trim();
 	let newDiscountAmount = $('#new-coupon-discount').val().trim();
-	let couponRegExp = /^[\p{L}\p{N}_-]{1,20}$/u;
+	let couponRegExp = /^[\p{L}\p{N}_-]+$/u;
 	let discountRegExp = /^(100|[0-9]{1,2})$/;
 
 	if (newCouponCode === '') {
@@ -1712,7 +1712,14 @@ $('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on(
 
 		return;
 	}
-	
+
+	if (newCouponCode.length > 20) {
+		alertify.error(translator.translate('couponCodeLengthLimitExceeded'));
+		$('#new-coupon-code').focus();
+
+		return;
+	}
+
 	if(!couponRegExp.test(newCouponCode)) {
 		alertify.error(translator.translate('illegalCharactersDetecCouponCode'));
 		$('#new-coupon-code').focus();

@@ -96,6 +96,7 @@ function seatreg_generate_admin_strings() {
     $translations->allRoomsNeedName = esc_html__('All rooms must have name', 'seatreg');
     $translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
     $translations->illegalCharactersDetecCouponCode = esc_html__('Illegal characters detected in coupon code', 'seatreg');
+    $translations->couponCodeLengthLimitExceeded = esc_html__('Coupon code cant be longer than 20 characters', 'seatreg');
     $translations->illegalCharactersDetecDiscount = esc_html__('Illegal characters detected in discount value', 'seatreg');
     $translations->missingName = esc_html__('Name missing', 'seatreg');
     $translations->cantDelRoom_ = esc_html__('You can\'t delete room ', 'seatreg');

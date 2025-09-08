@@ -470,7 +470,7 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($couponDecoded, 'couponCode') || !is_string($couponDecoded->couponCode) || !preg_match('/^[\p{L}\p{N}_-]+$/u', $couponDecoded->couponCode) ) {
+                if( !property_exists($couponDecoded, 'couponCode') || !preg_match(SEATREG_COUPON_CODE_REGEX, $couponDecoded->couponCode) ) {
                     $validationStatus->setInvalid('Coupon code is missing or invalid');
                     return $validationStatus;
                 }
