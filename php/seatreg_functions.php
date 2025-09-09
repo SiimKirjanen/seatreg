@@ -2515,7 +2515,7 @@ function seatreg_get_registration_data($code) {
 	global $seatreg_db_table_names;
 
 	$registration = $wpdb->get_results( $wpdb->prepare(
-		"SELECT a.*, b.paypal_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates
+		"SELECT a.*, b.paypal_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates, b.custom_payments
 		FROM $seatreg_db_table_names->table_seatreg AS a
 		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 		ON a.registration_code = b.registration_code

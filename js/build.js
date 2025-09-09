@@ -529,6 +529,7 @@
 		this.roomNameChange = {};  //if room name got changed. store old and new here
 		this.usingSeats = true; //do we use seats or generic place
 		this.settings = {};
+		this.hasCustomPayments = false; //does registration have custom payments (new ones, not legacy)
 	}
 
 	Registration.prototype.clearRegistrationData = function() {
@@ -2221,6 +2222,7 @@
 		}else {
 			this.settings = window.seatreg.settings;
 			this.usingSeats = window.seatreg.settings.using_seats === '1';
+			this.hasCustomPayments = window.seatreg.settings.custom_payments !== '[]' && window.seatreg.settings.custom_payments !== null;
 
 			var roomData = responseObj.roomData;
 			this.regBoxCounter = responseObj.global.boxCounter;
@@ -2607,8 +2609,8 @@
 
 		$pricingWrap.empty();
 		$('#set-prices').removeClass('d-none');
-
-		if(reg.settings.paypal_payments === '1' || reg.settings.stripe_payments === '1' || reg.settings.custom_payment === '1') {
+		if(reg.settings.paypal_payments === '1' || reg.settings.stripe_payments === '1' || reg.settings.custom_payment === '1' || reg.hasCustomPayments) {
+			
 			$('#enable-paypal-alert').css('display', 'none');
 		}
 		if(!hasSeatSelected) {

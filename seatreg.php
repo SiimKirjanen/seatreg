@@ -38,6 +38,7 @@ require( 'php/repositories/SeatregPaymentLogRepository.php' );
 require( 'php/repositories/SeatregApiTokenRepository.php' );
 require( 'php/repositories/SeatregUploadsRepository.php' );
 require( 'php/repositories/SeatregTimeRepository.php' );
+require( 'php/repositories/SeatregCouponRepository.php' );
 require( 'php/services/SeatregRegistrationService.php' );
 require( 'php/services/SeatregBookingService.php' );
 require( 'php/services/SeatregPaymentService.php' );

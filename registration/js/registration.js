@@ -127,6 +127,7 @@
 		this.isLoggedIn = window.isLoggedIn === '1';
 		this.onePersonCheckout = window.onePersonCheckout === '1';
 		this.automaticBookingConfirmDialog = window.automaticBookingConfirmDialog === '1';
+		this.couponsEnabled = window.seatregCouponsEnabled === '1';
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {

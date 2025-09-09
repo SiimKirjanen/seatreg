@@ -73,6 +73,7 @@ function seatreg_public_scripts_and_styles() {
 		$siteLanguage = getSiteLanguage();
 		$registrationTimeRestrictions = json_encode( SeatregTimeRepository::getTimeInfoForRegistrationView($data->registration_start_time, $data->registration_end_time) );
 		$isLoggedIn = SeatregAuthService::isLoggedIn();
+		$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($data->registration_code);
 
 		$inlineScript = 'function showErrorView(title) {';
 			$inlineScript .= "jQuery('body').addClass('error-view').html('";
@@ -112,6 +113,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var onePersonCheckout = "'. esc_js($data->one_person_checkout) . '";';
 			$inlineScript .= 'var requireName = "' . esc_js($data->require_name ? '1' : '0') . '";';
 			$inlineScript .= 'var automaticBookingConfirmDialog = "' . esc_js($data->automatic_booking_confirm_dialog ? '1' : '0') . '";';
+			$inlineScript .= 'var seatregCouponsEnabled = "' . esc_js($couponsEnabled ? '1' : '0') . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";
