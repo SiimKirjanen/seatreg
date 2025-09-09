@@ -3607,6 +3607,30 @@ function seatreg_seat_password_check_callback() {
 	wp_send_json_success("No password set");
 }
 
+add_action( 'wp_ajax_seatreg_check_coupon', 'seatreg_check_coupon_callback' );
+add_action( 'wp_ajax_nopriv_seatreg_check_coupon', 'seatreg_check_coupon_callback' );
+function seatreg_check_coupon_callback() {
+	if ( empty($_POST['registration-code']) || empty($_POST['coupon']) ) {
+		wp_send_json_error("Missing data");
+	}
+
+	if ( !SeatregCouponRepository::areCouponsEnabled($_POST['registration-code']) ) {
+		wp_send_json_error("Coupons not enabled");
+	}
+
+	$coupon = SeatregCouponRepository::findCoupon($_POST['registration-code'], $_POST['coupon']);
+
+	if ($coupon) {
+		wp_send_json_success([
+			'message' => 'Coupon is valid',
+			'discount' => $coupon->discountValue,
+			'couponCode' => $coupon->couponCode,
+		]);
+	} else {
+		wp_send_json_error("Invalid coupon");
+	}
+}
+
 add_action( 'wp_ajax_seatreg_fetch_bookings_and_info', 'seatreg_fetch_bookings_and_info_callback' );
 add_action( 'wp_ajax_nopriv_seatreg_fetch_bookings_and_info', 'seatreg_fetch_bookings_and_info_callback' );
 function seatreg_fetch_bookings_and_info_callback() {

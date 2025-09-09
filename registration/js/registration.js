@@ -128,6 +128,7 @@
 		this.onePersonCheckout = window.onePersonCheckout === '1';
 		this.automaticBookingConfirmDialog = window.automaticBookingConfirmDialog === '1';
 		this.couponsEnabled = window.seatregCouponsEnabled === '1';
+		this.appliedCoupon = null;
 	}
 
 	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
@@ -714,6 +715,7 @@ SeatReg.prototype.addSeatToCart = function() {
 			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('youCanAdd_') + scope.spotName + translator.translate('_toCartClickTab') + '</p>');
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
+			$('#coupon-apply').css('display','none');
 			$('#booking-total-price').empty().attr('data-booking-price', 0);
 		}else {
 			var selected = scope.selectedSeats.length;
@@ -762,6 +764,7 @@ SeatReg.prototype.openSeatCart = function() {
 		}else if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
 			$('#seat-cart-info').html('<h3>'+ cartHeaderText +'</h3><p>' + cartEmptyText + '</p>');
 			$('#checkout').css('display','none');
+			$('#coupon-apply').css('display','flex');
 			$('#seat-cart-rows').css('display','none');
 		}else {
 			$('#seat-cart-info').html('<h3>'+ translator.translate('regClosedAtMoment') +'</h3>');
@@ -778,6 +781,7 @@ SeatReg.prototype.openSeatCart = function() {
 			infoText = selected + ( this.usingSeats ? translator.translate('_seatSelected') : translator.translate('_placeSelected') );
 		}
 		$('#seat-cart-info').text(infoText);
+		$('#coupon-apply').css('display', this.couponsEnabled ? 'flex' : 'none');
 		$('#checkout').css('display','inline-block');
 	}
 
@@ -1113,6 +1117,23 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 
 SeatReg.prototype.addEnteredSeatPassword = function(seatId, password) {
 	this.enteredSeatPasswords[seatId] = password;
+};
+
+SeatReg.prototype.applyCoupon = function(coupon) {
+	this.appliedCoupon = coupon;
+
+	$('#coupon-applied .coupon-applied-box__message').text('Coupon ' + this.appliedCoupon.couponCode + ' applied ' + '(-' + this.appliedCoupon.discount + ')');
+	$('#coupon-code-input').val('');
+	$('#coupon-apply').css('display','none');
+	$('#coupon-applied').css('display','flex');
+};
+
+SeatReg.prototype.removeCoupon = function() {
+	this.appliedCoupon = null;
+
+	$('#coupon-applied').css('display','none');
+	$('#coupon-apply').css('display','flex');
+	$('#coupon-applied .coupon-applied-box__message').text('');
 };
 
 /*Turning on lights*/
@@ -1613,6 +1634,55 @@ $('#room-nav-close').on('click', function() {
 
 $('#checkout').on('click', function() {
 	seatReg.openCheckOut();
+});
+
+//coupon-apply
+$('#seat-cart-popup').on('click', '#apply-coupon-btn', function() {
+	let couponCode = $('#coupon-code-input').val().trim();
+	
+	if(couponCode.length == 0) {
+		$('.coupon-apply-box__message').text(translator.translate('enterCouponCode')).css('display','block');
+		$('#coupon-code-input').focus();
+
+		return;
+	}
+
+	$('.coupon-apply-box__apply-text').css('display','none');
+	$('.coupon-apply-box__loading').css('display','block');
+	$('.coupon-apply-box__message').text('').css('display','none');
+
+	$.ajax({
+		type: 'POST',
+		url: ajaxUrl,
+		data: {
+			action: 'seatreg_check_coupon',
+			coupon: couponCode,
+			'registration-code': qs['c'],
+		},
+		success: function(data) {
+			try {
+				if (data.success) {
+					let coupon = {
+						couponCode: data.data.couponCode,
+						discount: data.data.discount,
+					}
+					seatReg.applyCoupon(coupon);
+				}
+			} catch(err) {
+				$('.coupon-apply-box__message').text(translator.translate('failedToApplyCoupon')).css('display','block');
+			}				
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$('.coupon-apply-box__message').text(translator.translate('failedToApplyCoupon')).css('display','block');
+		}
+	}).always(function() {
+		$('.coupon-apply-box__loading').css('display','none');
+		$('.coupon-apply-box__apply-text').css('display','block');
+	});
+});
+
+$('#seat-cart-popup').on('click', '#remove-coupon-btn', function() {
+	seatReg.removeCoupon();
 });
 
 $('#checkout-area').on('click', '.checkout-settings__copy input[type="checkbox"]', function() {

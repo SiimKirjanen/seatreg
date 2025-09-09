@@ -67,7 +67,9 @@ function seatreg_generate_registration_strings() {
     $translations->closedPleaseChooseNewDate = esc_html__('Registration not open for today. Please choose another date', 'seatreg');
     $translations->controlledZoom = esc_html__('Hold Z key also to zoom', 'seatreg');
     $translations->wpLoginRequired = esc_html__('Please log in to make a booking', 'seatreg');
-    
+    $translations->enterCouponCode = esc_html__('Please enter coupon code', 'seatreg');
+    $translations->failedToApplyCoupon = esc_html__('Failed to apply coupon', 'seatreg');
+
 	return $translations;
 }
 

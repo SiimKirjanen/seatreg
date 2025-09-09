@@ -1239,7 +1239,49 @@ body {
 	margin-right: 10px;
 }
 
-/**/
+/*Apply coupon rules*/
+.coupon-apply-box {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 16px;
+	column-gap: 16px;
+
+	&__input {
+		width: 100px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		padding: 4px;
+	}
+
+	&__message {
+		display: none;
+		color: red;
+		width: 100%;
+		margin-top: 4px;
+	}
+
+	&__loading {
+		display: none;
+		width: 24px;
+	}
+}
+
+.coupon-applied-box {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	column-gap: 8px;
+	margin-bottom: 16px;
+	
+	&__message {
+		font-size: 20px;
+	}
+	&__remove {
+		font-size: 14px;
+	}
+}
 
 /*checkout rules*/
 #checkout {
@@ -1447,6 +1489,14 @@ body {
 }
 .red-btn {
 	background-color: red;
+}
+.white-btn {
+	background-color: #fff;
+	color: #000;
+
+	&:hover {
+		background-color: #e6e6e6;
+	}
 }
 #checkoput-area-inner .ajax-load {
 	display: none;
