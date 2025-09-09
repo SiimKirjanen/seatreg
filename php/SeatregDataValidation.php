@@ -456,17 +456,25 @@ class SeatregDataValidation {
             $couponsDecoded = json_decode($coupons);
 
             if( !is_array($couponsDecoded) ) {
-                $validationStatus->setInvalid('Coupons not array');
+                $validationStatus->setInvalid('Coupons is not array');
                 return $validationStatus;
             }
 
             foreach($couponsDecoded as $couponDecoded) {
-                $duplicates = array_filter($couponsDecoded, function($coup) use ($couponDecoded) {
-                    return $coup->couponCode === $couponDecoded->couponCode;
+                $codeDuplicates = array_filter($couponsDecoded, function($cust) use ($couponDecoded) {
+                    return $cust->couponCode === $couponDecoded->couponCode;
+                });
+                $uuidDuplicates = array_filter($couponsDecoded, function($cust) use ($couponDecoded) {
+                    return $cust->couponUUID === $couponDecoded->couponUUID;
                 });
 
-                if( count($duplicates) > 1) {
+                if( count($codeDuplicates) > 1) {
                     $validationStatus->setInvalid('Duplicate coupon code detected');
+                    return $validationStatus;
+                }
+
+                if( count($uuidDuplicates) > 1) {
+                    $validationStatus->setInvalid('Duplicate coupon UUID detected');
                     return $validationStatus;
                 }
 
@@ -479,7 +487,12 @@ class SeatregDataValidation {
                     $validationStatus->setInvalid('Coupon discount is missing or invalid');
                     return $validationStatus;
                 }
-            }
+
+                if ( !property_exists($couponDecoded, 'couponUUID') || !preg_match(SEATREG_COUPON_UUID_REGEX, $couponDecoded->couponUUID) ) {
+                    $validationStatus->setInvalid('Coupon UUID is missing or invalid');
+                    return $validationStatus;
+                } 
+            }            
 
         } catch (Exception $error) {
             $validationStatus->setInvalid('Unexpected error occured');

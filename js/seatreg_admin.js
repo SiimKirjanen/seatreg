@@ -1705,6 +1705,7 @@ $('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on(
 	let newDiscountAmount = $('#new-coupon-discount').val().trim();
 	let couponRegExp = /^[\p{L}\p{N}_-]+$/u;
 	let discountRegExp = /^(100|[0-9]{1,2})$/;
+	let couponUUID = seatregGenerateUUIDv4();
 
 	if (newCouponCode === '') {
 		alertify.error(translator.translate('enterCouponCode'));
@@ -1742,7 +1743,7 @@ $('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on(
 	}
 
 	$('.seatreg_page_seatreg-options .existing-coupons').append(
-		'<div class="coupon-box">' +
+		'<div class="coupon-box" data-uuid="' + couponUUID + '">' +
 			'<div class="coupon-box__label">' + translator.translate('couponcode') + ':</div>' +
 			'<div class="coupon-box__value"><span data-target="coupon-code">' + newCouponCode + '</span></div>' +
 			'<div class="coupon-box__label">' + translator.translate('discount') + ':</div>' +
@@ -2057,10 +2058,12 @@ $('#seatreg-settings-submit').on('click', function(e) {
 	$('#seatreg-settings-form .existing-coupons .coupon-box').each(function() {
 		let couponCode = $(this).find('[data-target="coupon-code"]').text().trim();
 		let discountValue = $(this).find('[data-target="discount-value"]').text().trim();
+		let couponUUID = $(this).data('uuid');
 
  		coupons.push({
 			couponCode: couponCode,
-			discountValue: discountValue
+			discountValue: discountValue,
+			couponUUID: couponUUID
 		});
  	});
 

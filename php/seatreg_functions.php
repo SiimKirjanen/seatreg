@@ -1312,7 +1312,7 @@ function seatreg_generate_settings_form() {
 					<?php endif; ?>
 
 					<?php foreach($coupons as $coupon): ?>
-						<div class="coupon-box">
+						<div class="coupon-box" data-uuid="<?php echo esc_attr($coupon->couponUUID); ?>">
 							<div class="coupon-box__label"><?php esc_html_e('Coupon code', 'seatreg'); ?>:</div>
 							<div class="coupon-box__value"><span data-target="coupon-code"><?php echo esc_html($coupon->couponCode); ?></span></div>
 							<div class="coupon-box__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</div>
