@@ -10,12 +10,11 @@ class SeatregCouponService {
         return preg_match(SEATREG_COUPON_CODE_REGEX, $couponCode);
     }
 
-    public static function getAppliedCouponsString($appliedCoupons) {
-        if( empty($appliedCoupons) ) {
+    public static function getAppliedCouponString($appliedCoupon) {
+        if( is_null($appliedCoupon) ) {
             return esc_html__('None', 'seatreg');
         }
-        return implode(',', array_map(function($coupon) {
-            return $coupon->coupon_code . ' (-' . $coupon->discount . ')';
-        }, $appliedCoupons));
+
+        return "{$appliedCoupon->couponCode} (-{$appliedCoupon->discountValue})";
     }
 }

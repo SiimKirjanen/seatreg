@@ -1175,11 +1175,11 @@ body {
 	display: inline-block;
 	padding-left: 18px;
 	height: 18px;
-/*
-	background-image: url(del_small.png);
-	background-repeat: no-repeat;
-*/
 	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
 }
 .remove-cart-item .fa {
 	color: red;

@@ -694,7 +694,7 @@ SeatReg.prototype.addSeatToCart = function() {
 	var cartItem = $('<div class="cart-item" data-cart-id="' + seatId + '" data-room-uuid="'+ roomUUID +'"></div>');
 	var seatNumberDiv = $('<div class="cart-item-nr">' + seatNr + '</div>');
 	var roomNameDiv = $('<div class="cart-item-room">' + roomName + '</div>');
-	var delItem = $('<div class="remove-cart-item"><i class="fa fa-times-circle"></i><span style="padding-left:4px">'+ translator.translate('remove') +'</span></div>').on('click', function() {
+	var delItem = $('<div class="remove-cart-item"><i class="fa fa-times-circle"></i><span style="padding-left:6px">'+ translator.translate('remove') +'</span></div>').on('click', function() {
 		var item = $(this).closest('.cart-item');
 		var removeId = item.attr('data-cart-id');
 		var priceToRemove = 0;
