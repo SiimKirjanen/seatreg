@@ -69,6 +69,9 @@ function seatreg_generate_registration_strings() {
     $translations->wpLoginRequired = esc_html__('Please log in to make a booking', 'seatreg');
     $translations->enterCouponCode = esc_html__('Please enter coupon code', 'seatreg');
     $translations->failedToApplyCoupon = esc_html__('Failed to apply coupon', 'seatreg');
+    $translations->couponNotFound = esc_html__('Coupon not found', 'seatreg');
+    $translations->couponApplied = esc_html__('Coupon %s applied', 'seatreg');
+    $translations->couponAppliedWithDiscount = esc_html__('Coupon %s applied with -%s discount', 'seatreg');
 
 	return $translations;
 }

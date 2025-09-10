@@ -715,8 +715,9 @@ SeatReg.prototype.addSeatToCart = function() {
 			$('#seat-cart-info').html('<h3>'+ translator.translate('selectionIsEmpty') +'</h3><p>' + translator.translate('youCanAdd_') + scope.spotName + translator.translate('_toCartClickTab') + '</p>');
 			$('#checkout').css('display','none');
 			$('#seat-cart-rows').css('display','none');
-			$('#coupon-apply').css('display','none');
+			scope.resetCouponMarkup();
 			$('#booking-total-price').empty().attr('data-booking-price', 0);
+			$("#coupon-applied").css('display', 'none');
 		}else {
 			var selected = scope.selectedSeats.length;
 			var infoText;
@@ -727,24 +728,26 @@ SeatReg.prototype.addSeatToCart = function() {
 				infoText = selected + (this.usingSeats ? translator.translate('_seatSelected') : translator.translate('_placeSelected') );
 			}
 			$('#seat-cart-info').text(infoText);
-			var totalPrice = scope.selectedSeats.reduce(function(accumulator, currentValue) {
-				return currentValue.price + accumulator;
-			}, 0);
-			$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + getCurrencySymbolFromISO(scope.payPalCurrencyCode) + totalPrice);
-			$('#booking-total-price').attr('data-booking-price', totalPrice);
+			let totalPrice = scope.calculateBookingCost();
+
+			if (scope.appliedCoupon) {
+				totalPrice = scope.calculateBookingCostAfterDiscount(totalPrice, scope.appliedCoupon);
+			}
+			scope.applyBookingCost(totalPrice);
 		}
 		$('.seats-in-cart').text(scope.selectedSeats.length);
 	});
 
 	cartItem.append(seatNumberDiv, roomNameDiv, delItem);
 	$('#seat-cart-items').append(cartItem);
-	
-	var totalPrice = scope.selectedSeats.reduce(function(accumulator, currentValue) {
-		return currentValue.price + accumulator;
-	}, 0);
 
-	$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + getCurrencySymbolFromISO(scope.payPalCurrencyCode) + totalPrice);
-	$('#booking-total-price').attr('data-booking-price', totalPrice);
+	let totalPrice = scope.calculateBookingCost();
+
+	if (scope.appliedCoupon) {
+		totalPrice = scope.calculateBookingCostAfterDiscount(totalPrice, scope.appliedCoupon);
+	}
+
+	scope.applyBookingCost(totalPrice);
 
 	this.closeSeatDialog();
 };
@@ -757,6 +760,7 @@ SeatReg.prototype.openSeatCart = function() {
 	var selected = this.selectedSeats.length;
 	var cartHeaderText = this.usingSeats ? translator.translate('selectionIsEmpty') : translator.translate('selectionIsEmptyPlace');
 	var cartEmptyText = this.usingSeats ? translator.translate('selectingGuide') : translator.translate('selectingGuidePlace');
+	this.resetCouponMarkup();
 
 	if(selected == 0) {	
 		if(this.requireWPLogin && !this.isLoggedIn) {
@@ -764,7 +768,6 @@ SeatReg.prototype.openSeatCart = function() {
 		}else if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
 			$('#seat-cart-info').html('<h3>'+ cartHeaderText +'</h3><p>' + cartEmptyText + '</p>');
 			$('#checkout').css('display','none');
-			$('#coupon-apply').css('display','flex');
 			$('#seat-cart-rows').css('display','none');
 		}else {
 			$('#seat-cart-info').html('<h3>'+ translator.translate('regClosedAtMoment') +'</h3>');
@@ -781,7 +784,15 @@ SeatReg.prototype.openSeatCart = function() {
 			infoText = selected + ( this.usingSeats ? translator.translate('_seatSelected') : translator.translate('_placeSelected') );
 		}
 		$('#seat-cart-info').text(infoText);
-		$('#coupon-apply').css('display', this.couponsEnabled ? 'flex' : 'none');
+
+		if (this.couponsEnabled) {
+			if (this.appliedCoupon) {
+				this.showAppliedCouponBox(this.appliedCoupon);
+			} else {
+				this.showApplyCouponBox();
+			}
+		}
+
 		$('#checkout').css('display','inline-block');
 	}
 
@@ -1121,19 +1132,71 @@ SeatReg.prototype.addEnteredSeatPassword = function(seatId, password) {
 
 SeatReg.prototype.applyCoupon = function(coupon) {
 	this.appliedCoupon = coupon;
-
-	$('#coupon-applied .coupon-applied-box__message').text('Coupon ' + this.appliedCoupon.couponCode + ' applied ' + '(-' + this.appliedCoupon.discount + ')');
-	$('#coupon-code-input').val('');
-	$('#coupon-apply').css('display','none');
-	$('#coupon-applied').css('display','flex');
+	
+	this.showAppliedCouponBox(coupon);
+	let totalPrice = this.calculateBookingCost();
+	totalPrice = this.calculateBookingCostAfterDiscount(totalPrice);
+	this.applyBookingCost(totalPrice);
 };
 
 SeatReg.prototype.removeCoupon = function() {
 	this.appliedCoupon = null;
 
+	this.resetCouponMarkup();
+	this.showApplyCouponBox();
+};
+
+SeatReg.prototype.showApplyCouponBox = function() {
+	$('#coupon-code-input').val('');
+	$('#coupon-apply').css('display','flex');	
+}
+
+SeatReg.prototype.showAppliedCouponBox = function(coupon) {
+	let message = translator.translate('couponAppliedWithDiscount').replace('%s', coupon.couponCode).replace('%s', coupon.discount);
+
+	$('#coupon-applied .coupon-applied-box__message').text(message);
+	this.hideApplyCouponBox();
+	$('#coupon-applied').css('display','flex');
+}
+
+SeatReg.prototype.hideApplyCouponBox = function() {
+	$('#coupon-code-input').val('');
+	$('#coupon-apply').css('display','none');
+}
+
+SeatReg.prototype.resetCouponMarkup = function() {
 	$('#coupon-applied').css('display','none');
-	$('#coupon-apply').css('display','flex');
 	$('#coupon-applied .coupon-applied-box__message').text('');
+	$('#coupon-apply').css('display','none');
+	$('#coupon-code-input').val('');
+}
+
+SeatReg.prototype.calculateBookingCost = function() {
+	let totalPrice = this.selectedSeats.reduce(function(accumulator, currentValue) {
+		return currentValue.price + accumulator;
+	}, 0);
+
+	return totalPrice;
+}
+
+SeatReg.prototype.calculateBookingCostAfterDiscount = function(bookingCost) {
+	let totalPrice = bookingCost;
+
+	if (this.appliedCoupon) {
+		let discount = this.appliedCoupon.discount;
+		totalPrice -= discount;
+
+		if (totalPrice < 0) {
+			totalPrice = 0;
+		}
+	}
+
+	return totalPrice;
+};
+
+SeatReg.prototype.applyBookingCost = function (totalPrice) {
+	$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + getCurrencySymbolFromISO(this.payPalCurrencyCode) + totalPrice);
+	$('#booking-total-price').attr('data-booking-price', totalPrice);
 };
 
 /*Turning on lights*/
@@ -1491,7 +1554,7 @@ function sendData(customFieldBack, registrationCode) {
 	$.ajax({
 		type: 'POST',
 		url: ajaxUrl,
-		data: $('#checkoput-area-inner').serialize() + '&custom=' + encodeURIComponent(customFieldBack) +'&action=' + 'seatreg_booking_submit' + '&c=' + registrationCode + '&em=' + mailToSend + '&pw=' + $('#sub-pwd').val() + '&passwords=' + encodeURIComponent(seatPasswords),
+		data: $('#checkoput-area-inner').serialize() + '&custom=' + encodeURIComponent(customFieldBack) +'&action=' + 'seatreg_booking_submit' + '&c=' + registrationCode + '&em=' + mailToSend + '&pw=' + $('#sub-pwd').val() + '&passwords=' + encodeURIComponent(seatPasswords) + '&coupon=' +  (seatReg.appliedCoupon ? encodeURIComponent(seatReg.appliedCoupon.couponCode) : ''),
 		success: function(data) {
 			var is_JSON = true;
 			
@@ -1660,17 +1723,19 @@ $('#seat-cart-popup').on('click', '#apply-coupon-btn', function() {
 			'registration-code': qs['c'],
 		},
 		success: function(data) {
-			try {
-				if (data.success) {
-					let coupon = {
-						couponCode: data.data.couponCode,
-						discount: data.data.discount,
-					}
-					seatReg.applyCoupon(coupon);
+			if (data.success) {
+				let coupon = {
+					couponCode: data.data.couponCode,
+					discount: data.data.discount,
 				}
-			} catch(err) {
-				$('.coupon-apply-box__message').text(translator.translate('failedToApplyCoupon')).css('display','block');
-			}				
+				seatReg.applyCoupon(coupon);
+			}else {
+				if (data.data === 'Invalid coupon') {
+					$('.coupon-apply-box__message').text(translator.translate('couponNotFound')).css('display','block');
+				}else {
+					$('.coupon-apply-box__message').text(translator.translate('failedToApplyCoupon')).css('display','block');
+				}
+			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			$('.coupon-apply-box__message').text(translator.translate('failedToApplyCoupon')).css('display','block');

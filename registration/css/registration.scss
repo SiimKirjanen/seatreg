@@ -1241,7 +1241,7 @@ body {
 
 /*Apply coupon rules*/
 .coupon-apply-box {
-	display: flex;
+	display: none;
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
@@ -1276,7 +1276,7 @@ body {
 	margin-bottom: 16px;
 	
 	&__message {
-		font-size: 20px;
+		font-size: 16px;
 	}
 	&__remove {
 		font-size: 14px;
