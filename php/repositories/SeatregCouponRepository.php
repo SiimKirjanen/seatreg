@@ -52,4 +52,27 @@ class SeatregCouponRepository {
 
         return null;
     }
+
+    public static function getBookingAppliedCoupon($bookingId) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        $appliedCoupon = $wpdb->get_var( $wpdb->prepare(
+            "SELECT applied_coupon FROM $seatreg_db_table_names->table_seatreg_bookings
+            WHERE booking_id = %s",
+            $bookingId
+        ) );
+
+        if ($appliedCoupon === null) {
+            return null;
+        }
+        
+       $decoded = json_decode($appliedCoupon);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return null;
+        }
+
+        return $decoded;
+    }
 }

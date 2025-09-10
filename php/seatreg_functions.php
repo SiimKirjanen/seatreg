@@ -1576,7 +1576,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
-						$appliedCoponsString = SeatregCouponService::getAppliedCouponsString($row->applied_coupons);
+						$appliedCoponsString = SeatregCouponService::getAppliedCouponsString($row->applied_coupon);
 						
 						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
 							echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
@@ -1618,7 +1618,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									<?php
 								}
 								echo '<div>', esc_html__('WP user ID', 'seatreg'), ': ', $row->logged_in_user_id ? esc_html($row->logged_in_user_id) : esc_html__('None', 'seatreg'), '</div>';
-								echo '<div>', esc_html__('Used coupons', 'seatreg'), ': ', esc_html($appliedCoponsString), '</div>';
+								echo '<div>', esc_html__('Used coupon', 'seatreg'), ': ', esc_html($appliedCoponsString), '</div>';
 
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
@@ -1653,7 +1653,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
-						$appliedCoponsString = SeatregCouponService::getAppliedCouponsString($row->applied_coupons);
+						$appliedCoponsString = SeatregCouponService::getAppliedCouponsString($row->applied_coupon);
 		
 						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
 							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
@@ -1695,7 +1695,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									<?php
 								}
 								echo '<div>', esc_html__('WP user ID', 'seatreg'), ': ', $row->logged_in_user_id ? esc_html($row->logged_in_user_id) : esc_html__('None', 'seatreg'), '</div>';
-								echo '<div>', esc_html__('Used coupons', 'seatreg'), ': ', esc_html($appliedCoponsString), '</div>';
+								echo '<div>', esc_html__('Used coupon', 'seatreg'), ': ', esc_html($appliedCoponsString), '</div>';
 								
 								for($i = 0; $i < $cus_length; $i++) {
 									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
@@ -1972,6 +1972,8 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 		$bookings = SeatregBookingRepository::getBookingsByRegistrationCodeAndBookingId($registrationCode, $bookingId);
 		$roomData = json_decode($registration->registration_layout)->roomData;
 		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
+		$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($registrationCode);
+		$appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
 
 		$registrationCustomFields = json_decode( isset($registration->custom_fields) ? $registration->custom_fields : '[]');
 	
@@ -2000,8 +2002,12 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 			echo '</div>';
 
+			if ( $couponsEnabled && $appliedCoupon ) {
+				echo '<div style="margin-bottom: 20px;">', esc_html__('Applied coupon', 'seatreg') ,': <strong>' . esc_html($appliedCoupon->couponCode) . '</strong> (-' . esc_html($appliedCoupon->discountValue) . ' ' . esc_html__('discount', 'seatreg') . ')</div>';
+			}
+
 			if( SeatregBookingService::getBookingTotalCost($bookingId, $registration->registration_layout) > 0 ) {
-				echo SeatregBookingService::generatePaymentTable($bookingId);
+				echo SeatregBookingService::generatePaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
 				echo '<br>';
 			}
 		}else {
@@ -2452,7 +2458,7 @@ function seatreg_set_up_db() {
 			calendar_date DATE DEFAULT NULL,
 			logged_in_user_id int DEFAULT NULL,
 			custom_text_for_approved_email text,
-			applied_coupons text,
+			applied_coupon text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -3701,7 +3707,8 @@ function seatreg_booking_submit_callback() {
 			$_POST['custom'],
 			$_POST['room-uuid'],
 			$_POST['passwords'],
-			$_POST['multi-price-uuid']) 
+			$_POST['multi-price-uuid'],
+			$_POST['coupon']) 
 	){
 		$newBooking->validateBooking();
 	}	
