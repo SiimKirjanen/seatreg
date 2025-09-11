@@ -1303,7 +1303,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group" id="coupon-management">
 				<label><?php esc_html_e('Coupons', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Create coupon codes for discounts', 'seatreg'); ?>.</p>
+				<p class="help-block"><?php esc_html_e('Create coupon codes to offer discounts. These will be applied to the total booking price.', 'seatreg'); ?></p>
 
 				<div class="existing-coupons">
 					<div style="margin-bottom: 10px"><?php esc_html_e('Existing coupons', 'seatreg'); ?></div>

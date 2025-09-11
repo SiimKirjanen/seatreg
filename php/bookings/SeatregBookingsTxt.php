@@ -33,6 +33,7 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
             $status = $this->getStatus($registration->status);
             $bookingDate = $this->getBookingDate($registration->booking_date);
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($registration, $this->_roomData);
+            $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
 
             echo esc_html($placeNumberText), ': ', esc_html($registration->seat_nr), esc_html($this->lineBreak());
             echo esc_html__('Room', 'seatreg'), ': ', esc_html($registration->room_name), esc_html($this->lineBreak());
@@ -63,6 +64,8 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
                 echo esc_html__('Booking approval date', 'seatreg'), ': ', esc_html($confirmDate), esc_html($this->lineBreak());
             }
 
+            echo esc_html__('Used coupon', 'seatreg'), ': ', esc_html($usedCouponString), esc_html($this->lineBreak());
+            
             if($registration->payment_status != null) {
                 echo esc_html__('Payment status', 'seatreg'), ': ', esc_html($registration->payment_status), esc_html($this->lineBreak());
   
