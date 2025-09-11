@@ -1495,6 +1495,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	$project_name = str_replace(' ', '_', $project_name_original);
 	$usingSeats = $seatregData->using_seats === '1';
 	$requireName = $seatregData->require_name;
+	$currencyCode = $seatregData->paypal_currency_code;
 	$zipExtensionLoaded = extension_loaded('zip');
 
 	?>
@@ -1576,7 +1577,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
-						$appliedCoponsString = SeatregCouponService::getAppliedCouponString(json_decode($row->applied_coupon));
+						$appliedCoponsString = SeatregCouponService::getAppliedCouponString(json_decode($row->applied_coupon), $currencyCode);
 
 						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
 							echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
@@ -1653,7 +1654,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$bookingStatusUrl = seatreg_get_registration_status_url($code, $row->booking_id);
 						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
-						$appliedCoponsString = SeatregCouponService::getAppliedCouponString(json_decode($row->applied_coupon));
+						$appliedCoponsString = SeatregCouponService::getAppliedCouponString(json_decode($row->applied_coupon), $currencyCode);
 		
 						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
 							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
