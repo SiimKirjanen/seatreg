@@ -21,7 +21,13 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/stripe-php/init.php' );
 \Stripe\Stripe::setApiVersion( SEATREG_STRIPE_API_VERSION );
 
 $unitAmount = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
+$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($bookingData->registration_code);
+$appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
 $currencyCode = $bookingData->paypal_currency_code;
+
+if ( $couponsEnabled && $appliedCoupon ) {
+	$unitAmount = SeatregBookingService::applyCouponDiscountToTotalCost($unitAmount, $appliedCoupon);
+}
 
 if( !in_array($currencyCode, SEATREG_STRIPE_ZERO_DECIMAL_CURRENCIES) ) {
   $unitAmount = $unitAmount * 100;

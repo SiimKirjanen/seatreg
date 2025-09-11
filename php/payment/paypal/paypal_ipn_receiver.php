@@ -21,6 +21,13 @@
 
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 	$bookingTotalCost = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
+	$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($bookingData->registration_code);
+	$appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
+
+	if ( $couponsEnabled && $appliedCoupon ) {
+		$bookingTotalCost = SeatregBookingService::applyCouponDiscountToTotalCost($bookingTotalCost, $appliedCoupon);
+	}
+
     $payPalIPN = new SeatregPayPalIpn(
 		$bookingData->paypal_sandbox_mode === '1',
 		$bookingData->paypal_business_email,

@@ -16,6 +16,13 @@ if( !SeatregBookingRepository::getBookingsById($bookingId) ) {
 
 $bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 $bookingTotalCost = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
+$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($bookingData->registration_code);
+$appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
+
+if ( $couponsEnabled && $appliedCoupon ) {
+	$bookingTotalCost = SeatregBookingService::applyCouponDiscountToTotalCost($bookingTotalCost, $appliedCoupon);
+}
+
 $stripePayment = new SeatregStripePayment(
     $bookingData->paypal_currency_code,
     $bookingTotalCost,

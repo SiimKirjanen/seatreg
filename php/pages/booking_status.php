@@ -16,6 +16,8 @@
 	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 	$customPayments = $bookingData->custom_payments ? json_decode( $bookingData->custom_payments ) : [];
+	$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($registrationId);
+	$appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
 ?>
 
 <!DOCTYPE html>
@@ -101,6 +103,9 @@
 
 			if( SeatregPaymentRepository::hasPaymentEnabled($bookingData) && ($bookingData->payment_status === null || $bookingData->payment_status === SEATREG_PAYMENT_NONE) ) {
 				$bookingTotalCost = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
+				if ( $couponsEnabled && $appliedCoupon ) {
+					$bookingTotalCost = SeatregBookingService::applyCouponDiscountToTotalCost($bookingTotalCost, $appliedCoupon);
+				}
 				$bookingHasCost = $bookingTotalCost > 0;
 				$legacyCustomPaymentId = "legacy-custom-payment-id";
 
