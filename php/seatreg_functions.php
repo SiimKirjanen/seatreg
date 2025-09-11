@@ -2003,7 +2003,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			echo '</div>';
 
 			if ( $couponsEnabled && $appliedCoupon ) {
-				echo '<div style="margin-bottom: 20px;">', esc_html__('Applied coupon', 'seatreg') ,': <strong>' . esc_html($appliedCoupon->couponCode) . '</strong> (-' . esc_html($appliedCoupon->discountValue) . ' ' . esc_html__('discount', 'seatreg') . ')</div>';
+				echo '<div style="margin-bottom: 20px;">', esc_html__('Applied coupon', 'seatreg') ,': <strong>' . esc_html($appliedCoupon->couponCode) . '</strong> (-' . esc_html($appliedCoupon->discountValue) . esc_html($registration->paypal_currency_code) . ' ' . esc_html__('discount', 'seatreg') . ')</div>';
 			}
 
 			if( SeatregBookingService::getBookingTotalCost($bookingId, $registration->registration_layout) > 0 ) {

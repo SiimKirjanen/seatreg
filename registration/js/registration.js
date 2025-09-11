@@ -729,11 +729,12 @@ SeatReg.prototype.addSeatToCart = function() {
 			}
 			$('#seat-cart-info').text(infoText);
 			let totalPrice = scope.calculateBookingCost();
+			let discountPrice = 0;
 
 			if (scope.appliedCoupon) {
-				totalPrice = scope.calculateBookingCostAfterDiscount(totalPrice, scope.appliedCoupon);
+				discountPrice = scope.calculateBookingCostAfterDiscount(totalPrice, scope.appliedCoupon);
 			}
-			scope.applyBookingCost(totalPrice);
+			scope.applyBookingCost(totalPrice, discountPrice);
 		}
 		$('.seats-in-cart').text(scope.selectedSeats.length);
 	});
@@ -742,12 +743,13 @@ SeatReg.prototype.addSeatToCart = function() {
 	$('#seat-cart-items').append(cartItem);
 
 	let totalPrice = scope.calculateBookingCost();
+	let discountPrice = 0;
 
 	if (scope.appliedCoupon) {
-		totalPrice = scope.calculateBookingCostAfterDiscount(totalPrice, scope.appliedCoupon);
+		discountPrice = scope.calculateBookingCostAfterDiscount(totalPrice, scope.appliedCoupon);
 	}
 
-	scope.applyBookingCost(totalPrice);
+	scope.applyBookingCost(totalPrice, discountPrice);
 
 	this.closeSeatDialog();
 };
@@ -1135,8 +1137,8 @@ SeatReg.prototype.applyCoupon = function(coupon) {
 	
 	this.showAppliedCouponBox(coupon);
 	let totalPrice = this.calculateBookingCost();
-	totalPrice = this.calculateBookingCostAfterDiscount(totalPrice);
-	this.applyBookingCost(totalPrice);
+	let discountedPrice = this.calculateBookingCostAfterDiscount(totalPrice);
+	this.applyBookingCost(totalPrice, discountedPrice);
 };
 
 SeatReg.prototype.removeCoupon = function() {
@@ -1144,6 +1146,8 @@ SeatReg.prototype.removeCoupon = function() {
 
 	this.resetCouponMarkup();
 	this.showApplyCouponBox();
+	let totalPrice = this.calculateBookingCost();
+	this.applyBookingCost(totalPrice);
 };
 
 SeatReg.prototype.showApplyCouponBox = function() {
@@ -1152,7 +1156,7 @@ SeatReg.prototype.showApplyCouponBox = function() {
 }
 
 SeatReg.prototype.showAppliedCouponBox = function(coupon) {
-	let message = translator.translate('couponAppliedWithDiscount').replace('%s', coupon.couponCode).replace('%s', coupon.discount);
+	let message = translator.translate('couponAppliedWithDiscount').replace('%s', coupon.couponCode).replace('%s', getCurrencySymbolFromISO(this.payPalCurrencyCode) + coupon.discount);
 
 	$('#coupon-applied .coupon-applied-box__message').text(message);
 	this.hideApplyCouponBox();
@@ -1194,9 +1198,14 @@ SeatReg.prototype.calculateBookingCostAfterDiscount = function(bookingCost) {
 	return totalPrice;
 };
 
-SeatReg.prototype.applyBookingCost = function (totalPrice) {
-	$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + getCurrencySymbolFromISO(this.payPalCurrencyCode) + totalPrice);
-	$('#booking-total-price').attr('data-booking-price', totalPrice);
+SeatReg.prototype.applyBookingCost = function (totalPrice, discountPrice = 0) {
+	if (discountPrice === 0) {
+		$('#booking-total-price').text( translator.translate('bookingTotalCostIs_') + getCurrencySymbolFromISO(this.payPalCurrencyCode) + totalPrice);
+		$('#booking-total-price').attr('data-booking-price', totalPrice);
+	}else {
+		$('#booking-total-price').html( translator.translate('bookingTotalCostIs_') + '<span style="text-decoration: line-through; color: #888; margin-right: 4px;">' + getCurrencySymbolFromISO(this.payPalCurrencyCode) + totalPrice + '</span>' + getCurrencySymbolFromISO(this.payPalCurrencyCode) + discountPrice);
+		$('#booking-total-price').attr('data-booking-price', totalPrice);
+	}
 };
 
 /*Turning on lights*/
