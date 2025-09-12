@@ -25,6 +25,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 * Calendar Mode: Manage bookings with an integrated calendar mode.
 * Responsive Registration View: Provide a scrollable and resizable registration view via a direct link or embed it into your website pages using a shortcode.
 * Payment Integration: Support for PayPal and Stripe payments.
+* Coupons: Create coupon codes to offer booking discounts.
   
 == Installation ==
  

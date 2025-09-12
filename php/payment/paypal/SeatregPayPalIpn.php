@@ -88,6 +88,14 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 				$retryCounter = 999;
 			}else {
 				$this->log(sprintf(esc_html__('Unknown response from IPN. Will try again %s', 'seatreg'),  $result), SEATREG_PAYMENT_LOG_ERROR);
+
+				//detect if curl error and log it
+				$error = curl_error($ch);
+				$errno = curl_errno($ch);
+
+				if ($errno || $error) {
+					$this->log("cURL error ($errno): $error", SEATREG_PAYMENT_LOG_ERROR);
+				}			
 			}
 		}
 

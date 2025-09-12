@@ -3665,7 +3665,7 @@ function seatreg_booking_submit_callback() {
 		die();
 	}
 	
-	$data = seatreg_get_options($_POST['c']);
+	$data = seatreg_get_options($_POST['c'])[0];
 
 	if ($data->require_name)
 	{
