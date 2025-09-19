@@ -1696,6 +1696,67 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-op
     });
 });
 
+$('.seatreg_page_seatreg-options .existing-coupons').on('click', '[data-action="delete-coupon"]', function() {
+    $(this).closest('.coupon-box').remove();
+});
+
+$('.seatreg_page_seatreg-options .coupon-create [data-action="add-coupon"]').on('click', function() {
+    let newCouponCode = $('#new-coupon-code').val().trim();
+	let newDiscountAmount = $('#new-coupon-discount').val().trim();
+	let couponRegExp = /^[\p{L}\p{N}_-]+$/u;
+	let discountRegExp = /^(100|[0-9]{1,2})$/;
+	let couponUUID = seatregGenerateUUIDv4();
+
+	if (newCouponCode === '') {
+		alertify.error(translator.translate('enterCouponCode'));
+		$('#new-coupon-code').focus();
+
+		return;
+	}
+
+	if (newCouponCode.length > 20) {
+		alertify.error(translator.translate('couponCodeLengthLimitExceeded'));
+		$('#new-coupon-code').focus();
+
+		return;
+	}
+
+	if(!couponRegExp.test(newCouponCode)) {
+		alertify.error(translator.translate('illegalCharactersDetecCouponCode'));
+		$('#new-coupon-code').focus();
+
+		return;
+	}
+
+	if (newDiscountAmount === '') {
+		alertify.error(translator.translate('enterCouponDiscount'));
+		$('#new-coupon-discount').focus();
+
+		return;
+	}
+
+	if(!discountRegExp.test(newDiscountAmount)) {
+		alertify.error(translator.translate('illegalCharactersDetecDiscount'));
+		$('#new-coupon-discount').focus();
+
+		return;
+	}
+
+	$('.seatreg_page_seatreg-options .existing-coupons').append(
+		'<div class="coupon-box" data-uuid="' + couponUUID + '">' +
+			'<div class="coupon-box__label">' + translator.translate('couponcode') + ':</div>' +
+			'<div class="coupon-box__value"><span data-target="coupon-code">' + newCouponCode + '</span></div>' +
+			'<div class="coupon-box__label">' + translator.translate('discount') + ':</div>' +
+			'<div class="coupon-box__value">-<span data-target="discount-value">' + newDiscountAmount + '</span></div>' +
+			'<div class="coupon-box__actions">' +
+				'<button class="btn btn-danger btn-sm" type="button" data-action="delete-coupon"> ' + translator.translate('delete') + ' </button>' +
+			'</div>' +
+		'</div>'
+	);
+
+	$('#new-coupon-code, #new-coupon-discount').val('');
+});
+
 function highlight_moved_item(moved_item){
 	let css_class = 'custom-container-move-highlight';
 	moved_item.addClass(css_class);
@@ -1880,10 +1941,10 @@ $('#seatreg-settings-form #create-api-token').on('click', function(e) {
 	promise.fail = seatreg_admin_ajax_error;
 });
 
-//when user submits seatreg settings. Do validation, generate #custom-fields hidden input value. 
 $('#seatreg-settings-submit').on('click', function(e) {
-	var customFieldArray = [];  //array to store custom inputs
+	var customFieldArray = [];
 	var customPayments = [];
+	var coupons = [];
 	var currencyCode = $('#paypal-currency-code').val();
 
 	if($('#stripe').is(":checked")) {
@@ -1993,6 +2054,20 @@ $('#seatreg-settings-submit').on('click', function(e) {
  			}	
  	}); 
  	$('#custom-fields').val(JSON.stringify( customFieldArray) );  //set #custom-fields hidden input value
+
+	$('#seatreg-settings-form .existing-coupons .coupon-box').each(function() {
+		let couponCode = $(this).find('[data-target="coupon-code"]').text().trim();
+		let discountValue = $(this).find('[data-target="discount-value"]').text().trim();
+		let couponUUID = $(this).data('uuid');
+
+ 		coupons.push({
+			couponCode: couponCode,
+			discountValue: discountValue,
+			couponUUID: couponUUID
+		});
+ 	});
+
+	$('#coupon-management input[name="coupons"]').val(JSON.stringify( coupons ));
 
 	$('#seatreg-settings-form .existing-custom-payments .custom-payment').each(function() {
 		var paymentIcon = $(this).find('.current-custom-payment-icon img').length ? $(this).find('.current-custom-payment-icon img').data('name') : null;

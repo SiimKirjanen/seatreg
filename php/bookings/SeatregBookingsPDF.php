@@ -66,6 +66,7 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             $bookingDate = SeatregTimeService::getDateStringFromUnix($registration->booking_date);
             $placeNumberText = $this->_usingSeats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($registration, $this->_roomData);
+            $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
 
             $this->pdf->Cell(20, 6, $placeNumberText . ': ' . esc_html($registration->seat_nr), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($registration->room_name), 0, 1, 'L');
@@ -94,6 +95,8 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
                 $confirmDate = SeatregTimeService::getDateStringFromUnix( $registration->booking_confirm_date );
                 $this->pdf->Cell(20, 6, esc_html__('Booking approval time', 'seatreg') . ': ' . $confirmDate, 0, 1, 'L');
             }
+
+            $this->pdf->Cell(20, 6, esc_html__('Used coupon', 'seatreg') . ': ' . $usedCouponString, 0, 1, 'L');
             
             if($registration->payment_status != null) {
                 $this->pdf->Cell(20, 6, esc_html__('Payment status', 'seatreg') . ': ' . $registration->payment_status, 0, 1, 'L');

@@ -48,6 +48,8 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     $bookerEmail = $bookings[0]->booker_email;
     $bookingStatusUrl = seatreg_get_registration_status_url($registration->registration_code, $bookingId);
     $emailSubject = $registration->approved_booking_email_subject ? $registration->approved_booking_email_subject : sprintf(esc_html__("Your booking at %s is approved", "seatreg"), $registrationName);
+    $couponsEnabled = SeatregCouponRepository::areCouponsEnabled($registrationCode);
+    $appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
 
     if(!$bookerEmail) {
         //No booker email detected. Booker email column was added with version 1.7.0.
@@ -65,7 +67,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     $qrType = $registration->send_approved_booking_email_qr_code;
 
     if($template) {
-        $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $registrationCustomFields, $bookingId, $registration);
+        $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $registrationCustomFields, $bookingId, $registration, $couponsEnabled, $appliedCoupon);
     }else {
         $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html( wp_unslash($registrationName) ) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
         $message .= '<p>';
@@ -75,10 +77,14 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
 
         $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
         $message .= $bookingTable;
-        
+
+        if ( $couponsEnabled && $appliedCoupon ) {
+            $message .= '<div style="margin-bottom: 10px;margin-top: 20px;">' . esc_html__('Applied coupon', 'seatreg') . ': <strong>' . esc_html($appliedCoupon->couponCode) . '</strong> (-' . esc_html($appliedCoupon->discountValue) . ' ' . esc_html__('discount', 'seatreg') . ')</div>';
+        }
+
         if( SeatregBookingService::getBookingTotalCost($bookingId, $registration->registration_layout) > 0 ) {
             $message .= '<br>';
-            $message .= SeatregBookingService::generatePaymentTable($bookingId);
+            $message .= SeatregBookingService::generatePaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
         }
     }
 

@@ -22,7 +22,7 @@ class SeatregSubmitBookings extends SeatregBooking {
       	$this->getRegistrationAndOptions();
     }
 
-    public function validateAndPopulateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords, $multiPriceUUID) {
+    public function validateAndPopulateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords, $multiPriceUUID, $couponCode) {
     	$this->_bookerEmail = $emailToSend;
         $this->_submittedPassword = $pw;
 		$this->_seatPasswords = json_decode(stripslashes_deep($passwords));
@@ -32,13 +32,24 @@ class SeatregSubmitBookings extends SeatregBooking {
 		}
     
 		$customFields = stripslashes_deep($customFields);
-
 		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFields, $this->_maxSeats, $this->_createdCustomFields, $this->_registrationCode);
 		
 		if( !$customFieldValidation->valid ) {
 			$this->response->setValidationError( $customFieldValidation->errorMessage );
 
 			return false;
+		}
+
+		$appliedCoupon = null;
+		if( $this->_couponsEnabled && !empty($couponCode) ) {
+			$appliedCoupon = SeatregCouponRepository::findCoupon($this->_registrationCode, $couponCode);
+
+			if (!$appliedCoupon) {
+				$this->response->setValidationError('Invalid coupon code');
+
+				return false;
+			}
+			$appliedCoupon = json_encode($appliedCoupon);
 		}
 
 		$bookings = [];
@@ -74,6 +85,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			$booking->room_uuid = sanitize_text_field($roomUUID[$key]);
     		$booking->custom_field = $customFieldData[$key];
 			$booking->multi_price_selection = sanitize_text_field($multiPriceUUID[$key]);
+			$booking->applied_coupon = $appliedCoupon;
 
     		$bookings[] = $booking;
 		}
@@ -337,7 +349,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 						'seat_passwords' => json_encode($this->_seatPasswords),
 						'multi_price_selection' => $multiPriceSelection,
 						'calendar_date' => $this->_userSelectedCalendarDate,
-						'logged_in_user_id' => SeatregAuthService::getCurrentUserId()
+						'logged_in_user_id' => SeatregAuthService::getCurrentUserId(),
+						'applied_coupon' => $this->_bookings[$i]->applied_coupon
 					), 
 					'%s'	
 				);

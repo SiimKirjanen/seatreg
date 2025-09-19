@@ -449,6 +449,58 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
+    public static function validateCouponCreation($coupons) {
+        $validationStatus = new SeatregValidationStatus();
+
+        try {
+            $couponsDecoded = json_decode($coupons);
+
+            if( !is_array($couponsDecoded) ) {
+                $validationStatus->setInvalid('Coupons is not array');
+                return $validationStatus;
+            }
+
+            foreach($couponsDecoded as $couponDecoded) {
+                $codeDuplicates = array_filter($couponsDecoded, function($cust) use ($couponDecoded) {
+                    return $cust->couponCode === $couponDecoded->couponCode;
+                });
+                $uuidDuplicates = array_filter($couponsDecoded, function($cust) use ($couponDecoded) {
+                    return $cust->couponUUID === $couponDecoded->couponUUID;
+                });
+
+                if( count($codeDuplicates) > 1) {
+                    $validationStatus->setInvalid('Duplicate coupon code detected');
+                    return $validationStatus;
+                }
+
+                if( count($uuidDuplicates) > 1) {
+                    $validationStatus->setInvalid('Duplicate coupon UUID detected');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($couponDecoded, 'couponCode') || !preg_match(SEATREG_COUPON_CODE_REGEX, $couponDecoded->couponCode) ) {
+                    $validationStatus->setInvalid('Coupon code is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($couponDecoded, 'discountValue') || !preg_match('/^[0-9]+$/', (string)$couponDecoded->discountValue) || intval($couponDecoded->discountValue) <= 0 ) {
+                    $validationStatus->setInvalid('Coupon discount is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if ( !property_exists($couponDecoded, 'couponUUID') || !preg_match(SEATREG_COUPON_UUID_REGEX, $couponDecoded->couponUUID) ) {
+                    $validationStatus->setInvalid('Coupon UUID is missing or invalid');
+                    return $validationStatus;
+                } 
+            }            
+
+        } catch (Exception $error) {
+            $validationStatus->setInvalid('Unexpected error occured');
+        }
+        
+        return $validationStatus;
+    }
+
     public static function validateCustomFieldManagerSubmit($editCustomFields, $existingCustomFields, $registrationCode) {
         $validationStatus = new SeatregValidationStatus();
 

@@ -67,7 +67,12 @@ function seatreg_generate_registration_strings() {
     $translations->closedPleaseChooseNewDate = esc_html__('Registration not open for today. Please choose another date', 'seatreg');
     $translations->controlledZoom = esc_html__('Hold Z key also to zoom', 'seatreg');
     $translations->wpLoginRequired = esc_html__('Please log in to make a booking', 'seatreg');
-    
+    $translations->enterCouponCode = esc_html__('Please enter coupon code', 'seatreg');
+    $translations->failedToApplyCoupon = esc_html__('Failed to apply coupon', 'seatreg');
+    $translations->couponNotFound = esc_html__('Coupon not found', 'seatreg');
+    $translations->couponApplied = esc_html__('Coupon %s applied', 'seatreg');
+    $translations->couponAppliedWithDiscount = esc_html__('Coupon %s applied with -%s discount', 'seatreg');
+
 	return $translations;
 }
 
@@ -95,6 +100,9 @@ function seatreg_generate_admin_strings() {
     $translations->alreadyInRoom = esc_html__('Already in this room', 'seatreg');
     $translations->allRoomsNeedName = esc_html__('All rooms must have name', 'seatreg');
     $translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
+    $translations->illegalCharactersDetecCouponCode = esc_html__('Illegal characters detected in coupon code', 'seatreg');
+    $translations->couponCodeLengthLimitExceeded = esc_html__('Coupon code cant be longer than 20 characters', 'seatreg');
+    $translations->illegalCharactersDetecDiscount = esc_html__('Illegal characters detected in discount value', 'seatreg');
     $translations->missingName = esc_html__('Name missing', 'seatreg');
     $translations->cantDelRoom_ = esc_html__('You can\'t delete room ', 'seatreg');
     $translations->_cantDelRoomBecause = esc_html__(' because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg');
@@ -198,6 +206,11 @@ function seatreg_generate_admin_strings() {
     $translations->errorSavingText = esc_html__('Error at saving text', 'seatreg');
     $translations->price = esc_html__('Price', 'seatreg');
     $translations->priceNotFound = esc_html__('Price not found', 'seatreg');
-    
+    $translations->enterCouponCode = esc_html__('Please enter coupon code', 'seatreg');
+    $translations->enterCouponDiscount = esc_html__('Please enter coupon discount', 'seatreg');
+    $translations->couponcode = esc_html__('Coupon code', 'seatreg');
+    $translations->discount = esc_html__('Discount', 'seatreg');
+    $translations->delete = esc_html__('Delete', 'seatreg');
+
     return $translations;
 }

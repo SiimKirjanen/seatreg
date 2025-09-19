@@ -32,6 +32,7 @@ class SeatregBookingsCSV extends SeatregBookingsFile {
         foreach ($this->_registrations as $registration) {
             $booking_id = sha1(mt_rand(10000,99999).time().$registration->booker_email);
             $csvRow = array_fill(0, 14, '');
+            $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
 
             $csvRow[SEATREG_CSV_COL_FIRST_NAME] = $registration->first_name;
             $csvRow[SEATREG_CSV_COL_LAST_NAME] = $registration->last_name;
@@ -47,6 +48,7 @@ class SeatregBookingsCSV extends SeatregBookingsFile {
             $csvRow[SEATREG_CSV_COL_BOOKER_EMAIL] = $registration->booker_email;
             $csvRow[SEATREG_CSV_COL_MULTI_PRICE_SELECTION] = $this->cleanJSONForCsv($registration->multi_price_selection);
             $csvRow[SEATREG_CSV_COL_LOGGED_IN_USER_ID] = $registration->logged_in_user_id;
+            $csvRow[SEATREG_CSV_COL_USED_COUPON] = $usedCouponString;
 
             fputcsv($output, $csvRow);
         }

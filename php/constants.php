@@ -6,7 +6,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.47');
+define('SEATREG_DB_VERSION', '1.49');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));
@@ -16,6 +16,8 @@ define('SEATREG_CUSTOM_FIELD_TYPES', array('text', 'check', 'sel'));
 define('SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH', 100);
 define('SEATREG_DEFAULT_INPUT_MAX_LENGHT', 100);
 define('SEATREG_CUSTOM_PAYMENT_DESCRIPTION', '/^[\p{L}\p{N}+\s.:\/]+$/u');
+define("SEATREG_COUPON_CODE_REGEX", '/^[\p{L}\p{N}_-]{1,20}$/u');
+define("SEATREG_COUPON_UUID_REGEX", '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i');
 
 // Payments
 define('SEATREG_PAYMENT_PROCESSING', 'processing');
@@ -108,6 +110,7 @@ define('SEATREG_CSV_COL_BOOKING_ID', 10);
 define('SEATREG_CSV_COL_BOOKER_EMAIL', 11);
 define('SEATREG_CSV_COL_MULTI_PRICE_SELECTION', 12);
 define('SEATREG_CSV_COL_LOGGED_IN_USER_ID', 13);
+define('SEATREG_CSV_COL_USED_COUPON', 14);
 
 // Currency
 define('SEATREG_VALID_CURRENCY_CODES', array(

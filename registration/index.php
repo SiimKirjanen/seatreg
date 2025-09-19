@@ -28,6 +28,7 @@
 	$showInfoButton = $data->show_info_button === '1';
 	$requireName = $data->require_name === '1';
 	$zoom_on_top = $data->zoom_on_top === '1';
+	$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($data->registration_code);
 	
 	$needsToLogIn = $requireWPLogin && !SeatregAuthService::isLoggedIn();
 
@@ -358,6 +359,23 @@
 						
 						<?php if( SeatregPaymentRepository::hasPaymentEnabled($data) ) : ?>
 							<div id="booking-total-price" data-booking-price="0"></div>
+							<?php if ( $couponsEnabled ) : ?>
+								<div id="coupon-apply" class="coupon-apply-box">
+									<?php 
+										esc_html_e('Have a coupon?', 'seatreg');
+									?>
+									<input type="text" id="coupon-code-input" class="coupon-apply-box__input" />
+									<div class="seatreg-btn white-btn" id="apply-coupon-btn">
+										<span class="coupon-apply-box__apply-text"><?php esc_html_e('Apply', 'seatreg'); ?></span>
+										<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . 'img/ajax_loader.gif'); ?>" alt="Loading" class="coupon-apply-box__loading">
+									</div>
+									<div class="coupon-apply-box__message"></div>
+								</div>
+								<div id="coupon-applied" class="coupon-applied-box">
+									<div class="coupon-applied-box__message">Coupon TERE applied</div>
+									<div class="seatreg-btn red-btn coupon-applied-box__remove" id="remove-coupon-btn"><?php esc_html_e('Remove', 'seatreg'); ?></div>
+								</div>
+							<?php endif; ?>	
 						<?php endif; ?>
 
 						<div id="checkout" class="seatreg-btn green-btn">

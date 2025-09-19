@@ -48,7 +48,7 @@ function seatreg_public_scripts_and_styles() {
 		$manifestFileContents = file_get_contents(SEATREG_PLUGIN_FOLDER_DIR . 'rev-manifest.json');
 		$manifest = json_decode($manifestFileContents, true);
 
-		wp_enqueue_style('seatreg-registration-style', SEATREG_PLUGIN_FOLDER_URL . 'registration/css/' . $manifest['registration.min.css'] , array(), '1.6.0', 'all');
+		wp_enqueue_style('seatreg-registration-style', SEATREG_PLUGIN_FOLDER_URL . 'registration/css/' . $manifest['registration.min.css'] , array(), '1.7.0', 'all');
 		wp_enqueue_style('pg-calendar-style', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/css/pignose.calendar.css', array(), '1.4.31', 'all');
 		wp_enqueue_style('alertify-core', SEATREG_PLUGIN_FOLDER_URL . 'css/alertify.core.css', array(), '1.0.0', 'all');
 		wp_enqueue_style('alertify-default', SEATREG_PLUGIN_FOLDER_URL . 'css/alertify.default.css', array(), '1.0.0', 'all');
@@ -61,7 +61,7 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_script('jquery-powertip', SEATREG_PLUGIN_FOLDER_URL . 'js/jquery.powertip.js' , array(), '1.2.0', true);
 		wp_enqueue_script('pg-calendar', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/js/pignose.calendar.full.min.js' , array('jquery'), '1.4.31', false);
 		wp_enqueue_script('seatreg-utils', SEATREG_PLUGIN_FOLDER_URL . 'js/utils.js' , array(), '1.0.0', true);
-		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.29.0', true);
+		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.30.0', true);
 		wp_enqueue_script('alertify', SEATREG_PLUGIN_FOLDER_URL . 'js/alertify.js', array('jquery'), '1.0.0', true);
 
 		$data = seatreg_get_options_reg($_GET['c']);
@@ -73,6 +73,7 @@ function seatreg_public_scripts_and_styles() {
 		$siteLanguage = getSiteLanguage();
 		$registrationTimeRestrictions = json_encode( SeatregTimeRepository::getTimeInfoForRegistrationView($data->registration_start_time, $data->registration_end_time) );
 		$isLoggedIn = SeatregAuthService::isLoggedIn();
+		$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($data->registration_code);
 
 		$inlineScript = 'function showErrorView(title) {';
 			$inlineScript .= "jQuery('body').addClass('error-view').html('";
@@ -112,6 +113,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var onePersonCheckout = "'. esc_js($data->one_person_checkout) . '";';
 			$inlineScript .= 'var requireName = "' . esc_js($data->require_name ? '1' : '0') . '";';
 			$inlineScript .= 'var automaticBookingConfirmDialog = "' . esc_js($data->automatic_booking_confirm_dialog ? '1' : '0') . '";';
+			$inlineScript .= 'var seatregCouponsEnabled = "' . esc_js($couponsEnabled ? '1' : '0') . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";

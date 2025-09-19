@@ -55,8 +55,8 @@ class SeatregTemplateService {
         return $message;
     }
 
-    public static function replacePaymentTable($template, $bookingId) {
-        $paymentTable = SeatregBookingService::generatePaymentTable($bookingId);
+    public static function replacePaymentTable($template, $bookingId, $couponsEnabled, $appliedCoupon) {
+        $paymentTable = SeatregBookingService::generatePaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
 
         return str_replace(SEATREG_TEMPLATE_PAYMENT_TABLE, $paymentTable, $template);
     }
@@ -67,13 +67,13 @@ class SeatregTemplateService {
         return str_replace(SEATREG_TEMPLATE_BOOKING_APPROVED_EMAIL_CUSTOM_TEXT, $customText, $template);
     }
 
-    public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $registrationCustomFields, $bookingId, $registration) {
+    public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $registrationCustomFields, $bookingId, $registration, $couponsEnabled, $appliedCoupon) {
         $template = self::sanitizeTemplate($template);
         $template = self::replaceLineBreaksWithBrTags($template);
         $template = self::replaceBookingStatusLink($template, $bookingStatusLink);
         $template = self::replaceBookingTable($template, $bookings, $registrationCustomFields, $registration);
         $template = self::replaceBookingId($template, $bookingId);
-        $template = self::replacePaymentTable($template, $bookingId);
+        $template = self::replacePaymentTable($template, $bookingId, $couponsEnabled, $appliedCoupon);
         $template = self::replaceCustomApprovedEmailText($template, $bookings);
         
         $message = $template;

@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.7.1
-Stable tag: 1.60.1
+Stable tag: 1.61.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -25,6 +25,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 * Calendar Mode: Manage bookings with an integrated calendar mode.
 * Responsive Registration View: Provide a scrollable and resizable registration view via a direct link or embed it into your website pages using a shortcode.
 * Payment Integration: Support for PayPal and Stripe payments.
+* Coupons: Create coupon codes to offer booking discounts.
   
 == Installation ==
  
@@ -42,6 +43,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.61.0 =
+* Added coupons functionality. Allows users to enter a coupon code during booking checkout.
 
 = 1.60.1 =
 * Calendar mode date pickers now display localized dates based on site language.

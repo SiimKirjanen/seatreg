@@ -83,6 +83,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
                 esc_html__('Booking approval date', 'seatreg') => 'string',
                 esc_html__('Payment status', 'seatreg') => 'string',
                 esc_html__('Price', 'seatreg') => 'string',
+                esc_html__('Used coupon', 'seatreg') => 'string',
             )
         );
 
@@ -96,6 +97,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($registration, $this->_roomData);
             $priceDescription = $seatPrice->description ? '('. $seatPrice->description . ')' : '';
             $priceText = $seatPrice->price . ' ' . $this->_registrationInfo->paypal_currency_code .  ' ' . $priceDescription;
+            $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
 
             $nameField = $this->_separateFirstandLastName 
                 ? array(esc_html($registration->first_name), esc_html($registration->last_name))
@@ -130,7 +132,8 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
             }
 
             $registrationData[] = $priceText;
-        
+            $registrationData[] = $usedCouponString;
+
             foreach ($this->_customFields as $customField) {
                 $header[$customField['label']] = 'string';
                 $registrationData[] = $this->customFieldWithValueXlsx($customField, $registrantCustomData);

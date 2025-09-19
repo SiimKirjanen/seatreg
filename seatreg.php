@@ -6,7 +6,7 @@
 	Author: Siim Kirjanen
 	Author URI: https://github.com/SiimKirjanen
 	Text Domain: seatreg
-	Version: 1.60.1
+	Version: 1.61.0
 	Requires at least: 5.3
 	Requires PHP: 7.2.28
 	License: GPLv2 or later
@@ -38,6 +38,7 @@ require( 'php/repositories/SeatregPaymentLogRepository.php' );
 require( 'php/repositories/SeatregApiTokenRepository.php' );
 require( 'php/repositories/SeatregUploadsRepository.php' );
 require( 'php/repositories/SeatregTimeRepository.php' );
+require( 'php/repositories/SeatregCouponRepository.php' );
 require( 'php/services/SeatregRegistrationService.php' );
 require( 'php/services/SeatregBookingService.php' );
 require( 'php/services/SeatregPaymentService.php' );
@@ -62,6 +63,7 @@ require( 'php/services/SeatregLinksService.php' );
 require( 'php/services/SeatregCSVService.php' );
 require( 'php/services/SeatregImportService.php' );
 require( 'php/services/SeatregSanitizationService.php' );
+require( 'php/services/SeatregCouponService.php' );
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );

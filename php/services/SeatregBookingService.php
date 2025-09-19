@@ -164,7 +164,7 @@ class SeatregBookingService {
         return $bookingTable;
     }
 
-    public static function generatePaymentTable($bookingId) {
+    public static function generatePaymentTable($bookingId, $couponsEnabled = false, $appliedCoupon = null) {
         $bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
         $bookings = self::getBookingsCost($bookingId, $bookingData->registration_layout);
         $totalCost = 0;
@@ -184,6 +184,7 @@ class SeatregBookingService {
                 $paymentTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->price) . ' ' . $bookingData->paypal_currency_code . ' ' . $priceDescription  . '</td>';
             $paymentTable .= '</tr>';
         }
+        $totalCost = $couponsEnabled ? self::applyCouponDiscountToTotalCost($totalCost, $appliedCoupon) : $totalCost;
 
         $paymentTable .= '<tr>';
             $paymentTable .= '<td style=";border:1px solid black;padding: 6px;font-weight:700">'.  __('Total', 'seatreg') .'</td>';
@@ -266,5 +267,15 @@ class SeatregBookingService {
             ),
             '%s'
         );
+    }
+
+    public static function applyCouponDiscountToTotalCost($totalCost, $coupon) {
+        if( !$coupon ) {
+            return $totalCost;
+        }
+
+        $bookingPrice = $totalCost - $coupon->discountValue;
+
+        return $bookingPrice;
     }
 }
