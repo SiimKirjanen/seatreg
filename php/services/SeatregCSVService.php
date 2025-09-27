@@ -32,7 +32,7 @@ class SeatregCSVService {
 
         // Validate that each row has the correct number of columns
         $file_handle = fopen($file['tmp_name'], 'r');
-        $expectedColumnCount = 14;
+        $expectedColumnCount = 15;
 
         while (($row = fgetcsv($file_handle)) !== false) {
             $rowCount = count($row);
