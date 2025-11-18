@@ -1579,7 +1579,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
 						$appliedCoponsString = SeatregCouponService::getAppliedCouponString(json_decode($row->applied_coupon), $currencyCode);
 
-						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
+						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'" data-email="'. esc_attr($row->email) .'" data-booker-email="'. esc_attr($row->booker_email) .'">';
 							echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
 							echo '<div class="seat-room-box manager-box" title="', esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
 							echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
@@ -1656,7 +1656,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
 						$appliedCoponsString = SeatregCouponService::getAppliedCouponString(json_decode($row->applied_coupon), $currencyCode);
 		
-						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
+						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'" data-email="'. esc_attr($row->email) .'" data-booker-email="'. esc_attr($row->booker_email) .'">';
 							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
 							echo '<div class="seat-room-box manager-box" title="',esc_attr($row->room_name),'">', esc_html($row->room_name),'</div>';
 							echo '<div class="seat-name-box manager-box" title="'.esc_attr($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';

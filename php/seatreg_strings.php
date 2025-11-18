@@ -211,6 +211,8 @@ function seatreg_generate_admin_strings() {
     $translations->couponcode = esc_html__('Coupon code', 'seatreg');
     $translations->discount = esc_html__('Discount', 'seatreg');
     $translations->delete = esc_html__('Delete', 'seatreg');
+    $translations->email = esc_html__('Email', 'seatreg');
+    $translations->bookingMainEmail = esc_html__('Booking main email address (multi booking)', 'seatreg');
 
     return $translations;
 }

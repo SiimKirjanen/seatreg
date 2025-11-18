@@ -1054,7 +1054,12 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	var info = $(this).parent();
 	var modal = $('#edit-modal');
 	var modalCutsom = modal.find('.modal-body-custom');
+	var bookingId = $(info).data('booking-id');
+	var modalEmail = $('#edit-modal-email');
+	var isSingleBooking = $('.reg-seat-item[data-booking-id="' + bookingId + '"]').length === 1;
+
 	modalCutsom.empty();
+	modalEmail.empty();
 
 	modal.find('#edit-seat').val(info.find('.seat-id').val());
 	modal.find('#edit-room').val(info.find('.seat-room-box').text());
@@ -1064,6 +1069,22 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	modal.find('#booking-id').val($(this).attr('data-booking'));
 	modal.find('#r-id').val($(this).attr('data-id'));
 	modal.find('#edit-booking-seat-nr').val(info.find('.seat-nr-box').text());
+
+	if(isSingleBooking) {
+		modalEmail.append('<label for="booker-email"><h5>'+ translator.translate('email') +'</h5></label><br><input type="email" id="booker-email" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />');
+	}else {
+		modalEmail.append(
+			'<label for="email"><h5>' +
+				translator.translate('email') +
+			'</h5></label><br>' +
+			'<input type="email" id="email" name="email" class="modal-email-input" style="margin-bottom:12px" value="'+ info.data('email') +'" /><br>' +
+			'<label for="booker-email"><h5>' +
+				translator.translate('bookingMainEmail') +
+			'</h5></label>' +
+			'<input type="email" id="booker-email" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />'
+		);
+	}
+
 	info.find('.custom-field').each(function() {
 		var type = $(this).data('type');
 
