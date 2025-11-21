@@ -84,7 +84,9 @@
 					bookingid: editInfo.bookingId,
 					customfield: editInfo.customFieldData,
 					id: editInfo.id,
-					calendarDate: editInfo.calendarDate
+					calendarDate: editInfo.calendarDate,
+					bookerEmail: editInfo.bookerEmail,
+					email: editInfo.email
 				}
 			});
 	}
@@ -1071,17 +1073,17 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	modal.find('#edit-booking-seat-nr').val(info.find('.seat-nr-box').text());
 
 	if(isSingleBooking) {
-		modalEmail.append('<label for="booker-email"><h5>'+ translator.translate('email') +'</h5></label><br><input type="email" id="booker-email" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />');
+		modalEmail.append('<label for="booker-email-change-field"><h5>'+ translator.translate('email') +'</h5></label><br><input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />');
 	}else {
 		modalEmail.append(
-			'<label for="email"><h5>' +
+			'<label for="email-change-field"><h5>' +
 				translator.translate('email') +
 			'</h5></label><br>' +
-			'<input type="email" id="email" name="email" class="modal-email-input" style="margin-bottom:12px" value="'+ info.data('email') +'" /><br>' +
-			'<label for="booker-email"><h5>' +
+			'<input type="email" id="email-change-field" name="email" class="modal-email-input" style="margin-bottom:12px" value="'+ info.data('email') +'" /><br>' +
+			'<label for="booker-email-change-field"><h5>' +
 				translator.translate('bookingMainEmail') +
 			'</h5></label>' +
-			'<input type="email" id="booker-email" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />'
+			'<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />'
 		);
 	}
 
@@ -1380,7 +1382,9 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		'customFieldData': JSON.stringify(customFields),
 		'seatRoom': seat_room,
 		'id': $('#r-id').val(),
-		'calendarDate': $('#edit-date').val()
+		'calendarDate': $('#edit-date').val(),
+		'bookerEmail': $('#booking-edit-form #booker-email-change-field').val(),
+		'email': $('#booking-edit-form #email-change-field').val()
 	}
 
 	var promise = seatreg_edit_booking('seatreg_edit_booking', code, editInfo);
@@ -1429,6 +1433,15 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 				//Calendar date change.Remove booking from current view
 				bookingInfo.remove();
 			}
+
+			if (editInfo.bookerEmail) {
+				bookingInfo.data('booker-email', editInfo.bookerEmail);
+			}
+
+			if (editInfo.email) {
+				bookingInfo.data('email', editInfo.email);
+			}
+
 			alertify.success(translator.translate('bookingUpdated'));
 
 		}else {

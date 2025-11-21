@@ -2807,7 +2807,7 @@ function seatreg_confirm_or_delete_booking($action, $regCode, $calendarDate) {
 }
 
 //edit booking
-function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_name, $booking_id, $seat_id, $id, $calendarDate) {
+function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_name, $booking_id, $seat_id, $id, $calendarDate, $bookerEmail, $email) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
@@ -2820,7 +2820,9 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 			'room_uuid' => $room_uuid,
 			'custom_field_data' => $custom_fields,
 			'seat_id' => $seat_id,
-			'calendar_date' => $calendarDate
+			'calendar_date' => $calendarDate,
+			'booker_email' => $bookerEmail,
+			'email' => $email,
 		), 
 		array(
 			'booking_id' => $booking_id,
@@ -4065,6 +4067,8 @@ function seatreg_edit_booking_callback() {
 	$bookingEdit->editCustomField = stripslashes_deep($_POST['customfield']);
 	$bookingEdit->id = sanitize_text_field($_POST['id']);
 	$bookingEdit->calendarDate = !empty($_POST['calendarDate']) ? sanitize_text_field($_POST['calendarDate']): null;
+	$bookingEdit->bookerEmail = !empty($_POST['bookerEmail']) ? sanitize_email($_POST['bookerEmail']) : null;
+	$bookingEdit->email = !empty($_POST['email']) ? sanitize_email($_POST['email']) : null;
 
 	$statusArray = seatreg_validate_edit_booking( sanitize_text_field($_POST['code']), $bookingEdit );
 
@@ -4083,7 +4087,9 @@ function seatreg_edit_booking_callback() {
 			$bookingEdit->bookingId, 
 			$statusArray['newSeatId'],
 			$bookingEdit->id,
-			$bookingEdit->calendarDate
+			$bookingEdit->calendarDate,
+			$bookingEdit->bookerEmail,
+			$bookingEdit->email
 		) !== false) {
 		seatreg_add_activity_log('booking', $bookingEdit->bookingId, 'Booking edited (Booking manager)');
 		wp_send_json( array(
