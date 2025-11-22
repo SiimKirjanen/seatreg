@@ -2278,6 +2278,18 @@ function seatreg_validate_edit_booking($code, $data) {
 			break;
 		}
 	}
+
+	if ($data->bookerEmail && !SeatregDataValidation::validateEmailAddress($data->bookerEmail)) {
+		$allCorrect = false;
+		$resp['status'] = 'edit-email-not-valid';
+		$resp['text'] = esc_html__('Provided email address is not valid', 'seatreg');
+	}
+
+	if ($data->email && !SeatregDataValidation::validateEmailAddress($data->email)) {
+		$allCorrect = false;
+		$resp['status'] = 'edit-email-not-valid';
+		$resp['text'] = esc_html__('Provided email address is not valid', 'seatreg');
+	}
 	
 	return $resp;
 }
@@ -2811,19 +2823,27 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 	global $seatreg_db_table_names;
 	global $wpdb;
 
+	$updateFields = array(
+        'first_name' => $f_name,
+        'last_name' => $l_name,
+        'seat_nr' => $seat_nr,
+        'room_uuid' => $room_uuid,
+        'custom_field_data' => $custom_fields,
+        'seat_id' => $seat_id,
+        'calendar_date' => $calendarDate,
+    );
+
+	if ($bookerEmail) {
+        $updateFields['booker_email'] = $bookerEmail;
+    }
+
+    if ($email) {
+        $updateFields['email'] = $email;
+    }
+
 	$status = $wpdb->update( 
 		$seatreg_db_table_names->table_seatreg_bookings,
-		array( 
-			'first_name' => $f_name,
-			'last_name' => $l_name,
-			'seat_nr' => $seat_nr,
-			'room_uuid' => $room_uuid,
-			'custom_field_data' => $custom_fields,
-			'seat_id' => $seat_id,
-			'calendar_date' => $calendarDate,
-			'booker_email' => $bookerEmail,
-			'email' => $email,
-		), 
+		$updateFields, 
 		array(
 			'booking_id' => $booking_id,
 			'id' => $id,
@@ -4067,8 +4087,8 @@ function seatreg_edit_booking_callback() {
 	$bookingEdit->editCustomField = stripslashes_deep($_POST['customfield']);
 	$bookingEdit->id = sanitize_text_field($_POST['id']);
 	$bookingEdit->calendarDate = !empty($_POST['calendarDate']) ? sanitize_text_field($_POST['calendarDate']): null;
-	$bookingEdit->bookerEmail = !empty($_POST['bookerEmail']) ? sanitize_email($_POST['bookerEmail']) : null;
-	$bookingEdit->email = !empty($_POST['email']) ? sanitize_email($_POST['email']) : null;
+	$bookingEdit->bookerEmail = !empty($_POST['bookerEmail']) ? $_POST['bookerEmail'] : null;
+	$bookingEdit->email = !empty($_POST['email']) ? $_POST['email'] : null;
 
 	$statusArray = seatreg_validate_edit_booking( sanitize_text_field($_POST['code']), $bookingEdit );
 

@@ -1052,7 +1052,7 @@ $('#import-bookings-finalization-modal button[data-action="start-booking-import"
 });
 
 //booking edit click. Show edit modal
-$('#seatreg-booking-manager').on('click', '.edit-btn',function() {
+$('#seatreg-booking-manager').on('click', '.edit-btn', function() {
 	var info = $(this).parent();
 	var modal = $('#edit-modal');
 	var modalCutsom = modal.find('.modal-body-custom');
@@ -1082,7 +1082,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 			'<input type="email" id="email-change-field" name="email" class="modal-email-input" style="margin-bottom:12px" value="'+ info.data('email') +'" /><br>' +
 			'<label for="booker-email-change-field"><h5>' +
 				translator.translate('bookingMainEmail') +
-			'</h5></label>' +
+			'</h5></label> <i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="' + translator.translate('multiBookingMailEmailEditDesc') + '"></i><br>' +
 			'<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />'
 		);
 	}
@@ -1113,6 +1113,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	});
 
 	$('#edit-room-error, #edit-seat-error').text('');
+	initTooltips();
 	modal.modal('show');
 });
 
@@ -1400,6 +1401,8 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 			bookingInfo.find('.seat-name-box').attr('title', first_name + ' ' + last_name).find('.full-name').text(first_name + ' ' + last_name);
 			bookingInfo.find('.f-name').val(first_name);
 			bookingInfo.find('.l-name').val(last_name);
+			bookingInfo.attr('data-email', editInfo.email);
+			bookingInfo.attr('data-booker-email', editInfo.bookerEmail);
 
 			//correct custom fields
 			var a = customFields.length;
@@ -1468,6 +1471,9 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 			}
 			if(data.status === 'date not correct') {
 				$('#edit-date-error').text(translator.translate('dateNotCorrect'));
+			}
+			if(data.status === 'edit-email-not-valid') {
+				alertify.error(translator.translate('editEmailNotValid'));
 			}	
 		}
 	});
