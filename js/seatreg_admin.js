@@ -1396,13 +1396,14 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		if(data.status == 'updated') {
 			var bookingLoc = $('#r-id').val();
 			var bookingInfo = $('#seatreg-booking-manager .edit-btn[data-id="'+ bookingLoc +'"]').parent();
+			var relatedBookings = $('.reg-seat-item[data-booking-id="' + editInfo.bookingId + '"]');
+
 			bookingInfo.find('.seat-nr-box').text(data.newSeatNr);
 			bookingInfo.find('.seat-room-box').text(seat_room);
 			bookingInfo.find('.seat-name-box').attr('title', first_name + ' ' + last_name).find('.full-name').text(first_name + ' ' + last_name);
 			bookingInfo.find('.f-name').val(first_name);
 			bookingInfo.find('.l-name').val(last_name);
 			bookingInfo.attr('data-email', editInfo.email);
-			bookingInfo.attr('data-booker-email', editInfo.bookerEmail);
 
 			//correct custom fields
 			var a = customFields.length;
@@ -1437,13 +1438,9 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 				bookingInfo.remove();
 			}
 
-			if (editInfo.bookerEmail) {
-				bookingInfo.data('booker-email', editInfo.bookerEmail);
-			}
-
-			if (editInfo.email) {
-				bookingInfo.data('email', editInfo.email);
-			}
+			relatedBookings.each(function() {
+				$(this).attr('data-booker-email', editInfo.bookerEmail).data('booker-email', editInfo.bookerEmail);
+			}); 
 
 			alertify.success(translator.translate('bookingUpdated'));
 
