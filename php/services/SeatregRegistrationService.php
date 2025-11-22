@@ -141,15 +141,16 @@ class SeatregRegistrationService {
 
                     die();
                 }else {
-                    wp_die( esc_html_e('Something went wrong while coping a registration layout images', 'seatreg') );
+                    wp_die( esc_html__('Something went wrong while coping a registration layout images', 'seatreg') );
                 }
            
             }else {
-                wp_die( esc_html_e('Something went wrong while coping a registration settings', 'seatreg') );
+                wp_die( esc_html__('Something went wrong while coping a registration settings', 'seatreg') );
             }
         }else {
-            wp_die( esc_html_e('Something went wrong while coping a registration', 'seatreg') );
+            wp_die( esc_html__('Something went wrong while coping a registration', 'seatreg') );
         }
     }
+
 
 }
