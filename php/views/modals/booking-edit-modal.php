@@ -45,6 +45,9 @@
 			<input type="hidden" name="first-name[]" autocomplete="off"/>
 			<input type="hidden" name="last-name[]" autocomplete="off"/>
 			<?php endif; ?>
+
+			<div class="edit-modal-input-wrap" id="edit-modal-email"></div>
+			
 	        <div class="modal-body-custom"></div>
 			<input type="hidden" id="modal-code">
 			<input type="hidden" id="booking-id">

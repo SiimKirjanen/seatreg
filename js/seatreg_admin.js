@@ -84,7 +84,9 @@
 					bookingid: editInfo.bookingId,
 					customfield: editInfo.customFieldData,
 					id: editInfo.id,
-					calendarDate: editInfo.calendarDate
+					calendarDate: editInfo.calendarDate,
+					bookerEmail: editInfo.bookerEmail,
+					email: editInfo.email
 				}
 			});
 	}
@@ -1050,11 +1052,16 @@ $('#import-bookings-finalization-modal button[data-action="start-booking-import"
 });
 
 //booking edit click. Show edit modal
-$('#seatreg-booking-manager').on('click', '.edit-btn',function() {
+$('#seatreg-booking-manager').on('click', '.edit-btn', function() {
 	var info = $(this).parent();
 	var modal = $('#edit-modal');
 	var modalCutsom = modal.find('.modal-body-custom');
+	var bookingId = $(info).data('booking-id');
+	var modalEmail = $('#edit-modal-email');
+	var isSingleBooking = $('.reg-seat-item[data-booking-id="' + bookingId + '"]').length === 1;
+
 	modalCutsom.empty();
+	modalEmail.empty();
 
 	modal.find('#edit-seat').val(info.find('.seat-id').val());
 	modal.find('#edit-room').val(info.find('.seat-room-box').text());
@@ -1064,6 +1071,22 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	modal.find('#booking-id').val($(this).attr('data-booking'));
 	modal.find('#r-id').val($(this).attr('data-id'));
 	modal.find('#edit-booking-seat-nr').val(info.find('.seat-nr-box').text());
+
+	if(isSingleBooking) {
+		modalEmail.append('<label for="booker-email-change-field"><h5>'+ translator.translate('email') +'</h5></label><br><input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />');
+	}else {
+		modalEmail.append(
+			'<label for="email-change-field"><h5>' +
+				translator.translate('email') +
+			'</h5></label><br>' +
+			'<input type="email" id="email-change-field" name="email" class="modal-email-input" style="margin-bottom:12px" value="'+ info.data('email') +'" /><br>' +
+			'<label for="booker-email-change-field"><h5>' +
+				translator.translate('bookingMainEmail') +
+			'</h5></label> <i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="' + translator.translate('multiBookingMailEmailEditDesc') + '"></i><br>' +
+			'<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />'
+		);
+	}
+
 	info.find('.custom-field').each(function() {
 		var type = $(this).data('type');
 
@@ -1090,6 +1113,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn',function() {
 	});
 
 	$('#edit-room-error, #edit-seat-error').text('');
+	initTooltips();
 	modal.modal('show');
 });
 
@@ -1359,7 +1383,9 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		'customFieldData': JSON.stringify(customFields),
 		'seatRoom': seat_room,
 		'id': $('#r-id').val(),
-		'calendarDate': $('#edit-date').val()
+		'calendarDate': $('#edit-date').val(),
+		'bookerEmail': $('#booking-edit-form #booker-email-change-field').val(),
+		'email': $('#booking-edit-form #email-change-field').val()
 	}
 
 	var promise = seatreg_edit_booking('seatreg_edit_booking', code, editInfo);
@@ -1370,11 +1396,14 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 		if(data.status == 'updated') {
 			var bookingLoc = $('#r-id').val();
 			var bookingInfo = $('#seatreg-booking-manager .edit-btn[data-id="'+ bookingLoc +'"]').parent();
+			var relatedBookings = $('.reg-seat-item[data-booking-id="' + editInfo.bookingId + '"]');
+
 			bookingInfo.find('.seat-nr-box').text(data.newSeatNr);
 			bookingInfo.find('.seat-room-box').text(seat_room);
 			bookingInfo.find('.seat-name-box').attr('title', first_name + ' ' + last_name).find('.full-name').text(first_name + ' ' + last_name);
 			bookingInfo.find('.f-name').val(first_name);
 			bookingInfo.find('.l-name').val(last_name);
+			bookingInfo.attr('data-email', editInfo.email);
 
 			//correct custom fields
 			var a = customFields.length;
@@ -1408,6 +1437,11 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 				//Calendar date change.Remove booking from current view
 				bookingInfo.remove();
 			}
+
+			relatedBookings.each(function() {
+				$(this).attr('data-booker-email', editInfo.bookerEmail).data('booker-email', editInfo.bookerEmail);
+			}); 
+
 			alertify.success(translator.translate('bookingUpdated'));
 
 		}else {
@@ -1434,6 +1468,9 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 			}
 			if(data.status === 'date not correct') {
 				$('#edit-date-error').text(translator.translate('dateNotCorrect'));
+			}
+			if(data.status === 'edit-email-not-valid') {
+				alertify.error(translator.translate('editEmailNotValid'));
 			}	
 		}
 	});

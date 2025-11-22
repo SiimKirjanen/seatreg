@@ -1579,7 +1579,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
 						$appliedCoponsString = SeatregCouponService::getAppliedCouponString(json_decode($row->applied_coupon), $currencyCode);
 
-						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
+						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'" data-email="'. esc_attr($row->email) .'" data-booker-email="'. esc_attr($row->booker_email) .'">';
 							echo '<div class="seat-nr-box manager-box">', esc_html($row->seat_nr), '</div>';
 							echo '<div class="seat-room-box manager-box" title="', esc_html($row->room_name),'">', esc_html($row->room_name),'</div>';
 							echo '<div class="seat-name-box manager-box" title="' . esc_html($row->first_name) . ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
@@ -1656,7 +1656,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
 						$appliedCoponsString = SeatregCouponService::getAppliedCouponString(json_decode($row->applied_coupon), $currencyCode);
 		
-						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'">';
+						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'" data-email="'. esc_attr($row->email) .'" data-booker-email="'. esc_attr($row->booker_email) .'">';
 							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
 							echo '<div class="seat-room-box manager-box" title="',esc_attr($row->room_name),'">', esc_html($row->room_name),'</div>';
 							echo '<div class="seat-name-box manager-box" title="'.esc_attr($row->first_name). ' '. esc_html($row->last_name).'"><input type="hidden" class="f-name" value="'.esc_html($row->first_name).'"/><input type="hidden" class="l-name" value="'. esc_html($row->last_name) .'" /><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
@@ -2278,6 +2278,18 @@ function seatreg_validate_edit_booking($code, $data) {
 			break;
 		}
 	}
+
+	if ( !SeatregDataValidation::validateEmailAddress($data->bookerEmail) ) {
+		$allCorrect = false;
+		$resp['status'] = 'edit-email-not-valid';
+		$resp['text'] = esc_html__('Provided email address is not valid', 'seatreg');
+	}
+
+	if ( $data->email && !SeatregDataValidation::validateEmailAddress($data->email) ) {
+		$allCorrect = false;
+		$resp['status'] = 'edit-email-not-valid';
+		$resp['text'] = esc_html__('Provided email address is not valid', 'seatreg');
+	}
 	
 	return $resp;
 }
@@ -2807,29 +2819,50 @@ function seatreg_confirm_or_delete_booking($action, $regCode, $calendarDate) {
 }
 
 //edit booking
-function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_name, $booking_id, $seat_id, $id, $calendarDate) {
+function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_name, $booking_id, $seat_id, $id, $calendarDate, $bookerEmail, $email) {
 	global $seatreg_db_table_names;
 	global $wpdb;
 
+	$updateFields = array(
+        'first_name' => $f_name,
+        'last_name' => $l_name,
+        'seat_nr' => $seat_nr,
+        'room_uuid' => $room_uuid,
+        'custom_field_data' => $custom_fields,
+        'seat_id' => $seat_id,
+        'calendar_date' => $calendarDate
+    );
+
+    if ($email) {
+        $updateFields['email'] = $email;
+    }
+
 	$status = $wpdb->update( 
 		$seatreg_db_table_names->table_seatreg_bookings,
-		array( 
-			'first_name' => $f_name,
-			'last_name' => $l_name,
-			'seat_nr' => $seat_nr,
-			'room_uuid' => $room_uuid,
-			'custom_field_data' => $custom_fields,
-			'seat_id' => $seat_id,
-			'calendar_date' => $calendarDate
-		), 
+		$updateFields, 
 		array(
 			'booking_id' => $booking_id,
 			'id' => $id,
 		),
 		'%s'
 	);
+
+	$status2 = $wpdb->update( 
+		$seatreg_db_table_names->table_seatreg_bookings,
+		array(
+			'booker_email' => $bookerEmail,
+		), 
+		array(
+			'booking_id' => $booking_id,
+		),
+		'%s'
+	);
+
+	if ($status === false || $status2 === false) {
+        return false;
+    }
 	
-	return $status;
+	return true;
 }
 
 function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode, $calendarDate = null, $multiPriceSelection = null) {
@@ -4065,6 +4098,8 @@ function seatreg_edit_booking_callback() {
 	$bookingEdit->editCustomField = stripslashes_deep($_POST['customfield']);
 	$bookingEdit->id = sanitize_text_field($_POST['id']);
 	$bookingEdit->calendarDate = !empty($_POST['calendarDate']) ? sanitize_text_field($_POST['calendarDate']): null;
+	$bookingEdit->bookerEmail = $_POST['bookerEmail'];
+	$bookingEdit->email = !empty($_POST['email']) ? $_POST['email'] : null;
 
 	$statusArray = seatreg_validate_edit_booking( sanitize_text_field($_POST['code']), $bookingEdit );
 
@@ -4083,7 +4118,9 @@ function seatreg_edit_booking_callback() {
 			$bookingEdit->bookingId, 
 			$statusArray['newSeatId'],
 			$bookingEdit->id,
-			$bookingEdit->calendarDate
+			$bookingEdit->calendarDate,
+			$bookingEdit->bookerEmail,
+			$bookingEdit->email
 		) !== false) {
 		seatreg_add_activity_log('booking', $bookingEdit->bookingId, 'Booking edited (Booking manager)');
 		wp_send_json( array(
