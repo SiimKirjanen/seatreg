@@ -80,6 +80,13 @@ function seatreg_is_registration_view_page() {
 	return false;
 }
 
+function seatreg_is_companion_app_page() {
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'companion' ) {
+		return true;
+	}
+	return false;
+}
+
 function seatreg_is_booking_check_page() {
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-status' ) {
 		return true;

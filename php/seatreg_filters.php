@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_filter( 'show_admin_bar', 'seatreg_hide_admin_bar_from_registration_view' );
 function seatreg_hide_admin_bar_from_registration_view(){
 	if( is_user_logged_in() ) {
-		if( seatreg_is_registration_view_page() ) {
+		if( seatreg_is_registration_view_page() || seatreg_is_companion_app_page() ) {
 			return false;
 		}
 		return true;
@@ -20,6 +20,15 @@ add_filter( 'template_include', 'seatreg_page_template' );
 function seatreg_page_template( $page_template ){
     if ( seatreg_is_registration_view_page() ) {
         $page_template = SEATREG_PLUGIN_FOLDER_DIR . '/registration/index.php';
+    }
+
+    return $page_template;
+}
+
+add_filter( 'template_include', 'seatreg_companion_app_template' );
+function seatreg_companion_app_template( $page_template ){
+    if ( seatreg_is_companion_app_page() ) {
+        $page_template = SEATREG_PLUGIN_FOLDER_DIR . '/companion_app/index.php';
     }
 
     return $page_template;

@@ -64,6 +64,14 @@ function seatreg_add_plugin_menu() {
 		'seatreg-tools',   //slug
 		'seatreg_create_tools'
 	);
+	add_submenu_page(
+		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
+		esc_html__('Companion', 'seatreg'),  //page title
+		esc_html__('Companion', 'seatreg'),  //menu title
+		SEATREG_MANAGE_EVENTS_CAPABILITY,  //capability
+		'seatreg-companion-app',   //slug
+		'seatreg_companion_app'
+	);
 }
 
 function seatreg_create_welcome() {
@@ -237,4 +245,19 @@ function seatreg_create_tools() {
 			</div>
 		</div>
 	<?php
+}
+
+function seatreg_companion_app() {
+	$companionAppUrl = get_site_url() . '/?seatreg=companion';
+
+	?>
+		<div class="seatreg-wp-admin wrap">
+			<h1><i class="fa fa-mobile" aria-hidden="true"></i> <?php esc_html_e('Companion app'); ?></h1>
+			<p><?php esc_html_e('Web version of the mobile app', 'seatreg'); ?>.</p>
+			
+			<a target="_blank" href="<?php echo esc_url($companionAppUrl); ?>">
+				<?php echo esc_html($companionAppUrl); ?>
+			</a>
+		</div>
+	<?php	
 }

@@ -2,7 +2,7 @@
 require_once(SEATREG_PLUGIN_FOLDER_DIR . 'registration/php/reg_functions.php');
 require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_strings.php');
 
-//remove queued styles from registration view page
+//only allow spesific styles to load on pages
 add_action('wp_print_styles', 'seatreg_remove_all_styles', 100);
 function seatreg_remove_all_styles() {
 	if( seatreg_is_registration_view_page() ) {
@@ -16,6 +16,11 @@ function seatreg_remove_all_styles() {
     	$wp_styles->queue = $allowedToLoad;
 	}
 	if( seatreg_is_booking_confirm_page() ) {
+		global $wp_styles;
+		$allowedToLoad = array();
+    	$wp_styles->queue = $allowedToLoad;
+	}
+	if ( seatreg_is_companion_app_page() ) {
 		global $wp_styles;
 		$allowedToLoad = array();
     	$wp_styles->queue = $allowedToLoad;
@@ -38,6 +43,11 @@ function seatreg_remove_all_scripts() {
 	if( seatreg_is_booking_confirm_page() ) {
 		global $wp_scripts;
 		$allowedToLoad = array();
+		$wp_scripts->queue = $allowedToLoad;
+	}
+	if( seatreg_is_companion_app_page() ) {
+		global $wp_scripts;
+		$allowedToLoad = array('seatreg-companion-app');
 		$wp_scripts->queue = $allowedToLoad;
 	}
 }
@@ -132,6 +142,10 @@ function seatreg_public_scripts_and_styles() {
 			'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
 			'uploads_url' => SEATREG_TEMP_FOLDER_URL,
 		));
+	}
+
+	if( seatreg_is_companion_app_page() ) {
+		wp_enqueue_script('seatreg-companion-app', SEATREG_PLUGIN_FOLDER_URL . 'companion_app/_expo/static/js/web/AppEntry-7567d1395483e4933e24fd587abe135b.js' , array(), '1.0.0', true);
 	}
 
 	if( seatreg_is_booking_check_page() && !empty($_GET['registration']) && !empty($_GET['id']) ) {

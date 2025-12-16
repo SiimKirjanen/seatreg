@@ -22,6 +22,7 @@ function seatreg_load_admin_scripts($hook) {
 		'seatreg_page_seatreg-options',
 		'seatreg_page_seatreg-management',
 		'seatreg_page_seatreg-tools',
+		'seatreg_page_seatreg-companion-app'
 	);
 
 	if(in_array($screen->id, $allowedToLoadStylesAndScripts)) {
