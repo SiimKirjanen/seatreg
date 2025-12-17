@@ -80,6 +80,13 @@ function seatreg_is_registration_view_page() {
 	return false;
 }
 
+function seatreg_is_companion_app_page() {
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'companion' ) {
+		return true;
+	}
+	return false;
+}
+
 function seatreg_is_booking_check_page() {
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'booking-status' ) {
 		return true;
@@ -3544,6 +3551,19 @@ function seatreg_form_submit_handle() {
 
 		die();
 	}
+}
+
+//handle companion app toggle
+add_action('admin_post_seatreg_toggle_companion_app', 'toggle_companion_app_handle');
+function toggle_companion_app_handle() {
+	seatreg_check_user_capabilities(SEATREG_MANAGE_EVENTS_CAPABILITY);
+	check_admin_referer('seatreg-admin-nonce', 'seatreg-admin-nonce');
+
+	$enabled = isset($_POST['seatreg_companion_app_enabled']);
+	SeatregCompanionAppService::setEnabled($enabled);
+
+	wp_safe_redirect( wp_get_referer() );
+    exit;
 }
 
 /*

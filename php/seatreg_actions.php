@@ -10,7 +10,7 @@ if( is_admin() ) {
 
 add_action( 'after_setup_theme', 'seatreg_remove_unnecessary_tags_and_more' );
 function seatreg_remove_unnecessary_tags_and_more(){
-	if( seatreg_is_registration_view_page() ) {
+	if( seatreg_is_registration_view_page() || seatreg_is_companion_app_page() ) {
 		 // REMOVE WP EMOJI
 		 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 		 remove_action( 'wp_print_styles', 'print_emoji_styles' );

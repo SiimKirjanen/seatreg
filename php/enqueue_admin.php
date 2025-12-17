@@ -22,6 +22,7 @@ function seatreg_load_admin_scripts($hook) {
 		'seatreg_page_seatreg-options',
 		'seatreg_page_seatreg-management',
 		'seatreg_page_seatreg-tools',
+		'seatreg_page_seatreg-companion-app'
 	);
 
 	if(in_array($screen->id, $allowedToLoadStylesAndScripts)) {
@@ -32,7 +33,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('vanilla_picker_style', plugins_url('js/vanilla-picker/dist/vanilla-picker.csp.css', dirname(__FILE__) ), array(), '2.12.1', 'all');
 		wp_enqueue_style('seatreg_builder_style', plugins_url('css/seatreg_builder.min.css', dirname(__FILE__) ), array(), '1.1.1', 'all');
-		wp_enqueue_style('seatreg_admin_styles', plugins_url('css/seatreg_admin.min.css', dirname(__FILE__) ), array(), '1.18.0', 'all');
+		wp_enqueue_style('seatreg_admin_styles', plugins_url('css/seatreg_admin.min.css', dirname(__FILE__) ), array(), '1.19.0', 'all');
 		wp_enqueue_style('local-open-sans', SEATREG_PLUGIN_FOLDER_URL . 'fonts/open-sans/open-sans.css', array(), '1.0.0', 'all');
 		wp_enqueue_style('powertip_style', plugins_url('css/jquery.powertip.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 

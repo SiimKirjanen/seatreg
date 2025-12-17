@@ -64,6 +64,14 @@ function seatreg_add_plugin_menu() {
 		'seatreg-tools',   //slug
 		'seatreg_create_tools'
 	);
+	add_submenu_page(
+		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
+		esc_html__('Companion', 'seatreg'),  //page title
+		esc_html__('Companion', 'seatreg'),  //menu title
+		SEATREG_MANAGE_EVENTS_CAPABILITY,  //capability
+		'seatreg-companion-app',   //slug
+		'seatreg_companion_app'
+	);
 }
 
 function seatreg_create_welcome() {
@@ -237,4 +245,47 @@ function seatreg_create_tools() {
 			</div>
 		</div>
 	<?php
+}
+
+function seatreg_companion_app() {
+	$companionAppUrl = get_site_url() . '/?seatreg=companion';
+	$isCompanionEnabled = SeatregCompanionAppRepository::isCompanionAppEnabled();
+
+	?>
+		<div class="seatreg-wp-admin wrap">
+			<h1><i class="fa fa-mobile" aria-hidden="true"></i> <?php esc_html_e('Companion app'); ?></h1>
+			<p><?php esc_html_e('Web version of the mobile companion app.', 'seatreg'); ?></p>
+			<p><?php esc_html_e("Alternative way to view bookings on mobile devices."); ?><p>
+			<p>
+				<?php esc_html_e("Source code is available on GitHub:", "seatreg"); ?>
+				<a target="_blank" href="<?php echo esc_url('https://github.com/SiimKirjanen/seatreg-app'); ?>">
+					<?php echo esc_html('https://github.com/SiimKirjanen/seatreg-app'); ?>
+				</a>
+			<p>
+
+			<form action="<?php echo esc_url(get_admin_url() . 'admin-post.php'); ?>" method="post" class="companion-app-form">
+				<label>
+					<input
+						type="checkbox"
+						name="seatreg_companion_app_enabled"
+						value="1"
+						<?php checked( $isCompanionEnabled ); ?>
+					/>
+					<?php esc_html_e('Enable Companion App', 'seatreg'); ?>
+				</label>
+				
+				<?php
+					submit_button(esc_html__('Save', 'seatreg'));
+				?>
+
+				<?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
+				<input type='hidden' name='action' value='seatreg_toggle_companion_app' />
+			</form>
+			
+			<span><?php esc_html_e("The app is located at:", "seatreg"); ?></span>
+			<a target="_blank" href="<?php echo esc_url($companionAppUrl); ?>">
+				<?php echo esc_html($companionAppUrl); ?>
+			</a>
+		</div>
+	<?php	
 }

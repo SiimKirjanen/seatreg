@@ -1,4 +1,8 @@
 node_modules
+
+# But don't ignore companion_app/node_modules
+!companion_app/assets/node_modules/
+
 .vscode
 uploads
 # https://stackoverflow.com/questions/33711910/tfpdf-cant-open-file-c-webprojects-www-diners-font-unifont-dejavusanscondense/37549271#37549271
