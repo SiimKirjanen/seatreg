@@ -132,3 +132,6 @@ define('SEATREG_VALID_CURRENCY_CODES', array(
     'UAH', 'UGX', 'USD', 'UYI', 'UYU', 'UYW', 'UZS', 'VES', 'VND', 'VUV',
     'WST', 'XAF', 'XCD', 'XDR', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW', 'ZWL'
 ));
+
+// Options API
+define("SEATREG_COMPANION_APP_ENABLED", 'seatreg_companion_app_enabled');

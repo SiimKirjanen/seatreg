@@ -1,3 +1,10 @@
+<?php
+  $isCompanionEnabled = SeatregCompanionAppRepository::isCompanionAppEnabled();
+
+  if (!$isCompanionEnabled) {
+    exit("Companion is not enabled");
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
