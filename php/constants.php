@@ -18,6 +18,7 @@ define('SEATREG_DEFAULT_INPUT_MAX_LENGHT', 100);
 define('SEATREG_CUSTOM_PAYMENT_DESCRIPTION', '/^[\p{L}\p{N}+\s.:\/]+$/u');
 define("SEATREG_COUPON_CODE_REGEX", '/^[\p{L}\p{N}_-]{1,20}$/u');
 define("SEATREG_COUPON_UUID_REGEX", '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i');
+define("SEATREG_ROOM_DESCRIPTION_REGEX", '/^[\p{L}\p{N}\s\r\n.,-]+$/u');
 
 // Payments
 define('SEATREG_PAYMENT_PROCESSING', 'processing');

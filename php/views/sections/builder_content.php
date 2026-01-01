@@ -7,7 +7,12 @@
 <div id="construction-wrapper">
 	<div class="build-head">
 		<h1 class="reg-title"><?php esc_html_e('Registration name', 'seatreg'); ?>: <span class="reg-title-name"></span></h1>
-		<h2 class="room-title"><?php esc_html_e('Room', 'seatreg');?>: <span class="room-title-name"></span><span class="change-room-name"><?php esc_html_e('Change name', 'seatreg');?></span></h2>
+		<h2 class="room-title">
+			<?php esc_html_e('Room', 'seatreg'); ?>: 
+			<span class="room-title-name"></span>
+			<span class="change-room-name"><?php esc_html_e('Change name', 'seatreg');?></span>
+			<span class="change-room-description"><?php esc_html_e('Change description', 'seatreg');?></span>
+		</h2>
 		<div id="room-selection-wrapper"></div>
 		<div class="cre-del-room-wrapper">
 			<span id="new-room-create" class="room-action"><i class="fa fa-plus" aria-hidden="true"></i> <?php esc_html_e('Add room', 'seatreg');?> </span>
@@ -378,6 +383,26 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
 					<button type="button" class="btn btn-primary" id="room-dialog-ok"><?php esc_html_e('OK', 'seatreg');?></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal vert-modal fade" id="room-description-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-lg vert-modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title"><?php esc_html_e('Room description', 'seatreg');?></h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<label for="room-description-input"><?php esc_html_e('Enter room description:', 'seatreg');?> </label><br>
+					<textarea id="room-description-input" cols="50"></textarea>
+					<div class="room-description-error"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+					<button type="button" class="btn btn-primary" id="room-description-save"><?php esc_html_e('Save', 'seatreg');?></button>
 				</div>
 			</div>
 		</div>

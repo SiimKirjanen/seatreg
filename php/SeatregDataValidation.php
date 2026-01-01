@@ -262,6 +262,18 @@ class SeatregDataValidation {
                 return $validationStatus;
             }
 
+            if( !property_exists($roomData->room, 'description') ) {
+                $validationStatus->setInvalid('room description is missing');
+                return $validationStatus;
+            }
+
+            if ($roomData->room->description !== '' && !preg_match(SEATREG_ROOM_DESCRIPTION_REGEX, $roomData->room->description)) {
+                $validationStatus->setInvalid(
+                    'Invalid characters detected. Allowed: letters (all languages), numbers, spaces, line breaks, and . , -'
+                );
+                return $validationStatus;
+            }
+
             if( !property_exists($roomData, 'boxes') || !is_array($roomData->boxes) ) {
                 $validationStatus->setInvalid('room missing boxes');
                 return $validationStatus;
