@@ -3419,13 +3419,7 @@
 
 		$('.room-description-error').empty();
 
-		if (roomDescription === "") {
-			// empty description is valid
-			alertify.success(translator.translate('roomDescriptionSet'));
-			return;
-		}
-
-		if (!regex.test(roomDescription)) {
+		if (roomDescription !== "" && !regex.test(roomDescription)) {
 			$('.room-description-error').text(
 				'Invalid characters detected. \n Allowed: letters (all languages), numbers, spaces, line breaks, and . , -'
 			);
@@ -3434,6 +3428,7 @@
 
 		reg.rooms[reg.currentRoom].description = roomDescription;
 		alertify.success(translator.translate('roomDescriptionSet'));
+		$('#room-description-dialog').modal('toggle');
     });
 	   
     $('#room-name-dialog-input').keyup(function(e) {		

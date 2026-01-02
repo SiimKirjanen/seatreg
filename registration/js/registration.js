@@ -542,6 +542,14 @@
 	};
 
 SeatReg.prototype.paintRoomInfo = function() {
+	//top-info-bar
+	var topInfoBar = $(".top-info-bar [data-info='room']");
+	topInfoBar.empty();
+
+	if (this.rooms[this.currentRoom].room.description) {
+		topInfoBar.text(this.rooms[this.currentRoom].room.description);
+	}
+
 	//room-nav-info
 	$('#current-room-name').text(this.rooms[this.currentRoom].room.name);
 	var infoLoc = this.rooms[this.currentRoom].room;

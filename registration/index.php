@@ -135,11 +135,11 @@
 					</div>
 				</div>
 
-				<?php if($data->info): ?>
-					<div class="top-info-bar">
-						<?php esc_html_e($data->info); ?>
-					</div>
-				<?php endif; ?>
+				<div class="top-info-bar">
+					<div data-info="registration"><?php esc_html_e($data->info); ?></div>
+					<div data-info="room"></div>
+				</div>
+				
 				<?php if ($zoom_on_top) : ?>
 					<div id="zoom-controller" class="no-select">
 						<i class="fa fa-arrow-circle-up move-action" data-move="up"></i><br>

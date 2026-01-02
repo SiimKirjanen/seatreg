@@ -396,6 +396,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
 				<div class="modal-body">
+					<p><?php esc_html_e('Will be displayed on the registration view.', 'seatreg'); ?></p>
 					<label for="room-description-input"><?php esc_html_e('Enter room description:', 'seatreg');?> </label><br>
 					<textarea id="room-description-input" cols="50"></textarea>
 					<div class="room-description-error"></div>
