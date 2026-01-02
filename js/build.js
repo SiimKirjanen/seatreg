@@ -278,7 +278,7 @@
 			height: this.roomHeight + 10,
 			seatCounter: this.roomSeatCounter,
 			backgroundImage: this.backgroundImage,
-			description: this.description
+			description: this.description ?? ''
 		}
 
 		roomData['boxes'] = [];
