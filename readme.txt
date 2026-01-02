@@ -46,6 +46,8 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.64.0 =
 * Added map builder functionality to add room specific description.
+* Added web companion functionality to display booking status colors.
+* Fixed web companion notifications.
 
 = 1.63.0 =
 * Added web version of the mobile companion app.
