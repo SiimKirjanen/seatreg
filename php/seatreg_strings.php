@@ -215,6 +215,7 @@ function seatreg_generate_admin_strings() {
     $translations->bookingMainEmail = esc_html__('Booking main email', 'seatreg');
     $translations->editEmailNotValid = esc_html__('Provided email address is not valid', 'seatreg');
     $translations->multiBookingMailEmailEditDesc = esc_html__('Primary contact email if more than one seat is booked', 'seatreg');
+    $translations->roomDescriptionSet = esc_html__('Room description changed', 'seatreg');
 
     return $translations;
 }

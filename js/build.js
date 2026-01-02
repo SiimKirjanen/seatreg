@@ -243,6 +243,7 @@
 		this.backgroundImage = null;
 		this.backgroundImageWidth = null;
 		this.backgroundImageHeight = null;
+		this.description = "";
 	}
 
 	Room.prototype.returnRoomData = function() {
@@ -276,7 +277,8 @@
 			width: this.roomWidth + 10,
 			height: this.roomHeight + 10,
 			seatCounter: this.roomSeatCounter,
-			backgroundImage: this.backgroundImage
+			backgroundImage: this.backgroundImage,
+			description: this.description
 		}
 
 		roomData['boxes'] = [];
@@ -2237,6 +2239,7 @@
 			    	this.addRoom(true,false,false, roomData[property]['room'].uuid);
 			    	this.rooms[this.currentRoom].title = roomData[property]['room'].name;
 			    	this.rooms[this.currentRoom].initialName = roomData[property]['room'].name;
+					this.rooms[this.currentRoom].description = roomData[property]['room'].description;
 
 					var roomBackgroundImage = roomData[property]['room'].backgroundImage;
 			    	if(typeof roomBackgroundImage !== 'undefined' && roomBackgroundImage !== null) {
@@ -2490,6 +2493,11 @@
 		$(this).find('.room-name-error').empty();	
 		$('#room-name-dialog-input').val(reg.rooms[reg.currentRoom].title);
 		$('.room-name-char-rem').text('');	
+	});
+
+	$('#room-description-dialog').on('show.bs.modal', function() {
+		$(this).find('.room-description-error').empty();	
+		$('#room-description-input').val(reg.rooms[reg.currentRoom].description);
 	});
 
 	$('#skeleton-dialog').on('show.bs.modal', function() {
@@ -3367,6 +3375,10 @@
 		$('#room-name-dialog').modal("toggle");
 	});
 
+	$('.change-room-description').on('click', function() {
+		$('#room-description-dialog').modal("toggle");
+	});
+
 	$('#room-dialog-ok').on('click', function() {
 		if($('#room-name-dialog-input').val() == '') {
 			$('#room-name-dialog-input').focus();
@@ -3400,6 +3412,24 @@
 			}
 		}
 	});
+
+	$('#room-description-save').on('click', function() {
+		var roomDescription = $('#room-description-input').val();
+		const regex = /^[\p{L}\p{N}\s\r\n.,-]+$/u
+
+		$('.room-description-error').empty();
+
+		if (roomDescription !== "" && !regex.test(roomDescription)) {
+			$('.room-description-error').text(
+				'Invalid characters detected. \n Allowed: letters (all languages), numbers, spaces, line breaks, and . , -'
+			);
+        	return;
+		}
+
+		reg.rooms[reg.currentRoom].description = roomDescription;
+		alertify.success(translator.translate('roomDescriptionSet'));
+		$('#room-description-dialog').modal('toggle');
+    });
 	   
     $('#room-name-dialog-input').keyup(function(e) {		
     	if (e.which == 13) {

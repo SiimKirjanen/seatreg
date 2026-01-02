@@ -180,12 +180,12 @@
 	font-size: 30px;
 	padding-left: 10px;
 }
-.seatreg-map-builder-page .change-room-name {
+.seatreg-map-builder-page .change-room-name, .seatreg-map-builder-page .change-room-description {
 	font-size: 14px;
 	cursor: pointer;
 	padding-left: 10px;
 }
-.seatreg-map-builder-page .change-room-name:hover {
+.seatreg-map-builder-page .change-room-name:hover, .seatreg-map-builder-page .change-room-description:hover {
 	color: #ec6013;
 }
 
@@ -1430,6 +1430,11 @@
 .seatreg-map-builder-page .room-name-error {
 	display: none;
 	color: red;
+}
+
+.seatreg-map-builder-page .room-description-error {
+	color: red;
+	white-space: pre-line;
 }
 
 .seatreg-map-builder-page {
