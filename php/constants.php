@@ -68,6 +68,7 @@ define('SEATREG_TEMPLATE_BOOKING_TABLE', '[booking-table]');
 define('SEATREG_TEMPLATE_PAYMENT_TABLE', '[payment-table]');
 define('SEATREG_TEMPLATE_BOOKING_ID', '[booking-id]');
 define('SEATREG_TEMPLATE_BOOKING_APPROVED_EMAIL_CUSTOM_TEXT', '[custom-approved-email-text]');
+define('SEATREG_TEMPLATE_BOOKING_PDF_LINK', '[booking-pdf-link]');
 
 // Time related
 define('CALENDAR_DATE_FORMAT', 'Y-m-d');

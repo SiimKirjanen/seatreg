@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.9.0
-Stable tag: 1.64.1
+Stable tag: 1.65.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -26,6 +26,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 * Responsive Registration View: Provide a scrollable and resizable registration view via a direct link or embed it into your website pages using a shortcode.
 * Payment Integration: Support for PayPal and Stripe payments.
 * Coupons: Create coupon codes to offer booking discounts.
+* Companion: Web application where you can manage bookings by viewing them, scanning QR codes, and receiving notifications. 
   
 == Installation ==
  
@@ -43,6 +44,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.65.0 =
+* Added [booking-pdf-link] keyword to approved booking receipt email template.
 
 = 1.64.1 =
 * Fixed an issue where an empty room description prevented the layout from being saved.

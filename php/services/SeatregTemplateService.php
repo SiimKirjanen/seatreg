@@ -17,6 +17,10 @@ class SeatregTemplateService {
         return '<a href="'. $link .'">'. $link .'</a>';
     }
 
+    public static function doesTemplateKeywordExist($template, $keyword) {
+        return strpos($template, $keyword) !== false;
+    }
+
     public static function replaceEmailVerificationLink($template, $confirmationURL) {
         $confirmationURL = self::constructLink($confirmationURL);
 
@@ -30,9 +34,13 @@ class SeatregTemplateService {
     }
 
     public static function replaceBookingTable($template, $bookings, $registrationCustomFields, $registration) {
-        $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
+        if(self::doesTemplateKeywordExist($template, SEATREG_TEMPLATE_BOOKING_TABLE)) {
+            $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 
-        return str_replace(SEATREG_TEMPLATE_BOOKING_TABLE, $bookingTable, $template);
+            return str_replace(SEATREG_TEMPLATE_BOOKING_TABLE, $bookingTable, $template);
+        }
+
+        return $template;
     }
 
     public static function replaceBookingId($template, $bookingId) {
@@ -56,15 +64,30 @@ class SeatregTemplateService {
     }
 
     public static function replacePaymentTable($template, $bookingId, $couponsEnabled, $appliedCoupon) {
-        $paymentTable = SeatregBookingService::generatePaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
+        if(self::doesTemplateKeywordExist($template, SEATREG_TEMPLATE_PAYMENT_TABLE)) {
+            $paymentTable = SeatregBookingService::generatePaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
 
-        return str_replace(SEATREG_TEMPLATE_PAYMENT_TABLE, $paymentTable, $template);
+            return str_replace(SEATREG_TEMPLATE_PAYMENT_TABLE, $paymentTable, $template);
+        }
+
+        return $template;
     }
 
     public static function replaceCustomApprovedEmailText($template, $bookings) {
         $customText = $bookings[0]->custom_text_for_approved_email ?? '';
 
         return str_replace(SEATREG_TEMPLATE_BOOKING_APPROVED_EMAIL_CUSTOM_TEXT, $customText, $template);
+    }
+
+    public static function replaceBookingPDFLink($template, $bookingId) {
+        if (self::doesTemplateKeywordExist($template, SEATREG_TEMPLATE_BOOKING_PDF_LINK)) {
+            $pdfFileUrl = get_site_url() . '/?seatreg=booking-pdf&id=' . $bookingId;
+            $pdfLink = self::constructLink($pdfFileUrl);
+
+            return str_replace(SEATREG_TEMPLATE_BOOKING_PDF_LINK, $pdfLink, $template);
+        }
+
+        return $template;
     }
 
     public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $registrationCustomFields, $bookingId, $registration, $couponsEnabled, $appliedCoupon) {
@@ -75,6 +98,7 @@ class SeatregTemplateService {
         $template = self::replaceBookingId($template, $bookingId);
         $template = self::replacePaymentTable($template, $bookingId, $couponsEnabled, $appliedCoupon);
         $template = self::replaceCustomApprovedEmailText($template, $bookings);
+        $template = self::replaceBookingPDFLink($template, $bookingId);
         
         $message = $template;
 
