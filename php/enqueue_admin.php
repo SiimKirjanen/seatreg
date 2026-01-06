@@ -32,7 +32,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_style('alertify-core', plugins_url('css/alertify.core.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('vanilla_picker_style', plugins_url('js/vanilla-picker/dist/vanilla-picker.csp.css', dirname(__FILE__) ), array(), '2.12.1', 'all');
-		wp_enqueue_style('seatreg_builder_style', plugins_url('css/seatreg_builder.min.css', dirname(__FILE__) ), array(), '1.2.0', 'all');
+		wp_enqueue_style('seatreg_builder_style', plugins_url('css/seatreg_builder.min.css', dirname(__FILE__) ), array(), '1.3.0', 'all');
 		wp_enqueue_style('seatreg_admin_styles', plugins_url('css/seatreg_admin.min.css', dirname(__FILE__) ), array(), '1.19.0', 'all');
 		wp_enqueue_style('local-open-sans', SEATREG_PLUGIN_FOLDER_URL . 'fonts/open-sans/open-sans.css', array(), '1.0.0', 'all');
 		wp_enqueue_style('powertip_style', plugins_url('css/jquery.powertip.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
@@ -60,7 +60,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.0.0', true);
 		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg_admin_chart', 'seatreg-utils'), '1.22.0', true);
 		wp_enqueue_script('jstz', plugins_url('js/jstz-1.0.4.min.js', dirname(__FILE__) ), array(), '1.0.4', true);
-		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip'), '1.10.1', true);
+		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip'), '1.11.0', true);
 
 		wp_localize_script('seatreg_admin', 'WP_Seatreg', array(
 			'nonce' => wp_create_nonce('seatreg-admin-nonce'),

@@ -905,6 +905,42 @@
 		}		
 	};
 
+	Registration.prototype.generateRoomsReorder = function() {
+		var $roomSelection = $('#room-selection-wrapper');
+		var $rooms = $roomSelection.find('.room-selection');
+		var roomSelectionsCount = $rooms.length;
+
+		if (roomSelectionsCount === 1) {
+			//Only one room detected. Remove reorder arrows
+			$roomSelection.find('.room-reorder').remove();
+
+			return;
+		}
+
+		if (roomSelectionsCount > 1) {
+			$rooms.each(function (index) {
+				var $room = $(this);
+
+				// Remove existing arrows to avoid duplicates
+				$room.find('.room-reorder').remove();
+
+				// Add left arrow if NOT first
+				if (index !== 0) {
+					$room.prepend(
+						'<i class="room-reorder fa fa-chevron-left" data-direction="left"></i>'
+					);
+				}
+
+				// Add right arrow if NOT last
+				if (index !== roomSelectionsCount - 1) {
+					$room.append(
+						'<i class="room-reorder fa fa-chevron-right" data-direction="right"></i>'
+					);
+				}
+			});
+		}
+	}
+
 	//adds new room object to registration. new Room object to assosiative array. 1: firstRoom, 2: secondRoom
 	Registration.prototype.addRoom = function(ignoreLimit,boxIndexSave,buildSkeleton, uuid){
 		var regScope = this;
@@ -944,24 +980,27 @@
 		$('<div>').addClass('room-selection').attr({
 			'id': 'active-room',
 			'data-room-location': regScope.roomLocator
-		}).text(regScope.rooms[regScope.roomLocator].title).on('click', function() {
-			var loadingImg = $('<img>', {
-				"src": window.WP_Seatreg.plugin_dir_url + "img/loading.png",
-				"id": "loading-img"
-			});
+		}).append(
+			$('<div>')
+				.addClass('room-title')
+				.text(regScope.rooms[regScope.roomLocator].title)
+				.on('click', function() {
+					var loadingImg = $('<img>', {
+						"src": window.WP_Seatreg.plugin_dir_url + "img/loading.png",
+						"id": "loading-img"
+					});
+					var imgWrap = $('<div>', {
+						"id": "build-area-loading-wrap"
+					}).append(loadingImg, "<span class='loading-text'>"+ translator.translate('loading') +"</span>");
+					var changeScope = $(this).closest('.room-selection');
 
-			var imgWrap = $('<div>', {
-				"id": "build-area-loading-wrap"
-			}).append(loadingImg, "<span class='loading-text'>"+ translator.translate('loading') +"</span>");
+					$('#build-section').append(imgWrap);
 
-			var changeScope = $(this);
-
-			$('#build-section').append(imgWrap);
-			
-			setTimeout(function(){
-				regScope.changeRoom(changeScope.attr('data-room-location'), changeScope, false, true);
-			}, 300);
-		}).appendTo('#room-selection-wrapper');
+					setTimeout(function(){
+						regScope.changeRoom(changeScope.attr('data-room-location'), changeScope, false, true);
+					}, 300);
+				})
+			).appendTo('#room-selection-wrapper');
 
 		this.roomLabel++;
 		this.currentRoom = this.roomLocator;
@@ -976,8 +1015,6 @@
 		this.canOpenColor = true;
 		$('.palette-call').removeAttr('id');
 		$('.room-title-name').text(this.rooms[this.currentRoom].title);
-			
-		
 	};
 
 	Registration.prototype.deleteCurrentRoom = function() {
@@ -2264,7 +2301,6 @@
 			    		this.rooms[this.currentRoom].legends.push(new Legend(roomLegends[k].text, roomLegends[k].color));
 			    	}
 
-			    	$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"]').text(reg.rooms[reg.currentRoom].title);
 			    	var arr = roomData[property]['boxes'];
 			    	var arrLength = arr.length;
 
@@ -2310,6 +2346,7 @@
 			this.changeRoom(roomElem.attr('data-room-location'), roomElem, true, false);
 			this.generatePrevUploadedImgMarkup();
 			this.setBuilderHeight();
+			this.generateRoomsReorder();
 			$('#build-area-loading-wrap').remove();
 		}
 	};
@@ -3233,8 +3270,9 @@
 
 	//adds new room
 	$('#new-room-create').on('click', function() {
-            reg.addRoom(false,true,true, generateUUID());
-            $('#room-name-dialog').modal("toggle"); 	
+		reg.addRoom(false,true,true, generateUUID());
+		reg.generateRoomsReorder();
+		$('#room-name-dialog').modal("toggle"); 	
 	});
 
 	$('#current-room-delete').on('click', function() {
@@ -3388,7 +3426,7 @@
 				var oldRoomName = reg.rooms[reg.currentRoom].title;
 				reg.rooms[reg.currentRoom].title = $('#room-name-dialog-input').val();
 				$('.room-title-name').text(reg.rooms[reg.currentRoom].title);
-				$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"]').text(reg.rooms[reg.currentRoom].title);
+				$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"] .room-title').text(reg.rooms[reg.currentRoom].title);
 
 				if(oldRoomName != "") {
 					var newRoom = reg.rooms[reg.currentRoom].title;
