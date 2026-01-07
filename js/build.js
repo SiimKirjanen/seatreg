@@ -1032,6 +1032,7 @@
 
 			var newRoomElem = $('#room-selection-wrapper .room-selection').first();
 			this.changeRoom(newRoomElem.attr('data-room-location'), newRoomElem, false, false);
+			this.generateRoomsReorder();
 		}
 	};
 
