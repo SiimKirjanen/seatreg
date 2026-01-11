@@ -1064,8 +1064,9 @@
 	Registration.prototype.correctRoomsOrderAfterDelete = function(deletedOrder) {
 		for (var id in this.rooms) {
 			if (this.rooms.hasOwnProperty(id)) {
-				if (this.rooms[id].order > deletedOrder) {
+				if (this.rooms[id].order >= deletedOrder) {
 					this.rooms[id].order--;
+					$('#room-selection-wrapper .room-selection[data-room-location="' + id + '"]').attr('data-order', this.rooms[id].order).data('order', this.rooms[id].order);
 				}
 			}
 		}
@@ -3376,7 +3377,7 @@
 
 	//adds new room
 	$('#new-room-create').on('click', function() {
-		reg.addRoom(false, true, true, generateUUID(), Object.size(reg.rooms));
+		reg.addRoom(false, true, true, generateUUID(), Object.size(reg.rooms) + 1);
 		reg.updateRoomsSelectionReorderMarkup();
 
 		$('#room-name-dialog').modal("toggle");
