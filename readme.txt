@@ -47,6 +47,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.65.0 =
 * Added [booking-pdf-link] keyword to approved booking receipt email template.
+* Added map builder support for reordering rooms.
 
 = 1.64.1 =
 * Fixed an issue where an empty room description prevented the layout from being saved.

@@ -530,27 +530,47 @@
 
 .seatreg-map-builder-page #room-selection-wrapper {
 	overflow: hidden;
-	text-align: center;
-	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
 	line-height: 24px;
 	margin-top: 20px;
 	border-bottom: 1px solid #DFDFDF;
 	border-top: 1px solid #DFDFDF;
 	padding: 5px 0;
-
 }
 .seatreg-map-builder-page .room-selection {
-	cursor: pointer;
-	display: inline-block;
+	display: flex;
+	align-items: center;
 	margin: 4px 10px;
 	font-size: 18px;
+	
+	.room-title {
+		cursor: pointer;
+	}
+
+	.room-reorder {
+		font-size: 14px;
+	}
+
+	.room-reorder[data-direction="left"] {
+		margin-right: 6px;
+		cursor: pointer;
+
+		&:hover {
+			color: #418ac6;
+		}
+	}
+
+	.room-reorder[data-direction="right"] {
+		margin-left: 6px;
+		cursor: pointer;
+	}
 }
 
-.seatreg-map-builder-page #active-room {
+.seatreg-map-builder-page #active-room .room-title {
 	font-weight: bold;
 	color: #ec6013;
-	
-
 }
 
 .seatreg-map-builder-page .build-controls {

@@ -244,6 +244,7 @@
 		this.backgroundImageWidth = null;
 		this.backgroundImageHeight = null;
 		this.description = "";
+		this.order = null;
 	}
 
 	Room.prototype.returnRoomData = function() {
@@ -278,7 +279,8 @@
 			height: this.roomHeight + 10,
 			seatCounter: this.roomSeatCounter,
 			backgroundImage: this.backgroundImage,
-			description: this.description ?? ''
+			description: this.description ?? '',
+			order: this.order
 		}
 
 		roomData['boxes'] = [];
@@ -905,8 +907,59 @@
 		}		
 	};
 
+	Registration.prototype.reorderRoomsSelection = function() {
+		const $parent = $('#room-selection-wrapper');
+		const $children = $parent.children();
+
+		$children.sort(function(a, b) {
+			// Get data-order as numbers
+			const orderA = parseInt($(a).data("order"));
+			const orderB = parseInt($(b).data("order"));
+			return orderA - orderB; // ascending order
+		});
+
+		// Append back to parent in sorted order
+		$children.each(function() {
+			$parent.append(this);
+		});
+	}
+
+	Registration.prototype.updateRoomsSelectionReorderMarkup = function() {
+		var $roomSelection = $('#room-selection-wrapper');
+		var $rooms = $roomSelection.find('.room-selection');
+		var roomSelectionsCount = $rooms.length;
+
+		if (roomSelectionsCount <= 1) {
+			//Only one room detected. Remove reorder arrows
+			$roomSelection.find('.room-reorder').remove();
+
+			return;
+		}
+
+		$rooms.each(function (index) {
+			var $roomSelection = $(this);
+
+			// Remove existing arrows to avoid duplicates
+			$roomSelection.find('.room-reorder').remove();
+
+			// Add left arrow if NOT first
+			if (index !== 0) {
+				$roomSelection.prepend(
+					'<i class="room-reorder fa fa-chevron-left" data-direction="left"></i>'
+				);
+			}
+
+			// Add right arrow if NOT last
+			if (index !== roomSelectionsCount - 1) {
+				$roomSelection.append(
+					'<i class="room-reorder fa fa-chevron-right" data-direction="right"></i>'
+				);
+			}
+		});
+	}
+
 	//adds new room object to registration. new Room object to assosiative array. 1: firstRoom, 2: secondRoom
-	Registration.prototype.addRoom = function(ignoreLimit,boxIndexSave,buildSkeleton, uuid){
+	Registration.prototype.addRoom = function(ignoreLimit, boxIndexSave, buildSkeleton, uuid, roomOrder){
 		var regScope = this;
 	
 		if(boxIndexSave) {
@@ -941,30 +994,38 @@
 		}
 
 		this.roomLabel = $('#room-selection-wrapper .room-selection').length + 1;
-		$('<div>').addClass('room-selection').attr({
-			'id': 'active-room',
-			'data-room-location': regScope.roomLocator
-		}).text(regScope.rooms[regScope.roomLocator].title).on('click', function() {
-			var loadingImg = $('<img>', {
-				"src": window.WP_Seatreg.plugin_dir_url + "img/loading.png",
-				"id": "loading-img"
-			});
 
-			var imgWrap = $('<div>', {
-				"id": "build-area-loading-wrap"
-			}).append(loadingImg, "<span class='loading-text'>"+ translator.translate('loading') +"</span>");
+		$('<div>')
+			.addClass('room-selection')
+			.attr({
+				'id': 'active-room',
+				'data-room-location': regScope.roomLocator,
+				'data-order': roomOrder
+			}).append(
+				$('<div>')
+					.addClass('room-title')
+					.text(regScope.rooms[regScope.roomLocator].title)
+					.on('click', function() {
+						var loadingImg = $('<img>', {
+							"src": window.WP_Seatreg.plugin_dir_url + "img/loading.png",
+							"id": "loading-img"
+						});
+						var imgWrap = $('<div>', {
+							"id": "build-area-loading-wrap"
+						}).append(loadingImg, "<span class='loading-text'>"+ translator.translate('loading') +"</span>");
+						var changeScope = $(this).closest('.room-selection');
 
-			var changeScope = $(this);
+						$('#build-section').append(imgWrap);
 
-			$('#build-section').append(imgWrap);
-			
-			setTimeout(function(){
-				regScope.changeRoom(changeScope.attr('data-room-location'), changeScope, false, true);
-			}, 300);
-		}).appendTo('#room-selection-wrapper');
+						setTimeout(function(){
+							regScope.changeRoom(changeScope.attr('data-room-location'), changeScope, false, true);
+						}, 300);
+					})
+				).appendTo('#room-selection-wrapper');
 
 		this.roomLabel++;
 		this.currentRoom = this.roomLocator;
+		this.rooms[this.currentRoom].order = roomOrder;
 		this.roomLocator++;
 		clearBuildArea();
 
@@ -976,16 +1037,15 @@
 		this.canOpenColor = true;
 		$('.palette-call').removeAttr('id');
 		$('.room-title-name').text(this.rooms[this.currentRoom].title);
-			
-		
 	};
 
 	Registration.prototype.deleteCurrentRoom = function() {
 		var size = Object.size(this.rooms);
-
+		
 		if(size == 1) {
 			alert(translator.translate('oneRoomNeeded'));
 		}else if(size > 1) {
+			let roomDeletedLocation = this.currentRoom;
 			delete this.rooms[this.currentRoom];
 			this.needToSave = true;
 			this.activeBoxArray.length = 0;
@@ -995,8 +1055,22 @@
 
 			var newRoomElem = $('#room-selection-wrapper .room-selection').first();
 			this.changeRoom(newRoomElem.attr('data-room-location'), newRoomElem, false, false);
+			this.correctRoomsOrderAfterDelete(roomDeletedLocation);
+			this.reorderRoomsSelection();
+			this.updateRoomsSelectionReorderMarkup();
 		}
 	};
+
+	Registration.prototype.correctRoomsOrderAfterDelete = function(deletedOrder) {
+		for (var id in this.rooms) {
+			if (this.rooms.hasOwnProperty(id)) {
+				if (this.rooms[id].order >= deletedOrder) {
+					this.rooms[id].order--;
+					$('#room-selection-wrapper .room-selection[data-room-location="' + id + '"]').attr('data-order', this.rooms[id].order).data('order', this.rooms[id].order);
+				}
+			}
+		}
+	}
 
 	//check if room name exists in registration. return true if found. false if not
 	//don't include current room 
@@ -1137,6 +1211,49 @@
 			alertify.alert(translator.translate('alreadyInRoom'));
 		}
 	};
+
+	Registration.prototype.changeRoomOrder = function(roomLocation, newOrder) {
+		const totolRoomsCount = Object.size(this.rooms);
+		const targetRoom = this.rooms[roomLocation];
+		const oldOrder = targetRoom.order;
+
+		if(newOrder < 1 || newOrder > totolRoomsCount) {
+			alert("Out of order bounds");
+
+			return false;
+		}
+
+		if (oldOrder === newOrder) return false;
+
+		for (var id in this.rooms) {
+			if (!this.rooms.hasOwnProperty(id)) continue;
+			if (id === roomLocation.toString()) {
+				$('#room-selection-wrapper .room-selection[data-room-location="' + id + '"]').attr('data-order', newOrder).data('order', newOrder);
+
+				continue;
+			}
+
+			let room = this.rooms[id];
+
+			if (oldOrder < newOrder) {
+				// Moving DOWN
+				if (room.order > oldOrder && room.order <= newOrder) {
+					room.order--;
+					$('#room-selection-wrapper .room-selection[data-room-location="' + id + '"]').attr('data-order', room.order).data('order', room.order);
+				}
+			}else {
+				// Moving UP
+				if (room.order >= newOrder && room.order < oldOrder) {
+					room.order++;
+					$('#room-selection-wrapper .room-selection[data-room-location="' + id + '"]').attr('data-order', room.order).data('order', room.order);
+				}
+			}
+		
+		}
+		targetRoom.order = newOrder;
+
+		return true;
+	}
 
 	//for changing room skeleton values
 	Registration.prototype.updateSkeleton = function(sizeX,sizeY,countX,countY,marginX,marginY,grid) {
@@ -2217,7 +2334,7 @@
 	//SyncData from server
 	Registration.prototype.syncData = function(responseObj) {		
 		if($.isEmptyObject(responseObj)){
-			this.addRoom(false,false,true, generateUUID());
+			this.addRoom(false,false,true, generateUUID(), 1);
 			$('#build-area-loading-wrap').remove();
 			$('#room-name-dialog').modal("toggle");
 			this.setBuilderHeight();
@@ -2236,11 +2353,19 @@
 
 			for (var property in roomData) {
 			    if (roomData.hasOwnProperty(property)) {
-			    	this.addRoom(true,false,false, roomData[property]['room'].uuid);
+					let roomOrder = null;
+
+					if(roomData[property]['room'].order) {
+						roomOrder = roomData[property]['room'].order;
+					}else {
+						//If room order not provided
+						roomOrder = parseInt(property, 10) + 1;
+					}
+
+			    	this.addRoom(true, false, false, roomData[property]['room'].uuid, roomOrder);
 			    	this.rooms[this.currentRoom].title = roomData[property]['room'].name;
 			    	this.rooms[this.currentRoom].initialName = roomData[property]['room'].name;
 					this.rooms[this.currentRoom].description = roomData[property]['room'].description;
-
 					var roomBackgroundImage = roomData[property]['room'].backgroundImage;
 			    	if(typeof roomBackgroundImage !== 'undefined' && roomBackgroundImage !== null) {
 			    		this.rooms[this.currentRoom].backgroundImage = roomBackgroundImage;
@@ -2264,7 +2389,7 @@
 			    		this.rooms[this.currentRoom].legends.push(new Legend(roomLegends[k].text, roomLegends[k].color));
 			    	}
 
-			    	$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"]').text(reg.rooms[reg.currentRoom].title);
+					$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"] .room-title').text(reg.rooms[reg.currentRoom].title);
 			    	var arr = roomData[property]['boxes'];
 			    	var arrLength = arr.length;
 
@@ -2310,6 +2435,8 @@
 			this.changeRoom(roomElem.attr('data-room-location'), roomElem, true, false);
 			this.generatePrevUploadedImgMarkup();
 			this.setBuilderHeight();
+			this.reorderRoomsSelection();
+			this.updateRoomsSelectionReorderMarkup();
 			$('#build-area-loading-wrap').remove();
 		}
 	};
@@ -2820,6 +2947,23 @@
 		}
     });
 
+	$('#room-selection-wrapper').on('click', '.room-reorder', function (e) {
+		e.preventDefault();
+
+		var $icon = $(this);
+		var $roomSelection = $icon.closest('.room-selection');
+		var direction = $icon.data('direction');
+		var roomLocation = $roomSelection.data('room-location');
+		var order = $roomSelection.data('order');
+		var newLocation = direction === 'left' ? order -1 : order + 1;
+		const changeOrderSuccess = reg.changeRoomOrder(roomLocation, newLocation);
+
+		if (changeOrderSuccess) {
+			reg.reorderRoomsSelection();
+			reg.updateRoomsSelectionReorderMarkup();
+		}
+	});
+
     //color picket for main dialog
 	
 	var seatColorPicker = new Picker({
@@ -3233,8 +3377,10 @@
 
 	//adds new room
 	$('#new-room-create').on('click', function() {
-            reg.addRoom(false,true,true, generateUUID());
-            $('#room-name-dialog').modal("toggle"); 	
+		reg.addRoom(false, true, true, generateUUID(), Object.size(reg.rooms) + 1);
+		reg.updateRoomsSelectionReorderMarkup();
+
+		$('#room-name-dialog').modal("toggle");
 	});
 
 	$('#current-room-delete').on('click', function() {
@@ -3388,7 +3534,7 @@
 				var oldRoomName = reg.rooms[reg.currentRoom].title;
 				reg.rooms[reg.currentRoom].title = $('#room-name-dialog-input').val();
 				$('.room-title-name').text(reg.rooms[reg.currentRoom].title);
-				$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"]').text(reg.rooms[reg.currentRoom].title);
+				$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"] .room-title').text(reg.rooms[reg.currentRoom].title);
 
 				if(oldRoomName != "") {
 					var newRoom = reg.rooms[reg.currentRoom].title;

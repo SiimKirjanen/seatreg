@@ -274,6 +274,11 @@ class SeatregDataValidation {
                 return $validationStatus;
             }
 
+            if( !property_exists($roomData->room, 'order') || !is_int($roomData->room->order) ) {
+                $validationStatus->setInvalid('room order is missing or invalid');
+                return $validationStatus;
+            }
+
             if( !property_exists($roomData, 'boxes') || !is_array($roomData->boxes) ) {
                 $validationStatus->setInvalid('room missing boxes');
                 return $validationStatus;

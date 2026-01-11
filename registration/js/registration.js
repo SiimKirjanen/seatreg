@@ -607,20 +607,41 @@ SeatReg.prototype.paintRoomLegends = function() {
 };
 
 SeatReg.prototype.paintRoomsNav = function() {
-	var roomsLength = this.rooms.length;
 	var documentFragment = $(document.createDocumentFragment());
 	var scope = this;
 
-	for(var i = 0; i < roomsLength; i++) {
-		var roomName = this.rooms[i].room.name;
+	var roomsSorted = this.rooms.map(function(item, index) {
+		return {
+			item: item,
+			index: index
+		};
+	}).sort(function(a, b) {
+		var orderA = a.item.room.order;
+		var orderB = b.item.room.order;
+
+		// If both have order, sort by it
+		if (orderA != null && orderB != null) {
+			return orderA - orderB;
+		}
+
+		// If only one has order, it comes first
+		if (orderA != null) return -1;
+		if (orderB != null) return 1;
+
+		// Neither has order → fallback to original index
+		return a.index - b.index;
+	});
+
+	for(var i = 0; i < roomsSorted.length; i++) {
+		var room = roomsSorted[i].item.room;
 		var navItem = $('<div>', {
 			'class': 'room-nav-link',
-			'data-open': this.rooms[i].room.uuid
-		}).html(roomName).on('click', function() {
+			'data-open': room.uuid
+		}).text(room.name).on('click', function() {
 			scope.roomChange($(this).attr('data-open'));
 		});
 
-		if(seatReg.currentRoom == i) {
+		if(seatReg.currentRoom == roomsSorted[i].index) {
 			navItem.addClass('active-nav-link');
 		}
 
@@ -911,7 +932,6 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 		if(this.gmailNeeded == 1) {
 			var primaryMail = $('<div style="text-align:center;margin-top:16px"><label class="field-label">'+ translator.translate('confWillBeSentTogmail') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}else {
-			console.log('Gmail not needed!');
 			var primaryMail = $('<div style="text-align:center;margin-top:16px"><label class="field-label">'+ translator.translate('confWillBeSentTo') +'</br> <input type="text" id="prim-mail" class="field-input" data-field="Email"><span class="field-error"></span></label></div>');
 		}
 		documentFragment.append(primaryMail);
