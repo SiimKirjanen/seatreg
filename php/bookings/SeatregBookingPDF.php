@@ -29,7 +29,6 @@ class SeatregBookingPDF extends tFPDF {
     }
 
     public function setUp() {
-        $this->SetTitle( 'Test' );
         $this->SetAuthor('SeatReg WordPress');
         $this->AddFont('DejaVu','','DejaVuSans.ttf', true);
         $this->AliasNbPages();
