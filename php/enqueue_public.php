@@ -146,6 +146,9 @@ function seatreg_public_scripts_and_styles() {
 
 	if( seatreg_is_companion_app_page() ) {
 		wp_enqueue_script('seatreg-companion-app', SEATREG_PLUGIN_FOLDER_URL . 'companion_app/_expo/static/js/web/AppEntry-67b3de1bff18dbd09e5c8d6fa5402016.js' , array(), '1.1.0', true);
+		wp_localize_script('seatreg-companion-app', 'WP_Seatreg_Companion', array(
+			'translations' => seatreg_generate_companion_app_strings()
+		));
 	}
 
 	if( seatreg_is_booking_check_page() && !empty($_GET['registration']) && !empty($_GET['id']) ) {
