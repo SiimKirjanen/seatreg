@@ -24,7 +24,7 @@ class SeatregBookingPDF extends tFPDF {
         $this->Cell(30, 0, $this->_bookingData->registration_name , 0, 1, 'L');
         $this->Ln(6);
         $this->SetFont('DejaVu','',10);  
-        $this->Cell(30, 0, sprintf( esc_html('File generated: %s', 'seatreg'), SeatregTimeService::getDateStringFromUnix( time() ) ), 0, 1, 'L');
+        $this->Cell(30, 0, sprintf( esc_html__('File generated: %s', 'seatreg'), SeatregTimeService::getDateStringFromUnix( time() ) ), 0, 1, 'L');
         $this->Ln(10);
     }
 
@@ -107,7 +107,9 @@ class SeatregBookingPDF extends tFPDF {
     }
 
     protected function getStatus($status) {
-        return $status === "2" ? "Approved" : "Pending";
+        return $status === '2'
+            ? esc_html__('Approved', 'seatreg')
+            : esc_html__('Pending', 'seatreg');
     }
 
     protected function customFieldsWithValues($customField, $customData) {
