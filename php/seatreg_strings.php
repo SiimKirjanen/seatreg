@@ -219,3 +219,83 @@ function seatreg_generate_admin_strings() {
 
     return $translations;
 }
+
+function seatreg_generate_companion_app_strings() {
+    return [
+        'noConnections' => esc_html__('No connections', 'seatreg'),
+        'initializing' => esc_html__('Initializing', 'seatreg'),
+        'bookings' => esc_html__('bookings', 'seatreg'),
+        'loadingBookings' => esc_html__('Loading bookings', 'seatreg'),
+        'enterCorrectHttpsUrl' => esc_html__('Please enter correct HTTPS site URL', 'seatreg'),
+        'enterWPSiteUrl' => esc_html__('Please enter the root URL of your WordPress site where SeatReg plugin is activated', 'seatreg'),
+        'enterHere' => esc_html__('Enter here', 'seatreg'),
+        'next' => esc_html__('Next', 'seatreg'),
+        'errorMessage' => esc_html__('An error occurred: %s. Please try again', 'seatreg'),
+        'save' => esc_html__('Save', 'seatreg'),
+        'back' => esc_html__('Back', 'seatreg'),
+        'enterApiTokenPlaceholder' => esc_html__('Enter API token', 'seatreg'),
+        'enterSeatRegApiToken' => esc_html__('Enter SeatReg public API token', 'seatreg'),
+        'tokenValidationFailed' => esc_html__('Validating token request failed', 'seatreg'),
+        'connectionAdded' => esc_html__('Connection added', 'seatreg'),
+        'tokenAlreadyAdded' => esc_html__('Token %s is already added', 'seatreg'),
+        'requestFailed' => esc_html__('Request failed', 'seatreg'),
+        'unableToEstablishConnection' => esc_html__('Unable to Establish Connection. Check your internet connection and verify the website availability', 'seatreg'),
+        'home' => esc_html__('Home', 'seatreg'),
+        'addToken' => esc_html__('Add Connection', 'seatreg'),
+        'pushPermissionFailed' => esc_html__('Failed to get permissions for push notification!', 'seatreg'),
+        'pushPhysicalDeviceRequired' => esc_html__('Must use physical device for Push Notifications', 'seatreg'),
+        'notificationsNotSupported' => esc_html__('This browser does not support notifications', 'seatreg'),
+        'webNotificationPermissionFailed' => esc_html__('Failed to get permissions for web notifications', 'seatreg'),
+        'bookingName' => esc_html__('Name: %s', 'seatreg'),
+        'bookingRoom' => esc_html__('Room: %s', 'seatreg'),
+        'bookingSeat' => esc_html__('Seat: %s', 'seatreg'),
+        'bookingEmail' => esc_html__('Email: %s', 'seatreg'),
+        'bookingBookerEmail' => esc_html__('Booker email: %s', 'seatreg'),
+        'bookingCalendarDate' => esc_html__('Calendar date: %s', 'seatreg'),
+        'bookingDate' => esc_html__('Booking date: %s', 'seatreg'),
+        'bookingApprovedDate' => esc_html__('Booking approved date: %s', 'seatreg'),
+        'newBookingsSingle' => esc_html__('%s got a new booking', 'seatreg'),
+        'newBookingsMultiple' => esc_html__('%s got %s new bookings', 'seatreg'),
+        'bookingNotificationsDisabledDueToFailures' => esc_html__('%s had %s continuous request failures. Turning off booking notifications.', 'seatreg'),
+        'cameraNotFound' => esc_html__(
+            'No camera was found. Please connect a camera or use a different device.',
+            'seatreg'
+        ),
+        'cameraAccessDenied' => esc_html__(
+            'Camera access was denied. Please allow camera permissions.',
+            'seatreg'
+        ),
+        'cameraRequiresHttps' => esc_html__(
+            'Camera access requires HTTPS.',
+            'seatreg'
+        ),
+        'cameraStartFailed' => esc_html__(
+            'Unable to start the camera. Please try again.',
+            'seatreg'
+        ),
+        'searchCleared' => esc_html__(
+            'Search cleared',
+            'seatreg'
+        ),
+        'bookingSearch' => esc_html__('Booking search', 'seatreg'),
+        'searchPlaceholder' => esc_html__('Search', 'seatreg'),
+        'closeQRScanner' => esc_html__('Close QR scanner', 'seatreg'),
+        'scanQR' => esc_html__('Scan QR', 'seatreg'),
+        'closeButton' => esc_html__('Close', 'seatreg'),
+        'clearButton' => esc_html__('Clear', 'seatreg'),
+        'applyButton' => esc_html__('Apply', 'seatreg'),
+        'changeDateButton' => esc_html__('Change date', 'seatreg'),
+        'optionsUpdated' => esc_html__('Options updated', 'seatreg'),
+        'optionsDialogTitle' => esc_html__('Options', 'seatreg'),
+        'connectionRemoved' => esc_html__('Connection removed', 'seatreg'),
+        'optionsButton' => esc_html__('Options', 'seatreg'),
+        'bookingsButton' => esc_html__('Bookings', 'seatreg'),
+        'removeButton' => esc_html__('Remove', 'seatreg'),
+        'deleteConnectionDialogTitle' => esc_html__('Delete connection', 'seatreg'),
+        'deleteConnectionDialogMessage' => esc_html__('Are you sure?', 'seatreg'),
+        'bookingStatusPending' => esc_html__('Pending', 'seatreg'),
+        'bookingStatusApproved' => esc_html__('Approved', 'seatreg'),
+        'bookingStatusLabel' => esc_html__('Status: %s', 'seatreg'),
+        'bookingFilteringActive' => esc_html__('Booking filtering is active', 'seatreg')
+    ];
+}
