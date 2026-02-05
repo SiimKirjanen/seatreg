@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.9.0
-Stable tag: 1.66.0
+Stable tag: 1.67.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -44,6 +44,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.67.0 =
+* Added mobile_height and mobile_max_width shortcode attributes to let you set a different height on smaller screens.
 
 = 1.66.0 =
 * Updated Companion app to allow translations. 

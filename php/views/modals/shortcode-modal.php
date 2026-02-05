@@ -6,7 +6,11 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
             </div>
             <div class="modal-body">
-                <code>[seatreg code=<?php echo esc_html($registrationCode); ?> height=600]</code>
+                <code class="shortcode-example">[seatreg code=<?php echo esc_html($registrationCode); ?> height=600]</code>
+                <p class="shortcode-instructions"><?php esc_html_e("You can also set height for smaller screen sizes.", "seatreg"); ?></p>
+                <code class="shortcode-example">[seatreg code=<?php echo esc_html($registrationCode); ?> height=600 mobile_height=500]</code>
+                <p class="shortcode-instructions"><?php esc_html_e("You can customize the screen width below which the mobile height is applied (default: 720px).", "seatreg"); ?></p>
+                <code class="shortcode-example">[seatreg code=<?php echo esc_html($registrationCode); ?> height=600 mobile_height=500 mobile_max_width=600]</code>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg'); ?></button>
