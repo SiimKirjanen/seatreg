@@ -553,6 +553,13 @@ $('#seatreg-booking-manager').on('click', '.show-more-info', function() {
 	$(this).parent().find('.more-info').slideToggle();
 });
 
+// Ensures parent modal keeps scroll when closing a nested modal in Bootstrap.
+$(document).on('hidden.bs.modal', '.modal', function () {
+	if ($('.modal:visible').length) {
+		$('body').addClass('modal-open');
+	}
+});
+
 $(document).on('shown.bs.modal', '#booking-activity-modal', function () {
 	var modalBody = $(this).find('.modal-body');
 	var loading = modalBody.find('.activity-modal__loading');
