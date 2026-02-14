@@ -1381,7 +1381,7 @@ function seatreg_generate_settings_form() {
 				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>.<br />
-					<?php echo sprintf( esc_html__( 'Use %s when making a connection using Android application.', 'seatreg' ), '<strong>' . esc_url(site_url()) . '</strong>'); ?>
+					<?php echo sprintf( esc_html__( 'Use %s when making a connection using Android application or web based companion app provided by this plugin.', 'seatreg' ), '<strong>' . esc_url(site_url()) . '</strong>'); ?>
 				</p>
 				<div style="margin-bottom:25px;">
 					<a href="https://play.google.com/store/apps/details?id=com.seatreg" target="_blank">
@@ -2873,7 +2873,7 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 	return true;
 }
 
-function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode, $calendarDate = null, $multiPriceSelection = null) {
+function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seatNr, $seatId, $roomUuid, $registrationCode, $bookingStatus, $bookingId, $confCode, $calendarDate = null, $multiPriceSelection = null, $primaryEmail) {
 	global $wpdb;
 	global $seatreg_db_table_names;
 	$currentTimeStamp = time();
@@ -2894,7 +2894,7 @@ function seatreg_add_booking($firstName, $lastName, $email, $customFields, $seat
 			'status' => $bookingStatus,
 			'booking_date' => $currentTimeStamp,
 			'booking_confirm_date' => $bookingStatus === '2' ? $currentTimeStamp : null,
-			'booker_email' => $email,
+			'booker_email' => $primaryEmail,
 			'conf_code' => $confCode, 
 			'status' => $bookingStatus,
 			'calendar_date' => $calendarDate,
@@ -4018,6 +4018,12 @@ function seatreg_add_booking_with_manager_callback() {
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
 	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields), $options->registration_code);
 	$bookingStatus = sanitize_text_field($_POST['booking-status']);
+	$sendBookingConfirmToBooker = isset($_POST['send-booking-confirmation']) && sanitize_text_field($_POST['send-booking-confirmation']) === '1';
+	$singleBooking = count($_POST['first-name']) === 1;
+
+	if (!$singleBooking && !is_email($_POST['multi-booking-primary-email'])) {
+		wp_send_json_error(array('message' => 'Primary email required for multi-booking', 'status' => 'primary-email-validation-failed'));
+	}
 
 	if( !$customFieldValidation->valid ) {
 		wp_send_json_error( array('message' => $customFieldValidation->errorMessage, 'status' => 'custom field validation failed') );
@@ -4063,6 +4069,7 @@ function seatreg_add_booking_with_manager_callback() {
 	$bookingId = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
 	$confCode = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
 	$addingStatus = [];
+	$primaryEmail = $singleBooking ? $bookingsToAdd[0]->email : sanitize_text_field($_POST['multi-booking-primary-email']);
 
 	foreach( $bookingsToAdd as $booking ) {
 		$addingStatus[] = seatreg_add_booking( 
@@ -4079,6 +4086,7 @@ function seatreg_add_booking_with_manager_callback() {
 			$confCode,
 			$calendarDate,
 			$booking->multiPriceSelection,
+			$primaryEmail
 		);
 	}
 	$successStatusCount = count(array_filter($addingStatus, function($status) {
@@ -4090,12 +4098,15 @@ function seatreg_add_booking_with_manager_callback() {
 	$addingStatusCount = count($addingStatus);
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 	SeatregActionsService::triggerBookingManuallyAddedAction($bookingId);
+	$bookingCheckURL = seatreg_get_registration_status_url($registrationCode, $bookingId);
 	
 	if( $successStatusCount === $addingStatusCount ) {
 		$selectedStatus = $bookingStatus === '1' ? 'pending' : 'approved';
 		seatreg_add_activity_log( 'booking', $bookingId, 'Booking with '. $addingStatusCount . ' ' .  $selectedStatus .' seats added with booking manager', true );
-		if($bookingStatus === "2") {
+		if($bookingStatus === "2" && $sendBookingConfirmToBooker) {
 			seatreg_send_approved_booking_email($bookingId, $registrationCode, $bookingData->approved_booking_email_template);
+		}else if ($bookingStatus === "1" && $sendBookingConfirmToBooker) {
+			seatreg_send_pending_booking_email($bookingData->registration_name, $_POST['email'][0], $bookingCheckURL, $bookingData->pending_booking_email_template, $bookingData->email_from_address, $bookingData->pending_booking_email_subject);
 		}
 		wp_send_json_success( array('status' => 'created') );
 	}else if( $successStatusCount !== $addingStatusCount ) {

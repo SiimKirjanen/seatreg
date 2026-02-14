@@ -793,15 +793,27 @@ $('#seatreg-booking-manager').on('click', '#add-modal-add-seat', function() {
 	newItem.find('.add-modal-input-wrap[data-type="price-selection"]').remove();
 	
 	bookingItemsWrap.append(newItem);
+	
+	// Show primary email field if more than one booking item
+    if (bookingItemsWrap.find('.modal-body-item').length > 1) {
+        $('#add-booking-modal #multi-booking-primary-email').removeAttr('style');
+    }
 });
 
 $('#seatreg-booking-manager').on('click', '#add-modal-remove-seat', function() {
-	var bookingItemsWrap = $('#add-booking-modal-form .modal-body-item');
+	var bookingItemsWrap = $('#add-booking-modal-form .modal-body-items');
+	var bookingItems = bookingItemsWrap.find('.modal-body-item');
 
-	if(bookingItemsWrap.length === 1) {
+	if(bookingItems.length === 1) {
 		return;
 	}
-	bookingItemsWrap.last().remove();
+	bookingItems.last().remove();
+
+	// Hide primary email field if only one booking item left
+    if (bookingItemsWrap.find('.modal-body-item').length === 1) {
+        $('#add-booking-modal #multi-booking-primary-email').hide().val('');
+		$('#add-booking-modal #multi-booking-primary-email .bottom-action-item__input-error').text('');
+    }
 });
 
 $('#seatreg-booking-manager').on('click', '.add-booking', function() {
@@ -1197,6 +1209,8 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 	var modal = $('#add-booking-modal');
 	var allFieldsValid = true;
 	var allBookingCustomFields = [];
+	var singleSeatBooking = modal.find('.modal-body-item').length === 1;
+	$('#add-booking-modal #multi-booking-primary-email .bottom-action-item__input-error').text('');
 
 	modal.find('.modal-body-item').each(function() {
 		var booking = $(this);
@@ -1263,6 +1277,13 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 		return;
 	}
 
+	if(!singleSeatBooking && modal.find('input[name="multi-booking-primary-email"]').val() === '') {
+		subBtn.css('display', 'inline').next().css('display', 'none');
+		$('#multi-booking-primary-email .bottom-action-item__input-error').text(translator.translate('pleaseEnterBookingPrimaryEmail'));
+
+		return;
+	}
+
 	var promise = seatreg_add_booking_with_manager();
 
 	promise.done(function(resp) {
@@ -1305,6 +1326,10 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			}
 			if(data.status === 'seat-price-not-found') {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-multi-price[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('priceNotFound'));
+			}
+			if(data.status === 'primary-email-validation-failed') {
+				$('#multi-booking-primary-email .bottom-action-item__input-error').text(translator.translate('primaryEmailValidationFailed'));
+				alertify.error(translator.translate('primaryEmailValidationFailed'));
 			}
 		}
 	});

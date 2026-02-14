@@ -87,19 +87,35 @@
 						<i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i>
 					</div>
 				</div>
+				<div class="bottom-action-item" id="multi-booking-primary-email" style="display: none;">
+					<div class="bottom-action-item__title">
+						<?php esc_html_e('Booking primary email', 'seatreg'); ?>
+					</div>
+					<input type="text" name="multi-booking-primary-email" value="" />
+					<div class="bottom-action-item__input-error"></div>
+				</div>
 				<div class="bottom-action-item">
-					<div>
+					<div class="bottom-action-item__title">
 						<?php esc_html_e('Booking status', 'seatreg'); ?>
 					</div>
 					<label>
-						<?php esc_html_e('Pending'); ?>
+						<?php esc_html_e('Pending', 'seatreg'); ?>
 						<input type="radio" name="booking-status" value="1" checked>
 					</label>
 					<label>
-						<?php esc_html_e('Approved'); ?>
+						<?php esc_html_e('Approved', 'seatreg'); ?>
 						<input type="radio" name="booking-status" value="2">
 					</label>
 				</div>
+				<div class="bottom-action-item">
+					<div class="bottom-action-item__title">
+						<?php esc_html_e('Booking notification', 'seatreg'); ?>
+					</div>
+					<label>
+						<input type="checkbox" name="send-booking-confirmation" value="1" checked>
+						<?php esc_html_e('Send booking confirmation email to booker', 'seatreg'); ?>
+					</label>
+				</div>	
 			</div>
 			<input type="hidden" name="calendar-date" value="<?php echo esc_html($calendarDate); ?>" />
 			<input type="hidden" name="registration-code" id="add-booking-registration-id" />
