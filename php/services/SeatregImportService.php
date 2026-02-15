@@ -60,7 +60,8 @@ class SeatregImportService {
             $bookingData->booking_id,
             SeatregRandomGenerator::generateRandom($bookingData->email),
             null,
-            $bookingData->multi_price_selection
+            $bookingData->multi_price_selection,
+            $bookingData->booker_email
         );
     }
 
@@ -70,7 +71,7 @@ class SeatregImportService {
 
         foreach( $importedBookings as $importedBooking ) {
             try {
-                $validation = $this->validateData($importedBooking );
+                $validation = $this->validateData($importedBooking);
 
                 if( $validation->is_valid ) {
                     $inserted = $this->insertData($importedBooking);
