@@ -2431,12 +2431,14 @@
 				this.syncBoxStatuses(window.seatreg.bookings);
 			}
 			
-			var roomElem = $('#room-selection-wrapper .room-selection').first();
-			this.changeRoom(roomElem.attr('data-room-location'), roomElem, true, false);
 			this.generatePrevUploadedImgMarkup();
 			this.setBuilderHeight();
 			this.reorderRoomsSelection();
 			this.updateRoomsSelectionReorderMarkup();
+
+			var roomElem = $('#room-selection-wrapper .room-selection').first();
+			this.changeRoom(roomElem.attr('data-room-location'), roomElem, true, false);
+
 			$('#build-area-loading-wrap').remove();
 		}
 	};
