@@ -641,13 +641,10 @@ SeatReg.prototype.paintRoomsNav = function() {
 			scope.roomChange($(this).attr('data-open'));
 		});
 
-		if(seatReg.currentRoom == roomsSorted[i].index) {
-			navItem.addClass('active-nav-link');
-		}
-
 		navItem.appendTo(documentFragment);
 	}
 	$('#room-nav-items').html(documentFragment);
+	$('#room-nav-items .room-nav-link').first().trigger('click');
 };
 
 SeatReg.prototype.paintRegistrationMessage = function(text) {
