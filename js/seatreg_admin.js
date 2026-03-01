@@ -1437,6 +1437,12 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 			bookingInfo.find('.l-name').val(last_name);
 			bookingInfo.attr('data-email', editInfo.email);
 
+			if (editInfo.email) {
+				bookingInfo.find('[data-more-info="email"]').text(editInfo.email);
+			}else if (editInfo.bookerEmail) {
+				bookingInfo.find('[data-more-info="email"]').text(editInfo.bookerEmail);
+			}
+
 			//correct custom fields
 			var a = customFields.length;
 			bookingInfo.find('.custom-field').each(function() {

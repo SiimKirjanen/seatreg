@@ -1610,7 +1610,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 								if($row->calendar_date) {
 									echo '<div>', esc_html__('Calendar date', 'seatreg'), ': ', esc_html($row->calendar_date), '</div>';
 								}
-								echo '<div>', esc_html__('Email', 'seatreg'), ': ', esc_html($row->email), '</div>';
+								echo '<div>', esc_html__('Email', 'seatreg'), ': <span data-more-info="email">', esc_html($row->email), '</span></div>';
 
 								if( $seatPrice ) {
 									?>
@@ -1687,7 +1687,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									echo '<div>', esc_html__('Calendar date', 'seatreg'), ': ', esc_html($row->calendar_date), '</div>';
 								}
 								echo '<div>', esc_html__('Approval date', 'seatreg'), ': <span class="time-string">', esc_html(SeatregTimeService::getDateStringFromUnix( $row->booking_confirm_date )), '</span></div>';
-								echo '<div>Email: ', esc_html( $row->email ), '</div>';
+								echo '<div>', esc_html__('Email', 'seatreg'), ': <span data-more-info="email">', esc_html($row->email), '</span></div>';
 
 								if( $seatPrice ) {
 									?>
@@ -2843,7 +2843,9 @@ function seatreg_edit_booking($custom_fields, $seat_nr, $room_uuid, $f_name, $l_
 
     if ($email) {
         $updateFields['email'] = $email;
-    }
+    }else if($bookerEmail) {
+        $updateFields['email'] = $bookerEmail;
+	}
 
 	$status = $wpdb->update( 
 		$seatreg_db_table_names->table_seatreg_bookings,
