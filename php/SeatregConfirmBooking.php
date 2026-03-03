@@ -265,4 +265,6 @@ class SeatregConfirmBooking extends SeatregBooking {
 		    }
 		}
 
+		$this->confirmBookings();
+	}
 }
