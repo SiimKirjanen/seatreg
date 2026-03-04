@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.9.0
-Stable tag: 1.67.4
+Stable tag: 1.67.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -44,6 +44,10 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.67.5 =
+* Fixed WordPress user booking seat limit on email confirmation.
+* Improved admin translation handling to prevent issues with special characters in localized strings.
 
 = 1.67.4 =
 * Fixed single booking email update.

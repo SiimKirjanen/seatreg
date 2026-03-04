@@ -62,10 +62,15 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('jstz', plugins_url('js/jstz-1.0.4.min.js', dirname(__FILE__) ), array(), '1.0.4', true);
 		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip'), '1.11.1', true);
 
+		$seatreg_admin_strings_json = wp_json_encode(seatreg_generate_admin_strings());
+		if ($seatreg_admin_strings_json === false) {
+			$seatreg_admin_strings_json = '{}';
+		}
+
 		wp_localize_script('seatreg_admin', 'WP_Seatreg', array(
 			'nonce' => wp_create_nonce('seatreg-admin-nonce'),
 			'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
-			'translations' => seatreg_generate_admin_strings(), 
+			'translations' => $seatreg_admin_strings_json,
 			'uploads_url' => SEATREG_TEMP_FOLDER_URL,
 			'seatreg_page_id' => SEATREG_PAGE_ID,
 			'SEATREG_CSV_COL_FIRST_NAME' => SEATREG_CSV_COL_FIRST_NAME,
