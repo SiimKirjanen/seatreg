@@ -218,6 +218,10 @@ function seatreg_generate_admin_strings() {
     $translations->roomDescriptionSet = esc_html__('Room description changed', 'seatreg');
     $translations->primaryEmailValidationFailed = esc_html__('Booking primary email validation failed', 'seatreg');
     $translations->pleaseEnterBookingPrimaryEmail = esc_html__('Please enter booking primary email', 'seatreg');
+    $translations->preventsBookingWhenSameInputValueProvided = esc_html__('Prevents booking when same input value provided', 'seatreg');
+    $translations->unique = esc_html__('Unique', 'seatreg');
+    $translations->makeFieldOptional = esc_html__('Make field optional', 'seatreg');
+    $translations->optional = esc_html__('Optional', 'seatreg');
 
     return $translations;
 }

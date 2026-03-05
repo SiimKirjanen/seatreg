@@ -48,6 +48,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 = 1.67.5 =
 * Fixed WordPress user booking seat limit on email confirmation.
 * Improved admin translation handling to prevent issues with special characters in localized strings.
+* Added checkbox to mark text custom fields as optional during creation.
 
 = 1.67.4 =
 * Fixed single booking email update.
