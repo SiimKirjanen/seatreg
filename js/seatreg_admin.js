@@ -24,6 +24,13 @@
 	//console.log('jQuery version: ' + $.fn.jquery);
 	//console.log('jQUery UI version ' + $.ui.version);
 
+	try {
+		WP_Seatreg.translations = JSON.parse(WP_Seatreg.translations);
+	} catch (e) {
+		WP_Seatreg.translations = {};
+	}
+	
+
 	var translator = {
 		translate: function(translationKey) {
 			if(WP_Seatreg.translations && WP_Seatreg.translations.hasOwnProperty(translationKey)) {
@@ -1617,7 +1624,7 @@ function seatreg_insert_custom_field(label,type,options, placeToPut) {
 		containerDiv.append(move_down);
 
 		if(type == 'field') {
-			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label> <div class="custom-container-controls"><span class="seatreg-ui-tooltip" title="Prevents booking when same input value provided">Unique</span> <input type="checkbox" class="unique-input" /> <i class="fa fa-times-circle remove-cust-item"></i></div>'); 
+			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label> <div class="custom-container-controls"><span class="seatreg-ui-tooltip" title="' + translator.translate("preventsBookingWhenSameInputValueProvided") +'">'+ translator.translate("unique") +'</span> <input type="checkbox" class="unique-input" /> <span class="seatreg-ui-tooltip" title="'+ translator.translate("makeFieldOptional") +'">'+ translator.translate("optional") +'</span> <input type="checkbox" class="optional-input" /> <i class="fa fa-times-circle remove-cust-item"></i></div>'); 
 			containerDiv.attr('data-type','text').append(cusLabel);
 		}else if(type == 'checkbox') {
 			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="checkbox"/></label><div class="custom-container-controls"><i class="fa fa-times-circle remove-cust-item"></i></div>'); 
