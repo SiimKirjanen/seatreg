@@ -95,6 +95,9 @@ function seatreg_create_welcome() {
 					<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
 					<input type="image" class="donate-img" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
 				</form>
+				<p>
+					Bitcoin address: <code>bc1q2vam0ree3zw4j3f92vkfjd9vvxlwpxxsrpmkhu</code>
+				</p>
 				<p style="text-align:center">
 					Don't forget to leave a 
 					<a href="https://wordpress.org/support/plugin/seatreg/reviews/" target="_blank">
