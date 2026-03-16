@@ -285,10 +285,22 @@ $('.builder-popup-close').on('click', function() {
 	}
 });
 
+// Helper function to create UTC noon timestamp from dd.mm.yyyy date string
+function createUTCNoonTimestamp(dateText) {
+	// Parse dd.mm.yyyy
+	var parts = dateText.split('.');
+	// Create date at noon UTC (bypasses local timezone)
+	var date = new Date(Date.UTC(parts[2], parts[1] - 1, parts[0], 12, 0, 0));
+	return date.getTime();
+}
+
 $('#registration-start-timestamp').datepicker({
 	altField: '#start-timestamp',
 	altFormat: '@',
-	dateFormat: 'dd.mm.yy'
+	dateFormat: 'dd.mm.yy',
+	onSelect: function(dateText) {
+		$('#start-timestamp').val(createUTCNoonTimestamp(dateText));
+	}
 }).on('keyup', function() {
 	if($(this).val() == '') {
 		$('#start-timestamp').val('');
@@ -300,7 +312,10 @@ $('#registration-start-time').clockTimePicker();
 $('#registration-end-timestamp').datepicker({
 	altField: '#end-timestamp',
 	altFormat: '@',
-	dateFormat: 'dd.mm.yy'
+	dateFormat: 'dd.mm.yy',
+	onSelect: function(dateText) {
+		$('#end-timestamp').val(createUTCNoonTimestamp(dateText));
+	}
 }).on('keyup', function() {
 	if($(this).val() == '') {
 		$('#end-timestamp').val('');
