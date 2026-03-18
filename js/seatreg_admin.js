@@ -31,13 +31,7 @@
 	}
 	
 
-	var translator = {
-		translate: function(translationKey) {
-			if(WP_Seatreg.translations && WP_Seatreg.translations.hasOwnProperty(translationKey)) {
-				return WP_Seatreg.translations[translationKey];
-			}
-		}
-	};
+	var translator = createSeatregTranslator(WP_Seatreg.translations);
 
 	window.seatreg = {
 		builder: null,
