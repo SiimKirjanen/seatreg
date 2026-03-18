@@ -26,3 +26,22 @@ function seatregGenerateUUIDv4() {
         return v.toString(16);
     });
 }
+
+/**
+ * Creates a translator object for handling WP_Seatreg translations
+ * @param {Object} translationsSource - The translations object (usually WP_Seatreg.translations)
+ * @returns {Object} Translator with translate method
+ */
+function createSeatregTranslator(translationsSource) {
+    return {
+        translate: function(translationKey) {
+            if (translationsSource && translationsSource.hasOwnProperty(translationKey)) {
+                return translationsSource[translationKey];
+            }
+            if (console && console.warn) {
+                console.warn('Translation key not found:', translationKey);
+            }
+            return '';
+        }
+    };
+}

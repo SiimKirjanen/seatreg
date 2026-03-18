@@ -1,11 +1,5 @@
 (function($) {
-	var translator = {
-		translate: function(translationKey) {
-			if(window.seatregTranslations && window.seatregTranslations.hasOwnProperty(translationKey)) {
-				return window.seatregTranslations[translationKey];
-			}
-		}
-	};
+	var translator = createSeatregTranslator(window.seatregTranslations);
 
 	function capitalizeFirstLetter(string) {
 	    return string.charAt(0).toUpperCase() + string.slice(1);
