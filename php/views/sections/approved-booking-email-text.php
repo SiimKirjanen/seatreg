@@ -14,7 +14,7 @@
         <div class="approved-booking-email-text__warning"><?php esc_html_e('Note that one of the payment options is set up so that when payment is completed the booking is approved automatically!', 'seatreg'); ?></div>
     <?php endif; ?>     
     <div class="approved-booking-email-text__input-wrapper">
-        <textarea rows="3" cols="40" data-taget="custom-text-approved-email"><?php echo sanitize_textarea_field($booking->custom_text_for_approved_email); ?></textarea>
+        <textarea rows="3" cols="40" data-taget="custom-text-approved-email"><?php echo esc_textarea($booking->custom_text_for_approved_email); ?></textarea>
         <button class="btn btn-outline-secondary btn-sm" data-action="save-approved-email-template-text"><?php esc_html_e('Save', 'seatreg'); ?></button>
     </div>
 </div>

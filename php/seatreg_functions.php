@@ -214,7 +214,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 					<?php
 						if($targetRoom == 'overview') {
 							echo "<div class='reg-overview-top-bron-notify'>";
-								echo $registration->using_seats === '1' ? sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']) : sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats']), '!';
+								echo esc_html($registration->using_seats === '1' ? sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']) : sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats'])) . '!';
 							echo '</div>';
 						}else {
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
@@ -247,7 +247,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 							$end = $end_date;
 						}
 						
-						echo "<div class='reg-overview-top-date'><span class='time-block'><i class='fa fa-clock-o' style='color:rgb(4, 145, 4); margin-right:3px'></i><span class='time-stamp'>$start</span></span>  <span class='time-block'><i class='fa fa-clock-o' style='color:rgb(250, 38, 38); margin-right:3px'></i><span class='time-stamp'>$end</span></span></div>"; 
+						echo "<div class='reg-overview-top-date'><span class='time-block'><i class='fa fa-clock-o' style='color:rgb(4, 145, 4); margin-right:3px'></i><span class='time-stamp'>" . esc_html($start) . "</span></span>  <span class='time-block'><i class='fa fa-clock-o' style='color:rgb(250, 38, 38); margin-right:3px'></i><span class='time-stamp'>" . esc_html($end) . "</span></span></div>"; 
 					?>
 	  				
 				<?php echo '</div>';?>
@@ -934,7 +934,7 @@ function seatreg_generate_settings_form() {
 					<code>[booking-id]</code> <?php esc_html_e('(optional) will be converted to booking id', 'seatreg'); ?> <br>
 					<code>[booking-table]</code> <?php esc_html_e('(optional) will be converted to booking table', 'seatreg'); ?> <br>
 					<code>[payment-table]</code> <?php esc_html_e('(optional) will be converted to payment table', 'seatreg'); ?> <br>
-					<code><?php echo SEATREG_TEMPLATE_BOOKING_PDF_LINK; ?></code> <?php esc_html_e('(optional) will be converted to booking PDF link', 'seatreg'); ?> <br>
+					<code><?php echo esc_html(SEATREG_TEMPLATE_BOOKING_PDF_LINK); ?></code> <?php esc_html_e('(optional) will be converted to booking PDF link', 'seatreg'); ?> <br>
 					<code><?php echo esc_html(SEATREG_TEMPLATE_BOOKING_APPROVED_EMAIL_CUSTOM_TEXT); ?></code> <?php esc_html_e('(optional) will be converted to text added to booking in booking-manager. Useful if you want to provide custom text specific to the booking.', 'seatreg'); ?> <br>
 				</p>
 				<textarea rows="6" class="form-control" id="approved-booking-email-template" name="approved-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_textarea($options[0]->approved_booking_email_template); ?></textarea>
@@ -1217,7 +1217,7 @@ function seatreg_generate_settings_form() {
 										echo '<div class="custom-container" data-type="sel" data-label="'. esc_html($custFields[$i]->label) .'">';
 											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
 											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>';
-												echo '<select id="custom-select-'. $i .'">';
+												echo '<select id="custom-select-'. esc_attr($i) .'">';
 
 													for($j = 0; $j < $optLen; $j++) {
 														echo '<option><span class="option-value">', esc_html($custFields[$i]->options[$j]) ,'</span></option>';
@@ -1226,7 +1226,7 @@ function seatreg_generate_settings_form() {
 												echo '</select>';
 											echo '</label>';
 											echo '<div class="custom-container-controls">';
-												echo ' <i class="fa fa-pencil edit-options mr-1 btn btn-primary" data-select-id="custom-select-'. $i .'"></i>';
+												echo ' <i class="fa fa-pencil edit-options mr-1 btn btn-primary" data-select-id="custom-select-'. esc_attr($i) .'"></i>';
 												echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
 											echo '</div>';
 
@@ -1552,8 +1552,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		<div class="bg-color">
 			<div class="tab-container">
 				<ul class="etabs">
-					<li class="tab"><a href="<?php echo '#' . sha1($project_name) . 'bron'; ?>"><?php esc_html_e('Pending', 'seatreg'); ?></a></li>
-					<li class="tab"><a href="<?php echo '#' . sha1($project_name) . 'taken'; ?>"><?php esc_html_e('Approved','seatreg'); ?></a></li>
+					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'bron'); ?>"><?php esc_html_e('Pending', 'seatreg'); ?></a></li>
+					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'taken'); ?>"><?php esc_html_e('Approved','seatreg'); ?></a></li>
 				</ul>
 				<div class="panel-container differentBgColor">
 					<div class="registration-manager-labels">
@@ -1567,8 +1567,8 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						<div class="booking-status-box manager-box manager-box-link" data-order="payment-status"><?php esc_html_e('Payment status', 'seatreg'); ?></div>	
 					</div>
 
-				<?php
-					echo '<div id="', sha1($project_name), 'bron" class="tab_container">';
+				   <?php
+					   echo '<div id="' . esc_attr(sha1($project_name) . 'bron') . '" class="tab_container">';
 		
 					if($row_count == 0) {
 						echo '<div class="notify-text">';
@@ -1647,7 +1647,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 					
 					echo '</div>';
 		
-					echo '<div id="', sha1($project_name),'taken" class="tab_container active">';
+					   echo '<div id="' . esc_attr(sha1($project_name) . 'taken') . '" class="tab_container active">';
 		
 					if($row_count2 == 0) {
 						echo '<div class="notify-text">', esc_html__('No approved bookings', 'seatreg'), '</div>';

@@ -24,7 +24,8 @@ class SeatregBookingPDF extends tFPDF {
         $this->SetFont('DejaVu','',14);
         $this->Cell(30, 0, $this->_bookingData->registration_name , 0, 1, 'L');
         $this->Ln(6);
-        $this->SetFont('DejaVu','',10);  
+        $this->SetFont('DejaVu','',10);
+        /* translators: %s: Date and time when the PDF file was generated */
         $this->Cell(30, 0, sprintf( esc_html__('File generated: %s', 'seatreg'), SeatregTimeService::getDateStringFromUnix( time() ) ), 0, 1, 'L');
         $this->Ln(10);
     }

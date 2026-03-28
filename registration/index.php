@@ -50,7 +50,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo $registrationName; ?></title>
+	<title><?php echo esc_html($registrationName); ?></title>
 	
 	<link rel="icon" href="<?php echo esc_url(get_site_icon_url()); ?>" />
 
@@ -86,7 +86,7 @@
 						printf(
 							/* translators: %s: Name of the registration */
 							esc_html__( '%s is closed at the moment', 'seatreg' ),
-							$registrationName
+							esc_html($registrationName)
 						);
 					?>
 				</h2>
@@ -100,7 +100,7 @@
 
 			<?php if($data->registration_layout != null && $data->registration_layout !== '{}'): ?>
 				<header id="main-header">
-					<?php echo $registrationName; ?>
+					<?php echo esc_html($registrationName); ?>
 				</header>
 				<div id="room-nav-wrap" class="border-box no-select">
 					<div id="room-nav">
