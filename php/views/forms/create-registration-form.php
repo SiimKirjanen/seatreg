@@ -1,3 +1,5 @@
+<?php if(!defined('ABSPATH')) exit; ?>
+
 <form action="<?php echo esc_url(get_admin_url() . 'admin-post.php'); ?>" method="post" id="create-registration-form">
     <h4 class="new-reg-title">
         <?php esc_html_e('Create new registration','seatreg'); ?>

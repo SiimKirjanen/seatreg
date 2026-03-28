@@ -1,3 +1,5 @@
+<?php if(!defined('ABSPATH')) exit; ?>
+
 <div class="modal fade activity-modal" id="booking-activity-modal" tabindex="-1" role="dialog" aria-hidden="true" data-booking-id="">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

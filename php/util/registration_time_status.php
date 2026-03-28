@@ -1,4 +1,5 @@
-<?php 
+<?php if(!defined('ABSPATH')) exit; ?> 
+<?php
 
 function seatreg_registration_time_status($startUnix, $endUnix) {
     $startDate = SeatregTimeService::getLocalDateTimeOutOfUnix($startUnix);

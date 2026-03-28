@@ -1,3 +1,5 @@
+<?php if(!defined('ABSPATH')) exit; ?>
+
 <?php
     function seatreg_shortcode( $atts ){
 

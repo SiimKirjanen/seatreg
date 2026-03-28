@@ -24,8 +24,8 @@ function seatreg_get_options_reg($code) {
 
 	return $wpdb->get_row( $wpdb->prepare(
 		"SELECT a.*, b.* 
-		FROM $seatreg_db_table_names->table_seatreg AS a
-		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
+		FROM " . esc_sql($seatreg_db_table_names->table_seatreg) . " AS a
+		INNER JOIN " . esc_sql($seatreg_db_table_names->table_seatreg_options) . " AS b
 		ON a.registration_code = b.registration_code
 		WHERE a.registration_code = %s",
 		$code

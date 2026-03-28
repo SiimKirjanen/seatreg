@@ -1,3 +1,4 @@
+<?php if(!defined('ABSPATH')) exit; ?> 
 <?php
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/tfpdf/tfpdf.php' );
 
