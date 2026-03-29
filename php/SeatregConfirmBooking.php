@@ -100,7 +100,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		$this->init();
 
 		if(!$this->_valid) {
-			esc_html($this->reply);
+			echo esc_html($this->reply);
 
 			return;
 		}
@@ -117,7 +117,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 		//2 step. Does confirmation code exists? Is booking already confirmed?
 		if(!$this->_valid) {
-			esc_html($this->reply);
+			echo esc_html($this->reply);
 
 			return;
 		}
