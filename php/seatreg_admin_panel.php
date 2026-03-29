@@ -25,7 +25,7 @@ function seatreg_add_plugin_menu() {
 	//Generate SeatReg Admin Page Sub Pages
 	add_submenu_page(
 		'seatreg-welcome',
-		sprintf(esc_html__('%s Home', 'seatreg'), 'SeatReg'),
+		esc_html__('SeatReg Home', 'seatreg'),
 		esc_html__('Home', 'seatreg'),
 		SEATREG_MANAGE_EVENTS_CAPABILITY,
 		'seatreg-welcome',
@@ -34,7 +34,7 @@ function seatreg_add_plugin_menu() {
 	add_submenu_page(
 		'seatreg-welcome',   //slug 
 		/* translators: %s: Name of the registration */
-		sprintf(esc_html__('%s Overview', 'seatreg'), 'SeatReg'),  //page title
+		esc_html__('SeatReg Overview', 'seatreg'),  //page title
 		esc_html__('Overview', 'seatreg'),  //menu title
 		SEATREG_MANAGE_EVENTS_CAPABILITY,  //capability
 		'seatreg-overview',   //slug
@@ -42,7 +42,7 @@ function seatreg_add_plugin_menu() {
 	);
 	add_submenu_page(
 		'seatreg-welcome',   //slug 
-		sprintf(esc_html__('%s Settings', 'seatreg'), 'SeatReg'),  //page title
+		esc_html__('SeatReg Settings', 'seatreg'),  //page title
 		esc_html__('Settings', 'seatreg'),  //menu title
 		SEATREG_MANAGE_EVENTS_CAPABILITY,  //capability
 		'seatreg-options',   //slug
@@ -50,7 +50,7 @@ function seatreg_add_plugin_menu() {
 	);
 	add_submenu_page(
 		'seatreg-welcome',   //slug kuhu sisse submenu tuleb
-		sprintf(esc_html__('%s Bookings', 'seatreg'), 'SeatReg'),  //page title
+		esc_html__('SeatReg Bookings', 'seatreg'),  //page title
 		esc_html__('Bookings', 'seatreg'),  //menu title
 		SEATREG_MANAGE_BOOKINGS_CAPABILITY,  //capability
 		'seatreg-management',   //slug
@@ -161,7 +161,7 @@ function seatreg_create_options() {
 function seatreg_create_overview() {
 	?>
 		<div class="seatreg-wp-admin wrap">
-			<h1><i class="fa fa-bar-chart" aria-hidden="true"></i> <?php esc_html_e('Overview'); ?></h1>
+			<h1><i class="fa fa-bar-chart" aria-hidden="true"></i> <?php esc_html_e('Overview', 'seatreg'); ?></h1>
 			<p><?php esc_html_e('Statistics for your registrations', 'seatreg'); ?>.</p>
 			<?php
 				seatreg_generate_tabs('seatreg-overview');
@@ -178,7 +178,7 @@ function seatreg_create_overview() {
 function seatreg_create_management() {
 	?>
 		<div class="seatreg-wp-admin wrap" id="seatreg-booking-manager">
-			<h1><i class="fa fa-book" aria-hidden="true"></i> <?php esc_html_e('Booking manager'); ?></h1>
+			<h1><i class="fa fa-book" aria-hidden="true"></i> <?php esc_html_e('Booking manager', 'seatreg'); ?></h1>
 			<p><?php esc_html_e('Manage bookings', 'seatreg'); ?>.</p>
 			<?php
 				seatreg_generate_tabs('seatreg-management');	
@@ -196,7 +196,7 @@ function seatreg_create_tools() {
 	require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/phpqrcode/qrlib.php');
 	?>
 		<div class="seatreg-wp-admin wrap">
-			<h1><i class="fa fa-wrench" aria-hidden="true"></i> <?php esc_html_e('Tools'); ?></h1>
+			<h1><i class="fa fa-wrench" aria-hidden="true"></i> <?php esc_html_e('Tools', 'seatreg'); ?></h1>
 			<p><?php esc_html_e('Useful tools', 'seatreg'); ?>.</p>
 
 			<form id="email-tester-form">
@@ -220,7 +220,7 @@ function seatreg_create_tools() {
 					<?php esc_html_e('QR Code testing','seatreg'); ?>
 				</h4>
 				<p>
-					<?php esc_html_e('QR codes can be sent with booking receipt email. You should see test QR code below. If not then you should see error message that can help with debugging.'); ?>
+					<?php esc_html_e('QR codes can be sent with booking receipt email. You should see test QR code below. If not then you should see error message that can help with debugging.', 'seatreg'); ?>
 				</p>
 
 				<?php if( extension_loaded('gd') ) : ?>
@@ -256,9 +256,9 @@ function seatreg_companion_app() {
 
 	?>
 		<div class="seatreg-wp-admin wrap">
-			<h1><i class="fa fa-mobile" aria-hidden="true"></i> <?php esc_html_e('Companion app'); ?></h1>
+			<h1><i class="fa fa-mobile" aria-hidden="true"></i> <?php esc_html_e('Companion app', 'seatreg'); ?></h1>
 			<p><?php esc_html_e('Web version of the mobile companion app.', 'seatreg'); ?></p>
-			<p><?php esc_html_e("Alternative way to view bookings on mobile devices."); ?><p>
+			<p><?php esc_html_e("Alternative way to view bookings on mobile devices.", 'seatreg'); ?><p>
 			<p>
 				<?php esc_html_e("Source code is available on GitHub:", "seatreg"); ?>
 				<a target="_blank" href="<?php echo esc_url('https://github.com/SiimKirjanen/seatreg-app'); ?>">

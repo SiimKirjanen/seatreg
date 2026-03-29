@@ -87,12 +87,13 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 				$gotCurlIpnResponse = true;
 				$retryCounter = 999;
 			}else {
-				$this->log(sprintf(esc_html__('Unknown response from IPN. Will try again %s', 'seatreg'),  $result), SEATREG_PAYMENT_LOG_ERROR);
+			/* translators: %s: The response result from IPN */
+			$this->log(sprintf(esc_html__('Unknown response from IPN. Will try again %s', 'seatreg'),  $result), SEATREG_PAYMENT_LOG_ERROR);
 
-				//detect if curl error and log it
-				$error = curl_error($ch);
-				$errno = curl_errno($ch);
-
+			//detect if curl error and log it
+			$error = curl_error($ch);
+			$errno = curl_errno($ch);
+			
 				if ($errno || $error) {
 					$this->log("cURL error ($errno): $error", SEATREG_PAYMENT_LOG_ERROR);
 				}			
@@ -129,7 +130,8 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 			
 			return false;
 		}elseif( isset($_POST['case_type']) ) {
-			$this->log(sprintf(esc_html__('Got a %s case. Reason is %s. Case id: %s', 'seatreg'), $_POST['case_type'], $_POST['reason_code'], $_POST['case_id']), SEATREG_PAYMENT_LOG_INFO);
+			/* translators: 1: case type, 2: reason code, 3: case ID */
+			$this->log(sprintf(esc_html__('Got a %1$s case. Reason is %2$s. Case id: %3$s', 'seatreg'), $_POST['case_type'], $_POST['reason_code'], $_POST['case_id']), SEATREG_PAYMENT_LOG_INFO);
 
 			return false;
 		}
@@ -142,7 +144,8 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 		if($_POST['receiver_email'] === $this->_businessEmail) {
 			return true;
 		}else {
-			$this->log(sprintf(esc_html__("Receiver_email %s is not my Primary PayPal email %s", 'seatreg'), $_POST['receiver_email'], $this->_businessEmail), SEATREG_PAYMENT_LOG_ERROR);
+			/* translators: 1: receiver email, 2: primary PayPal email */
+			$this->log(sprintf(esc_html__('Receiver_email %1$s is not my Primary PayPal email %2$s', 'seatreg'), $_POST['receiver_email'], $this->_businessEmail), SEATREG_PAYMENT_LOG_ERROR);
 			$this->changePaymentStatus(SEATREG_PAYMENT_VALIDATION_FAILED);
 
 			return false;

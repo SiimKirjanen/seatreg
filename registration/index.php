@@ -92,7 +92,7 @@
 				</h2>
 				<?php if($data->registration_close_reason): ?>
 					<p>
-						<?php esc_html_e($data->registration_close_reason); ?>
+						<?php echo esc_html($data->registration_close_reason); ?>
 					</p>	
 				<?php endif; ?>
 	    	</div>
@@ -136,7 +136,7 @@
 				</div>
 
 				<div class="top-info-bar">
-					<div data-info="registration"><?php esc_html_e($data->info); ?></div>
+					<div data-info="registration"><?php echo esc_html($data->info); ?></div>
 					<div data-info="room"></div>
 				</div>
 				

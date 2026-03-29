@@ -578,7 +578,7 @@
 						<input type="file" name="fileToUpload" id="img-upload" class="file-select"><br>
 						<input type="hidden" name="code" id="urlCode"  value="">
 						<input type="hidden" name="action" value="seatreg_upload_image">
-						<input type="submit" class="btn btn-success" name="submit" id="file-sub" value="<?php esc_html_e('Upload'); ?>">
+						<input type="submit" class="btn btn-success" name="submit" id="file-sub" value="<?php esc_attr_e('Upload', 'seatreg'); ?>">
 						<input type="reset" class="btn btn-danger" value="Clear" id="reset-btn">
 					</form>
 					<br>

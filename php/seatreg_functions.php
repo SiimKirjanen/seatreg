@@ -187,7 +187,7 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 	?>
 
 	  		<?php echo '<div class="reg-overview" id="existing-regs">';?>
-	  			<input type="hidden" id="seatreg-reg-code" value="<?php esc_attr_e($registration->registration_code); ?>"/>
+	  			<input type="hidden" id="seatreg-reg-code" value="<?php echo esc_attr($registration->registration_code); ?>"/>
 
 				  <?php if($registration->using_calendar === '1') : ?>
 					<div class="overview-calendar-wrap">
@@ -202,11 +202,11 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 	  				<?php 
 	  					if($targetRoom == 'overview') {
 							echo '<div class="reg-overview-top-header">';
-								esc_html_e($project_name); 
+								echo esc_html($project_name); 
 							echo '</div>'; 
 	  					}else {
 							echo '<div class="reg-overview-top-header">';
-								esc_html_e($targetRoom); 
+								echo esc_html($targetRoom); 
 							echo '</div>';
 	  					}
 	  				?>
@@ -214,7 +214,11 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 					<?php
 						if($targetRoom == 'overview') {
 							echo "<div class='reg-overview-top-bron-notify'>";
-								echo esc_html($registration->using_seats === '1' ? sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']) : sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats'])) . '!';
+								// translators: %s: Number of pending seats
+								$pendingSeats = sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']);
+								// translators: %s: Number of pending places
+								$pendingPlaces = sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats']);
+								echo esc_html($registration->using_seats === '1' ? $pendingSeats : $pendingPlaces) . '!';
 							echo '</div>';
 						}else {
 							for($i = 0; $i < $regStats['roomCount']; $i++) {
@@ -500,7 +504,10 @@ function seatreg_generate_settings_form() {
 
 	?>
 		<h4 class="settings-heading">
-			<?php echo sprintf( esc_html__('%s settings', 'seatreg'), esc_html(wp_unslash($options[0]->registration_name))); ?> 
+			<?php 
+				/* translators: %s: Registration name */
+				echo sprintf( esc_html__('%s settings', 'seatreg'), esc_html(wp_unslash($options[0]->registration_name)));
+			?> 
 		</h4>
 		<form action="<?php echo esc_url(get_admin_url() . 'admin-post.php'); ?>" method="post" id="seatreg-settings-form" class="seatreg-settings-form" style="max-width:600px">
 
@@ -509,7 +516,7 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('Change registration name', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo esc_attr(SEATREG_REGISTRATION_NAME_MAX_LENGTH); ?>" placeholder="<?php esc_html_e('Enter registration name', 'seatreg'); ?>" autocomplete="off" value="<?php echo esc_attr($options[0]->registration_name); ?>">
+				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo esc_attr(SEATREG_REGISTRATION_NAME_MAX_LENGTH); ?>" placeholder="<?php esc_attr_e('Enter registration name', 'seatreg'); ?>" autocomplete="off" value="<?php echo esc_attr($options[0]->registration_name); ?>">
 			</div>
 			
 			<div class="form-group">
@@ -686,8 +693,8 @@ function seatreg_generate_settings_form() {
 					<?php foreach( $custFields as $customField ): ?>
 						<div class="checkbox">
 							<label>
-								<input type="checkbox" name="show-booking-data-registration[]" value="<?php esc_html_e($customField->label); ?>" <?php echo in_array($customField->label, $previouslySelectedBookingDataToShow) ? 'checked' : '' ?> /> 
-								<?php esc_html_e($customField->label); ?>
+								<input type="checkbox" name="show-booking-data-registration[]" value="<?php echo esc_attr($customField->label); ?>" <?php echo in_array($customField->label, $previouslySelectedBookingDataToShow) ? 'checked' : '' ?> /> 
+								<?php echo esc_html($customField->label); ?>
 							</label>
 						</div>
 					<?php endforeach; ?>
@@ -789,7 +796,10 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="use-pending"><?php esc_html_e('Email from address', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php echo sprintf(esc_html__('You can specify email FROM address that will be used when sending out emails. By default site admin (%s) email will be used', 'seatreg'), esc_html(get_option( 'admin_email' ))); ?>.
+					<?php
+						/* translators: %s: Site admin email address */
+						echo sprintf(esc_html__('You can specify email FROM address that will be used when sending out emails. By default site admin (%s) email will be used.', 'seatreg'), esc_html(get_option( 'admin_email' ))); 
+					?>
 				</p>
 				<input type="text" class="form-control" id="email-from" name="email-from" placeholder="<?php echo esc_html('Using default admin email', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->email_from_address); ?>">
 			</div>
@@ -953,8 +963,8 @@ function seatreg_generate_settings_form() {
 						$selectedBookingQRCodeInput = $options[0]->booking_qr_code_input;
 					?>
 					<select class="form-control" name="booking-qr-code-input">
-						<option value="booking-id" <?php echo $selectedBookingQRCodeInput === 'booking-id' ? 'selected' : ''; ?>><?php esc_html_e('Booking ID'); ?></option>
-						<option value="booking-url" <?php echo $selectedBookingQRCodeInput === 'booking-url' ? 'selected' : ''; ?>><?php esc_html_e('URl to booking check page'); ?></option>
+						<option value="booking-id" <?php echo $selectedBookingQRCodeInput === 'booking-id' ? 'selected' : ''; ?>><?php esc_html_e('Booking ID', 'seatreg'); ?></option>
+						<option value="booking-url" <?php echo $selectedBookingQRCodeInput === 'booking-url' ? 'selected' : ''; ?>><?php esc_html_e('URl to booking check page', 'seatreg'); ?></option>
 					</select>
 					<br/>
 					<div class="checkbox">
@@ -989,9 +999,9 @@ function seatreg_generate_settings_form() {
 					?>
 
 					<select class="form-control" name="approved-booking-email-qr-code">
-						<option value="booking-id" <?php echo $selectedBookingQrCode === 'booking-id' ? 'selected' : ''; ?>><?php esc_html_e('Booking ID'); ?></option>
-						<option value="booking-url" <?php echo $selectedBookingQrCode === 'booking-url' ? 'selected' : ''; ?>><?php esc_html_e('URl to booking check page'); ?></option>
-						<option value="" <?php echo $selectedBookingQrCode === null ? 'selected' : ''; ?>><?php esc_html_e('Don\'t display QR code'); ?></option>
+						<option value="booking-id" <?php echo $selectedBookingQrCode === 'booking-id' ? 'selected' : ''; ?>><?php esc_html_e('Booking ID', 'seatreg'); ?></option>
+						<option value="booking-url" <?php echo $selectedBookingQrCode === 'booking-url' ? 'selected' : ''; ?>><?php esc_html_e('URl to booking check page', 'seatreg'); ?></option>
+						<option value="" <?php echo $selectedBookingQrCode === null ? 'selected' : ''; ?>><?php esc_html_e('Don\'t display QR code', 'seatreg'); ?></option>
 					</select>
 
 				<?php else: ?>
@@ -1381,12 +1391,15 @@ function seatreg_generate_settings_form() {
 				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Enables external devices to read SeatReg data', 'seatreg'); ?>.<br />
-					<?php echo sprintf( esc_html__( 'Use %s when making a connection using Android application or web based companion app provided by this plugin.', 'seatreg' ), '<strong>' . esc_url(site_url()) . '</strong>'); ?>
+					<?php
+						/* translators: %s is replaced with site URL */
+						echo sprintf( esc_html__( 'Use %s when making a connection using Android application or web based companion app provided by this plugin.', 'seatreg' ), '<strong>' . esc_url(site_url()) . '</strong>');
+					?>
 				</p>
 				<div style="margin-bottom:25px;">
 					<a href="https://play.google.com/store/apps/details?id=com.seatreg" target="_blank">
 						<i class="fa fa-android" aria-hidden="true" style="color: #A4C639"></i>
-						<?php esc_html_e('SeatReg Android application'); ?>
+						<?php esc_html_e('SeatReg Android application', 'seatreg'); ?>
 					<a/>
 				</div>
 
@@ -1521,7 +1534,10 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 			</div>
 			<?php if($row_count > 0): ?>
 				<div class="pending-bookings-count">
-					<?php echo sprintf(esc_html__('%s pending bookings', 'seatreg'), esc_html($row_count)); ?>
+					<?php 
+						/* translators: %s is replaced with the number of pending bookings */
+						echo sprintf(esc_html__('%s pending bookings', 'seatreg'), esc_html($row_count));
+					?>
 				</div>
 			<?php endif; ?>
 			<div class="management-extra-actions">
@@ -1800,13 +1816,13 @@ function seatreg_generate_payment_logs($paymentLogs, $bookingId) {
 
 			?>
 				<div class="<?php echo esc_attr($logClassName); ?>">
-					<?php esc_html_e($paymentLog->log_status); ?>
+					<?php echo esc_html($paymentLog->log_status); ?>
 				</div>
 				<div class="<?php echo esc_attr($logClassName); ?>">
-					<?php esc_html_e($paymentLog->log_date); ?>
+					<?php echo esc_html($paymentLog->log_date); ?>
 				</div>
 				<div class="<?php echo esc_attr($logClassName); ?>">
-					<?php esc_html_e($paymentLog->log_message); ?>
+					<?php echo esc_html($paymentLog->log_message); ?>
 				</div>
 			<?php
 		}
@@ -1843,15 +1859,24 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 	if( $bookingPaymentStatus->status === SEATREG_PAYMENT_COMPLETED || $bookingPaymentStatus->status === SEATREG_PAYMENT_REVERSED || $bookingPaymentStatus->status === SEATREG_PAYMENT_REFUNDED ) {
 		?>
 			<div>
-				<?php echo sprintf(esc_html__('Payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency")); ?>
+				<?php 
+					/* translators: %s is replaced with the payment total price and currency, for example "20 USD" */
+					echo sprintf(esc_html__('Payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency"));
+				?>
 			</div>
 
 			<div>
-				<?php echo sprintf(esc_html__('Payment txn is %s', 'seatreg'), esc_html($booking->payment_txn_id)); ?> 
+				<?php 
+					/* translators: %s is replaced with the payment transaction ID */
+					echo sprintf(esc_html__('Payment txn is %s', 'seatreg'), esc_html($booking->payment_txn_id)); 
+				?> 
 			</div>
 
 			<div class="mb-2">
-				<?php echo sprintf(esc_html__('Payment date is %s', 'seatreg'), esc_html($booking->payment_update_date)); ?>
+				<?php 
+					/* translators: %s is replaced with the payment date */
+					echo sprintf(esc_html__('Payment date is %s', 'seatreg'), esc_html($booking->payment_update_date)); 
+				?>
 			</div>
 		<?php
 	}
@@ -2001,6 +2026,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 				$bookingTimeToLive = floor($bookingWillBeDeletedTimestamp - (time() / 60));
 
 				if($bookingTimeToLive > 0 && !$hasPaymentEntry) {
+					/* translators: %s is replaced with the pending booking time to live in minutes */
 					echo '<h3 style="color:red">', sprintf(esc_html__('This pending booking will be deleted in about %s minutes if not approved', 'seatreg'), esc_html($bookingTimeToLive)), '</h3>';
 				}
 			}

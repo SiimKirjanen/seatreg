@@ -81,6 +81,7 @@ class SeatregBooking {
 
 		foreach( $this->_bookings as $booking ) {
 			if( SeatregLayoutService::checkIfSeatLocked($this->_registrationLayoutFull, $booking->seat_id) ) {
+				/* translators: %s: Seat number */
 				$statusReport = sprintf(esc_html__('Seat %s is locked', 'seatreg'),  $booking->seat_nr);
 
 				break;
@@ -99,6 +100,7 @@ class SeatregBooking {
 				$enteredPassword = array_key_exists($booking->seat_id, $enteredSeatPasswords) ? $enteredSeatPasswords[$booking->seat_id] : '';
 
 				if( SeatregLayoutService::getSeatPassword($this->_registrationLayoutFull, $booking->seat_id) !== $enteredPassword ) {
+					/* translators: %s: Seat number */
 					$statusReport = sprintf(esc_html__('Seat %s password is not correct', 'seatreg'),  $booking->seat_nr);
 
 					break;
@@ -172,7 +174,8 @@ class SeatregBooking {
 		$sameEmailBookingsCount = (int)SeatregBookingRepository::getBookingsCountWithSameEmail($this->_registrationCode, $this->_bookerEmail);
 
 		if($sameEmailBookingsCount >= $emailLimit) {
-			$statusReport = sprintf(esc_html__('Email %s is already used. You are allowed to make %s booking with the same email', 'seatreg'), $email, $emailLimit);
+			/* translators: 1: Email, 2: Email limit */
+			$statusReport = sprintf(esc_html__('Email %1$s is already used. You are allowed to make %2$s booking with the same email', 'seatreg'), $email, $emailLimit);
 		}
 
 		return $statusReport;
@@ -275,6 +278,7 @@ class SeatregBooking {
 		$bookingsByUser = SeatregBookingRepository::getUserBookings($userId, $registrationCode);
 
 		if( $bookingsByUser >= $this->_wp_user_booking_limit ) {
+			/* translators: %s: Maximum number of bookings allowed per user */
 			$statusReport = sprintf(esc_html__('Allowed number of bookings per user is %s', 'seatreg'), $this->_wp_user_booking_limit);
 		}
 
@@ -286,7 +290,8 @@ class SeatregBooking {
 		$bookingsByUser = SeatregBookingRepository::getUserBookings($userId, $registrationCode);
 
 		if( ($bookingsByUser + $newBookingsLength) > $this->_wp_user_bookings_seat_limit ) {
-			$statusReport = sprintf(esc_html__('Allowed number of total booked seats per user is %s. You have booked previously %s ', 'seatreg'), $this->_wp_user_bookings_seat_limit, $bookingsByUser);
+			/* translators: 1: Maximum number of total booked seats allowed per user, 2: Number of seats the user has already booked */
+			$statusReport = sprintf(esc_html__('Allowed number of total booked seats per user is %1$s. You have booked previously %2$s ', 'seatreg'), $this->_wp_user_bookings_seat_limit, $bookingsByUser);
 		}
 
 		return $statusReport;
