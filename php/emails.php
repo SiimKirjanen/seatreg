@@ -50,7 +50,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     $bookerEmail = $bookings[0]->booker_email;
     $bookingStatusUrl = seatreg_get_registration_status_url($registration->registration_code, $bookingId);
     /* translators: %s: Registration name */
-    $emailSubject = $registration->approved_booking_email_subject ? $registration->approved_booking_email_subject : sprintf(esc_html__("Your booking at %s is approved", "seatreg"), $registrationName);
+    $emailSubject = $registration->approved_booking_email_subject ? $registration->approved_booking_email_subject : sprintf(esc_html__("Your booking at %s is approved", "seatreg"), esc_html($registrationName));
     $couponsEnabled = SeatregCouponRepository::areCouponsEnabled($registrationCode);
     $appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
 

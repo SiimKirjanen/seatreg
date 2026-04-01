@@ -257,7 +257,7 @@ function seatreg_companion_app() {
 		<div class="seatreg-wp-admin wrap">
 			<h1><i class="fa fa-mobile" aria-hidden="true"></i> <?php esc_html_e('Companion app', 'seatreg'); ?></h1>
 			<p><?php esc_html_e('Web version of the mobile companion app.', 'seatreg'); ?></p>
-			<p><?php esc_html_e("Alternative way to view bookings on mobile devices.", 'seatreg'); ?><p>
+			<p><?php esc_html_e("Alternative way to view bookings on mobile devices.", 'seatreg'); ?></p>
 			<p>
 				<?php esc_html_e("Source code is available on GitHub:", "seatreg"); ?>
 				<a target="_blank" href="<?php echo esc_url('https://github.com/SiimKirjanen/seatreg-app'); ?>">
