@@ -1,5 +1,5 @@
-<?php if(!defined('ABSPATH')) exit; ?>
 <?php
+if(!defined('ABSPATH')) exit;
 
 add_action( 'rest_api_init', function () {
     register_rest_route( 'seatreg/v1', '/echo', array(

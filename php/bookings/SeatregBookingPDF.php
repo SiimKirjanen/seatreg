@@ -1,5 +1,6 @@
-<?php if(!defined('ABSPATH')) exit; ?> 
 <?php
+if(!defined('ABSPATH')) exit;
+
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/tfpdf/tfpdf.php' );
 
 class SeatregBookingPDF extends tFPDF {
