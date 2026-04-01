@@ -1,3 +1,5 @@
+<?php if(!defined('ABSPATH')) exit; ?>
+
 <div class="modal fade add-modal" id="add-booking-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -10,7 +12,10 @@
 		<?php if($calendarDate): ?>
 			<div class="add-modal-calendar-date">
 				<i class="fa fa-calendar" aria-hidden="true"></i>
-				<?php echo sprintf(esc_html__('Selected date is %s', 'seatreg'), esc_html($calendarDate)); ?>
+				<?php 
+					/* translators: %s: selected date */
+					echo sprintf(esc_html__('Selected date is %s', 'seatreg'), esc_html($calendarDate)); 
+				?>
 			</div>
 		<?php endif; ?>
 

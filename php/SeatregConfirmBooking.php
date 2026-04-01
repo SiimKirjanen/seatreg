@@ -86,6 +86,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		}
 
 		printf(
+			/* translators: %s: URL link to the booking status page */
 			esc_html__('You can see your booking status at the following link %s', 'seatreg'), 
 			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"
 		);
@@ -99,7 +100,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		$this->init();
 
 		if(!$this->_valid) {
-			esc_html_e($this->reply);
+			echo esc_html($this->reply);
 
 			return;
 		}
@@ -116,7 +117,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 		//2 step. Does confirmation code exists? Is booking already confirmed?
 		if(!$this->_valid) {
-			esc_html_e($this->reply);
+			echo esc_html($this->reply);
 
 			return;
 		}

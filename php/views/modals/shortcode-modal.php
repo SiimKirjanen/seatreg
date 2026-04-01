@@ -1,3 +1,5 @@
+<?php if(!defined('ABSPATH')) exit; ?>
+
 <div class="modal fade shortcode-modal" tabindex="-1" role="dialog" aria-hidden="true" data-registration-id="<?php echo esc_attr($registrationCode); ?>">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

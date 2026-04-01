@@ -23,9 +23,11 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
         $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
     }
    
+    /* translators: %s: Registration name */
     $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), $registrationName ) . "<br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg") . "<br><br>";
     $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 
+    /* translators: %s: Registration name */
     wp_mail($emailToSend, sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName), $message, array(
         "Content-type: text/html",
         "FROM: $fromAddress"
@@ -47,7 +49,8 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     $registrationName = $registration->registration_name;
     $bookerEmail = $bookings[0]->booker_email;
     $bookingStatusUrl = seatreg_get_registration_status_url($registration->registration_code, $bookingId);
-    $emailSubject = $registration->approved_booking_email_subject ? $registration->approved_booking_email_subject : sprintf(esc_html__("Your booking at %s is approved", "seatreg"), $registrationName);
+    /* translators: %s: Registration name */
+    $emailSubject = $registration->approved_booking_email_subject ? $registration->approved_booking_email_subject : sprintf(esc_html__("Your booking at %s is approved", "seatreg"), esc_html($registrationName));
     $couponsEnabled = SeatregCouponRepository::areCouponsEnabled($registrationCode);
     $appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
 
@@ -69,6 +72,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     if($template) {
         $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $registrationCustomFields, $bookingId, $registration, $couponsEnabled, $appliedCoupon);
     }else {
+        /* translators: %s: Registration name */
         $message = '<p>' . sprintf(esc_html__("Thank you for booking at %s.", "seatreg"), esc_html( wp_unslash($registrationName) ) ) . ' ' . esc_html__("Your booking is now approved", "seatreg")  . '</p>';
         $message .= '<p>';
         $message .= esc_html__('Booking ID: ', 'seatreg') . ' <strong>'. esc_html($bookingId) .'</strong><br>';
@@ -122,6 +126,7 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
     if($template) {
         $message = SeatregTemplateService::emailVerificationTemplateProcessing($template, $confirmationURL);
     }else {
+        /* translators: %s: Registration name */
         $message =  '<p>' . sprintf( esc_html__('Thank you for booking at %s', 'seatreg'), esc_html( wp_unslash($registrationName) ) ) . '</p>' .
         '<p>' . esc_html__('Click on the link below to complete email verification', 'seatreg') . '</p>
         <a href="' .  esc_url($confirmationURL) .'" >'. esc_html($confirmationURL) .'</a><br/>

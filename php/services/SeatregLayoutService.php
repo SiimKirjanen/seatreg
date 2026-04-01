@@ -82,15 +82,18 @@ class SeatregLayoutService {
         foreach( $layout as $layoutData ) {
             $room = $layoutData->room;
             $status->searchStatus = 'room-searching';
-            $status->errorText = sprintf( esc_html__('Room %s does not exist!', 'seatreg'),  esc_html($bookingRoomName) );
+            /* translators: %s: Room name */
+            $status->errorText = sprintf( esc_html__('Room %s does not exist!', 'seatreg'), esc_html($bookingRoomName) );
     
             if( $room->name == $bookingRoomName ) {
                 $status->searchStatus = 'seat-id-searching';
 
                 if ($seatNr !== null) {
-                    $status->errorText = sprintf(esc_html__('Seat id %s with number %s does not exist in %s', 'seatreg'), esc_html($bookingSeatId), esc_html($seatNr), esc_html($bookingRoomName));
+                    /* translators: %1$s: Seat ID, %2$s: Seat number, %3$s: Room name */
+                    $status->errorText = sprintf(esc_html__('Seat id %1$s with number %2$s does not exist in %3$s', 'seatreg'), esc_html($bookingSeatId), esc_html($seatNr), esc_html($bookingRoomName));
                 } else {
-                    $status->errorText = sprintf(esc_html__('Seat id %s does not exist in %s', 'seatreg'), esc_html($bookingSeatId), esc_html($bookingRoomName));
+                    /* translators: %1$s: Seat ID, %2$s: Room name */
+                    $status->errorText = sprintf(esc_html__('Seat id %1$s does not exist in %2$s', 'seatreg'), esc_html($bookingSeatId), esc_html($bookingRoomName));
                 }
                 
                 foreach( $layoutData->boxes as $box ) {    

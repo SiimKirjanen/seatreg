@@ -1,4 +1,6 @@
 <?php
+if(!defined('ABSPATH')) exit;
+
 require_once(SEATREG_PLUGIN_FOLDER_DIR . 'registration/php/reg_functions.php');
 require_once(SEATREG_PLUGIN_FOLDER_DIR . 'php/seatreg_strings.php');
 

@@ -156,7 +156,7 @@ add_filter( 'cron_schedules', 'seatreg_expiration_booking_interval' );
 function seatreg_expiration_booking_interval( $schedules ) {
     $schedules['seatreg_expiration_schedult'] = array(
         'interval' => 10,
-        'display'  => esc_html__( 'Seatreg expiration booking interval' ),
+        'display'  => esc_html__( 'Seatreg expiration booking interval', 'seatreg' ),
     );
 
     return $schedules;

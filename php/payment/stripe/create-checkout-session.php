@@ -45,6 +45,7 @@ $checkout_session = \Stripe\Checkout\Session::create([
         ]
       ],
     ],
+    /* translators: %s: Booking ID */
     'description' => sprintf( __('Booking %s', 'seatreg'),  $bookingId),
     'quantity' => 1,
   ]],

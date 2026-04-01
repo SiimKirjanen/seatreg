@@ -1,4 +1,6 @@
 <?php
+  if(!defined('ABSPATH')) exit;
+
   $isCompanionEnabled = SeatregCompanionAppRepository::isCompanionAppEnabled();
 
   if (!$isCompanionEnabled) {

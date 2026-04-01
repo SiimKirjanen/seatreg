@@ -42,7 +42,8 @@ class SeatregPaymentBase {
 
     protected function insertPayment($txnId) {
 		SeatregPaymentService::insertOrUpdatePayment($this->_bookingId, SEATREG_PAYMENT_COMPLETED, $txnId, $this->_currency, $this->_price);
-		$this->log(sprintf(esc_html__('Payment of %s is completed via %s', 'seatreg'), "$this->_price $this->_currency", $this->_paymentMethod));
+		/* translators: 1: price and currency, 2: payment method */
+		$this->log(sprintf(esc_html__('Payment of %1$s is completed via %2$s', 'seatreg'), "$this->_price $this->_currency", $this->_paymentMethod));
 
 		if($this->_setBookingConfirmed === '1') {
 			$bookingData = SeatregBookingRepository::getDataRelatedToBooking($this->_bookingId);
@@ -72,7 +73,8 @@ class SeatregPaymentBase {
 		if( strtoupper($receivedCurrency) === $this->_currency && floatval($receivedPrice) === floatval($this->_price) ) {
 			return true;
 		}else {
-			$this->log(sprintf(esc_html__('Payment %s is not correct. Expecting %s', 'seatreg'), $receivedPrice . ' ' .  $receivedCurrency, $this->_price . ' ' . $this->_currency ), SEATREG_PAYMENT_LOG_ERROR);
+			/* translators: 1: received price and currency, 2: expected price and currency */
+			$this->log(sprintf(esc_html__('Payment %1$s is not correct. Expecting %2$s', 'seatreg'), $receivedPrice . ' ' .  $receivedCurrency, $this->_price . ' ' . $this->_currency ), SEATREG_PAYMENT_LOG_ERROR);
 			$this->changePaymentStatus(SEATREG_PAYMENT_VALIDATION_FAILED);
 
 			return false;

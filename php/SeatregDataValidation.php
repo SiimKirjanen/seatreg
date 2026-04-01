@@ -632,6 +632,7 @@ class SeatregDataValidation {
                 $foundExistingUnique = SeatregBookingRepository::findIfExistingBookingWasMadeWithCustomFieldValue($registrationCode, $assosiatedCustomField, $personCustomField);
 
                 if($foundExistingUnique) {
+                    /* translators: %s: Custom field label */
                     $validationStatus->setInvalid(sprintf(esc_html__('%s field value is already used', 'seatreg'), $assosiatedCustomField->label));
                     return $validationStatus;
                 }

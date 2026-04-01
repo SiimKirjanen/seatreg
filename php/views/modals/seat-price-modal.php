@@ -1,3 +1,5 @@
+<?php if(!defined('ABSPATH')) exit; ?>
+
 <div class="modal vert-modal fade" id="price-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog vert-modal-dialog">
     <div class="modal-content">

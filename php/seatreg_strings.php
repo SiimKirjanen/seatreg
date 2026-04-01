@@ -70,8 +70,10 @@ function seatreg_generate_registration_strings() {
     $translations->enterCouponCode = esc_html__('Please enter coupon code', 'seatreg');
     $translations->failedToApplyCoupon = esc_html__('Failed to apply coupon', 'seatreg');
     $translations->couponNotFound = esc_html__('Coupon not found', 'seatreg');
+    /* translators: %s: Coupon code */
     $translations->couponApplied = esc_html__('Coupon %s applied', 'seatreg');
-    $translations->couponAppliedWithDiscount = esc_html__('Coupon %s applied with -%s discount', 'seatreg');
+    /* translators: %1$s: Coupon code, %2$s: Discount amount */
+    $translations->couponAppliedWithDiscount = esc_html__('Coupon %1$s applied with -%2$s discount', 'seatreg');
 
 	return $translations;
 }
@@ -236,6 +238,7 @@ function seatreg_generate_companion_app_strings() {
         'enterWPSiteUrl' => esc_html__('Please enter the root URL of your WordPress site where SeatReg plugin is activated', 'seatreg'),
         'enterHere' => esc_html__('Enter here', 'seatreg'),
         'next' => esc_html__('Next', 'seatreg'),
+        /* translators: %s: Error message */
         'errorMessage' => esc_html__('An error occurred: %s. Please try again', 'seatreg'),
         'save' => esc_html__('Save', 'seatreg'),
         'back' => esc_html__('Back', 'seatreg'),
@@ -243,6 +246,7 @@ function seatreg_generate_companion_app_strings() {
         'enterSeatRegApiToken' => esc_html__('Enter SeatReg public API token', 'seatreg'),
         'tokenValidationFailed' => esc_html__('Validating token request failed', 'seatreg'),
         'connectionAdded' => esc_html__('Connection added', 'seatreg'),
+        /* translators: %s: API token */
         'tokenAlreadyAdded' => esc_html__('Token %s is already added', 'seatreg'),
         'requestFailed' => esc_html__('Request failed', 'seatreg'),
         'unableToEstablishConnection' => esc_html__('Unable to Establish Connection. Check your internet connection and verify the website availability', 'seatreg'),
@@ -252,17 +256,28 @@ function seatreg_generate_companion_app_strings() {
         'pushPhysicalDeviceRequired' => esc_html__('Must use physical device for Push Notifications', 'seatreg'),
         'notificationsNotSupported' => esc_html__('This browser does not support notifications', 'seatreg'),
         'webNotificationPermissionFailed' => esc_html__('Failed to get permissions for web notifications', 'seatreg'),
+        /* translators: %s: Booker name */
         'bookingName' => esc_html__('Name: %s', 'seatreg'),
+        /* translators: %s: Room name */
         'bookingRoom' => esc_html__('Room: %s', 'seatreg'),
+        /* translators: %s: Seat number */
         'bookingSeat' => esc_html__('Seat: %s', 'seatreg'),
+        /* translators: %s: Email address */
         'bookingEmail' => esc_html__('Email: %s', 'seatreg'),
+        /* translators: %s: Booker email */
         'bookingBookerEmail' => esc_html__('Booker email: %s', 'seatreg'),
+        /* translators: %s: Calendar date */
         'bookingCalendarDate' => esc_html__('Calendar date: %s', 'seatreg'),
+        /* translators: %s: Booking date */
         'bookingDate' => esc_html__('Booking date: %s', 'seatreg'),
+        /* translators: %s: Booking approved date */
         'bookingApprovedDate' => esc_html__('Booking approved date: %s', 'seatreg'),
+        /* translators: %s: Registration name */
         'newBookingsSingle' => esc_html__('%s got a new booking', 'seatreg'),
-        'newBookingsMultiple' => esc_html__('%s got %s new bookings', 'seatreg'),
-        'bookingNotificationsDisabledDueToFailures' => esc_html__('%s had %s continuous request failures. Turning off booking notifications.', 'seatreg'),
+        /* translators: %1$s: Registration name, %2$s: Number of new bookings */
+        'newBookingsMultiple' => esc_html__('%1$s got %2$s new bookings', 'seatreg'),
+        /* translators: %1$s: Registration name, %2$s: Number of continuous request failures */
+        'bookingNotificationsDisabledDueToFailures' => esc_html__('%1$s had %2$s continuous request failures. Turning off booking notifications.', 'seatreg'),
         'cameraNotFound' => esc_html__(
             'No camera was found. Please connect a camera or use a different device.',
             'seatreg'
@@ -301,6 +316,7 @@ function seatreg_generate_companion_app_strings() {
         'deleteConnectionDialogMessage' => esc_html__('Are you sure?', 'seatreg'),
         'bookingStatusPending' => esc_html__('Pending', 'seatreg'),
         'bookingStatusApproved' => esc_html__('Approved', 'seatreg'),
+        /* translators: %s: Booking status */
         'bookingStatusLabel' => esc_html__('Status: %s', 'seatreg'),
         'bookingFilteringActive' => esc_html__('Booking filtering is active', 'seatreg')
     ];

@@ -1,3 +1,5 @@
+<?php if(!defined('ABSPATH')) exit; ?>
+
 <div>
     <br>
     <button class="btn btn-outline-info btn-sm" data-action="view-booking-activity" data-booking-id="<?php echo esc_attr($booking->booking_id); ?>">

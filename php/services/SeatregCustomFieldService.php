@@ -25,10 +25,10 @@ class SeatregCustomFieldService {
                         if( $customField['type'] == 'sel' ) {
                             ?>
                                 <div class="custom-field" data-type="sel">
-                                    <label><span><?php esc_html_e($customField['label']); ?></span>
-                                        <select name="<?php esc_html_e($customField['label']); ?>">
+                                    <label><span><?php echo esc_html($customField['label']); ?></span>
+                                        <select name="<?php echo esc_attr($customField['label']); ?>">
                                             <?php foreach($customField['options'] as $option) : ?>
-                                                <option><span><?php esc_html_e($option); ?></span></option>
+                                                <option><span><?php echo esc_html($option); ?></span></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </label>
@@ -40,7 +40,7 @@ class SeatregCustomFieldService {
                         }else if( $customField['type'] == 'text' ){
                             ?>
                                 <div class="custom-field" data-type="text">
-                                    <label><span><?php esc_html_e($customField['label']); ?></span><input type="text" name="<?php esc_html_e($customField['label']); ?>" /></label>
+                                    <label><span><?php echo esc_html($customField['label']); ?></span><input type="text" name="<?php echo esc_attr($customField['label']); ?>" /></label>
                                     <?php if($addButtons): ?>
                                         <i class="fa fa-plus-circle fa-lg" data-action="remove" aria-hidden="true"></i>
                                     <?php endif; ?>
@@ -49,7 +49,7 @@ class SeatregCustomFieldService {
                         }else if( $customField['type'] == 'check' ) {
                             ?>
                                 <div class="custom-field" data-type="check">
-                                    <label><span><?php esc_html_e($customField['label']); ?></span><input type="checkbox" name="<?php esc_html_e($customField['label']); ?>" value="1" checked /></label>
+                                    <label><span><?php echo esc_html($customField['label']); ?></span><input type="checkbox" name="<?php echo esc_attr($customField['label']); ?>" value="1" checked /></label>
                                     <?php if($addButtons): ?>
                                         <i class="fa fa-plus-circle fa-lg" data-action="remove" aria-hidden="true"></i>
                                     <?php endif; ?>
