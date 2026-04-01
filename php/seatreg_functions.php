@@ -790,7 +790,7 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="registration-password" name="registration-password" autocomplete="off" placeholder="<?php echo esc_html('Enter password here', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->registration_password); ?>">
+				<input type="text" class="form-control" id="registration-password" name="registration-password" autocomplete="off" placeholder="<?php esc_attr_e('Enter password here', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->registration_password); ?>">
 			</div>
 
 			<div class="form-group">
@@ -801,7 +801,7 @@ function seatreg_generate_settings_form() {
 						echo sprintf(esc_html__('You can specify email FROM address that will be used when sending out emails. By default site admin (%s) email will be used.', 'seatreg'), esc_html(get_option( 'admin_email' ))); 
 					?>
 				</p>
-				<input type="text" class="form-control" id="email-from" name="email-from" placeholder="<?php echo esc_html('Using default admin email', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->email_from_address); ?>">
+				<input type="text" class="form-control" id="email-from" name="email-from" placeholder="<?php esc_attr_e('Using default admin email', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->email_from_address); ?>">
 			</div>
 
 			<div class="form-group">
@@ -1384,7 +1384,7 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('By default the button that opens seat selection has text "open". You can change it if needed.', 'seatreg'); ?>
 				</p>
-				<input type="text" class="form-control" id="seat-selection-btn-text" name="seat-selection-btn-text" autocomplete="off" placeholder="<?php echo esc_html('Enter button text', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->seat_selection_btn_text); ?>"> 
+				<input type="text" class="form-control" id="seat-selection-btn-text" name="seat-selection-btn-text" autocomplete="off" placeholder="<?php esc_attr_e('Enter button text', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->seat_selection_btn_text); ?>"> 
 			</div>
 
 			<div class="form-group">

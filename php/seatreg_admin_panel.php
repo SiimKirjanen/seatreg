@@ -33,7 +33,6 @@ function seatreg_add_plugin_menu() {
 	);
 	add_submenu_page(
 		'seatreg-welcome',   //slug 
-		/* translators: %s: Name of the registration */
 		esc_html__('SeatReg Overview', 'seatreg'),  //page title
 		esc_html__('Overview', 'seatreg'),  //menu title
 		SEATREG_MANAGE_EVENTS_CAPABILITY,  //capability
