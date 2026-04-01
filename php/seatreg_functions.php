@@ -1400,7 +1400,7 @@ function seatreg_generate_settings_form() {
 					<a href="https://play.google.com/store/apps/details?id=com.seatreg" target="_blank">
 						<i class="fa fa-android" aria-hidden="true" style="color: #A4C639"></i>
 						<?php esc_html_e('SeatReg Android application', 'seatreg'); ?>
-					<a/>
+					</a>
 				</div>
 
 				<div class="checkbox">
@@ -1419,7 +1419,7 @@ function seatreg_generate_settings_form() {
 							<button class="btn btn-default btn-sm toggle-token" type="button">Show token</button>
 							<div class="token-actions">
 								<i class="fa fa-times-circle remove-token"></i>
-							</diV>
+							</div>
 						</div>
 					<?php endforeach; ?>
 				</div>
