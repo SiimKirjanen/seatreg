@@ -1122,7 +1122,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + placeCostText + '<strong>' +  getCurrencySymbolFromISO(this.payPalCurrencyCode) + price + '</strong></p>');
 					}
 				}else {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + this.spotName + ' ' + nr + translator.translate('_fromRoom_')  + room + '</h5></div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + this.spotName + ' ' + seatPrefix + nr + translator.translate('_fromRoom_')  + room + '</h5></div>');
 				}
 
 			}else if(type == 'tak') {
