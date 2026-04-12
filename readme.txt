@@ -47,6 +47,7 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 
 = 1.67.9 =
 * Fixed an issue where the seat prefix was missing from the selected seat in the registration view when registration had not yet started.
+* Booking manager now auto-selects the room when using ID lookup, and copies the room selection when adding additional seats.
 
 = 1.67.8 =
 * Various code improvements and fixes based on Plugin Check (PCP).
