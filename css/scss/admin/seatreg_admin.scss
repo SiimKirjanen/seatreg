@@ -18,6 +18,7 @@
 @import "components/coupons";
 @import "forms/companion_app_form";
 @import "../animations.scss";
+@import "components/seatreg-flower";
 
 html {
   font-size: 100%;
@@ -78,6 +79,7 @@ html {
   align-items: center;
   text-align: center;
   row-gap: 12px;
+  position: relative;
 
   p {
     margin-bottom: 0.6rem;

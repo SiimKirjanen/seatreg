@@ -125,6 +125,7 @@ function seatreg_create_welcome() {
 					<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . "img/quicktasker-icon.png"); ?>" />
 					<a href="https://wordpress.org/plugins/quicktasker/" target="_blank">QuickTasker</a>
 				</p>
+				<?php include(SEATREG_PLUGIN_FOLDER_DIR . 'php/views/parts/donation-flowers.php'); ?>
 			</div>
 		</div>
 

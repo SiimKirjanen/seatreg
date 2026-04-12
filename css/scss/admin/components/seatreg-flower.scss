@@ -1,0 +1,119 @@
+.seatreg-flower-container {
+    --flower-size: 12px;
+    --flower-delay: 0s;
+    --flower-opacity: 0.2;
+    width: var(--flower-size);
+    height: var(--flower-size);
+    position: absolute;
+}
+
+.seatreg-flower-droplet {
+    border-radius: 5px 90%;
+    border-style: solid;
+    border-width: 1px;
+    height: var(--flower-size);
+    width: var(--flower-size);
+    position: absolute;
+    top: var(--flower-size);
+    left: var(--flower-size);
+    transform-origin: left top;
+    opacity: 0;
+}
+
+.seatreg-flower-droplet-1 {
+  background: #428bca;
+  animation: spin1 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0s);
+}
+
+.seatreg-flower-droplet-2 {
+  background: #2271b1;
+  animation: spin2 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0.05s);
+}
+
+.seatreg-flower-droplet-3 {
+  background: #428bca;
+  animation: spin3 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0.1s);
+}
+
+.seatreg-flower-droplet-4 {
+  background: #2271b1;
+  animation: spin4 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0.15s);
+}
+
+.seatreg-flower-droplet-5 {
+  background: #428bca;
+  animation: spin5 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0.2s);
+}
+
+.seatreg-flower-droplet-6 {
+  background: #2271b1;
+  animation: spin6 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0.25s);
+}
+
+.seatreg-flower-droplet-7 {
+  background: #428bca;
+  animation: spin7 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0.30s);
+}
+
+.seatreg-flower-droplet-8 {
+  background: #2271b1;
+  animation: spin8 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0.35s);
+}
+
+.seatreg-flower-droplet-9 {
+  background: #428bca;
+  animation: spin9 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0.40s);
+}
+
+.seatreg-flower-droplet-10 {
+  background: #2271b1;
+  animation: spin10 5s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: calc(var(--flower-delay) + 0.45s);
+}
+
+// Generate all 10 spin animations using SCSS loop
+@for $i from 1 through 10 {
+  $rotation: 360deg - ($i * 36deg);
+  
+  @keyframes spin#{$i} {
+    0% {
+      opacity: 0;
+      -webkit-transform: rotate(0deg) scale(0.01);
+      transform: rotate(0deg) scale(0.01);
+    }
+    20% {
+      opacity: var(--flower-opacity);
+      -webkit-transform: rotate($rotation) scale(1);
+      transform: rotate($rotation) scale(1);
+    }
+    60% {
+      opacity: var(--flower-opacity);
+      -webkit-transform: rotate($rotation) scale(1);
+      transform: rotate($rotation) scale(1);
+    }
+    100% {
+      opacity: var(--flower-opacity);
+      -webkit-transform: rotate($rotation) scale(1);
+      transform: rotate($rotation) scale(1);
+    }
+  }
+}
