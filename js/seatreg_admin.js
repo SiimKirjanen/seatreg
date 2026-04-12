@@ -803,10 +803,13 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 $('#seatreg-booking-manager').on('click', '#add-modal-add-seat', function() {
 	var bookingItemsWrap = $(this).closest('form').find('.modal-body-items');
 	var bookingItems = bookingItemsWrap.find('.modal-body-item');
-	var newItem = bookingItems.first().clone();
+	var firstBookingItem = bookingItems.first();
+	var newItem = firstBookingItem.clone();
+	var firstBookingItemSelectedRoom = firstBookingItem.find('select[name="room[]"] option:selected').text();
 
 	newItem.find('input[name="seat-id[]"]').val('');
 	newItem.find('.add-modal-input-wrap[data-type="price-selection"]').remove();
+	newItem.find('select[name="room[]"]').val(firstBookingItemSelectedRoom);
 	
 	bookingItemsWrap.append(newItem);
 	
@@ -1184,7 +1187,9 @@ $('#seatreg-booking-manager').on('click', '.seat-id-search', function() {
 
 $('#seatreg-booking-manager .seat-id-grid [data-action="select-id"]').on('click', function() {
 	const $modalBodyItem = $('#seatreg-booking-manager #add-booking-modal-form .modal-body-item').eq(bookingManagerActiveAddBookingIdLookupIndex);
+	const roomName = $(this).data('room-name');
 
+	$modalBodyItem.find('[name="room[]"]').val(roomName);
 	$modalBodyItem.find('[name="seat-id[]"]').val( $(this).data('seat-id') ).trigger('change');
 	$('#seat-id-modal').modal('hide');
 });
