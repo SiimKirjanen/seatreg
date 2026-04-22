@@ -147,7 +147,7 @@ function seatreg_public_scripts_and_styles() {
 	}
 
 	if( seatreg_is_companion_app_page() ) {
-		wp_enqueue_script('seatreg-companion-app', SEATREG_PLUGIN_FOLDER_URL . 'companion_app/_expo/static/js/web/AppEntry-b8c70972178bea8f0189194db4264245.js' , array(), '1.2.0', true);
+		wp_enqueue_script('seatreg-companion-app', SEATREG_PLUGIN_FOLDER_URL . 'companion_app/_expo/static/js/web/AppEntry-2654c845f33ba2d75d1a4d2ba11d0fc8.js' , array(), '1.3.0', true);
 		wp_localize_script('seatreg-companion-app', 'WP_Seatreg_Companion', array(
 			'translations' => seatreg_generate_companion_app_strings()
 		));
