@@ -122,6 +122,7 @@
 		this.onePersonCheckout = window.onePersonCheckout === '1';
 		this.automaticBookingConfirmDialog = window.automaticBookingConfirmDialog === '1';
 		this.couponsEnabled = window.seatregCouponsEnabled === '1';
+		this.zoomControlsOnTop = window.zoomControlsOnTop === '1';
 		this.appliedCoupon = null;
 	}
 
@@ -1271,6 +1272,7 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 	var infoHeight = $('.top-info-bar').outerHeight(true) || 0;
 	var poweredByHeight = $('#powered-by').outerHeight(true);
 	var cartWidth = $('#controls-wrapper').outerWidth(true);
+	var topZoomHeight = seatReg.zoomControlsOnTop ? $('#zoom-controller').outerHeight(true) : 0;
 	var legendWidth = 0;
 	var spaceForMiddleWidth = screenWidth - 20; //how much room for seat map
 	var spaceForMiddleHeight = screenHeight - 30 - 70 - navHeight - $('#bottom-wrapper').outerHeight(true) - $('#zoom-controller').outerHeight(true);  // - header height, -legend height, navbar height, -spacing  --default mobile
@@ -1293,7 +1295,7 @@ function setMiddleSecSize(roomSizeWidth, roomSizeHeight) {
 		console.log('navHeight height: ', navHeight);
 		console.log('infoHeight height: ', infoHeight); */
 
-		spaceForMiddleHeight = screenHeight - 30 - navHeight - infoHeight - 30 - poweredByHeight;  //- header height, - navbar height, -footer if needed
+		spaceForMiddleHeight = screenHeight - 30 - navHeight - infoHeight - 30 - poweredByHeight - topZoomHeight;  //- header height, - navbar height, -footer if needed, - zoom controls if on top
 
 		if(seatReg.rooms[seatReg.currentRoom].room.legends.length > 0) {
 			$('#legend-wrapper').css('display','inline-block');
