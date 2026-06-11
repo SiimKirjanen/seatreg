@@ -1284,3 +1284,33 @@ html {
     width: 60px;
   }
 }
+
+#calendar-dates-list {
+  .calendar-date-chip {
+    display: inline-flex;
+    align-items: center;
+    margin: 2px 4px 2px 0;
+    padding: 2px 4px 2px 8px;
+    background-color: #e7f3ff;
+    border: 1px solid #b8daff;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #04357d;
+  }
+  .calendar-date-chip-remove {
+    margin-left: 6px;
+    padding: 0 3px;
+    border: none;
+    background: transparent;
+    color: #04357d;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+      color: #c00;
+    }
+  }
+}

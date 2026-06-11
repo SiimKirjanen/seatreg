@@ -381,9 +381,40 @@ function initEditBookingCalendarDatePicker() {
 }
 initEditBookingCalendarDatePicker();
 
-$('#calendar-dates').multiDatesPicker({
+function renderSelectedCalendarDates() {
+	var value = $('#calendar-dates').val();
+	var dates = value ? value.split(',') : [];
+	var $list = $('#calendar-dates-list');
+
+	if (dates.length === 0) {
+		$list.html('<em>' + translator.translate('calendarNoDatesSelected') + '</em>');
+		return;
+	}
+
+	var removeLabel = translator.translate('calendarRemoveDate');
+	var chips = dates.map(function(date) {
+		return '<span class="calendar-date-chip">' + date +
+			'<button type="button" class="calendar-date-chip-remove" data-date="' + date + '" aria-label="' + removeLabel + '" title="' + removeLabel + '">&times;</button></span>';
+	}).join('');
+	$list.html('<strong>' + translator.translate('calendarSelectedDates') + ':</strong> ' + chips);
+}
+
+var existingCalendarDates = $('#calendar-dates').val();
+$('#calendar-dates-picker').multiDatesPicker({
 	dateFormat: 'yy-mm-dd',
-	separator: ','
+	separator: ',',
+	altField: '#calendar-dates',
+	addDates: existingCalendarDates ? existingCalendarDates.split(',') : undefined,
+	onSelect: function() {
+		renderSelectedCalendarDates();
+	}
+});
+renderSelectedCalendarDates();
+
+$('#calendar-dates-list').on('click', '.calendar-date-chip-remove', function() {
+	var date = $(this).attr('data-date');
+	$('#calendar-dates-picker').multiDatesPicker('removeDates', date);
+	renderSelectedCalendarDates();
 });
 
 $('.datepicker-altfield').each(function() {

@@ -48,6 +48,8 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 = 1.68.0 =
 * Added a "Current booking flow" summary at the top of the registration settings to help you understand how your selected settings shape the way visitors book.
 * Fixed an issue where the "Powered by" footer could overlap the seat map when the "Zoom controls on top" option was enabled and the map was tall.
+* Fixed the "Calendar dates" picker in registration settings resetting to the current month when picking several dates. Selected dates are now listed above the calendar and can be removed with one click.
+
 
 = 1.67.10 =
 * Companion now supports searching for bookings by seat number.
