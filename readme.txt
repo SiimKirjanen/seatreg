@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 6.9.0
-Stable tag: 1.67.10
+Stable tag: 1.67.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -44,6 +44,9 @@ SeatReg is a plugin that offers the following and more to build and manage onlin
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.67.11 =
+* Fixed an issue where the "Powered by" footer could overlap the seat map when the "Zoom controls on top" option was enabled and the map was tall.
 
 = 1.67.10 =
 * Companion now supports searching for bookings by seat number.
