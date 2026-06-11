@@ -649,9 +649,11 @@ function seatreg_generate_settings_form() {
 			<div class="form-group ml-4 mt-n3" <?php if( $options[0]->using_calendar === '0' ) { echo ' style="display:none;"'; } ?>>
 				<label for="calendar-dates"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Choose the dates when registration is open. Leave empty for no date restrictions', 'seatreg'); ?>.
+					<?php esc_html_e('Click the dates when registration is open. Leave empty for no date restrictions', 'seatreg'); ?>.
 				</p>
-				<input type="text" class="form-control" id="calendar-dates" name="calendar-dates" placeholder="<?php esc_html_e('Click here to add dates', 'seatreg'); ?>" autocomplete="off" value="<?php echo esc_attr($options[0]->calendar_dates ? $options[0]->calendar_dates : ""); ?>">
+				<div id="calendar-dates-list" class="mb-2"></div>
+				<div id="calendar-dates-picker"></div>
+				<input type="hidden" id="calendar-dates" name="calendar-dates" value="<?php echo esc_attr($options[0]->calendar_dates ? $options[0]->calendar_dates : ""); ?>">
 			</div>
 		
 			<div class="form-group">

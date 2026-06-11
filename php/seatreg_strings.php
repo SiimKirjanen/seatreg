@@ -251,6 +251,9 @@ function seatreg_generate_admin_strings() {
     $translations->flowTimeWindowEnd = esc_html__('Each day, bookings can only be made before the registration\'s scheduled end time.', 'seatreg');
     $translations->flowCalendar = esc_html__('The registration runs on a calendar, so each booking is made for a specific day.', 'seatreg');
     $translations->flowCalendarDates = esc_html__('Bookings are only possible on the dates you have opened.', 'seatreg');
+    $translations->calendarSelectedDates = esc_html__('Selected dates', 'seatreg');
+    $translations->calendarNoDatesSelected = esc_html__('No dates selected yet', 'seatreg');
+    $translations->calendarRemoveDate = esc_html__('Remove date', 'seatreg');
     /* translators: %s: seats or places */
     $translations->flowSelect = esc_html__('Visitors select %s on the map.', 'seatreg');
     /* translators: %1$s: seats or places, %2$d: maximum number per booking */
