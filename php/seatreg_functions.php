@@ -509,7 +509,19 @@ function seatreg_generate_settings_form() {
 				echo sprintf( esc_html__('%s settings', 'seatreg'), esc_html(wp_unslash($options[0]->registration_name)));
 			?> 
 		</h4>
-		<form action="<?php echo esc_url(get_admin_url() . 'admin-post.php'); ?>" method="post" id="seatreg-settings-form" class="seatreg-settings-form" style="max-width:600px">
+		<form action="<?php echo esc_url(get_admin_url() . 'admin-post.php'); ?>" method="post" id="seatreg-settings-form" class="seatreg-settings-form">
+
+			<div class="form-group flow-summary-group">
+				<details class="booking-flow-details">
+					<summary class="booking-flow-details__summary">
+						<i class="fa fa-chevron-right booking-flow-details__icon" aria-hidden="true"></i>
+						<?php esc_html_e('Current booking flow', 'seatreg'); ?>
+						<span class="booking-flow-details__hint">(<?php esc_html_e('click to view', 'seatreg'); ?>)</span>
+					</summary>
+					<p class="help-block"><?php esc_html_e('A summary of booking flow based on the settings below.', 'seatreg'); ?></p>
+					<div id="booking-flow-summary" class="alert alert-info" role="status" aria-live="polite"></div>
+				</details>
+			</div>
 
 			<div class="form-group">
 				<label for="registration-name"><?php esc_html_e('Registration name', 'seatreg'); ?></label>

@@ -225,6 +225,71 @@ function seatreg_generate_admin_strings() {
     $translations->makeFieldOptional = esc_html__('Make field optional', 'seatreg');
     $translations->optional = esc_html__('Optional', 'seatreg');
 
+    /* Booking flow summary (settings page) */
+    $translations->flowGroupBefore = esc_html__('Before booking', 'seatreg');
+    $translations->flowGroupBooking = esc_html__('Making a booking', 'seatreg');
+    $translations->flowGroupAfter = esc_html__('After submitting', 'seatreg');
+    $translations->flowJumpToSetting = esc_html__('Go to this setting', 'seatreg');
+    $translations->flowSeatSingular = esc_html__('seat', 'seatreg');
+    $translations->flowSeatPlural = esc_html__('seats', 'seatreg');
+    $translations->flowPlaceSingular = esc_html__('place', 'seatreg');
+    $translations->flowPlacePlural = esc_html__('places', 'seatreg');
+    $translations->flowClosed = esc_html__('Your registration is currently closed, so visitors cannot make a booking.', 'seatreg');
+    /* translators: %s: the close reason text entered by the admin */
+    $translations->flowClosedReason = esc_html__('Visitors are shown the following reason: %s', 'seatreg');
+    $translations->flowPassword = esc_html__('Visitors must enter the access password to view it.', 'seatreg');
+    $translations->flowRequireLogin = esc_html__('Only visitors logged in to your site can book.', 'seatreg');
+    /* translators: %1$d: number of bookings, %2$s: seats or places */
+    $translations->flowWpBookingLimit = esc_html__('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seatreg');
+    /* translators: %1$d: number of seats, %2$s: seats or places */
+    $translations->flowWpSeatLimit = esc_html__('Across all their bookings, each logged-in user can book at most %1$d %2$s.', 'seatreg');
+    $translations->flowDateWindowBoth = esc_html__('Bookings can only be made within the registration\'s scheduled start and end dates.', 'seatreg');
+    $translations->flowDateWindowStart = esc_html__('Bookings can only be made once the registration\'s scheduled start date is reached.', 'seatreg');
+    $translations->flowDateWindowEnd = esc_html__('Bookings can only be made until the registration\'s scheduled end date.', 'seatreg');
+    $translations->flowTimeWindowBoth = esc_html__('Each day, bookings can only be made during the registration\'s scheduled hours.', 'seatreg');
+    $translations->flowTimeWindowStart = esc_html__('Each day, bookings can only be made after the registration\'s scheduled start time.', 'seatreg');
+    $translations->flowTimeWindowEnd = esc_html__('Each day, bookings can only be made before the registration\'s scheduled end time.', 'seatreg');
+    $translations->flowCalendar = esc_html__('The registration runs on a calendar, so each booking is made for a specific day.', 'seatreg');
+    $translations->flowCalendarDates = esc_html__('Bookings are only possible on the dates you have opened.', 'seatreg');
+    /* translators: %s: seats or places */
+    $translations->flowSelect = esc_html__('Visitors select %s on the map.', 'seatreg');
+    /* translators: %1$s: seats or places, %2$d: maximum number per booking */
+    $translations->flowSelectMax = esc_html__('Visitors select %1$s on the map, up to %2$d per booking.', 'seatreg');
+    /* translators: %1$s: seats or places, %2$s: comma-separated list of shown details */
+    $translations->flowShowBookingData = esc_html__('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seatreg');
+    $translations->flowShowBookingDataFullName = esc_html__('full name', 'seatreg');
+    /* translators: %s: seat or place */
+    $translations->flowAutoDialog = esc_html__('The booking form opens automatically as soon as a %s is selected.', 'seatreg');
+    /* translators: %s: seats or places */
+    $translations->flowManualDialog = esc_html__('After choosing %s, visitors open the selection menu to complete their booking.', 'seatreg');
+    /* translators: %s: seat or place */
+    $translations->flowOnePersonCheckout = esc_html__('Booking details are entered once and applied to every %s.', 'seatreg');
+    /* translators: %s: seat or place */
+    $translations->flowPerSeatCheckout = esc_html__('Booking details are entered for each %s.', 'seatreg');
+    $translations->flowRequireName = esc_html__('A full name (first and last) is required.', 'seatreg');
+    $translations->flowGmailRequired = esc_html__('A Gmail address is required.', 'seatreg');
+    /* translators: %1$d: maximum number of bookings per email, %2$s: seats or places */
+    $translations->flowEmailLimit = esc_html__('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seatreg');
+    $translations->flowCustomFields = esc_html__('Bookers also fill in the custom fields you have created, which are required by default.', 'seatreg');
+    $translations->flowCustomFieldsOptional = esc_html__('Some custom fields are optional and can be left blank.', 'seatreg');
+    $translations->flowCustomFieldsUnique = esc_html__('Some custom fields must contain a value that no other booking has used.', 'seatreg');
+    $translations->flowEmailVerify = esc_html__('Bookings must be verified through an email link before they are submitted.', 'seatreg');
+    $translations->flowStatusPage = esc_html__('Every booking gets its own status page where the booker can view the booking details and its current status.', 'seatreg');
+    $translations->flowBookingPdfPending = esc_html__('While a booking is pending, the status page offers a downloadable booking PDF with a scannable QR code.', 'seatreg');
+    $translations->flowBookingPdfApproved = esc_html__('Once a booking is approved, the status page offers a downloadable booking PDF with a scannable QR code.', 'seatreg');
+    $translations->flowBookingPdfBoth = esc_html__('The status page offers a downloadable booking PDF with a scannable QR code, both while the booking is pending and after it is approved.', 'seatreg');
+    $translations->flowApprovedEmail = esc_html__('When a booking is approved, the booker receives a receipt email.', 'seatreg');
+    $translations->flowApprovedEmailQr = esc_html__('That receipt email also includes a scannable QR code.', 'seatreg');
+    $translations->flowPending = esc_html__('Each booking stays pending until an admin approves it.', 'seatreg');
+    $translations->flowPaidAutoApprove = esc_html__('A pending booking is approved automatically once its payment is completed.', 'seatreg');
+    $translations->flowBookerPendingNotification = esc_html__('The booker is emailed when their booking becomes pending.', 'seatreg');
+    /* translators: %d: number of minutes */
+    $translations->flowPendingExpiration = esc_html__('If there is no payment activity, a pending booking is automatically removed after %d minutes.', 'seatreg');
+    $translations->flowAutoApproved = esc_html__('Bookings are approved automatically.', 'seatreg');
+    $translations->flowPayment = esc_html__('Payment is requested on the booking status page after the booking is made.', 'seatreg');
+    $translations->flowCoupons = esc_html__('In the cart, bookers can apply a coupon code to receive a discount.', 'seatreg');
+    $translations->flowRedirectStatus = esc_html__('Afterward, visitors are redirected to their booking status page.', 'seatreg');
+
     return $translations;
 }
 

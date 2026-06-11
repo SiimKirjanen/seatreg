@@ -294,14 +294,20 @@ $('#registration-start-timestamp').datepicker({
 	dateFormat: 'dd.mm.yy',
 	onSelect: function(dateText) {
 		$('#start-timestamp').val(createUTCNoonTimestamp(dateText));
+		seatregRenderBookingFlowSummary();
 	}
 }).on('keyup', function() {
 	if($(this).val() == '') {
 		$('#start-timestamp').val('');
+		seatregRenderBookingFlowSummary();
 	}
 });
 
-$('#registration-start-time').clockTimePicker();
+$('#registration-start-time').clockTimePicker({
+	onChange: function() {
+		seatregRenderBookingFlowSummary();
+	}
+});
 
 $('#registration-end-timestamp').datepicker({
 	altField: '#end-timestamp',
@@ -309,14 +315,20 @@ $('#registration-end-timestamp').datepicker({
 	dateFormat: 'dd.mm.yy',
 	onSelect: function(dateText) {
 		$('#end-timestamp').val(createUTCNoonTimestamp(dateText));
+		seatregRenderBookingFlowSummary();
 	}
 }).on('keyup', function() {
 	if($(this).val() == '') {
 		$('#end-timestamp').val('');
+		seatregRenderBookingFlowSummary();
 	}
 });
 
-$('#registration-end-time').clockTimePicker();
+$('#registration-end-time').clockTimePicker({
+	onChange: function() {
+		seatregRenderBookingFlowSummary();
+	}
+});
 
 function initOverviewCalendarDatePicker() {
 	$('#overview-calendar-date').datepicker({
@@ -2211,5 +2223,294 @@ function initTooltips() {
 	$('.seatreg-ui-tooltip').tooltip();
 }
 initTooltips();
+
+/*
+	============================================
+		Booking flow summary (settings page)
+	============================================
+*/
+
+// Lightweight printf-style replace supporting %s, %d and positional %1$d, %2$s tokens.
+function seatregFlowFormat(template, args) {
+	if (!args || !args.length) {
+		return template;
+	}
+
+	return template
+		.replace(/%(\d+)\$[ds]/g, function(match, position) {
+			return args[parseInt(position, 10) - 1];
+		})
+		.replace(/%[ds]/g, (function() {
+			var index = 0;
+			return function() {
+				return args[index++];
+			};
+		})());
+}
+
+// Appends a titled, bulleted group to the summary box (skipped when it has no items).
+function seatregAppendFlowGroup($box, title, items) {
+	if (!items.length) {
+		return;
+	}
+
+	var jumpTitle = translator.translate('flowJumpToSetting');
+	var $group = $('<div class="flow-group"></div>');
+	$('<div class="flow-group__title"></div>').text(title).appendTo($group);
+	var $list = $('<ul class="flow-group__list"></ul>');
+	items.forEach(function(item) {
+		var $li = $('<li></li>').text(item.text);
+		if (item.target) {
+			$('<a class="flow-jump" href="#"></a>')
+				.attr('data-target', item.target)
+				.attr('title', jumpTitle)
+				.attr('aria-label', jumpTitle)
+				.html('<i class="fa fa-cog" aria-hidden="true"></i>')
+				.appendTo($li);
+		}
+		$li.appendTo($list);
+	});
+	$list.appendTo($group);
+	$box.append($group);
+}
+
+function seatregRenderBookingFlowSummary() {
+	var $box = $('#booking-flow-summary');
+
+	if (!$box.length) {
+		return;
+	}
+
+	var $form = $('#seatreg-settings-form');
+	var t = function(key) {
+		return translator.translate(key);
+	};
+
+	// Registration closed short-circuits the whole flow.
+	if (!$form.find('#registration-status').is(':checked')) {
+		var closedText = t('flowClosed');
+		var closeReason = ($form.find('#registration-close-reason').val() || '').trim();
+		if (closeReason !== '') {
+			closedText += ' ' + seatregFlowFormat(t('flowClosedReason'), [closeReason]);
+		}
+		$box.text(closedText);
+
+		return;
+	}
+
+	var usingSeats = $form.find('#using-seats').is(':checked');
+	var nounSingular = usingSeats ? t('flowSeatSingular') : t('flowPlaceSingular');
+	var nounPlural = usingSeats ? t('flowSeatPlural') : t('flowPlacePlural');
+
+	// Each item carries its sentence and the selector of the setting it describes (for the jump link).
+	var item = function(text, target) {
+		return { text: text, target: target || null };
+	};
+
+	// Sentences are collected into three ordered groups for the bulleted summary.
+	var beforeBooking = [];
+	var makingBooking = [];
+	var afterBooking = [];
+
+	// Payment detection (mirrors SeatregPaymentRepository::hasPaymentEnabled). The cart's
+	// coupon box and the payment step only appear when a payment method is enabled.
+	var paypalEnabled = $form.find('#paypal').is(':checked');
+	var stripeEnabled = $form.find('#stripe').is(':checked');
+	var paymentsEnabled = paypalEnabled || stripeEnabled ||
+		$form.find('.existing-custom-payments .custom-payment').length > 0;
+
+	// --- Before booking: access & availability ---
+	if (($form.find('#registration-password').val() || '').trim() !== '') {
+		beforeBooking.push(item(t('flowPassword'), '#registration-password'));
+	}
+	// Per-WordPress-user limits only act as a real gate when login is required.
+	if ($form.find('#require-wp-login').is(':checked')) {
+		beforeBooking.push(item(t('flowRequireLogin'), '#require-wp-login'));
+
+		var wpBookingLimit = parseInt($form.find('#wp-user-booking-limit').val(), 10);
+		if (!isNaN(wpBookingLimit) && wpBookingLimit > 0) {
+			beforeBooking.push(item(seatregFlowFormat(t('flowWpBookingLimit'), [wpBookingLimit, nounPlural]), '#wp-user-booking-limit'));
+		}
+		var wpSeatLimit = parseInt($form.find('#wp-user-bookings-seat-limit').val(), 10);
+		if (!isNaN(wpSeatLimit) && wpSeatLimit > 0) {
+			beforeBooking.push(item(seatregFlowFormat(t('flowWpSeatLimit'), [wpSeatLimit, nounPlural]), '#wp-user-bookings-seat-limit'));
+		}
+	}
+
+	// Scheduled availability window (independent of calendar mode). The hidden inputs hold unix timestamps.
+	var hasStartDate = ($form.find('#start-timestamp').val() || '').trim() !== '';
+	var hasEndDate = ($form.find('#end-timestamp').val() || '').trim() !== '';
+	if (hasStartDate && hasEndDate) {
+		beforeBooking.push(item(t('flowDateWindowBoth'), '#registration-start-timestamp'));
+	} else if (hasStartDate) {
+		beforeBooking.push(item(t('flowDateWindowStart'), '#registration-start-timestamp'));
+	} else if (hasEndDate) {
+		beforeBooking.push(item(t('flowDateWindowEnd'), '#registration-end-timestamp'));
+	}
+
+	// Scheduled time-of-day window, enforced each day (separate from the date window above).
+	var hasStartTime = ($form.find('#registration-start-time').val() || '').trim() !== '';
+	var hasEndTime = ($form.find('#registration-end-time').val() || '').trim() !== '';
+	if (hasStartTime && hasEndTime) {
+		beforeBooking.push(item(t('flowTimeWindowBoth'), '#registration-start-time'));
+	} else if (hasStartTime) {
+		beforeBooking.push(item(t('flowTimeWindowStart'), '#registration-start-time'));
+	} else if (hasEndTime) {
+		beforeBooking.push(item(t('flowTimeWindowEnd'), '#registration-end-time'));
+	}
+
+	// Calendar mode (bookings are made per day, optionally limited to opened dates)
+	if ($form.find('#using-calendar').is(':checked')) {
+		beforeBooking.push(item(t('flowCalendar'), '#using-calendar'));
+		if (($form.find('#calendar-dates').val() || '').trim() !== '') {
+			beforeBooking.push(item(t('flowCalendarDates'), '#calendar-dates'));
+		}
+	}
+
+	// --- Making a booking: selection & checkout ---
+	var maxSeats = parseInt($form.find('#registration-max-seats').val(), 10);
+	if (!isNaN(maxSeats) && maxSeats > 0) {
+		makingBooking.push(item(seatregFlowFormat(t('flowSelectMax'), [nounPlural, maxSeats]), '#registration-max-seats'));
+	} else {
+		makingBooking.push(item(seatregFlowFormat(t('flowSelect'), [nounPlural]), '#using-seats'));
+	}
+	// Booking data shown publicly on the map for already-booked seats/places.
+	var shownBookingDetails = [];
+	$form.find('input[name="show-booking-data-registration[]"]:checked').each(function() {
+		var value = $(this).val();
+		shownBookingDetails.push(value === 'name' ? t('flowShowBookingDataFullName') : value);
+	});
+	if (shownBookingDetails.length > 0) {
+		makingBooking.push(item(seatregFlowFormat(t('flowShowBookingData'), [nounPlural, shownBookingDetails.join(', ')]), 'input[name="show-booking-data-registration[]"]'));
+	}
+	if ($form.find('#automatic-booking-confirm-dialog').is(':checked')) {
+		makingBooking.push(item(seatregFlowFormat(t('flowAutoDialog'), [nounSingular]), '#automatic-booking-confirm-dialog'));
+	} else {
+		makingBooking.push(item(seatregFlowFormat(t('flowManualDialog'), [nounPlural]), '#automatic-booking-confirm-dialog'));
+	}
+	// Coupons are applied in the cart (only shown when payment is enabled) before entering details.
+	if (paymentsEnabled && $form.find('.existing-coupons .coupon-box').length > 0) {
+		makingBooking.push(item(t('flowCoupons'), '#coupon-management'));
+	}
+	if ($form.find('#one-person-checkout').is(':checked')) {
+		makingBooking.push(item(seatregFlowFormat(t('flowOnePersonCheckout'), [nounSingular]), '#one-person-checkout'));
+	} else {
+		makingBooking.push(item(seatregFlowFormat(t('flowPerSeatCheckout'), [nounSingular]), '#one-person-checkout'));
+	}
+	if ($form.find('#require-name').is(':checked')) {
+		makingBooking.push(item(t('flowRequireName'), '#require-name'));
+	}
+	if ($form.find('#gmail-required').is(':checked')) {
+		makingBooking.push(item(t('flowGmailRequired'), '#gmail-required'));
+	}
+	var emailLimit = parseInt($form.find('#bookings-email-limit').val(), 10);
+	if (!isNaN(emailLimit) && emailLimit > 0) {
+		makingBooking.push(item(seatregFlowFormat(t('flowEmailLimit'), [emailLimit, nounPlural]), '#bookings-email-limit'));
+	}
+	var $customFields = $form.find('.existing-custom-fields .custom-container');
+	if ($customFields.length > 0) {
+		makingBooking.push(item(t('flowCustomFields'), '.user-custom-field-options'));
+		if ($customFields.find('.optional-input:checked').length > 0) {
+			makingBooking.push(item(t('flowCustomFieldsOptional'), '.user-custom-field-options'));
+		}
+		if ($customFields.find('.unique-input:checked').length > 0) {
+			makingBooking.push(item(t('flowCustomFieldsUnique'), '.user-custom-field-options'));
+		}
+	}
+
+	// --- After submitting: verification, approval, payment ---
+	var emailVerification = $form.find('#email-confirm').is(':checked');
+	if (emailVerification) {
+		afterBooking.push(item(t('flowEmailVerify'), '#email-confirm'));
+	}
+	// The status page is inherent to every booking, so it has no related setting to jump to.
+	afterBooking.push(item(t('flowStatusPage'), null));
+	// Booking PDF (with QR code) on the status page. The toggles only render when the gd extension is available.
+	var pdfPending = $form.find('#show-pending-booking-pdf').is(':checked');
+	var pdfApproved = $form.find('#show-approved-booking-pdf').is(':checked');
+	if (pdfPending && pdfApproved) {
+		afterBooking.push(item(t('flowBookingPdfBoth'), '#show-pending-booking-pdf'));
+	} else if (pdfPending) {
+		afterBooking.push(item(t('flowBookingPdfPending'), '#show-pending-booking-pdf'));
+	} else if (pdfApproved) {
+		afterBooking.push(item(t('flowBookingPdfApproved'), '#show-approved-booking-pdf'));
+	}
+	if ($form.find('#use-pending').is(':checked')) {
+		afterBooking.push(item(t('flowPending'), '#use-pending'));
+
+		if ($form.find('#booker-pending-booking-notification').is(':checked')) {
+			afterBooking.push(item(t('flowBookerPendingNotification'), '#booker-pending-booking-notification'));
+		}
+		var pendingExpiration = parseInt($form.find('#pending-expiration').val(), 10);
+		if (!isNaN(pendingExpiration) && pendingExpiration > 0) {
+			afterBooking.push(item(seatregFlowFormat(t('flowPendingExpiration'), [pendingExpiration]), '#pending-expiration'));
+		}
+
+		// A completed payment can auto-approve a pending booking (per payment method).
+		var paypalAutoApprove = paypalEnabled && $form.find('#payment-mark-confirmed').is(':checked');
+		var stripeAutoApprove = stripeEnabled && $form.find('#payment-mark-confirmed-stripe').is(':checked');
+		if (paypalAutoApprove || stripeAutoApprove) {
+			afterBooking.push(item(t('flowPaidAutoApprove'), paypalAutoApprove ? '#payment-mark-confirmed' : '#payment-mark-confirmed-stripe'));
+		}
+	} else {
+		afterBooking.push(item(t('flowAutoApproved'), '#use-pending'));
+	}
+
+	// Approved booking receipt email (and its optional QR code)
+	if ($form.find('#approved-booking-email').is(':checked')) {
+		afterBooking.push(item(t('flowApprovedEmail'), '#approved-booking-email'));
+		if (($form.find('[name="approved-booking-email-qr-code"]').val() || '') !== '') {
+			afterBooking.push(item(t('flowApprovedEmailQr'), '[name="approved-booking-email-qr-code"]'));
+		}
+	}
+
+	// Payment
+	if (paymentsEnabled) {
+		afterBooking.push(item(t('flowPayment'), paypalEnabled ? '#paypal' : (stripeEnabled ? '#stripe' : '#custom-payments')));
+	}
+
+	// After booking (redirect is ignored by the plugin when email verification is on)
+	if (!emailVerification && $form.find('#booking-redirect-status-page').is(':checked')) {
+		afterBooking.push(item(t('flowRedirectStatus'), '#booking-redirect-status-page'));
+	}
+
+	$box.empty();
+	seatregAppendFlowGroup($box, t('flowGroupBefore'), beforeBooking);
+	seatregAppendFlowGroup($box, t('flowGroupBooking'), makingBooking);
+	seatregAppendFlowGroup($box, t('flowGroupAfter'), afterBooking);
+}
+
+$('#seatreg-settings-form').on('change input', function() {
+	seatregRenderBookingFlowSummary();
+});
+// Jump links in the summary scroll to (and briefly highlight) the related setting.
+$('#seatreg-settings-form').on('click', '#booking-flow-summary .flow-jump', function(e) {
+	e.preventDefault();
+
+	var $target = $($(this).data('target')).first();
+	if (!$target.length) {
+		return;
+	}
+
+	var $highlight = $target.closest('.form-group');
+	if (!$highlight.length) {
+		$highlight = $target;
+	}
+	if ($highlight[0].scrollIntoView) {
+		$highlight[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+	}
+	$highlight.removeClass('flow-jump-highlight');
+	// Force reflow so the animation restarts even on repeated clicks.
+	void $highlight[0].offsetWidth;
+	$highlight.addClass('flow-jump-highlight');
+	if ($target.is(':visible') && $target.is('input, textarea, select')) {
+		$target.trigger('focus');
+	}
+});
+// Custom fields, coupons and custom payments are added/removed via clicks (no change/input event), so refresh after the DOM updates.
+$('#seatreg-settings-form').on('click', '.apply-custom-field, .existing-custom-fields .remove-cust-item, .coupon-create [data-action="add-coupon"], .existing-coupons [data-action="delete-coupon"], #create-custom-payment, #custom-payments [data-action="remove-custom-payment"]', function() {
+	setTimeout(seatregRenderBookingFlowSummary, 0);
+});
+seatregRenderBookingFlowSummary();
 
 })(jQuery);
