@@ -15,18 +15,22 @@ Create and manage online registrations. Design your own registration layout and 
 
 Create and manage online registrations with ease. Design your own registration layout and manage bookings.
 
-SeatReg is a plugin that offers the following and more to build and manage online registrations.
- 
-* Map Builder: Design your registration layout with a versatile map builder. Easily create, delete, resize, and move elements. Add prices, legends, seat numbers, hover text, customize colors, and more.
-* Registration Overview: Get a overview of your registrations. Track the number of open, approved, or pending bookings.
-* Customizable Settings: Control the booking flow with numerous settings. Create custom fields to collect additional data from customers.
-* Email Templates: Utilize customizable email templates.
-* Export: Export bookings to different file formats (PDF, XLSX, TEXT).
-* Calendar Mode: Manage bookings with an integrated calendar mode.
-* Responsive Registration View: Provide a scrollable and resizable registration view via a direct link or embed it into your website pages using a shortcode.
-* Payment Integration: Support for PayPal and Stripe payments.
-* Coupons: Create coupon codes to offer booking discounts.
-* Companion: Web application where you can manage bookings by viewing them, scanning QR codes, and receiving notifications. 
+SeatReg is built around a visual seat map. You design the layout in the map builder, add it to your site with a shortcode or share it as a direct link, and manage the bookings that come in. Visitors open the map, select a seat, and complete their booking.
+
+It is commonly used for events and conferences, theaters and cinemas, classes and workshops, restaurants and venues, churches, and coworking spaces — situations where people reserve a specific seat or spot.
+
+**Features**
+
+* Map Builder: Design your registration layout in the map builder. Create, delete, resize, and move elements, and add prices, legends, seat numbers, hover text, and custom colors.
+* Registration Overview: View your registrations and the number of open, approved, and pending bookings.
+* Customizable Settings: Control the booking flow through the settings, and add custom fields to collect additional data from customers.
+* Email Templates: Customize the emails sent to customers.
+* Export: Export bookings to PDF, XLSX, or TEXT.
+* Calendar Mode: Manage date-based bookings with calendar mode.
+* Responsive Registration View: Share a scrollable, resizable registration view via a direct link, or embed it in your pages with a shortcode.
+* Payment Integration: Accept payments through PayPal and Stripe.
+* Coupons: Create coupon codes that apply a discount during checkout.
+* Companion App: A web app for managing bookings — view them, scan QR codes, and receive notifications.
   
 == Installation ==
  
