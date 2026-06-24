@@ -4,8 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
 
-add_filter( 'show_admin_bar', 'seatreg_hide_admin_bar_from_registration_view' );
-function seatreg_hide_admin_bar_from_registration_view(){
+add_filter( 'show_admin_bar', 'seatreg_hide_admin_bar' );
+function seatreg_hide_admin_bar(){
 	if( is_user_logged_in() ) {
 		if( seatreg_is_registration_view_page() || seatreg_is_companion_app_page() || seatreg_is_booking_confirm_page() || seatreg_is_booking_check_page() ) {
 			return false;
