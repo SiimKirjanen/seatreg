@@ -3,8 +3,8 @@ Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source
 Tags: reservation, online booking, event management, online registration, seat plan
 Requires at least: 5.3
 Requires PHP: 7.2.28
-Tested up to: 6.9.0
-Stable tag: 1.68.0
+Tested up to: 7.0
+Stable tag: 1.68.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -48,6 +48,9 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.68.1 =
+* Fixed an issue where the booking confirmation and booking status pages could show a fatal error with some themes.
 
 = 1.68.0 =
 * Added a "Current booking flow" summary at the top of the registration settings to help you understand how your selected settings shape the way visitors book.

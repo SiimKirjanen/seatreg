@@ -4,10 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; 
 }
 
-add_filter( 'show_admin_bar', 'seatreg_hide_admin_bar_from_registration_view' );
-function seatreg_hide_admin_bar_from_registration_view(){
+add_filter( 'show_admin_bar', 'seatreg_hide_admin_bar' );
+function seatreg_hide_admin_bar(){
 	if( is_user_logged_in() ) {
-		if( seatreg_is_registration_view_page() || seatreg_is_companion_app_page() ) {
+		if( seatreg_is_registration_view_page() || seatreg_is_companion_app_page() || seatreg_is_booking_confirm_page() || seatreg_is_booking_check_page() ) {
 			return false;
 		}
 		return true;
@@ -43,7 +43,7 @@ function custom_http_status_code() {
     }
 }
 
-add_filter('init', 'seatreg_custom_pages');
+add_action('template_redirect', 'seatreg_custom_pages');
 function seatreg_custom_pages() {
 
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'pdf' ) {
