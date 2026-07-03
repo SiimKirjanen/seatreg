@@ -208,18 +208,28 @@ class SeatregBookingRepository {
      * @return (array|object|null)
      *
      */
-    public static function getPendingBookingsThatAreExpired($registrationCode, $expirationTimeInMinutes) {
+    public static function getPendingBookingsThatAreExpired($registrationCode, $expirationTimeInMinutes, $deletablePaymentStatuses = array()) {
         global $wpdb;
         global $seatreg_db_table_names;
+
+        // Delete bookings that have no payment rows falling outside the allowed-to-delete set.
+        // With an empty set this keeps the original behavior: any payment row protects the booking.
+        if( count($deletablePaymentStatuses) > 0 ) {
+            $placeholders = implode(', ', array_fill(0, count($deletablePaymentStatuses), '%s'));
+            $paymentCondition = "AND (SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_payments AS b WHERE b.booking_id = a.booking_id AND b.payment_status NOT IN ($placeholders)) = 0";
+            $queryArgs = array_merge( array($registrationCode, $expirationTimeInMinutes), $deletablePaymentStatuses );
+        }else {
+            $paymentCondition = "AND (SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_payments AS b WHERE b.booking_id = a.booking_id) = 0";
+            $queryArgs = array($registrationCode, $expirationTimeInMinutes);
+        }
 
         return $wpdb->get_results( $wpdb->prepare(
             "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings AS a
             WHERE a.registration_code = %s
             AND a.status = 1
             AND ((UNIX_TIMESTAMP() - a.booking_date) / 60) > %d
-            AND (SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_payments AS b WHERE b.booking_id = a.booking_id) = 0",
-            $registrationCode,
-            $expirationTimeInMinutes
+            $paymentCondition",
+            $queryArgs
         ) );
     }
 

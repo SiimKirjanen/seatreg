@@ -16,7 +16,8 @@ class SeatregJobService {
         if($registrations) {
             foreach($registrations as $registration) {
                 $pendingBookingExpirationTime = (int)$registration->pending_expiration;
-                $bookingsToBeDeleted = SeatregBookingRepository::getPendingBookingsThatAreExpired($registration->registration_code, $pendingBookingExpirationTime);
+                $deletablePaymentStatuses = $registration->pending_expiration_payment_statuses ? array_filter(explode(',', $registration->pending_expiration_payment_statuses)) : array();
+                $bookingsToBeDeleted = SeatregBookingRepository::getPendingBookingsThatAreExpired($registration->registration_code, $pendingBookingExpirationTime, $deletablePaymentStatuses);
 
                 if($bookingsToBeDeleted) {
                     foreach($bookingsToBeDeleted as $bookingToBeDeleted) {
