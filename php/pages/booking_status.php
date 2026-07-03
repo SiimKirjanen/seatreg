@@ -15,7 +15,7 @@
 	$registrationId = sanitize_text_field($_GET['registration']);
 	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
-	$customPayments = $bookingData->custom_payments ? json_decode( $bookingData->custom_payments ) : [];
+	$customPayments = ($bookingData && $bookingData->custom_payments) ? json_decode( $bookingData->custom_payments ) : [];
 	$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($registrationId);
 	$appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
 ?>
