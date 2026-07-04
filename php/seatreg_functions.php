@@ -2052,9 +2052,13 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 				$bookingWillBeDeletedTimestamp = $bookingDateTimestampInMinutes + (int)$options->pending_expiration;
 				$bookingTimeToLive = floor($bookingWillBeDeletedTimestamp - (time() / 60));
 
-				if($bookingTimeToLive > 0 && !$hasBlockingPayment) {
-					/* translators: %s is replaced with the pending booking time to live in minutes */
-					echo '<h3 style="color:red">', sprintf(esc_html__('This pending booking will be deleted in about %s minutes if not approved', 'seatreg'), esc_html($bookingTimeToLive)), '</h3>';
+				if(!$hasBlockingPayment) {
+					if($bookingTimeToLive > 0) {
+						/* translators: %s is replaced with the pending booking time to live in minutes */
+						echo '<h3 style="color:red">', sprintf(esc_html__('This pending booking will be deleted in about %s minutes if not approved', 'seatreg'), esc_html($bookingTimeToLive)), '</h3>';
+					}else {
+						echo '<h3 style="color:red">', esc_html__('This pending booking has expired and will be deleted', 'seatreg'), '</h3>';
+					}
 				}
 			}
 			echo '<div style="margin-bottom: 6px"><strong>', esc_html__('Booking id', 'seatreg'), '</strong>: ' , esc_html($bookingId),'</div>';
@@ -2566,7 +2570,7 @@ function seatreg_set_up_db() {
 
 		$sql6 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_activity_log (
 			id int(11) NOT NULL AUTO_INCREMENT,
-			log_type enum('booking', 'map', 'settings') NOT NULL,
+			log_type enum('booking', 'map', 'settings', 'booking_expiration') NOT NULL,
 			relation_id varchar(40) NOT NULL,
 			log_date TIMESTAMP DEFAULT NOW(),
 			log_message text,
