@@ -213,20 +213,33 @@ class SeatregBookingService {
 
     /**
      *
-     * Check if booking has entry in payments table
+     * Check if booking has a payment that prevents it from being deleted by pending booking expiration.
+     * A payment is "blocking" when its status is not in the deletable set. With an empty deletable set
+     * any payment row is blocking
      * @param string $bookingId booking id
+     * @param array $deletablePaymentStatuses payment statuses that are allowed to be deleted
      * @return bool
-     * 
+     *
     */
-    public static function checkIfBookingHasPaymentEntry($bookingId) {
+    public static function checkIfBookingHasNonExpirablePayment($bookingId, $deletablePaymentStatuses = array()) {
         global $wpdb;
         global $seatreg_db_table_names;
 
-        $result = $wpdb->get_var( $wpdb->prepare(
-            "SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_payments
-            WHERE booking_id = %s",
-            $bookingId
-        ));
+        if( count($deletablePaymentStatuses) > 0 ) {
+            $placeholders = implode(', ', array_fill(0, count($deletablePaymentStatuses), '%s'));
+            $result = $wpdb->get_var( $wpdb->prepare(
+                "SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_payments
+                WHERE booking_id = %s
+                AND payment_status NOT IN ($placeholders)",
+                array_merge( array($bookingId), $deletablePaymentStatuses )
+            ));
+        }else {
+            $result = $wpdb->get_var( $wpdb->prepare(
+                "SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_payments
+                WHERE booking_id = %s",
+                $bookingId
+            ));
+        }
 
         if($result) {
             return true;

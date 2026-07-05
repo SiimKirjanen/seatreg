@@ -896,9 +896,21 @@ function seatreg_generate_settings_form() {
 			<div class="form-group">
 				<label for="pending-expiration"><?php esc_html_e('Pending booking expiration', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('You can enable pending booking expiration after a certain period of time (in minutes). If the booking has some payment related activity, then booking will not be removed. Leave empty for no expiration time.', 'seatreg'); ?>
+					<?php esc_html_e('You can enable pending booking expiration after a certain period of time (in minutes). If the booking has some payment related activity, then booking will not be removed unless you allow specific payment statuses below. Leave empty for no expiration time.', 'seatreg'); ?>
 				</p>
 				<input type="number" class="form-control" id="pending-expiration" name="pending-expiration" autocomplete="off" placeholder="<?php echo esc_html('Expiration time not set', 'seatreg'); ?>" value="<?php echo ($options[0]->pending_expiration) ? esc_html($options[0]->pending_expiration) : ''; ?>" />
+				<div style="padding-left: 20px;">
+					<p class="help-block" style="margin-top: 10px;">
+						<?php esc_html_e('Also delete expired pending bookings that have one of these payment statuses:', 'seatreg'); ?>
+					</p>
+					<?php $previouslySelectedDeletablePaymentStatuses = $options[0]->pending_expiration_payment_statuses ? explode(',', $options[0]->pending_expiration_payment_statuses) : []; ?>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="pending-expiration-payment-statuses[]" value="<?php echo esc_attr(SEATREG_PAYMENT_PROCESSING); ?>" <?php echo in_array(SEATREG_PAYMENT_PROCESSING, $previouslySelectedDeletablePaymentStatuses) ? 'checked' : '' ?> />
+							<?php esc_html_e('Processing', 'seatreg'); ?>
+						</label>
+					</div>
+				</div>
 			</div>
 
 			<div class="form-group">
@@ -2034,14 +2046,19 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			echo '<h2>', esc_html( wp_unslash($registration->registration_name) ), '</h2>';
 			
 			if($options && $options->pending_expiration && $bookingStatus === '1') {
-				$hasPaymentEntry = SeatregBookingService::checkIfBookingHasPaymentEntry($bookings[0]->booking_id);
+				$deletablePaymentStatuses = $options->pending_expiration_payment_statuses ? array_filter(explode(',', $options->pending_expiration_payment_statuses)) : array();
+				$hasBlockingPayment = SeatregBookingService::checkIfBookingHasNonExpirablePayment($bookings[0]->booking_id, $deletablePaymentStatuses);
 				$bookingDateTimestampInMinutes = ceil($bookings[0]->booking_date / 60);
 				$bookingWillBeDeletedTimestamp = $bookingDateTimestampInMinutes + (int)$options->pending_expiration;
 				$bookingTimeToLive = floor($bookingWillBeDeletedTimestamp - (time() / 60));
 
-				if($bookingTimeToLive > 0 && !$hasPaymentEntry) {
-					/* translators: %s is replaced with the pending booking time to live in minutes */
-					echo '<h3 style="color:red">', sprintf(esc_html__('This pending booking will be deleted in about %s minutes if not approved', 'seatreg'), esc_html($bookingTimeToLive)), '</h3>';
+				if(!$hasBlockingPayment) {
+					if($bookingTimeToLive > 0) {
+						/* translators: %s is replaced with the pending booking time to live in minutes */
+						echo '<h3 style="color:red">', sprintf(esc_html__('This pending booking will be deleted in about %s minutes if not approved', 'seatreg'), esc_html($bookingTimeToLive)), '</h3>';
+					}else {
+						echo '<h3 style="color:red">', esc_html__('This pending booking has expired and will be deleted', 'seatreg'), '</h3>';
+					}
 				}
 			}
 			echo '<div style="margin-bottom: 6px"><strong>', esc_html__('Booking id', 'seatreg'), '</strong>: ' , esc_html($bookingId),'</div>';
@@ -2450,6 +2467,7 @@ function seatreg_set_up_db() {
 			paypal_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
 			payment_completed_set_booking_confirmed tinyint(1) NOT NULL DEFAULT 0,
 			pending_expiration int(11) DEFAULT NULL,
+			pending_expiration_payment_statuses varchar(255) DEFAULT NULL,
 			verification_email_subject varchar(255) DEFAULT NULL,
 			email_verification_template text,
 			pending_booking_email_subject varchar(255) DEFAULT NULL,
@@ -2552,7 +2570,7 @@ function seatreg_set_up_db() {
 
 		$sql6 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_activity_log (
 			id int(11) NOT NULL AUTO_INCREMENT,
-			log_type enum('booking', 'map', 'settings') NOT NULL,
+			log_type enum('booking', 'map', 'settings', 'booking_expiration') NOT NULL,
 			relation_id varchar(40) NOT NULL,
 			log_date TIMESTAMP DEFAULT NOW(),
 			log_message text,
@@ -3335,6 +3353,12 @@ function seatreg_update() {
 		$_POST['pending-expiration'] = null;
 	}
 
+	if(!empty($_POST['pending-expiration-payment-statuses']) && is_array($_POST['pending-expiration-payment-statuses'])) {
+		$selectedDeletablePaymentStatuses = implode(',', array_map('sanitize_text_field', $_POST['pending-expiration-payment-statuses']));
+	}else {
+		$selectedDeletablePaymentStatuses = null;
+	}
+
 	if(empty($_POST['bookings-email-limit'])) {
 		$_POST['bookings-email-limit'] = null;
 	}
@@ -3476,6 +3500,7 @@ function seatreg_update() {
 				'send_approved_booking_email' => $_POST['approved-booking-email'],
 				'send_approved_booking_email_qr_code' => ( !isset($_POST['approved-booking-email-qr-code']) || $_POST['approved-booking-email-qr-code'] === '') ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
 				'pending_expiration' => $_POST['pending-expiration'],
+				'pending_expiration_payment_statuses' => $selectedDeletablePaymentStatuses,
 				'verification_email_subject' => $_POST['verification-email-subject'] === '' ? null : $_POST['verification-email-subject'],
 				'email_verification_template' => $_POST['email-verification-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['email-verification-template']),
 				'pending_booking_email_subject' => $_POST['pending-booking-email-subject'] === '' ? null : $_POST['pending-booking-email-subject'],

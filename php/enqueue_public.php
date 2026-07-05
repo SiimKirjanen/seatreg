@@ -169,7 +169,7 @@ function seatreg_public_scripts_and_styles() {
 			'updatingPageContent' => __('Refreshing page. Please wait.', 'seatreg')
 		));
 
-		if( $bookingData->booking_status_page_custom_styles ) {
+		if( $bookingData && $bookingData->booking_status_page_custom_styles ) {
 			add_action('wp_head', function() use ($bookingData) {
 				seatreg_add_custom_styles($bookingData->booking_status_page_custom_styles);
 			}, 100);
