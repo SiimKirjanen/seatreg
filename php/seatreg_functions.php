@@ -501,6 +501,7 @@ function seatreg_generate_settings_form() {
 	 $previouslySelectedBookingDataToShow = $options[0]->show_bookings_data_in_registration ? explode(',', $options[0]->show_bookings_data_in_registration) : [];
 	 $adminEmail = get_option( 'admin_email' );
 	 $publicApiTokens = SeatregApiTokenRepository::getRegistrationApiTokens($options[0]->registration_code);
+	 $seatregCronWarning = seatreg_get_cron_health_warning();
 
 	?>
 		<h4 class="settings-heading">
@@ -895,6 +896,9 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<label for="pending-expiration"><?php esc_html_e('Pending booking expiration', 'seatreg'); ?></label>
+				<?php if ( $seatregCronWarning ) : ?>
+					<div class="alert alert-warning" role="alert"><?php echo esc_html($seatregCronWarning); ?></div>
+				<?php endif; ?>	
 				<p class="help-block">
 					<?php esc_html_e('You can enable pending booking expiration after a certain period of time (in minutes). If the booking has some payment related activity, then booking will not be removed unless you allow specific payment statuses below. Leave empty for no expiration time.', 'seatreg'); ?>
 				</p>
@@ -3096,6 +3100,26 @@ function seatreg_add_activity_log($type, $relation_id, $message, $includeCurrent
 		),
 		'%s'
 	);
+}
+
+//Returns a warning message when WP-Cron looks like it isn't running (which stops pending booking expiration), or an empty string when everything looks fine.
+function seatreg_get_cron_health_warning() {
+	if ( defined('DISABLE_WP_CRON') && DISABLE_WP_CRON ) {
+		return esc_html__('Scheduled tasks are turned off on this site, so pending bookings may not expire automatically.', 'seatreg');
+	}
+
+	$next = wp_next_scheduled('seatreg_pending_booking_expiration');
+	if ( ! $next ) {
+		return esc_html__('Pending booking expiration is not scheduled. Try deactivating and reactivating the plugin.', 'seatreg');
+	}
+
+	// Event is scheduled every 10s; if it is more than 5 minutes overdue, WP-Cron is very likely
+	// not firing (full-page caching or very low site traffic are the usual causes).
+	if ( ( time() - $next ) > 300 ) {
+		return esc_html__('Scheduled tasks don\'t seem to be running, so pending bookings may not expire automatically.', 'seatreg');
+	}
+
+	return '';
 }
 
 /*
