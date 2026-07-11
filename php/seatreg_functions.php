@@ -1640,7 +1640,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 							echo '<div class="seat-date-box manager-box" title="', esc_attr($bookingDateString),'">',esc_html($myFormatForView),'</div>';
 							echo "<div class='booking-id-box manager-box' title='", esc_html($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
 							echo "<div class='manager-box payment-status-box'>";
-								echo esc_html($row->payment_status ? $row->payment_status : esc_html__('None', 'seatreg'));
+								echo esc_html($row->payment_status ? $row->payment_status : esc_html__('Not set', 'seatreg'));
 							echo "</div>";
 							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
 							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
@@ -1717,7 +1717,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 							echo '<div class="seat-date-box manager-box" title="', esc_attr($bookingDateString),'">', esc_html($myFormatForView), '</div>';
 							echo "<div class='booking-id-box manager-box' title='",esc_attr($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
 							echo "<div class='manager-box payment-status-box'>";
-								echo esc_html($row->payment_status ? $row->payment_status : __('None', 'seatreg'));
+								echo esc_html($row->payment_status ? $row->payment_status : __('Not set', 'seatreg'));
 							echo "</div>";
 							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
 							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
