@@ -2558,6 +2558,63 @@ function seatregRenderBookingFlowSummary() {
 	seatregAppendFlowGroup($box, t('flowGroupAfter'), afterBooking);
 }
 
+// --- Settings tabs -------------------------------------------------------
+// The settings form is split into tab panels (all inside the single form, so every field
+// still submits). Panels are shown/hidden via a class, and the active tab is remembered
+// per registration so a save (which reloads the page) returns to the same tab.
+function seatregSettingsTabStorageKey() {
+	var code = $('#seatreg-settings-form input[name="registration_code"]').val() || '';
+	return 'seatregSettingsTab:' + code;
+}
+
+function seatregActivateSettingsTab(tabId) {
+	if (!tabId) {
+		return;
+	}
+	var $form = $('#seatreg-settings-form');
+	var $tab = $form.find('.settings-tab[data-tab="' + tabId + '"]');
+	var $panel = $form.find('.settings-tab-panel[data-tab-panel="' + tabId + '"]');
+	if (!$tab.length || !$panel.length) {
+		return;
+	}
+
+	$form.find('.settings-tab').removeClass('settings-tab--active');
+	$form.find('.settings-tab-panel').removeClass('settings-tab-panel--active');
+	$tab.addClass('settings-tab--active');
+	$panel.addClass('settings-tab-panel--active');
+
+	try {
+		window.sessionStorage.setItem(seatregSettingsTabStorageKey(), tabId);
+	} catch (err) {}
+
+	// TinyMCE editors initialised while their panel was hidden can render blank until repainted.
+	if (window.tinymce) {
+		$panel.find('.wp-editor-area').each(function() {
+			var editor = window.tinymce.get(this.id);
+			if (editor) {
+				try {
+					editor.execCommand('mceRepaint');
+				} catch (err) {}
+			}
+		});
+	}
+}
+
+$('#seatreg-settings-form').on('click', '.settings-tab', function() {
+	seatregActivateSettingsTab($(this).data('tab'));
+});
+
+// Restore the last active tab for this registration (defaults to the first tab in the markup).
+(function() {
+	var savedTab = null;
+	try {
+		savedTab = window.sessionStorage.getItem(seatregSettingsTabStorageKey());
+	} catch (err) {}
+	if (savedTab) {
+		seatregActivateSettingsTab(savedTab);
+	}
+})();
+
 $('#seatreg-settings-form').on('change input', function() {
 	seatregRenderBookingFlowSummary();
 });
@@ -2568,6 +2625,12 @@ $('#seatreg-settings-form').on('click', '#booking-flow-summary .flow-jump', func
 	var $target = $($(this).data('target')).first();
 	if (!$target.length) {
 		return;
+	}
+
+	// The setting may live on a different tab, so switch to its panel before scrolling.
+	var $panel = $target.closest('.settings-tab-panel');
+	if ($panel.length) {
+		seatregActivateSettingsTab($panel.data('tab-panel'));
 	}
 
 	var $highlight = $target.closest('.form-group');
@@ -2581,6 +2644,11 @@ $('#seatreg-settings-form').on('click', '#booking-flow-summary .flow-jump', func
 	// Force reflow so the animation restarts even on repeated clicks.
 	void $highlight[0].offsetWidth;
 	$highlight.addClass('flow-jump-highlight');
+	// Drop the class once the animation ends, otherwise it re-plays every time the panel is
+	// hidden and shown again (switching tabs re-enters the element in the DOM).
+	$highlight.one('animationend', function() {
+		$highlight.removeClass('flow-jump-highlight');
+	});
 	if ($target.is(':visible') && $target.is('input, textarea, select')) {
 		$target.trigger('focus');
 	}

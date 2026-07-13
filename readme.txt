@@ -50,6 +50,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 == Changelog ==
 
 = 1.70.0 =
+* Reorganized the registration settings into tabs for easier navigation.
 * Added the ability to show a custom logo on the booking status page PDF, with a selectable corner position, configurable per registration in the settings.
 * Added an optional custom text that is shown below the "Booking not found" message on the booking status page, configurable per registration in the settings.
 
