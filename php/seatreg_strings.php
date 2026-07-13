@@ -288,6 +288,8 @@ function seatreg_generate_admin_strings() {
     $translations->flowBookerPendingNotification = esc_html__('The booker is emailed when their booking becomes pending.', 'seatreg');
     /* translators: %d: number of minutes */
     $translations->flowPendingExpiration = esc_html__('If there is no payment activity, a pending booking is automatically removed after %d minutes.', 'seatreg');
+    /* translators: %s: comma-separated list of payment statuses */
+    $translations->flowPendingExpirationStatuses = esc_html__('Expired pending bookings are also removed even if they have one of these payment statuses: %s.', 'seatreg');
     $translations->flowAutoApproved = esc_html__('Bookings are approved automatically.', 'seatreg');
     $translations->flowPayment = esc_html__('Payment is requested on the booking status page after the booking is made.', 'seatreg');
     $translations->flowCoupons = esc_html__('In the cart, bookers can apply a coupon code to receive a discount.', 'seatreg');

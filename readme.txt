@@ -51,6 +51,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 
 = 1.70.0 =
 * Added the ability to show a custom logo on the booking status page PDF, with a selectable corner position, configurable per registration in the settings.
+* Added an optional custom text that is shown below the "Booking not found" message on the booking status page, configurable per registration in the settings.
 
 = 1.69.1 =
 * Added a settings warning when scheduled tasks aren't running, since this can stop pending bookings from expiring automatically.
