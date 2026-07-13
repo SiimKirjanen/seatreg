@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 7.0
-Stable tag: 1.69.1
+Stable tag: 1.70.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -48,6 +48,9 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.70.0 =
+* Added the ability to show a custom logo on the booking status page PDF, with a selectable corner position, configurable per registration in the settings.
 
 = 1.69.1 =
 * Added a settings warning when scheduled tasks aren't running, since this can stop pending bookings from expiring automatically.

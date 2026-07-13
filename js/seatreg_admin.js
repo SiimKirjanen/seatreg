@@ -2015,6 +2015,42 @@ $('#seatreg-settings-form #custom-payments').on('change', '[data-action="custom-
 	promise.fail = seatreg_admin_ajax_error;
 });
 
+var seatregBookingPdfLogoFrame = null;
+
+$('#seatreg-settings-form').on('click', '[data-action="booking-pdf-logo-select"]', function(e) {
+	e.preventDefault();
+	var $group = $(this).closest('.form-group');
+
+	if(seatregBookingPdfLogoFrame) {
+		seatregBookingPdfLogoFrame.off('select');
+	}
+
+	seatregBookingPdfLogoFrame = wp.media({
+		multiple: false,
+		library: { type: 'image' }
+	});
+
+	seatregBookingPdfLogoFrame.on('select', function() {
+		var attachment = seatregBookingPdfLogoFrame.state().get('selection').first().toJSON();
+		var previewUrl = (attachment.sizes && attachment.sizes.medium) ? attachment.sizes.medium.url : attachment.url;
+
+		$group.find('input[name="booking-pdf-logo-id"]').val(attachment.id);
+		$group.find('.booking-pdf-logo__preview').attr('src', previewUrl).css('display', '');
+		$group.find('[data-action="booking-pdf-logo-remove"]').css('display', '');
+	});
+
+	seatregBookingPdfLogoFrame.open();
+});
+
+$('#seatreg-settings-form').on('click', '[data-action="booking-pdf-logo-remove"]', function(e) {
+	e.preventDefault();
+	var $group = $(this).closest('.form-group');
+
+	$group.find('input[name="booking-pdf-logo-id"]').val('');
+	$group.find('.booking-pdf-logo__preview').attr('src', '').css('display', 'none');
+	$(this).css('display', 'none');
+});
+
 
 $('#seatreg-settings-form #public-api-tokens').on('click', '.remove-token', function() {
 	var tokenBox = $(this).closest('.token-box');

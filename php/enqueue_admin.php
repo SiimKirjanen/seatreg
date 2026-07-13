@@ -26,6 +26,7 @@ function seatreg_load_admin_scripts($hook) {
 	);
 
 	if(in_array($screen->id, $allowedToLoadStylesAndScripts)) {
+		wp_enqueue_media();
 		wp_enqueue_style('jquery-ui-style', plugins_url('css/custom-theme/jquery-ui-1.9.2.custom.min.css', dirname(__FILE__) ), array(), '1.9.2', 'all');
 		wp_enqueue_style('bootstrap-styles', plugins_url('css/bootstrap.min.css', dirname(__FILE__) ), array(), '3.1.1', 'all');
 		wp_enqueue_style('jquery-ui-multidatespicker', plugins_url('js/jquery-ui-multidatespicker/jquery-ui.multidatespicker.css', dirname(__FILE__) ), array(), '1.6.4', 'all');
@@ -58,7 +59,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('date-format', plugins_url('js/date.format.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('seatreg_admin_chart', plugins_url('js/Chart.min.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
 		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.2.0', true);
-		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg_admin_chart', 'seatreg-utils'), '1.28.0', true);
+		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg_admin_chart', 'seatreg-utils'), '1.29.0', true);
 		wp_enqueue_script('jstz', plugins_url('js/jstz-1.0.4.min.js', dirname(__FILE__) ), array(), '1.0.4', true);
 		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip', 'seatreg-utils', 'seatreg_admin'), '1.11.1', true);
 

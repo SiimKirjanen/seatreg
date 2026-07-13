@@ -1017,6 +1017,35 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label><?php esc_html_e('Booking PDF logo', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Select a logo to show on the booking status page PDF and choose in which corner it should appear.', 'seatreg'); ?>
+				</p>
+				<?php
+					$bookingPdfLogoId = $options[0]->booking_pdf_logo_id;
+					$bookingPdfLogoUrl = $bookingPdfLogoId ? wp_get_attachment_image_url( $bookingPdfLogoId, 'medium' ) : '';
+					$bookingPdfLogoPosition = $options[0]->booking_pdf_logo_position;
+				?>
+				<div class="booking-pdf-logo">
+					<input type="hidden" name="booking-pdf-logo-id" value="<?php echo esc_attr($bookingPdfLogoId); ?>">
+					<img class="booking-pdf-logo__preview" src="<?php echo esc_url($bookingPdfLogoUrl); ?>" alt="" style="max-width:100px; height:auto; margin-bottom:10px; <?php echo $bookingPdfLogoUrl ? '' : 'display:none;'; ?>">
+					<div>
+						<button type="button" class="btn btn-default btn-sm" data-action="booking-pdf-logo-select"><?php esc_html_e('Select logo', 'seatreg'); ?></button>
+						<button type="button" class="btn btn-default btn-sm" data-action="booking-pdf-logo-remove" style="<?php echo $bookingPdfLogoUrl ? '' : 'display:none;'; ?>"><?php esc_html_e('Remove logo', 'seatreg'); ?></button>
+					</div>
+				</div>
+				<div style="padding-left:20px; margin-top:10px;">
+					<label for="booking-pdf-logo-position"><?php esc_html_e('Logo position', 'seatreg'); ?></label>
+				<select class="form-control" id="booking-pdf-logo-position" name="booking-pdf-logo-position">
+					<option value="top-left" <?php echo empty($bookingPdfLogoPosition) || $bookingPdfLogoPosition === 'top-left' ? 'selected' : ''; ?>><?php esc_html_e('Top left', 'seatreg'); ?></option>
+					<option value="top-right" <?php echo $bookingPdfLogoPosition === 'top-right' ? 'selected' : ''; ?>><?php esc_html_e('Top right', 'seatreg'); ?></option>
+					<option value="bottom-left" <?php echo $bookingPdfLogoPosition === 'bottom-left' ? 'selected' : ''; ?>><?php esc_html_e('Bottom left', 'seatreg'); ?></option>
+					<option value="bottom-right" <?php echo $bookingPdfLogoPosition === 'bottom-right' ? 'selected' : ''; ?>><?php esc_html_e('Bottom right', 'seatreg'); ?></option>
+				</select>
+				</div>
+			</div>
+
+			<div class="form-group">
 				<label for="approved-booking-email-qr-code"><?php esc_html_e('Approved booking receipt email QR code', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
@@ -2515,6 +2544,8 @@ function seatreg_set_up_db() {
 			automatic_booking_confirm_dialog tinyint(0) NOT NULL DEFAULT 0,
 			enable_coupons tinyint(0) NOT NULL DEFAULT 0,
 			coupons text,
+			booking_pdf_logo_id int(11) DEFAULT NULL,
+			booking_pdf_logo_position varchar(20) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3567,6 +3598,8 @@ function seatreg_update() {
 				'automatic_booking_confirm_dialog' => $_POST['automatic-booking-confirm-dialog'],
 				'enable_coupons' => $_POST['enable_coupons'],
 				'coupons' => $coupons,
+				'booking_pdf_logo_id' => empty($_POST['booking-pdf-logo-id']) ? null : intval($_POST['booking-pdf-logo-id']),
+				'booking_pdf_logo_position' => in_array($_POST['booking-pdf-logo-position'] ?? '', array('top-left', 'top-right', 'bottom-left', 'bottom-right'), true) ? sanitize_text_field($_POST['booking-pdf-logo-position']) : null,
 			 ),
 			array(
 				'registration_code' => sanitize_text_field($_POST['registration_code'])
