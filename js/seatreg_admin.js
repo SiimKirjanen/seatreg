@@ -2510,7 +2510,18 @@ function seatregRenderBookingFlowSummary() {
 		}
 		var pendingExpiration = parseInt($form.find('#pending-expiration').val(), 10);
 		if (!isNaN(pendingExpiration) && pendingExpiration > 0) {
-			afterBooking.push(item(seatregFlowFormat(t('flowPendingExpiration'), [pendingExpiration]), '#pending-expiration'));
+			var expirationText = seatregFlowFormat(t('flowPendingExpiration'), [pendingExpiration]);
+
+			// Payment statuses that don't block deletion of an expired pending booking.
+			var deletableStatusLabels = [];
+			$form.find('input[name="pending-expiration-payment-statuses[]"]:checked').each(function() {
+				deletableStatusLabels.push($(this).closest('label').text().trim());
+			});
+			if (deletableStatusLabels.length > 0) {
+				expirationText += ' ' + seatregFlowFormat(t('flowPendingExpirationStatuses'), [deletableStatusLabels.join(', ')]);
+			}
+
+			afterBooking.push(item(expirationText, '#pending-expiration'));
 		}
 
 		// A completed payment can auto-approve a pending booking (per payment method).

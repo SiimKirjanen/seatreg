@@ -749,6 +749,25 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label><?php esc_html_e('Additional text for "Booking not found" status page', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('When a booking cannot be found on the booking status page, this text is shown below the "Booking not found" message. Leave empty to show only the default message.', 'seatreg'); ?></p>
+				<?php
+				$bookingNotFoundTextEditorSettings = array(
+				    'wpautop' => true, // enable auto paragraph
+				    'textarea_name' => 'booking-not-found-text',
+				    'textarea_rows' => 4,
+				    'media_buttons' => false,
+				    'teeny' => true, // minimal toolbar
+				    'tinymce' => array(
+				        // minimal toolbar without list buttons
+				        'toolbar1' => 'bold,italic,underline,blockquote,strikethrough,alignleft,aligncenter,alignright,undo,redo,link,unlink,fullscreen',
+				    ),
+				);
+				wp_editor($options[0]->booking_not_found_text, 'bookingNotFoundTextEditor', $bookingNotFoundTextEditorSettings)
+				?>
+			</div>
+
+			<div class="form-group">
 			<label for="one-person-checkout"><?php esc_html_e('One person checkout', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e("By default, during booking checkout, information must be entered separately for each seat. The 'One Person Checkout' option simplifies this by requiring details for only one seat, and if multiple seats are selected, the same data will be copied to all seats behind the scenes.", 'seatreg'); ?></p>
 				<div class="checkbox">
@@ -2111,6 +2130,9 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			}
 		}else {
 			esc_html_e('Booking not found.', 'seatreg');
+			if( $options && $options->booking_not_found_text ) {
+				echo '<div style="margin-top: 12px;">', wp_kses_post($options->booking_not_found_text), '</div>';
+			}
 			die();
 		}
 	}else {
@@ -2546,6 +2568,7 @@ function seatreg_set_up_db() {
 			coupons text,
 			booking_pdf_logo_id int(11) DEFAULT NULL,
 			booking_pdf_logo_position varchar(20) DEFAULT NULL,
+			booking_not_found_text text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3461,6 +3484,12 @@ function seatreg_update() {
 		$_POST['custom-footer-text'] = null;
 	}
 
+	if( !empty($_POST['booking-not-found-text']) ) {
+	    $_POST['booking-not-found-text'] = wp_kses_post(wpautop($_POST['booking-not-found-text']));
+	}else {
+		$_POST['booking-not-found-text'] = null;
+	}
+
 	if( !isset($_POST['show-pending-booking-pdf']) ) {
 		$_POST['show-pending-booking-pdf'] = 0;
 	}else {
@@ -3600,6 +3629,7 @@ function seatreg_update() {
 				'coupons' => $coupons,
 				'booking_pdf_logo_id' => empty($_POST['booking-pdf-logo-id']) ? null : intval($_POST['booking-pdf-logo-id']),
 				'booking_pdf_logo_position' => in_array($_POST['booking-pdf-logo-position'] ?? '', array('top-left', 'top-right', 'bottom-left', 'bottom-right'), true) ? sanitize_text_field($_POST['booking-pdf-logo-position']) : null,
+				'booking_not_found_text' => $_POST['booking-not-found-text'],
 			 ),
 			array(
 				'registration_code' => sanitize_text_field($_POST['registration_code'])
