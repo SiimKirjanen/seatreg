@@ -180,6 +180,47 @@ html {
 .seatreg-settings-form .flow-summary-group {
   max-width: none;
 }
+.settings-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 0;
+  background-color: #f2f2f2;
+}
+.settings-tab {
+  background: #fff;
+  border: none;
+  padding: 6px 24px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 2em;
+  color: #000;
+}
+.settings-tab:hover {
+  text-decoration: underline;
+}
+.settings-tab.settings-tab--active {
+  background: #404040;
+  font-weight: 700;
+  color: #fff;
+}
+.settings-tab.settings-tab--active:hover {
+  text-decoration: none;
+}
+.settings-tab-panels {
+  padding: 32px 0 0;
+  background: transparent;
+}
+.settings-tab-panel {
+  display: none;
+}
+.settings-tab-panel.settings-tab-panel--active {
+  display: block;
+}
+.seatreg-settings-form #seatreg-settings-submit {
+  margin-top: 20px;
+}
 .booking-flow-details__summary {
   cursor: pointer;
   font-weight: 700;
@@ -813,22 +854,35 @@ html {
 .seatreg-tabs-content .custom-container {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   column-gap: 6px;
   margin-bottom: 4px;
   margin-left: 24px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 12px;
+  padding: 12px 18px;
 
   label {
     margin-bottom: 0;
     display: flex;
     align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  // Let the text field / select shrink so the whole row fits on one line
+  // instead of overflowing the box and pushing the controls off the edge.
+  label input[type="text"],
+  label select {
+    flex: 1 1 auto;
+    min-width: 40px;
+    width: auto;
   }
 
   .custom-container-controls {
     display: flex;
     align-items: center;
+    flex: 0 0 auto;
     column-gap: 4px;
     margin-left: auto;
   }

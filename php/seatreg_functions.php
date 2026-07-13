@@ -524,6 +524,18 @@ function seatreg_generate_settings_form() {
 				</details>
 			</div>
 
+			<nav class="settings-tabs" role="tablist">
+				<button type="button" class="settings-tab settings-tab--active" data-tab="general" role="tab"><?php esc_html_e('General', 'seatreg'); ?></button>
+				<button type="button" class="settings-tab" data-tab="scheduling" role="tab"><?php esc_html_e('Scheduling & calendar', 'seatreg'); ?></button>
+				<button type="button" class="settings-tab" data-tab="booking-flow" role="tab"><?php esc_html_e('Booking flow & display', 'seatreg'); ?></button>
+				<button type="button" class="settings-tab" data-tab="emails" role="tab"><?php esc_html_e('Emails & notifications', 'seatreg'); ?></button>
+				<button type="button" class="settings-tab" data-tab="payments" role="tab"><?php esc_html_e('Payments & coupons', 'seatreg'); ?></button>
+				<button type="button" class="settings-tab" data-tab="advanced" role="tab"><?php esc_html_e('Advanced', 'seatreg'); ?></button>
+			</nav>
+
+			<div class="settings-tab-panels">
+			<div class="settings-tab-panel settings-tab-panel--active" data-tab-panel="general">
+
 			<div class="form-group">
 				<label for="registration-name"><?php esc_html_e('Registration name', 'seatreg'); ?></label>
 				<p class="help-block">
@@ -532,27 +544,7 @@ function seatreg_generate_settings_form() {
 				<input type="text" class="form-control" id="registration-name" name="registration-name" maxlength="<?php echo esc_attr(SEATREG_REGISTRATION_NAME_MAX_LENGTH); ?>" placeholder="<?php esc_attr_e('Enter registration name', 'seatreg'); ?>" autocomplete="off" value="<?php echo esc_attr($options[0]->registration_name); ?>">
 			</div>
 			
-			<div class="form-group">
-				<label for="zoom-on-top"><?php esc_html_e('Zoom controls on top', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Show the zoom controls before the seat map, or after it', 'seatreg'); ?></label>
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" id="zoom-on-top" name="zoom-on-top" value="0" <?php echo $options[0]->zoom_on_top == '1' ? 'checked':'' ?>>
-						<?php esc_html_e('Zoom controls on top', 'seatreg'); ?>
-					</label>
-				</div>
-			</div>
 			
-			<div class="form-group">
-				<label for="show-info-button"><?php esc_html_e('Show info button', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Set if the info button is shown on the booking page', 'seatreg'); ?></label>
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" id="show-info-button" name="show-info-button" value="0" <?php echo $options[0]->show_info_button == '1' ? 'checked':'' ?>>
-						<?php esc_html_e('Show info button', 'seatreg'); ?>
-					</label>
-				</div>
-			</div>
 
 			<div class="form-group">
 				<label for="registration-status"><?php esc_html_e('Registration status', 'seatreg'); ?></label>
@@ -574,25 +566,33 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="require-name"><?php esc_html_e('Require full name for booking (first & last)', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Controls whether first and last name are required when making a booking. When enabled, customers must provide their full name to complete the registration process.', 'seatreg'); ?></label>
+				<label for="using-seats"><?php esc_html_e('Registration is using seats', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Uncheck if your registration is not dealing with seats. More generic place will be used', 'seatreg'); ?>.</p>
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" id="require-name" name="require-name" value="0" <?php echo $options[0]->require_name == '1' ? 'checked':'' ?>>
-						<?php esc_html_e('Require name', 'seatreg'); ?>
+						<input type="checkbox" id="using-seats" name="using-seats" value="1" <?php echo $options[0]->using_seats == '1' ? 'checked':''; ?> >
+						<?php esc_html_e('Using seats', 'seatreg'); ?>
 					</label>
 				</div>
 			</div>
-			
+
+			<div class="form-group">
+				<label for="registration-password"><?php esc_html_e('Password', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
+				</p>
+				<input type="text" class="form-control" id="registration-password" name="registration-password" autocomplete="off" placeholder="<?php esc_attr_e('Enter password here', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->registration_password); ?>">
+			</div>
+
 			<div class="form-group">
 				<label for="require-wp-login"><?php esc_html_e('Require WordPress login', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Only logged in WordPress users can make a booking', 'seatreg'); ?>.</p>
 				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="require-wp-login" name="require-wp-login" value="0" <?php echo $options[0]->require_wp_login == '1' ? 'checked':'' ?> >
-			      		<?php esc_html_e('Require login', 'seatreg'); ?>
-			    	</label>
-			  	</div>
+					<label>
+						<input type="checkbox" id="require-wp-login" name="require-wp-login" value="0" <?php echo $options[0]->require_wp_login == '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Require login', 'seatreg'); ?>
+					</label>
+				</div>
 			</div>
 
 			<div class="form-group">
@@ -626,15 +626,15 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="using-seats"><?php esc_html_e('Registration is using seats', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Uncheck if your registration is not dealing with seats. More generic place will be used', 'seatreg'); ?>.</p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="using-seats" name="using-seats" value="1" <?php echo $options[0]->using_seats == '1' ? 'checked':''; ?> >
-			      		<?php esc_html_e('Using seats', 'seatreg'); ?>
-			    	</label>
-			  	</div>
+				<label for="bookings-email-limit"><?php esc_html_e('Booking email limit', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Specify how many bookings can be made with the same email. Leave empty for no limit', 'seatreg'); ?>.
+				</p>
+				<input type="number" class="form-control" id="bookings-email-limit" name="bookings-email-limit" value="<?php echo esc_html($options[0]->booking_email_limit); ?>" placeholder="<?php esc_html_e('No limit for email', 'seatreg'); ?>">
 			</div>
+
+			</div><!-- /.settings-tab-panel general -->
+			<div class="settings-tab-panel" data-tab-panel="scheduling">
 
 			<div class="form-group">
 				<label for="using-calendar"><?php esc_html_e('Registration calendar', 'seatreg'); ?></label>
@@ -693,6 +693,122 @@ function seatreg_generate_settings_form() {
 					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
 				</p>
 				<input id="registration-end-time" name="registration-end-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_end_time); ?>"  />
+			</div>
+
+			</div><!-- /.settings-tab-panel scheduling -->
+			<div class="settings-tab-panel" data-tab-panel="booking-flow">
+
+			<div class="form-group">
+				<label for="use-pending"><?php esc_html_e('Use pending bookings', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('By default all bookings will first be in pending state so admin can approve them (with booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
+				</p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="use-pending" name="use-pending" value="1" <?php echo $options[0]->use_pending == '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Use pending', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="pending-expiration"><?php esc_html_e('Pending booking expiration', 'seatreg'); ?></label>
+				<?php if ( $seatregCronWarning ) : ?>
+					<div class="alert alert-warning" role="alert"><?php echo esc_html($seatregCronWarning); ?></div>
+				<?php endif; ?>	
+				<p class="help-block">
+					<?php esc_html_e('You can enable pending booking expiration after a certain period of time (in minutes). If the booking has some payment related activity, then booking will not be removed unless you allow specific payment statuses below. Leave empty for no expiration time.', 'seatreg'); ?>
+				</p>
+				<input type="number" class="form-control" id="pending-expiration" name="pending-expiration" autocomplete="off" placeholder="<?php echo esc_html('Expiration time not set', 'seatreg'); ?>" value="<?php echo ($options[0]->pending_expiration) ? esc_html($options[0]->pending_expiration) : ''; ?>" />
+				<div style="padding-left: 20px;">
+					<p class="help-block" style="margin-top: 10px;">
+						<?php esc_html_e('Also delete expired pending bookings that have one of these payment statuses:', 'seatreg'); ?>
+					</p>
+					<?php $previouslySelectedDeletablePaymentStatuses = $options[0]->pending_expiration_payment_statuses ? explode(',', $options[0]->pending_expiration_payment_statuses) : []; ?>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="pending-expiration-payment-statuses[]" value="<?php echo esc_attr(SEATREG_PAYMENT_PROCESSING); ?>" <?php echo in_array(SEATREG_PAYMENT_PROCESSING, $previouslySelectedDeletablePaymentStatuses) ? 'checked' : '' ?> />
+							<?php esc_html_e('Processing', 'seatreg'); ?>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="booking-redirect-status-page"><?php esc_html_e('Booking redirect to status page', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Redirect automatically to booking status page after booking was made. This wont be applied when booking email verification is turned on', 'seatreg'); ?>.</p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="booking-redirect-status-page" name="booking-redirect-status-page" value="0" <?php echo $options[0]->booking_redirect_status_page == '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Redirect to status page', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="one-person-checkout"><?php esc_html_e('One person checkout', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e("By default, during booking checkout, information must be entered separately for each seat. The 'One Person Checkout' option simplifies this by requiring details for only one seat, and if multiple seats are selected, the same data will be copied to all seats behind the scenes.", 'seatreg'); ?></p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="one-person-checkout" name="one-person-checkout" value="0" <?php echo $options[0]->one_person_checkout === '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Enable one person checkout', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="automatic-booking-confirm-dialog"><?php esc_html_e('Automatic booking confirm dialog', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e("By default, users need to manually open the seat selection menu to complete their booking. This option automatically displays the booking confirmation dialog immediately after seat is selected.", 'seatreg'); ?></p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="automatic-booking-confirm-dialog" name="automatic-booking-confirm-dialog" value="0" <?php echo $options[0]->automatic_booking_confirm_dialog  === '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Open booking confirm dialog automatically', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="require-name"><?php esc_html_e('Require full name for booking (first & last)', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Controls whether first and last name are required when making a booking. When enabled, customers must provide their full name to complete the registration process.', 'seatreg'); ?></label>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="require-name" name="require-name" value="0" <?php echo $options[0]->require_name == '1' ? 'checked':'' ?>>
+						<?php esc_html_e('Require name', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="gmail-required"><?php esc_html_e('Gmail required', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Gmail address is required when making a booking', 'seatreg'); ?>.</p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="gmail-required" name="gmail-required" value="1" <?php echo $options[0]->gmail_required == '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Allow only gmail address', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="zoom-on-top"><?php esc_html_e('Zoom controls on top', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Show the zoom controls before the seat map, or after it', 'seatreg'); ?></label>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="zoom-on-top" name="zoom-on-top" value="0" <?php echo $options[0]->zoom_on_top == '1' ? 'checked':'' ?>>
+						<?php esc_html_e('Zoom controls on top', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="show-info-button"><?php esc_html_e('Show info button', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Set if the info button is shown on the booking page', 'seatreg'); ?></label>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="show-info-button" name="show-info-button" value="0" <?php echo $options[0]->show_info_button == '1' ? 'checked':'' ?>>
+						<?php esc_html_e('Show info button', 'seatreg'); ?>
+					</label>
+				</div>
 			</div>
 
 			<div class="form-group">
@@ -768,71 +884,87 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-			<label for="one-person-checkout"><?php esc_html_e('One person checkout', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e("By default, during booking checkout, information must be entered separately for each seat. The 'One Person Checkout' option simplifies this by requiring details for only one seat, and if multiple seats are selected, the same data will be copied to all seats behind the scenes.", 'seatreg'); ?></p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="one-person-checkout" name="one-person-checkout" value="0" <?php echo $options[0]->one_person_checkout === '1' ? 'checked':'' ?> >
-			      		<?php esc_html_e('Enable one person checkout', 'seatreg'); ?>
-			    	</label>
-			  	</div>
-			</div>
-
-			<div class="form-group">
-			<label for="automatic-booking-confirm-dialog"><?php esc_html_e('Automatic booking confirm dialog', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e("By default, users need to manually open the seat selection menu to complete their booking. This option automatically displays the booking confirmation dialog immediately after seat is selected.", 'seatreg'); ?></p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="automatic-booking-confirm-dialog" name="automatic-booking-confirm-dialog" value="0" <?php echo $options[0]->automatic_booking_confirm_dialog  === '1' ? 'checked':'' ?> >
-			      		<?php esc_html_e('Open booking confirm dialog automatically', 'seatreg'); ?>
-			    	</label>
-			  	</div>
-			</div>
-
-			<div class="form-group">
-				<label for="bookings-email-limit"><?php esc_html_e('Booking email limit', 'seatreg'); ?></label>
+				<label><?php esc_html_e('Booking PDF', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('Specify how many bookings can be made with the same email. Leave empty for no limit', 'seatreg'); ?>.
+					<?php
+						esc_html_e('Configures booking details PDF in booking status page.', 'seatreg');
+					?>
 				</p>
-				<input type="number" class="form-control" id="bookings-email-limit" name="bookings-email-limit" value="<?php echo esc_html($options[0]->booking_email_limit); ?>" placeholder="<?php esc_html_e('No limit for email', 'seatreg'); ?>">
+				
+				<?php if( extension_loaded('gd') ): ?>
+					<?php
+						$selectedBookingQRCodeInput = $options[0]->booking_qr_code_input;
+					?>
+					<select class="form-control" name="booking-qr-code-input">
+						<option value="booking-id" <?php echo $selectedBookingQRCodeInput === 'booking-id' ? 'selected' : ''; ?>><?php esc_html_e('Booking ID', 'seatreg'); ?></option>
+						<option value="booking-url" <?php echo $selectedBookingQRCodeInput === 'booking-url' ? 'selected' : ''; ?>><?php esc_html_e('URl to booking check page', 'seatreg'); ?></option>
+					</select>
+					<br/>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="show-pending-booking-pdf" name="show-pending-booking-pdf" value="0" <?php echo $options[0]->show_pending_booking_pdf == '1' ? 'checked':'' ?> >
+							<?php esc_html_e('Show booking PDF if booking status is pending', 'seatreg'); ?>
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="show-approved-booking-pdf" name="show-approved-booking-pdf" value="0" <?php echo $options[0]->show_approved_booking_pdf == '1' ? 'checked':'' ?> >
+							<?php esc_html_e('Show booking PDF if booking status is approved', 'seatreg'); ?>
+						</label>
+					</div>
+				<?php else: ?>
+					<div class="alert alert-primary" role="alert">
+						<?php esc_html_e('PHP gd extension is required to generate QR codes.', 'seatreg'); ?>
+					</div>
+				<?php endif; ?>
 			</div>
 
 			<div class="form-group">
-				<label for="gmail-required"><?php esc_html_e('Gmail required', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Gmail address is required when making a booking', 'seatreg'); ?>.</p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="gmail-required" name="gmail-required" value="1" <?php echo $options[0]->gmail_required == '1' ? 'checked':'' ?> > 
-			      		<?php esc_html_e('Allow only gmail address', 'seatreg'); ?>
-			    	</label>
-			  	</div>
-			</div>
-
-			<div class="form-group">
-				<label for="booking-redirect-status-page"><?php esc_html_e('Booking redirect to status page', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Redirect automatically to booking status page after booking was made. This wont be applied when booking email verification is turned on', 'seatreg'); ?>.</p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="booking-redirect-status-page" name="booking-redirect-status-page" value="0" <?php echo $options[0]->booking_redirect_status_page == '1' ? 'checked':'' ?> > 
-			      		<?php esc_html_e('Redirect to status page', 'seatreg'); ?>
-			    	</label>
-			  	</div>
-			</div>
-
-			<div class="form-group">
-				<label for="registration-password"><?php esc_html_e('Password', 'seatreg'); ?></label>
+				<label><?php esc_html_e('Booking PDF logo', 'seatreg'); ?></label>
 				<p class="help-block">
-					<?php esc_html_e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
+					<?php esc_html_e('Select a logo to show on the booking status page PDF and choose in which corner it should appear.', 'seatreg'); ?>
 				</p>
-				<input type="text" class="form-control" id="registration-password" name="registration-password" autocomplete="off" placeholder="<?php esc_attr_e('Enter password here', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->registration_password); ?>">
+				<?php
+					$bookingPdfLogoId = $options[0]->booking_pdf_logo_id;
+					$bookingPdfLogoUrl = $bookingPdfLogoId ? wp_get_attachment_image_url( $bookingPdfLogoId, 'medium' ) : '';
+					$bookingPdfLogoPosition = $options[0]->booking_pdf_logo_position;
+				?>
+				<div class="booking-pdf-logo">
+					<input type="hidden" name="booking-pdf-logo-id" value="<?php echo esc_attr($bookingPdfLogoId); ?>">
+					<img class="booking-pdf-logo__preview" src="<?php echo esc_url($bookingPdfLogoUrl); ?>" alt="" style="max-width:100px; height:auto; margin-bottom:10px; <?php echo $bookingPdfLogoUrl ? '' : 'display:none;'; ?>">
+					<div>
+						<button type="button" class="btn btn-default btn-sm" data-action="booking-pdf-logo-select"><?php esc_html_e('Select logo', 'seatreg'); ?></button>
+						<button type="button" class="btn btn-default btn-sm" data-action="booking-pdf-logo-remove" style="<?php echo $bookingPdfLogoUrl ? '' : 'display:none;'; ?>"><?php esc_html_e('Remove logo', 'seatreg'); ?></button>
+					</div>
+				</div>
+				<div style="padding-left:20px; margin-top:10px;">
+					<label for="booking-pdf-logo-position"><?php esc_html_e('Logo position', 'seatreg'); ?></label>
+				<select class="form-control" id="booking-pdf-logo-position" name="booking-pdf-logo-position">
+					<option value="top-left" <?php echo empty($bookingPdfLogoPosition) || $bookingPdfLogoPosition === 'top-left' ? 'selected' : ''; ?>><?php esc_html_e('Top left', 'seatreg'); ?></option>
+					<option value="top-right" <?php echo $bookingPdfLogoPosition === 'top-right' ? 'selected' : ''; ?>><?php esc_html_e('Top right', 'seatreg'); ?></option>
+					<option value="bottom-left" <?php echo $bookingPdfLogoPosition === 'bottom-left' ? 'selected' : ''; ?>><?php esc_html_e('Bottom left', 'seatreg'); ?></option>
+					<option value="bottom-right" <?php echo $bookingPdfLogoPosition === 'bottom-right' ? 'selected' : ''; ?>><?php esc_html_e('Bottom right', 'seatreg'); ?></option>
+				</select>
+				</div>
 			</div>
+
+			<div class="form-group">
+				<label for="seat-selection-btn-text"><?php esc_html_e('Seat selection button text', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('By default the button that opens seat selection has text "open". You can change it if needed.', 'seatreg'); ?>
+				</p>
+				<input type="text" class="form-control" id="seat-selection-btn-text" name="seat-selection-btn-text" autocomplete="off" placeholder="<?php esc_attr_e('Enter button text', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->seat_selection_btn_text); ?>">
+			</div>
+
+			</div><!-- /.settings-tab-panel booking-flow -->
+			<div class="settings-tab-panel" data-tab-panel="emails">
 
 			<div class="form-group">
 				<label for="use-pending"><?php esc_html_e('Email from address', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
 						/* translators: %s: Site admin email address */
-						echo sprintf(esc_html__('You can specify email FROM address that will be used when sending out emails. By default site admin (%s) email will be used.', 'seatreg'), esc_html(get_option( 'admin_email' ))); 
+						echo sprintf(esc_html__('You can specify email FROM address that will be used when sending out emails. By default site admin (%s) email will be used.', 'seatreg'), esc_html(get_option( 'admin_email' )));
 					?>
 				</p>
 				<input type="text" class="form-control" id="email-from" name="email-from" placeholder="<?php esc_attr_e('Using default admin email', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->email_from_address); ?>">
@@ -870,19 +1002,6 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="use-pending"><?php esc_html_e('Use pending bookings', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('By default all bookings will first be in pending state so admin can approve them (with booking manager). If you want bookings automatically to be in approved state then uncheck below.', 'seatreg'); ?>
-				</p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="use-pending" name="use-pending" value="1" <?php echo $options[0]->use_pending == '1' ? 'checked':'' ?> > 
-			      		<?php esc_html_e('Use pending', 'seatreg'); ?>
-			    	</label>
-			  	</div>
-			</div>
-
-			<div class="form-group">
 				<label for="booker-pending-booking-notification"><?php esc_html_e('Booker pending booking notification', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('Send out email to booker when booking is pending.', 'seatreg'); ?>
@@ -911,29 +1030,6 @@ function seatreg_generate_settings_form() {
 					<code>[status-link]</code> <?php esc_html_e('(required) will be converted to booking status link', 'seatreg'); ?>
 				</p>
 				<textarea rows="4" class="form-control" id="pendin-booking-email-template" name="pendin-booking-email-template" placeholder="<?php esc_html_e('Using system default message', 'seatreg'); ?>"><?php echo esc_html($options[0]->pending_booking_email_template); ?></textarea>
-			</div>
-
-			<div class="form-group">
-				<label for="pending-expiration"><?php esc_html_e('Pending booking expiration', 'seatreg'); ?></label>
-				<?php if ( $seatregCronWarning ) : ?>
-					<div class="alert alert-warning" role="alert"><?php echo esc_html($seatregCronWarning); ?></div>
-				<?php endif; ?>	
-				<p class="help-block">
-					<?php esc_html_e('You can enable pending booking expiration after a certain period of time (in minutes). If the booking has some payment related activity, then booking will not be removed unless you allow specific payment statuses below. Leave empty for no expiration time.', 'seatreg'); ?>
-				</p>
-				<input type="number" class="form-control" id="pending-expiration" name="pending-expiration" autocomplete="off" placeholder="<?php echo esc_html('Expiration time not set', 'seatreg'); ?>" value="<?php echo ($options[0]->pending_expiration) ? esc_html($options[0]->pending_expiration) : ''; ?>" />
-				<div style="padding-left: 20px;">
-					<p class="help-block" style="margin-top: 10px;">
-						<?php esc_html_e('Also delete expired pending bookings that have one of these payment statuses:', 'seatreg'); ?>
-					</p>
-					<?php $previouslySelectedDeletablePaymentStatuses = $options[0]->pending_expiration_payment_statuses ? explode(',', $options[0]->pending_expiration_payment_statuses) : []; ?>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" name="pending-expiration-payment-statuses[]" value="<?php echo esc_attr(SEATREG_PAYMENT_PROCESSING); ?>" <?php echo in_array(SEATREG_PAYMENT_PROCESSING, $previouslySelectedDeletablePaymentStatuses) ? 'checked' : '' ?> />
-							<?php esc_html_e('Processing', 'seatreg'); ?>
-						</label>
-					</div>
-				</div>
 			</div>
 
 			<div class="form-group">
@@ -1000,71 +1096,6 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label><?php esc_html_e('Booking PDF', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php
-						esc_html_e('Configures booking details PDF in booking status page.', 'seatreg');
-					?>
-				</p>
-				
-				<?php if( extension_loaded('gd') ): ?>
-					<?php
-						$selectedBookingQRCodeInput = $options[0]->booking_qr_code_input;
-					?>
-					<select class="form-control" name="booking-qr-code-input">
-						<option value="booking-id" <?php echo $selectedBookingQRCodeInput === 'booking-id' ? 'selected' : ''; ?>><?php esc_html_e('Booking ID', 'seatreg'); ?></option>
-						<option value="booking-url" <?php echo $selectedBookingQRCodeInput === 'booking-url' ? 'selected' : ''; ?>><?php esc_html_e('URl to booking check page', 'seatreg'); ?></option>
-					</select>
-					<br/>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" id="show-pending-booking-pdf" name="show-pending-booking-pdf" value="0" <?php echo $options[0]->show_pending_booking_pdf == '1' ? 'checked':'' ?> >
-							<?php esc_html_e('Show booking PDF if booking status is pending', 'seatreg'); ?>
-						</label>
-					</div>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" id="show-approved-booking-pdf" name="show-approved-booking-pdf" value="0" <?php echo $options[0]->show_approved_booking_pdf == '1' ? 'checked':'' ?> >
-							<?php esc_html_e('Show booking PDF if booking status is approved', 'seatreg'); ?>
-						</label>
-					</div>
-				<?php else: ?>
-					<div class="alert alert-primary" role="alert">
-						<?php esc_html_e('PHP gd extension is required to generate QR codes.', 'seatreg'); ?>
-					</div>
-				<?php endif; ?>
-			</div>
-
-			<div class="form-group">
-				<label><?php esc_html_e('Booking PDF logo', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Select a logo to show on the booking status page PDF and choose in which corner it should appear.', 'seatreg'); ?>
-				</p>
-				<?php
-					$bookingPdfLogoId = $options[0]->booking_pdf_logo_id;
-					$bookingPdfLogoUrl = $bookingPdfLogoId ? wp_get_attachment_image_url( $bookingPdfLogoId, 'medium' ) : '';
-					$bookingPdfLogoPosition = $options[0]->booking_pdf_logo_position;
-				?>
-				<div class="booking-pdf-logo">
-					<input type="hidden" name="booking-pdf-logo-id" value="<?php echo esc_attr($bookingPdfLogoId); ?>">
-					<img class="booking-pdf-logo__preview" src="<?php echo esc_url($bookingPdfLogoUrl); ?>" alt="" style="max-width:100px; height:auto; margin-bottom:10px; <?php echo $bookingPdfLogoUrl ? '' : 'display:none;'; ?>">
-					<div>
-						<button type="button" class="btn btn-default btn-sm" data-action="booking-pdf-logo-select"><?php esc_html_e('Select logo', 'seatreg'); ?></button>
-						<button type="button" class="btn btn-default btn-sm" data-action="booking-pdf-logo-remove" style="<?php echo $bookingPdfLogoUrl ? '' : 'display:none;'; ?>"><?php esc_html_e('Remove logo', 'seatreg'); ?></button>
-					</div>
-				</div>
-				<div style="padding-left:20px; margin-top:10px;">
-					<label for="booking-pdf-logo-position"><?php esc_html_e('Logo position', 'seatreg'); ?></label>
-				<select class="form-control" id="booking-pdf-logo-position" name="booking-pdf-logo-position">
-					<option value="top-left" <?php echo empty($bookingPdfLogoPosition) || $bookingPdfLogoPosition === 'top-left' ? 'selected' : ''; ?>><?php esc_html_e('Top left', 'seatreg'); ?></option>
-					<option value="top-right" <?php echo $bookingPdfLogoPosition === 'top-right' ? 'selected' : ''; ?>><?php esc_html_e('Top right', 'seatreg'); ?></option>
-					<option value="bottom-left" <?php echo $bookingPdfLogoPosition === 'bottom-left' ? 'selected' : ''; ?>><?php esc_html_e('Bottom left', 'seatreg'); ?></option>
-					<option value="bottom-right" <?php echo $bookingPdfLogoPosition === 'bottom-right' ? 'selected' : ''; ?>><?php esc_html_e('Bottom right', 'seatreg'); ?></option>
-				</select>
-				</div>
-			</div>
-
-			<div class="form-group">
 				<label for="approved-booking-email-qr-code"><?php esc_html_e('Approved booking receipt email QR code', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
@@ -1088,6 +1119,9 @@ function seatreg_generate_settings_form() {
 					</div>
 				<?php endif; ?>
 			</div>
+
+			</div><!-- /.settings-tab-panel emails -->
+			<div class="settings-tab-panel" data-tab-panel="payments">
 
 			<div class="form-group">
 				<label for="payment-instructions"><?php esc_html_e('Payment instruction', 'seatreg'); ?></label>
@@ -1284,6 +1318,57 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<label><?php esc_html_e('Enable coupons', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Allow users to enter a coupon code during booking checkout.', 'seatreg'); ?></p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="enable-coupons" name="enable_coupons" value="0" <?php echo $options[0]->enable_coupons == '1' ? 'checked':'' ?> >
+						<?php esc_html_e('Turn on coupons', 'seatreg'); ?>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group" id="coupon-management">
+				<label><?php esc_html_e('Coupons', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Create coupon codes to offer discounts. These will be applied to the total booking price.', 'seatreg'); ?></p>
+
+				<div class="existing-coupons">
+					<div style="margin-bottom: 10px"><?php esc_html_e('Existing coupons', 'seatreg'); ?></div>
+					<?php if( count($coupons) == 0 ): ?>
+						<p class="help-block"><?php esc_html_e('No coupons created', 'seatreg'); ?></p>
+					<?php endif; ?>
+
+					<?php foreach($coupons as $coupon): ?>
+						<div class="coupon-box" data-uuid="<?php echo esc_attr($coupon->couponUUID); ?>">
+							<div class="coupon-box__label"><?php esc_html_e('Coupon code', 'seatreg'); ?>:</div>
+							<div class="coupon-box__value"><span data-target="coupon-code"><?php echo esc_html($coupon->couponCode); ?></span></div>
+							<div class="coupon-box__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</div>
+							<div class="coupon-box__value">-<span data-target="discount-value"><?php echo esc_html($coupon->discountValue); ?></span></div>
+							<div class="coupon-box__actions">
+								<button class="btn btn-danger btn-sm" type="button" data-action="delete-coupon"><?php esc_html_e('Delete', 'seatreg'); ?></button>
+							</div>
+						</div>
+					<?php endforeach; ?>
+				</div>
+
+				<div class="coupon-create">
+					<div style="margin-bottom: 6px"><?php esc_html_e('New coupon', 'seatreg'); ?></div>
+					<p><?php esc_html_e('Create a new coupon', 'seatreg'); ?></p>
+					<div class="new-coupon">
+						<label class="new-coupon__label"><?php esc_html_e('Coupon code', 'seatreg'); ?>:</label>
+						<input type="text" class="form-control" id="new-coupon-code" maxlength="20">
+						<label class="new-coupon__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</label>
+						<input type="number" class="form-control" id="new-coupon-discount" placeholder="1-100" min="1" oninput="this.value = Math.abs(this.value) || null">
+						<button class="btn btn-default btn-sm" type="button" data-action="add-coupon"><?php esc_html_e('Add', 'seatreg'); ?></button>
+					</div>
+				</div>
+				<input type="hidden" name="coupons" value='<?php echo esc_attr(json_encode($coupons)); ?>' />
+			</div>
+
+			</div><!-- /.settings-tab-panel payments -->
+			<div class="settings-tab-panel" data-tab-panel="advanced">
+
+			<div class="form-group">
 				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
 					<label><?php esc_html_e('Custom fields', 'seatreg'); ?></label>
 					<p class="help-block">
@@ -1387,54 +1472,6 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label><?php esc_html_e('Enable coupons', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Allow users to enter a coupon code during booking checkout.', 'seatreg'); ?></p>
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" id="enable-coupons" name="enable_coupons" value="0" <?php echo $options[0]->enable_coupons == '1' ? 'checked':'' ?> >
-						<?php esc_html_e('Turn on coupons', 'seatreg'); ?>
-					</label>
-				</div>
-			</div>
-
-			<div class="form-group" id="coupon-management">
-				<label><?php esc_html_e('Coupons', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Create coupon codes to offer discounts. These will be applied to the total booking price.', 'seatreg'); ?></p>
-
-				<div class="existing-coupons">
-					<div style="margin-bottom: 10px"><?php esc_html_e('Existing coupons', 'seatreg'); ?></div>
-					<?php if( count($coupons) == 0 ): ?>
-						<p class="help-block"><?php esc_html_e('No coupons created', 'seatreg'); ?></p>
-					<?php endif; ?>
-
-					<?php foreach($coupons as $coupon): ?>
-						<div class="coupon-box" data-uuid="<?php echo esc_attr($coupon->couponUUID); ?>">
-							<div class="coupon-box__label"><?php esc_html_e('Coupon code', 'seatreg'); ?>:</div>
-							<div class="coupon-box__value"><span data-target="coupon-code"><?php echo esc_html($coupon->couponCode); ?></span></div>
-							<div class="coupon-box__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</div>
-							<div class="coupon-box__value">-<span data-target="discount-value"><?php echo esc_html($coupon->discountValue); ?></span></div>
-							<div class="coupon-box__actions">
-								<button class="btn btn-danger btn-sm" type="button" data-action="delete-coupon"><?php esc_html_e('Delete', 'seatreg'); ?></button>
-							</div>
-						</div>
-					<?php endforeach; ?>
-				</div>
-				
-				<div class="coupon-create">
-					<div style="margin-bottom: 6px"><?php esc_html_e('New coupon', 'seatreg'); ?></div>
-					<p><?php esc_html_e('Create a new coupon', 'seatreg'); ?></p>
-					<div class="new-coupon">
-						<label class="new-coupon__label"><?php esc_html_e('Coupon code', 'seatreg'); ?>:</label>
-						<input type="text" class="form-control" id="new-coupon-code" maxlength="20">
-						<label class="new-coupon__label"><?php esc_html_e('Discount', 'seatreg'); ?>:</label>
-						<input type="number" class="form-control" id="new-coupon-discount" placeholder="1-100" min="1" oninput="this.value = Math.abs(this.value) || null">
-						<button class="btn btn-default btn-sm" type="button" data-action="add-coupon"><?php esc_html_e('Add', 'seatreg'); ?></button>
-					</div>
-				</div>
-				<input type="hidden" name="coupons" value='<?php echo esc_attr(json_encode($coupons)); ?>' />
-			</div>
-
-			<div class="form-group">
 				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
 				<p class="help-block">
@@ -1455,14 +1492,6 @@ function seatreg_generate_settings_form() {
 
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking confirm page', 'seatreg'); ?>.</p>
 				<textarea class="form-control" name="booking-confirm-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_confirm_page_custom_styles); ?></textarea>
-			</div>
-
-			<div class="form-group">
-				<label for="seat-selection-btn-text"><?php esc_html_e('Seat selection button text', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('By default the button that opens seat selection has text "open". You can change it if needed.', 'seatreg'); ?>
-				</p>
-				<input type="text" class="form-control" id="seat-selection-btn-text" name="seat-selection-btn-text" autocomplete="off" placeholder="<?php esc_attr_e('Enter button text', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->seat_selection_btn_text); ?>"> 
 			</div>
 
 			<div class="form-group">
@@ -1506,6 +1535,9 @@ function seatreg_generate_settings_form() {
 				</div>
 			</div>
 
+			</div><!-- /.settings-tab-panel advanced -->
+			</div><!-- /.settings-tab-panels -->
+
 			<input type='hidden' name='action' value='seatreg-form-submit' />
 			<input type="hidden" name="registration_code" value="<?php echo esc_attr($options[0]->registration_code); ?>"/>
 
@@ -1514,7 +1546,7 @@ function seatreg_generate_settings_form() {
 				submit_button( esc_html__('Save changes', 'seatreg'), 'primary', 'seatreg-settings-submit', false );
 			?>
 
-		</from>
+		</form>
 
 	<?php
 }
