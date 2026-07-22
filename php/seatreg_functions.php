@@ -169,11 +169,11 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 	$confirmedBookingsRoomInfo = [];
 
 	if($registration->using_calendar === '1') {
-		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 1 GROUP BY room_uuid");
-		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 2 GROUP BY room_uuid");
+		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 1 AND is_deleted = 0 GROUP BY room_uuid");
+		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 2 AND is_deleted = 0 GROUP BY room_uuid");
 	}else {
-		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date IS NULL AND status = 1 GROUP BY room_uuid");
-		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date IS NULL AND status = 2 GROUP BY room_uuid");
+		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date IS NULL AND status = 1 AND is_deleted = 0 GROUP BY room_uuid");
+		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date IS NULL AND status = 2 AND is_deleted = 0 GROUP BY room_uuid");
 	}
 	
 	$regStats = seatreg_get_room_seat_info($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
@@ -1621,8 +1621,10 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	$project_name_original = $seatregData->registration_name;
 	$bookings1 = seatreg_get_specific_bookings($code, $order, $searchTerm, '1', $calendarDate);
 	$bookings2 = seatreg_get_specific_bookings($code, $order, $searchTerm, '2', $calendarDate);
+	$bookings3 = seatreg_get_specific_bookings($code, $order, $searchTerm, null, $calendarDate, 1);
 	$row_count = count($bookings1);
 	$row_count2 = count($bookings2);
+	$row_count3 = count($bookings3);
 	$project_name = str_replace(' ', '_', $project_name_original);
 	$usingSeats = $seatregData->using_seats === '1';
 	$requireName = $seatregData->require_name;
@@ -1680,6 +1682,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 				<ul class="etabs">
 					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'bron'); ?>"><?php esc_html_e('Pending', 'seatreg'); ?></a></li>
 					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'taken'); ?>"><?php esc_html_e('Approved','seatreg'); ?></a></li>
+					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'deleted'); ?>"><?php esc_html_e('Deleted','seatreg'); ?></a></li>
 				</ul>
 				<div class="panel-container differentBgColor">
 					<div class="registration-manager-labels">
@@ -1694,7 +1697,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 					</div>
 
 				   <?php
-					   echo '<div id="' . esc_attr(sha1($project_name) . 'bron') . '" class="tab_container">';
+					   echo '<div id="' . esc_attr(sha1($project_name) . 'bron') . '" class="tab_container active">';
 		
 					if($row_count == 0) {
 						echo '<div class="notify-text">';
@@ -1725,7 +1728,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
 							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
 							echo '<div class="action-select">';
-								echo "<label class='action-label'>", esc_html__('Remove','seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
+								echo "<label class='action-label'>", esc_html__('Delete','seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
 								echo "<label class='action-label'>", esc_html__('Approve','seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action'data-action='confirm'/></label>";
 							echo '</div>';
 		
@@ -1768,12 +1771,12 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 					}
 				
 					if($row_count > 0) {
-						echo "<div class='action-control' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
+						echo "<div class='action-control is-disabled' style='background-color:#999;cursor:not-allowed;' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
 					}
 					
 					echo '</div>';
 		
-					   echo '<div id="' . esc_attr(sha1($project_name) . 'taken') . '" class="tab_container active">';
+					   echo '<div id="' . esc_attr(sha1($project_name) . 'taken') . '" class="tab_container">';
 		
 					if($row_count2 == 0) {
 						echo '<div class="notify-text">', esc_html__('No approved bookings', 'seatreg'), '</div>';
@@ -1802,7 +1805,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
 							echo "<span class='edit-btn' data-code='", esc_attr($code),"' data-booking='", esc_attr($booking),"' data-id='", esc_attr($registrationId),"'><i class='fa fa-pencil-square-o' aria-hidden='true'></i>", esc_html__('Edit','seatreg'), "</span>";
 							echo '<div class="action-select">';
-								echo "<label>", esc_html__('Remove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
+								echo "<label>", esc_html__('Delete', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='del'/></label>";
 								echo "<label>", esc_html__('Unapprove', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='bron-action' data-action='unapprove'/></label>";
 							echo '</div>';
 		
@@ -1844,9 +1847,78 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 					}
 		
 					if($row_count2 > 0) {
-						echo "<div class='action-control' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
+						echo "<div class='action-control is-disabled' style='background-color:#999;cursor:not-allowed;' data-code='", esc_attr($code), "'>", esc_html__('OK','seatreg'), "</div>";
 					}
-		
+
+					echo '</div>';
+
+					   echo '<div id="' . esc_attr(sha1($project_name) . 'deleted') . '" class="tab_container">';
+
+					if($row_count3 == 0) {
+						echo '<div class="notify-text">', esc_html__('No deleted bookings', 'seatreg'), '</div>';
+					}
+
+					foreach ($bookings3 as $row) {
+						$custom_field_data = json_decode($row->custom_field_data, true);
+						$booking = $row->booking_id;
+						$myFormatForView = date("m-d-y", $row->booking_date);
+						$bookingDateString = SeatregTimeService::getDateStringFromUnix( $row->booking_date );
+						$seatPrice = SeatregLayoutService::getSeatPriceFromLayout($row, $roomsData);
+						$appliedCoponsString = SeatregCouponService::getAppliedCouponString(json_decode($row->applied_coupon), $currencyCode);
+
+						echo '<div class="reg-seat-item" data-booking-id="'. esc_attr($booking) .'" data-email="'. esc_attr($row->email) .'" data-booker-email="'. esc_attr($row->booker_email) .'">';
+							echo '<div class="seat-nr-box manager-box">',esc_html( $row->seat_nr), '</div>';
+							echo '<div class="seat-room-box manager-box" title="',esc_attr($row->room_name),'">', esc_html($row->room_name),'</div>';
+							echo '<div class="seat-name-box manager-box" title="'.esc_attr($row->first_name). ' '. esc_html($row->last_name).'"><span class="full-name">', esc_html($row->first_name), ' ', esc_html($row->last_name), '</span></div>';
+							echo '<div class="seat-date-box manager-box" title="', esc_attr($bookingDateString),'">', esc_html($myFormatForView), '</div>';
+							echo "<div class='booking-id-box manager-box' title='",esc_attr($row->booking_id), "'>",esc_html($row->booking_id),"</div>";
+							echo "<div class='manager-box payment-status-box'>";
+								echo esc_html($row->payment_status ? $row->payment_status : __('Not set', 'seatreg'));
+							echo "</div>";
+							echo '<button class="btn btn-outline-secondary btn-sm show-more-info">', esc_html__('More info','seatreg'), '</button>';
+							echo '<div class="action-select">';
+								echo "<label>", esc_html__('Permanently delete', 'seatreg'), "<input type='checkbox' value='", esc_attr($row->booking_id),"' class='permanent-delete-action'/></label>";
+							echo '</div>';
+
+							echo '<div class="more-info">';
+								echo '<div style="font-weight:bold;margin-bottom:10px;">', esc_html__('Deletion reason', 'seatreg'), ': ', esc_html($row->deletion_reason), '</div>';
+								echo '<div>', esc_html__('Booking date','seatreg'), ': <span class="time-string">', esc_html($bookingDateString), '</span></div>';
+								if($row->calendar_date) {
+									echo '<div>', esc_html__('Calendar date', 'seatreg'), ': ', esc_html($row->calendar_date), '</div>';
+								}
+								echo '<div>', esc_html__('Email', 'seatreg'), ': <span data-more-info="email">', esc_html($row->email), '</span></div>';
+
+								if( $seatPrice ) {
+									?>
+										<div>
+											<?php
+												echo esc_html__('Price', 'seatreg'), ': ',  esc_html($seatPrice->price), ' ' ,esc_html($seatregData->paypal_currency_code);
+
+												if($seatPrice->description) {
+													echo ' (', esc_html($seatPrice->description) , ')';
+												}
+											?>
+
+										</div>
+									<?php
+								}
+								echo '<div>', esc_html__('WP user ID', 'seatreg'), ': ', $row->logged_in_user_id ? esc_html($row->logged_in_user_id) : esc_html__('None', 'seatreg'), '</div>';
+								echo '<div>', esc_html__('Used coupon', 'seatreg'), ': ', esc_html($appliedCoponsString), '</div>';
+
+								for($i = 0; $i < $cus_length; $i++) {
+									echo seatreg_customfield_with_value($custom_fields[$i], $custom_field_data);
+								}
+								echo seatreg_view_booking_activity_btn($row);
+								echo seatreg_generate_payment_section($row, $seatregData, true);
+							echo '</div>';
+							echo '<input type="hidden" class="booking-identification" value='. esc_attr($row->booking_id) .' />';
+						echo '</div>';
+					}
+
+					if($row_count3 > 0) {
+						echo "<div class='permanent-delete-control is-disabled' style='background-color:#999;text-align:center;width:100px;float:right;cursor:not-allowed;color:#fff;padding:4px 0;margin-top:24px;' data-code='", esc_attr($code), "'>", esc_html__('Delete','seatreg'), "</div>";
+					}
+
 					echo '</div>';
 				?>
 				</div>
@@ -1911,7 +1983,7 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 	}
 }
 
-function seatreg_generate_payment_logs($paymentLogs, $bookingId) {
+function seatreg_generate_payment_logs($paymentLogs, $bookingId, $readOnly = false) {
 	?>
 	<div class="payment-log-wrap">
 	<?php
@@ -1938,6 +2010,7 @@ function seatreg_generate_payment_logs($paymentLogs, $bookingId) {
 		}
 		?>
 		</div>
+		<?php if( !$readOnly ) : ?>
 		<div class="add-payment-log-wrap">
 			<select class="payment-log-type">
 				<option value="<?php echo esc_attr(SEATREG_PAYMENT_LOG_OK); ?>"><?php esc_html_e('Ok', 'seatreg'); ?></option>
@@ -1947,10 +2020,11 @@ function seatreg_generate_payment_logs($paymentLogs, $bookingId) {
 			<input type="text" class="payment-log-message" />
 			<button class="btn btn-outline-secondary btn-sm" data-action="add-payment-log" data-booking-id="<?php echo esc_attr($bookingId); ?>"><?php esc_html_e('Add payment log', 'seatreg'); ?></button>
 		</div>
+		<?php endif; ?>
 		<?php
 }
 
-function seatreg_generate_payment_section($booking, $optionsData) {
+function seatreg_generate_payment_section($booking, $optionsData, $readOnly = false) {
 	$hasPaymentEnabled = SeatregPaymentRepository::hasPaymentEnabled( $optionsData );
 	$paymentLogs = SeatregPaymentLogRepository::getPaymentLogsByBookingId( $booking->booking_id );
 	$bookingPaymentStatus = SeatregPaymentRepository::getBookingPaymentSatatus($booking);
@@ -1991,7 +2065,8 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 		<?php
 	}
 
-	?>
+	if( !$readOnly ) {
+		?>
 		<form>
 			<p>
 				<?php esc_html_e('You can change the payment status manually if needed. PayPal and Stripe payments will do it automatically.', 'seatreg'); ?>
@@ -2010,11 +2085,12 @@ function seatreg_generate_payment_section($booking, $optionsData) {
 				<button class="btn btn-default btn-sm" data-action="change-payment-status" data-booking-id><?php esc_html_e('Change status', 'seatreg'); ?></button>
 			</div>
 		</form>
-	<?php
-	
+		<?php
+	}
+
 	if( $hasPaymentEnabled || count($paymentLogs) > 0 ) {
 		echo '<div style="margin-bottom: 6px;"><strong>', esc_html__('Payment logs', 'seatreg') ,'</strong></div>';
-		echo seatreg_generate_payment_logs( $paymentLogs, $booking->booking_id );
+		echo seatreg_generate_payment_logs( $paymentLogs, $booking->booking_id, $readOnly );
 	}
 }
 
@@ -2628,6 +2704,8 @@ function seatreg_set_up_db() {
 			logged_in_user_id int DEFAULT NULL,
 			custom_text_for_approved_email text,
 			applied_coupon text,
+			is_deleted tinyint(1) NOT NULL DEFAULT 0,
+			deletion_reason text,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 
@@ -2660,7 +2738,7 @@ function seatreg_set_up_db() {
 
 		$sql6 = "CREATE TABLE $seatreg_db_table_names->table_seatreg_activity_log (
 			id int(11) NOT NULL AUTO_INCREMENT,
-			log_type enum('booking', 'map', 'settings', 'booking_expiration') NOT NULL,
+			log_type enum('booking', 'map', 'settings', 'booking_expiration', 'booking_permanent_delete') NOT NULL,
 			relation_id varchar(40) NOT NULL,
 			log_date TIMESTAMP DEFAULT NOW(),
 			log_message text,
@@ -2711,7 +2789,7 @@ function seatreg_get_data_related_to_booking($bookingId) {
 		FROM $seatreg_db_table_names->table_seatreg AS a
 		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 		ON a.registration_code = b.registration_code
-		WHERE a.registration_code = (SELECT registration_code FROM $seatreg_db_table_names->table_seatreg_bookings WHERE booking_id = %s LIMIT 1)",
+		WHERE a.registration_code = (SELECT registration_code FROM $seatreg_db_table_names->table_seatreg_bookings WHERE booking_id = %s AND is_deleted = 0 LIMIT 1)",
 		$bookingId
 	) );
 
@@ -2756,9 +2834,13 @@ function seatreg_order_bookings_by_room_name($a, $b) {
 }
 
 //return bookins
-function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStatus, $calendarDate ) {
+function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStatus, $calendarDate, $isDeleted = 0 ) {
 	global $wpdb;
 	global $seatreg_db_table_names;
+
+	$isDeleted = (int)$isDeleted;
+	// Deleted tab passes null status so deleted rows of any status are returned.
+	$statusCondition = $bookingStatus === null ? '' : 'AND a.status = ' . (int)$bookingStatus;
 
 	switch($order) {
 		case 'date':
@@ -2790,8 +2872,9 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS c
 			ON a.registration_code = c.registration_code
 			WHERE a.registration_code = %s
-			AND a.status = $bookingStatus
+			$statusCondition
 			AND a.calendar_date = %s
+			AND a.is_deleted = $isDeleted
 			ORDER BY $order",
 			$code,
 			$calendarDate
@@ -2805,8 +2888,9 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS c
 			ON a.registration_code = c.registration_code
 			WHERE a.registration_code = %s
-			AND a.status = $bookingStatus
+			$statusCondition
 			AND a.calendar_date IS NULL
+			AND a.is_deleted = $isDeleted
 			ORDER BY $order",
 			$code
 		));
@@ -2931,27 +3015,38 @@ function seatreg_confirm_or_delete_booking($action, $regCode, $calendarDate) {
 				'booking_confirm_date' => time()
 			), 
 			array(
-				'booking_id' => $action->booking_id, 
-				'calendar_date' => $calendarDate
-			), 
+				'booking_id' => $action->booking_id,
+				'calendar_date' => $calendarDate,
+				'is_deleted' => 0
+			),
 			'%s',
-			'%s'
+			array('%s', '%s', '%d')
 		);
 		seatreg_add_activity_log('booking', $action->booking_id, 'Booking approved (Booking manager)');
 		SeatregActionsService::triggerBookingApprovedActionViaManager($action->booking_id);
 
 	}else if($action->action == 'del') {
 
-		$wpdb->delete( 
+		$currentUser = wp_get_current_user();
+		$deletedBy = ($currentUser && $currentUser->ID)
+			? $currentUser->display_name . ' (WP user ID: ' . $currentUser->ID . ')'
+			: 'Unknown user';
+
+		$wpdb->update(
 			$seatreg_db_table_names->table_seatreg_bookings,
 			array(
-				'booking_id' => $action->booking_id, 
-				'seat_id' => $action->seat_id,
-				'calendar_date' => $calendarDate
-			), 
-			'%s'
+				'is_deleted' => 1,
+				'deletion_reason' => 'Deleted via booking manager by ' . $deletedBy
+			),
+			array(
+				'booking_id' => $action->booking_id,
+				'calendar_date' => $calendarDate,
+				'is_deleted' => 0
+			),
+			array('%d', '%s'),
+			array('%s', '%s', '%d')
 		);
-		seatreg_add_activity_log('booking', $action->booking_id, sprintf('Seat %s from room %s deleted from booking (Booking manager)', $action->seat_nr, $action->room_name));
+		seatreg_add_activity_log('booking', $action->booking_id, 'Booking deleted (Booking manager)');
 		SeatregActionsService::triggerBookingRemovedAction($action->booking_id);
 
 	}else if($action->action == 'unapprove') {
@@ -2964,10 +3059,11 @@ function seatreg_confirm_or_delete_booking($action, $regCode, $calendarDate) {
 			), 
 			array(
 				'booking_id' => $action->booking_id,
-				'calendar_date' => $calendarDate
-			), 
+				'calendar_date' => $calendarDate,
+				'is_deleted' => 0
+			),
 			'%s',
-			'%s'
+			array('%s', '%s', '%d')
 		);
 		seatreg_add_activity_log('booking', $action->booking_id, 'Booking unapproved (Booking manager)');
 		SeatregActionsService::triggerBookingPendingActionViaManager($action->booking_id);
@@ -3077,6 +3173,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow, $calendarDate) {
 				WHERE a.registration_code = %s
 				AND a.status IN (1,2)
 				AND a.calendar_date = %s
+				AND a.is_deleted = 0
 				ORDER BY room_uuid, seat_nr",
 				$code,
 				$calendarDate
@@ -3090,6 +3187,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow, $calendarDate) {
 				WHERE a.registration_code = %s
 				AND a.status IN (1,2)
 				AND a.calendar_date IS NULL
+				AND a.is_deleted = 0
 				ORDER BY room_uuid, seat_nr",
 				$code
 			) );
@@ -3106,6 +3204,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow, $calendarDate) {
 				WHERE a.registration_code = %s
 				AND a.status = 1
 				AND a.calendar_date = %s
+				AND a.is_deleted = 0
 				ORDER BY room_uuid, seat_nr",
 				$code,
 				$calendarDate
@@ -3119,6 +3218,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow, $calendarDate) {
 				WHERE a.registration_code = %s
 				AND a.status = 1
 				AND a.calendar_date IS NULL
+				AND a.is_deleted = 0
 				ORDER BY room_uuid, seat_nr",
 				$code
 			) );
@@ -3134,6 +3234,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow, $calendarDate) {
 				WHERE a.registration_code = %s
 				AND a.status = 2
 				AND a.calendar_date = %s
+				AND a.is_deleted = 0
 				ORDER BY room_uuid, seat_nr",
 				$code,
 				$calendarDate
@@ -3147,6 +3248,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow, $calendarDate) {
 				WHERE a.registration_code = %s
 				AND a.status = 2
 				AND a.calendar_date IS NULL
+				AND a.is_deleted = 0
 				ORDER BY room_uuid, seat_nr",
 				$code
 			) );
@@ -4158,6 +4260,52 @@ function seatreg_confirm_del_bookings_callback() {
 		$searchTerm = sanitize_text_field($_POST['data']['searchTerm']);
 	}
 	seatreg_generate_booking_manager_html( sanitize_text_field($_POST['code']) , $order, $searchTerm, $calendarDate );
+
+	die();
+}
+
+add_action( 'wp_ajax_seatreg_permanently_delete_booking', 'seatreg_permanently_delete_booking_callback' );
+function seatreg_permanently_delete_booking_callback() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
+
+	global $wpdb;
+	global $seatreg_db_table_names;
+
+	$code = sanitize_text_field( $_POST['code'] );
+	$calendarDate = assignIfNotEmpty( $_POST['data']['calendarDate'], null );
+	$bookingIdsRaw = isset($_POST['data']['bookingIds']) ? json_decode( stripslashes_deep($_POST['data']['bookingIds']) ) : array();
+	$bookingIds = is_array($bookingIdsRaw) ? $bookingIdsRaw : array();
+
+	foreach( $bookingIds as $bookingId ) {
+		$bookingId = sanitize_text_field( $bookingId );
+
+		// Only rows already soft-deleted for this registration may be permanently removed.
+		$deleted = $wpdb->delete(
+			$seatreg_db_table_names->table_seatreg_bookings,
+			array(
+				'booking_id' => $bookingId,
+				'registration_code' => $code,
+				'is_deleted' => 1
+			),
+			array( '%s', '%s', '%d' )
+		);
+
+		if( $deleted ) {
+			seatreg_add_activity_log('booking_permanent_delete', $code, 'Booking ' . $bookingId . ' permanently deleted (Booking manager)');
+		}
+	}
+
+	$order = 'date';
+	$searchTerm = '';
+
+	if( !empty( $_POST['data']['orderby'] ) ) {
+		$order = sanitize_text_field($_POST['data']['orderby']);
+	}
+
+	if( !empty( $_POST['data']['searchTerm'] ) ) {
+		$searchTerm = sanitize_text_field($_POST['data']['searchTerm']);
+	}
+	seatreg_generate_booking_manager_html( $code, $order, $searchTerm, $calendarDate );
 
 	die();
 }

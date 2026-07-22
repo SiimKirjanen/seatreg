@@ -38,7 +38,7 @@ class SeatregActivityLogRepository {
 
         return $wpdb->get_results( $wpdb->prepare(
             "SELECT * FROM $seatreg_db_table_names->table_seatreg_activity_log
-            WHERE log_type IN ('map', 'settings', 'booking_expiration')
+            WHERE log_type IN ('map', 'settings', 'booking_expiration', 'booking_permanent_delete')
             AND relation_id = %s
             ORDER BY log_date DESC",
             $registrationId

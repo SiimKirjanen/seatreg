@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 7.0
-Stable tag: 1.70.0
+Stable tag: 1.71.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -48,6 +48,10 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.71.0 =
+* Removed bookings are now kept in a new "Deleted" tab in the booking manager instead of being erased right away.
+* Added the option to permanently delete bookings from the "Deleted" tab when you no longer need them.
 
 = 1.70.0 =
 * Reorganized the registration settings into tabs for easier navigation.

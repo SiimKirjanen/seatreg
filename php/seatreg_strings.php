@@ -176,6 +176,8 @@ function seatreg_generate_admin_strings() {
     $translations->no = esc_html__('No', 'seatreg');
     $translations->noActivityLogged = esc_html__('No activity logged', 'seatreg');
     $translations->bookingStatusUpdated = esc_html__('Booking status updated', 'seatreg');
+    $translations->permanentlyDeleteBookingConfirm = esc_html__('This will permanently delete the selected bookings. This cannot be undone. Are you sure?', 'seatreg');
+    $translations->bookingPermanentlyDeleted = esc_html__('Booking permanently deleted', 'seatreg');
     $translations->newBookingWasAddedRefreshingThaPage = esc_html__('Booking was added. Page will refresh in a second', 'seatreg');
     $translations->duplicateSeatDetected = esc_html__('Duplicate seat detected!', 'seatreg');
     $translations->emailTemplateNotCorrect = esc_html__('Email template is missing required keywords', 'seatreg');

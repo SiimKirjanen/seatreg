@@ -445,8 +445,18 @@ $('#registration-link').on('click', function() {
 
 $('.tab-container').easytabs({
 	animate: false,
-	animationSpeed: 0
-}); 
+	animationSpeed: 0,
+	updateHash: false
+});
+
+// Reflect the active tab in the URL so it can be bookmarked/deep-linked, but do it with
+// replaceState instead of easytabs' own `location.hash =` write, which scrolls the page to
+// the panel anchor. Delegated on the stable parent so it survives AJAX re-renders/re-inits.
+$('#seatreg-booking-manager').on('easytabs:after', '.tab-container', function(e, clicked, targetPanel) {
+	if(targetPanel && targetPanel.attr('id') && window.history && window.history.replaceState) {
+		window.history.replaceState(null, '', '#' + targetPanel.attr('id'));
+	}
+});
 
 $('#existing-regs-wrap').on('click', '.room-list-item', function() {
 	var code = $('#seatreg-reg-code').val();
@@ -554,7 +564,8 @@ function managerSearch() {
 		wrapper.empty().html(data).promise().done(function() {
 			wrapper.find('.tab-container').easytabs({
 				animate: false,
-				animationSpeed: 0
+				animationSpeed: 0,
+				updateHash: false
 			});
 		});
 	});
@@ -576,8 +587,8 @@ $('#seatreg-booking-manager').on('click','.manager-box-link', function() {
 		wrapper.empty().html(data).promise().done(function() {
 			wrapper.find('.tab-container').easytabs({
 				animate: false,
-				animationSpeed: 0
-				//updateHash: false
+				animationSpeed: 0,
+				updateHash: false
 			});
 		});
 	});
@@ -592,21 +603,35 @@ $('#seatreg-booking-manager').on('click', '.bron-action', function() {
 
 	check.closest('.action-select').find('.bron-action').not(check).prop('checked', false);
 
+	var delCheck = check.closest('.reg-seat-item').find('.bron-action[data-action=del]').is(':checked');
 	var confirmCheck = check.closest('.reg-seat-item').find('.bron-action[data-action=confirm]').is(':checked');
 	var unapproveCheck = check.closest('.reg-seat-item').find('.bron-action[data-action=unapprove]').is(':checked');
-		
+
 	$(this).closest('.tab_container').find('.bron-action').not(check).each(function() {
 		if( $(this).closest('.reg-seat-item').find('.booking-identification').val() == bookingId ) {
-
-			if(!check.is('[data-action=del]')) {
-				$(this).closest('.reg-seat-item').find('.bron-action[data-action=del]').prop('checked', false);
-			}
-			
+			$(this).closest('.reg-seat-item').find('.bron-action[data-action=del]').prop('checked', delCheck);
 			$(this).closest('.reg-seat-item').find('.bron-action[data-action=confirm]').prop('checked', confirmCheck);
 			$(this).closest('.reg-seat-item').find('.bron-action[data-action=unapprove]').prop('checked', unapproveCheck);
 		}
 	});
+
+	seatreg_update_action_control(check.closest('.tab_container'));
 });
+
+// Enable/disable the OK action control based on whether any booking action is selected
+function seatreg_update_action_control(tabContainer) {
+	var control = tabContainer.find('.action-control');
+
+	if(control.length === 0) {
+		return;
+	}
+
+	if(tabContainer.find('.bron-action:checked').length > 0) {
+		control.removeClass('is-disabled').css({'background-color': '#404040', 'cursor': 'pointer'});
+	}else {
+		control.addClass('is-disabled').css({'background-color': '#999', 'cursor': 'not-allowed'});
+	}
+}
 
 $('#seatreg-booking-manager').on('click', '.show-more-info', function() {
 	$(this).parent().find('.more-info').slideToggle();
@@ -781,6 +806,11 @@ $('#seatreg-booking-manager').on('keydown', '.manager-search', function(e) {
 
 $('#seatreg-booking-manager').on('click', '.action-control', function() {
 	var button = $(this);
+
+	if(button.hasClass('is-disabled')) {
+		return;
+	}
+
 	var data = [];
 	var code = $('#seatreg-reg-code').val();
 	var searchTerm = $('.manager-search').val();
@@ -831,7 +861,8 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 		wrapper.empty().html(data).promise().done(function() {
 			wrapper.find('.tab-container').easytabs({
 				animate: false,
-				animationSpeed: 0
+				animationSpeed: 0,
+				updateHash: false
 			});
 			if(calendarDate) {
 				initBookingManagerCalendarDatePicer();
@@ -841,6 +872,96 @@ $('#seatreg-booking-manager').on('click', '.action-control', function() {
 	});
 
 	promise.fail = seatreg_admin_ajax_error;
+});
+
+// Enable/disable the permanent delete control based on whether any deleted booking is selected
+function seatreg_update_permanent_delete_control(tabContainer) {
+	var control = tabContainer.find('.permanent-delete-control');
+
+	if(control.length === 0) {
+		return;
+	}
+
+	if(tabContainer.find('.permanent-delete-action:checked').length > 0) {
+		control.removeClass('is-disabled').css({'background-color': '#404040', 'cursor': 'pointer'});
+	}else {
+		control.addClass('is-disabled').css({'background-color': '#999', 'cursor': 'not-allowed'});
+	}
+}
+
+// Selecting a deleted booking for permanent deletion also selects all related (same booking id) rows
+$('#seatreg-booking-manager').on('click', '.permanent-delete-action', function() {
+	var check = $(this);
+	var bookingId = check.closest('.reg-seat-item').find('.booking-identification').val();
+	var isChecked = check.is(':checked');
+	var tabContainer = check.closest('.tab_container');
+
+	tabContainer.find('.permanent-delete-action').each(function() {
+		if( $(this).closest('.reg-seat-item').find('.booking-identification').val() == bookingId ) {
+			$(this).prop('checked', isChecked);
+		}
+	});
+
+	seatreg_update_permanent_delete_control(tabContainer);
+});
+
+$('#seatreg-booking-manager').on('click', '.permanent-delete-control', function() {
+	var button = $(this);
+
+	if(button.hasClass('is-disabled')) {
+		return;
+	}
+
+	var code = button.attr('data-code');
+	var bookingIds = [];
+	var searchTerm = $('.manager-search').val();
+	var wrapper = $('#seatreg-booking-manager .seatreg-tabs-content');
+	var queryParams = new URLSearchParams(window.location.search);
+	var calendarDate = queryParams.get('calendar-date');
+
+	button.closest('.tab_container').find('.permanent-delete-action').each(function() {
+		if($(this).prop('checked')) {
+			var bookingId = $(this).val();
+			if(bookingIds.indexOf(bookingId) === -1) {
+				bookingIds.push(bookingId);
+			}
+		}
+	});
+
+	if(bookingIds.length === 0) {
+		return;
+	}
+
+	alertify.confirm(translator.translate('permanentlyDeleteBookingConfirm'), function(e) {
+		if(!e) {
+			return;
+		}
+
+		wrapper.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
+
+		var promise = seaterg_admin_ajax2('seatreg_permanently_delete_booking', code, {
+			bookingIds: JSON.stringify(bookingIds),
+			searchTerm: searchTerm,
+			orderby: bookingOrderInManager,
+			calendarDate: calendarDate
+		});
+
+		promise.done(function(data) {
+			wrapper.empty().html(data).promise().done(function() {
+				wrapper.find('.tab-container').easytabs({
+					animate: false,
+					animationSpeed: 0,
+					updateHash: false
+				});
+				if(calendarDate) {
+					initBookingManagerCalendarDatePicer();
+				}
+				alertify.success(translator.translate('bookingPermanentlyDeleted'));
+			});
+		});
+
+		promise.fail = seatreg_admin_ajax_error;
+	});
 });
 
 $('#seatreg-booking-manager').on('click', '#add-modal-add-seat', function() {

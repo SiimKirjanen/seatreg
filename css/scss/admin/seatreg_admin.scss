@@ -519,6 +519,14 @@ html {
   overflow: visible !important;
 }
 
+.seatreg-tabs-content .panel-container .tab_container {
+  display: none;
+}
+
+.seatreg-tabs-content .panel-container .tab_container.active {
+  display: block;
+}
+
 .seatreg-tabs-content .first-reg-section .tab_container:before {
   display: block;
   content: " ";
@@ -595,6 +603,8 @@ html {
 }
 .seatreg-tabs-content .action-select label {
   margin-left: 10px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .seatreg-tabs-content .show-more-info {
@@ -658,7 +668,8 @@ html {
   margin-bottom: 24px;
 }
 
-.seatreg-tabs-content .action-select .bron-action {
+.seatreg-tabs-content .action-select .bron-action,
+.seatreg-tabs-content .action-select .permanent-delete-action {
   margin-left: 4px;
   cursor: pointer;
   margin-top: 0;
@@ -965,8 +976,16 @@ html {
   margin-top: 6px;
   float: right;
 }
+.seatreg-tabs-content .manager-search {
+  border-color: #ccc;
+  border-right: 0;
+  height: calc(1.5rem + .75rem + 2px);
+  min-height: calc(1.5rem + .75rem + 2px);
+}
 .seatreg-tabs-content .manager-search:focus {
   box-shadow: none;
+  border-color: #ccc;
+  border-right: 0;
 }
 
 .seatreg-tabs-content .option-input {
