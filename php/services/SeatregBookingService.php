@@ -64,9 +64,14 @@ class SeatregBookingService {
         global $seatreg_db_table_names;
 	    global $wpdb;
 
-        return $wpdb->delete( 
+        return $wpdb->update(
 			$seatreg_db_table_names->table_seatreg_bookings,
-			array('booking_id' => $bookingId), 
+			array(
+				'is_deleted' => 1,
+				'deletion_reason' => 'Booking expired and was automatically removed'
+			),
+			array('booking_id' => $bookingId),
+			array('%d', '%s'),
 			'%s'
 		);
     }

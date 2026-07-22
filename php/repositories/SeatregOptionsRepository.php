@@ -35,7 +35,7 @@ class SeatregOptionsRepository {
 
         return $wpdb->get_row( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_options
-			WHERE registration_code = (SELECT registration_code FROM $seatreg_db_table_names->table_seatreg_bookings WHERE conf_code = %s LIMIT 1)",
+			WHERE registration_code = (SELECT registration_code FROM $seatreg_db_table_names->table_seatreg_bookings WHERE conf_code = %s AND is_deleted = 0 LIMIT 1)",
 			$confirmationCode
 		) );
     }

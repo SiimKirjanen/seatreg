@@ -20,7 +20,8 @@ class SeatregBookingRepository {
         return $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE booking_id = %s
-			AND status != 0",
+			AND status != 0
+			AND is_deleted = 0",
 			$bookingId
 		) );
     }
@@ -58,14 +59,15 @@ class SeatregBookingRepository {
             "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
             WHERE registration_code = %s
             AND (status = '1' OR status = '2')
-            AND calendar_date IS NULL",
+            AND calendar_date IS NULL
+            AND is_deleted = 0",
             $registrationCode,
         ) );
     }
 
     /**
      *
-     * Return all confirmed and approved bookings made with calendar mode. 
+     * Return all confirmed and approved bookings made with calendar mode.
      * 
      * @param string $registrationCode The code of the registration
      *
@@ -78,7 +80,8 @@ class SeatregBookingRepository {
             "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
             WHERE registration_code = %s
             AND (status = '1' OR status = '2')
-            AND calendar_date IS NOT NULL",
+            AND calendar_date IS NOT NULL
+            AND is_deleted = 0",
             $registrationCode,
         ) );
     }
@@ -99,7 +102,8 @@ class SeatregBookingRepository {
             "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
             WHERE registration_code = %s
             AND (status = '1' OR status = '2')
-            AND calendar_date = %s",
+            AND calendar_date = %s
+            AND is_deleted = 0",
             $registrationCode,
             $filterCalendarDate
         ) );
@@ -119,7 +123,8 @@ class SeatregBookingRepository {
         return $wpdb->get_results( $wpdb->prepare(
             "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
             WHERE registration_code = %s
-            AND (status = '1' OR status = '2')",
+            AND (status = '1' OR status = '2')
+            AND is_deleted = 0",
             $registrationCode,
         ) );
     } 
@@ -138,7 +143,8 @@ class SeatregBookingRepository {
         return $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE conf_code = %s
-			AND status = 0",
+			AND status = 0
+			AND is_deleted = 0",
 			$confCode
 		) );
     }
@@ -159,7 +165,8 @@ class SeatregBookingRepository {
 			"SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings
 			WHERE registration_code = %s
 			AND booking_id = %s
-			AND status != 0",
+			AND status != 0
+			AND is_deleted = 0",
 			$registrationCode,
 			$bookingId
 		) );
@@ -182,7 +189,7 @@ class SeatregBookingRepository {
             FROM $seatreg_db_table_names->table_seatreg AS a
             INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
             ON a.registration_code = b.registration_code
-            WHERE a.registration_code = (SELECT registration_code FROM $seatreg_db_table_names->table_seatreg_bookings WHERE booking_id = %s LIMIT 1)",
+            WHERE a.registration_code = (SELECT registration_code FROM $seatreg_db_table_names->table_seatreg_bookings WHERE booking_id = %s AND is_deleted = 0 LIMIT 1)",
             $bookingId
         ) );
 
@@ -227,6 +234,7 @@ class SeatregBookingRepository {
             "SELECT * FROM $seatreg_db_table_names->table_seatreg_bookings AS a
             WHERE a.registration_code = %s
             AND a.status = 1
+            AND a.is_deleted = 0
             AND ((UNIX_TIMESTAMP() - a.booking_date) / 60) > %d
             $paymentCondition",
             $queryArgs
@@ -241,6 +249,7 @@ class SeatregBookingRepository {
             "SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_bookings
             WHERE registration_code = %s
             AND (status = '1' OR status = '2')
+            AND is_deleted = 0
             AND booker_email = %s",
             $registrationCode,
             $bookerEmail
@@ -291,7 +300,8 @@ class SeatregBookingRepository {
                 FROM $seatreg_db_table_names->table_seatreg_bookings
                 WHERE registration_code = %s
                 AND (status = '1' OR status = '2')
-                AND calendar_date = %s",
+                AND calendar_date = %s
+                AND is_deleted = 0",
                 $registrationCode,
                 $calendarDateFilter
             ) );
@@ -301,7 +311,8 @@ class SeatregBookingRepository {
                 FROM $seatreg_db_table_names->table_seatreg_bookings
                 WHERE registration_code = %s
                 AND (status = '1' OR status = '2')
-                AND calendar_date IS NULL",
+                AND calendar_date IS NULL
+                AND is_deleted = 0",
                 $registrationCode,
             ) );
         }
@@ -345,6 +356,7 @@ class SeatregBookingRepository {
                 WHERE registration_code = %s
                 AND status = %d
                 AND calendar_date = %s
+                AND is_deleted = 0
                 GROUP BY room_uuid",
                 $registrationCode,
                 $bookingStatus,
@@ -357,6 +369,7 @@ class SeatregBookingRepository {
                 WHERE registration_code = %s
                 AND status = %d
                 AND calendar_date IS NULL
+                AND is_deleted = 0
                 GROUP BY room_uuid",
                 $registrationCode,
                 $bookingStatus
@@ -381,7 +394,8 @@ class SeatregBookingRepository {
             "SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_bookings
             WHERE logged_in_user_id = %s
             AND registration_code = %s
-            AND (status = %d OR status = %d)",
+            AND (status = %d OR status = %d)
+            AND is_deleted = 0",
             $userId,
             $registrationCode,
             SEATREG_BOOKING_APPROVED,
