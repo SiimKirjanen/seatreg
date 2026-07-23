@@ -8,7 +8,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.57');
+define('SEATREG_DB_VERSION', '1.58');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));

@@ -1151,6 +1151,32 @@ function seatreg_generate_settings_form() {
 				</div>
 			</div>
 
+			<?php
+				$emailLogoId = $options[0]->email_logo ? (int)$options[0]->email_logo : 0;
+				$emailLogoUrl = $emailLogoId ? wp_get_attachment_image_url($emailLogoId, 'medium') : '';
+				$emailLogoPosition = in_array($options[0]->email_logo_position, array('left', 'center', 'right'), true) ? $options[0]->email_logo_position : 'center';
+			?>
+			<div class="form-group">
+				<label><?php esc_html_e('Email logo', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Add a logo to show at the top of emails sent to bookers.', 'seatreg'); ?></p>
+				<input type="hidden" id="email-logo" name="email-logo" value="<?php echo esc_attr($emailLogoId ? $emailLogoId : ''); ?>">
+				<div class="email-logo-controls">
+					<img id="email-logo-preview" src="<?php echo esc_url($emailLogoUrl); ?>" alt="" style="<?php echo $emailLogoUrl ? '' : 'display:none;'; ?>">
+					<button type="button" class="button" id="email-logo-select"><?php esc_html_e('Select logo', 'seatreg'); ?></button>
+					<button type="button" class="button" id="email-logo-remove" style="<?php echo $emailLogoId ? '' : 'display:none;'; ?>"><?php esc_html_e('Remove', 'seatreg'); ?></button>
+				</div>
+				<div class="email-color-fields">
+					<div class="email-color-field">
+						<label for="email-logo-position"><?php esc_html_e('Logo alignment', 'seatreg'); ?></label>
+						<select id="email-logo-position" name="email-logo-position" class="form-control">
+							<option value="left" <?php echo $emailLogoPosition === 'left' ? 'selected' : ''; ?>><?php esc_html_e('Left', 'seatreg'); ?></option>
+							<option value="center" <?php echo $emailLogoPosition === 'center' ? 'selected' : ''; ?>><?php esc_html_e('Center', 'seatreg'); ?></option>
+							<option value="right" <?php echo $emailLogoPosition === 'right' ? 'selected' : ''; ?>><?php esc_html_e('Right', 'seatreg'); ?></option>
+						</select>
+					</div>
+				</div>
+			</div>
+
 			</div><!-- /.settings-tab-panel emails -->
 			<div class="settings-tab-panel" data-tab-panel="payments">
 
@@ -2677,6 +2703,8 @@ function seatreg_set_up_db() {
 			email_background_color varchar(7) DEFAULT NULL,
 			email_text_color varchar(7) DEFAULT NULL,
 			email_heading_color varchar(7) DEFAULT NULL,
+			email_logo varchar(255) DEFAULT NULL,
+			email_logo_position varchar(255) DEFAULT NULL,
 			booking_email_limit int(11) DEFAULT NULL,
 			using_calendar tinyint(1) NOT NULL DEFAULT 0,
 			calendar_dates text,
@@ -3768,6 +3796,8 @@ function seatreg_update() {
 				'email_background_color' => $customizeEmailColors && !empty($_POST['email-background-color']) ? sanitize_hex_color($_POST['email-background-color']) : null,
 				'email_text_color' => $customizeEmailColors && !empty($_POST['email-text-color']) ? sanitize_hex_color($_POST['email-text-color']) : null,
 				'email_heading_color' => $customizeEmailColors && !empty($_POST['email-heading-color']) ? sanitize_hex_color($_POST['email-heading-color']) : null,
+				'email_logo' => !empty($_POST['email-logo']) ? absint($_POST['email-logo']) : null,
+				'email_logo_position' => in_array(($_POST['email-logo-position'] ?? ''), array('left', 'center', 'right'), true) ? $_POST['email-logo-position'] : null,
 				'booking_email_limit' => $_POST['bookings-email-limit'],
 				'using_calendar' => $_POST['using-calendar'],
 				'calendar_dates' => !empty($_POST['calendar-dates']) ? $_POST['calendar-dates'] : $oldOptions->calendar_dates,
@@ -4478,7 +4508,7 @@ function seatreg_add_booking_with_manager_callback() {
 		if($bookingStatus === "2" && $sendBookingConfirmToBooker) {
 			seatreg_send_approved_booking_email($bookingId, $registrationCode, $bookingData->approved_booking_email_template);
 		}else if ($bookingStatus === "1" && $sendBookingConfirmToBooker) {
-			seatreg_send_pending_booking_email($bookingData->registration_name, $_POST['email'][0], $bookingCheckURL, $bookingData->pending_booking_email_template, $bookingData->email_from_address, $bookingData->pending_booking_email_subject, array('bg' => $bookingData->email_background_color, 'text' => $bookingData->email_text_color, 'heading' => $bookingData->email_heading_color));
+			seatreg_send_pending_booking_email($bookingData->registration_name, $_POST['email'][0], $bookingCheckURL, $bookingData->pending_booking_email_template, $bookingData->email_from_address, $bookingData->pending_booking_email_subject, array('bg' => $bookingData->email_background_color, 'text' => $bookingData->email_text_color, 'heading' => $bookingData->email_heading_color, 'logo' => $bookingData->email_logo, 'logoPosition' => $bookingData->email_logo_position));
 		}
 		wp_send_json_success( array('status' => 'created') );
 	}else if( $successStatusCount !== $addingStatusCount ) {

@@ -359,7 +359,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			
 			if($this->_requireBookingEmailConfirm) {
 				//send email with the confirm link
-				$emailVerificationMailSent = seatreg_sent_email_verification_email($confCode, $this->_bookerEmail, $this->_registrationName, $this->_emailVerificationTemplate, $this->_emailFromAddress, $this->_emailVerificationSubject, array('bg' => $this->_emailBackgroundColor, 'text' => $this->_emailTextColor, 'heading' => $this->_emailHeadingColor));
+				$emailVerificationMailSent = seatreg_sent_email_verification_email($confCode, $this->_bookerEmail, $this->_registrationName, $this->_emailVerificationTemplate, $this->_emailFromAddress, $this->_emailVerificationSubject, array('bg' => $this->_emailBackgroundColor, 'text' => $this->_emailTextColor, 'heading' => $this->_emailHeadingColor, 'logo' => $this->_emailLogo, 'logoPosition' => $this->_emailLogoPosition));
 
 				if($emailVerificationMailSent) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking email verification sent', false);
@@ -380,7 +380,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 					SeatregActionsService::triggerBookingPendingAction($this->_bookingId);
 
 					if ($this->_sendNewPendingBookingNotificationBookerEmail) {
-						$pendingBookingEmailSent = seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate, $this->_emailFromAddress, $this->_pendingBookingSubject, array('bg' => $this->_emailBackgroundColor, 'text' => $this->_emailTextColor, 'heading' => $this->_emailHeadingColor));
+						$pendingBookingEmailSent = seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate, $this->_emailFromAddress, $this->_pendingBookingSubject, array('bg' => $this->_emailBackgroundColor, 'text' => $this->_emailTextColor, 'heading' => $this->_emailHeadingColor, 'logo' => $this->_emailLogo, 'logoPosition' => $this->_emailLogoPosition));
 						
 						if($pendingBookingEmailSent) {
 							seatreg_add_activity_log('booking', $this->_bookingId, 'Pending booking email sent', false);

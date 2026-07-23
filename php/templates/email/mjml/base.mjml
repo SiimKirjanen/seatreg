@@ -25,6 +25,7 @@
 
     <mj-section background-color="#ffffff" border-radius="10px" padding="30px 32px 32px 32px">
       <mj-column>
+        <mj-text padding="0" line-height="1px" font-size="1px">{{emailLogo}}</mj-text>
         <mj-text font-size="22px" font-weight="600" color="{{emailHeadingColor}}" letter-spacing="-0.3px" line-height="1.35" padding="0 0 16px 0">
           {{heading}}
         </mj-text>

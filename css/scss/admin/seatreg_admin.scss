@@ -225,6 +225,21 @@ html {
   gap: 10px 16px;
   margin-top: 12px;
 }
+.email-logo-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+#email-logo-preview {
+  max-height: 60px;
+  max-width: 200px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4px;
+  background: #fff;
+}
 .email-color-field {
   display: contents;
 

@@ -33,7 +33,8 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
         'heading' => $emailSubject,
         'bgColor' => $registration->email_background_color,
         'textColor' => $registration->email_text_color,
-        'headingColor' => $registration->email_heading_color
+        'headingColor' => $registration->email_heading_color,
+        'logo' => SeatregEmailTemplateService::prepareLogo($registration->email_logo, $registration->email_logo_position)
     ));
 
     wp_mail($emailToSend, $emailSubject, $message, array(
@@ -116,7 +117,8 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         'heading' => $emailSubject,
         'bgColor' => $registration->email_background_color,
         'textColor' => $registration->email_text_color,
-        'headingColor' => $registration->email_heading_color
+        'headingColor' => $registration->email_heading_color,
+        'logo' => SeatregEmailTemplateService::prepareLogo($registration->email_logo, $registration->email_logo_position)
     ));
 
     $isSent = wp_mail($bookerEmail, $emailSubject, $message, array(
@@ -152,7 +154,11 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
         'heading' => $emailSubject,
         'bgColor' => isset($emailColors['bg']) ? $emailColors['bg'] : null,
         'textColor' => isset($emailColors['text']) ? $emailColors['text'] : null,
-        'headingColor' => isset($emailColors['heading']) ? $emailColors['heading'] : null
+        'headingColor' => isset($emailColors['heading']) ? $emailColors['heading'] : null,
+        'logo' => SeatregEmailTemplateService::prepareLogo(
+            isset($emailColors['logo']) ? $emailColors['logo'] : 0,
+            isset($emailColors['logoPosition']) ? $emailColors['logoPosition'] : 'center'
+        )
     ));
 
     return wp_mail($bookerEmail, $emailSubject, $message, array(
@@ -178,7 +184,11 @@ function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bo
         'heading' => $emailSubject,
         'bgColor' => isset($emailColors['bg']) ? $emailColors['bg'] : null,
         'textColor' => isset($emailColors['text']) ? $emailColors['text'] : null,
-        'headingColor' => isset($emailColors['heading']) ? $emailColors['heading'] : null
+        'headingColor' => isset($emailColors['heading']) ? $emailColors['heading'] : null,
+        'logo' => SeatregEmailTemplateService::prepareLogo(
+            isset($emailColors['logo']) ? $emailColors['logo'] : 0,
+            isset($emailColors['logoPosition']) ? $emailColors['logoPosition'] : 'center'
+        )
     ));
 
     return wp_mail($bookerEmail, $emailSubject, $message, array(
