@@ -62,3 +62,6 @@ Compiles map builder styles
 
 ### admin-styles
 Compiles admin styles
+
+### build:emails
+Compiles the MJML email templates into HTML

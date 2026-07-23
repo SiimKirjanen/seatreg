@@ -4610,7 +4610,11 @@ function seatreg_send_test_email() {
 	$response = new SeatregJsonResponse();
 	$adminEmail = get_option( 'admin_email' );
 
-	$mailSent = wp_mail($email, esc_html__('Seatreg test email', 'seatreg'), esc_html__('This is a test email', 'seatreg'), array(
+	$testEmailSubject = esc_html__('Seatreg test email', 'seatreg');
+	$testEmailBody = '<p>' . esc_html__('This is a test email', 'seatreg') . '</p>';
+	$testEmailBody = SeatregEmailTemplateService::renderEmail($testEmailBody, array('heading' => $testEmailSubject));
+
+	$mailSent = wp_mail($email, $testEmailSubject, $testEmailBody, array(
 		"Content-type: text/html",
 		"FROM: $adminEmail"
 	));

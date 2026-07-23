@@ -28,7 +28,10 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
     $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 
     /* translators: %s: Registration name */
-    wp_mail($emailToSend, sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName), $message, array(
+    $emailSubject = sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName);
+    $message = SeatregEmailTemplateService::renderEmail($message, array('heading' => $emailSubject));
+
+    wp_mail($emailToSend, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromAddress"
     ));
@@ -103,7 +106,9 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         
         $message .= '<br><img src="cid:qrcode" />';
     }
-    
+
+    $message = SeatregEmailTemplateService::renderEmail($message, array('heading' => $emailSubject));
+
     $isSent = wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"
@@ -133,6 +138,8 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
         ('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>';
     }
 
+    $message = SeatregEmailTemplateService::renderEmail($message, array('heading' => $emailSubject));
+
     return wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"
@@ -151,7 +158,9 @@ function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bo
         '<p>' . esc_html__('You can look your booking at the following link', 'seatreg') . '</p>' .
         '<a href="' .  esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) . '</a>';
     }
-    
+
+    $message = SeatregEmailTemplateService::renderEmail($message, array('heading' => $emailSubject));
+
     return wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"

@@ -1,0 +1,42 @@
+<mjml>
+  <mj-head>
+    <mj-title>{{heading}}</mj-title>
+    <mj-preview>{{preheader}}</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" />
+      <mj-text font-size="15px" color="#3d4759" line-height="1.6" />
+      <mj-section padding="0px" />
+    </mj-attributes>
+    <mj-style>
+      .seatreg-content table { border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+      .seatreg-content th { background: #f1f4f9; color: #3d4759; text-align: left; padding: 8px 10px; border: 1px solid #e2e8f0; }
+      .seatreg-content td { padding: 8px 10px; border: 1px solid #e2e8f0; color: #3d4759; }
+      .seatreg-content a { color: #2b6cb0; }
+      .seatreg-content p { margin: 0 0 14px 0; }
+      .seatreg-content img { max-width: 100%; }
+    </mj-style>
+  </mj-head>
+  <mj-body width="600px" background-color="#eef1f6">
+    <mj-section padding="20px 0 0 0">
+      <mj-column>
+        <mj-text padding="0" font-size="1px" line-height="1px">&nbsp;</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" border-radius="10px" padding="30px 32px 32px 32px">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="600" color="#1a2233" letter-spacing="-0.3px" line-height="1.35" padding="0 0 16px 0">
+          {{heading}}
+        </mj-text>
+        <mj-divider border-width="1px" border-color="#e8ecf2" padding="0 0 20px 0" />
+        <mj-text css-class="seatreg-content" padding="0">{{content}}</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="0 0 24px 0">
+      <mj-column>
+        <mj-text padding="0" line-height="1px">&nbsp;</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
