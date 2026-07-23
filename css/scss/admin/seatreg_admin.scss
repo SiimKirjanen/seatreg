@@ -218,6 +218,35 @@ html {
 .settings-tab-panel.settings-tab-panel--active {
   display: block;
 }
+.email-color-fields {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 12px;
+}
+.email-color-field {
+  display: contents;
+
+  label {
+    font-size: 13px;
+    margin: 0;
+  }
+
+  input[type="color"] {
+    width: 48px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
 .seatreg-settings-form #seatreg-settings-submit {
   margin-top: 20px;
 }

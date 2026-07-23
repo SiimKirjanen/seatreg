@@ -1120,6 +1120,37 @@ function seatreg_generate_settings_form() {
 				<?php endif; ?>
 			</div>
 
+			<?php
+				$emailBgColor = $options[0]->email_background_color ? $options[0]->email_background_color : SEATREG_EMAIL_DEFAULT_BG_COLOR;
+				$emailTextColor = $options[0]->email_text_color ? $options[0]->email_text_color : SEATREG_EMAIL_DEFAULT_TEXT_COLOR;
+				$emailHeadingColor = $options[0]->email_heading_color ? $options[0]->email_heading_color : SEATREG_EMAIL_DEFAULT_HEADING_COLOR;
+				$emailColorsCustomized = $options[0]->email_background_color || $options[0]->email_text_color || $options[0]->email_heading_color;
+			?>
+			<div class="form-group">
+				<label><?php esc_html_e('Email appearance', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Customize the colors of emails sent to bookers. When disabled, default colors are used.', 'seatreg'); ?></p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="customize-email-colors" name="customize-email-colors" value="1" <?php echo $emailColorsCustomized ? 'checked' : ''; ?>>
+						<?php esc_html_e('Customize email colors', 'seatreg'); ?>
+					</label>
+				</div>
+				<div class="email-color-fields">
+					<div class="email-color-field">
+						<label for="email-background-color"><?php esc_html_e('Page background color', 'seatreg'); ?></label>
+						<input type="color" id="email-background-color" name="email-background-color" value="<?php echo esc_attr($emailBgColor); ?>" <?php echo $emailColorsCustomized ? '' : 'disabled'; ?>>
+					</div>
+					<div class="email-color-field">
+						<label for="email-heading-color"><?php esc_html_e('Heading color', 'seatreg'); ?></label>
+						<input type="color" id="email-heading-color" name="email-heading-color" value="<?php echo esc_attr($emailHeadingColor); ?>" <?php echo $emailColorsCustomized ? '' : 'disabled'; ?>>
+					</div>
+					<div class="email-color-field">
+						<label for="email-text-color"><?php esc_html_e('Body text color', 'seatreg'); ?></label>
+						<input type="color" id="email-text-color" name="email-text-color" value="<?php echo esc_attr($emailTextColor); ?>" <?php echo $emailColorsCustomized ? '' : 'disabled'; ?>>
+					</div>
+				</div>
+			</div>
+
 			</div><!-- /.settings-tab-panel emails -->
 			<div class="settings-tab-panel" data-tab-panel="payments">
 
@@ -2643,6 +2674,9 @@ function seatreg_set_up_db() {
 			stripe_webhook_secret varchar(255) DEFAULT NULL,
 			using_seats tinyint(1) NOT NULL DEFAULT 1,
 			email_from_address varchar(255) DEFAULT NULL,
+			email_background_color varchar(7) DEFAULT NULL,
+			email_text_color varchar(7) DEFAULT NULL,
+			email_heading_color varchar(7) DEFAULT NULL,
 			booking_email_limit int(11) DEFAULT NULL,
 			using_calendar tinyint(1) NOT NULL DEFAULT 0,
 			calendar_dates text,
@@ -3687,6 +3721,7 @@ function seatreg_update() {
 
 	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 	$dbUpdated = true;
+	$customizeEmailColors = isset($_POST['customize-email-colors']);
 
 	try {
         $wpdb->query('START TRANSACTION');
@@ -3730,6 +3765,9 @@ function seatreg_update() {
 				'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
 				'using_seats' => $_POST['using-seats'],
 				'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null,
+				'email_background_color' => $customizeEmailColors && !empty($_POST['email-background-color']) ? sanitize_hex_color($_POST['email-background-color']) : null,
+				'email_text_color' => $customizeEmailColors && !empty($_POST['email-text-color']) ? sanitize_hex_color($_POST['email-text-color']) : null,
+				'email_heading_color' => $customizeEmailColors && !empty($_POST['email-heading-color']) ? sanitize_hex_color($_POST['email-heading-color']) : null,
 				'booking_email_limit' => $_POST['bookings-email-limit'],
 				'using_calendar' => $_POST['using-calendar'],
 				'calendar_dates' => !empty($_POST['calendar-dates']) ? $_POST['calendar-dates'] : $oldOptions->calendar_dates,
@@ -4440,7 +4478,7 @@ function seatreg_add_booking_with_manager_callback() {
 		if($bookingStatus === "2" && $sendBookingConfirmToBooker) {
 			seatreg_send_approved_booking_email($bookingId, $registrationCode, $bookingData->approved_booking_email_template);
 		}else if ($bookingStatus === "1" && $sendBookingConfirmToBooker) {
-			seatreg_send_pending_booking_email($bookingData->registration_name, $_POST['email'][0], $bookingCheckURL, $bookingData->pending_booking_email_template, $bookingData->email_from_address, $bookingData->pending_booking_email_subject);
+			seatreg_send_pending_booking_email($bookingData->registration_name, $_POST['email'][0], $bookingCheckURL, $bookingData->pending_booking_email_template, $bookingData->email_from_address, $bookingData->pending_booking_email_subject, array('bg' => $bookingData->email_background_color, 'text' => $bookingData->email_text_color, 'heading' => $bookingData->email_heading_color));
 		}
 		wp_send_json_success( array('status' => 'created') );
 	}else if( $successStatusCount !== $addingStatusCount ) {

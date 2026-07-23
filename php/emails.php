@@ -29,7 +29,12 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
 
     /* translators: %s: Registration name */
     $emailSubject = sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName);
-    $message = SeatregEmailTemplateService::renderEmail($message, array('heading' => $emailSubject));
+    $message = SeatregEmailTemplateService::renderEmail($message, array(
+        'heading' => $emailSubject,
+        'bgColor' => $registration->email_background_color,
+        'textColor' => $registration->email_text_color,
+        'headingColor' => $registration->email_heading_color
+    ));
 
     wp_mail($emailToSend, $emailSubject, $message, array(
         "Content-type: text/html",
@@ -107,7 +112,12 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         $message .= '<br><img src="cid:qrcode" />';
     }
 
-    $message = SeatregEmailTemplateService::renderEmail($message, array('heading' => $emailSubject));
+    $message = SeatregEmailTemplateService::renderEmail($message, array(
+        'heading' => $emailSubject,
+        'bgColor' => $registration->email_background_color,
+        'textColor' => $registration->email_text_color,
+        'headingColor' => $registration->email_heading_color
+    ));
 
     $isSent = wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
@@ -122,7 +132,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     return false;
 }
 
-function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template, $emailFromAddress, $customEmailSubject) {
+function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template, $emailFromAddress, $customEmailSubject, $emailColors = array()) {
     $confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
     $fromEmail = getEmailFromAddress($emailFromAddress);
     $message = '';
@@ -138,7 +148,12 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
         ('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>';
     }
 
-    $message = SeatregEmailTemplateService::renderEmail($message, array('heading' => $emailSubject));
+    $message = SeatregEmailTemplateService::renderEmail($message, array(
+        'heading' => $emailSubject,
+        'bgColor' => isset($emailColors['bg']) ? $emailColors['bg'] : null,
+        'textColor' => isset($emailColors['text']) ? $emailColors['text'] : null,
+        'headingColor' => isset($emailColors['heading']) ? $emailColors['heading'] : null
+    ));
 
     return wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
@@ -146,7 +161,7 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
     ));
 }
 
-function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template, $emailFromAddress, $customEmailSubject) {
+function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template, $emailFromAddress, $customEmailSubject, $emailColors = array()) {
     $fromEmail = getEmailFromAddress($emailFromAddress);
     $message = '';
     $emailSubject = $customEmailSubject ? $customEmailSubject : esc_html__('Booking update', 'seatreg');
@@ -159,7 +174,12 @@ function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bo
         '<a href="' .  esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) . '</a>';
     }
 
-    $message = SeatregEmailTemplateService::renderEmail($message, array('heading' => $emailSubject));
+    $message = SeatregEmailTemplateService::renderEmail($message, array(
+        'heading' => $emailSubject,
+        'bgColor' => isset($emailColors['bg']) ? $emailColors['bg'] : null,
+        'textColor' => isset($emailColors['text']) ? $emailColors['text'] : null,
+        'headingColor' => isset($emailColors['heading']) ? $emailColors['heading'] : null
+    ));
 
     return wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",

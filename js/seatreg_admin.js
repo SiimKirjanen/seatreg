@@ -2725,6 +2725,12 @@ $('#seatreg-settings-form').on('click', '.settings-tab', function() {
 	seatregActivateSettingsTab($(this).data('tab'));
 });
 
+// Enable/disable the email color pickers based on the "Customize email colors" toggle.
+$('#seatreg-settings-form').on('change', '#customize-email-colors', function() {
+	var enabled = $(this).is(':checked');
+	$('#email-background-color, #email-heading-color, #email-text-color').prop('disabled', !enabled);
+});
+
 // Restore the last active tab for this registration (defaults to the first tab in the markup).
 (function() {
 	var savedTab = null;

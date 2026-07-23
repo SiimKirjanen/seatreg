@@ -35,7 +35,7 @@ class SeatregEmailTemplateService {
      * Wrap generated HTML content in the branded email layout.
      *
      * @param string $contentHtml The email body HTML to inject into the layout.
-     * @param array  $args        Optional overrides: 'heading', 'preheader'.
+     * @param array  $args        Optional overrides: 'heading', 'preheader', 'bgColor', 'textColor', 'headingColor'.
      * @return string The full HTML email, or the raw content if the template is unavailable.
      */
     public static function renderEmail( $contentHtml, $args = array() ) {
@@ -46,12 +46,15 @@ class SeatregEmailTemplateService {
             return $contentHtml;
         }
 
-        $heading   = isset( $args['heading'] ) ? $args['heading'] : get_bloginfo( 'name' );
-        $preheader = isset( $args['preheader'] ) ? $args['preheader'] : $heading;
+        $heading      = isset( $args['heading'] ) ? $args['heading'] : get_bloginfo( 'name' );
+        $preheader    = isset( $args['preheader'] ) ? $args['preheader'] : $heading;
+        $bgColor      = ! empty( $args['bgColor'] ) ? $args['bgColor'] : SEATREG_EMAIL_DEFAULT_BG_COLOR;
+        $textColor    = ! empty( $args['textColor'] ) ? $args['textColor'] : SEATREG_EMAIL_DEFAULT_TEXT_COLOR;
+        $headingColor = ! empty( $args['headingColor'] ) ? $args['headingColor'] : SEATREG_EMAIL_DEFAULT_HEADING_COLOR;
 
         return str_replace(
-            array( '{{heading}}', '{{preheader}}', '{{content}}', '{{year}}' ),
-            array( $heading, $preheader, $contentHtml, gmdate( 'Y' ) ),
+            array( '{{heading}}', '{{preheader}}', '{{content}}', '{{year}}', '{{emailBgColor}}', '{{emailTextColor}}', '{{emailHeadingColor}}' ),
+            array( $heading, $preheader, $contentHtml, gmdate( 'Y' ), $bgColor, $textColor, $headingColor ),
             $template
         );
     }

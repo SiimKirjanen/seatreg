@@ -31,6 +31,9 @@ class SeatregBooking {
 	protected $_sendApprovedBookingEmail;
 	protected $_seatPasswords; //seat passwords provided by seat registration
 	protected $_emailFromAddress = null;
+	protected $_emailBackgroundColor = null;
+	protected $_emailTextColor = null;
+	protected $_emailHeadingColor = null;
 	protected $_bookingSameEmailLimit = null;
 	protected $_usingCalendar = false; //is registration calendar mode activated?
 	protected $_calendarDates = []; // dates for calendar mode
@@ -316,6 +319,9 @@ class SeatregBooking {
 		$this->_approvedBookingTemplate = $result->approved_booking_email_template;
 		$this->_sendApprovedBookingEmail = $result->send_approved_booking_email;
 		$this->_emailFromAddress = $result->email_from_address;
+		$this->_emailBackgroundColor = $result->email_background_color;
+		$this->_emailTextColor = $result->email_text_color;
+		$this->_emailHeadingColor = $result->email_heading_color;
 		$this->_bookingSameEmailLimit = is_null($result->booking_email_limit) ? null : (int)$result->booking_email_limit;
 		$this->_usingCalendar = $result->using_calendar === '1';
 		$this->_calendarDates = $result->calendar_dates ? explode(',', $result->calendar_dates) : [];
