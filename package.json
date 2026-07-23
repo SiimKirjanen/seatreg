@@ -27,7 +27,7 @@
     "registration-styles": "gulp registration-styles",
     "admin-styles": "gulp admin-styles",
     "builder-styles": "gulp builder-styles",
-    "build:emails": "mjml php/templates/email/mjml/*.mjml -o php/templates/email",
+    "build:emails": "mjml php/templates/email/mjml/*.mjml -o php/templates/email --sanitizeStyles",
     "watch": "gulp watch"
   },
   "author": "Siim Kirjanen",

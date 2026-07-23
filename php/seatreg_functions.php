@@ -3751,6 +3751,14 @@ function seatreg_update() {
 	$dbUpdated = true;
 	$customizeEmailColors = isset($_POST['customize-email-colors']);
 
+	if( $customizeEmailColors ) {
+		foreach( array('email-background-color', 'email-text-color', 'email-heading-color') as $colorField ) {
+			if( !empty($_POST[$colorField]) && !SeatregDataValidation::validateHexColor($_POST[$colorField]) ) {
+				wp_die('Email color not valid');
+			}
+		}
+	}
+
 	try {
         $wpdb->query('START TRANSACTION');
 

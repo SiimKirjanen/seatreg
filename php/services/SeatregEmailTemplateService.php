@@ -48,9 +48,9 @@ class SeatregEmailTemplateService {
 
         $heading      = isset( $args['heading'] ) ? $args['heading'] : get_bloginfo( 'name' );
         $preheader    = isset( $args['preheader'] ) ? $args['preheader'] : $heading;
-        $bgColor      = ! empty( $args['bgColor'] ) ? $args['bgColor'] : SEATREG_EMAIL_DEFAULT_BG_COLOR;
-        $textColor    = ! empty( $args['textColor'] ) ? $args['textColor'] : SEATREG_EMAIL_DEFAULT_TEXT_COLOR;
-        $headingColor = ! empty( $args['headingColor'] ) ? $args['headingColor'] : SEATREG_EMAIL_DEFAULT_HEADING_COLOR;
+        $bgColor      = sanitize_hex_color( $args['bgColor'] ?? '' ) ?: SEATREG_EMAIL_DEFAULT_BG_COLOR;
+        $textColor    = sanitize_hex_color( $args['textColor'] ?? '' ) ?: SEATREG_EMAIL_DEFAULT_TEXT_COLOR;
+        $headingColor = sanitize_hex_color( $args['headingColor'] ?? '' ) ?: SEATREG_EMAIL_DEFAULT_HEADING_COLOR;
         $logo         = isset( $args['logo'] ) ? $args['logo'] : '';
 
         return str_replace(
