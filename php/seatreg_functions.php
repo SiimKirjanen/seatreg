@@ -4125,6 +4125,13 @@ function seatreg_custom_payment_icon_upload() {
 	}
 	$code = sanitize_text_field($_POST['code']);
 
+	if( !SeatregSanitizationService::isValidRegistrationCode($code) ) {
+		$resp->setError('Invalid registration code');
+		$resp->echoData();
+
+		die();
+	}
+
 	try {
 		$imageUploadService = new SeatregImageUploadService('/custom_payment_icons/' . $code . '/');
 		$status = $imageUploadService->uploadImage($_FILES["file"]);
@@ -4540,6 +4547,13 @@ function seatreg_upload_image_callback() {
 
 	$code = sanitize_text_field($_POST['code']);
 
+	if( !SeatregSanitizationService::isValidRegistrationCode($code) ) {
+		$resp->setError('Invalid registration code');
+		$resp->echoData();
+
+		die();
+	}
+
 	try {
 		$imageUploadService = new SeatregImageUploadService('/room_images/' . $code . '/');
 		$status = $imageUploadService->uploadImage($_FILES["fileToUpload"]);
@@ -4565,17 +4579,26 @@ function seatreg_remove_img_callback() {
 	$resp = new SeatregJsonResponse();
 
 	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {
-		//check if file exists
-		$imgPath = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . sanitize_text_field($_POST['code']) . '/' . sanitize_text_field($_POST['imgName']);
-		
-		if(file_exists($imgPath)) {
+		$code = sanitize_text_field($_POST['code']);
+
+		if( !SeatregSanitizationService::isValidRegistrationCode($code) ) {
+			$resp->setError('Image was not found!');
+			$resp->echoData();
+
+			die();
+		}
+
+		$roomImagesLocation = SeatregUploadsRepository::getCustomRoomImagesLocationDir($code);
+		$imgPath = SeatregSanitizationService::resolvePathInsideBase($roomImagesLocation, $_POST['imgName']);
+
+		if($imgPath !== false && file_exists($imgPath)) {
 			unlink($imgPath);
 			$resp->setText('Image deleted');
 		}else {
 			$resp->setError('Image was not found!');
 		}
 		$resp->echoData();
-		
+
 		die();
 	}
 }
