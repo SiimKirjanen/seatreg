@@ -734,4 +734,8 @@ class SeatregDataValidation {
     public static function validateNumberic($number) {
         return preg_match('/^[0-9]+$/', $number);
     }
+
+    public static function validateHexColor($color) {
+        return sanitize_hex_color($color) !== null;
+    }
 }

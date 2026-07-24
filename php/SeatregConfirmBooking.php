@@ -73,7 +73,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			SeatregActionsService::triggerBookingPendingAction($this->_bookingId);
 
 			if ($this->_sendNewPendingBookingNotificationBookerEmail) {
-				seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate, $this->_emailFromAddress, $this->_pendingBookingSubject);
+				seatreg_send_pending_booking_email($this->_registrationName, $this->_bookerEmail, $bookingCheckURL, $this->_pendingBookingTemplate, $this->_emailFromAddress, $this->_pendingBookingSubject, array('bg' => $this->_emailBackgroundColor, 'text' => $this->_emailTextColor, 'heading' => $this->_emailHeadingColor, 'logo' => $this->_emailLogo, 'logoPosition' => $this->_emailLogoPosition));
 			}
 			esc_html_e('You booking is now in pending state. Registration owner must approve it', 'seatreg');
 			echo '.<br><br>';

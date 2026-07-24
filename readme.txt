@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 7.0
-Stable tag: 1.71.0
+Stable tag: 1.72.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -48,6 +48,11 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.72.0 =
+* Emails sent to bookers now have a cleaner design.
+* Added the option to customize email colors (background, heading, and text) per registration.
+* Added the option to show logo at the top of emails, with a selectable alignment, per registration.
 
 = 1.71.0 =
 * Removed bookings are now kept in a new "Deleted" tab in the booking manager instead of being erased right away.

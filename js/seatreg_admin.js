@@ -2725,6 +2725,48 @@ $('#seatreg-settings-form').on('click', '.settings-tab', function() {
 	seatregActivateSettingsTab($(this).data('tab'));
 });
 
+// Enable/disable the email color pickers based on the "Customize email colors" toggle.
+$('#seatreg-settings-form').on('change', '#customize-email-colors', function() {
+	var enabled = $(this).is(':checked');
+	$('#email-background-color, #email-heading-color, #email-text-color').prop('disabled', !enabled);
+});
+
+// Email logo: pick an image from the WordPress media library.
+var seatregEmailLogoFrame = null;
+$('#seatreg-settings-form').on('click', '#email-logo-select', function(e) {
+	e.preventDefault();
+
+	if (seatregEmailLogoFrame) {
+		seatregEmailLogoFrame.open();
+		return;
+	}
+
+	seatregEmailLogoFrame = wp.media({
+		title: 'Select email logo',
+		library: { type: 'image' },
+		button: { text: 'Use as logo' },
+		multiple: false
+	});
+
+	seatregEmailLogoFrame.on('select', function() {
+		var attachment = seatregEmailLogoFrame.state().get('selection').first().toJSON();
+		var previewUrl = (attachment.sizes && attachment.sizes.medium) ? attachment.sizes.medium.url : attachment.url;
+
+		$('#email-logo').val(attachment.id);
+		$('#email-logo-preview').attr('src', previewUrl).show();
+		$('#email-logo-remove').show();
+	});
+
+	seatregEmailLogoFrame.open();
+});
+
+$('#seatreg-settings-form').on('click', '#email-logo-remove', function(e) {
+	e.preventDefault();
+	$('#email-logo').val('');
+	$('#email-logo-preview').attr('src', '').hide();
+	$(this).hide();
+});
+
 // Restore the last active tab for this registration (defaults to the first tab in the markup).
 (function() {
 	var savedTab = null;
