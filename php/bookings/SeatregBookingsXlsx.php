@@ -138,7 +138,8 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
                 $header[$customField['label']] = 'string';
                 $registrationData[] = $this->customFieldWithValueXlsx($customField, $registrantCustomData);
             }
-            $data[] = $registrationData;
+
+            $data[] = array_map(array('SeatregSanitizationService', 'neutralizeSpreadsheetFormula'), $registrationData);
         }
 
         $writer = new XLSXWriter();
