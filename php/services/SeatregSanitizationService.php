@@ -67,4 +67,21 @@ class SeatregSanitizationService {
 
         return $realTarget;
     }
+
+    /**
+     * Neutralize spreadsheet formula injection (CSV / XLSX). Spreadsheet
+     * applications evaluate a cell as a formula when its text starts with one
+     * of = + - @ (or a leading tab / carriage return). Prefixing such a value
+     * with a single quote forces it to be treated as literal text.
+     *
+     * @param mixed $value The cell value.
+     * @return mixed The neutralized value (unchanged when not a string or not risky).
+     */
+    public static function neutralizeSpreadsheetFormula($value) {
+        if (is_string($value) && $value !== '' && strpbrk($value[0], "=+-@\t\r") !== false) {
+            return "'" . $value;
+        }
+
+        return $value;
+    }
 }
