@@ -1197,6 +1197,29 @@ body {
 	float: right;
 	text-align: right;
 }
+.cart-item-label,
+.row-label {
+	display: none;
+	width: 30%;
+	float: right;
+	text-align: right;
+	word-break: break-word;
+}
+#seat-cart-popup.cart-has-labels {
+	.cart-item-label,
+	.row-label {
+		display: block;
+	}
+	.cart-item-label:empty:before {
+		content: '\00a0';
+	}
+	.cart-item-room,
+	.row-room {
+		width: 45%;
+		float: left;
+		text-align: center;
+	}
+}
 #seat-cart-rows {
 	clear: both;
 	overflow: hidden;
@@ -1294,6 +1317,7 @@ body {
 .check-item {
 	text-align: left;
 	display: inline-block;
+	vertical-align: top;
 	margin: 0 6px 6px;
 
 	&:not(.check-item--last) {
@@ -1875,6 +1899,18 @@ body {
 		width: 60%;
 		float: left;
 		text-align: center;
+	}
+	#seat-cart-popup.cart-has-labels {
+		.cart-item-room,
+		.row-room {
+			width: 30%;
+		}
+		.cart-item-label,
+		.row-label {
+			width: 30%;
+			float: left;
+			text-align: center;
+		}
 	}
 	#seat-cart-rows {
 		clear: both;

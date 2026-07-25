@@ -325,6 +325,7 @@
 					<input type="hidden" id="selected-room-uuid">
 					<input type="hidden" id="selected-seat-price">
 					<input type="hidden" id="selected-multi-price-uuid">
+					<input type="hidden" id="selected-seat-legend">
 				</div>
 			</div>
 
@@ -349,8 +350,13 @@
 								?>
 							</div>
 							<div class="row-room">
-								<?php 
+								<?php
 									esc_html_e('Room', 'seatreg');
+								?>
+							</div>
+							<div class="row-label">
+								<?php
+									esc_html_e('Label', 'seatreg');
 								?>
 							</div>
 						</div>
