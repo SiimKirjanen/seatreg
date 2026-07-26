@@ -19,6 +19,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-rev": "^9.0.0",
     "gulp-sass": "^5.0.0",
+    "mjml": "^5.4.0",
     "sass": "^1.39.0"
   },
   "scripts": {
@@ -26,6 +27,7 @@
     "registration-styles": "gulp registration-styles",
     "admin-styles": "gulp admin-styles",
     "builder-styles": "gulp builder-styles",
+    "build:emails": "mjml php/templates/email/mjml/*.mjml -o php/templates/email --sanitizeStyles",
     "watch": "gulp watch"
   },
   "author": "Siim Kirjanen",

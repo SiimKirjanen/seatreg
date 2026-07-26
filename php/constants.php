@@ -8,7 +8,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.55');
+define('SEATREG_DB_VERSION', '1.58');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));
@@ -62,6 +62,11 @@ define('SEATREG_BOOKING_APPROVED', 2);
 $up_dir = wp_upload_dir();
 define('SEATREG_TEMP_FOLDER_DIR', $up_dir['basedir'].'/seatreg');
 define('SEATREG_TEMP_FOLDER_URL', $up_dir['baseurl'].'/seatreg');
+
+// Email appearance defaults (must match the fixed colors in php/templates/email/mjml/base.mjml)
+define('SEATREG_EMAIL_DEFAULT_BG_COLOR', '#eef1f6');
+define('SEATREG_EMAIL_DEFAULT_TEXT_COLOR', '#3d4759');
+define('SEATREG_EMAIL_DEFAULT_HEADING_COLOR', '#1a2233');
 
 // Email template keywords
 define('SEATREG_TEMPLATE_STATUS_LINK', '[status-link]');

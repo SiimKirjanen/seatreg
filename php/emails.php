@@ -28,7 +28,16 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
     $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 
     /* translators: %s: Registration name */
-    wp_mail($emailToSend, sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName), $message, array(
+    $emailSubject = sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName);
+    $message = SeatregEmailTemplateService::renderEmail($message, array(
+        'heading' => $emailSubject,
+        'bgColor' => $registration->email_background_color,
+        'textColor' => $registration->email_text_color,
+        'headingColor' => $registration->email_heading_color,
+        'logo' => SeatregEmailTemplateService::prepareLogo($registration->email_logo, $registration->email_logo_position)
+    ));
+
+    wp_mail($emailToSend, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromAddress"
     ));
@@ -103,7 +112,15 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         
         $message .= '<br><img src="cid:qrcode" />';
     }
-    
+
+    $message = SeatregEmailTemplateService::renderEmail($message, array(
+        'heading' => $emailSubject,
+        'bgColor' => $registration->email_background_color,
+        'textColor' => $registration->email_text_color,
+        'headingColor' => $registration->email_heading_color,
+        'logo' => SeatregEmailTemplateService::prepareLogo($registration->email_logo, $registration->email_logo_position)
+    ));
+
     $isSent = wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"
@@ -117,7 +134,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     return false;
 }
 
-function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template, $emailFromAddress, $customEmailSubject) {
+function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template, $emailFromAddress, $customEmailSubject, $emailColors = array()) {
     $confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
     $fromEmail = getEmailFromAddress($emailFromAddress);
     $message = '';
@@ -133,13 +150,24 @@ function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registr
         ('. esc_html__('If you can\'t click then copy and paste it into your web browser', 'seatreg') . ')<br/><br/>';
     }
 
+    $message = SeatregEmailTemplateService::renderEmail($message, array(
+        'heading' => $emailSubject,
+        'bgColor' => isset($emailColors['bg']) ? $emailColors['bg'] : null,
+        'textColor' => isset($emailColors['text']) ? $emailColors['text'] : null,
+        'headingColor' => isset($emailColors['heading']) ? $emailColors['heading'] : null,
+        'logo' => SeatregEmailTemplateService::prepareLogo(
+            isset($emailColors['logo']) ? $emailColors['logo'] : 0,
+            isset($emailColors['logoPosition']) ? $emailColors['logoPosition'] : 'center'
+        )
+    ));
+
     return wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"
     ));
 }
 
-function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template, $emailFromAddress, $customEmailSubject) {
+function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bookingCheckURL, $template, $emailFromAddress, $customEmailSubject, $emailColors = array()) {
     $fromEmail = getEmailFromAddress($emailFromAddress);
     $message = '';
     $emailSubject = $customEmailSubject ? $customEmailSubject : esc_html__('Booking update', 'seatreg');
@@ -151,7 +179,18 @@ function seatreg_send_pending_booking_email($registrationName, $bookerEmail, $bo
         '<p>' . esc_html__('You can look your booking at the following link', 'seatreg') . '</p>' .
         '<a href="' .  esc_url($bookingCheckURL) .'" >'. esc_html($bookingCheckURL) . '</a>';
     }
-    
+
+    $message = SeatregEmailTemplateService::renderEmail($message, array(
+        'heading' => $emailSubject,
+        'bgColor' => isset($emailColors['bg']) ? $emailColors['bg'] : null,
+        'textColor' => isset($emailColors['text']) ? $emailColors['text'] : null,
+        'headingColor' => isset($emailColors['heading']) ? $emailColors['heading'] : null,
+        'logo' => SeatregEmailTemplateService::prepareLogo(
+            isset($emailColors['logo']) ? $emailColors['logo'] : 0,
+            isset($emailColors['logoPosition']) ? $emailColors['logoPosition'] : 'center'
+        )
+    ));
+
     return wp_mail($bookerEmail, $emailSubject, $message, array(
         "Content-type: text/html",
         "FROM: $fromEmail"
