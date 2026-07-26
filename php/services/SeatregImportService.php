@@ -12,7 +12,7 @@ class SeatregImportService {
     public function __construct($code) {
         $this->seatregCode = $code;
         $this->registrationData = SeatregRegistrationRepository::getRegistrationByCode($this->seatregCode);
-        $this->roomData = json_decode($this->registrationData->registration_layout)->roomData;
+        $this->roomData = SeatregLayoutService::getRoomDataFromLayout($this->registrationData->registration_layout);
         $this->existingBookings = SeatregBookingRepository::getAllConfirmedAndApprovedBookingsByRegistrationCode($this->seatregCode);
     }
 

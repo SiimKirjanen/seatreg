@@ -58,7 +58,7 @@ class SeatregBookingPDF extends tFPDF {
         $this->SetFont('DejaVu','',10);
 
        if( $this->_bookingData->registration_layout !== null ) {
-            $this->_roomData = json_decode( $this->_bookingData->registration_layout )->roomData;
+            $this->_roomData = SeatregLayoutService::getRoomDataFromLayout( $this->_bookingData->registration_layout );
     
             foreach($this->_bookings as $booking) {
                 $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($this->_roomData, $booking->room_uuid);
@@ -161,9 +161,15 @@ class SeatregBookingPDF extends tFPDF {
             $paymentStatus = $this->_payment->payment_status ?? null;
             $registrantCustomData = json_decode($booking->custom_field_data, true);
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($booking, $this->_roomData);
+            $seatLegend = SeatregRegistrationService::getSeatLegendFromLayout($this->_roomData, $booking->room_uuid, $booking->seat_id);
 
             $this->Cell(20, 6, $placeNumberText . ': ' . esc_html($booking->seat_nr), 0, 1, 'L');
             $this->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($booking->room_name), 0, 1, 'L');
+
+            if( $seatLegend ) {
+                $this->Cell(20, 6, esc_html__('Label', 'seatreg') . ': ' . esc_html($seatLegend), 0, 1, 'L');
+            }
+
             $this->Cell(20, 6, esc_html__('Name', 'seatreg') . ': ' . esc_html($booking->first_name) . ' ' . esc_html($booking->last_name), 0, 1, 'L');
             $this->Cell(20, 6, esc_html__('Email', 'seatreg') . ': ' . $booking->email, 0, 1, 'L');
             $this->Cell(20, 6, esc_html__('Booking time', 'seatreg') . ': ' . $bookingDate, 0, 1, 'L');

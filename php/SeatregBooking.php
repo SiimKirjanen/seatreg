@@ -302,7 +302,7 @@ class SeatregBooking {
 		
 		$this->_registrationStartTimestamp = $result->registration_start_timestamp;
 		$this->_registrationEndTimestamp = $result->registration_end_timestamp;
-		$this->_registrationLayout = json_decode($result->registration_layout)->roomData;
+		$this->_registrationLayout = SeatregLayoutService::getRoomDataFromLayout($result->registration_layout);
 		$this->_registrationLayoutFull = json_decode($result->registration_layout);
         $this->_registrationName = $result->registration_name;
 		$this->_maxSeats = $result->seats_at_once;
