@@ -153,6 +153,19 @@ class SeatregLayoutService {
 
      /**
      *
+     * Return room data from registration layout
+     * @param string|null $registrationLayout Registration layout JSON
+     * @return array Rooms in the layout. Empty array when the layout is missing or empty
+     *
+    */
+    public static function getRoomDataFromLayout($registrationLayout) {
+        $layout = $registrationLayout ? json_decode($registrationLayout) : null;
+
+        return isset($layout->roomData) ? $layout->roomData : array();
+    }
+
+     /**
+     *
      * check if multi price UUID exists 
      * @param object $booking Booking
      * @param array $layout Registration layout

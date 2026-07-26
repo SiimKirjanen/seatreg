@@ -31,6 +31,33 @@ class SeatregRegistrationService {
         return $roomName;
     }
 
+    /**
+     *
+     * Return seat legend from layout
+     *
+    */
+    public static function getSeatLegendFromLayout($roomsLayout, $bookingRoomUuid, $bookingSeatId) {
+        $legend = null;
+
+        if( !$roomsLayout ) {
+            return $legend;
+        }
+
+        foreach($roomsLayout as $roomLayout) {
+            if($roomLayout->room->uuid !== $bookingRoomUuid || !isset($roomLayout->boxes)) {
+                continue;
+            }
+
+            foreach($roomLayout->boxes as $box) {
+                if(isset($box->id, $box->legend) && $box->id === $bookingSeatId && $box->legend !== 'noLegend') {
+                    $legend = $box->legend;
+                }
+            }
+        }
+
+        return $legend;
+    }
+
     public static function updateRegistrationLayout($registrationLayout, $registrationCode) {
         global $wpdb;
 	    global $seatreg_db_table_names;

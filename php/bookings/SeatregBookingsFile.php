@@ -43,7 +43,7 @@ class SeatregBookingsFile {
         $this->_registrations = $this->filtering( seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat, $this->_calendarDate) );
         $this->_registrationName = esc_html($this->_registrationInfo->registration_name);
         $this->_usingSeats = $this->_registrationInfo->using_seats === '1';
-        $this->_roomData = json_decode( $this->_registrationInfo->registration_layout )->roomData;
+        $this->_roomData = SeatregLayoutService::getRoomDataFromLayout( $this->_registrationInfo->registration_layout );
     }
 
     protected function customFieldsWithValues($customField, $customData) {
@@ -74,6 +74,20 @@ class SeatregBookingsFile {
         }
     
         return $string;
+    }
+
+    protected function getSeatLegend($booking) {
+        return SeatregRegistrationService::getSeatLegendFromLayout($this->_roomData, $booking->room_uuid, $booking->seat_id);
+    }
+
+    protected function hasSeatLegends() {
+        foreach($this->_registrations as $registration) {
+            if( $this->getSeatLegend($registration) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getStatus($status) {
