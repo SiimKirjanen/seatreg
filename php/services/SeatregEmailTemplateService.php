@@ -126,4 +126,58 @@ class SeatregEmailTemplateService {
             }
         } );
     }
+
+    /**
+     * Whether the phpmailer_init booking PDF handler has been registered this request.
+     *
+     * @var bool
+     */
+    private static $pdfAttachRegistered = false;
+
+    /**
+     * Queue a generated booking PDF to be attached to the next outgoing email. The PDF is
+     * held in memory only - nothing is written to the uploads folder. Call without arguments
+     * after sending (or when there is no PDF) to clear a previously queued one.
+     *
+     * @param string $pdfContent Raw PDF bytes, or '' to clear.
+     * @param string $fileName   File name the booker sees in the email.
+     */
+    public static function prepareBookingPdfAttachment( $pdfContent = '', $fileName = 'booking.pdf' ) {
+        // Reset first so an email without a PDF never inherits a previous one's attachment.
+        $GLOBALS['seatreg_email_pdf_attachment'] = null;
+
+        if ( ! $pdfContent ) {
+            return;
+        }
+
+        $GLOBALS['seatreg_email_pdf_attachment'] = array(
+            'content'  => $pdfContent,
+            'fileName' => $fileName,
+        );
+
+        self::registerPdfAttach();
+    }
+
+    /**
+     * Register (once per request) the phpmailer_init handler that attaches the currently
+     * queued booking PDF. Reads from a global at send time so multiple emails in one
+     * request each attach their own PDF. wp_mail clears attachments per send.
+     */
+    private static function registerPdfAttach() {
+        if ( self::$pdfAttachRegistered ) {
+            return;
+        }
+
+        self::$pdfAttachRegistered = true;
+
+        add_action( 'phpmailer_init', function( $phpmailer ) {
+            $pdf = isset( $GLOBALS['seatreg_email_pdf_attachment'] ) ? $GLOBALS['seatreg_email_pdf_attachment'] : null;
+
+            if ( empty( $pdf['content'] ) ) {
+                return;
+            }
+
+            $phpmailer->AddStringAttachment( $pdf['content'], $pdf['fileName'], 'base64', 'application/pdf' );
+        } );
+    }
 }

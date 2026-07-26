@@ -54,6 +54,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 * Added the option to customize email colors (background, heading, and text) per registration.
 * Added the option to show logo at the top of emails, with a selectable alignment, per registration.
 * Seat labels are now shown in the cart, checkout, booking emails, the booking status page, and the PDF, XLSX and TXT exports.
+* Added the [booking-pdf-attachment] keyword for the approved booking receipt email template, which attaches the booking PDF to the email.
 * The booking manager "Pending", "Approved" and "Deleted" tabs now show how many bookings each one contains.
 
 = 1.71.0 =

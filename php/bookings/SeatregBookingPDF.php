@@ -152,7 +152,31 @@ class SeatregBookingPDF extends tFPDF {
         $this->Image( $this->_logoPath, $x, $y, $width, $height );
     }
 
+    public function getFileName() {
+        return sanitize_file_name( $this->_bookingData->registration_name . '_' . $this->_bookingId ) . '.pdf';
+    }
+
     public function printPDF() {
+        $this->buildDocument();
+
+        $this->Output($this->getFileName(), 'I');
+    }
+
+    /**
+     *
+     * Build the document and return it as a string instead of streaming it to the browser.
+     * Used for email attachments so the PDF never has to be written to disk.
+     *
+     * @return string Raw PDF bytes
+     *
+     */
+    public function getPDFString() {
+        $this->buildDocument();
+
+        return $this->Output('S');
+    }
+
+    protected function buildDocument() {
 
         foreach( $this->_bookings as $booking ) {
             $placeNumberText = $this->_bookingData->using_seats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
@@ -213,8 +237,6 @@ class SeatregBookingPDF extends tFPDF {
             
             $this->image(SEATREG_TEMP_FOLDER_DIR. '/' . $this->_bookingId . '.png');
         }
-        
-        $this->Output($this->_bookingData->registration_name . '_' .  $this->_bookingId . '.pdf', 'I');	
     }
 
     protected function getStatus($status) {
