@@ -58,7 +58,12 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
     
     public function printXlsx() {
         $placeNumberText = $this->_usingSeats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
-        
+        $hasSeatLegends = $this->hasSeatLegends();
+
+        $labelHeader = $hasSeatLegends
+            ? array( esc_html__('Label', 'seatreg') => 'string' )
+            : array();
+
         $nameHeader = $this->_separateFirstandLastName
             ? array(
                 esc_html__('First name', 'seatreg') => 'string',
@@ -73,6 +78,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
                 $placeNumberText => 'string',
                 esc_html__('Room name', 'seatreg') => 'string',
             ),
+            $labelHeader,
             $nameHeader,
             array(
                 esc_html__('Email', 'seatreg') => 'string',
@@ -99,15 +105,20 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
             $priceText = $seatPrice->price . ' ' . $this->_registrationInfo->paypal_currency_code .  ' ' . $priceDescription;
             $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
 
-            $nameField = $this->_separateFirstandLastName 
+            $nameField = $this->_separateFirstandLastName
                 ? array(esc_html($registration->first_name), esc_html($registration->last_name))
                 : array(esc_html($registration->first_name) . ' ' . esc_html($registration->last_name));
+
+            $labelField = $hasSeatLegends
+                ? array( esc_html($this->getSeatLegend($registration)) )
+                : array();
 
             $registrationData = array_merge(
                 array(
                     esc_html($registration->seat_nr),
                     esc_html($registration->room_name),
                 ),
+                $labelField,
                 $nameField,
                 array(
                     esc_html($registration->email),
@@ -138,7 +149,8 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
                 $header[$customField['label']] = 'string';
                 $registrationData[] = $this->customFieldWithValueXlsx($customField, $registrantCustomData);
             }
-            $data[] = $registrationData;
+
+            $data[] = array_map(array('SeatregSanitizationService', 'neutralizeSpreadsheetFormula'), $registrationData);
         }
 
         $writer = new XLSXWriter();

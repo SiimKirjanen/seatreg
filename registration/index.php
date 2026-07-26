@@ -127,7 +127,7 @@
 
 					<div id="room-nav-btn-wrap" class="border-box">
 						<div id="current-room-name"></div>
-						<?php if( SeatregLayoutService::getRoomsLength( json_decode($data->registration_layout)->roomData ) > 1 ): ?>
+						<?php if( SeatregLayoutService::getRoomsLength( SeatregLayoutService::getRoomDataFromLayout($data->registration_layout) ) > 1 ): ?>
 							<div id="room-nav-btn">
 								<?php esc_html_e('Change room', 'seatreg'); ?>
 							</div>
@@ -325,6 +325,7 @@
 					<input type="hidden" id="selected-room-uuid">
 					<input type="hidden" id="selected-seat-price">
 					<input type="hidden" id="selected-multi-price-uuid">
+					<input type="hidden" id="selected-seat-legend">
 				</div>
 			</div>
 
@@ -349,8 +350,13 @@
 								?>
 							</div>
 							<div class="row-room">
-								<?php 
+								<?php
 									esc_html_e('Room', 'seatreg');
+								?>
+							</div>
+							<div class="row-label">
+								<?php
+									esc_html_e('Label', 'seatreg');
 								?>
 							</div>
 						</div>

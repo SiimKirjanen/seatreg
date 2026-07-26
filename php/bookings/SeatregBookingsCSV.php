@@ -50,6 +50,8 @@ class SeatregBookingsCSV extends SeatregBookingsFile {
             $csvRow[SEATREG_CSV_COL_LOGGED_IN_USER_ID] = $registration->logged_in_user_id;
             $csvRow[SEATREG_CSV_COL_USED_COUPON] = $usedCouponString;
 
+            $csvRow = array_map(array('SeatregSanitizationService', 'neutralizeSpreadsheetFormula'), $csvRow);
+
             fputcsv($output, $csvRow);
         }
         fclose($output);

@@ -126,7 +126,7 @@
 		this.appliedCoupon = null;
 	}
 
-	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID) {
+	function CartItem(id, nr, room, roomUUID, price, multiPriceUUID, legend) {
 		this.id = id;
 		this.nr = nr;
 		this.room = room;
@@ -135,6 +135,7 @@
 		this.customFields = [];
 		this.price = price;
 		this.multiPriceUUID = multiPriceUUID;
+		this.legend = legend || '';
 	};
 
 	SeatReg.prototype.isPaymentEnabled = function() {
@@ -693,7 +694,23 @@ SeatReg.prototype.clearCart = function() {
 	$('#booking-total-price').empty().attr('data-booking-price', 0);
 	$('#seat-cart-items').empty();
 	$('.seats-in-cart').text(0);
+	this.updateCartLabelColumnVisibility();
+};
 
+SeatReg.prototype.hasSelectedSeatWithLegend = function() {
+	var arrLen = this.selectedSeats.length;
+
+	for(var i = 0; i < arrLen; i++) {
+		if(this.selectedSeats[i].legend) {
+			return true;
+		}
+	}
+
+	return false;
+};
+
+SeatReg.prototype.updateCartLabelColumnVisibility = function() {
+	$('#seat-cart-popup').toggleClass('cart-has-labels', this.hasSelectedSeatWithLegend());
 };
 
 SeatReg.prototype.addSeatToCart = function() {
@@ -704,8 +721,9 @@ SeatReg.prototype.addSeatToCart = function() {
 	var roomUUID = document.getElementById('selected-room-uuid').value;
 	var price = parseInt(document.getElementById('selected-seat-price').value);
 	var multiPriceUUID = document.getElementById('selected-multi-price-uuid').value;
+	var legend = document.getElementById('selected-seat-legend').value;
 	var scope = this;
-	this.selectedSeats.push(new CartItem(seatId, seatNr, roomName, roomUUID, price, multiPriceUUID));
+	this.selectedSeats.push(new CartItem(seatId, seatNr, roomName, roomUUID, price, multiPriceUUID, legend));
 	
 	$('.seats-in-cart').text(this.selectedSeats.length);
 	var boxColor = $('#boxes .box[data-seat="' + seatId + '"]').css('background-color');
@@ -714,6 +732,7 @@ SeatReg.prototype.addSeatToCart = function() {
 	//add to seat cart popup
 	var cartItem = $('<div class="cart-item" data-cart-id="' + seatId + '" data-room-uuid="'+ roomUUID +'"></div>');
 	var seatNumberDiv = $('<div class="cart-item-nr">' + seatNr + '</div>');
+	var legendDiv = $('<div class="cart-item-label"></div>').text(legend);
 	var roomNameDiv = $('<div class="cart-item-room">' + roomName + '</div>');
 	var delItem = $('<div class="remove-cart-item"><i class="fa fa-times-circle"></i><span style="padding-left:6px">'+ translator.translate('remove') +'</span></div>').on('click', function() {
 		var item = $(this).closest('.cart-item');
@@ -758,10 +777,12 @@ SeatReg.prototype.addSeatToCart = function() {
 			scope.applyBookingCost(totalPrice, discountPrice);
 		}
 		$('.seats-in-cart').text(scope.selectedSeats.length);
+		scope.updateCartLabelColumnVisibility();
 	});
 
-	cartItem.append(seatNumberDiv, roomNameDiv, delItem);
+	cartItem.append(seatNumberDiv, roomNameDiv, legendDiv, delItem);
 	$('#seat-cart-items').append(cartItem);
+	this.updateCartLabelColumnVisibility();
 
 	let totalPrice = scope.calculateBookingCost();
 	let discountPrice = 0;
@@ -859,6 +880,7 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 	var documentFragment = $(document.createDocumentFragment());
 	var arrLen3 = this.customF.length;
 	var hasMultipleSeatsSelected = arrLen > 1;
+	var showLegendRow = this.hasSelectedSeatWithLegend();
     var checkItemCounter = 1;
 	if( hasMultipleSeatsSelected && !this.onePersonCheckout ) {
 		$('#checkout-area .checkout-settings').removeClass('display-none');
@@ -866,10 +888,14 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 
 	for(var i = 0; i < arrLen; i++) {
 		var checkItem = $('<div class="check-item"></div>');
-		var checkItemHeader = $('<div class="check-item-head">'+ this.spotName +' No. <span>' + this.selectedSeats[i].nr + '</span><br><span>' + this.selectedSeats[i].room + '</span></div>');
+		var checkItemHeader = $('<div class="check-item-head">No. <span>' + this.selectedSeats[i].nr + '</span><br><span>' + this.selectedSeats[i].room + '</span></div>');
 		var documentFragment2 = $(document.createDocumentFragment());
 		var arrLen2 = this.selectedSeats[i].defFields.length;
 		var isLastCheckItem = i === arrLen - 1 || this.onePersonCheckout;
+
+		if( showLegendRow ) {
+			checkItemHeader.append('<br>', $('<span class="check-item-label"></span>').text(this.selectedSeats[i].legend || ' '));
+		}
 
 		if( this.onePersonCheckout ) {
 			checkItemHeader = null;
@@ -1023,6 +1049,7 @@ SeatReg.prototype.closeSeatDialog = function() {
 SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	$('#confirm-dialog-mob-hover, #confirm-dialog-mob-legend').empty().css('display','none');
 	$('#confirm-dialog-mob-text, #confirm-dialog-bottom').empty();
+	$('#selected-seat-legend').val('');
 
 	var hover = null;
 	var legend = null;
@@ -1046,6 +1073,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 	if(clickBox.hasAttribute('data-legend')) {
 		$('#confirm-dialog-mob-legend').css('display','block');
 		legend = clickBox.getAttribute('data-legend');
+		$('#selected-seat-legend').val(legend);
 		showDialog = true;
 	}
 	

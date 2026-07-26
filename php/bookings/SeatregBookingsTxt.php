@@ -34,9 +34,15 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
             $bookingDate = $this->getBookingDate($registration->booking_date);
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($registration, $this->_roomData);
             $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
+            $seatLegend = $this->getSeatLegend($registration);
 
             echo esc_html($placeNumberText), ': ', esc_html($registration->seat_nr), esc_html($this->lineBreak());
             echo esc_html__('Room', 'seatreg'), ': ', esc_html($registration->room_name), esc_html($this->lineBreak());
+
+            if( $seatLegend ) {
+                echo esc_html__('Label', 'seatreg'), ': ', esc_html($seatLegend), esc_html($this->lineBreak());
+            }
+
             if ( $this->_separateFirstandLastName ) {
                 echo esc_html__('First name', 'seatreg'), ': ', esc_html($registration->first_name), esc_html($this->lineBreak());
                 echo esc_html__('Last name', 'seatreg'), ': ', esc_html($registration->last_name), esc_html($this->lineBreak());

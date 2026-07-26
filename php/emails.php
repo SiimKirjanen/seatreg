@@ -13,7 +13,7 @@ function getEmailFromAddress($emailFromAddress) {
 function seatreg_send_booking_notification_email($registrationCode, $bookingId, $emailAddress) {
     $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
-    $roomData = json_decode($registration->registration_layout)->roomData;
+    $roomData = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
     $registrationCustomFields = json_decode($registration->custom_fields ?? '[]');
     $emailToSend = $registration->notification_email ?? get_option( 'admin_email' );
     $fromAddress = getEmailFromAddress($registration->email_from_address);
@@ -50,7 +50,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
     $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
     $registrationCustomFields = json_decode($registration->custom_fields);
-    $roomData = json_decode($registration->registration_layout)->roomData;
+    $roomData = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
     foreach ($bookings as $booking) {
         $booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
     }

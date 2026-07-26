@@ -31,7 +31,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			$this->_valid = false;
 		}else {
 			$registration = SeatregRegistrationRepository::getRegistrationByCode($rows[0]->registration_code);
-			$roomData = json_decode($registration->registration_layout)->roomData;
+			$roomData = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
 			$this->_bookings = $rows; 
 			foreach ($this->_bookings as $booking) {
 				$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);

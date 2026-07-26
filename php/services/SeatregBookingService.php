@@ -117,13 +117,26 @@ class SeatregBookingService {
         }, is_array( $enteredCustomFieldData) ? $enteredCustomFieldData : [] );
         $spotName = $registration->using_seats ? __('Seat', 'seatreg') : __('Place', 'seatreg');
         $hasCalendarDate = (boolean)$bookings[0]->calendar_date;
+        $roomsLayout = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout ?? null);
+        $seatLegends = array();
+
+        foreach($bookings as $bookingKey => $booking) {
+            $seatLegends[$bookingKey] = SeatregRegistrationService::getSeatLegendFromLayout($roomsLayout, $booking->room_uuid, $booking->seat_id);
+        }
+
+        $hasLegends = count(array_filter($seatLegends)) > 0;
 
         $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;">
             <tr>
             <th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Name', 'seatreg') . '</th>
             <th style="border:1px solid black;text-align:left;padding: 6px;">' . $spotName . '</th>
-            <th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Room', 'seatreg') . '</th>
-            <th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Email', 'seatreg') . '</th>';
+            <th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Room', 'seatreg') . '</th>';
+
+        if($hasLegends) {
+            $bookingTable .= '<th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Label', 'seatreg') . '</th>';
+        }
+
+        $bookingTable .= '<th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Email', 'seatreg') . '</th>';
 
         if($hasCalendarDate) {
             $bookingTable .= '<th style="border:1px solid black;text-align: left;padding: 6px;">' . __('Calendar date', 'seatreg') . '</th>';
@@ -134,13 +147,18 @@ class SeatregBookingService {
         }
         $bookingTable .= '</tr>';
 
-        foreach ($bookings as $booking) {
+        foreach ($bookings as $bookingKey => $booking) {
             $bookingCustomFields = json_decode($booking->custom_field_data);
             $bookingTable .= '<tr>
                 <td style="border:1px solid black;padding: 6px;">'. esc_html($booking->first_name . ' ' .  $booking->last_name) .'</td>
                 <td style="border:1px solid black;padding: 6px;">'. esc_html($booking->seat_nr) . '</td>
-                <td style="border:1px solid black;padding: 6px;">'. esc_html($booking->room_name) . '</td>
-                <td style="border:1px solid black;padding: 6px;">'. esc_html($booking->email) . '</td>';
+                <td style="border:1px solid black;padding: 6px;">'. esc_html($booking->room_name) . '</td>';
+
+                if($hasLegends) {
+                    $bookingTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($seatLegends[$bookingKey]) . '</td>';
+                }
+
+                $bookingTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($booking->email) . '</td>';
 
                 if($hasCalendarDate) {
                     $bookingTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($booking->calendar_date) . '</td>';

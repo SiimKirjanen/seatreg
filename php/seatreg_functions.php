@@ -2247,7 +2247,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 
 	if($registration) {
 		$bookings = SeatregBookingRepository::getBookingsByRegistrationCodeAndBookingId($registrationCode, $bookingId);
-		$roomData = json_decode($registration->registration_layout)->roomData;
+		$roomData = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
 		$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
 		$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($registrationCode);
 		$appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
@@ -2397,7 +2397,7 @@ function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrat
 
 function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate) {
 	$registration = seatreg_get_registration_data($code)[0];
-	$structure = json_decode($registration->registration_layout)->roomData;
+	$structure = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
 	$bookingActionLength = count($bookingActions);
 	$seat_id;
 	$allCorrect = true;
@@ -2454,7 +2454,7 @@ function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate
 
 function seatreg_valdiate_add_booking_with_manager($code, $data, $calendarDate) {
 	$registration = seatreg_get_options($code)[0];
-	$structure = json_decode($registration->registration_layout)->roomData;
+	$structure = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
 	$allCorrect = true;
 	$resp = array();
     $resp['status'] = 'ok';
@@ -2504,7 +2504,7 @@ function seatreg_valdiate_add_booking_with_manager($code, $data, $calendarDate) 
 //for booking edit
 function seatreg_validate_edit_booking($code, $data) {
 	$registration = seatreg_get_options($code)[0];
-	$structure = json_decode($registration->registration_layout)->roomData;
+	$structure = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
 	$allCorrect = true;
     $resp = array();
     $resp['status'] = 'ok';
@@ -2961,7 +2961,7 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 	$registration = SeatregRegistrationRepository::getRegistrationByCode($code);
 
 	if($registration->registration_layout !== null) {
-		$roomData = json_decode($registration->registration_layout)->roomData;
+		$roomData = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
 
 		foreach ($bookings as $booking) {
 			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
@@ -3320,7 +3320,7 @@ function seatreg_get_data_for_booking_file($code, $whatToShow, $calendarDate) {
 	$registration = SeatregRegistrationRepository::getRegistrationByCode( $code );
 
 	if($registration->registration_layout !== null) {
-		$roomData = json_decode($registration->registration_layout)->roomData;
+		$roomData = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
 
 		foreach($bookings as $booking) {
 			$booking->room_name = SeatregRegistrationService::getRoomNameFromLayout($roomData, $booking->room_uuid);
@@ -4201,6 +4201,13 @@ function seatreg_custom_payment_icon_upload() {
 	}
 	$code = sanitize_text_field($_POST['code']);
 
+	if( !SeatregSanitizationService::isValidRegistrationCode($code) ) {
+		$resp->setError('Invalid registration code');
+		$resp->echoData();
+
+		die();
+	}
+
 	try {
 		$imageUploadService = new SeatregImageUploadService('/custom_payment_icons/' . $code . '/');
 		$status = $imageUploadService->uploadImage($_FILES["file"]);
@@ -4616,6 +4623,13 @@ function seatreg_upload_image_callback() {
 
 	$code = sanitize_text_field($_POST['code']);
 
+	if( !SeatregSanitizationService::isValidRegistrationCode($code) ) {
+		$resp->setError('Invalid registration code');
+		$resp->echoData();
+
+		die();
+	}
+
 	try {
 		$imageUploadService = new SeatregImageUploadService('/room_images/' . $code . '/');
 		$status = $imageUploadService->uploadImage($_FILES["fileToUpload"]);
@@ -4641,17 +4655,26 @@ function seatreg_remove_img_callback() {
 	$resp = new SeatregJsonResponse();
 
 	if(!empty($_POST['imgName']) && !empty($_POST['code'])) {
-		//check if file exists
-		$imgPath = SEATREG_TEMP_FOLDER_DIR . '/room_images/' . sanitize_text_field($_POST['code']) . '/' . sanitize_text_field($_POST['imgName']);
-		
-		if(file_exists($imgPath)) {
+		$code = sanitize_text_field($_POST['code']);
+
+		if( !SeatregSanitizationService::isValidRegistrationCode($code) ) {
+			$resp->setError('Image was not found!');
+			$resp->echoData();
+
+			die();
+		}
+
+		$roomImagesLocation = SeatregUploadsRepository::getCustomRoomImagesLocationDir($code);
+		$imgPath = SeatregSanitizationService::resolvePathInsideBase($roomImagesLocation, $_POST['imgName']);
+
+		if($imgPath !== false && file_exists($imgPath)) {
 			unlink($imgPath);
 			$resp->setText('Image deleted');
 		}else {
 			$resp->setError('Image was not found!');
 		}
 		$resp->echoData();
-		
+
 		die();
 	}
 }

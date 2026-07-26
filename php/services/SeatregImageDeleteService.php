@@ -5,9 +5,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class SeatregImageDeleteService {
     public static function deleteCustomPaymentImage($registrationCode, $fileName) {
+        if (!SeatregSanitizationService::isValidRegistrationCode($registrationCode)) {
+            return false;
+        }
+
         $customPaymentLocation = SeatregUploadsRepository::getCustomPaymentIconLocationDir($registrationCode);
-        $imgPath = $customPaymentLocation . '/' . $fileName;
-		
-		return unlink($imgPath);
+        $imgPath = SeatregSanitizationService::resolvePathInsideBase($customPaymentLocation, $fileName);
+
+        if ($imgPath === false) {
+            return false;
+        }
+
+        return unlink($imgPath);
     }
 }

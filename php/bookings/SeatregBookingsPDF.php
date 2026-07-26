@@ -67,9 +67,15 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             $placeNumberText = $this->_usingSeats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($registration, $this->_roomData);
             $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
+            $seatLegend = $this->getSeatLegend($registration);
 
             $this->pdf->Cell(20, 6, $placeNumberText . ': ' . esc_html($registration->seat_nr), 0, 1, 'L');
             $this->pdf->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($registration->room_name), 0, 1, 'L');
+
+            if( $seatLegend ) {
+                $this->pdf->Cell(20, 6, esc_html__('Label', 'seatreg') . ': ' . esc_html($seatLegend), 0, 1, 'L');
+            }
+
             if ( $this->_separateFirstandLastName ) {
                 $this->pdf->Cell(20, 6, esc_html__('First name', 'seatreg') . ': ' . esc_html($registration->first_name), 0, 1, 'L');
                 $this->pdf->Cell(20, 6, esc_html__('Last name', 'seatreg') . ': ' . esc_html($registration->last_name), 0, 1, 'L');
