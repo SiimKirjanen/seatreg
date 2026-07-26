@@ -90,6 +90,11 @@ class SeatregTemplateService {
         return $template;
     }
 
+    public static function replaceBookingPDFAttachment($template) {
+        //The PDF is attached to the email in seatreg_send_approved_booking_email. Keyword itself renders nothing.
+        return str_replace(SEATREG_TEMPLATE_BOOKING_PDF_ATTACHMENT, '', $template);
+    }
+
     public static function approvedBookingTemplateProcessing($template, $bookingStatusLink, $bookings, $registrationCustomFields, $bookingId, $registration, $couponsEnabled, $appliedCoupon) {
         $template = self::sanitizeTemplate($template);
         $template = self::replaceLineBreaksWithBrTags($template);
@@ -99,7 +104,8 @@ class SeatregTemplateService {
         $template = self::replacePaymentTable($template, $bookingId, $couponsEnabled, $appliedCoupon);
         $template = self::replaceCustomApprovedEmailText($template, $bookings);
         $template = self::replaceBookingPDFLink($template, $bookingId);
-        
+        $template = self::replaceBookingPDFAttachment($template);
+
         $message = $template;
 
         return $message;

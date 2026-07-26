@@ -77,6 +77,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     $fromEmail = getEmailFromAddress($registration->email_from_address);
     $message = '';
     $qrType = $registration->send_approved_booking_email_qr_code;
+    $pdfAttached = false;
 
     if($template) {
         $message = SeatregTemplateService::approvedBookingTemplateProcessing($template, $bookingStatusUrl, $bookings, $registrationCustomFields, $bookingId, $registration, $couponsEnabled, $appliedCoupon);
@@ -100,6 +101,24 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
             $message .= SeatregBookingService::generatePaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
         }
     }
+
+    $pdfContent = '';
+    $pdfFileName = '';
+
+    if( $template && SeatregTemplateService::doesTemplateKeywordExist($template, SEATREG_TEMPLATE_BOOKING_PDF_ATTACHMENT) ) {
+        require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/bookings/SeatregBookingPDF.php' );
+
+        $bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
+
+        if( $bookingData ) {
+            $pdf = new SeatregBookingPDF($bookingId, $bookings, $bookingData);
+            $pdfContent = $pdf->getPDFString();
+            $pdfFileName = $pdf->getFileName();
+            $pdfAttached = true;
+        }
+    }
+
+    SeatregEmailTemplateService::prepareBookingPdfAttachment($pdfContent, $pdfFileName);
 
     if( extension_loaded('gd') && $qrType ) {
         $qrContent = SeatregRegQRCodeService::getQRCodeContent( $bookingId, $registration->registration_code, $qrType);
@@ -126,8 +145,16 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         "FROM: $fromEmail"
     ));
 
+    //Release the PDF so later emails in this request don't get it attached.
+    SeatregEmailTemplateService::prepareBookingPdfAttachment();
+
     if($isSent) {
         $activityMessage = $qrType ? "Approved booking email with QR Code sent to $bookerEmail": "Approved booking email sent to $bookerEmail";
+
+        if( $pdfAttached ) {
+            $activityMessage .= ' with booking PDF attached';
+        }
+
         seatreg_add_activity_log('booking', $bookingId, $activityMessage, false);
         return true;
     }
