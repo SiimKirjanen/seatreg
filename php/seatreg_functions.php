@@ -1737,9 +1737,9 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		<div class="bg-color">
 			<div class="tab-container">
 				<ul class="etabs">
-					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'bron'); ?>"><?php esc_html_e('Pending', 'seatreg'); ?></a></li>
-					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'taken'); ?>"><?php esc_html_e('Approved','seatreg'); ?></a></li>
-					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'deleted'); ?>"><?php esc_html_e('Deleted','seatreg'); ?></a></li>
+					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'bron'); ?>"><?php esc_html_e('Pending', 'seatreg'); ?> <?php echo esc_html(sprintf('(%s)', $row_count)); ?></a></li>
+					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'taken'); ?>"><?php esc_html_e('Approved','seatreg'); ?> <?php echo esc_html(sprintf('(%s)', $row_count2)); ?></a></li>
+					<li class="tab"><a href="<?php echo esc_attr('#' . sha1($project_name) . 'deleted'); ?>"><?php esc_html_e('Deleted','seatreg'); ?> <?php echo esc_html(sprintf('(%s)', $row_count3)); ?></a></li>
 				</ul>
 				<div class="panel-container differentBgColor">
 					<div class="registration-manager-labels">
