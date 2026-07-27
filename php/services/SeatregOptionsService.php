@@ -21,4 +21,20 @@ class SeatregOptionsService {
             '%s'
         );
     }
+
+    public static function updatePayPalWebhookId($payPalWebhookId, $registrationCode) {
+        global $seatreg_db_table_names;
+		global $wpdb;
+
+		return $wpdb->update(
+            $seatreg_db_table_names->table_seatreg_options,
+            array(
+                'paypal_webhook_id' => $payPalWebhookId,
+            ),
+            array(
+                'registration_code' => $registrationCode
+            ),
+            '%s'
+        );
+    }
 }

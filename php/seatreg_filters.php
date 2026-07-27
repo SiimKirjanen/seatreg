@@ -120,6 +120,24 @@ function seatreg_custom_pages() {
 		die();
 	}
 
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'paypal-order' ) {
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/paypal-rest/create-paypal-order.php';
+
+		die();
+	}
+
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'paypal-capture' ) {
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/paypal-rest/capture-paypal-order.php';
+
+		die();
+	}
+
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'paypal-webhook-callback' ) {
+		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/paypal-rest/paypal-webhook-receiver.php';
+
+		die();
+	}
+
 	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'stripe-checkout-session' ) {
 		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/stripe/create-checkout-session.php';
 

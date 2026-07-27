@@ -103,6 +103,7 @@
 		this.timeRestrictions = registrationTimeRestrictions;
 		this.emailConfirmEnabled = window.emailConfirmRequired === '1' ? true: false;
 		this.payPalEnabled = window.payPalEnabled === '1' ? true : false;
+		this.payPalRestEnabled = window.payPalRestEnabled === '1' ? true : false;
 		this.stripeEnabled = window.stripeEnabled === '1' ? true : false;
 		this.customPaymentEnabled = window.customPaymentEnabled === '1' ? true : false;
 		this.payPalCurrencyCode = window.payPalCurrencyCode;
@@ -139,7 +140,7 @@
 	};
 
 	SeatReg.prototype.isPaymentEnabled = function() {
-		return this.payPalEnabled || this.stripeEnabled || this.customPaymentEnabled;
+		return this.payPalEnabled || this.payPalRestEnabled || this.stripeEnabled || this.customPaymentEnabled;
 	};
 
 	SeatReg.prototype.browserInfoDetection = function() {

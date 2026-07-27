@@ -85,6 +85,48 @@ class SeatregOptionsRepository {
 
     /**
      *
+     * Returns number of enabled PayPal client id usages
+     *
+     * @param string $payPalClientId The PayPal REST app client id
+     * @return number
+     *
+     */
+    public static function getActivePayPalClientIdUsage($payPalClientId) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return (int)$wpdb->get_var( $wpdb->prepare(
+			"SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_options
+			WHERE paypal_client_id = %s
+            AND paypal_rest_payments = 1",
+			$payPalClientId
+		) );
+    }
+
+    /**
+     *
+     * Returns the PayPal webhook id that is already in use with the given client id
+     *
+     * @param string $payPalClientId The PayPal REST app client id
+     * @return string|null
+     *
+     */
+    public static function getActivePayPalWebhookId($payPalClientId) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_var( $wpdb->prepare(
+			"SELECT paypal_webhook_id FROM $seatreg_db_table_names->table_seatreg_options
+			WHERE paypal_client_id = %s
+            AND paypal_rest_payments = 1
+            AND paypal_webhook_id IS NOT NULL
+            LIMIT 1",
+			$payPalClientId
+		) );
+    }
+
+    /**
+     *
      * Is it allowed to generate booking PDF?
      *
      * @param string $bookings Array of bookings

@@ -263,6 +263,7 @@
 					window.seatreg.selectedRegistration = code;
 					window.seatreg.settings = {
 						paypal_payments: data._response.data.registration[0].paypal_payments,
+						paypal_rest_payments: data._response.data.registration[0].paypal_rest_payments,
 						stripe_payments: data._response.data.registration[0].stripe_payments,
 						custom_payment: data._response.data.registration[0].custom_payment,
 						using_seats: data._response.data.registration[0].using_seats
@@ -2228,6 +2229,49 @@ $('#seatreg-settings-form #public-api-tokens').on('click', '.toggle-token', func
 	}
 });
 
+$('#seatreg-settings-form #check-paypal-webhook').on('click', function(e) {
+	e.preventDefault();
+	var $this = $(this);
+	var code = $this.data('registration-code');
+	var $result = $('#paypal-webhook-check-result');
+
+	$this.prop('disabled', true).text(translator.translate('checkingWebhook'));
+	$result.empty();
+
+	var promise = seaterg_admin_ajax('seatreg_check_paypal_webhook', code);
+	promise.done(function(data) {
+		$this.prop('disabled', false).text(translator.translate('checkWebhook'));
+
+		var response = data._response;
+
+		if(!response || response.type !== 'ok') {
+			$result.html('<div class="alert alert-primary" role="alert">' + ((response && response.text) || translator.translate('somethingWentWrong')) + '</div>');
+
+			return;
+		}
+
+		var html = '<ul class="webhook-check-list">';
+		response.data.checks.forEach(function(check) {
+			html += '<li class="' + (check.ok ? 'webhook-check-ok' : 'webhook-check-failed') + '">' +
+				(check.ok ? '&#10003; ' : '&#10007; ') + check.label +
+				(check.detail ? ' <span class="webhook-check-detail">(' + check.detail + ')</span>' : '') +
+				'</li>';
+		});
+		html += '</ul>';
+		$result.html(html);
+
+		if(response.data.ok) {
+			alertify.success(translator.translate('webhookCheckOk'));
+		}else {
+			alertify.error(translator.translate('webhookCheckProblems'));
+		}
+	});
+	promise.fail(function() {
+		$this.prop('disabled', false).text(translator.translate('checkWebhook'));
+		alertify.error(translator.translate('somethingWentWrong'));
+	});
+});
+
 $('#seatreg-settings-form #create-api-token').on('click', function(e) {
 	e.preventDefault();
 	var code = $('input[name="registration_code"]').val();
@@ -2296,6 +2340,34 @@ $('#seatreg-settings-submit').on('click', function(e) {
 		alertify.error(translator.translate('emailFromNotCorrect'));
 
 		return true;
+	}
+
+	if($('#paypal-rest').is(":checked")) {
+		if($('#paypal-client-id').val() === "") {
+			e.preventDefault();
+			alertify.error(translator.translate('pleaseEnterPayPalClientId'));
+
+			return true;
+		}
+		//An empty client secret field keeps the already saved secret, so it is only required when nothing is saved yet
+		if($('#paypal-client-secret').val() === "" && $('#paypal-client-secret').data('secret-stored') !== 1) {
+			e.preventDefault();
+			alertify.error(translator.translate('pleaseEnterPayPalClientSecret'));
+
+			return true;
+		}
+		if(currencyCode === "") {
+			e.preventDefault();
+			alertify.error(translator.translate('pleaseEnterPayPalCurrencyCode'));
+
+			return true;
+		}
+		if(!validateCurrencyCode(currencyCode)) {
+			e.preventDefault();
+			alertify.error(translator.translate('currencyCodeNotCorrect'));
+
+			return true;
+		}
 	}
 
 	if($('#paypal').is(":checked")) {
@@ -2521,9 +2593,10 @@ function seatregRenderBookingFlowSummary() {
 
 	// Payment detection (mirrors SeatregPaymentRepository::hasPaymentEnabled). The cart's
 	// coupon box and the payment step only appear when a payment method is enabled.
+	var paypalRestEnabled = $form.find('#paypal-rest').is(':checked');
 	var paypalEnabled = $form.find('#paypal').is(':checked');
 	var stripeEnabled = $form.find('#stripe').is(':checked');
-	var paymentsEnabled = paypalEnabled || stripeEnabled ||
+	var paymentsEnabled = paypalRestEnabled || paypalEnabled || stripeEnabled ||
 		$form.find('.existing-custom-payments .custom-payment').length > 0;
 
 	// --- Before booking: access & availability ---
@@ -2665,10 +2738,19 @@ function seatregRenderBookingFlowSummary() {
 		}
 
 		// A completed payment can auto-approve a pending booking (per payment method).
+		var paypalRestAutoApprove = paypalRestEnabled && $form.find('#payment-mark-confirmed-paypal-rest').is(':checked');
 		var paypalAutoApprove = paypalEnabled && $form.find('#payment-mark-confirmed').is(':checked');
 		var stripeAutoApprove = stripeEnabled && $form.find('#payment-mark-confirmed-stripe').is(':checked');
-		if (paypalAutoApprove || stripeAutoApprove) {
-			afterBooking.push(item(t('flowPaidAutoApprove'), paypalAutoApprove ? '#payment-mark-confirmed' : '#payment-mark-confirmed-stripe'));
+		if (paypalRestAutoApprove || paypalAutoApprove || stripeAutoApprove) {
+			var autoApproveTarget = '#payment-mark-confirmed-stripe';
+
+			if (paypalRestAutoApprove) {
+				autoApproveTarget = '#payment-mark-confirmed-paypal-rest';
+			} else if (paypalAutoApprove) {
+				autoApproveTarget = '#payment-mark-confirmed';
+			}
+
+			afterBooking.push(item(t('flowPaidAutoApprove'), autoApproveTarget));
 		}
 	} else {
 		afterBooking.push(item(t('flowAutoApproved'), '#use-pending'));
@@ -2684,7 +2766,17 @@ function seatregRenderBookingFlowSummary() {
 
 	// Payment
 	if (paymentsEnabled) {
-		afterBooking.push(item(t('flowPayment'), paypalEnabled ? '#paypal' : (stripeEnabled ? '#stripe' : '#custom-payments')));
+		var paymentTarget = '#custom-payments';
+
+		if (paypalRestEnabled) {
+			paymentTarget = '#paypal-rest';
+		} else if (paypalEnabled) {
+			paymentTarget = '#paypal';
+		} else if (stripeEnabled) {
+			paymentTarget = '#stripe';
+		}
+
+		afterBooking.push(item(t('flowPayment'), paymentTarget));
 	}
 
 	// After booking (redirect is ignored by the plugin when email verification is on)

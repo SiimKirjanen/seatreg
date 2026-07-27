@@ -39,6 +39,25 @@ class SeatregPaymentRepository {
 
     /**
      *
+     * Return payment object by the payment transaction id
+     *
+     * @param string $txnId The payment transaction id
+     * @return  array|object|null|void
+     *
+     */
+    public static function getPaymentByTxnId($txnId) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_row( $wpdb->prepare(
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg_payments
+             WHERE payment_txn_id = %s",
+            $txnId
+        ) );
+    }
+
+    /**
+     *
      * Check if there are custom payments. Return true or false.
      *
      * @param object $bookingData The booking data
@@ -60,7 +79,7 @@ class SeatregPaymentRepository {
      *
      */
     public static function hasPaymentEnabled($bookingData) {
-        return $bookingData->paypal_payments === '1' || $bookingData->stripe_payments === '1' || $bookingData->custom_payment === '1' || self::hasCustomPayments($bookingData);
+        return $bookingData->paypal_payments === '1' || $bookingData->paypal_rest_payments === '1' || $bookingData->stripe_payments === '1' || $bookingData->custom_payment === '1' || self::hasCustomPayments($bookingData);
     }
 
     /**
