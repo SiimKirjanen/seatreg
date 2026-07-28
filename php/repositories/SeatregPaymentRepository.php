@@ -84,6 +84,19 @@ class SeatregPaymentRepository {
 
     /**
      *
+     * Check if the booker can pay with the PayPal REST integration. Without a webhook nothing would
+     * record the payment, so PayPal is not offered until one exists.
+     *
+     * @param object $bookingData The booking data
+     * @return boolean
+     *
+     */
+    public static function isPayPalRestUsable($bookingData) {
+        return $bookingData && $bookingData->paypal_rest_payments === '1' && !empty($bookingData->paypal_webhook_id);
+    }
+
+    /**
+     *
      * Get the booking payment status.
      *
      * @param object $bookingData The booking data

@@ -116,7 +116,7 @@
 					<?php
 				}
 				
-				$payPalRestUsable = $bookingData->paypal_rest_payments === '1' && $bookingData->paypal_webhook_id;
+				$payPalRestUsable = SeatregPaymentRepository::isPayPalRestUsable($bookingData);
 
 				if( $payPalRestUsable && $bookingHasCost ) {
 					echo SeatregPaymentService::generatePayPalRestCheckoutForm($bookingId);

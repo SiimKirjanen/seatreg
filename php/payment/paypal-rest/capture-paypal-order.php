@@ -1,12 +1,19 @@
 <?php
 	//===========
-	/* Capture the PayPal order the buyer just approved and show the return to merchant page.
+	/* Capture the PayPal order the buyer just approved and send them to the return to merchant page.
 	   The payment itself is recorded by the PAYMENT.CAPTURE.COMPLETED webhook. */
 	//===========
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit();
 }
+
+if( empty($_GET['id']) ) {
+    exit('Missing data');
+}
+
+$capturedBookingId = sanitize_text_field($_GET['id']);
+$capturedBookingData = SeatregBookingRepository::getDataRelatedToBooking($capturedBookingId);
 
 /**
  *
@@ -54,15 +61,10 @@ function seatreg_capture_paypal_order($bookingId, $orderId, $bookingData) {
     SeatregPaymentLogService::log($bookingId, sprintf(esc_html__('Could not capture PayPal order. %s', 'seatreg'), $response->error), SEATREG_PAYMENT_LOG_ERROR);
 }
 
-if( empty($_GET['id']) ) {
-    exit('Missing data');
-}
-
-$capturedBookingId = sanitize_text_field($_GET['id']);
-$capturedBookingData = SeatregBookingRepository::getDataRelatedToBooking($capturedBookingId);
-
-if( $capturedBookingData && $capturedBookingData->paypal_rest_payments === '1' && !empty($_GET['token']) ) {
+if( SeatregPaymentRepository::isPayPalRestUsable($capturedBookingData) && !empty($_GET['token']) ) {
     seatreg_capture_paypal_order( $capturedBookingId, sanitize_text_field($_GET['token']), $capturedBookingData );
 }
 
-include SEATREG_PLUGIN_FOLDER_DIR . 'php/payment/return_to_merchant.php';
+wp_redirect( SEATREG_PAYPAL_RETURN_URL . '&id=' . urlencode($capturedBookingId) );
+
+exit();

@@ -15,7 +15,7 @@ $bookingId = sanitize_text_field( $_GET['booking-id'] );
 $bookingData = SeatregBookingRepository::getDataRelatedToBooking( $bookingId );
 
 
-if( !$bookingData || $bookingData->paypal_rest_payments !== '1' || !$bookingData->paypal_webhook_id ) {
+if( !SeatregPaymentRepository::isPayPalRestUsable($bookingData) ) {
     die('PayPal payment is not turned on');
 }
 
