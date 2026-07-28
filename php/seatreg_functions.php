@@ -1225,9 +1225,18 @@ function seatreg_generate_settings_form() {
 					//Only the hidden form of this is ever printed to the page
 					$payPalSecret = $payPalSecretStored ? SeatregEncryptionService::decryptValue($options[0]->paypal_client_secret) : null;
 					$payPalSecretReadable = !$payPalSecretStored || $payPalSecret !== null;
-					$payPalWebhookMissing = $options[0]->paypal_rest_payments == '1' && !SeatregPayPalWebhooksService::hasWebhookForCurrentSite($options[0]);
+					$payPalWebhookUrlIsHttps = SeatregPayPalWebhooksService::webhookUrlIsHttps();
+					//Without https the https alert already tells why there is no webhook
+					$payPalWebhookMissing = $payPalWebhookUrlIsHttps
+						&& $options[0]->paypal_rest_payments == '1'
+						&& !SeatregPayPalWebhooksService::hasWebhookForCurrentSite($options[0]);
 				?>
 				<?php if(extension_loaded('curl') && SeatregEncryptionService::isOpenSSLEnabled()): ?>
+					<?php if(!$payPalWebhookUrlIsHttps): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php esc_html_e('PayPal payments need a https site address. PayPal only sends payment notifications to https.', 'seatreg'); ?>
+						</div>
+					<?php endif; ?>
 					<?php if(!$payPalSecretReadable): ?>
 						<div class="alert alert-primary" role="alert">
 							<?php esc_html_e('The saved PayPal client secret can not be read anymore. This happens when the WordPress security keys in wp-config.php have been changed. Please enter the client secret again.', 'seatreg'); ?>
@@ -1294,9 +1303,16 @@ function seatreg_generate_settings_form() {
 						<p class="help-block">
 							<?php esc_html_e('Checks that PayPal accepts your client id and secret, and that the webhook the plugin needs is in place. The check uses the saved settings, so save first if you just changed something', 'seatreg'); ?>.
 						</p>
-						<button type="button" class="btn btn-secondary btn-sm" id="check-paypal-webhook" data-registration-code="<?php echo esc_attr($options[0]->registration_code); ?>">
+						<button type="button" class="btn btn-secondary btn-sm" id="check-paypal-webhook" data-registration-code="<?php echo esc_attr($options[0]->registration_code); ?>" <?php echo $payPalWebhookUrlIsHttps ? '' : 'disabled'; ?>>
 							<?php esc_html_e('Check setup', 'seatreg'); ?>
 						</button>
+						<?php // Shown by JS when the check can not be run ?>
+						<p class="help-block" id="paypal-webhook-check-off" style="display: none;">
+							<?php esc_html_e('PayPal payments are not turned on. Turn them on and save the settings first', 'seatreg'); ?>.
+						</p>
+						<p class="help-block" id="paypal-webhook-check-unsaved" style="display: none;">
+							<?php esc_html_e('Save the changed PayPal settings before running the check', 'seatreg'); ?>.
+						</p>
 						<div id="paypal-webhook-check-result"></div>
 					</div>
 				<?php else: ?>

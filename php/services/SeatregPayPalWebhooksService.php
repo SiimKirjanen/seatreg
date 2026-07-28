@@ -37,6 +37,17 @@ class SeatregPayPalWebhooksService {
 
     /**
      *
+     * PayPal only sends notifications to a https address, so on a http site there can be no webhook
+     *
+     * @return boolean
+     *
+     */
+    public static function webhookUrlIsHttps() {
+        return strpos(SEATREG_PAYPAL_WEBHOOK_CALLBACK_URL, 'https://') === 0;
+    }
+
+    /**
+     *
      * Create a PayPal webhook to get payment change notifications
      * @param string $clientId PayPal REST app client id
      * @param string $clientSecret PayPal REST app client secret
@@ -286,6 +297,12 @@ class SeatregPayPalWebhooksService {
      *
      */
     private static function createWebhookForRegistration($oldOptions, $registrationCode, $clientId, $clientSecret, $sandbox, $credentialsChanged) {
+        if( !self::webhookUrlIsHttps() ) {
+            SeatregOptionsService::updatePayPalWebhook(null, null, $registrationCode);
+
+            return;
+        }
+
         if( $credentialsChanged && $oldOptions->paypal_client_id ) {
             SeatregPayPalApiService::clearAccessToken($oldOptions->paypal_client_id, $oldOptions->paypal_rest_sandbox_mode === '1');
         }

@@ -2229,18 +2229,74 @@ $('#seatreg-settings-form #public-api-tokens').on('click', '.toggle-token', func
 	}
 });
 
+//The setup check runs against the saved settings, so it is only offered when the PayPal fields are unchanged
+var seatregPayPalFieldsSelector = '#paypal-rest, #paypal-client-id, #paypal-client-secret, #payment-mark-confirmed-paypal-rest, #paypal-rest-sandbox-mode';
+var seatregPayPalCheckInProgress = false;
+var seatregPayPalCheckBlocked = false;
+var seatregPayPalSavedValues = {};
+
+function seatregPayPalFieldValue($field) {
+	return $field.is(':checkbox') ? $field.is(':checked') : $field.val();
+}
+
+function seatregPayPalSettingsDirty() {
+	var dirty = false;
+
+	$(seatregPayPalFieldsSelector).each(function() {
+		var $field = $(this);
+
+		if(seatregPayPalFieldValue($field) !== seatregPayPalSavedValues[$field.attr('id')]) {
+			dirty = true;
+		}
+	});
+
+	return dirty;
+}
+
+function seatregUpdatePayPalCheckButtonState() {
+	var paymentsOff = seatregPayPalSavedValues['paypal-rest'] !== true;
+	var dirty = seatregPayPalSettingsDirty();
+
+	$('#check-paypal-webhook').prop('disabled', seatregPayPalCheckBlocked || seatregPayPalCheckInProgress || paymentsOff || dirty);
+	$('#paypal-webhook-check-off').toggle(!seatregPayPalCheckBlocked && paymentsOff);
+	$('#paypal-webhook-check-unsaved').toggle(!seatregPayPalCheckBlocked && !paymentsOff && !seatregPayPalCheckInProgress && dirty);
+}
+
+if($('#check-paypal-webhook').length) {
+	//The server disables the button when the check can not work at all, that has to stay
+	seatregPayPalCheckBlocked = $('#check-paypal-webhook').prop('disabled');
+
+	$(seatregPayPalFieldsSelector).each(function() {
+		var $field = $(this);
+		seatregPayPalSavedValues[$field.attr('id')] = seatregPayPalFieldValue($field);
+	});
+	seatregUpdatePayPalCheckButtonState();
+}
+
+$('#seatreg-settings-form').on('change input', seatregPayPalFieldsSelector, function() {
+	seatregUpdatePayPalCheckButtonState();
+
+	if(seatregPayPalSettingsDirty()) {
+		$('#paypal-webhook-check-result').empty();
+	}
+});
+
 $('#seatreg-settings-form #check-paypal-webhook').on('click', function(e) {
 	e.preventDefault();
 	var $this = $(this);
 	var code = $this.data('registration-code');
 	var $result = $('#paypal-webhook-check-result');
 
-	$this.prop('disabled', true).text(translator.translate('checkingWebhook'));
+	seatregPayPalCheckInProgress = true;
+	seatregUpdatePayPalCheckButtonState();
+	$this.text(translator.translate('checkingWebhook'));
 	$result.empty();
 
 	var promise = seaterg_admin_ajax('seatreg_check_paypal_webhook', code);
 	promise.done(function(data) {
-		$this.prop('disabled', false).text(translator.translate('checkWebhook'));
+		seatregPayPalCheckInProgress = false;
+		seatregUpdatePayPalCheckButtonState();
+		$this.text(translator.translate('checkWebhook'));
 
 		var response = data._response;
 
@@ -2274,7 +2330,9 @@ $('#seatreg-settings-form #check-paypal-webhook').on('click', function(e) {
 		}
 	});
 	promise.fail(function() {
-		$this.prop('disabled', false).text(translator.translate('checkWebhook'));
+		seatregPayPalCheckInProgress = false;
+		seatregUpdatePayPalCheckButtonState();
+		$this.text(translator.translate('checkWebhook'));
 		alertify.error(translator.translate('somethingWentWrong'));
 	});
 });
