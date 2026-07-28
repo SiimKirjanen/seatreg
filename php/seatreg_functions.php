@@ -1225,7 +1225,7 @@ function seatreg_generate_settings_form() {
 					//Only the hidden form of this is ever printed to the page
 					$payPalSecret = $payPalSecretStored ? SeatregEncryptionService::decryptValue($options[0]->paypal_client_secret) : null;
 					$payPalSecretReadable = !$payPalSecretStored || $payPalSecret !== null;
-					$payPalWebhookMissing = $options[0]->paypal_rest_payments == '1' && empty($options[0]->paypal_webhook_id);
+					$payPalWebhookMissing = $options[0]->paypal_rest_payments == '1' && !SeatregPayPalWebhooksService::hasWebhookForCurrentSite($options[0]);
 				?>
 				<?php if(extension_loaded('curl') && SeatregEncryptionService::isOpenSSLEnabled()): ?>
 					<?php if(!$payPalSecretReadable): ?>
@@ -1235,7 +1235,7 @@ function seatreg_generate_settings_form() {
 					<?php endif; ?>
 					<?php if($payPalWebhookMissing): ?>
 						<div class="alert alert-danger" role="alert">
-							<?php esc_html_e('Creating the PayPal webhook failed, so the PayPal button is not shown to bookers. Use Check webhook below, then save the settings again.', 'seatreg'); ?>
+							<?php esc_html_e('Creating the PayPal webhook failed, so the PayPal button is not shown to bookers. Saving the PayPal settings tries again. Use the Check setup button to see what went wrong.', 'seatreg'); ?>
 						</div>
 					<?php endif; ?>
 					<div class="checkbox">
@@ -1290,12 +1290,12 @@ function seatreg_generate_settings_form() {
 						</div>
 						<br>
 
-						<label><?php esc_html_e('Webhook', 'seatreg'); ?></label>
+						<label><?php esc_html_e('Setup check', 'seatreg'); ?></label>
 						<p class="help-block">
-							<?php esc_html_e('PayPal sends payment notifications to a webhook that the plugin creates for you. Use the button to check that it is in place. The check uses the saved settings, so save first if you just changed something', 'seatreg'); ?>.
+							<?php esc_html_e('Checks that PayPal accepts your client id and secret, and that the webhook the plugin needs is in place. The check uses the saved settings, so save first if you just changed something', 'seatreg'); ?>.
 						</p>
 						<button type="button" class="btn btn-secondary btn-sm" id="check-paypal-webhook" data-registration-code="<?php echo esc_attr($options[0]->registration_code); ?>">
-							<?php esc_html_e('Check webhook', 'seatreg'); ?>
+							<?php esc_html_e('Check setup', 'seatreg'); ?>
 						</button>
 						<div id="paypal-webhook-check-result"></div>
 					</div>
@@ -2806,6 +2806,7 @@ function seatreg_set_up_db() {
 			paypal_client_secret varchar(512) DEFAULT NULL,
 			paypal_rest_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
 			paypal_webhook_id varchar(255) DEFAULT NULL,
+			paypal_webhook_url varchar(255) DEFAULT NULL,
 			payment_completed_set_booking_confirmed_paypal_rest tinyint(1) NOT NULL DEFAULT 0,
 			pending_expiration int(11) DEFAULT NULL,
 			pending_expiration_payment_statuses varchar(255) DEFAULT NULL,

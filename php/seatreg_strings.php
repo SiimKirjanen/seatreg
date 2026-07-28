@@ -163,10 +163,10 @@ function seatreg_generate_admin_strings() {
     $translations->pleaseEnterPayPalBusinessEmail = esc_html__('Please enter PayPal business email', 'seatreg');
     $translations->pleaseEnterPayPalButtonId = esc_html__('Please enter PayPal button id', 'seatreg');
     $translations->pleaseEnterPayPalCurrencyCode = esc_html__('Please enter currency code', 'seatreg');
-    $translations->checkWebhook = esc_html__('Check webhook', 'seatreg');
+    $translations->checkWebhook = esc_html__('Check setup', 'seatreg');
     $translations->checkingWebhook = esc_html__('Checking...', 'seatreg');
-    $translations->webhookCheckOk = esc_html__('Webhook is set up correctly', 'seatreg');
-    $translations->webhookCheckProblems = esc_html__('There are problems with the webhook', 'seatreg');
+    $translations->webhookCheckOk = esc_html__('PayPal setup is correct', 'seatreg');
+    $translations->webhookCheckProblems = esc_html__('There are problems with the PayPal setup', 'seatreg');
     $translations->pleaseEnterPayPalClientId = esc_html__('Please enter PayPal client id', 'seatreg');
     $translations->pleaseEnterPayPalClientSecret = esc_html__('Please enter PayPal client secret', 'seatreg');
     $translations->pleaseEnterStripeApiKey = esc_html__('Please enter Stripe API key', 'seatreg');

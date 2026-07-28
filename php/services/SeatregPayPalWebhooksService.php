@@ -23,6 +23,20 @@ class SeatregPayPalWebhooksService {
 
     /**
      *
+     * Does the registration have a PayPal webhook that notifies the address this site uses now.
+     * A webhook made for an address the site no longer answers on delivers nothing, so it counts as missing.
+     *
+     * @param object $options Registration options
+     * @return boolean
+     *
+     */
+    public static function hasWebhookForCurrentSite($options) {
+        return !empty($options->paypal_webhook_id)
+            && $options->paypal_webhook_url === SEATREG_PAYPAL_WEBHOOK_CALLBACK_URL;
+    }
+
+    /**
+     *
      * Create a PayPal webhook to get payment change notifications
      * @param string $clientId PayPal REST app client id
      * @param string $clientSecret PayPal REST app client secret
@@ -137,7 +151,7 @@ class SeatregPayPalWebhooksService {
     /**
      *
      * Check that the PayPal webhook this site needs really exists in PayPal and is set up correctly.
-     * Used by the "Check webhook" button in the registration settings.
+     * Used by the "Check setup" button in the registration settings.
      *
      * @param string $clientId PayPal REST app client id
      * @param string $clientSecret PayPal REST app client secret, in plain text
@@ -250,8 +264,9 @@ class SeatregPayPalWebhooksService {
         $turningOnPayPalPaymentsDetected = $payPalOn && !$payPalWasOn;
         $payPalCredentialsChangeDetected = $payPalOn && $payPalWasOn && $credentialsChanged;
         $missingWebhookDetected = $payPalOn && !$oldOptions->paypal_webhook_id;
+        $webhookMadeForAnotherUrlDetected = $payPalOn && $oldOptions->paypal_webhook_url !== SEATREG_PAYPAL_WEBHOOK_CALLBACK_URL;
 
-        if( $turningOnPayPalPaymentsDetected || $payPalCredentialsChangeDetected || $missingWebhookDetected ) {
+        if( $turningOnPayPalPaymentsDetected || $payPalCredentialsChangeDetected || $missingWebhookDetected || $webhookMadeForAnotherUrlDetected ) {
             self::createWebhookForRegistration($oldOptions, $registrationCode, $clientId, $clientSecret, $sandbox, $credentialsChanged);
         }else if( !$payPalOn && $payPalWasOn ) {
             //Turning off PayPal payment
@@ -282,10 +297,11 @@ class SeatregPayPalWebhooksService {
             $createdWebhook = self::createPayPalWebhook($clientId, $clientSecret, $sandbox);
 
             if( !$createdWebhook->success ) {
+                error_log('SeatReg: creating the PayPal webhook for registration ' . $registrationCode . ' failed: ' . $createdWebhook->error);
                 //The saved webhook id can belong to credentials that are not in use anymore, so it
                 //has to be cleared. The settings page then shows that payments are paused and the
                 //booker is not offered PayPal until a webhook exists.
-                SeatregOptionsService::updatePayPalWebhookId(null, $registrationCode);
+                SeatregOptionsService::updatePayPalWebhook(null, null, $registrationCode);
 
                 return;
             }
@@ -293,7 +309,7 @@ class SeatregPayPalWebhooksService {
             $webhookId = $createdWebhook->webhookId;
         }
 
-        SeatregOptionsService::updatePayPalWebhookId($webhookId, $registrationCode);
+        SeatregOptionsService::updatePayPalWebhook($webhookId, SEATREG_PAYPAL_WEBHOOK_CALLBACK_URL, $registrationCode);
     }
 
     /**
@@ -305,7 +321,7 @@ class SeatregPayPalWebhooksService {
      *
      */
     private static function removeWebhookForRegistration($oldOptions, $registrationCode, $oldClientSecret) {
-        SeatregOptionsService::updatePayPalWebhookId(null, $registrationCode);
+        SeatregOptionsService::updatePayPalWebhook(null, null, $registrationCode);
         self::removeNotUsedPayPalWebhook(
             $oldOptions->paypal_client_id,
             $oldClientSecret,

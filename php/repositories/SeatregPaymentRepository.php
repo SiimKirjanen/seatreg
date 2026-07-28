@@ -92,7 +92,7 @@ class SeatregPaymentRepository {
      *
      */
     public static function isPayPalRestUsable($bookingData) {
-        return $bookingData && $bookingData->paypal_rest_payments === '1' && !empty($bookingData->paypal_webhook_id);
+        return $bookingData && $bookingData->paypal_rest_payments === '1' && SeatregPayPalWebhooksService::hasWebhookForCurrentSite($bookingData);
     }
 
     /**
