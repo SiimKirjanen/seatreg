@@ -2245,20 +2245,27 @@ $('#seatreg-settings-form #check-paypal-webhook').on('click', function(e) {
 		var response = data._response;
 
 		if(!response || response.type !== 'ok') {
-			$result.html('<div class="alert alert-primary" role="alert">' + ((response && response.text) || translator.translate('somethingWentWrong')) + '</div>');
+			$result.append(
+				$('<div class="alert alert-primary" role="alert"></div>')
+					.text((response && response.text) || translator.translate('somethingWentWrong'))
+			);
 
 			return;
 		}
 
-		var html = '<ul class="webhook-check-list">';
+		var $list = $('<ul class="webhook-check-list"></ul>');
 		response.data.checks.forEach(function(check) {
-			html += '<li class="' + (check.ok ? 'webhook-check-ok' : 'webhook-check-failed') + '">' +
-				(check.ok ? '&#10003; ' : '&#10007; ') + check.label +
-				(check.detail ? ' <span class="webhook-check-detail">(' + check.detail + ')</span>' : '') +
-				'</li>';
+			var $item = $('<li></li>')
+				.addClass(check.ok ? 'webhook-check-ok' : 'webhook-check-failed')
+				.text((check.ok ? '✓ ' : '✗ ') + check.label);
+
+			if(check.detail) {
+				$item.append( $('<span class="webhook-check-detail"></span>').text(' (' + check.detail + ')') );
+			}
+
+			$list.append($item);
 		});
-		html += '</ul>';
-		$result.html(html);
+		$result.append($list);
 
 		if(response.data.ok) {
 			alertify.success(translator.translate('webhookCheckOk'));

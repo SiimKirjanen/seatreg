@@ -2857,7 +2857,7 @@
 				//Multi price configured
 				$this.find('.multi-input').each(function() {
 					price.push({
-						price: $(this).find('.price-input').val(),
+						price: parseInt($(this).find('.price-input').val()),
 						description: $(this).find('.text-input').val(),
 						uuid: $(this).data('price-uuid')
 					});

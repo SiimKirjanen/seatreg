@@ -1225,11 +1225,17 @@ function seatreg_generate_settings_form() {
 					//Only the hidden form of this is ever printed to the page
 					$payPalSecret = $payPalSecretStored ? SeatregEncryptionService::decryptValue($options[0]->paypal_client_secret) : null;
 					$payPalSecretReadable = !$payPalSecretStored || $payPalSecret !== null;
+					$payPalWebhookMissing = $options[0]->paypal_rest_payments == '1' && empty($options[0]->paypal_webhook_id);
 				?>
 				<?php if(extension_loaded('curl') && SeatregEncryptionService::isOpenSSLEnabled()): ?>
 					<?php if(!$payPalSecretReadable): ?>
 						<div class="alert alert-primary" role="alert">
 							<?php esc_html_e('The saved PayPal client secret can not be read anymore. This happens when the WordPress security keys in wp-config.php have been changed. Please enter the client secret again.', 'seatreg'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if($payPalWebhookMissing): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php esc_html_e('Creating the PayPal webhook failed, so the PayPal button is not shown to bookers. Use Check webhook below, then save the settings again.', 'seatreg'); ?>
 						</div>
 					<?php endif; ?>
 					<div class="checkbox">
@@ -3934,7 +3940,6 @@ function seatreg_update() {
 				'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
 				'paypal_rest_payments' => $_POST['paypal-rest-payments'],
 				'paypal_client_id' => sanitize_text_field($_POST['paypal-client-id'] ?? ''),
-				//Stored encrypted. An empty field keeps the already stored secret.
 				'paypal_client_secret' => $payPalClientSecretInput === '' ? $oldOptions->paypal_client_secret : SeatregEncryptionService::encryptValue($payPalClientSecretInput),
 				'paypal_rest_sandbox_mode' => $_POST['paypal-rest-sandbox-mode'],
 				'payment_completed_set_booking_confirmed_paypal_rest' => $_POST['payment-mark-confirmed-paypal-rest'],
@@ -4057,7 +4062,6 @@ function seatreg_update() {
 		$oldOptions,
 		sanitize_text_field($_POST['registration_code']),
 		sanitize_text_field($_POST['paypal-client-id'] ?? ''),
-		//The PayPal API needs the secret in plain text. An empty field means the stored one is kept.
 		$payPalClientSecretInput === '' ? SeatregEncryptionService::decryptValue($oldOptions->paypal_client_secret) : $payPalClientSecretInput,
 		$_POST['paypal-rest-sandbox-mode'] === 1,
 		$_POST['paypal-rest-payments'] === 1

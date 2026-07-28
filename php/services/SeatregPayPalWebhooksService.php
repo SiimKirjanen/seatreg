@@ -247,36 +247,70 @@ class SeatregPayPalWebhooksService {
             || $oldClientSecret !== $clientSecret
             || $oldOptions->paypal_rest_sandbox_mode !== ($sandbox ? '1' : '0');
 
-        if( $payPalOn && ($credentialsChanged || !$payPalWasOn || !$oldOptions->paypal_webhook_id) ) {
-            if( $credentialsChanged && $oldOptions->paypal_client_id ) {
-                SeatregPayPalApiService::clearAccessToken($oldOptions->paypal_client_id, $oldOptions->paypal_rest_sandbox_mode === '1');
-            }
+        $turningOnPayPalPaymentsDetected = $payPalOn && !$payPalWasOn;
+        $payPalCredentialsChangeDetected = $payPalOn && $payPalWasOn && $credentialsChanged;
+        $missingWebhookDetected = $payPalOn && !$oldOptions->paypal_webhook_id;
 
-            //A webhook may already exist for this site, either from another registration or from an earlier save
-            $webhookId = self::getPayPalWebhookIdForCurrentSite($clientId, $clientSecret, $sandbox);
-
-            if( !$webhookId ) {
-                $createdWebhook = self::createPayPalWebhook($clientId, $clientSecret, $sandbox);
-
-                if( !$createdWebhook->success ) {
-                    //Settings are already saved at this point, but without a webhook PayPal payments
-                    //can not be completed, so tell the admin what PayPal answered.
-                    wp_die( 'Settings were saved, but creating the PayPal webhook failed: ' . esc_html($createdWebhook->error) );
-                }
-
-                $webhookId = $createdWebhook->webhookId;
-            }
-
-            SeatregOptionsService::updatePayPalWebhookId($webhookId, $registrationCode);
+        if( $turningOnPayPalPaymentsDetected || $payPalCredentialsChangeDetected || $missingWebhookDetected ) {
+            self::createWebhookForRegistration($oldOptions, $registrationCode, $clientId, $clientSecret, $sandbox, $credentialsChanged);
         }else if( !$payPalOn && $payPalWasOn ) {
             //Turning off PayPal payment
-            SeatregOptionsService::updatePayPalWebhookId(null, $registrationCode);
-            self::removeNotUsedPayPalWebhook(
-                $oldOptions->paypal_client_id,
-                $oldClientSecret,
-                $oldOptions->paypal_rest_sandbox_mode === '1'
-            );
+            self::removeWebhookForRegistration($oldOptions, $registrationCode, $oldClientSecret);
         }
+    }
+
+    /**
+     *
+     * Make sure the registration has a working webhook id saved for it
+     * @param object $oldOptions Registration options before the save
+     * @param string $registrationCode The code of the registration that was saved
+     * @param string $clientId PayPal REST app client id that was saved
+     * @param string $clientSecret PayPal REST app client secret that was saved, in plain text
+     * @param bool $sandbox Sandbox environment setting that was saved
+     * @param bool $credentialsChanged Did the client id, secret or sandbox setting change with the save
+     *
+     */
+    private static function createWebhookForRegistration($oldOptions, $registrationCode, $clientId, $clientSecret, $sandbox, $credentialsChanged) {
+        if( $credentialsChanged && $oldOptions->paypal_client_id ) {
+            SeatregPayPalApiService::clearAccessToken($oldOptions->paypal_client_id, $oldOptions->paypal_rest_sandbox_mode === '1');
+        }
+
+        //A webhook may already exist for this site, either from another registration or from an earlier save
+        $webhookId = self::getPayPalWebhookIdForCurrentSite($clientId, $clientSecret, $sandbox);
+
+        if( !$webhookId ) {
+            $createdWebhook = self::createPayPalWebhook($clientId, $clientSecret, $sandbox);
+
+            if( !$createdWebhook->success ) {
+                //The saved webhook id can belong to credentials that are not in use anymore, so it
+                //has to be cleared. The settings page then shows that payments are paused and the
+                //booker is not offered PayPal until a webhook exists.
+                SeatregOptionsService::updatePayPalWebhookId(null, $registrationCode);
+
+                return;
+            }
+
+            $webhookId = $createdWebhook->webhookId;
+        }
+
+        SeatregOptionsService::updatePayPalWebhookId($webhookId, $registrationCode);
+    }
+
+    /**
+     *
+     * Drop the webhook id from the registration and remove the webhook from PayPal if no one else uses it
+     * @param object $oldOptions Registration options before the save
+     * @param string $registrationCode The code of the registration that was saved
+     * @param string $oldClientSecret PayPal REST app client secret before the save, in plain text
+     *
+     */
+    private static function removeWebhookForRegistration($oldOptions, $registrationCode, $oldClientSecret) {
+        SeatregOptionsService::updatePayPalWebhookId(null, $registrationCode);
+        self::removeNotUsedPayPalWebhook(
+            $oldOptions->paypal_client_id,
+            $oldClientSecret,
+            $oldOptions->paypal_rest_sandbox_mode === '1'
+        );
     }
 
     /**
