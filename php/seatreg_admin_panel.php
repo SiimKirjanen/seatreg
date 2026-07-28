@@ -82,6 +82,7 @@ function seatreg_create_welcome() {
 	    </div>
 
 		<div class="home-content">
+			<?php include(SEATREG_PLUGIN_FOLDER_DIR . 'php/views/parts/update-notice.php'); ?>
 			<div class='container-fluid'>
 				<?php 
 					echo seatreg_create_registration_from(); 
