@@ -266,7 +266,6 @@ class SeatregPayPalWebhooksService {
      */
     public static function syncWebhookAfterSettingsSave($oldOptions, $registrationCode, $clientId, $clientSecret, $sandbox, $payPalOn) {
         $payPalWasOn = $oldOptions->paypal_rest_payments === '1';
-        //The stored secret is encrypted, so it has to be decrypted before comparing it to the saved one
         $oldClientSecret = SeatregEncryptionService::decryptValue($oldOptions->paypal_client_secret);
         $credentialsChanged = $oldOptions->paypal_client_id !== $clientId
             || $oldClientSecret !== $clientSecret
@@ -280,7 +279,6 @@ class SeatregPayPalWebhooksService {
         if( $turningOnPayPalPaymentsDetected || $payPalCredentialsChangeDetected || $missingWebhookDetected || $webhookMadeForAnotherUrlDetected ) {
             self::createWebhookForRegistration($oldOptions, $registrationCode, $clientId, $clientSecret, $sandbox, $credentialsChanged);
         }else if( !$payPalOn && $payPalWasOn ) {
-            //Turning off PayPal payment
             self::removeWebhookForRegistration($oldOptions, $registrationCode, $oldClientSecret);
         }
     }
@@ -315,9 +313,8 @@ class SeatregPayPalWebhooksService {
 
             if( !$createdWebhook->success ) {
                 error_log('SeatReg: creating the PayPal webhook for registration ' . $registrationCode . ' failed: ' . $createdWebhook->error);
-                //The saved webhook id can belong to credentials that are not in use anymore, so it
-                //has to be cleared. The settings page then shows that payments are paused and the
-                //booker is not offered PayPal until a webhook exists.
+                //Clear the saved webhook id, it can belong to credentials that are not in use anymore.
+                //The booker is not offered PayPal until a webhook exists.
                 SeatregOptionsService::updatePayPalWebhook(null, null, $registrationCode);
 
                 return;
@@ -358,7 +355,6 @@ class SeatregPayPalWebhooksService {
         $activeClientIdCount = SeatregOptionsRepository::getActivePayPalClientIdUsage($clientId);
 
         if( $activeClientIdCount === 0 ) {
-            //Remove the webhook if not used anymore
             self::removePayPalWebhook($clientId, $clientSecret, $sandbox);
         }
     }

@@ -53,7 +53,6 @@ define('SEATREG_PAYPAL_WEBHOOK_CALLBACK_URL', SEATREG_PAYMENT_CALLBACK_URL . '?s
 define('SEATREG_PAYPAL_REST_RETURN_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=paypal-capture');
 define('SEATREG_PAYPAL_REST_CANCEL_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=booking-status');
 define('SEATREG_PAYPAL_ACCESS_TOKEN_TRANSIENT_PREFIX', 'seatreg_paypal_token_');
-//Currencies that PayPal does not accept decimals for
 define('SEATREG_PAYPAL_ZERO_DECIMAL_CURRENCIES', array('HUF', 'JPY', 'TWD'));
 
 // Stripe
@@ -65,8 +64,7 @@ define('SEATREG_STRIPE_API_VERSION', '2020-08-27');
 define('SEATREG_STRIPE_ZERO_DECIMAL_CURRENCIES', array('BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'));
 
 // Encryption
-//Marks a stored value as encrypted. The version lets the cipher change later without
-//having to guess which form an already stored value is in.
+//The version in the prefix lets the cipher change later without having to guess which form an already stored value is in
 define('SEATREG_ENCRYPTED_VALUE_PREFIX', 'seatreg_enc_v1:');
 
 // Status

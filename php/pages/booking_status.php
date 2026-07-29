@@ -122,7 +122,6 @@
 					echo SeatregPaymentService::generatePayPalRestCheckoutForm($bookingId);
 				}
 
-				//Only show the legacy PayPal button when the newer PayPal integration is not in use
 				if( $bookingData->paypal_payments === '1' && !$payPalRestUsable && $bookingHasCost ) {
 					$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
 					$returnUrl = SEATREG_PAYPAL_RETURN_URL . '&id=' . esc_html($bookingId);

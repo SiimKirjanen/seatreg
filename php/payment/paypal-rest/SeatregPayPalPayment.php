@@ -134,9 +134,8 @@ class SeatregPayPalPayment extends SeatregPaymentBase {
 
 				return true;
 			case 'CHECKOUT.ORDER.APPROVED':
-				//The buyer approved the order but did not return to the site. Capture it here so that
-				//the payment is not left hanging. The resulting PAYMENT.CAPTURE.COMPLETED event
-				//records the payment.
+				//The buyer approved the order but did not return to the site. Capturing it here
+				//leads to a PAYMENT.CAPTURE.COMPLETED event, which records the payment.
 				$this->captureApprovedOrder();
 
 				return false;
@@ -182,10 +181,9 @@ class SeatregPayPalPayment extends SeatregPaymentBase {
 			return;
 		}
 
-		//Ask PayPal if the order still needs capturing. Usually the booker has returned to the site
-		//already and it was captured there. Only an order that is still approved needs capturing
-		//here. Capturing again would not take money twice, but PayPal answers a repeated capture
-		//with the response of the first one, so there would be no way to tell the two apart.
+		//Only an order that is still approved needs capturing. Capturing again would not take money
+		//twice, but PayPal answers a repeated capture with the response of the first one, so there
+		//would be no way to tell the two apart.
 		$order = SeatregPayPalApiService::getOrder($orderId, $this->_clientId, $this->_clientSecret, $this->_sandbox);
 
 		if( $order->success && isset($order->body->status) && $order->body->status !== 'APPROVED' ) {
@@ -207,9 +205,8 @@ class SeatregPayPalPayment extends SeatregPaymentBase {
 		}
 
 		if( SeatregPayPalApiService::hasIssue($response->body, 'ORDER_ALREADY_CAPTURED') ) {
-			//The booker returned to the site and the order was captured there already. Nothing
-			//happened here, so nothing is logged, otherwise the payment log would show two
-			//captures for one payment.
+			//The booker returned to the site and the order was captured there already. Logging it
+			//here would show two captures for one payment.
 			return;
 		}
 

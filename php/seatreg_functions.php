@@ -1282,7 +1282,6 @@ function seatreg_generate_settings_form() {
 								}
 							?>.
 						</p>
-						<?php // Only the hidden form of the secret is shown, never the whole value. An empty field means "keep the saved one". ?>
 						<input type="password" class="form-control" id="paypal-client-secret" name="paypal-client-secret" autocomplete="new-password" data-secret-stored="<?php echo $payPalSecretStored && $payPalSecretReadable ? '1' : '0'; ?>" placeholder="<?php echo $payPalSecretStored && $payPalSecretReadable ? esc_attr( showFirstAndLastLetters($payPalSecret, 4) ) : esc_attr__('PayPal client secret', 'seatreg'); ?>" value="">
 						<br>
 
@@ -1317,7 +1316,6 @@ function seatreg_generate_settings_form() {
 						<button type="button" class="btn btn-secondary btn-sm" id="check-paypal-webhook" data-registration-code="<?php echo esc_attr($options[0]->registration_code); ?>" <?php echo $payPalWebhookUrlIsHttps ? '' : 'disabled'; ?>>
 							<?php esc_html_e('Check setup', 'seatreg'); ?>
 						</button>
-						<?php // Shown by JS when the check can not be run ?>
 						<p class="help-block" id="paypal-webhook-check-off" style="display: none;">
 							<?php esc_html_e('PayPal payments are not turned on. Turn them on and save the settings first', 'seatreg'); ?>.
 						</p>
@@ -4399,7 +4397,6 @@ function seatreg_check_paypal_webhook() {
 		wp_send_json($resp);
 	}
 
-	//The check runs against the saved settings, not against what is currently typed in the form
 	if( $options->paypal_rest_payments !== '1' ) {
 		$resp->setError( esc_html__('PayPal payments are not turned on. Turn them on and save the settings first.', 'seatreg') );
 		wp_send_json($resp);
