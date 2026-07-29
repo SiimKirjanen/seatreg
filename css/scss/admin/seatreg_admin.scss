@@ -19,6 +19,7 @@
 @import "forms/companion_app_form";
 @import "../animations.scss";
 @import "components/seatreg-flower";
+@import "components/seatreg-update-notice";
 
 html {
   font-size: 100%;
@@ -64,6 +65,7 @@ html {
 }
 .seatreg-wp-admin .home-content {
   display: flex;
+  position: relative;
 }
 .seatreg-wp-admin .jumbotron {
   background-image: url(../img/chairs_med.jpg);

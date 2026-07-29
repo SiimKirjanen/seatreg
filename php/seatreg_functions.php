@@ -32,6 +32,17 @@ Useful functions
 ==================================================================================================================================================================================================================
 */
 
+//returns the new version number if WordPress has found a plugin update for SeatReg, otherwise null
+function seatreg_get_available_plugin_update() {
+	$updates = get_site_transient('update_plugins');
+
+	if( empty($updates->response[SEATREG_PLUGIN_BASENAME]->new_version) ) {
+		return null;
+	}
+
+	return $updates->response[SEATREG_PLUGIN_BASENAME]->new_version;
+}
+
 //for bookings pdf, xlsx adn text files. Do view those files you need to be logged in and have permissions
 function seatreg_is_user_logged_in_and_has_permissions() {
 	if( !is_user_logged_in() ) {
