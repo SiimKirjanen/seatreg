@@ -5,6 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SeatregBookingService {
+    //Kept inline rather than in the email stylesheet because several email clients strip <style> blocks.
+    const EMAIL_TABLE_STYLE = 'width:100%;max-width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 12px 0;';
+    const EMAIL_TABLE_HEADER_STYLE = 'text-align:left;padding:6px 8px;border:1px solid #e2e8f0;background-color:#f1f4f9;font-weight:600;word-break:break-word;overflow-wrap:break-word;';
+    const EMAIL_TABLE_VALUE_STYLE = 'padding:6px 8px;border:1px solid #e2e8f0;word-break:break-word;overflow-wrap:break-word;';
+
     /**
      *
      * Return booking total cost
@@ -102,15 +107,14 @@ class SeatregBookingService {
 
     /**
      *
-     * Generate booking table
+     * Collect the columns and values shown for a booking
      * @param array $registrationCustomFields custom fields added to registration
      * @param array $bookings The UUID of the booking
      * @param object $registration Registration data
-     * @return string Booking table markup
-     * 
+     * @return array 'headers' => column labels, 'rows' => label/value pairs per booking. Values are unescaped
+     *
     */
-
-    public static function generateBookingTable($registrationCustomFields, $bookings, $registration) {
+    private static function getBookingTableData($registrationCustomFields, $bookings, $registration) {
         $enteredCustomFieldData = json_decode($bookings[0]->custom_field_data);
         $customFieldLabels = array_map(function($customField) {
             return $customField->label;
@@ -125,60 +129,94 @@ class SeatregBookingService {
         }
 
         $hasLegends = count(array_filter($seatLegends)) > 0;
-
-        $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;">
-            <tr>
-            <th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Name', 'seatreg') . '</th>
-            <th style="border:1px solid black;text-align:left;padding: 6px;">' . $spotName . '</th>
-            <th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Room', 'seatreg') . '</th>';
+        $headers = array( __('Name', 'seatreg'), $spotName, __('Room', 'seatreg') );
 
         if($hasLegends) {
-            $bookingTable .= '<th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Label', 'seatreg') . '</th>';
+            $headers[] = __('Label', 'seatreg');
         }
 
-        $bookingTable .= '<th style="border:1px solid black;text-align:left;padding: 6px;">' . __('Email', 'seatreg') . '</th>';
+        $headers[] = __('Email', 'seatreg');
 
         if($hasCalendarDate) {
-            $bookingTable .= '<th style="border:1px solid black;text-align: left;padding: 6px;">' . __('Calendar date', 'seatreg') . '</th>';
+            $headers[] = __('Calendar date', 'seatreg');
         }
-        
+
         foreach($customFieldLabels as $customFieldLabel) {
-            $bookingTable .= '<th style="border:1px solid black;text-align: left;padding: 6px;">' . esc_html($customFieldLabel) . '</th>';
+            $headers[] = $customFieldLabel;
         }
-        $bookingTable .= '</tr>';
+
+        $rows = array();
 
         foreach ($bookings as $bookingKey => $booking) {
             $bookingCustomFields = json_decode($booking->custom_field_data);
-            $bookingTable .= '<tr>
-                <td style="border:1px solid black;padding: 6px;">'. esc_html($booking->first_name . ' ' .  $booking->last_name) .'</td>
-                <td style="border:1px solid black;padding: 6px;">'. esc_html($booking->seat_nr) . '</td>
-                <td style="border:1px solid black;padding: 6px;">'. esc_html($booking->room_name) . '</td>';
+            $row = array(
+                array( 'label' => __('Name', 'seatreg'), 'value' => $booking->first_name . ' ' . $booking->last_name ),
+                array( 'label' => $spotName, 'value' => $booking->seat_nr ),
+                array( 'label' => __('Room', 'seatreg'), 'value' => $booking->room_name ),
+            );
 
-                if($hasLegends) {
-                    $bookingTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($seatLegends[$bookingKey]) . '</td>';
-                }
+            if($hasLegends) {
+                $row[] = array( 'label' => __('Label', 'seatreg'), 'value' => $seatLegends[$bookingKey] );
+            }
 
-                $bookingTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($booking->email) . '</td>';
+            $row[] = array( 'label' => __('Email', 'seatreg'), 'value' => $booking->email );
 
-                if($hasCalendarDate) {
-                    $bookingTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($booking->calendar_date) . '</td>';
-                }
-    
-                if( is_array($bookingCustomFields) ) {
-                    foreach($bookingCustomFields as $bookingCustomField) {
-                        $valueToDisplay = $bookingCustomField->value;
-    
-                        $customFieldObject = array_values(array_filter($registrationCustomFields, function($custField) use($bookingCustomField) {
-                            return $custField->label === $bookingCustomField->label;
-                        }));
-        
-                        if( count($customFieldObject) > 0 && $customFieldObject[0]->type === 'check' ) {
-                            $valueToDisplay = $bookingCustomField->value === '1' ? esc_html__('Yes', 'seatreg') : esc_html__('No', 'seatreg');
-                        }
-                        $bookingTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($valueToDisplay) . '</td>';
+            if($hasCalendarDate) {
+                $row[] = array( 'label' => __('Calendar date', 'seatreg'), 'value' => $booking->calendar_date );
+            }
+
+            if( is_array($bookingCustomFields) ) {
+                foreach($bookingCustomFields as $bookingCustomField) {
+                    $valueToDisplay = $bookingCustomField->value;
+
+                    $customFieldObject = array_values(array_filter($registrationCustomFields, function($custField) use($bookingCustomField) {
+                        return $custField->label === $bookingCustomField->label;
+                    }));
+
+                    if( count($customFieldObject) > 0 && $customFieldObject[0]->type === 'check' ) {
+                        $valueToDisplay = $bookingCustomField->value === '1' ? __('Yes', 'seatreg') : __('No', 'seatreg');
                     }
+
+                    $row[] = array( 'label' => $bookingCustomField->label, 'value' => $valueToDisplay );
                 }
-            
+            }
+
+            $rows[] = $row;
+        }
+
+        return array(
+            'headers' => $headers,
+            'rows' => $rows,
+        );
+    }
+
+    /**
+     *
+     * Generate booking table
+     * @param array $registrationCustomFields custom fields added to registration
+     * @param array $bookings The UUID of the booking
+     * @param object $registration Registration data
+     * @return string Booking table markup
+     *
+    */
+
+    public static function generateBookingTable($registrationCustomFields, $bookings, $registration) {
+        $tableData = self::getBookingTableData($registrationCustomFields, $bookings, $registration);
+        $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;"><tr>';
+
+        foreach($tableData['headers'] as $header) {
+            $bookingTable .= '<th style="border:1px solid black;text-align:left;padding: 6px;">' . esc_html($header) . '</th>';
+        }
+
+        $bookingTable .= '</tr>';
+
+        foreach($tableData['rows'] as $row) {
+            $bookingTable .= '<tr>';
+
+            foreach($row as $field) {
+                $bookingTable .= '<td style="border:1px solid black;padding: 6px;">' . esc_html($field['value']) . '</td>';
+            }
+
             $bookingTable .= '</tr>';
         }
 
@@ -187,31 +225,117 @@ class SeatregBookingService {
         return $bookingTable;
     }
 
-    public static function generatePaymentTable($bookingId, $couponsEnabled = false, $appliedCoupon = null) {
+    /**
+     *
+     * Generate booking table for emails. One row per field, so it fits the fixed width email card
+     * no matter how many custom fields the registration has
+     * @param array $registrationCustomFields custom fields added to registration
+     * @param array $bookings The UUID of the booking
+     * @param object $registration Registration data
+     * @return string Booking table markup
+     *
+    */
+    public static function generateEmailBookingTable($registrationCustomFields, $bookings, $registration) {
+        $tableData = self::getBookingTableData($registrationCustomFields, $bookings, $registration);
+        $bookingTable = '<div style="margin: 12px 0;">';
+
+        foreach($tableData['rows'] as $row) {
+            $bookingTable .= '<table width="100%" border="0" cellpadding="0" cellspacing="0" style="' . self::EMAIL_TABLE_STYLE . '">';
+
+            foreach($row as $field) {
+                if( $field['value'] === null || $field['value'] === '' ) {
+                    continue;
+                }
+
+                $bookingTable .= '<tr>';
+                $bookingTable .= '<th style="width:38%;' . self::EMAIL_TABLE_HEADER_STYLE . '">' . esc_html($field['label']) . '</th>';
+                $bookingTable .= '<td style="' . self::EMAIL_TABLE_VALUE_STYLE . '">' . esc_html($field['value']) . '</td>';
+                $bookingTable .= '</tr>';
+            }
+
+            $bookingTable .= '</table>';
+        }
+
+        $bookingTable .= '</div>';
+
+        return $bookingTable;
+    }
+
+    /**
+     *
+     * Collect the seats, their prices and the total cost of a booking
+     * @param string $bookingId booking id
+     * @param bool $couponsEnabled whether coupons are enabled for the registration
+     * @param object $appliedCoupon coupon applied to the booking
+     * @return array 'spotName', 'rows' => seat/price pairs, 'total'. Values are unescaped
+     *
+    */
+    private static function getPaymentTableData($bookingId, $couponsEnabled = false, $appliedCoupon = null) {
         $bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
         $bookings = self::getBookingsCost($bookingId, $bookingData->registration_layout);
         $totalCost = 0;
-        $spotName = $bookingData->using_seats ? __('Seat', 'seatreg') : __('Place', 'seatreg');
-        $paymentTable = '<table style="border: 1px solid black;border-collapse: collapse;">
-            <tr>
-                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . $spotName . '</th>
-                <th style=";border:1px solid black;text-align: left;padding: 6px;">' . __('Price', 'seatreg') . '</th>
-            </tr>';
+        $rows = array();
 
         foreach($bookings as $booking) {
             $totalCost += $booking->price;
             $priceDescription = $booking->description ? "($booking->description)" : null;
 
+            $rows[] = array(
+                'seatNr' => $booking->seatNr,
+                'price' => $booking->price . ' ' . $bookingData->paypal_currency_code . ' ' . $priceDescription,
+            );
+        }
+
+        return array(
+            'spotName' => $bookingData->using_seats ? __('Seat', 'seatreg') : __('Place', 'seatreg'),
+            'rows' => $rows,
+            'total' => ( $couponsEnabled ? self::applyCouponDiscountToTotalCost($totalCost, $appliedCoupon) : $totalCost ) . ' ' . $bookingData->paypal_currency_code,
+        );
+    }
+
+    public static function generatePaymentTable($bookingId, $couponsEnabled = false, $appliedCoupon = null) {
+        $tableData = self::getPaymentTableData($bookingId, $couponsEnabled, $appliedCoupon);
+        $paymentTable = '<table style="border: 1px solid black;border-collapse: collapse;">
+            <tr>
+                <th style="border:1px solid black;text-align: left;padding: 6px;">' . esc_html($tableData['spotName']) . '</th>
+                <th style="border:1px solid black;text-align: left;padding: 6px;">' . esc_html__('Price', 'seatreg') . '</th>
+            </tr>';
+
+        foreach($tableData['rows'] as $row) {
             $paymentTable .= '<tr>';
-                $paymentTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->seatNr) .'</td>';
-                $paymentTable .= '<td style=";border:1px solid black;padding: 6px;"">'. esc_html($booking->price) . ' ' . $bookingData->paypal_currency_code . ' ' . $priceDescription  . '</td>';
+                $paymentTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($row['seatNr']) .'</td>';
+                $paymentTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($row['price']) . '</td>';
             $paymentTable .= '</tr>';
         }
-        $totalCost = $couponsEnabled ? self::applyCouponDiscountToTotalCost($totalCost, $appliedCoupon) : $totalCost;
 
         $paymentTable .= '<tr>';
-            $paymentTable .= '<td style=";border:1px solid black;padding: 6px;font-weight:700">'.  __('Total', 'seatreg') .'</td>';
-            $paymentTable .= '<td style=";border:1px solid black;padding: 6px;font-weight:700">'. $totalCost . ' ' . $bookingData->paypal_currency_code . '</td>';
+            $paymentTable .= '<td style="border:1px solid black;padding: 6px;font-weight:700">'.  esc_html__('Total', 'seatreg') .'</td>';
+            $paymentTable .= '<td style="border:1px solid black;padding: 6px;font-weight:700">'. esc_html($tableData['total']) . '</td>';
+        $paymentTable .= '</tr>';
+
+        $paymentTable .= '</table>';
+
+        return $paymentTable;
+    }
+
+    public static function generateEmailPaymentTable($bookingId, $couponsEnabled = false, $appliedCoupon = null) {
+        $tableData = self::getPaymentTableData($bookingId, $couponsEnabled, $appliedCoupon);
+        $paymentTable = '<table width="100%" border="0" cellpadding="0" cellspacing="0" style="' . self::EMAIL_TABLE_STYLE . '">
+            <tr>
+                <th style="' . self::EMAIL_TABLE_HEADER_STYLE . '">' . esc_html($tableData['spotName']) . '</th>
+                <th style="' . self::EMAIL_TABLE_HEADER_STYLE . '">' . esc_html__('Price', 'seatreg') . '</th>
+            </tr>';
+
+        foreach($tableData['rows'] as $row) {
+            $paymentTable .= '<tr>';
+                $paymentTable .= '<td style="' . self::EMAIL_TABLE_VALUE_STYLE . '">'. esc_html($row['seatNr']) .'</td>';
+                $paymentTable .= '<td style="' . self::EMAIL_TABLE_VALUE_STYLE . '">'. esc_html($row['price']) . '</td>';
+            $paymentTable .= '</tr>';
+        }
+
+        $paymentTable .= '<tr>';
+            $paymentTable .= '<td style="' . self::EMAIL_TABLE_VALUE_STYLE . 'font-weight:700;">'.  esc_html__('Total', 'seatreg') .'</td>';
+            $paymentTable .= '<td style="' . self::EMAIL_TABLE_VALUE_STYLE . 'font-weight:700;">'. esc_html($tableData['total']) . '</td>';
         $paymentTable .= '</tr>';
 
         $paymentTable .= '</table>';
