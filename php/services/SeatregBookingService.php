@@ -214,7 +214,7 @@ class SeatregBookingService {
             $bookingTable .= '<tr>';
 
             foreach($row as $field) {
-                $bookingTable .= '<td style="border:1px solid black;padding: 6px;">' . esc_html($field['value']) . '</td>';
+                $bookingTable .= '<td style="border:1px solid black;padding: 6px;">' . esc_html($field['value'] ?? '') . '</td>';
             }
 
             $bookingTable .= '</tr>';
@@ -243,13 +243,9 @@ class SeatregBookingService {
             $bookingTable .= '<table width="100%" border="0" cellpadding="0" cellspacing="0" style="' . self::EMAIL_TABLE_STYLE . '">';
 
             foreach($row as $field) {
-                if( $field['value'] === null || $field['value'] === '' ) {
-                    continue;
-                }
-
                 $bookingTable .= '<tr>';
                 $bookingTable .= '<th style="width:38%;' . self::EMAIL_TABLE_HEADER_STYLE . '">' . esc_html($field['label']) . '</th>';
-                $bookingTable .= '<td style="' . self::EMAIL_TABLE_VALUE_STYLE . '">' . esc_html($field['value']) . '</td>';
+                $bookingTable .= '<td style="' . self::EMAIL_TABLE_VALUE_STYLE . '">' . esc_html($field['value'] ?? '') . '</td>';
                 $bookingTable .= '</tr>';
             }
 
