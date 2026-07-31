@@ -51,6 +51,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 
 = 1.72.1 =
 * Booking and payment tables in emails now list each field on its own row, preventing wide tables from cutting off email content on the right.
+* The Home page now shows a notice when a new plugin version is available.
 
 = 1.72.0 =
 * Emails sent to bookers now have a cleaner design.
