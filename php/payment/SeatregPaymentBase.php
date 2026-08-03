@@ -36,6 +36,10 @@ class SeatregPaymentBase {
 		SeatregBookingService::changeBookingStatus($status, $this->_bookingId);
 	}
 
+    protected function approveBooking() {
+		SeatregBookingService::setBookingApproved($this->_bookingId);
+	}
+
     protected function changePaymentStatus($status = SEATREG_PAYMENT_COMPLETED) {
 		SeatregPaymentService::changePaymentStatus($status, $this->_bookingId);
 	}
@@ -48,7 +52,7 @@ class SeatregPaymentBase {
 		if($this->_setBookingConfirmed === '1') {
 			$bookingData = SeatregBookingRepository::getDataRelatedToBooking($this->_bookingId);
 
-			$this->changeBookingStatus(SEATREG_BOOKING_APPROVED);
+			$this->approveBooking();
 			seatreg_add_activity_log('booking', $this->_bookingId, "Booking set to approved state by the system ($this->_paymentMethod)", false);
 			seatreg_send_approved_booking_email($this->_bookingId, $this->_registrationCode, $bookingData->approved_booking_email_template);
 			SeatregActionsService::triggerBookingApprovedAction($this->_bookingId);

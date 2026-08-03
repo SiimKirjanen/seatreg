@@ -52,6 +52,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 = 1.73.0 =
 * Added a new PayPal payment integration that uses the PayPal API and webhooks. It is configured with a client id and secret from the PayPal developer dashboard.
 * The old PayPal payment integration still works, but PayPal now considers it legacy, so it is marked as legacy in the settings. Moving to the new one is recommended.
+* The booking approval date is now recorded when a completed payment approves the booking.
 
 = 1.72.1 =
 * Booking and payment tables in emails now list each field on its own row, preventing wide tables from cutting off email content on the right.

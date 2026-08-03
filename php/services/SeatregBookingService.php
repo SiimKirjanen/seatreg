@@ -107,6 +107,30 @@ class SeatregBookingService {
 
     /**
      *
+     * Set booking approved and record the approval date
+     * @param string $bookingId The UUID of the booking
+     * @return (int|false) The number of rows updated, or false on error.
+     *
+    */
+    public static function setBookingApproved($bookingId) {
+        global $seatreg_db_table_names;
+		global $wpdb;
+
+        return $wpdb->update(
+			$seatreg_db_table_names->table_seatreg_bookings,
+			array(
+				'status' => SEATREG_BOOKING_APPROVED,
+				'booking_confirm_date' => time()
+			),
+			array(
+				'booking_id' => $bookingId
+			),
+			'%s'
+		);
+    }
+
+    /**
+     *
      * Collect the columns and values shown for a booking
      * @param array $registrationCustomFields custom fields added to registration
      * @param array $bookings The UUID of the booking
