@@ -2740,7 +2740,7 @@
 
 		$pricingWrap.empty();
 		$('#set-prices').removeClass('d-none');
-		if(reg.settings.paypal_payments === '1' || reg.settings.stripe_payments === '1' || reg.settings.custom_payment === '1' || reg.hasCustomPayments) {
+		if(reg.settings.paypal_payments === '1' || reg.settings.paypal_rest_payments === '1' || reg.settings.stripe_payments === '1' || reg.settings.custom_payment === '1' || reg.hasCustomPayments) {
 			
 			$('#enable-paypal-alert').css('display', 'none');
 		}
@@ -2857,7 +2857,7 @@
 				//Multi price configured
 				$this.find('.multi-input').each(function() {
 					price.push({
-						price: $(this).find('.price-input').val(),
+						price: parseInt($(this).find('.price-input').val()),
 						description: $(this).find('.text-input').val(),
 						uuid: $(this).data('price-uuid')
 					});

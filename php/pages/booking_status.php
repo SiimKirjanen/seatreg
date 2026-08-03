@@ -116,7 +116,13 @@
 					<?php
 				}
 				
-				if( $bookingData->paypal_payments === '1' && $bookingHasCost ) {
+				$payPalRestUsable = SeatregPaymentRepository::isPayPalRestUsable($bookingData);
+
+				if( $payPalRestUsable && $bookingHasCost ) {
+					echo SeatregPaymentService::generatePayPalRestCheckoutForm($bookingId);
+				}
+
+				if( $bookingData->paypal_payments === '1' && !$payPalRestUsable && $bookingHasCost ) {
 					$payPalFromAction = $bookingData->paypal_sandbox_mode === '1' ? SEATREG_PAYPAL_FORM_ACTION_SANDBOX : SEATREG_PAYPAL_FORM_ACTION;
 					$returnUrl = SEATREG_PAYPAL_RETURN_URL . '&id=' . esc_html($bookingId);
 					$cancelUrl = SEATREG_PAYPAL_CANCEL_URL . '&registration=' . esc_html($registrationId) . '&id=' . esc_html($bookingId);

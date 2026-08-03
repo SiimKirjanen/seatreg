@@ -110,6 +110,21 @@ class SeatregPaymentService {
 
     /**
      *
+     * Generate PayPal REST API HTML checkout form
+     *
+    */
+    public static function generatePayPalRestCheckoutForm($bookingId) {
+        ?>
+            <form action="<?php echo esc_url( get_site_url() ); ?>" target="_blank">
+                <input type="hidden" name="seatreg" value="paypal-order" />
+                <input type="hidden" name="booking-id" value="<?php echo esc_attr($bookingId); ?>" />
+                <input type="image" src="<?php echo esc_url(plugins_url('../img/paypal.png', dirname(__FILE__) )); ?>" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
+            </form>
+        <?php
+    }
+
+    /**
+     *
      * Generate Stripe HTML checkout Form
      *
     */

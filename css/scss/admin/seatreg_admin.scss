@@ -975,6 +975,33 @@ html {
   margin-left: 24px;
 }
 
+#paypal-webhook-check-result:not(:empty) {
+  margin-top: 12px;
+}
+
+.webhook-check-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    margin-bottom: 4px;
+  }
+
+  .webhook-check-ok {
+    color: #46b450;
+  }
+
+  .webhook-check-failed {
+    color: #dc3232;
+  }
+
+  .webhook-check-detail {
+    color: #666;
+    word-break: break-all;
+  }
+}
+
 .seatreg-tabs-content .custom-container input[type="checkbox"] {
   margin-top: 0;
 }

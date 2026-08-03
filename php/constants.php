@@ -9,7 +9,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.58');
+define('SEATREG_DB_VERSION', '1.60');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));
@@ -35,7 +35,7 @@ define('SEATREG_PAYMENT_LOG_ERROR', 'error');
 define('SEATREG_PAYMENT_LOG_OK', 'ok');
 define('SEATREG_PAYMENT_LOG_INFO', 'info');
 define('SEATREG_PAYMENT_VALIDATION_FAILED', 'validation_failure');
-define('SEATREG_PAYMENT_CALLBACK_URL', get_site_url()); //For live use get_site_url(). For local testing use ngrok URL
+define('SEATREG_PAYMENT_CALLBACK_URL', get_site_url()); //For live use get_site_url(). For local testing use ngrok URL (example: ngrok http 80 --host-header=seatreg.local)
 
 // PayPal
 define('SEATREG_PAYPAL_FORM_ACTION', "https://www.paypal.com/cgi-bin/webscr");
@@ -46,6 +46,15 @@ define('SEATREG_PAYPAL_NOTIFY_URL', SEATREG_PAYMENT_CALLBACK_URL  . '?seatreg=pa
 define('SEATREG_PAYPAL_RETURN_URL', SEATREG_PAYMENT_CALLBACK_URL  . '?seatreg=payment-return');
 define('SEATREG_PAYPAL_CANCEL_URL', SEATREG_PAYMENT_CALLBACK_URL  . '?seatreg=booking-status');
 
+// PayPal REST (Orders v2 + webhooks)
+define('SEATREG_PAYPAL_API_BASE', 'https://api-m.paypal.com');
+define('SEATREG_PAYPAL_API_BASE_SANDBOX', 'https://api-m.sandbox.paypal.com');
+define('SEATREG_PAYPAL_WEBHOOK_CALLBACK_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=paypal-webhook-callback');
+define('SEATREG_PAYPAL_REST_RETURN_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=paypal-capture');
+define('SEATREG_PAYPAL_REST_CANCEL_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=booking-status');
+define('SEATREG_PAYPAL_ACCESS_TOKEN_TRANSIENT_PREFIX', 'seatreg_paypal_token_');
+define('SEATREG_PAYPAL_ZERO_DECIMAL_CURRENCIES', array('HUF', 'JPY', 'TWD'));
+
 // Stripe
 define('SEATREG_STRIPE_WEBHOOK_DESCRIPTION', 'WordPress SeatReg plugin webhook');
 define('SEATREG_STRIPE_WEBHOOK_CALLBACK_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=stripe-webhook-callback');
@@ -53,6 +62,10 @@ define('SEATREG_STRIPE_WEBHOOK_SUCCESS_URL', SEATREG_PAYMENT_CALLBACK_URL . '?se
 define('SEATREG_STRIPE_WEBHOOK_CANCEL_URL', SEATREG_PAYMENT_CALLBACK_URL . '?seatreg=booking-status');
 define('SEATREG_STRIPE_API_VERSION', '2020-08-27');
 define('SEATREG_STRIPE_ZERO_DECIMAL_CURRENCIES', array('BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'));
+
+// Encryption
+//The version in the prefix lets the cipher change later without having to guess which form an already stored value is in
+define('SEATREG_ENCRYPTED_VALUE_PREFIX', 'seatreg_enc_v1:');
 
 // Status
 define('SEATREG_BOOKING_DEFAULT', 0);

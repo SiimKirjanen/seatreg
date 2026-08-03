@@ -134,6 +134,26 @@ function showFirstLetters($inputString, $lettersToShow) {
     return $convertedString;
 }
 
+/**
+ * Show only the start and the end of a secret value, so that it can be recognised without
+ * revealing it. The hidden part is always the same width, so the length of the value is not
+ * given away either.
+ *
+ * @param string $inputString The value to hide
+ * @param int $lettersToShow How many letters to show at each end
+ * @return string
+ */
+function showFirstAndLastLetters($inputString, $lettersToShow) {
+	$hiddenPart = str_repeat('●', 8);
+
+	//Too short to show both ends without giving away most of the value
+	if( strlen($inputString) < $lettersToShow * 3 ) {
+		return $hiddenPart;
+	}
+
+	return substr($inputString, 0, $lettersToShow) . $hiddenPart . substr($inputString, -$lettersToShow);
+}
+
 /*
 ==================================================================================================================================================================================================================
 Generating HTML stuff
@@ -1207,7 +1227,115 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label for="paypal"><?php esc_html_e('PayPal payments', 'seatreg'); ?></label>
+				<label for="paypal-rest"><?php esc_html_e('PayPal payments', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create an app in the PayPal developer dashboard (https://developer.paypal.com/dashboard/applications/) and copy its client id and secret here.', 'seatreg'); ?>
+				</p>
+				<?php
+					$payPalSecretStored = !empty($options[0]->paypal_client_secret);
+					//Only the hidden form of this is ever printed to the page
+					$payPalSecret = $payPalSecretStored ? SeatregEncryptionService::decryptValue($options[0]->paypal_client_secret) : null;
+					$payPalSecretReadable = !$payPalSecretStored || $payPalSecret !== null;
+					$payPalWebhookUrlIsHttps = SeatregPayPalWebhooksService::webhookUrlIsHttps();
+					//Without https the https alert already tells why there is no webhook
+					$payPalWebhookMissing = $payPalWebhookUrlIsHttps
+						&& $options[0]->paypal_rest_payments == '1'
+						&& !SeatregPayPalWebhooksService::hasWebhookForCurrentSite($options[0]);
+				?>
+				<?php if(extension_loaded('curl') && SeatregEncryptionService::isOpenSSLEnabled()): ?>
+					<?php if(!$payPalWebhookUrlIsHttps): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php esc_html_e('PayPal payments need a https site address. PayPal only sends payment notifications to https.', 'seatreg'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if(!$payPalSecretReadable): ?>
+						<div class="alert alert-primary" role="alert">
+							<?php esc_html_e('The saved PayPal client secret can not be read anymore. This happens when the WordPress security keys in wp-config.php have been changed. Please enter the client secret again.', 'seatreg'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if($payPalWebhookMissing): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php esc_html_e('Creating the PayPal webhook failed, so the PayPal button is not shown to bookers. Saving the PayPal settings tries again. Use the Check setup button to see what went wrong.', 'seatreg'); ?>
+						</div>
+					<?php endif; ?>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="paypal-rest" name="paypal-rest-payments" value="0" <?php echo $options[0]->paypal_rest_payments == '1' ? 'checked':'' ?> >
+							<?php esc_html_e('Turn on PayPal payments', 'seatreg'); ?>
+						</label>
+					</div>
+					<div class="payment-configuration">
+						<label for="paypal-client-id"><?php esc_html_e('PayPal client id', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Please enter your PayPal app client id', 'seatreg'); ?>.
+						</p>
+						<input type="text" class="form-control" id="paypal-client-id" name="paypal-client-id" autocomplete="off" placeholder="<?php echo esc_html('PayPal client id', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->paypal_client_id); ?>">
+						<br>
+
+						<label for="paypal-client-secret"><?php esc_html_e('PayPal client secret', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php
+								if( $payPalSecretStored && $payPalSecretReadable ) {
+									esc_html_e('Leave this empty to keep the saved client secret, or enter a new one to replace it', 'seatreg');
+								}else {
+									esc_html_e('Please enter your PayPal app client secret', 'seatreg');
+								}
+							?>.
+						</p>
+						<input type="password" class="form-control" id="paypal-client-secret" name="paypal-client-secret" autocomplete="new-password" data-secret-stored="<?php echo $payPalSecretStored && $payPalSecretReadable ? '1' : '0'; ?>" placeholder="<?php echo $payPalSecretStored && $payPalSecretReadable ? esc_attr( showFirstAndLastLetters($payPalSecret, 4) ) : esc_attr__('PayPal client secret', 'seatreg'); ?>" value="">
+						<br>
+
+						<label for="payment-mark-confirmed-paypal-rest"><?php esc_html_e('Set paid booking approved', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Set booking approved automatically when payment has been completed', 'seatreg'); ?>.
+						</p>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="payment-mark-confirmed-paypal-rest" name="payment-mark-confirmed-paypal-rest" value="0" <?php echo $options[0]->payment_completed_set_booking_confirmed_paypal_rest == '1' ? 'checked': ''; ?> >
+								<?php esc_html_e('Set approved', 'seatreg'); ?>
+							</label>
+						</div>
+						<br>
+
+						<label for="paypal-rest-sandbox-mode"><?php esc_html_e('PayPal sandbox mode', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Turn on sandbox mode. Lets you test payments with your sandbox account. Don\'t forget to change the client id and secret to sandbox ones.', 'seatreg'); ?>
+						</p>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="paypal-rest-sandbox-mode" name="paypal-rest-sandbox-mode" value="0" <?php echo $options[0]->paypal_rest_sandbox_mode == '1' ? 'checked':'' ?> >
+								<?php esc_html_e('PayPal sandbox', 'seatreg'); ?>
+							</label>
+						</div>
+						<br>
+
+						<label><?php esc_html_e('Setup check', 'seatreg'); ?></label>
+						<p class="help-block">
+							<?php esc_html_e('Checks that PayPal accepts your client id and secret, and that the webhook the plugin needs is in place. The check uses the saved settings, so save first if you just changed something', 'seatreg'); ?>.
+						</p>
+						<button type="button" class="btn btn-secondary btn-sm" id="check-paypal-webhook" data-registration-code="<?php echo esc_attr($options[0]->registration_code); ?>" <?php echo $payPalWebhookUrlIsHttps ? '' : 'disabled'; ?>>
+							<?php esc_html_e('Check setup', 'seatreg'); ?>
+						</button>
+						<p class="help-block" id="paypal-webhook-check-off" style="display: none;">
+							<?php esc_html_e('PayPal payments are not turned on. Turn them on and save the settings first', 'seatreg'); ?>.
+						</p>
+						<p class="help-block" id="paypal-webhook-check-unsaved" style="display: none;">
+							<?php esc_html_e('Save the changed PayPal settings before running the check', 'seatreg'); ?>.
+						</p>
+						<div id="paypal-webhook-check-result"></div>
+					</div>
+				<?php else: ?>
+					<div class="alert alert-primary" role="alert">
+						<?php esc_html_e('Curl and OpenSSL extensions are required for PayPal to work', 'seatreg'); ?>
+					</div>
+				<?php endif; ?>
+			</div>
+
+			<div class="form-group">
+				<label for="paypal"><?php esc_html_e('PayPal payments (legacy IPN)', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('This is the older PayPal payment method. For new setups the PayPal payments setting above is recommended. If both are turned on, only the new one is shown to the booker.', 'seatreg'); ?>
+				</p>
 				<p class="help-block">
 					<?php esc_html_e('Allow and configure PayPal payments. Enables you to ask money for bookings. To enable this feature you need to create a Buy Now button in Paypal (https://www.paypal.com/buttons/). Button price and currency fields will be overriden by the plugin (just add something as they are required).', 'seatreg'); ?>
 				</p>
@@ -2698,6 +2826,13 @@ function seatreg_set_up_db() {
 			paypal_currency_code varchar(3) DEFAULT NULL,
 			paypal_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
 			payment_completed_set_booking_confirmed tinyint(1) NOT NULL DEFAULT 0,
+			paypal_rest_payments tinyint(1) NOT NULL DEFAULT 0,
+			paypal_client_id varchar(255) DEFAULT NULL,
+			paypal_client_secret varchar(512) DEFAULT NULL,
+			paypal_rest_sandbox_mode tinyint(1) NOT NULL DEFAULT 0,
+			paypal_webhook_id varchar(255) DEFAULT NULL,
+			paypal_webhook_url varchar(255) DEFAULT NULL,
+			payment_completed_set_booking_confirmed_paypal_rest tinyint(1) NOT NULL DEFAULT 0,
 			pending_expiration int(11) DEFAULT NULL,
 			pending_expiration_payment_statuses varchar(255) DEFAULT NULL,
 			verification_email_subject varchar(255) DEFAULT NULL,
@@ -2842,7 +2977,7 @@ function seatreg_get_registration_data($code) {
 	global $seatreg_db_table_names;
 
 	$registration = $wpdb->get_results( $wpdb->prepare(
-		"SELECT a.*, b.paypal_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates, b.custom_payments
+		"SELECT a.*, b.paypal_payments, b.paypal_rest_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates, b.custom_payments
 		FROM $seatreg_db_table_names->table_seatreg AS a
 		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 		ON a.registration_code = b.registration_code
@@ -3514,6 +3649,20 @@ function seatreg_update() {
 		wp_die('Missing PayPal configuration');
 	}
 
+	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
+	//An empty client secret field means the saved one is kept, so it is only required when nothing is saved yet
+	$payPalClientSecretInput = sanitize_text_field($_POST['paypal-client-secret'] ?? '');
+	$payPalClientSecretSaved = !empty($oldOptions->paypal_client_secret) && SeatregEncryptionService::decryptValue($oldOptions->paypal_client_secret) !== null;
+
+	if( isset($_POST['paypal-rest-payments']) && (($_POST['paypal-client-id'] ?? '') === "" || ($payPalClientSecretInput === "" && !$payPalClientSecretSaved) || $_POST['paypal-currency-code'] === "") ) {
+		wp_die('Missing PayPal API configuration');
+	}
+
+	//Nothing may reach the encrypt call without OpenSSL, it throws
+	if( ($payPalClientSecretInput !== '' || isset($_POST['paypal-rest-payments'])) && !SeatregEncryptionService::isOpenSSLEnabled() ) {
+		wp_die('OpenSSL extension is required to store PayPal credentials');
+	}
+
 	if( isset($_POST['stripe-payments']) && ($_POST['stripe-api-key'] === "" || $_POST['paypal-currency-code'] === "") ) {
 		wp_die('Missing Stripe configuration');
 	}
@@ -3611,6 +3760,24 @@ function seatreg_update() {
 		$_POST['payment-mark-confirmed'] = 0;  
 	}else {
 		$_POST['payment-mark-confirmed'] = 1;
+	}
+
+	if(!isset($_POST['paypal-rest-payments'])) {
+		$_POST['paypal-rest-payments'] = 0;
+	}else {
+		$_POST['paypal-rest-payments'] = 1;
+	}
+
+	if(!isset($_POST['paypal-rest-sandbox-mode'])) {
+		$_POST['paypal-rest-sandbox-mode'] = 0;
+	}else {
+		$_POST['paypal-rest-sandbox-mode'] = 1;
+	}
+
+	if(!isset($_POST['payment-mark-confirmed-paypal-rest'])) {
+		$_POST['payment-mark-confirmed-paypal-rest'] = 0;
+	}else {
+		$_POST['payment-mark-confirmed-paypal-rest'] = 1;
 	}
 
 	if(!isset($_POST['approved-booking-email'])) {
@@ -3759,7 +3926,6 @@ function seatreg_update() {
 		$_POST['enable_coupons'] = 1;
 	}
 
-	$oldOptions = SeatregOptionsRepository::getOptionsByRegistrationCode(sanitize_text_field($_POST['registration_code']));
 	$dbUpdated = true;
 	$customizeEmailColors = isset($_POST['customize-email-colors']);
 
@@ -3798,6 +3964,11 @@ function seatreg_update() {
 				'paypal_currency_code' => sanitize_text_field(strtoupper($_POST['paypal-currency-code'])),
 				'paypal_sandbox_mode' => $_POST['paypal-sandbox-mode'],
 				'payment_completed_set_booking_confirmed' => $_POST['payment-mark-confirmed'],
+				'paypal_rest_payments' => $_POST['paypal-rest-payments'],
+				'paypal_client_id' => sanitize_text_field($_POST['paypal-client-id'] ?? ''),
+				'paypal_client_secret' => $payPalClientSecretInput === '' ? $oldOptions->paypal_client_secret : SeatregEncryptionService::encryptValue($payPalClientSecretInput),
+				'paypal_rest_sandbox_mode' => $_POST['paypal-rest-sandbox-mode'],
+				'payment_completed_set_booking_confirmed_paypal_rest' => $_POST['payment-mark-confirmed-paypal-rest'],
 				'send_approved_booking_email' => $_POST['approved-booking-email'],
 				'send_approved_booking_email_qr_code' => ( !isset($_POST['approved-booking-email-qr-code']) || $_POST['approved-booking-email-qr-code'] === '') ? null : sanitize_text_field($_POST['approved-booking-email-qr-code']),
 				'pending_expiration' => $_POST['pending-expiration'],
@@ -3912,6 +4083,15 @@ function seatreg_update() {
 		SeatregOptionsService::updateStripeWebhookSecret(null, sanitize_text_field($_POST['registration_code']));
 		StripeWebhooksService::removeNotUsedStripeAPiWebhook($_POST['stripe-api-key']);
 	}
+
+	SeatregPayPalWebhooksService::syncWebhookAfterSettingsSave(
+		$oldOptions,
+		sanitize_text_field($_POST['registration_code']),
+		sanitize_text_field($_POST['paypal-client-id'] ?? ''),
+		$payPalClientSecretInput === '' ? SeatregEncryptionService::decryptValue($oldOptions->paypal_client_secret) : $payPalClientSecretInput,
+		$_POST['paypal-rest-sandbox-mode'] === 1,
+		$_POST['paypal-rest-payments'] === 1
+	);
 }
 
 //handle settings form submit
@@ -4198,6 +4378,45 @@ function seatreg_delete_api_token() {
 	}else {
 		wp_send_json_error();
 	}
+}
+
+add_action('wp_ajax_seatreg_check_paypal_webhook', 'seatreg_check_paypal_webhook');
+function seatreg_check_paypal_webhook() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
+	$resp = new SeatregJsonResponse();
+
+	if( empty($_POST['code']) ) {
+		$resp->setError('Missing data');
+		wp_send_json($resp);
+	}
+
+	$options = SeatregOptionsRepository::getOptionsByRegistrationCode( sanitize_text_field($_POST['code']) );
+
+	if( !$options ) {
+		$resp->setError( esc_html__('Registration not found', 'seatreg') );
+		wp_send_json($resp);
+	}
+
+	if( $options->paypal_rest_payments !== '1' ) {
+		$resp->setError( esc_html__('PayPal payments are not turned on. Turn them on and save the settings first.', 'seatreg') );
+		wp_send_json($resp);
+	}
+
+	$clientSecret = SeatregEncryptionService::decryptValue($options->paypal_client_secret);
+
+	if( $clientSecret === null ) {
+		$resp->setError( esc_html__('The saved PayPal client secret can not be read. Please enter it again and save the settings.', 'seatreg') );
+		wp_send_json($resp);
+	}
+
+	$resp->setData( SeatregPayPalWebhooksService::checkWebhookStatus(
+		$options->paypal_client_id,
+		$clientSecret,
+		$options->paypal_rest_sandbox_mode === '1',
+		$options->paypal_webhook_id
+	) );
+
+	wp_send_json($resp);
 }
 
 add_action('wp_ajax_seatreg_custom_payment_icon_upload', 'seatreg_custom_payment_icon_upload');
