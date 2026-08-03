@@ -35,7 +35,7 @@ class SeatregTemplateService {
 
     public static function replaceBookingTable($template, $bookings, $registrationCustomFields, $registration) {
         if(self::doesTemplateKeywordExist($template, SEATREG_TEMPLATE_BOOKING_TABLE)) {
-            $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
+            $bookingTable = SeatregBookingService::generateEmailBookingTable($registrationCustomFields, $bookings, $registration);
 
             return str_replace(SEATREG_TEMPLATE_BOOKING_TABLE, $bookingTable, $template);
         }
@@ -65,7 +65,7 @@ class SeatregTemplateService {
 
     public static function replacePaymentTable($template, $bookingId, $couponsEnabled, $appliedCoupon) {
         if(self::doesTemplateKeywordExist($template, SEATREG_TEMPLATE_PAYMENT_TABLE)) {
-            $paymentTable = SeatregBookingService::generatePaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
+            $paymentTable = SeatregBookingService::generateEmailPaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
 
             return str_replace(SEATREG_TEMPLATE_PAYMENT_TABLE, $paymentTable, $template);
         }

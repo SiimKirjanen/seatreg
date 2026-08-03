@@ -53,6 +53,10 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 * Added a new PayPal payment integration that uses the PayPal API and webhooks. It is configured with a client id and secret from the PayPal developer dashboard.
 * The old PayPal payment integration still works, but PayPal now considers it legacy, so it is marked as legacy in the settings. Moving to the new one is recommended.
 
+= 1.72.1 =
+* Booking and payment tables in emails now list each field on its own row, preventing wide tables from cutting off email content on the right.
+* The Home page now shows a notice when a new plugin version is available.
+
 = 1.72.0 =
 * Emails sent to bookers now have a cleaner design.
 * Added the option to customize email colors (background, heading, and text) per registration.

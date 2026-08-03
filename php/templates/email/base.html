@@ -72,6 +72,9 @@
   </style>
   <style type="text/css">
     .seatreg-content table {
+      width: 100% !important;
+      max-width: 100% !important;
+      table-layout: fixed;
       border-collapse: collapse;
       margin: 12px 0;
       font-size: 14px;
@@ -83,12 +86,16 @@
       text-align: left;
       padding: 8px 10px;
       border: 1px solid #e2e8f0;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     .seatreg-content td {
       padding: 8px 10px;
       border: 1px solid #e2e8f0;
       color: {{emailTextColor}};
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     .seatreg-content a {

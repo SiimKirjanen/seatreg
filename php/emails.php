@@ -25,7 +25,7 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
    
     /* translators: %s: Registration name */
     $message = esc_html__("Hello", 'seatreg') . "<br>" . sprintf(esc_html__("This is a notification email telling you that %s has a new booking", "seatreg"), $registrationName ) . "<br><br>" . esc_html__("You can disable booking notification in options if you don't want to receive them.", "seatreg") . "<br><br>";
-    $message .= SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
+    $message .= SeatregBookingService::generateEmailBookingTable($registrationCustomFields, $bookings, $registration);
 
     /* translators: %s: Registration name */
     $emailSubject = sprintf(esc_html__("%s has a new booking", "seatreg"), $registrationName);
@@ -89,7 +89,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         $message .= esc_html__('Booking status link:', 'seatreg') . ' <a href="'. $bookingStatusUrl .'" target="_blank">'. esc_url($bookingStatusUrl) .'</a>';
         $message .= '</p>';
 
-        $bookingTable = SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
+        $bookingTable = SeatregBookingService::generateEmailBookingTable($registrationCustomFields, $bookings, $registration);
         $message .= $bookingTable;
 
         if ( $couponsEnabled && $appliedCoupon ) {
@@ -98,7 +98,7 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
 
         if( SeatregBookingService::getBookingTotalCost($bookingId, $registration->registration_layout) > 0 ) {
             $message .= '<br>';
-            $message .= SeatregBookingService::generatePaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
+            $message .= SeatregBookingService::generateEmailPaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
         }
     }
 

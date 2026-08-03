@@ -8,9 +8,9 @@
       <mj-section padding="0px" />
     </mj-attributes>
     <mj-style>
-      .seatreg-content table { border-collapse: collapse; margin: 12px 0; font-size: 14px; }
-      .seatreg-content th { background: #f1f4f9; color: {{emailTextColor}}; text-align: left; padding: 8px 10px; border: 1px solid #e2e8f0; }
-      .seatreg-content td { padding: 8px 10px; border: 1px solid #e2e8f0; color: {{emailTextColor}}; }
+      .seatreg-content table { width: 100% !important; max-width: 100% !important; table-layout: fixed; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+      .seatreg-content th { background: #f1f4f9; color: {{emailTextColor}}; text-align: left; padding: 8px 10px; border: 1px solid #e2e8f0; word-break: break-word; overflow-wrap: break-word; }
+      .seatreg-content td { padding: 8px 10px; border: 1px solid #e2e8f0; color: {{emailTextColor}}; word-break: break-word; overflow-wrap: break-word; }
       .seatreg-content a { color: #2b6cb0; }
       .seatreg-content p { margin: 0 0 14px 0; }
       .seatreg-content img { max-width: 100%; }
