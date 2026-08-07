@@ -975,7 +975,8 @@ html {
   margin-left: 24px;
 }
 
-#paypal-webhook-check-result:not(:empty) {
+#paypal-webhook-check-result:not(:empty),
+#stripe-webhook-check-result:not(:empty) {
   margin-top: 12px;
 }
 

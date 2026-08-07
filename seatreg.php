@@ -71,6 +71,7 @@ require( 'php/services/SeatregSanitizationService.php' );
 require( 'php/services/SeatregCouponService.php' );
 require( 'php/services/SeatregCompanionAppService.php' );
 require( 'php/migrations/SeatregEncryptStripeCredentialsMigration.php' );
+require( 'php/migrations/SeatregBackfillStripeWebhookUrlMigration.php' );
 require( 'php/migrations/SeatregMigrationsRunner.php' );
 
 require( 'php/emails.php' );
