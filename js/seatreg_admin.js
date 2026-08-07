@@ -2372,7 +2372,7 @@ $('#seatreg-settings-submit').on('click', function(e) {
 	var currencyCode = $('#paypal-currency-code').val();
 
 	if($('#stripe').is(":checked")) {
-		if($('#stripe-api-key').val() === "") {
+		if($('#stripe-api-key').val() === "" && $('#stripe-api-key').data('secret-stored') !== 1) {
 			e.preventDefault();
 			alertify.error(translator.translate('pleaseEnterStripeApiKey'));
 

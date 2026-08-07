@@ -9,7 +9,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.60');
+define('SEATREG_DB_VERSION', '1.61');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));
@@ -66,6 +66,9 @@ define('SEATREG_STRIPE_ZERO_DECIMAL_CURRENCIES', array('BIF', 'CLP', 'DJF', 'GNF
 // Encryption
 //The version in the prefix lets the cipher change later without having to guess which form an already stored value is in
 define('SEATREG_ENCRYPTED_VALUE_PREFIX', 'seatreg_enc_v1:');
+
+// Migrations
+define('SEATREG_TRIGGER_MIGRATIONS', '1');
 
 // Status
 define('SEATREG_BOOKING_DEFAULT', 0);

@@ -23,14 +23,24 @@ if ( $couponsEnabled && $appliedCoupon ) {
 	$bookingTotalCost = SeatregBookingService::applyCouponDiscountToTotalCost($bookingTotalCost, $appliedCoupon);
 }
 
+$stripeApiKey = SeatregEncryptionService::decryptValue($bookingData->stripe_api_key);
+$stripeWebhookSecret = SeatregEncryptionService::decryptValue($bookingData->stripe_webhook_secret);
+
+if( $stripeApiKey === null || $stripeWebhookSecret === null ) {
+    SeatregPaymentLogService::log($bookingId, esc_html__('The saved Stripe credentials can not be read. Please enter the API key again in the registration settings.', 'seatreg'), SEATREG_PAYMENT_LOG_ERROR);
+    //Answer with an error so that Stripe sends the event again after the credentials have been fixed
+    http_response_code(500);
+    exit();
+}
+
 $stripePayment = new SeatregStripePayment(
     $bookingData->paypal_currency_code,
     $bookingTotalCost,
     $bookingId,
     $bookingData->payment_completed_set_booking_confirmed_stripe,
     $bookingData->registration_code,
-    $bookingData->stripe_api_key,
-    $bookingData->stripe_webhook_secret
+    $stripeApiKey,
+    $stripeWebhookSecret
 );
 $stripePayment->run();
 

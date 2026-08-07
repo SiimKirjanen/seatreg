@@ -6,15 +6,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 class SeatregOptionsService {
+    /**
+     *
+     * Save the Stripe webhook secret of a registration. It is stored encrypted.
+     *
+     * @param string|null $stripeWebhookSecret The webhook signing secret in plain text, or null to clear it
+     * @param string $registrationCode The code of the registration
+     *
+     */
     public static function updateStripeWebhookSecret($stripeWebhookSecret, $registrationCode) {
         global $seatreg_db_table_names;
 		global $wpdb;
 
-		return $wpdb->update( 
+		return $wpdb->update(
             $seatreg_db_table_names->table_seatreg_options,
-            array( 
-                'stripe_webhook_secret' => $stripeWebhookSecret,
-            ), 
+            array(
+                'stripe_webhook_secret' => $stripeWebhookSecret === null ? null : SeatregEncryptionService::encryptValue($stripeWebhookSecret),
+            ),
             array(
                 'registration_code' => $registrationCode
             ),

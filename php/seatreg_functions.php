@@ -1396,7 +1396,17 @@ function seatreg_generate_settings_form() {
 				<p class="help-block">
 					<?php esc_html_e('Allow and configure Stripe payments. Enables you to ask money for bookings. ', 'seatreg'); ?>
 				</p>
-				<?php if(extension_loaded('curl')): ?>
+				<?php
+					$stripeApiKeyStored = !empty($options[0]->stripe_api_key);
+					$stripeApiKey = $stripeApiKeyStored ? SeatregEncryptionService::decryptValue($options[0]->stripe_api_key) : null;
+					$stripeApiKeyReadable = !$stripeApiKeyStored || $stripeApiKey !== null;
+				?>
+				<?php if(extension_loaded('curl') && SeatregEncryptionService::isOpenSSLEnabled()): ?>
+					<?php if(!$stripeApiKeyReadable): ?>
+						<div class="alert alert-primary" role="alert">
+							<?php esc_html_e('The saved Stripe API key can not be read anymore. This happens when the WordPress security keys in wp-config.php have been changed. Please enter the API key again.', 'seatreg'); ?>
+						</div>
+					<?php endif; ?>
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" id="stripe" name="stripe-payments" value="0" <?php echo $options[0]->stripe_payments == '1' ? 'checked':'' ?> >
@@ -1406,9 +1416,15 @@ function seatreg_generate_settings_form() {
 					<div class="payment-configuration">
 						<label for="stripe_api_key"><?php esc_html_e('Stripe API secret key', 'seatreg'); ?></label>
 						<p class="help-block">
-							<?php esc_html_e('Please enter your Stripe API secret key', 'seatreg'); ?>.
+							<?php
+								if( $stripeApiKeyStored && $stripeApiKeyReadable ) {
+									esc_html_e('Leave this empty to keep the saved API key, or enter a new one to replace it', 'seatreg');
+								}else {
+									esc_html_e('Please enter your Stripe API secret key', 'seatreg');
+								}
+							?>.
 						</p>
-						<input type="text" class="form-control" id="stripe-api-key" name="stripe-api-key" autocomplete="off" placeholder="<?php echo esc_html('Stripe API key', 'seatreg'); ?>" value="<?php echo esc_html($options[0]->stripe_api_key); ?>"> 
+						<input type="password" class="form-control" id="stripe-api-key" name="stripe-api-key" autocomplete="new-password" data-secret-stored="<?php echo $stripeApiKeyStored && $stripeApiKeyReadable ? '1' : '0'; ?>" placeholder="<?php echo $stripeApiKeyStored && $stripeApiKeyReadable ? esc_attr( showFirstAndLastLetters($stripeApiKey, 4) ) : esc_attr__('Stripe API key', 'seatreg'); ?>" value="">
 						<br>
 						<label for="payment-mark-confirmed-stripe"><?php esc_html_e('Set paid booking approved', 'seatreg'); ?></label>
 						<p class="help-block">
@@ -1423,7 +1439,7 @@ function seatreg_generate_settings_form() {
 					</div>
 				<?php else: ?>
 					<div class="alert alert-primary" role="alert">
-						<?php esc_html_e('Curl extension is required for Stripe to work', 'seatreg'); ?>
+						<?php esc_html_e('Curl and OpenSSL extensions are required for Stripe to work', 'seatreg'); ?>
 					</div>
 				<?php endif; ?>
 			</div>
@@ -2842,9 +2858,9 @@ function seatreg_set_up_db() {
 			approved_booking_email_subject varchar(255) DEFAULT NULL,
 			approved_booking_email_template text,
 			stripe_payments tinyint(1) NOT NULL DEFAULT 0,
-			stripe_api_key varchar(255) DEFAULT NULL,
+			stripe_api_key varchar(512) DEFAULT NULL,
 			payment_completed_set_booking_confirmed_stripe tinyint(1) NOT NULL DEFAULT 0,
-			stripe_webhook_secret varchar(255) DEFAULT NULL,
+			stripe_webhook_secret varchar(512) DEFAULT NULL,
 			using_seats tinyint(1) NOT NULL DEFAULT 1,
 			email_from_address varchar(255) DEFAULT NULL,
 			email_background_color varchar(7) DEFAULT NULL,
@@ -3663,8 +3679,17 @@ function seatreg_update() {
 		wp_die('OpenSSL extension is required to store PayPal credentials');
 	}
 
-	if( isset($_POST['stripe-payments']) && ($_POST['stripe-api-key'] === "" || $_POST['paypal-currency-code'] === "") ) {
+	//An empty API key field means the saved one is kept, so it is only required when nothing is saved yet
+	$stripeApiKeyInput = sanitize_text_field($_POST['stripe-api-key'] ?? '');
+	$stripeApiKeySaved = !empty($oldOptions->stripe_api_key) && SeatregEncryptionService::decryptValue($oldOptions->stripe_api_key) !== null;
+
+	if( isset($_POST['stripe-payments']) && (($stripeApiKeyInput === "" && !$stripeApiKeySaved) || $_POST['paypal-currency-code'] === "") ) {
 		wp_die('Missing Stripe configuration');
+	}
+
+	//Nothing may reach the encrypt call without OpenSSL, it throws
+	if( ($stripeApiKeyInput !== '' || isset($_POST['stripe-payments'])) && !SeatregEncryptionService::isOpenSSLEnabled() ) {
+		wp_die('OpenSSL extension is required to store Stripe credentials');
 	}
 
 	$registrationName = sanitize_text_field($_POST['registration-name']);
@@ -3980,7 +4005,7 @@ function seatreg_update() {
 				'approved_booking_email_subject' => $_POST['approved-booking-email-subject'] === '' ? null : $_POST['approved-booking-email-subject'],
 				'approved_booking_email_template' => $_POST['approved-booking-email-template'] === '' ? null : SeatregSanitizationService::sanitizeEmailTemplate($_POST['approved-booking-email-template']),
 				'stripe_payments' => $_POST['stripe-payments'],
-				'stripe_api_key' => $_POST['stripe-api-key'],
+				'stripe_api_key' => $stripeApiKeyInput === '' ? $oldOptions->stripe_api_key : SeatregEncryptionService::encryptValue($stripeApiKeyInput),
 				'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
 				'using_seats' => $_POST['using-seats'],
 				'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null,
@@ -4063,25 +4088,32 @@ function seatreg_update() {
 		return false;
 	}
 	
+	//The Stripe API key is stored encrypted, but Stripe is always called with the plain one
+	$oldStripeApiKey = SeatregEncryptionService::decryptValue($oldOptions->stripe_api_key);
+	$stripeApiKey = $stripeApiKeyInput === '' ? $oldStripeApiKey : $stripeApiKeyInput;
 	$turningOnStripePaymentsDetected = $oldOptions->stripe_payments === '0' && $_POST['stripe-payments'] === 1;
-	$stripeAPiKeyChangeDetected = $oldOptions->stripe_payments === '1' && $_POST['stripe-payments'] === 1 && $oldOptions->stripe_api_key !== $_POST['stripe-api-key'];
+	$stripeAPiKeyChangeDetected = $oldOptions->stripe_payments === '1' && $_POST['stripe-payments'] === 1 && $oldStripeApiKey !== $stripeApiKey;
 
 	if( $turningOnStripePaymentsDetected || $stripeAPiKeyChangeDetected ) {
-		if( !StripeWebhooksService::isStripeWebhookCreatedForCurrentSite($_POST['stripe-api-key']) ) {
+		if( !StripeWebhooksService::isStripeWebhookCreatedForCurrentSite($stripeApiKey) ) {
 			//Create a new Stripe webhook
-			$webhook = StripeWebhooksService::createStripeWebhook($_POST['stripe-api-key']);
+			$webhook = StripeWebhooksService::createStripeWebhook($stripeApiKey);
 			SeatregOptionsService::updateStripeWebhookSecret($webhook->secret, sanitize_text_field($_POST['registration_code']));
 		}else {
 			//Webhook already created for this site. Set stripe_webhook secret from existing working webhook
 			SeatregOptionsService::updateStripeWebhookSecret(
-				SeatregOptionsRepository::getActiveStripeWebhookSecret($_POST['stripe-api-key']),
+				SeatregOptionsRepository::getActiveStripeWebhookSecret($stripeApiKey),
 				sanitize_text_field($_POST['registration_code'])
 			);
 		}
 	}else if( $oldOptions->stripe_payments === '1' &&  $_POST['stripe-payments'] === 0) {
 		//Turning off Stripe payment
 		SeatregOptionsService::updateStripeWebhookSecret(null, sanitize_text_field($_POST['registration_code']));
-		StripeWebhooksService::removeNotUsedStripeAPiWebhook($_POST['stripe-api-key']);
+
+		//Without a readable API key the webhook can not be removed from Stripe
+		if( $stripeApiKey ) {
+			StripeWebhooksService::removeNotUsedStripeAPiWebhook($stripeApiKey);
+		}
 	}
 
 	SeatregPayPalWebhooksService::syncWebhookAfterSettingsSave(

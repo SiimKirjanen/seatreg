@@ -70,6 +70,9 @@ require( 'php/services/SeatregEncryptionService.php' );
 require( 'php/services/SeatregSanitizationService.php' );
 require( 'php/services/SeatregCouponService.php' );
 require( 'php/services/SeatregCompanionAppService.php' );
+require( 'php/migrations/SeatregEncryptStripeCredentialsMigration.php' );
+require( 'php/migrations/SeatregMigrationsRunner.php' );
+
 require( 'php/emails.php' );
 require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );

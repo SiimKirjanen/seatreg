@@ -15,9 +15,17 @@ if( $bookingData->stripe_payments !== '1' ) {
     die('Stripe payment is not turned on');
 }
 
+$stripeApiKey = SeatregEncryptionService::decryptValue($bookingData->stripe_api_key);
+
+if( $stripeApiKey === null ) {
+    SeatregPaymentLogService::log($bookingId, esc_html__('The saved Stripe API key can not be read. The WordPress security keys have most likely been changed. Please enter the API key again in the settings.', 'seatreg'), SEATREG_PAYMENT_LOG_ERROR);
+
+    wp_die( esc_html__('Could not start the Stripe payment. Please try again later.', 'seatreg') );
+}
+
 require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/stripe-php/init.php' );
 
-\Stripe\Stripe::setApiKey($bookingData->stripe_api_key);
+\Stripe\Stripe::setApiKey($stripeApiKey);
 \Stripe\Stripe::setApiVersion( SEATREG_STRIPE_API_VERSION );
 
 $unitAmount = SeatregBookingService::getBookingTotalCost($bookingId, $bookingData->registration_layout);
