@@ -14,6 +14,8 @@ class SeatregEncryptStripeCredentialsMigration {
      */
     public static function run() {
         if( !SeatregEncryptionService::isOpenSSLEnabled() ) {
+            error_log('SeatReg: the saved Stripe credentials were left unencrypted because the OpenSSL extension is not enabled.');
+
             return;
         }
 
@@ -26,8 +28,8 @@ class SeatregEncryptStripeCredentialsMigration {
             OR ( stripe_webhook_secret IS NOT NULL AND stripe_webhook_secret != '' )"
         );
 
-        try {
-            foreach( $rows as $row ) {
+        foreach( $rows as $row ) {
+            try {
                 $newValues = array();
 
                 if( !empty($row->stripe_api_key) && !SeatregEncryptionService::isEncryptedValue($row->stripe_api_key) ) {
@@ -51,11 +53,11 @@ class SeatregEncryptStripeCredentialsMigration {
                 );
 
                 if( $updated === false ) {
-                    throw new Exception('Saving the encrypted Stripe credentials of options row ' . $row->id . ' failed: ' . $wpdb->last_error);
+                    throw new Exception('saving the encrypted values failed: ' . $wpdb->last_error);
                 }
+            } catch (Exception $e) {
+                error_log('SeatReg: encrypting the saved Stripe credentials of options row ' . $row->id . ' failed: ' . $e->getMessage());
             }
-        } catch (Exception $e) {
-            error_log('SeatReg: encrypting the saved Stripe credentials failed: ' . $e->getMessage());
         }
     }
 }

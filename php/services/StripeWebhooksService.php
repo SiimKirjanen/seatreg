@@ -90,9 +90,9 @@ class StripeWebhooksService {
         require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/stripe-php/init.php' );
 
         $webhooks = self::getSeatregStripeWebhooks($stripeAPIKey);    
-        $currentSiteWebhooks = array_filter($webhooks, function($webhook){
+        $currentSiteWebhooks = array_values( array_filter($webhooks, function($webhook){
             return strpos($webhook['url'], SEATREG_PAYMENT_CALLBACK_URL) !== false;
-        });
+        }) );
 
         if( !$currentSiteWebhooks ) {
             return false;
@@ -250,16 +250,17 @@ class StripeWebhooksService {
     */
     private static function createWebhookForRegistration($registrationCode, $stripeAPIKey) {
         try {
-            if( !self::isStripeWebhookCreatedForCurrentSite($stripeAPIKey) ) {
-                $webhook = self::createStripeWebhook($stripeAPIKey);
-                SeatregOptionsService::updateStripeWebhook($webhook->secret, SEATREG_STRIPE_WEBHOOK_CALLBACK_URL, $registrationCode);
-            }else {
-                SeatregOptionsService::updateStripeWebhook(
-                    SeatregOptionsRepository::getActiveStripeWebhookSecret($stripeAPIKey),
-                    SEATREG_STRIPE_WEBHOOK_CALLBACK_URL,
-                    $registrationCode
-                );
+            $webhookSecret = self::isStripeWebhookCreatedForCurrentSite($stripeAPIKey)
+                ? SeatregOptionsRepository::getActiveStripeWebhookSecret($stripeAPIKey)
+                : null;
+
+            if( $webhookSecret === null ) {
+                self::removeStripeWebhook($stripeAPIKey);
+
+                $webhookSecret = self::createStripeWebhook($stripeAPIKey)->secret;
             }
+
+            SeatregOptionsService::updateStripeWebhook($webhookSecret, SEATREG_STRIPE_WEBHOOK_CALLBACK_URL, $registrationCode);
         } catch (Exception $e) {
             error_log('SeatReg: creating the Stripe webhook for registration ' . $registrationCode . ' failed: ' . $e->getMessage());
             SeatregOptionsService::updateStripeWebhook(null, null, $registrationCode);
