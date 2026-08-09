@@ -216,4 +216,74 @@ class StripeWebhooksService {
             StripeWebhooksService::removeStripeWebhook($stripeAPIKey);
         }
     }
+
+    /**
+     *
+     * Create or remove the Stripe webhook after Stripe payment settings have been saved
+     * @param object $oldOptions Registration options before the save
+     * @param string $registrationCode The code of the registration that was saved
+     * @param string|null $stripeAPIKey The Stripe API key that was saved, in plain text
+     * @param bool $stripeOn Is the Stripe payment method turned on after the save
+     *
+    */
+    public static function syncWebhookAfterSettingsSave($oldOptions, $registrationCode, $stripeAPIKey, $stripeOn) {
+        $stripeWasOn = $oldOptions->stripe_payments === '1';
+        $oldStripeAPIKey = SeatregEncryptionService::decryptValue($oldOptions->stripe_api_key);
+
+        $turningOnStripePaymentsDetected = $stripeOn && !$stripeWasOn;
+        $stripeAPiKeyChangeDetected = $stripeOn && $stripeWasOn && $oldStripeAPIKey !== $stripeAPIKey;
+        $missingWebhookDetected = $stripeOn && !self::hasWebhookForCurrentSite($oldOptions);
+
+        if( $turningOnStripePaymentsDetected || $stripeAPiKeyChangeDetected || $missingWebhookDetected ) {
+            self::createWebhookForRegistration($registrationCode, $stripeAPIKey);
+        }else if( !$stripeOn && $stripeWasOn ) {
+            self::removeWebhookForRegistration($registrationCode, $oldStripeAPIKey);
+        }
+    }
+
+    /**
+     *
+     * Make sure the registration has a working webhook secret saved for it
+     * @param string $registrationCode The code of the registration that was saved
+     * @param string|null $stripeAPIKey The Stripe API key that was saved, in plain text
+     *
+    */
+    private static function createWebhookForRegistration($registrationCode, $stripeAPIKey) {
+        try {
+            if( !self::isStripeWebhookCreatedForCurrentSite($stripeAPIKey) ) {
+                $webhook = self::createStripeWebhook($stripeAPIKey);
+                SeatregOptionsService::updateStripeWebhook($webhook->secret, SEATREG_STRIPE_WEBHOOK_CALLBACK_URL, $registrationCode);
+            }else {
+                SeatregOptionsService::updateStripeWebhook(
+                    SeatregOptionsRepository::getActiveStripeWebhookSecret($stripeAPIKey),
+                    SEATREG_STRIPE_WEBHOOK_CALLBACK_URL,
+                    $registrationCode
+                );
+            }
+        } catch (Exception $e) {
+            error_log('SeatReg: creating the Stripe webhook for registration ' . $registrationCode . ' failed: ' . $e->getMessage());
+            SeatregOptionsService::updateStripeWebhook(null, null, $registrationCode);
+        }
+    }
+
+    /**
+     *
+     * Forget the webhook of a registration and remove it from Stripe when no one else uses it
+     * @param string $registrationCode The code of the registration that was saved
+     * @param string|null $stripeAPIKey The Stripe API key the webhook was made with, in plain text
+     *
+    */
+    private static function removeWebhookForRegistration($registrationCode, $stripeAPIKey) {
+        SeatregOptionsService::updateStripeWebhook(null, null, $registrationCode);
+
+        if( !$stripeAPIKey ) {
+            return;
+        }
+
+        try {
+            self::removeNotUsedStripeAPiWebhook($stripeAPIKey);
+        } catch (Exception $e) {
+            error_log('SeatReg: removing the Stripe webhook of registration ' . $registrationCode . ' failed: ' . $e->getMessage());
+        }
+    }
 }

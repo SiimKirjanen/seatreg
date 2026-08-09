@@ -4112,51 +4112,12 @@ function seatreg_update() {
 		return false;
 	}
 	
-	//The Stripe API key is stored encrypted, but Stripe is always called with the plain one
-	$oldStripeApiKey = SeatregEncryptionService::decryptValue($oldOptions->stripe_api_key);
-	$stripeApiKey = $stripeApiKeyInput === '' ? $oldStripeApiKey : $stripeApiKeyInput;
-	$stripeOn = $_POST['stripe-payments'] === 1;
-	$stripeWasOn = $oldOptions->stripe_payments === '1';
-	$turningOnStripePaymentsDetected = !$stripeWasOn && $stripeOn;
-	$stripeAPiKeyChangeDetected = $stripeWasOn && $stripeOn && $oldStripeApiKey !== $stripeApiKey;
-	//An earlier save can have failed to create the webhook, and a webhook made for an address the
-	//site no longer answers on delivers nothing. Both are retried instead of staying broken.
-	$missingStripeWebhookDetected = $stripeOn && !StripeWebhooksService::hasWebhookForCurrentSite($oldOptions);
-	$registrationCode = sanitize_text_field($_POST['registration_code']);
-
-	if( $turningOnStripePaymentsDetected || $stripeAPiKeyChangeDetected || $missingStripeWebhookDetected ) {
-		try {
-			if( !StripeWebhooksService::isStripeWebhookCreatedForCurrentSite($stripeApiKey) ) {
-				//Create a new Stripe webhook
-				$webhook = StripeWebhooksService::createStripeWebhook($stripeApiKey);
-				SeatregOptionsService::updateStripeWebhook($webhook->secret, SEATREG_STRIPE_WEBHOOK_CALLBACK_URL, $registrationCode);
-			}else {
-				//Webhook already created for this site. Set stripe_webhook secret from existing working webhook
-				SeatregOptionsService::updateStripeWebhook(
-					SeatregOptionsRepository::getActiveStripeWebhookSecret($stripeApiKey),
-					SEATREG_STRIPE_WEBHOOK_CALLBACK_URL,
-					$registrationCode
-				);
-			}
-		} catch (Exception $e) {
-			//Stripe refuses an address it can not reach, a local one for example. Clear the saved
-			//webhook so the settings page warns about it and the next save tries again.
-			error_log('SeatReg: creating the Stripe webhook for registration ' . $registrationCode . ' failed: ' . $e->getMessage());
-			SeatregOptionsService::updateStripeWebhook(null, null, $registrationCode);
-		}
-	}else if( $stripeWasOn && !$stripeOn ) {
-		//Turning off Stripe payment
-		SeatregOptionsService::updateStripeWebhook(null, null, $registrationCode);
-
-		//Without a readable API key the webhook can not be removed from Stripe
-		if( $stripeApiKey ) {
-			try {
-				StripeWebhooksService::removeNotUsedStripeAPiWebhook($stripeApiKey);
-			} catch (Exception $e) {
-				error_log('SeatReg: removing the Stripe webhook of registration ' . $registrationCode . ' failed: ' . $e->getMessage());
-			}
-		}
-	}
+	StripeWebhooksService::syncWebhookAfterSettingsSave(
+		$oldOptions,
+		sanitize_text_field($_POST['registration_code']),
+		$stripeApiKeyInput === '' ? SeatregEncryptionService::decryptValue($oldOptions->stripe_api_key) : $stripeApiKeyInput,
+		$_POST['stripe-payments'] === 1
+	);
 
 	SeatregPayPalWebhooksService::syncWebhookAfterSettingsSave(
 		$oldOptions,
