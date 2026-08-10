@@ -51,6 +51,9 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 
 = 1.74.0 =
 * The shortcode now takes an optional room attribute that sets which room the registration opens on.
+* Added an optional custom text that is shown on the page the booker returns to after paying, configurable per registration in the settings.
+* The payment return, booking confirm and booking status pages are now styled instead of being plain unformatted pages.
+* Added a new "Pages" settings tab where the background, heading and body text colors of those pages can be set per registration, along with a logo shown at the top of them. The custom CSS fields for the booking status and booking confirm pages moved to this tab.
 
 = 1.73.0 =
 * Added a new PayPal payment integration that uses the PayPal API and webhooks. It is configured with a client id and secret from the PayPal developer dashboard.

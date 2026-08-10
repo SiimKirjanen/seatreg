@@ -108,7 +108,7 @@ function seatreg_custom_pages() {
 		die();
 	}
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'payment-return' ) {
+	if( seatreg_is_payment_return_page() ) {
 		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/return_to_merchant.php';
 
 		die();

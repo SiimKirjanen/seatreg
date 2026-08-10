@@ -9,7 +9,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.60');
+define('SEATREG_DB_VERSION', '1.62');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));
@@ -81,6 +81,11 @@ define('SEATREG_TEMP_FOLDER_URL', $up_dir['baseurl'].'/seatreg');
 define('SEATREG_EMAIL_DEFAULT_BG_COLOR', '#eef1f6');
 define('SEATREG_EMAIL_DEFAULT_TEXT_COLOR', '#3d4759');
 define('SEATREG_EMAIL_DEFAULT_HEADING_COLOR', '#1a2233');
+
+// Booker facing page appearance defaults (payment return, booking confirm and booking status pages)
+define('SEATREG_PAGE_DEFAULT_BG_COLOR', '#f4f6fa');
+define('SEATREG_PAGE_DEFAULT_TEXT_COLOR', '#3d4759');
+define('SEATREG_PAGE_DEFAULT_HEADING_COLOR', '#1a2233');
 
 // Email template keywords
 define('SEATREG_TEMPLATE_STATUS_LINK', '[status-link]');

@@ -22,6 +22,11 @@ function seatreg_remove_all_styles() {
 		$allowedToLoad = array();
     	$wp_styles->queue = $allowedToLoad;
 	}
+	if( seatreg_is_payment_return_page() ) {
+		global $wp_styles;
+		$allowedToLoad = array();
+    	$wp_styles->queue = $allowedToLoad;
+	}
 	if ( seatreg_is_companion_app_page() ) {
 		global $wp_styles;
 		$allowedToLoad = array();
@@ -43,6 +48,11 @@ function seatreg_remove_all_scripts() {
 		$wp_scripts->queue = $allowedToLoad;
 	}
 	if( seatreg_is_booking_confirm_page() ) {
+		global $wp_scripts;
+		$allowedToLoad = array();
+		$wp_scripts->queue = $allowedToLoad;
+	}
+	if( seatreg_is_payment_return_page() ) {
 		global $wp_scripts;
 		$allowedToLoad = array();
 		$wp_scripts->queue = $allowedToLoad;
@@ -185,7 +195,7 @@ function seatreg_public_scripts_and_styles() {
 	if( seatreg_is_booking_confirm_page() && !empty( $_GET['confirmation-code'] ) ) {
 		$options = SeatregOptionsRepository::getOptionsByConfirmationCode( sanitize_text_field($_GET['confirmation-code']) );
 
-		if( $options->booking_confirm_page_custom_styles ) {
+		if( $options && $options->booking_confirm_page_custom_styles ) {
 			add_action('wp_head', function() use ($options) {
 				seatreg_add_custom_styles($options->booking_confirm_page_custom_styles);
 			}, 100);

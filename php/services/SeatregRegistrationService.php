@@ -146,7 +146,12 @@ class SeatregRegistrationService {
                 'show_approved_booking_pdf' => $registrationData->show_approved_booking_pdf,
                 'using_seats' => $registrationData->using_seats,
                 'controlled_scroll' => $registrationData->controlled_scroll,
-                'booking_email_limit' => $registrationData->booking_email_limit
+                'booking_email_limit' => $registrationData->booking_email_limit,
+                'payment_return_page_text' => $registrationData->payment_return_page_text,
+                'page_background_color' => $registrationData->page_background_color,
+                'page_text_color' => $registrationData->page_text_color,
+                'page_heading_color' => $registrationData->page_heading_color,
+                'page_logo' => $registrationData->page_logo
             ),
     		'%s'
     	);

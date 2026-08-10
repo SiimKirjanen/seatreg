@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class SeatregConfirmBooking extends SeatregBooking {
 	public $reply;
+	public $status = 'error';
 	protected $_confirmationCode;
 	protected $_bookindId;
 	protected $_registrationOwnerEmail;
@@ -65,6 +66,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 			die();
 		}
 		$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
+		$this->status = 'success';
 
 		SeatregActionsService::triggerBookingSubmittedAction($this->_bookingId);
 
@@ -94,6 +96,11 @@ class SeatregConfirmBooking extends SeatregBooking {
 		if($this->_sendNewBookingNotificationEmail) {
 			seatreg_send_booking_notification_email($this->_registrationCode, $this->_bookingId, $this->_sendNewBookingNotificationEmail);
 		}
+	}
+
+	//Only known once the registration has been loaded, so empty when the confirmation code did not match anything
+	public function getRegistrationName() {
+		return $this->_registrationName;
 	}
 
 	public function startConfirm() {
@@ -144,11 +151,11 @@ class SeatregConfirmBooking extends SeatregBooking {
 		}
 
 		//5 step. Check if seat/seats is already bron or taken
-		$seatsOpenCheck = $this->isAllSelectedSeatsOpen($this->_selectedBookingCalendarDate); 
+		$seatsOpenCheck = $this->isAllSelectedSeatsOpen($this->_selectedBookingCalendarDate);
 		if($seatsOpenCheck != 'ok') {
 			echo esc_html($seatsOpenCheck);
 
-			exit();
+			return;
 		}
 		
 		//6 step. Seat/seats lock check

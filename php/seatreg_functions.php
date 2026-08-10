@@ -112,6 +112,13 @@ function seatreg_is_booking_confirm_page() {
 	return false;
 }
 
+function seatreg_is_payment_return_page() {
+	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'payment-return' ) {
+		return true;
+	}
+	return false;
+}
+
 function seatreg_validate_bookings_file_input() {
 	if(empty($_GET['code'])) {
 		wp_die('Missing code');
@@ -561,6 +568,7 @@ function seatreg_generate_settings_form() {
 				<button type="button" class="settings-tab" data-tab="booking-flow" role="tab"><?php esc_html_e('Booking flow & display', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="emails" role="tab"><?php esc_html_e('Emails & notifications', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="payments" role="tab"><?php esc_html_e('Payments & coupons', 'seatreg'); ?></button>
+				<button type="button" class="settings-tab" data-tab="pages" role="tab"><?php esc_html_e('Pages', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="advanced" role="tab"><?php esc_html_e('Advanced', 'seatreg'); ?></button>
 			</nav>
 
@@ -1562,7 +1570,91 @@ function seatreg_generate_settings_form() {
 				<input type="hidden" name="coupons" value='<?php echo esc_attr(json_encode($coupons)); ?>' />
 			</div>
 
+			<div class="form-group">
+				<label><?php esc_html_e('Additional text for the payment return page', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('After paying with PayPal or Stripe the booker is sent back to the payment return page. This text is shown below the default payment status message. Leave empty to show only the default message.', 'seatreg'); ?></p>
+				<?php
+				$paymentReturnTextEditorSettings = array(
+				    'wpautop' => true, // enable auto paragraph
+				    'textarea_name' => 'payment-return-text',
+				    'textarea_rows' => 4,
+				    'media_buttons' => false,
+				    'teeny' => true, // minimal toolbar
+				    'tinymce' => array(
+				        // minimal toolbar without list buttons
+				        'toolbar1' => 'bold,italic,underline,blockquote,strikethrough,alignleft,aligncenter,alignright,undo,redo,link,unlink,fullscreen',
+				    ),
+				);
+				wp_editor($options[0]->payment_return_page_text, 'paymentReturnTextEditor', $paymentReturnTextEditorSettings)
+				?>
+			</div>
+
 			</div><!-- /.settings-tab-panel payments -->
+			<div class="settings-tab-panel" data-tab-panel="pages">
+
+			<div class="form-group">
+				<p class="help-block">
+					<?php esc_html_e('These settings control how the pages a booker lands on look: the booking status page, the booking confirm page and the page they return to after paying.', 'seatreg'); ?>
+				</p>
+			</div>
+
+			<?php
+				$pageBgColor = $options[0]->page_background_color ? $options[0]->page_background_color : SEATREG_PAGE_DEFAULT_BG_COLOR;
+				$pageTextColor = $options[0]->page_text_color ? $options[0]->page_text_color : SEATREG_PAGE_DEFAULT_TEXT_COLOR;
+				$pageHeadingColor = $options[0]->page_heading_color ? $options[0]->page_heading_color : SEATREG_PAGE_DEFAULT_HEADING_COLOR;
+				$pageColorsCustomized = $options[0]->page_background_color || $options[0]->page_text_color || $options[0]->page_heading_color;
+			?>
+			<div class="form-group">
+				<label><?php esc_html_e('Page appearance', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Customize the colors of the pages shown to bookers. When disabled, default colors are used.', 'seatreg'); ?></p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="customize-page-colors" name="customize-page-colors" value="1" <?php echo $pageColorsCustomized ? 'checked' : ''; ?>>
+						<?php esc_html_e('Customize page colors', 'seatreg'); ?>
+					</label>
+				</div>
+				<div class="email-color-fields">
+					<div class="email-color-field">
+						<label for="page-background-color"><?php esc_html_e('Page background color', 'seatreg'); ?></label>
+						<input type="color" id="page-background-color" name="page-background-color" value="<?php echo esc_attr($pageBgColor); ?>" <?php echo $pageColorsCustomized ? '' : 'disabled'; ?>>
+					</div>
+					<div class="email-color-field">
+						<label for="page-heading-color"><?php esc_html_e('Heading color', 'seatreg'); ?></label>
+						<input type="color" id="page-heading-color" name="page-heading-color" value="<?php echo esc_attr($pageHeadingColor); ?>" <?php echo $pageColorsCustomized ? '' : 'disabled'; ?>>
+					</div>
+					<div class="email-color-field">
+						<label for="page-text-color"><?php esc_html_e('Body text color', 'seatreg'); ?></label>
+						<input type="color" id="page-text-color" name="page-text-color" value="<?php echo esc_attr($pageTextColor); ?>" <?php echo $pageColorsCustomized ? '' : 'disabled'; ?>>
+					</div>
+				</div>
+			</div>
+
+			<?php
+				$pageLogoId = $options[0]->page_logo ? (int)$options[0]->page_logo : 0;
+				$pageLogoUrl = $pageLogoId ? wp_get_attachment_image_url($pageLogoId, 'medium') : '';
+			?>
+			<div class="form-group">
+				<label><?php esc_html_e('Page logo', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Add a logo to show at the top of the pages shown to bookers.', 'seatreg'); ?></p>
+				<input type="hidden" id="page-logo" name="page-logo" value="<?php echo esc_attr($pageLogoId ? $pageLogoId : ''); ?>">
+				<div class="email-logo-controls">
+					<img id="page-logo-preview" src="<?php echo esc_url($pageLogoUrl); ?>" alt="" style="<?php echo $pageLogoUrl ? '' : 'display:none;'; ?>">
+					<button type="button" class="button" id="page-logo-select"><?php esc_html_e('Select logo', 'seatreg'); ?></button>
+					<button type="button" class="button" id="page-logo-remove" style="<?php echo $pageLogoId ? '' : 'display:none;'; ?>"><?php esc_html_e('Remove', 'seatreg'); ?></button>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
+
+				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking status page', 'seatreg'); ?>.</p>
+				<textarea class="form-control mb-2" name="booking-status-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_status_page_custom_styles); ?></textarea>
+
+				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking confirm page', 'seatreg'); ?>.</p>
+				<textarea class="form-control" name="booking-confirm-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_confirm_page_custom_styles); ?></textarea>
+			</div>
+
+			</div><!-- /.settings-tab-panel pages -->
 			<div class="settings-tab-panel" data-tab-panel="advanced">
 
 			<div class="form-group">
@@ -1682,13 +1774,7 @@ function seatreg_generate_settings_form() {
 	
 				</p>
 
-				<textarea class="form-control mb-2" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
-
-				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking status page', 'seatreg'); ?>.</p>
-				<textarea class="form-control mb-2" name="booking-status-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_status_page_custom_styles); ?></textarea>
-
-				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking confirm page', 'seatreg'); ?>.</p>
-				<textarea class="form-control" name="booking-confirm-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_confirm_page_custom_styles); ?></textarea>
+				<textarea class="form-control" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
 			</div>
 
 			<div class="form-group">
@@ -2381,7 +2467,7 @@ function seatreg_generate_tabs($targetPage) {
 	<?php
 }
 
-//echo out booking info and status
+//echo out booking info and status. Returns false when there is nothing to show, so the caller can skip the rest of the page
 function seatreg_echo_booking($registrationCode, $bookingId) {
 	$registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
 
@@ -2400,8 +2486,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 
 		if(count($bookings)) {
 			$bookingStatus = $bookings[0]->status;
-			echo '<h2>', esc_html( wp_unslash($registration->registration_name) ), '</h2>';
-			
+
 			if($options && $options->pending_expiration && $bookingStatus === '1') {
 				$deletablePaymentStatuses = $options->pending_expiration_payment_statuses ? array_filter(explode(',', $options->pending_expiration_payment_statuses)) : array();
 				$hasBlockingPayment = SeatregBookingService::checkIfBookingHasNonExpirablePayment($bookings[0]->booking_id, $deletablePaymentStatuses);
@@ -2421,7 +2506,7 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			echo '<div style="margin-bottom: 6px"><strong>', esc_html__('Booking id', 'seatreg'), '</strong>: ' , esc_html($bookingId),'</div>';
 			echo '<div><strong>', esc_html__('Booking status', 'seatreg'), '</strong>: ' , esc_html(SeatregBookingService::getBookingStatusText($bookingStatus)),'</div>';
 
-			echo '<div style="margin: 16px 0px 20px">';
+			echo '<div class="seatreg-table-scroll">';
 			echo SeatregBookingService::generateBookingTable($registrationCustomFields, $bookings, $registration);
 			echo '</div>';
 
@@ -2430,20 +2515,25 @@ function seatreg_echo_booking($registrationCode, $bookingId) {
 			}
 
 			if( SeatregBookingService::getBookingTotalCost($bookingId, $registration->registration_layout) > 0 ) {
+				echo '<div class="seatreg-table-scroll">';
 				echo SeatregBookingService::generatePaymentTable($bookingId, $couponsEnabled, $appliedCoupon);
-				echo '<br>';
+				echo '</div>';
 			}
 		}else {
 			esc_html_e('Booking not found.', 'seatreg');
 			if( $options && $options->booking_not_found_text ) {
 				echo '<div style="margin-top: 12px;">', wp_kses_post($options->booking_not_found_text), '</div>';
 			}
-			die();
+
+			return false;
 		}
 	}else {
 		esc_html_e('Registration does not exist', 'seatreg');
-		die();
+
+		return false;
 	}
+
+	return true;
 }
 
 /*
@@ -2886,6 +2976,11 @@ function seatreg_set_up_db() {
 			booking_pdf_logo_id int(11) DEFAULT NULL,
 			booking_pdf_logo_position varchar(20) DEFAULT NULL,
 			booking_not_found_text text,
+			payment_return_page_text text,
+			page_background_color varchar(7) DEFAULT NULL,
+			page_text_color varchar(7) DEFAULT NULL,
+			page_heading_color varchar(7) DEFAULT NULL,
+			page_logo int(11) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3865,6 +3960,12 @@ function seatreg_update() {
 		$_POST['booking-not-found-text'] = null;
 	}
 
+	if( !empty($_POST['payment-return-text']) ) {
+	    $_POST['payment-return-text'] = wp_kses_post(wpautop($_POST['payment-return-text']));
+	}else {
+		$_POST['payment-return-text'] = null;
+	}
+
 	if( !isset($_POST['show-pending-booking-pdf']) ) {
 		$_POST['show-pending-booking-pdf'] = 0;
 	}else {
@@ -3933,6 +4034,16 @@ function seatreg_update() {
 		foreach( array('email-background-color', 'email-text-color', 'email-heading-color') as $colorField ) {
 			if( !empty($_POST[$colorField]) && !SeatregDataValidation::validateHexColor($_POST[$colorField]) ) {
 				wp_die('Email color not valid');
+			}
+		}
+	}
+
+	$customizePageColors = isset($_POST['customize-page-colors']);
+
+	if( $customizePageColors ) {
+		foreach( array('page-background-color', 'page-text-color', 'page-heading-color') as $colorField ) {
+			if( !empty($_POST[$colorField]) && !SeatregDataValidation::validateHexColor($_POST[$colorField]) ) {
+				wp_die('Page color not valid');
 			}
 		}
 	}
@@ -4023,6 +4134,11 @@ function seatreg_update() {
 				'booking_pdf_logo_id' => empty($_POST['booking-pdf-logo-id']) ? null : intval($_POST['booking-pdf-logo-id']),
 				'booking_pdf_logo_position' => in_array($_POST['booking-pdf-logo-position'] ?? '', array('top-left', 'top-right', 'bottom-left', 'bottom-right'), true) ? sanitize_text_field($_POST['booking-pdf-logo-position']) : null,
 				'booking_not_found_text' => $_POST['booking-not-found-text'],
+				'payment_return_page_text' => $_POST['payment-return-text'],
+				'page_background_color' => $customizePageColors && !empty($_POST['page-background-color']) ? sanitize_hex_color($_POST['page-background-color']) : null,
+				'page_text_color' => $customizePageColors && !empty($_POST['page-text-color']) ? sanitize_hex_color($_POST['page-text-color']) : null,
+				'page_heading_color' => $customizePageColors && !empty($_POST['page-heading-color']) ? sanitize_hex_color($_POST['page-heading-color']) : null,
+				'page_logo' => !empty($_POST['page-logo']) ? absint($_POST['page-logo']) : null,
 			 ),
 			array(
 				'registration_code' => sanitize_text_field($_POST['registration_code'])
