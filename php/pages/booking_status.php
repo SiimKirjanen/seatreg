@@ -30,44 +30,6 @@
 	<title>
 		<?php esc_html_e('Booking status', 'seatreg'); ?>
 	</title>
-	<style>
-		.payment-forms {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-wrap: wrap;
-			gap: 12px;
-		}
-		.payment-instructions {
-			margin: 24px 0 16px;
-		}
-		.custom-payment-box {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			cursor: pointer;
-			min-width: 230px;
-			height: 56px;
-			padding: 0 6px;
-			line-height: 56px;
-			margin-top: 5px;
-			text-align: center;
-			border: 2px solid #b7b7b7;
-			border-radius: 6px;
-			font-size: 18px;
-		}
-		.custom-payment-box__img {
-			height: 47px;
-		}
-		.custom-payment-box__text {
-			flex-grow: 1;
-		}
-		#custom-payment-descriptions {
-			margin-top: 12px;
-			font-size: 18px;
-			font-weight: 600;
-		}
-	</style>
 	<?php wp_head(); ?>
 </head>
 <body>
