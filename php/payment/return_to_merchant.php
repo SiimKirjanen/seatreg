@@ -37,7 +37,6 @@
 	<title>
 		<?php esc_html_e('Payment processing', 'seatreg'); ?>
 	</title>
-	<?php SeatregPublicPageService::renderStyles($bookingData); ?>
 	<?php wp_head(); ?>
 </head>
 <body>

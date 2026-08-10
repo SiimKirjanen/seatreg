@@ -30,7 +30,6 @@
 	<title>
 		<?php esc_html_e('Booking status', 'seatreg'); ?>
 	</title>
-	<?php SeatregPublicPageService::renderStyles($pageOptions); ?>
 	<style>
 		.payment-forms {
 			display: flex;

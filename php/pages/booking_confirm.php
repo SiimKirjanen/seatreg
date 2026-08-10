@@ -33,7 +33,6 @@
 	<title>
 		<?php esc_html_e('Booking confirm', 'seatreg'); ?>
 	</title>
-	<?php SeatregPublicPageService::renderStyles($options); ?>
 	<?php wp_head(); ?>
 </head>
 <body>

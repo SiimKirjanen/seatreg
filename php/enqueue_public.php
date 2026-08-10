@@ -14,17 +14,17 @@ function seatreg_remove_all_styles() {
 	}
 	if( seatreg_is_booking_check_page() ) {
 		global $wp_styles;
-		$allowedToLoad = array('alertify-core', 'alertify-default');
+		$allowedToLoad = array('seatreg-public-page', 'alertify-core', 'alertify-default');
     	$wp_styles->queue = $allowedToLoad;
 	}
 	if( seatreg_is_booking_confirm_page() ) {
 		global $wp_styles;
-		$allowedToLoad = array();
+		$allowedToLoad = array('seatreg-public-page');
     	$wp_styles->queue = $allowedToLoad;
 	}
 	if( seatreg_is_payment_return_page() ) {
 		global $wp_styles;
-		$allowedToLoad = array();
+		$allowedToLoad = array('seatreg-public-page');
     	$wp_styles->queue = $allowedToLoad;
 	}
 	if ( seatreg_is_companion_app_page() ) {
@@ -174,6 +174,7 @@ function seatreg_public_scripts_and_styles() {
 		$bookingData = SeatregBookingRepository::getDataRelatedToBooking( $_GET['id'] );
 		$pageOptions = $bookingData ? $bookingData : SeatregOptionsRepository::getOptionsByRegistrationCode( sanitize_text_field($_GET['registration']) );
 
+		seatreg_enqueue_public_page_styles($pageOptions);
 		wp_enqueue_style('alertify-core', plugins_url('css/alertify.core.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_script("jquery");
@@ -198,12 +199,25 @@ function seatreg_public_scripts_and_styles() {
 			? SeatregOptionsRepository::getOptionsByRegistrationCode( sanitize_text_field($_GET['registration']) )
 			: null;
 
+		seatreg_enqueue_public_page_styles($options);
+
 		if( $options && $options->booking_confirm_page_custom_styles ) {
 			add_action('wp_head', function() use ($options) {
 				seatreg_add_custom_styles($options->booking_confirm_page_custom_styles);
 			}, 100);
 		}
 	}
+
+	if( seatreg_is_payment_return_page() && !empty($_GET['id']) ) {
+		$bookingData = SeatregBookingRepository::getDataRelatedToBooking( sanitize_text_field($_GET['id']) );
+
+		seatreg_enqueue_public_page_styles($bookingData);
+	}
+}
+
+function seatreg_enqueue_public_page_styles($options) {
+	wp_enqueue_style('seatreg-public-page', SEATREG_PLUGIN_FOLDER_URL . 'css/seatreg_pages.min.css', array(), '1.0.0', 'all');
+	wp_add_inline_style('seatreg-public-page', SeatregPublicPageService::getColorStyles($options));
 }
 
 function seatreg_add_custom_styles($customStyles) {

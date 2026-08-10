@@ -53,6 +53,15 @@ function workingOnBuilderStyles() {
 		.pipe(gulp.dest('css'))
 }
 
+function workingOnPagesStyles() {
+	return gulp.src(['css/scss/pages/seatreg_pages.scss'])
+		.on('error', console.error.bind(console))
+		.pipe(sass())
+		.pipe(concat('seatreg_pages.min.css'))
+		.pipe(minifyCSS())
+		.pipe(gulp.dest('css'))
+}
+
 gulp.task('clean:registration:css:cache', function () {
 	return del([
 		'registration/css/registration-*.min.css',
@@ -69,6 +78,7 @@ gulp.task('registration-scripts', gulp.series('clean:registration:js:cache', wor
 gulp.task('registration-styles', gulp.series('clean:registration:css:cache', workingOnRegistrationCSSFiles));
 gulp.task('builder-styles', gulp.series(workingOnBuilderStyles));
 gulp.task('admin-styles', gulp.series(workingOnAdminStyles));
+gulp.task('pages-styles', gulp.series(workingOnPagesStyles));
 
 
 gulp.task('watch', function() {
