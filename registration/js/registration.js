@@ -520,7 +520,8 @@
 
 				if(selectedElement) {
 					selectedElement.setAttribute('data-selectedbox','true');
-					selectedElement.classList.add('selected-box'); 
+					selectedElement.classList.add('selected-box');
+					selectedElement.style.setProperty('--animationColor', selectedElement.style.backgroundColor);
 				}
 			}
 		}
