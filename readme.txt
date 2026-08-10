@@ -50,7 +50,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 == Changelog ==
 
 = 1.74.0 =
-* The shortcode now takes an optional room attribute that sets which room the registration opens on, so the same registration can be embedded several times on one page with a different room each time.
+* The shortcode now takes an optional room attribute that sets which room the registration opens on.
 
 = 1.73.0 =
 * Added a new PayPal payment integration that uses the PayPal API and webhooks. It is configured with a client id and secret from the PayPal developer dashboard.
