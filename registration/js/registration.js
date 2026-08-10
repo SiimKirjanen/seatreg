@@ -124,6 +124,7 @@
 		this.automaticBookingConfirmDialog = window.automaticBookingConfirmDialog === '1';
 		this.couponsEnabled = window.seatregCouponsEnabled === '1';
 		this.zoomControlsOnTop = window.zoomControlsOnTop === '1';
+		this.initialRoomUuid = window.seatregInitialRoomUuid || null;
 		this.appliedCoupon = null;
 	}
 
@@ -235,6 +236,11 @@
 			$('body').append('<div class="under-construction-notify"><span class="icon-construction6 index-icon"></span>'+ translator.translate('_regUnderConstruction') +'</div>');
 		}else {
 			this.fillLocationObj();
+
+			if( this.initialRoomUuid !== null && this.locationObj.hasOwnProperty(this.initialRoomUuid) ) {
+				//registration was opened with a room selected. Open that room instead of the first one
+				this.currentRoom = this.locationObj[this.initialRoomUuid];
+			}
 
 			if( this.usingCalendar && !this.isSelectedCalendarDateAvalidable() ) {
 				this.paintRegistrationMessage(translator.translate('closedPleaseChooseNewDate'));
@@ -642,7 +648,15 @@ SeatReg.prototype.paintRoomsNav = function() {
 		navItem.appendTo(documentFragment);
 	}
 	$('#room-nav-items').html(documentFragment);
-	$('#room-nav-items .room-nav-link').first().trigger('click');
+
+	var activeRoomUuid = this.rooms[this.currentRoom].room.uuid;
+	var $activeNavLink = $('#room-nav-items').find('.room-nav-link[data-open="' + activeRoomUuid + '"]');
+
+	if($activeNavLink.length) {
+		$activeNavLink.trigger('click');
+	}else {
+		$('#room-nav-items .room-nav-link').first().trigger('click');
+	}
 };
 
 SeatReg.prototype.paintRegistrationMessage = function(text) {
