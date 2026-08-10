@@ -147,6 +147,24 @@ class SeatregLayoutService {
         return $roomUUID;
     }
 
+     /**
+     *
+     * Find room UUID by room name. Match ignores case and surrounding spaces, like the room name uniqueness check in the map builder
+     * @param array $roomData Rooms in the layout
+     * @param string $roomName Name of the room to look for
+     * @return string|null Room UUID. Null when no room has that name
+     *
+    */
+    public static function findRoomUuidByName($roomData, $roomName) {
+        foreach( $roomData as $layoutData ) {
+            if( strcasecmp( trim($layoutData->room->name), trim($roomName) ) === 0 ) {
+                return $layoutData->room->uuid;
+            }
+        }
+
+        return null;
+    }
+
     public static function getRoomsLength($roomData) {
         return count($roomData);
     }
