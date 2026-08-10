@@ -172,6 +172,7 @@ function seatreg_public_scripts_and_styles() {
 
 	if( seatreg_is_booking_check_page() && !empty($_GET['registration']) && !empty($_GET['id']) ) {
 		$bookingData = SeatregBookingRepository::getDataRelatedToBooking( $_GET['id'] );
+		$pageOptions = $bookingData ? $bookingData : SeatregOptionsRepository::getOptionsByRegistrationCode( sanitize_text_field($_GET['registration']) );
 
 		wp_enqueue_style('alertify-core', plugins_url('css/alertify.core.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
@@ -185,15 +186,17 @@ function seatreg_public_scripts_and_styles() {
 			'updatingPageContent' => __('Refreshing page. Please wait.', 'seatreg')
 		));
 
-		if( $bookingData && $bookingData->booking_status_page_custom_styles ) {
-			add_action('wp_head', function() use ($bookingData) {
-				seatreg_add_custom_styles($bookingData->booking_status_page_custom_styles);
+		if( $pageOptions && $pageOptions->booking_status_page_custom_styles ) {
+			add_action('wp_head', function() use ($pageOptions) {
+				seatreg_add_custom_styles($pageOptions->booking_status_page_custom_styles);
 			}, 100);
 		}
 	}
 
 	if( seatreg_is_booking_confirm_page() && !empty( $_GET['confirmation-code'] ) ) {
-		$options = SeatregOptionsRepository::getOptionsByConfirmationCode( sanitize_text_field($_GET['confirmation-code']) );
+		$options = !empty($_GET['registration'])
+			? SeatregOptionsRepository::getOptionsByRegistrationCode( sanitize_text_field($_GET['registration']) )
+			: null;
 
 		if( $options && $options->booking_confirm_page_custom_styles ) {
 			add_action('wp_head', function() use ($options) {

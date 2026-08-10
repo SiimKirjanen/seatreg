@@ -16,6 +16,7 @@
 	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 	$customPayments = ($bookingData && $bookingData->custom_payments) ? json_decode( $bookingData->custom_payments ) : [];
+	$pageOptions = $bookingData ? $bookingData : SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationId);
 	$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($registrationId);
 	$appliedCoupon = SeatregCouponRepository::getBookingAppliedCoupon($bookingId);
 ?>
@@ -29,7 +30,7 @@
 	<title>
 		<?php esc_html_e('Booking status', 'seatreg'); ?>
 	</title>
-	<?php SeatregPublicPageService::renderStyles($bookingData); ?>
+	<?php SeatregPublicPageService::renderStyles($pageOptions); ?>
 	<style>
 		.payment-forms {
 			display: flex;
@@ -74,8 +75,8 @@
 	<?php
 		SeatregPublicPageService::renderPageStart(array(
 			'title' => __('Booking status', 'seatreg'),
-			'name' => $bookingData ? wp_unslash($bookingData->registration_name) : '',
-			'logoId' => $bookingData ? $bookingData->page_logo : null,
+			'name' => $pageOptions ? wp_unslash($pageOptions->registration_name) : '',
+			'logoId' => $pageOptions ? $pageOptions->page_logo : null,
 		));
 	?>
 		<div class="page-wrap">

@@ -15,7 +15,10 @@
 	require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/SeatregConfirmBooking.php' );
 
 	$confirmationCode = sanitize_text_field($_GET['confirmation-code']);
-	$options = SeatregOptionsRepository::getOptionsByConfirmationCode($confirmationCode);
+	$options = !empty($_GET['registration'])
+		? SeatregOptionsRepository::getOptionsByRegistrationCode( sanitize_text_field($_GET['registration']) )
+		: null;
+
 	$validator = new SeatregConfirmBooking($confirmationCode);
 	ob_start();
 	$validator->startConfirm();
