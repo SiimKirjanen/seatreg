@@ -119,6 +119,41 @@ function seatreg_is_payment_return_page() {
 	return false;
 }
 
+/*
+ * When testing payments locally, SEATREG_PAYMENT_CALLBACK_URL points to a tunnel (ngrok) so that the payment
+ * provider can reach this site. The provider then sends the booker back to that tunnel address, but WordPress
+ * builds stylesheet, logo and upload URLs from the site URL, so the browser blocks them as cross origin and the
+ * page shows up unstyled. Sending the booker to the same page on the site URL puts everything back on one origin.
+ *
+ * On a live site SEATREG_PAYMENT_CALLBACK_URL is the site URL, so this never redirects.
+ */
+function seatreg_redirect_from_payment_tunnel() {
+	if( SEATREG_PAYMENT_CALLBACK_URL === get_site_url() ) {
+		return;
+	}
+
+	$requestHost = !empty($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : ( $_SERVER['HTTP_HOST'] ?? '' );
+	$siteHost = wp_parse_url(get_site_url(), PHP_URL_HOST);
+
+	//Already on the site URL. Comparing the hosts also makes a redirect loop impossible
+	if( !$requestHost || !$siteHost || $requestHost === $siteHost ) {
+		return;
+	}
+
+	//Rebuilt from the known parameters instead of forwarding the query string as it came in
+	$queryArgs = array();
+
+	foreach( array('seatreg', 'id', 'registration') as $param ) {
+		if( !empty($_GET[$param]) ) {
+			$queryArgs[$param] = sanitize_text_field($_GET[$param]);
+		}
+	}
+
+	wp_redirect( add_query_arg($queryArgs, get_site_url() . '/') );
+
+	exit();
+}
+
 function seatreg_validate_bookings_file_input() {
 	if(empty($_GET['code'])) {
 		wp_die('Missing code');

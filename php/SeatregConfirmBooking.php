@@ -91,7 +91,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		printf(
 			/* translators: %s: URL link to the booking status page */
 			esc_html__('You can see your booking status at the following link %s', 'seatreg'), 
-			"<a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"
+			"<br><a href='" . esc_url($bookingCheckURL) . "'>" . esc_html($bookingCheckURL) . "</a>"
 		);
 
 		if($this->_sendNewBookingNotificationEmail) {
