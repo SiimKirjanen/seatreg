@@ -63,7 +63,8 @@ class SeatregConfirmBooking extends SeatregBooking {
 
 		if(!$rowsUpdated) {
 			esc_html_e('Something went wrong while confirming your booking', 'seatreg');
-			die();
+
+			return;
 		}
 		$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
 		$this->status = 'success';

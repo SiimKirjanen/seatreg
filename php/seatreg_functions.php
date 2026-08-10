@@ -904,25 +904,6 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label><?php esc_html_e('Additional text for "Booking not found" status page', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('When a booking cannot be found on the booking status page, this text is shown below the "Booking not found" message. Leave empty to show only the default message.', 'seatreg'); ?></p>
-				<?php
-				$bookingNotFoundTextEditorSettings = array(
-				    'wpautop' => true, // enable auto paragraph
-				    'textarea_name' => 'booking-not-found-text',
-				    'textarea_rows' => 4,
-				    'media_buttons' => false,
-				    'teeny' => true, // minimal toolbar
-				    'tinymce' => array(
-				        // minimal toolbar without list buttons
-				        'toolbar1' => 'bold,italic,underline,blockquote,strikethrough,alignleft,aligncenter,alignright,undo,redo,link,unlink,fullscreen',
-				    ),
-				);
-				wp_editor($options[0]->booking_not_found_text, 'bookingNotFoundTextEditor', $bookingNotFoundTextEditorSettings)
-				?>
-			</div>
-
-			<div class="form-group">
 				<label><?php esc_html_e('Booking PDF', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php
@@ -1570,25 +1551,6 @@ function seatreg_generate_settings_form() {
 				<input type="hidden" name="coupons" value='<?php echo esc_attr(json_encode($coupons)); ?>' />
 			</div>
 
-			<div class="form-group">
-				<label><?php esc_html_e('Additional text for the payment return page', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('After paying with PayPal or Stripe the booker is sent back to the payment return page. This text is shown below the default payment status message. Leave empty to show only the default message.', 'seatreg'); ?></p>
-				<?php
-				$paymentReturnTextEditorSettings = array(
-				    'wpautop' => true, // enable auto paragraph
-				    'textarea_name' => 'payment-return-text',
-				    'textarea_rows' => 4,
-				    'media_buttons' => false,
-				    'teeny' => true, // minimal toolbar
-				    'tinymce' => array(
-				        // minimal toolbar without list buttons
-				        'toolbar1' => 'bold,italic,underline,blockquote,strikethrough,alignleft,aligncenter,alignright,undo,redo,link,unlink,fullscreen',
-				    ),
-				);
-				wp_editor($options[0]->payment_return_page_text, 'paymentReturnTextEditor', $paymentReturnTextEditorSettings)
-				?>
-			</div>
-
 			</div><!-- /.settings-tab-panel payments -->
 			<div class="settings-tab-panel" data-tab-panel="pages">
 
@@ -1642,6 +1604,44 @@ function seatreg_generate_settings_form() {
 					<button type="button" class="button" id="page-logo-select"><?php esc_html_e('Select logo', 'seatreg'); ?></button>
 					<button type="button" class="button" id="page-logo-remove" style="<?php echo $pageLogoId ? '' : 'display:none;'; ?>"><?php esc_html_e('Remove', 'seatreg'); ?></button>
 				</div>
+			</div>
+
+			<div class="form-group">
+				<label><?php esc_html_e('Additional text for the payment return page', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('After paying with PayPal or Stripe the booker is sent back to the payment return page. This text is shown below the default payment status message. Leave empty to show only the default message.', 'seatreg'); ?></p>
+				<?php
+				$paymentReturnTextEditorSettings = array(
+				    'wpautop' => true, // enable auto paragraph
+				    'textarea_name' => 'payment-return-text',
+				    'textarea_rows' => 4,
+				    'media_buttons' => false,
+				    'teeny' => true, // minimal toolbar
+				    'tinymce' => array(
+				        // minimal toolbar without list buttons
+				        'toolbar1' => 'bold,italic,underline,blockquote,strikethrough,alignleft,aligncenter,alignright,undo,redo,link,unlink,fullscreen',
+				    ),
+				);
+				wp_editor($options[0]->payment_return_page_text, 'paymentReturnTextEditor', $paymentReturnTextEditorSettings)
+				?>
+			</div>
+
+			<div class="form-group">
+				<label><?php esc_html_e('Additional text for "Booking not found" status page', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('When a booking cannot be found on the booking status page, this text is shown below the "Booking not found" message. Leave empty to show only the default message.', 'seatreg'); ?></p>
+				<?php
+				$bookingNotFoundTextEditorSettings = array(
+				    'wpautop' => true, // enable auto paragraph
+				    'textarea_name' => 'booking-not-found-text',
+				    'textarea_rows' => 4,
+				    'media_buttons' => false,
+				    'teeny' => true, // minimal toolbar
+				    'tinymce' => array(
+				        // minimal toolbar without list buttons
+				        'toolbar1' => 'bold,italic,underline,blockquote,strikethrough,alignleft,aligncenter,alignright,undo,redo,link,unlink,fullscreen',
+				    ),
+				);
+				wp_editor($options[0]->booking_not_found_text, 'bookingNotFoundTextEditor', $bookingNotFoundTextEditorSettings)
+				?>
 			</div>
 
 			<div class="form-group">
