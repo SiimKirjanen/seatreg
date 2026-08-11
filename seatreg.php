@@ -47,6 +47,7 @@ require( 'php/services/SeatregPaymentLogService.php' );
 require( 'php/services/SeatregJobService.php' );
 require( 'php/services/SeatregTemplateService.php' );
 require( 'php/services/SeatregEmailTemplateService.php' );
+require( 'php/services/SeatregPublicPageService.php' );
 require( 'php/services/SeatregLayoutService.php' );
 require( 'php/services/StripeWebhooksService.php' );
 require( 'php/services/SeatregPayPalApiService.php' );

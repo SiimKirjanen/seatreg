@@ -27,6 +27,7 @@
     "registration-styles": "gulp registration-styles",
     "admin-styles": "gulp admin-styles",
     "builder-styles": "gulp builder-styles",
+    "pages-styles": "gulp pages-styles",
     "build:emails": "mjml php/templates/email/mjml/*.mjml -o php/templates/email --sanitizeStyles",
     "watch": "gulp watch"
   },

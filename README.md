@@ -63,5 +63,8 @@ Compiles map builder styles
 ### admin-styles
 Compiles admin styles
 
+### pages-styles
+Compiles the styles of the pages the booker lands on (payment return, booking confirm and booking status)
+
 ### build:emails
 Compiles the MJML email templates into HTML

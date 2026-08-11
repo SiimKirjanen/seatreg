@@ -358,8 +358,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking inserted to database', false);
 			
 			if($this->_requireBookingEmailConfirm) {
-				//send email with the confirm link
-				$emailVerificationMailSent = seatreg_sent_email_verification_email($confCode, $this->_bookerEmail, $this->_registrationName, $this->_emailVerificationTemplate, $this->_emailFromAddress, $this->_emailVerificationSubject, array('bg' => $this->_emailBackgroundColor, 'text' => $this->_emailTextColor, 'heading' => $this->_emailHeadingColor, 'logo' => $this->_emailLogo, 'logoPosition' => $this->_emailLogoPosition));
+				$emailVerificationMailSent = seatreg_sent_email_verification_email($confCode, $this->_bookerEmail, $this->_registrationName, $this->_registrationCode, $this->_emailVerificationTemplate, $this->_emailFromAddress, $this->_emailVerificationSubject, array('bg' => $this->_emailBackgroundColor, 'text' => $this->_emailTextColor, 'heading' => $this->_emailHeadingColor, 'logo' => $this->_emailLogo, 'logoPosition' => $this->_emailLogoPosition));
 
 				if($emailVerificationMailSent) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking email verification sent', false);

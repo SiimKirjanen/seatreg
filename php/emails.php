@@ -161,8 +161,8 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
     return false;
 }
 
-function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $template, $emailFromAddress, $customEmailSubject, $emailColors = array()) {
-    $confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode;
+function seatreg_sent_email_verification_email($confCode, $bookerEmail, $registrationName, $registrationCode, $template, $emailFromAddress, $customEmailSubject, $emailColors = array()) {
+    $confirmationURL = get_site_url() . '?seatreg=booking-confirm&confirmation-code='. $confCode . '&registration=' . $registrationCode;
     $fromEmail = getEmailFromAddress($emailFromAddress);
     $message = '';
     $emailSubject = $customEmailSubject ? $customEmailSubject : esc_html__('Booking email verification', 'seatreg');

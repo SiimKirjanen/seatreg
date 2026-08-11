@@ -2943,6 +2943,46 @@ $('#seatreg-settings-form').on('click', '#email-logo-remove', function(e) {
 	$(this).hide();
 });
 
+$('#seatreg-settings-form').on('change', '#customize-page-colors', function() {
+	var enabled = $(this).is(':checked');
+	$('#page-background-color, #page-heading-color, #page-text-color').prop('disabled', !enabled);
+});
+
+var seatregPageLogoFrame = null;
+$('#seatreg-settings-form').on('click', '#page-logo-select', function(e) {
+	e.preventDefault();
+
+	if (seatregPageLogoFrame) {
+		seatregPageLogoFrame.open();
+		return;
+	}
+
+	seatregPageLogoFrame = wp.media({
+		title: 'Select page logo',
+		library: { type: 'image' },
+		button: { text: 'Use as logo' },
+		multiple: false
+	});
+
+	seatregPageLogoFrame.on('select', function() {
+		var attachment = seatregPageLogoFrame.state().get('selection').first().toJSON();
+		var previewUrl = (attachment.sizes && attachment.sizes.medium) ? attachment.sizes.medium.url : attachment.url;
+
+		$('#page-logo').val(attachment.id);
+		$('#page-logo-preview').attr('src', previewUrl).show();
+		$('#page-logo-remove').show();
+	});
+
+	seatregPageLogoFrame.open();
+});
+
+$('#seatreg-settings-form').on('click', '#page-logo-remove', function(e) {
+	e.preventDefault();
+	$('#page-logo').val('');
+	$('#page-logo-preview').attr('src', '').hide();
+	$(this).hide();
+});
+
 // Restore the last active tab for this registration (defaults to the first tab in the markup).
 (function() {
 	var savedTab = null;
