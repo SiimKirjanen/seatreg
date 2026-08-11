@@ -6,7 +6,7 @@
 	Author: Siim Kirjanen
 	Author URI: https://github.com/SiimKirjanen
 	Text Domain: seatreg
-	Version: 1.74.0
+	Version: 1.74.1
 	Requires at least: 5.3
 	Requires PHP: 7.2.28
 	License: GPLv2 or later
@@ -76,6 +76,8 @@ require( 'php/SeatregBooking.php' );
 require( 'php/SeatregSubmitBookings.php' );
 require( 'php/SeatregDataValidation.php' );
 require( 'php/util/registration_time_status.php' );
+
+require( 'php/seatreg_no_cache.php' );
 
 if( is_admin() ) {
 	require( 'php/enqueue_admin.php' );
