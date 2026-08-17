@@ -26,10 +26,10 @@ test.describe('Layout builder', () => {
 		await builder.dismissRoomNameDialog();
 
 		await builder.closeButton.click();
-		await expect(builder.unsavedChangesMessage).toHaveText(
+		await expect(builder.confirmMessage).toHaveText(
 			'Unsaved changes. You sure you want to leave?'
 		);
-		await builder.keepEditingButton.click();
+		await builder.confirmCancelButton.click();
 		await expect(builder.registrationName).toHaveText(name);
 
 		await builder.close();

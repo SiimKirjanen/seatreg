@@ -40,4 +40,18 @@ async function expectModalShown(modal) {
 	await expect(modal).toHaveCSS('opacity', '1');
 }
 
-module.exports = { clickUntil, expectModalShown };
+/**
+ * Wait for a Bootstrap modal to be fully faded out.
+ *
+ * The modal turns invisible before Bootstrap has finished tearing it down, and
+ * a trigger clicked inside that window is ignored. That matters wherever the
+ * plugin opens a dialog with .modal('toggle'), because the ignored click is
+ * indistinguishable from one that opened and closed it again. The backdrop is
+ * removed at the end of the teardown, so its absence is what says it is done.
+ */
+async function expectModalHidden(modal) {
+	await expect(modal).toBeHidden();
+	await expect(modal.page().locator('.modal-backdrop')).toHaveCount(0);
+}
+
+module.exports = { clickUntil, expectModalShown, expectModalHidden };
