@@ -3,8 +3,8 @@ const TIMEOUTS = {
 	DEFAULT: 5000,
 	/** Page navigations and app load */
 	NAVIGATION: 15000,
-	/** Tests with multiple navigations and async side effects */
-	LONG_TEST: 60000,
+	/** How long a bound handler gets to visibly react, one attempt of clickUntil() */
+	REACTION: 1000,
 };
 
 module.exports = { TIMEOUTS };
