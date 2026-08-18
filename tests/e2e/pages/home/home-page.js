@@ -2,6 +2,7 @@ const { expect } = require('@playwright/test');
 const { TIMEOUTS } = require('../../utils/timeouts');
 const { openSeatRegScreen } = require('../../utils/navigation');
 const { clickUntil, expectModalShown } = require('../../utils/interactions');
+const { RegistrationPage } = require('../registration/registration-page');
 
 /**
  * Page object for the SeatReg Home screen (admin.php?page=seatreg-welcome).
@@ -153,6 +154,27 @@ class HomePage {
 		await expect(card).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
 
 		return card.locator('[data-registration-id]').first().getAttribute('data-registration-id');
+	}
+
+	/**
+	 * Open the registration a visitor sees, in the tab its link opens.
+	 *
+	 * This card is the only place in the admin that links to a registration, so
+	 * screens that need to check what their settings did to it come through
+	 * here.
+	 *
+	 * @param {string} code Registration code
+	 * @return {Promise<RegistrationPage>} The registration in its own tab
+	 */
+	async openRegistration(code) {
+		const popup = this.page.waitForEvent('popup', { timeout: TIMEOUTS.NAVIGATION });
+
+		await this.registrationLink(code).click();
+
+		const registrationTab = await popup;
+		await registrationTab.waitForLoadState('domcontentloaded');
+
+		return new RegistrationPage(registrationTab);
 	}
 
 	/**

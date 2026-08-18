@@ -37,4 +37,18 @@ async function loginToWordPress(page, username = WP_ADMIN_USER.username, passwor
 	await expect(page.locator('#wpadminbar')).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
 }
 
-module.exports = { WP_ADMIN_USER, loginToWordPress };
+/**
+ * A browser context with nobody logged in.
+ *
+ * Every context in the suite starts with the admin's session restored into it,
+ * so a setting that only does something to a visitor without one cannot be seen
+ * working from the tests' own browser. This is a context that never had the
+ * session. The caller closes it when it is done with it.
+ *
+ * @param {import('@playwright/test').Browser} browser The `browser` fixture
+ */
+function visitorContext(browser) {
+	return browser.newContext({ storageState: { cookies: [], origins: [] } });
+}
+
+module.exports = { WP_ADMIN_USER, loginToWordPress, visitorContext };

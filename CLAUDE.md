@@ -5,7 +5,10 @@ WordPress plugin for creating and managing online registrations with a custom se
 ## E2E tests
 
 Playwright tests live in `tests/e2e`. Each admin screen gets a folder under `tests/e2e/pages/`
-holding its page object and its specs. See README.md for how to run them.
+holding its page object and its specs. Where a screen is split into tabs the specs follow that
+split, one file per tab (`settings-general.spec.js`, `settings-payments.spec.js`), plus a
+`-screen` spec for what belongs to the screen rather than to any one tab. See README.md for how
+to run them.
 
 Keep the suite small — it has to cover every screen of the plugin eventually, so tests are
 added sparingly:

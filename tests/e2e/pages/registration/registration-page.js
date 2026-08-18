@@ -6,7 +6,7 @@ const { TIMEOUTS } = require('../../utils/timeouts');
  * (?seatreg=registration&c=<code>&page_id=seatreg).
  *
  * It has no spec of its own yet. The screen exists here so the layout builder
- * specs can assert that what they built survived the save, through named
+ * and settings specs can assert that what they saved survived, through named
  * locators instead of raw selectors. Its own tests get added to this folder
  * when the screen is covered.
  *
@@ -21,6 +21,45 @@ const { TIMEOUTS } = require('../../utils/timeouts');
 class RegistrationPage {
 	constructor(page) {
 		this.page = page;
+	}
+
+	/* What a visitor is shown instead of the registration. A closed registration
+	   and a password protected one both replace the whole page, so neither of
+	   these can be on screen at the same time as the rooms below. */
+
+	get closedNotice() {
+		return this.page.locator('#center-wrap h2');
+	}
+
+	/** Only rendered when a close reason was set in the settings. */
+	get closeReason() {
+		return this.page.locator('#center-wrap p');
+	}
+
+	get passwordForm() {
+		return this.page.locator('#pwd-form');
+	}
+
+	get passwordInput() {
+		return this.page.locator('#reg-pwd');
+	}
+
+	/**
+	 * Shown over the registration when it takes bookings from logged in
+	 * WordPress users only, and never rendered at all for someone who has a
+	 * session.
+	 */
+	get loginNotice() {
+		return this.page.locator('#login-notify');
+	}
+
+	/**
+	 * Shown when the registration is outside the dates or the hours it takes
+	 * bookings in. One element serves both: they are branches of the same
+	 * condition, and the dates win over the hours.
+	 */
+	get timeNotice() {
+		return this.page.locator('#time-notify');
 	}
 
 	/* Rooms */
@@ -108,6 +147,16 @@ class RegistrationPage {
 		await expect(this.roomNavLinks.first()).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
 
 		return this.roomNavLinks.allInnerTexts();
+	}
+
+	/**
+	 * Answer the password the registration is asking for. The form posts back to
+	 * the registration itself, so a wrong password lands on the same form again.
+	 */
+	async submitPassword(password) {
+		await this.passwordInput.fill(password);
+		await this.passwordForm.locator('input[type="submit"]').click();
+		await this.page.waitForLoadState('domcontentloaded');
 	}
 
 	/** Click a seat to see what the registration offers for it. */
