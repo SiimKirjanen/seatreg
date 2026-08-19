@@ -405,6 +405,10 @@ class LayoutBuilderPage {
 	}
 
 	/**
+	 * Open a registration's builder. The button is on its Home card, so the
+	 * caller has to be on the Home screen already - openForNewRegistration()
+	 * arrives there by creating the registration.
+	 *
 	 * The layout is fetched over AJAX before the popup is shown. The longer
 	 * reaction window covers that request, so a slow response does not look like
 	 * an ignored click. Safe to retry - the handler disables the button while its

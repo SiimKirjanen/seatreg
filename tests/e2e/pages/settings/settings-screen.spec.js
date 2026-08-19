@@ -6,6 +6,15 @@ const MAX_SEATS = '4';
 const INFO_TEXT = 'Doors open at 18:00.';
 const PDF_LOGO_POSITION = 'bottom-right';
 
+/* Sentences the summary writes for a setting and for its opposite. A fresh
+   registration counts in seats rather than places, which is the noun they are
+   filled in with. */
+const MANUAL_DIALOG = 'After choosing seats, visitors open the selection menu to complete';
+const AUTOMATIC_DIALOG = 'The booking form opens automatically as soon as a seat is selected.';
+const PER_SEAT_CHECKOUT = 'Booking details are entered for each seat.';
+const ONE_PERSON_CHECKOUT = 'Booking details are entered once and applied to every seat.';
+const CLOSED = 'Your registration is currently closed, so visitors cannot make a booking.';
+
 /* The screen itself: which registration it is editing, its section tabs, and the
    save that carries all of them. The settings live in the spec of the section
    tab they belong to.
@@ -64,5 +73,42 @@ test.describe('SeatReg Settings screen', () => {
 		await settings.save();
 
 		await expect(settings.activeSectionPanel).toHaveAttribute('data-tab-panel', 'payments');
+	});
+
+	/* The summary is the plugin reading its own settings back as sentences, and
+	   it is rewritten as they are changed rather than when they are saved, so
+	   nothing here is posted. */
+
+	test('writes the booking flow out of the settings it is given', async () => {
+		await settings.openBookingFlowSummary();
+
+		const makingABooking = settings.summaryGroup('Making a booking');
+
+		await expect(makingABooking).toContainText(MANUAL_DIALOG);
+		await expect(makingABooking).toContainText(PER_SEAT_CHECKOUT);
+
+		await settings.set('automaticBookingConfirmDialog', true);
+		await settings.set('onePersonCheckout', true);
+
+		await expect(makingABooking).toContainText(AUTOMATIC_DIALOG);
+		await expect(makingABooking).toContainText(ONE_PERSON_CHECKOUT);
+
+		/* With nobody able to book, there is no flow left to describe and the
+		   groups give way to the one sentence that says so. */
+		await settings.set('registrationStatus', false);
+
+		await expect(settings.bookingFlowSummary).toHaveText(CLOSED);
+		await expect(makingABooking).toHaveCount(0);
+	});
+
+	test('jumps to the setting a summary line is about', async () => {
+		await settings.openBookingFlowSummary();
+
+		/* The screen opens on the first section, and this setting is on another
+		   one, so following the line has to change section to get there. */
+		await settings.summaryJumpLink('#one-person-checkout').click();
+
+		await expect(settings.activeSectionPanel).toHaveAttribute('data-tab-panel', 'booking-flow');
+		await expect(settings.field('onePersonCheckout')).toBeFocused();
 	});
 });

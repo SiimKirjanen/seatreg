@@ -178,6 +178,34 @@ class HomePage {
 	}
 
 	/**
+	 * Open a registration at an address carrying extra parameters, the ones a
+	 * visitor can arrive with - the room to open, or the calendar date to look
+	 * at.
+	 *
+	 * Only the query string is the test's. The address itself still comes off
+	 * the card, which is why this goes through Home first: the path in front of
+	 * the query string depends on the site's permalink settings. It opens in the
+	 * tab this one is in, since there is no link to click.
+	 *
+	 * @param {Object<string, string>} params Added to the address
+	 * @return {Promise<RegistrationPage>} The registration
+	 */
+	async openRegistrationWith(code, params) {
+		await this.goto();
+
+		const url = new URL(await this.registrationLink(code).getAttribute('href'));
+
+		for (const [key, value] of Object.entries(params)) {
+			url.searchParams.set(key, value);
+		}
+
+		await this.page.goto(url.toString());
+		await this.page.waitForLoadState('domcontentloaded');
+
+		return new RegistrationPage(this.page);
+	}
+
+	/**
 	 * An action inside the More modal, e.g. 'view-registration-activity'.
 	 */
 	moreModalItem(code, action) {

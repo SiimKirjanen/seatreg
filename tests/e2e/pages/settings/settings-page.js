@@ -3,8 +3,16 @@ const { TIMEOUTS } = require('../../utils/timeouts');
 const { SEATREG_PAGES, openSeatRegScreen, expectOnSeatRegPage } = require('../../utils/navigation');
 const { clickUntil } = require('../../utils/interactions');
 const { visitorContext } = require('../../utils/auth');
+const { uploadThroughMediaModal } = require('../../utils/media');
 const { HomePage } = require('../home/home-page');
+const { LayoutBuilderPage } = require('../layout-builder/layout-builder-page');
 const { RegistrationPage } = require('../registration/registration-page');
+
+/** The caption the plugin gives the media modal's button (seatreg_admin.js). */
+const PAGE_LOGO_CONFIRM_LABEL = 'Use as logo';
+
+/** The room the settings specs put their seats in. Nothing asserts on it. */
+const ROOM_NAME = 'Settings room';
 
 /**
  * The settings the specs touch, and the section tab each one lives in.
@@ -21,6 +29,8 @@ const FIELDS = {
 	requireWpLogin: { tab: 'general', selector: '#require-wp-login', kind: 'checkbox' },
 	maxSeats: { tab: 'general', selector: '#registration-max-seats', kind: 'text' },
 
+	usePending: { tab: 'booking-flow', selector: '#use-pending', kind: 'checkbox' },
+
 	usingCalendar: { tab: 'scheduling', selector: '#using-calendar', kind: 'checkbox' },
 	startTime: { tab: 'scheduling', selector: '#registration-start-time', kind: 'time' },
 	endTime: { tab: 'scheduling', selector: '#registration-end-time', kind: 'time' },
@@ -28,20 +38,73 @@ const FIELDS = {
 	infoText: { tab: 'booking-flow', selector: '#registration-info-text', kind: 'text' },
 	showInfoButton: { tab: 'booking-flow', selector: '#show-info-button', kind: 'checkbox' },
 	pdfLogoPosition: { tab: 'booking-flow', selector: '#booking-pdf-logo-position', kind: 'select' },
+	onePersonCheckout: { tab: 'booking-flow', selector: '#one-person-checkout', kind: 'checkbox' },
+	automaticBookingConfirmDialog: {
+		tab: 'booking-flow',
+		selector: '#automatic-booking-confirm-dialog',
+		kind: 'checkbox',
+	},
+	requireName: { tab: 'booking-flow', selector: '#require-name', kind: 'checkbox' },
+	gmailRequired: { tab: 'booking-flow', selector: '#gmail-required', kind: 'checkbox' },
+	zoomOnTop: { tab: 'booking-flow', selector: '#zoom-on-top', kind: 'checkbox' },
+	seatSelectionBtnText: {
+		tab: 'booking-flow',
+		selector: '#seat-selection-btn-text',
+		kind: 'text',
+	},
+	customFooterText: {
+		tab: 'booking-flow',
+		selector: '#customFooterTextEditor',
+		kind: 'richText',
+	},
 
 	emailFrom: { tab: 'emails', selector: '#email-from', kind: 'text' },
 	approvedEmailTemplate: { tab: 'emails', selector: '#approved-booking-email-template', kind: 'text' },
+	emailConfirm: { tab: 'emails', selector: '#email-confirm', kind: 'checkbox' },
+	bookerPendingNotification: {
+		tab: 'emails',
+		selector: '#booker-pending-booking-notification',
+		kind: 'checkbox',
+	},
+	approvedBookingEmail: { tab: 'emails', selector: '#approved-booking-email', kind: 'checkbox' },
+	adminBookingNotification: { tab: 'emails', selector: '#booking-notification', kind: 'checkbox' },
 
 	currencyCode: { tab: 'payments', selector: '#paypal-currency-code', kind: 'text' },
 	stripeEnabled: { tab: 'payments', selector: '#stripe', kind: 'checkbox' },
 	stripeApiKey: { tab: 'payments', selector: '#stripe-api-key', kind: 'text' },
+
+	customizePageColors: { tab: 'pages', selector: '#customize-page-colors', kind: 'checkbox' },
+	pageBackgroundColor: { tab: 'pages', selector: '#page-background-color', kind: 'text' },
+	pageHeadingColor: { tab: 'pages', selector: '#page-heading-color', kind: 'text' },
+	pageTextColor: { tab: 'pages', selector: '#page-text-color', kind: 'text' },
+	bookingNotFoundText: { tab: 'pages', selector: '#bookingNotFoundTextEditor', kind: 'richText' },
+	bookingStatusStyles: {
+		tab: 'pages',
+		selector: 'textarea[name="booking-status-custom-styles"]',
+		kind: 'text',
+	},
+	bookingConfirmStyles: {
+		tab: 'pages',
+		selector: 'textarea[name="booking-confirm-custom-styles"]',
+		kind: 'text',
+	},
+
+	customStyles: { tab: 'advanced', selector: '#custom-styles', kind: 'text' },
+	publicApi: { tab: 'advanced', selector: '#public-api', kind: 'checkbox' },
+};
+
+/** The kinds of custom field the builder offers, by the caption it lists them under. */
+const CUSTOM_FIELD_TYPES = {
+	text: 'Text',
+	checkbox: 'Checkbox',
+	select: 'Select',
 };
 
 /**
  * Page object for the SeatReg Settings screen
  * (admin.php?page=seatreg-options&tab=<code>).
  *
- * Four things about the screen shape the code here:
+ * Five things about the screen shape the code here:
  *
  * 1. It is one form split into section tab panels, and a hidden panel keeps its
  *    fields in the DOM. They can be read there, but not filled, so set() opens
@@ -55,6 +118,9 @@ const FIELDS = {
  *    arrive rather than for something to appear on the old one.
  * 4. The screen has no link to the registration itself. Checking what a setting
  *    did to a visitor's view goes back to Home, which has one.
+ * 5. A few settings are gated by another one: the page colours are disabled
+ *    until page colours are being customised. set() does not know about that,
+ *    so a spec has to set the gate first, the way a user would.
  */
 class SettingsPage {
 	constructor(page) {
@@ -88,6 +154,38 @@ class SettingsPage {
 	/** The registration picker above the form, one tab per registration. */
 	registrationTab(code) {
 		return this.page.locator(`.nav-tab-wrapper a.nav-tab[href*="tab=${code}"]`);
+	}
+
+	/* Booking flow summary. The plugin's own reading of the settings, written out
+	   as sentences above the tab bar, so it belongs to no section and is on
+	   screen whichever one is open. */
+
+	get bookingFlowSummary() {
+		return this.page.locator('#booking-flow-summary');
+	}
+
+	get bookingFlowSummaryToggle() {
+		return this.form.locator('summary.booking-flow-details__summary');
+	}
+
+	/**
+	 * One of the summary's headings and the sentences under it.
+	 *
+	 * @param {string} title e.g. 'Making a booking'
+	 */
+	summaryGroup(title) {
+		return this.bookingFlowSummary
+			.locator('.flow-group')
+			.filter({ has: this.page.getByText(title, { exact: true }) });
+	}
+
+	/**
+	 * The link a summary sentence carries to the setting behind it.
+	 *
+	 * @param {string} target The setting's selector, as the link names it
+	 */
+	summaryJumpLink(target) {
+		return this.bookingFlowSummary.locator(`.flow-jump[data-target="${target}"]`);
 	}
 
 	/* Sections */
@@ -159,6 +257,107 @@ class SettingsPage {
 			.filter({ has: this.page.locator(`[data-date="${date}"]`) });
 	}
 
+	/* Pages. The logo is an attachment id in a hidden field, with a preview and a
+	   Remove button that the media modal and the field between them decide the
+	   state of. */
+
+	get pageLogo() {
+		return this.page.locator('#page-logo');
+	}
+
+	get pageLogoPreview() {
+		return this.page.locator('#page-logo-preview');
+	}
+
+	get pageLogoSelectButton() {
+		return this.page.locator('#page-logo-select');
+	}
+
+	get pageLogoRemoveButton() {
+		return this.page.locator('#page-logo-remove');
+	}
+
+	/* Advanced. Custom fields are not a setting but a builder: they are drawn one
+	   at a time into a list, and only the save button's own click turns that list
+	   into the value that gets posted. */
+
+	get customFieldList() {
+		return this.form.locator('.existing-custom-fields');
+	}
+
+	/**
+	 * A custom field that has been added to the list.
+	 *
+	 * @param {string} label The name it was created under
+	 */
+	customField(label) {
+		return this.customFieldList.locator(`.custom-container[data-label="${label}"]`);
+	}
+
+	/** The names of the fields in the order they are listed, which is the order
+	    they reach a booker in. */
+	customFieldLabels() {
+		return this.customFieldList.locator('.custom-container .l-text').allInnerTexts();
+	}
+
+	/* The box a new field is built in, before it joins the list. */
+
+	get newCustomFieldLabel() {
+		return this.form.locator('.cust-field-create .cust-input-label');
+	}
+
+	get newCustomFieldType() {
+		return this.form.locator('.cust-field-create .custom-field-select');
+	}
+
+	get newCustomFieldOptionName() {
+		return this.form.locator('.cust-field-create .option-name');
+	}
+
+	/**
+	 * The options a select field is being given. They only apply to the field
+	 * being built, and are cleared once it joins the list.
+	 */
+	get newCustomFieldOptions() {
+		return this.form.locator('.cust-field-create .existing-options .option-value');
+	}
+
+	/**
+	 * The dialog for changing a select field's options.
+	 *
+	 * Only fields that have been saved get one: the pencil that opens it is
+	 * rendered by the server, and the one the builder makes has neither the
+	 * pencil nor the select id the pencil points at. The dialog is put on the
+	 * body rather than in the form, so it is not looked for inside it.
+	 */
+	get editOptionsDialog() {
+		return this.page.locator('dialog');
+	}
+
+	get editOptionsError() {
+		return this.editOptionsDialog.locator('#error-message');
+	}
+
+	get editOptionInputs() {
+		return this.editOptionsDialog.locator('#options-list input');
+	}
+
+	/** The options the dialog is offering, in the order it lists them. */
+	editOptionValues() {
+		return this.editOptionInputs.evaluateAll((inputs) => inputs.map((input) => input.value));
+	}
+
+	/* API tokens. Created and deleted the moment the button is pressed, not when
+	   the settings are saved. */
+
+	get apiTokens() {
+		return this.page.locator('#public-api-tokens .token-box');
+	}
+
+	get createApiTokenButton() {
+		return this.page.locator('#create-api-token');
+	}
+
 	/* Actions */
 
 	/**
@@ -196,6 +395,75 @@ class SettingsPage {
 		await expect(this.form).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
 
 		return code;
+	}
+
+	/**
+	 * Create a registration with something to book, and open its settings.
+	 *
+	 * Most of what the booking flow settings decide is only visible on a
+	 * registration a visitor can actually get as far as the booking form on, so
+	 * those tests need a map with seats on it before they touch a setting.
+	 *
+	 * @param {string} name      Registration name, must be unique for the run
+	 * @param {number} seatCount How many seats to put in its one room
+	 * @return {Promise<string>} The registration's code
+	 */
+	async openForNewRegistrationWithSeats(name, seatCount) {
+		const builder = new LayoutBuilderPage(this.page);
+
+		const code = await builder.openForNewRegistration(name);
+
+		await builder.nameFirstRoom(ROOM_NAME);
+		await builder.placeSeats(seatCount);
+		await builder.save();
+
+		await this.open(code);
+
+		return code;
+	}
+
+	/**
+	 * Put the registration in a state where a booking can actually be made.
+	 *
+	 * Two things stand in the way of one by default, and both are email.
+	 *
+	 * The plugin sends its booking emails during the submit itself, and turns a
+	 * send it could not complete into a booking that failed. The site the tests
+	 * run on has no way to send mail at all, so every email whose result the
+	 * booking path looks at has to be off. The one it does not look at is turned
+	 * off too, only so the request is not left waiting on it.
+	 *
+	 * Email verification is the other one: with it on the booking is written at
+	 * a status that is filtered out of everything - the map does not show it and
+	 * the seat stays free - so no test could see that it worked.
+	 *
+	 * @param {boolean} options.approved Whether bookings skip the pending state.
+	 *                                   The only way to get a seat to show as
+	 *                                   taken rather than pending.
+	 */
+	async allowBookings({ approved = false } = {}) {
+		await this.set('emailConfirm', false);
+		await this.set('adminBookingNotification', false);
+
+		if (approved) {
+			await this.set('usePending', false);
+			await this.set('approvedBookingEmail', false);
+		} else {
+			await this.set('bookerPendingNotification', false);
+		}
+
+		await this.save();
+	}
+
+	/**
+	 * Unfold the booking flow summary so its sentences can be read.
+	 *
+	 * It starts collapsed, and until it is opened there is no text in it to
+	 * assert on. Retried because the summary is wired up by the same footer
+	 * script the section tabs are.
+	 */
+	async openBookingFlowSummary() {
+		await clickUntil(this.bookingFlowSummaryToggle, this.bookingFlowSummary);
 	}
 
 	/**
@@ -252,6 +520,22 @@ class SettingsPage {
 			await field.blur();
 
 			await expect(field).toHaveValue(value);
+
+			return;
+		}
+
+		if (config.kind === 'richText') {
+			/* A TinyMCE field. In its Visual mode the textarea is behind the
+			   editor's iframe and holds nothing; its Text mode hands the
+			   textarea back, and is also what makes it the thing that gets
+			   posted, so the whole value goes through the tab first.
+
+			   The editor is only set up once its section has been shown, and it
+			   opens in Visual mode, so a tab clicked before that is undone
+			   again. Retrying until the textarea is on screen waits that out. */
+			await clickUntil(this.page.locator(`${config.selector}-html`), field);
+
+			await field.fill(value);
 
 			return;
 		}
@@ -321,6 +605,141 @@ class SettingsPage {
 		}
 
 		await cell.click();
+	}
+
+	/**
+	 * Give the registration a page logo.
+	 *
+	 * The form has no file input of its own: the button opens the WordPress
+	 * media modal, and only choosing something in there writes the attachment id
+	 * into the field that posts. An image is uploaded rather than picked from
+	 * whatever the library already holds, so the test knows which one it got.
+	 *
+	 * @return {Promise<string>} The attachment's title
+	 */
+	async selectPageLogo() {
+		await this.openSection('pages');
+		await this.pageLogoSelectButton.click();
+
+		const title = await uploadThroughMediaModal(this.page, PAGE_LOGO_CONFIRM_LABEL);
+
+		await expect(this.pageLogo).not.toHaveValue('');
+
+		return title;
+	}
+
+	/**
+	 * Fill in the box a new custom field is built in, without applying it.
+	 *
+	 * @param {Object} field
+	 * @param {string} field.label   The name to ask for it under
+	 * @param {string} field.type    A key of CUSTOM_FIELD_TYPES
+	 * @param {string[]} field.options The choices a select field offers
+	 */
+	async #fillNewCustomField({ label, type, options = [] }) {
+		await this.openSection('advanced');
+
+		await this.newCustomFieldLabel.fill(label);
+		await this.newCustomFieldType.selectOption({ label: CUSTOM_FIELD_TYPES[type] });
+
+		for (const option of options) {
+			await this.newCustomFieldOptionName.fill(option);
+			await this.form.locator('.cust-field-create .add-select-option').click();
+		}
+
+		if (options.length) {
+			await expect(this.newCustomFieldOptions).toHaveCount(options.length);
+		}
+	}
+
+	/**
+	 * Add a custom field to the registration.
+	 *
+	 * @see #fillNewCustomField for the shape of the field
+	 */
+	async addCustomField(field) {
+		await this.#fillNewCustomField(field);
+		await this.form.locator('.cust-field-create .apply-custom-field').click();
+
+		await expect(this.customField(field.label)).toBeVisible();
+	}
+
+	/**
+	 * Try to add a custom field and expect the builder to turn it down.
+	 *
+	 * The field never leaves the box it is built in, so the toast is the only
+	 * sign anything happened, and the list not growing is the other half of it.
+	 *
+	 * @param {string} message The error the screen is expected to show
+	 */
+	async addCustomFieldExpectingError(field, message) {
+		const listed = await this.customFieldList.locator('.custom-container').count();
+
+		await this.#fillNewCustomField(field);
+		await this.form.locator('.cust-field-create .apply-custom-field').click();
+
+		await expect(this.errorToast).toHaveText(message);
+		await expect(this.customFieldList.locator('.custom-container')).toHaveCount(listed);
+	}
+
+	/**
+	 * Take a custom field off the list, or decide not to.
+	 *
+	 * It asks first, through the browser's own confirm, which Playwright says no
+	 * to unless it is told otherwise - so both answers have to be given here.
+	 *
+	 * @param {boolean} options.confirm Whether to go through with it
+	 */
+	async removeCustomField(label, { confirm = true } = {}) {
+		this.page.once('dialog', (dialog) => (confirm ? dialog.accept() : dialog.dismiss()));
+
+		await this.customField(label).locator('.remove-cust-item').click();
+	}
+
+	/** Move a custom field one place down the list. */
+	async moveCustomFieldDown(label) {
+		await this.customField(label).locator('.custom-container-move-down').click();
+	}
+
+	/**
+	 * Open the dialog for changing a saved select field's options.
+	 */
+	async openEditOptions(label) {
+		await this.openSection('advanced');
+		await this.customField(label).locator('.edit-options').click();
+
+		await expect(this.editOptionsDialog).toBeVisible();
+	}
+
+	/**
+	 * Create an API token.
+	 *
+	 * The token is made over AJAX and is live at once, with nothing to save, so
+	 * the new box arriving is what says it exists.
+	 *
+	 * @return {Promise<import('@playwright/test').Locator>} The new token's box
+	 */
+	async createApiToken() {
+		await this.openSection('advanced');
+
+		const listed = await this.apiTokens.count();
+
+		await this.createApiTokenButton.click();
+		await expect(this.apiTokens).toHaveCount(listed + 1);
+
+		return this.apiTokens.last();
+	}
+
+	/**
+	 * Delete an API token, or decide not to. Asks through the browser's confirm,
+	 * the same way removing a custom field does.
+	 *
+	 * @param {import('@playwright/test').Locator} token A token box
+	 */
+	async removeApiToken(token, { confirm = true } = {}) {
+		this.page.once('dialog', (dialog) => (confirm ? dialog.accept() : dialog.dismiss()));
+
+		await token.locator('.remove-token').click();
 	}
 
 	/**
