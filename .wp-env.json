@@ -2,6 +2,9 @@
 	"$schema": "https://schemas.wp.org/trunk/wp-env.json",
 	"core": null,
 	"plugins": ["."],
+	"mappings": {
+		"wp-content/mu-plugins/seatreg-e2e-mail-log.php": "./tests/e2e/mu-plugins/mail-log.php"
+	},
 	"port": 8889,
 	"testsEnvironment": false,
 	"config": {

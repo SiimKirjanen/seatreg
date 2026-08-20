@@ -295,6 +295,94 @@ class LayoutBuilderPage {
 		return this.page.locator('#set-seat-locks');
 	}
 
+	/* Price dialog. Like the lock one it reads the selection when it opens.
+
+	   builder_content.php renders it twice - once by requiring seat-price-modal.php
+	   and once inline - so two elements answer to #price-dialog. The tool button
+	   opens the first, which is what everything here is scoped to. */
+
+	get priceButton() {
+		return this.page.locator('.price-option');
+	}
+
+	get priceDialog() {
+		return this.page.locator('#price-dialog').first();
+	}
+
+	get priceForAllInput() {
+		return this.priceDialog.locator('#price-for-all-selected');
+	}
+
+	get fillPricesButton() {
+		return this.priceDialog.locator('#fill-price-for-all-selected');
+	}
+
+	get setPricesButton() {
+		return this.priceDialog.locator('#set-prices');
+	}
+
+	/** Exact, so seat 1 does not also match seat 11. */
+	priceRow(seatNumber) {
+		return this.priceDialog
+			.locator('.price-item')
+			.filter({ has: this.page.getByText(`NR: ${seatNumber}`, { exact: true }) });
+	}
+
+	/** One input per price the seat is offered under. */
+	priceInputs(seatNumber) {
+		return this.priceRow(seatNumber).locator('.price-input');
+	}
+
+	async openPriceDialog() {
+		await this.priceButton.click();
+		await expectModalShown(this.priceDialog);
+	}
+
+	/** Fill-all is only offered for a selection of more than one seat. */
+	async setSeatPrices(price) {
+		await this.openPriceDialog();
+
+		const rows = await this.priceDialog.locator('.price-item').count();
+
+		if (rows > 1) {
+			await this.priceForAllInput.fill(String(price));
+			await this.fillPricesButton.click();
+		} else {
+			await this.priceDialog.locator('.price-input').fill(String(price));
+		}
+
+		await this.setPricesButton.click();
+		await expectModalHidden(this.priceDialog);
+	}
+
+	/**
+	 * Offer a seat under more than one price. Every option has to be described or
+	 * the dialog turns the whole seat down.
+	 *
+	 * @param {Array<{price: number, description: string}>} options
+	 */
+	async setSeatPriceOptions(seatNumber, options) {
+		await this.openPriceDialog();
+
+		const row = this.priceRow(seatNumber);
+
+		for (let i = 1; i < options.length; i += 1) {
+			await row.locator('.add-price').click();
+		}
+
+		await expect(this.priceInputs(seatNumber)).toHaveCount(options.length);
+
+		for (const [i, option] of options.entries()) {
+			const wrap = row.locator('.input-wrap').nth(i);
+
+			await wrap.locator('.price-input').fill(String(option.price));
+			await wrap.locator('.text-input').fill(option.description);
+		}
+
+		await this.setPricesButton.click();
+		await expectModalHidden(this.priceDialog);
+	}
+
 	/* Legend dialog. A jQuery UI dialog, not a Bootstrap modal, and its creator is
 	   a three step slider animated with jQuery. */
 

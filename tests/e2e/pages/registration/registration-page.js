@@ -179,6 +179,13 @@ class RegistrationPage {
 		return this.page.locator('#dialog-close-btn');
 	}
 
+	/* A button per option in place of the single add to booking button. Only drawn
+	   where there is a way to pay; without one the seat falls back to being free. */
+
+	get priceOptions() {
+		return this.seatDialog.locator('.multi-price-wrap .add-to-cart');
+	}
+
 	/* Cart and booking form */
 
 	get cartPopup() {
@@ -202,6 +209,15 @@ class RegistrationPage {
 
 	get checkoutButton() {
 		return this.page.locator('#checkout');
+	}
+
+	/** Its text carries the currency symbol; data-booking-price is the number alone. */
+	get totalPrice() {
+		return this.page.locator('#booking-total-price');
+	}
+
+	async bookingCost() {
+		return this.totalPrice.getAttribute('data-booking-price');
 	}
 
 	/* Coupons. Drawn into the cart whenever the registration has them turned on,
@@ -243,10 +259,15 @@ class RegistrationPage {
 		return this.page.locator(`#checkout-input-area [data-field="${name}"]`);
 	}
 
-	/** Only asked for when the details are entered per seat. */
+	/** Only asked for when the details are entered per seat. Carries
+	    data-field="Email" like the per-seat ones, so checkoutField() also matches it. */
+	get primaryEmail() {
+		return this.page.locator('#prim-mail');
+	}
+
 	get primaryEmailLabel() {
 		return this.page.locator('#checkout-input-area label').filter({
-			has: this.page.locator('#prim-mail'),
+			has: this.primaryEmail,
 		});
 	}
 
@@ -290,6 +311,12 @@ class RegistrationPage {
 
 	get bookingStatusLink() {
 		return this.bookingConfirmed.locator('.booking-check-url');
+	}
+
+	/** Shown in its place when the booker has to confirm by email: there is no
+	    booking to hand an address for until they follow the link. */
+	get emailVerificationSent() {
+		return this.page.locator('#email-conf');
 	}
 
 	/* Calendar mode. Only rendered when the registration runs on a calendar. */
@@ -468,6 +495,16 @@ class RegistrationPage {
 		await expect(this.seatDialog).toBeHidden();
 	}
 
+	/**
+	 * Take the seat whose dialog is open, at one of the prices it is offered under.
+	 *
+	 * @param {number} option Which of the prices, counting from 1
+	 */
+	async pickPriceOption(option) {
+		await this.priceOptions.nth(option - 1).click();
+		await expect(this.seatDialog).toBeHidden();
+	}
+
 	async openCart() {
 		await this.selectionButton.click();
 		await expect(this.cartPopup).toBeVisible();
@@ -504,6 +541,32 @@ class RegistrationPage {
 	 * Walk from an empty map to the booking form. A caller asking for more seats
 	 * than the registration allows has to have raised the limit first.
 	 */
+	/**
+	 * Answer the booking form for every seat taken. Fields are scoped to their own
+	 * block, since the primary email cannot be told apart from the form as a whole.
+	 *
+	 * @param {Object} options.customFields Answers keyed by the field's label
+	 */
+	async fillBooking({ firstName, lastName, email, customFields = {} }) {
+		const seats = await this.checkoutItems.count();
+
+		for (let seat = 0; seat < seats; seat += 1) {
+			const block = this.checkoutItems.nth(seat);
+
+			await block.locator('[data-field="FirstName"]').fill(firstName);
+			await block.locator('[data-field="LastName"]').fill(lastName);
+			await block.locator('[data-field="Email"]').fill(email);
+
+			for (const [label, value] of Object.entries(customFields)) {
+				await block.locator(`[data-field="${label}"]`).fill(value);
+			}
+		}
+
+		if (await this.primaryEmail.count()) {
+			await this.primaryEmail.fill(email);
+		}
+	}
+
 	async bookSeats(count) {
 		for (let number = 1; number <= count; number += 1) {
 			await this.addSeatToBooking(number);

@@ -12,6 +12,9 @@ const PAGE_LOGO_CONFIRM_LABEL = 'Use as logo';
 
 const ROOM_NAME = 'Settings room';
 
+/* Whatever allowPaidBookings() is not told to use. */
+const PAID_BOOKING_PAYMENT = { title: 'Bank transfer', description: 'Pay to the account on the invoice' };
+
 /* Looked up by name rather than by selector so a spec never has to know which
    section a setting sits in. */
 const FIELDS = {
@@ -34,6 +37,16 @@ const FIELDS = {
 	infoText: { tab: 'booking-flow', selector: '#registration-info-text', kind: 'text' },
 	showInfoButton: { tab: 'booking-flow', selector: '#show-info-button', kind: 'checkbox' },
 	pdfLogoPosition: { tab: 'booking-flow', selector: '#booking-pdf-logo-position', kind: 'select' },
+	showPendingBookingPdf: {
+		tab: 'booking-flow',
+		selector: '#show-pending-booking-pdf',
+		kind: 'checkbox',
+	},
+	showApprovedBookingPdf: {
+		tab: 'booking-flow',
+		selector: '#show-approved-booking-pdf',
+		kind: 'checkbox',
+	},
 	onePersonCheckout: { tab: 'booking-flow', selector: '#one-person-checkout', kind: 'checkbox' },
 	automaticBookingConfirmDialog: {
 		tab: 'booking-flow',
@@ -399,12 +412,35 @@ class SettingsPage {
 	}
 
 	/**
+	 * Reopen the registration's layout, which is opened off its Home card.
+	 *
+	 * @return {Promise<LayoutBuilderPage>}
+	 */
+	async openLayout(code) {
+		const builder = new LayoutBuilderPage(this.page);
+
+		await this.homePage.goto();
+		await builder.open(code);
+
+		return builder;
+	}
+
+	/** Prices belong to the seat, so this goes through the layout. Only means
+	    anything once allowPaidBookings() has given the registration a way to be paid. */
+	async priceSeats(code, price, seatCount) {
+		const builder = await this.openLayout(code);
+
+		await builder.lassoSelectSeats(1, seatCount);
+		await builder.setSeatPrices(price);
+		await builder.save();
+	}
+
+	/**
 	 * Put the registration in a state where a booking can actually be made.
 	 *
-	 * The plugin sends its booking emails during the submit itself and turns a
-	 * send it could not complete into a booking that failed, and the test site
-	 * cannot send mail at all. Email verification is the other blocker: with it on
-	 * the booking is written at a status filtered out of everything.
+	 * Email verification is the blocker: with it on the booking is written at a
+	 * status filtered out of everything until the booker follows a link out of their
+	 * mail. The rest of the emails are off to keep unrelated tests off the mail log.
 	 *
 	 * @param {boolean} options.approved Whether bookings skip the pending state
 	 */
@@ -420,6 +456,20 @@ class SettingsPage {
 		}
 
 		await this.save();
+	}
+
+	/**
+	 * The same, for a registration whose seats are going to cost something. A custom
+	 * payment counts as payments being on and needs an account nowhere. Save it
+	 * before opening the builder, which only offers to price a seat once one is on.
+	 */
+	async allowPaidBookings({ approved = false, currency = 'EUR', payment = PAID_BOOKING_PAYMENT } = {}) {
+		await this.addCustomPayment(payment);
+		await this.set('currencyCode', currency);
+
+		await this.allowBookings({ approved });
+
+		return payment;
 	}
 
 	async openBookingFlowSummary() {
@@ -762,4 +812,4 @@ class SettingsPage {
 	}
 }
 
-module.exports = { SettingsPage, FIELDS };
+module.exports = { SettingsPage, FIELDS, PAID_BOOKING_PAYMENT };

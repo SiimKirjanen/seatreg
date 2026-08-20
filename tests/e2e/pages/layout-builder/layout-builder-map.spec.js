@@ -1,6 +1,7 @@
 const path = require('path');
 const { test, expect } = require('@playwright/test');
 const { LayoutBuilderPage } = require('./layout-builder-page');
+const { HomePage } = require('../home/home-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 
 const ROOM = 'Main hall';
@@ -19,6 +20,8 @@ const SEAT_COLOR_RGB = 'rgb(233, 30, 99)';
 
 const HOVER_TEXT_LINES = ['Extra legroom', 'Next to the exit'];
 
+const SEAT_PRICE = 25;
+
 /* One of the plugin's own images, so the suite carries no binary of its own.
    Its name has to stay within [0-9a-zA-Z-._], which the upload form enforces. */
 const BACKGROUND_IMAGE = path.join(__dirname, '../../../../img/chairs_med.jpg');
@@ -29,11 +32,12 @@ const BACKGROUND_IMAGE = path.join(__dirname, '../../../../img/chairs_med.jpg');
 
 test.describe('Layout builder map', () => {
 	let builder;
+	let code;
 
 	test.beforeEach(async ({ page }) => {
 		builder = new LayoutBuilderPage(page);
 
-		await builder.openForNewRegistration(uniqueRegistrationName('Layout map'));
+		code = await builder.openForNewRegistration(uniqueRegistrationName('Layout map'));
 		await builder.nameFirstRoom(ROOM);
 	});
 
@@ -89,6 +93,25 @@ test.describe('Layout builder map', () => {
 		await expect(registration.seat(1)).toHaveText('1');
 		await expect(registration.seat(10)).toHaveText('10');
 		await expect(registration.seat(11)).toHaveText('11');
+	});
+
+	test('prices the seats that were selected', async ({ page }) => {
+		await builder.placeSeats(2);
+		await builder.lassoSelectSeats(1, 2);
+
+		await builder.setSeatPrices(SEAT_PRICE);
+		await builder.save();
+
+		/* Nothing on the map says what a seat costs, so the dialog the prices were
+		   given to is also where they are read back. */
+		await new HomePage(page).goto();
+		await builder.open(code);
+
+		await builder.lassoSelectSeats(1, 2);
+		await builder.openPriceDialog();
+
+		await expect(builder.priceInputs(1)).toHaveValue(String(SEAT_PRICE));
+		await expect(builder.priceInputs(2)).toHaveValue(String(SEAT_PRICE));
 	});
 
 	test('locks and password protects seats without leaking the password', async () => {

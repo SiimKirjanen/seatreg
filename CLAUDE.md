@@ -25,3 +25,15 @@ added sparingly:
   destination screen is the other spec's job.
 - Shared setup, and any workaround for the plugin's markup or timing quirks, belongs in the
   page object — not repeated in specs.
+
+The site cannot send mail, so `tests/e2e/mu-plugins/mail-log.php` (mapped in by `.wp-env.json`)
+captures `wp_mail()` instead of sending it. Read what the plugin emailed with
+`tests/e2e/utils/mail.js`, always filtering by a `uniqueBookerEmail()` — the log is shared by
+every worker. Capturing stops `wp_mail()` before PHPMailer is built, so it is off unless a run
+asks for it: `auth.setup.js` turns it on and the `cleanup` project turns it back off, leaving
+the site sending its mail the usual way for anyone developing against real SMTP. Set
+`SEATREG_E2E_MAIL_LOG` in `.wp-env.json` to hold it on to read mail by hand.
+
+Do not have a test ask for a booking PDF: generating one rewrites tFPDF's font cache under
+`php/libs/tfpdf/` with the absolute path of whichever environment generated it, and the wp-env
+container and the host share that folder.

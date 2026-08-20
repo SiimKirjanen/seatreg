@@ -1,7 +1,5 @@
 const { test, expect } = require('@playwright/test');
 const { SettingsPage } = require('../settings/settings-page');
-const { LayoutBuilderPage } = require('../layout-builder/layout-builder-page');
-const { HomePage } = require('../home/home-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 
 const SEAT_COUNT = 3;
@@ -11,6 +9,14 @@ const MALFORMED_EMAIL = 'riina.tamm.example.com';
 
 const SEAT_PASSWORD = 'letmein7f3a';
 const WRONG_PASSWORD = 'notthepassword';
+
+const SEAT_PRICE = 25;
+
+/* Every option has to be described or the builder turns the whole seat down. */
+const PRICE_OPTIONS = [
+	{ price: 15, description: 'Restricted view' },
+	{ price: 40, description: 'Front row' },
+];
 
 const EMPTY_FIELD = 'Empty field';
 const EMAIL_NOT_CORRECT = 'Email address is not correct';
@@ -74,13 +80,8 @@ test.describe('Registration booking', () => {
 		await expect(registration.addToBookingButton).toHaveCount(0);
 	});
 
-	test('opens a seat that is behind a password', async ({ page }) => {
-		const builder = new LayoutBuilderPage(page);
-
-		/* The builder is opened off the registration's Home card, and the setup
-		   left this tab on the settings. */
-		await new HomePage(page).goto();
-		await builder.open(code);
+	test('opens a seat that is behind a password', async () => {
+		const builder = await settings.openLayout(code);
 
 		/* Only a selected seat gets a row in the lock dialog. */
 		await builder.selectSeat(1);
@@ -149,6 +150,53 @@ test.describe('Registration booking', () => {
 		await registration.openSeat(1);
 
 		await expect(registration.addToBookingButton).toHaveCount(0);
+	});
+
+	test('adds up what the seats in the booking cost', async () => {
+		await settings.set('maxSeats', '2');
+		await settings.allowPaidBookings();
+
+		await settings.priceSeats(code, SEAT_PRICE, 2);
+
+		const registration = await settings.openRegistration(code);
+
+		// Both seats first: the cart popup covers the map once it is open
+		await registration.addSeatToBooking(1);
+		await registration.addSeatToBooking(2);
+		await registration.openCart();
+
+		await expect(registration.totalPrice).toHaveAttribute(
+			'data-booking-price',
+			String(SEAT_PRICE * 2)
+		);
+
+		await registration.removeSeatFromBooking(1);
+
+		await expect(registration.totalPrice).toHaveAttribute('data-booking-price', String(SEAT_PRICE));
+	});
+
+	test('takes the price the visitor picked for the seat', async () => {
+		await settings.allowPaidBookings();
+
+		const builder = await settings.openLayout(code);
+
+		await builder.selectSeat(1);
+		await builder.setSeatPriceOptions(1, PRICE_OPTIONS);
+		await builder.save();
+
+		const registration = await builder.openRegistration();
+
+		await registration.openSeat(1);
+
+		await expect(registration.priceOptions).toHaveCount(PRICE_OPTIONS.length);
+
+		await registration.pickPriceOption(2);
+		await registration.openCart();
+
+		await expect(registration.totalPrice).toHaveAttribute(
+			'data-booking-price',
+			String(PRICE_OPTIONS[1].price)
+		);
 	});
 
 	test('books straight through when bookings are approved automatically', async () => {

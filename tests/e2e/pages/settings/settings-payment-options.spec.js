@@ -29,10 +29,10 @@ const OUT_OF_RANGE_DISCOUNT = '500';
    make the plugin count payments as turned on, which is what puts the coupon box
    in the cart - so none of this needs an account anywhere.
 
-   The payment buttons on the status page are not covered: they are only drawn
-   for a booking that costs something (booking_status.php:74) and nothing in the
-   suite can price a seat yet. The instruction text above them has no such
-   condition, so that is checked instead. */
+   The payment buttons themselves are only drawn for a booking that costs
+   something, and are covered from booking-status.spec.js. The instruction text
+   above them has no such condition, so that is what is followed to the booker
+   here. */
 
 test.describe('Settings payment options', () => {
 	let settings;

@@ -39,6 +39,50 @@ class BookingStatusPage {
 		return this.page.locator('.seatreg-card__content');
 	}
 
+	/* Both tables are built with inline styles and no classes of their own, so they
+	   are told apart by the order they are written in: seats, then what they cost. */
+
+	get bookingTable() {
+		return this.content.locator('.seatreg-table-scroll table').first();
+	}
+
+	get paymentTable() {
+		return this.content.locator('.seatreg-table-scroll table').nth(1);
+	}
+
+	/** Only offered where the settings allow one for a booking at this status. */
+	get pdfLink() {
+		return this.content.locator('a[href*="seatreg=booking-pdf"]');
+	}
+
+	/* Only drawn for a booking that has something left to pay. */
+
+	get paymentForms() {
+		return this.content.locator('.payment-forms');
+	}
+
+	/** @param {string} provider e.g. 'paypal-order' or 'stripe-checkout-session' */
+	paymentForm(provider) {
+		return this.paymentForms.locator(`form:has(input[value="${provider}"])`);
+	}
+
+	customPaymentButton(title) {
+		return this.paymentForms.locator('.custom-payment-box').filter({ hasText: title });
+	}
+
+	/** Hidden until its button is clicked. Keyed by a payment id the test never sees. */
+	customPaymentDescription(description) {
+		return this.page.locator('#custom-payment-descriptions div').filter({ hasText: description });
+	}
+
+	get resendReceiptButton() {
+		return this.page.locator('#send-receipt');
+	}
+
+	get successToast() {
+		return this.page.locator('.alertify-log-success');
+	}
+
 	/* Actions */
 
 	/**

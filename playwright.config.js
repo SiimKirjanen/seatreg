@@ -25,6 +25,16 @@ module.exports = defineConfig({
 		{
 			name: 'setup',
 			testMatch: /.*\.setup\.js/,
+			teardown: 'cleanup',
+		},
+		{
+			/* Puts back whatever the setup turned on for the run's sake. Needs the
+			   admin session, so it runs signed in like the tests do. */
+			name: 'cleanup',
+			testMatch: /.*\.teardown\.js/,
+			use: {
+				storageState: 'playwright/.auth/user.json',
+			},
 		},
 		{
 			name: 'chromium',
