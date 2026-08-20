@@ -13,15 +13,21 @@ const SELECTION_BUTTON = 'Choose your seats';
 const INFO_TEXT = 'Doors open half an hour before the show.';
 const FOOTER_TEXT = 'By booking you agree to the house rules.';
 
-/* Everything on this tab shapes the seat map, the cart or the booking form, so
-   every test walks a visitor to the part of the registration its setting
-   decides. Nothing here is validated, on the page or on the server, so there is
-   no refusing to save to cover.
+/* An extra question whose answer the registration is told to make public. */
+const PUBLIC_FIELD = { label: 'Company', type: 'text' };
 
-   The settings that only show on a booking that has been made - pending
-   bookings and their expiry, the redirect to the status page, the booking data
-   shown on taken seats, and everything under Booking PDF - are left out until
-   the suite can make one. */
+const BOOKER = {
+	firstName: 'Riina',
+	lastName: 'Tamm',
+	email: 'riina.tamm@example.com',
+	company: 'Kalev',
+};
+
+/* Everything on this tab shapes the seat map, the cart or the booking form, so
+   every test walks a visitor to the part its setting decides.
+
+   Left out: pending bookings and their expiry, the redirect to the status page,
+   and everything under Booking PDF. */
 
 test.describe('Settings booking flow', () => {
 	let settings;
@@ -39,8 +45,6 @@ test.describe('Settings booking flow', () => {
 	test('dresses the seat map from the settings', async () => {
 		const asBuilt = await settings.openRegistration(code);
 
-		/* A registration nobody has touched: the info button is on, and the
-		   button that opens the selection falls back to a caption of its own. */
 		await expect(asBuilt.infoButton).toBeVisible();
 		await expect(asBuilt.selectionButton).toHaveText(DEFAULT_SELECTION_BUTTON);
 
@@ -65,8 +69,6 @@ test.describe('Settings booking flow', () => {
 
 		await expect(registration.registrationInfo).toHaveText(INFO_TEXT);
 
-		/* The same text again in the dialog the info button opens, which is
-		   where a visitor reads it once the map is in the way. */
 		await registration.openInfoDialog();
 
 		await expect(registration.infoDialog).toContainText(INFO_TEXT);
@@ -124,8 +126,6 @@ test.describe('Settings booking flow', () => {
 
 		await perSeat.bookSeats(SEAT_COUNT);
 
-		/* Asked once per seat, with the offer to copy the first entry to the
-		   rest. */
 		await expect(perSeat.checkoutItems).toHaveCount(SEAT_COUNT);
 		await expect(perSeat.checkoutSyncSettings).toBeVisible();
 
@@ -139,7 +139,6 @@ test.describe('Settings booking flow', () => {
 
 		await once.bookSeats(SEAT_COUNT);
 
-		/* The other seat's entry is still posted, it is just not asked for. */
 		await expect(once.checkoutItems).toHaveCount(SEAT_COUNT);
 		await expect(once.checkoutItems.nth(1)).toBeHidden();
 		await expect(once.checkoutSyncSettings).toBeHidden();
@@ -172,5 +171,41 @@ test.describe('Settings booking flow', () => {
 		await expect(registration.primaryEmailLabel).toContainText('Gmail');
 
 		await expect(registration.customFooterText).toHaveText(FOOTER_TEXT);
+	});
+
+	/* The one setting on this tab that needs a booking before it says anything.
+	   What it makes public is not written onto the map but into the taken seat's
+	   tooltip, one row per thing it was told to give away. */
+	test('shows the booker details the settings make public on a taken seat', async () => {
+		/* A field only gets a row in the Show booking data list once it has been
+		   saved: the server draws that list from the fields the registration
+		   already has, not from the ones the builder is holding. */
+		await settings.addCustomField(PUBLIC_FIELD);
+		await settings.save();
+
+		await settings.showBookingData(['name', PUBLIC_FIELD.label]);
+		await settings.allowBookings();
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.bookSeats(1);
+		await registration.checkoutField('FirstName').fill(BOOKER.firstName);
+		await registration.checkoutField('LastName').fill(BOOKER.lastName);
+		await registration.checkoutField('Email').fill(BOOKER.email);
+		await registration.customField(PUBLIC_FIELD.label).locator('input').fill(BOOKER.company);
+		await registration.submitBooking();
+
+		await expect(registration.bookingConfirmed).toBeVisible();
+
+		/* Nothing repaints the map, so the seat only gives it away on the next
+		   visit. */
+		await registration.page.reload();
+
+		const tooltip = await registration.seatTooltip(1);
+
+		expect(tooltip).toContain(`${BOOKER.firstName} ${BOOKER.lastName}`);
+		expect(tooltip).toContain(BOOKER.company);
+
+		expect(tooltip).not.toContain(BOOKER.email);
 	});
 });

@@ -24,13 +24,11 @@ const NOT_FOUND_TEXT = 'Write to us and we will look your booking up.';
 const STATUS_PAGE_RULE = '.seatreg-card__name{display:none}';
 const CONFIRM_PAGE_RULE = '.seatreg-card__title{display:none}';
 
-/* Everything on this tab is about the standalone pages a booker lands on, and
-   the booking status page is the one of them that can be reached without a
-   booking, so it stands for all three. Nothing here is validated, on the page or
-   on the server, so there is no refusing to save to cover.
+/* The standalone pages a booker lands on. The booking status page is the one
+   reachable without a booking, so it stands for all three.
 
-   The tab's last setting, the text for the payment return page, is not covered:
-   that page needs a booking id, and visiting it starts a payment. */
+   The payment return page's text is not covered: visiting that page starts a
+   payment. */
 
 test.describe('Settings pages', () => {
 	let settings;
@@ -96,8 +94,6 @@ test.describe('Settings pages', () => {
 		await settings.openSection('pages');
 		await expect(settings.pageLogoPreview).toBeVisible();
 
-		/* The admin and the booker are shown the same size of the same
-		   attachment, so the preview says which image should turn up. */
 		const previewUrl = await settings.pageLogoPreview.getAttribute('src');
 
 		await bookingStatus.goto(code, noSuchBooking());
@@ -144,8 +140,6 @@ test.describe('Settings pages', () => {
 
 		await bookingStatus.goto(code, noSuchBooking());
 
-		/* The status page's rule took effect and the confirm page's did not,
-		   which is what says the two boxes reach different pages. */
 		await expect(bookingStatus.registrationName).toBeHidden();
 		await expect(bookingStatus.title).toBeVisible();
 	});

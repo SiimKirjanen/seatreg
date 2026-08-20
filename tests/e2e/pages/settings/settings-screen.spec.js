@@ -16,12 +16,9 @@ const ONE_PERSON_CHECKOUT = 'Booking details are entered once and applied to eve
 const CLOSED = 'Your registration is currently closed, so visitors cannot make a booking.';
 
 /* The screen itself: which registration it is editing, its section tabs, and the
-   save that carries all of them. The settings live in the spec of the section
-   tab they belong to.
-
-   The whole form is one post that writes every setting at once, so one setting
-   of each kind is enough to prove saving works. What each of those settings then
-   does is not this file's business. */
+   save that carries all of them. The settings live in the spec of the tab they
+   belong to; the whole form is one post, so one setting of each kind is enough
+   to prove saving works. */
 
 test.describe('SeatReg Settings screen', () => {
 	let settings;

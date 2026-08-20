@@ -13,11 +13,9 @@ const CALENDAR_DAYS = [10, 20];
 const AHEAD = [1, 2];
 const BEHIND = [-2, -1];
 
-/* Nothing on this tab is validated, on the page or on the server, so there is no
-   refusing to save to cover here. What it does have is two conversions worth
-   following - a date turned into the milliseconds that get stored and back - and
-   two ways of shutting a visitor out, both of which the registration renders
-   without needing a layout. */
+/* Two conversions worth following - a date turned into the milliseconds that get
+   stored, and back - and two ways of shutting a visitor out, both of which the
+   registration renders without needing a layout. */
 
 test.describe('Settings scheduling', () => {
 	let settings;
@@ -100,7 +98,6 @@ test.describe('Settings scheduling', () => {
 
 		await beforeItOpens.page.close();
 
-		/* The same registration, with both of its dates behind it now. */
 		const [openedOn, closedOn] = BEHIND.map(monthsFromNow);
 
 		await settings.open(code);

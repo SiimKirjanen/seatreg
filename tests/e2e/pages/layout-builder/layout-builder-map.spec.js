@@ -57,8 +57,6 @@ test.describe('Layout builder map', () => {
 	test('prefixes the numbers of the selected seats only', async () => {
 		await builder.placeSeats(2);
 
-		/* The dialog numbers what is selected, so with a seat on the map but
-		   nothing picked it has nothing to offer. */
 		await builder.openSeatNumberingDialog();
 		await expect(builder.noSeatsSelectedAlert).toBeVisible();
 		await expect(builder.numberingControls).toBeHidden();
@@ -103,13 +101,11 @@ test.describe('Layout builder map', () => {
 
 		const registration = await builder.openRegistration();
 
-		/* A locked seat is offered to nobody. */
 		await registration.openSeat(1);
 		await expect(registration.seatNotice).toBeVisible();
 		await expect(registration.addToBookingButton).toHaveCount(0);
 		await registration.closeSeatDialog();
 
-		/* A password protected one asks before it offers anything. */
 		await registration.openSeat(2);
 		await expect(registration.seatPasswordInput).toBeVisible();
 		await expect(registration.addToBookingButton).toHaveCount(0);

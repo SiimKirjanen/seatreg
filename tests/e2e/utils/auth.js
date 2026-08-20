@@ -1,18 +1,11 @@
 const { expect } = require('@playwright/test');
 const { TIMEOUTS } = require('./timeouts');
 
-/**
- * WordPress authentication utilities for e2e testing
- */
-
 const WP_ADMIN_USER = {
 	username: 'admin',
 	password: 'password',
 };
 
-/**
- * Login to WordPress admin
- */
 async function loginToWordPress(page, username = WP_ADMIN_USER.username, password = WP_ADMIN_USER.password) {
 	await page.goto('/wp-login.php');
 
@@ -23,9 +16,8 @@ async function loginToWordPress(page, username = WP_ADMIN_USER.username, passwor
 	await usernameField.fill(username);
 	await expect(usernameField).toHaveValue(username);
 
-	// Wait for WP's login script to render the show-password toggle. Until this
-	// button exists the password input is still being re-initialized, and any
-	// keystrokes typed in the meantime get dropped.
+	// Until the show-password toggle exists the password input is still being
+	// re-initialized, and keystrokes typed meanwhile get dropped.
 	await expect(page.locator('button.wp-hide-pw')).toBeVisible();
 
 	await expect(passwordField).toBeEditable();
@@ -37,16 +29,7 @@ async function loginToWordPress(page, username = WP_ADMIN_USER.username, passwor
 	await expect(page.locator('#wpadminbar')).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
 }
 
-/**
- * A browser context with nobody logged in.
- *
- * Every context in the suite starts with the admin's session restored into it,
- * so a setting that only does something to a visitor without one cannot be seen
- * working from the tests' own browser. This is a context that never had the
- * session. The caller closes it when it is done with it.
- *
- * @param {import('@playwright/test').Browser} browser The `browser` fixture
- */
+/** A context that never had the admin session. The caller closes it. */
 function visitorContext(browser) {
 	return browser.newContext({ storageState: { cookies: [], origins: [] } });
 }

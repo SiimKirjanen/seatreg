@@ -14,12 +14,8 @@ const LEGEND = 'Wheelchair';
 /** The blink runs twice over a second, so it is gone comfortably inside this. */
 const BLINK_OVER = 4000;
 
-/* What a visitor does with the map itself: moving between rooms, reading it,
-   and moving it around. None of it needs a booking, and none of it is decided
-   by a setting.
-
-   What the map is drawn from belongs to the layout builder's specs - that a
-   seat arrives with the number it was given is its business, not this file's. */
+/* What a visitor does with the map itself: moving between rooms, reading it, and
+   moving it around. What the map is drawn from belongs to the builder's specs. */
 
 test.describe('Registration map', () => {
 	let homePage;
@@ -87,8 +83,6 @@ test.describe('Registration map', () => {
 
 		await registration.legend(LEGEND).click();
 
-		/* The blink is the whole of it: nothing is hidden and nothing stays
-		   selected, and it takes itself off again when it has finished. */
 		await expect(marked).toHaveClass(/legend-animation/);
 		await expect(registration.seat(2)).not.toHaveClass(/legend-animation/);
 
@@ -118,8 +112,6 @@ test.describe('Registration map', () => {
 	});
 
 	test('tells a visitor what the registration holds', async () => {
-		/* The name opens the info dialog whatever the info button setting says,
-		   which is the only way in when that button has been turned off. */
 		await registration.header.click();
 
 		await expect(registration.infoDialog).toBeVisible();

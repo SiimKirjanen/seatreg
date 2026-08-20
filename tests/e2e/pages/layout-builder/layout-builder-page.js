@@ -6,23 +6,13 @@ const { HomePage } = require('../home/home-page');
 const { RegistrationPage } = require('../registration/registration-page');
 
 /**
- * Page object for the layout builder.
+ * Page object for the layout builder, which is not a screen of its own but a
+ * popup on Home opened by a registration's Layout button.
  *
- * The builder is not an admin screen of its own. It is a popup rendered on the
- * Home screen and opened by a registration's Layout button, so getting into it
- * goes through HomePage.
- *
- * Four things about the builder shape the code here:
- *
- * 1. Its dialogs are opened with .modal('toggle'), so a second click closes the
- *    one that just opened. Nothing here clicks a dialog trigger twice.
- * 2. alertify renders every confirm into the same #alertify node, so the delete
- *    room prompt and the unsaved changes prompt share their selectors and are
- *    told apart by their message.
- * 3. Switching rooms is deferred behind a 300ms timeout and a loading overlay,
- *    so it is waited out on the room title rather than on the click.
- * 4. The View registration link refuses to open while there are unsaved
- *    changes, which makes save() a precondition of openRegistration().
+ * Its dialogs are opened with .modal('toggle'), so a second click closes the one
+ * that just opened and nothing here clicks a trigger twice. alertify renders
+ * every confirm into the same node, so the delete room and unsaved changes
+ * prompts share their selectors and are told apart by their message.
  */
 class LayoutBuilderPage {
 	constructor(page) {
@@ -76,16 +66,15 @@ class LayoutBuilderPage {
 		});
 	}
 
-	/** The room being edited. The builder moves this id, not a class. */
+	/** The builder moves this id, not a class. */
 	get activeRoomSelection() {
 		return this.page.locator('#room-selection-wrapper #active-room');
 	}
 
 	/**
-	 * A room's reorder arrow. The builder only renders the arrows a room can
-	 * use, so the first room has no left arrow and the last has no right one.
+	 * The builder only renders the arrows a room can use, so the first room has no
+	 * left arrow and the last has no right one.
 	 *
-	 * @param {string} name      Room name
 	 * @param {string} direction 'left' or 'right'
 	 */
 	reorderArrow(name, direction) {
@@ -156,9 +145,8 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * A seat by the number it was created with. Renumbering a seat only rewrites
-	 * the caption, so this stays the seat's identity for the rest of a test;
-	 * seatNumbers() is what says what the seats are called now.
+	 * By the number it was created with. Renumbering only rewrites the caption, so
+	 * this stays the seat's identity; seatNumbers() says what they are called now.
 	 */
 	seat(number) {
 		return this.page.locator(`.build-area .drag-box[data-seatnr="${number}"]`);
@@ -212,8 +200,8 @@ class LayoutBuilderPage {
 	}
 
 	/* Colour dialog. Its picker is vanilla-picker, whose editor field is the only
-	   part of it worth driving - the hue and saturation strips are drag targets
-	   where the colour you get depends on where in a gradient the cursor lands. */
+	   part worth driving - the hue and saturation strips are drag targets where
+	   the colour you get depends on where in a gradient the cursor lands. */
 
 	get colorButton() {
 		return this.page.locator('.palette-call');
@@ -231,9 +219,9 @@ class LayoutBuilderPage {
 		return this.colorDialog.locator('.picker_done button');
 	}
 
-	/* Background image dialog. Uploading an image and putting it on a room are
-	   two steps: an upload is kept for the whole registration and can be added
-	   to, and taken off, any of its rooms. */
+	/* Background image dialog. Uploading an image and putting it on a room are two
+	   steps: an upload is kept for the whole registration and can be added to, and
+	   taken off, any of its rooms. */
 
 	get backgroundImageButton() {
 		return this.page.locator('.background-image');
@@ -251,7 +239,7 @@ class LayoutBuilderPage {
 		return this.page.locator('#file-sub');
 	}
 
-	/** An upload, found by the file name the plugin stored it under. */
+	/** By the file name the plugin stored it under. */
 	uploadedImage(fileName) {
 		return this.page
 			.locator('#uploaded-images .uploaded-image-box')
@@ -266,8 +254,8 @@ class LayoutBuilderPage {
 		return this.page.locator('.build-area img.room-image');
 	}
 
-	/* Hover text dialog. Scoped to the side bar because the builder also puts a
-	   bubble-text class on the boxes that have hover text. */
+	/* Scoped to the side bar: the builder also puts a bubble-text class on the
+	   boxes that have hover text. */
 
 	get hoverTextButton() {
 		return this.page.locator('.build-area-side .bubble-text');
@@ -296,10 +284,7 @@ class LayoutBuilderPage {
 		return this.page.locator('#lock-seat-dialog');
 	}
 
-	/**
-	 * The dialog's row for one seat. Matched on the seat number it shows, which
-	 * has to be exact so seat 1 does not also match seat 11.
-	 */
+	/** Exact, so seat 1 does not also match seat 11. */
 	lockRow(seatNumber) {
 		return this.page
 			.locator('#selected-seats-for-locking .lock-item')
@@ -310,8 +295,8 @@ class LayoutBuilderPage {
 		return this.page.locator('#set-seat-locks');
 	}
 
-	/* Legend dialog. A jQuery UI dialog, not a Bootstrap modal, and its creator
-	   is a three step slider animated with jQuery. */
+	/* Legend dialog. A jQuery UI dialog, not a Bootstrap modal, and its creator is
+	   a three step slider animated with jQuery. */
 
 	get legendButton() {
 		return this.page.locator('.legend-option');
@@ -330,8 +315,8 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * A step button of the legend creator. Both ends of a step carry the same
-	 * data-slide-open, so the step it leaves is part of the selector.
+	 * Both ends of a step carry the same data-slide-open, so the step it leaves is
+	 * part of the selector.
 	 *
 	 * @param {number} from Step the button sits on
 	 * @param {number} to   Step it opens
@@ -368,8 +353,8 @@ class LayoutBuilderPage {
 		return this.page.locator('#registration-link');
 	}
 
-	/* alertify reuses one node for both of the builder's confirm prompts, so
-	   these are named after the widget and not after either prompt. */
+	/* alertify reuses one node for both of the builder's confirm prompts, so these
+	   are named after the widget and not after either prompt. */
 
 	get confirmDialog() {
 		return this.page.locator('#alertify.alertify-confirm');
@@ -389,12 +374,7 @@ class LayoutBuilderPage {
 
 	/* Actions */
 
-	/**
-	 * Create a registration on the Home screen and open its layout builder.
-	 *
-	 * @param {string} name Registration name, must be unique for the run
-	 * @return {Promise<string>} The registration's code
-	 */
+	/** @return {Promise<string>} The registration's code */
 	async openForNewRegistration(name) {
 		await this.homePage.goto();
 
@@ -405,14 +385,10 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Open a registration's builder. The button is on its Home card, so the
-	 * caller has to be on the Home screen already - openForNewRegistration()
-	 * arrives there by creating the registration.
-	 *
-	 * The layout is fetched over AJAX before the popup is shown. The longer
-	 * reaction window covers that request, so a slow response does not look like
-	 * an ignored click. Safe to retry - the handler disables the button while its
-	 * request is in flight.
+	 * The button is on the registration's Home card, so the caller has to be on
+	 * Home already. The layout is fetched over AJAX before the popup is shown, and
+	 * the longer reaction window covers that so a slow response does not look like
+	 * an ignored click. Safe to retry: the handler disables the button in flight.
 	 */
 	async open(code) {
 		await clickUntil(this.homePage.layoutButton(code), this.popup, {
@@ -440,12 +416,7 @@ class LayoutBuilderPage {
 		await expectModalShown(this.roomNameDialog);
 	}
 
-	/**
-	 * Add a room. The builder names it "<n> room" and opens the room name dialog
-	 * for it straight away, so the two always happen together.
-	 *
-	 * @param {string} roomName Name for the new room
-	 */
+	/** The builder names it "<n> room" and opens the name dialog straight away. */
 	async addRoom(roomName) {
 		await this.addRoomButton.click();
 		await this.waitForRoomNameDialog();
@@ -456,17 +427,12 @@ class LayoutBuilderPage {
 		await expect(this.roomName).toHaveText(roomName);
 	}
 
-	/**
-	 * Open the room name dialog for the current room. Kept apart from
-	 * renameCurrentRoom() so a test can submit a name the builder rejects and
-	 * still find the dialog open.
-	 */
+	/** Kept apart from renameCurrentRoom() so a spec can submit a name it rejects. */
 	async openRoomNameDialog() {
 		await this.changeRoomNameLink.click();
 		await this.waitForRoomNameDialog();
 	}
 
-	/** Fill and submit the room name dialog, whether or not it accepts the name. */
 	async submitRoomName(roomName) {
 		await this.roomNameInput.fill(roomName);
 		await this.roomNameOkButton.click();
@@ -480,10 +446,6 @@ class LayoutBuilderPage {
 		await expect(this.roomName).toHaveText(roomName);
 	}
 
-	/**
-	 * Open the room description dialog. Kept apart from setRoomDescription() for
-	 * the same reason as the room name dialog.
-	 */
 	async openRoomDescriptionDialog() {
 		await this.changeRoomDescriptionLink.click();
 		await expect(this.roomDescriptionDialog).toBeVisible();
@@ -496,8 +458,6 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Delete the current room. The builder confirms through alertify first.
-	 *
 	 * @param {boolean} options.confirm Whether to go through with the delete
 	 * @return {Promise<string>} The confirm prompt's message
 	 */
@@ -513,27 +473,20 @@ class LayoutBuilderPage {
 		return message;
 	}
 
-	/**
-	 * Switch to another room. The builder defers this behind a 300ms timeout and
-	 * a loading overlay, so the room title is what says the switch happened.
-	 */
+	/** Deferred behind a 300ms timeout and a loading overlay, so the title is the signal. */
 	async selectRoom(roomName) {
 		await this.roomSelection(roomName).locator('.room-title').click();
 		await expect(this.roomName).toHaveText(roomName, { timeout: TIMEOUTS.NAVIGATION });
 	}
 
-	/** The room names in the order the strip shows them. */
+	/** In the order the strip shows them. */
 	async roomNames() {
 		return this.roomSelections.locator('.room-title').allInnerTexts();
 	}
 
 	/**
-	 * Place seats on the current room's grid.
-	 *
 	 * The builder creates a seat on mousedown over a grid box and leaves the new
 	 * seat sitting on top of it, so each grid box is only ever used once.
-	 *
-	 * @param {number} count How many seats to place
 	 */
 	async placeSeats(count) {
 		await this.seatTool.click();
@@ -548,15 +501,11 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Add a text box to the current room and type into it.
-	 *
 	 * The builder puts the text into the layout on keyup, so it has to be typed
 	 * key by key - a filled value never reaches the model. Blurring is part of
 	 * placing it: a text box that loses focus while still empty deletes itself.
 	 *
-	 * @param {string} text     Text to type, empty to leave the box unfilled
-	 * @param {number} options.at Grid box to place it over, so two text boxes
-	 *                            do not land on top of each other
+	 * @param {number} options.at Grid box to place it over
 	 */
 	async addText(text, { at = 0 } = {}) {
 		await this.textTool.click();
@@ -569,7 +518,6 @@ class LayoutBuilderPage {
 		await input.blur();
 	}
 
-	/** Select a single seat, which is what the legend and colour tools act on. */
 	async selectSeat(number) {
 		await this.selectTool.click();
 		await this.seat(number).click();
@@ -577,15 +525,10 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Select a run of seats by dragging the lasso across them.
-	 *
 	 * The only way to select more than one seat: the select tool empties the
 	 * selection before adding the seat the click landed on. The drag starts just
-	 * off the first seat's corner because the lasso has to begin on bare grid,
-	 * and it ends past the last seat's opposite corner so both are enclosed.
-	 *
-	 * @param {number} first First seat of the run
-	 * @param {number} last  Last seat of the run
+	 * off the first seat's corner because the lasso has to begin on bare grid, and
+	 * ends past the last seat's opposite corner so both are enclosed.
 	 */
 	async lassoSelectSeats(first, last) {
 		await this.lassoTool.click();
@@ -614,14 +557,7 @@ class LayoutBuilderPage {
 		await expectModalHidden(this.numberingDialog);
 	}
 
-	/**
-	 * Give the selected seats a numbering prefix.
-	 *
-	 * The dialog binds its buttons to the seats that were selected when it
-	 * opened, so a seat has to be selected before this runs.
-	 *
-	 * @param {string} prefix Prefix to put in front of the seat numbers
-	 */
+	/** The dialog binds to the seats selected when it opened, so select first. */
 	async setSeatPrefix(prefix) {
 		await this.openSeatNumberingDialog();
 		await this.seatPrefixInput.fill(prefix);
@@ -629,12 +565,7 @@ class LayoutBuilderPage {
 		await this.closeSeatNumberingDialog();
 	}
 
-	/**
-	 * Renumber the selected seats, counting up from the given number. Same
-	 * precondition as setSeatPrefix().
-	 *
-	 * @param {number} start Number the first of the selected seats gets
-	 */
+	/** Same precondition as setSeatPrefix(). */
 	async reorderSeatsFrom(start) {
 		await this.openSeatNumberingDialog();
 		await this.seatReorderInput.fill(String(start));
@@ -655,14 +586,10 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Upload an image and put it on the current room.
+	 * The upload is a real multipart post, so its entry turning up in the dialog
+	 * is what says it finished. The file keeps its name - the plugin stores it
+	 * under that and rejects anything outside [0-9a-zA-Z-._].
 	 *
-	 * The upload is a real multipart post to admin-ajax, so its own entry
-	 * turning up in the dialog is what says it finished. The file keeps its
-	 * name - the plugin stores it under that and rejects anything outside
-	 * [0-9a-zA-Z-._] - which is also how the entry is found again afterwards.
-	 *
-	 * @param {string} filePath Absolute path of the image to upload
 	 * @return {Promise<string>} The name the image was stored under
 	 */
 	async setRoomBackgroundImage(filePath) {
@@ -684,10 +611,7 @@ class LayoutBuilderPage {
 		return fileName;
 	}
 
-	/**
-	 * Take the background image off the current room. The upload itself stays,
-	 * which is what tells this apart from removing the image altogether.
-	 */
+	/** The upload itself stays, which is what tells this apart from removing it. */
 	async removeRoomBackgroundImage() {
 		await this.openBackgroundImageDialog();
 
@@ -698,14 +622,9 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Give the selected seats hover text.
-	 *
-	 * Both the button that opens the dialog and the one that submits it check
-	 * the selection first, so nothing happens at all until a seat is selected.
-	 * Line breaks survive as ^ in the saved layout and become breaks again on
-	 * the registration, so passing a multi line text is worth doing.
-	 *
-	 * @param {string} text Hover text, newlines allowed
+	 * Both the button that opens the dialog and the one that submits it check the
+	 * selection first, so nothing happens until a seat is selected. Line breaks
+	 * survive as ^ in the saved layout and become breaks again on the registration.
 	 */
 	async setHoverText(text) {
 		await this.hoverTextButton.click();
@@ -718,13 +637,9 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Colour the selected seat.
-	 *
 	 * The colour is typed into the picker's editor field, which commits it on
-	 * input, and Ok is what hands it to the builder. With the select tool only
-	 * the first selected seat is coloured, which is the tool this runs under.
-	 *
-	 * @param {string} color Any colour the picker's editor accepts, e.g. a hex
+	 * input, and Ok hands it to the builder. Under the select tool only the first
+	 * selected seat is coloured.
 	 */
 	async setSeatColor(color) {
 		await this.colorButton.click();
@@ -737,15 +652,12 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Lock seats and password protect others, in one trip through the dialog.
-	 *
-	 * Both are set per seat on the same rows and applied by the same button, so
-	 * splitting them would mean opening the dialog twice for no reason. Same
-	 * precondition as the numbering dialog: the seats have to be selected first,
-	 * and only selected seats get a row.
+	 * Locks and passwords are set per seat on the same rows and applied by the
+	 * same button, so they are done in one trip. The seats have to be selected
+	 * first, and only selected seats get a row.
 	 *
 	 * @param {number[]} options.lock     Seat numbers to lock
-	 * @param {Object}   options.password Seat number to password, keyed by number
+	 * @param {Object}   options.password Password keyed by seat number
 	 */
 	async applySeatLocks({ lock = [], password = {} } = {}) {
 		await this.lockButton.click();
@@ -766,13 +678,10 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Create a legend and apply it to whatever is selected.
-	 *
 	 * The dialog reads the selection when it opens, so a seat has to be selected
-	 * before this runs. Its creator is a slider whose steps animate for a second
-	 * each; Playwright waits for each step button to stop moving before clicking.
+	 * first.
 	 *
-	 * @param {string} legendName Legend name, must be unique for the registration
+	 * @param {string} legendName Must be unique for the registration
 	 */
 	async createAndApplyLegend(legendName) {
 		await this.legendButton.click();
@@ -788,21 +697,16 @@ class LayoutBuilderPage {
 		await this.legendSelect.selectOption(legendName);
 		await this.applyLegendButton.click();
 
-		// Closed with Escape because jQuery UI renders the dialog's own Close
-		// button outside #legend-dialog, in the wrapper it puts around it.
+		// jQuery UI renders the dialog's own Close button outside #legend-dialog.
 		await this.page.keyboard.press('Escape');
 		await expect(this.legendDialog).toBeHidden();
 	}
 
 	/**
-	 * Save the layout.
-	 *
-	 * The request finishing is not enough: the builder clears its unsaved
-	 * changes flag in the AJAX success callback, and that flag is what decides
-	 * whether View registration opens. The callback also puts the button caption
-	 * back, so the caption returning to what it was is the signal that it ran.
-	 * The caption is read rather than hard coded so this does not break on a
-	 * copy change.
+	 * The request finishing is not enough: the builder clears its unsaved changes
+	 * flag in the success callback, and that flag is what decides whether View
+	 * registration opens. The callback also puts the button caption back, so the
+	 * caption returning is the signal that it ran.
 	 */
 	async save() {
 		const idleCaption = await this.saveButtonText.innerText();
@@ -820,10 +724,8 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Open the saved registration in the tab the View registration link opens.
-	 *
-	 * Must follow save(). With unsaved changes the link cancels its own
-	 * navigation and asks about them instead, so no tab would ever arrive.
+	 * Must follow save(): with unsaved changes the link cancels its own navigation
+	 * and asks about them instead, so no tab would ever arrive.
 	 *
 	 * @return {Promise<RegistrationPage>} The registration in its own tab
 	 */
@@ -839,9 +741,8 @@ class LayoutBuilderPage {
 	}
 
 	/**
-	 * Close the builder, discarding the changes. It marks itself as having
-	 * unsaved changes as soon as it loads a registration, so closing always asks
-	 * for confirmation first.
+	 * The builder marks itself as having unsaved changes as soon as it loads a
+	 * registration, so closing always asks for confirmation first.
 	 */
 	async close() {
 		await this.closeButton.click();

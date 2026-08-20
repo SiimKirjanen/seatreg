@@ -16,14 +16,11 @@ const EMPTY_FIELD = 'Empty field';
 const EMAIL_NOT_CORRECT = 'Email address is not correct';
 const BOOKING_IS_FULL = 'Booking is full';
 
-/* Making a booking, and everything a visitor does on the way to one. This is
-   the only spec that completes one, so it is also where the seat states a
-   booking leaves behind are checked.
+/* Making a booking, and everything a visitor does on the way to one, including
+   the seat states a completed booking leaves behind.
 
-   A booking only goes through on a registration that has been told not to send
-   any email - see SettingsPage.allowBookings() for why - so the tests that make
-   one ask for that first, and the ones that never get that far do not pay for
-   it. */
+   A booking only goes through on a registration told not to send any email, so
+   the tests that make one call allowBookings() first. */
 
 test.describe('Registration booking', () => {
 	let settings;
@@ -55,7 +52,6 @@ test.describe('Registration booking', () => {
 		await expect(registration.cartItems).toHaveCount(1);
 		await expect(registration.seatsInCart).toHaveText('1');
 
-		/* The seat goes back to being one anyone can choose. */
 		await expect(registration.seat(1)).not.toHaveAttribute('data-selectedbox');
 		await expect(registration.seat(2)).toHaveAttribute('data-selectedbox');
 
@@ -64,7 +60,6 @@ test.describe('Registration booking', () => {
 		await expect(registration.seatsInCart).toHaveText('0');
 		await expect(registration.cartInfo).toContainText('empty');
 
-		/* With nothing chosen there is nowhere to go on to. */
 		await expect(registration.checkoutButton).toBeHidden();
 	});
 
@@ -102,7 +97,6 @@ test.describe('Registration booking', () => {
 
 		await registration.submitSeatPassword(SEAT_PASSWORD);
 
-		/* The right password reopens the dialog with the seat on offer. */
 		await expect(registration.addToBookingButton).toBeVisible();
 	});
 
@@ -111,7 +105,6 @@ test.describe('Registration booking', () => {
 
 		await registration.bookSeats(1);
 
-		/* Nothing filled in at all. */
 		await registration.submitBooking();
 
 		await expect(registration.fieldError('FirstName')).toHaveText(EMPTY_FIELD);

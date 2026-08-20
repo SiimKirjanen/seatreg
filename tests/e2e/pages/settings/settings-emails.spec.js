@@ -9,9 +9,8 @@ const MALFORMED_EMAIL = 'bookings.example.com';
 const TEMPLATE_WITHOUT_STATUS_LINK = 'Your booking [booking-id] has been approved.';
 
 /* An email the plugin could not send, or one a booker could not act on, is
-   refused before the form is ever posted, by a check on the save button that
-   calls preventDefault(). The three templates are checked the same way, so one
-   of them stands for all of them.
+   refused before the form is ever posted. The three templates are checked the
+   same way, so one stands for all of them.
 
    What the emails themselves look like is not something this suite can see. */
 

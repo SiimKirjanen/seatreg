@@ -26,13 +26,9 @@ const ILLEGAL_LABEL = 'E-mail?';
 const CUSTOM_STYLE = '.box[data-seat]{border-radius:50%}';
 const STYLED_SEAT_RADIUS = '50%';
 
-/* The advanced tab holds three unrelated things: a builder for the extra
-   questions a booking asks, a stylesheet for the registration, and the public
-   API. Each is checked where it ends up - the booking form, the seat map, and
-   the API itself.
-
-   The whole tab has no validation on the server beyond what the builder already
-   turns down on the page, so there is no refused save to cover. */
+/* Three unrelated things - the custom field builder, a stylesheet for the
+   registration, and the public API - each checked where it ends up. Nothing here
+   is validated on the server beyond what the builder turns down on the page. */
 
 test.describe('Settings advanced', () => {
 	let settings;
@@ -51,7 +47,6 @@ test.describe('Settings advanced', () => {
 		await settings.addCustomField(CHECKBOX_FIELD);
 		await settings.addCustomField(SELECT_FIELD);
 
-		/* The text field is the only kind that can be made optional. */
 		await settings.customField(TEXT_FIELD.label).locator('.optional-input').check();
 
 		await settings.moveCustomFieldDown(TEXT_FIELD.label);
@@ -65,7 +60,6 @@ test.describe('Settings advanced', () => {
 
 		await registration.bookSeats(1);
 
-		/* Each field arrives as the kind of control it was made as. */
 		await expect(registration.checkoutField(TEXT_FIELD.label)).toHaveAttribute(
 			'data-optional',
 			'true'
@@ -78,7 +72,6 @@ test.describe('Settings advanced', () => {
 			SELECT_FIELD.options
 		);
 
-		/* And in the order the list ended up in, which is what moving one did. */
 		expect(await registration.customFieldLabels()).toEqual(listed);
 	});
 
@@ -94,7 +87,6 @@ test.describe('Settings advanced', () => {
 
 		await settings.addCustomFieldExpectingError(TEXT_FIELD, NAME_ALREADY_USED);
 
-		/* A select with nothing to select from. */
 		await settings.addCustomFieldExpectingError(
 			{ label: SELECT_FIELD.label, type: 'select' },
 			PLEASE_ADD_AN_OPTION
