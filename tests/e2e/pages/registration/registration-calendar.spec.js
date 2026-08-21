@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { SettingsPage } = require('../settings/settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
+const { isoDate, dayNextMonth } = require('../../utils/dates');
 
 const SEAT_COUNT = 2;
 
@@ -66,23 +67,6 @@ test.describe('Registration calendar', () => {
 		await expect(registration.seats).toHaveCount(0);
 	});
 });
-
-function dayNextMonth(day) {
-	const date = new Date();
-
-	date.setDate(1);
-	date.setMonth(date.getMonth() + 1);
-	date.setDate(day);
-
-	return date;
-}
-
-/** yyyy-mm-dd, how the day travels in the address and in the picker. */
-function isoDate(date) {
-	return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
-		.map((part, index) => (index === 0 ? part : String(part).padStart(2, '0')))
-		.join('-');
-}
 
 /** How the registration writes the day out for the site's language. */
 function writtenOut(date) {

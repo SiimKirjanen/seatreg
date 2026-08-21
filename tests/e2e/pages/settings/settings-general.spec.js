@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { SettingsPage } = require('./settings-page');
+const { SettingsPage, BOOKER } = require('./settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 
 const CLOSE_REASON = 'The event has sold out.';
@@ -8,7 +8,7 @@ const WRONG_PASSWORD = 'notthepassword';
 
 const SEAT_COUNT = 3;
 
-const BOOKER = { firstName: 'Riina', lastName: 'Tamm', email: 'riina.tamm@example.com' };
+const BOOKER_EMAIL = 'riina.tamm@example.com';
 
 /* The wording a registration that does not count in seats uses for them. */
 const PLACE_SELECTED = 'place selected';
@@ -143,7 +143,7 @@ test.describe('Settings general', () => {
 		/* A second booking by the same user, under an address the email limit
 		   has nothing against. */
 		await registration.page.reload();
-		await bookSeat(registration, 2, `second.${BOOKER.email}`);
+		await bookSeat(registration, 2, `second.${BOOKER_EMAIL}`);
 
 		await expect(registration.bookingRefusal).toBeVisible();
 
@@ -154,15 +154,11 @@ test.describe('Settings general', () => {
 	});
 });
 
-/** Walk one seat all the way to a submitted booking. */
-async function bookSeat(registration, seatNumber, email = BOOKER.email) {
-	await registration.addSeatToBooking(seatNumber);
-	await registration.openCart();
-	await registration.openCheckout();
-
-	await registration.checkoutField('FirstName').fill(BOOKER.firstName);
-	await registration.checkoutField('LastName').fill(BOOKER.lastName);
-	await registration.checkoutField('Email').fill(email);
-
-	await registration.submitBooking();
+/**
+ * Walk one seat all the way to a submitted booking. Kept local because these
+ * tests come back and book the same registration a second time, which is what
+ * the limits are counted against.
+ */
+function bookSeat(registration, seatNumber, email = BOOKER_EMAIL) {
+	return registration.completeBooking({ seats: [seatNumber], ...BOOKER, email });
 }

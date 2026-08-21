@@ -46,6 +46,25 @@ async function mailCaptureEnabled(page) {
 	return !(await response.json()).disabled;
 }
 
+/**
+ * Whether a spec that reads the mail has to stand down, for `test.skip()`.
+ *
+ * Off a developer's machine the mu-plugin may simply not be mounted, and standing
+ * down says so. On CI auth.setup.js has always switched capturing on, so anything
+ * else is a broken run - and skipping would leave every mail test quietly green.
+ */
+async function shouldSkipWithoutMail(page) {
+	if (await mailCaptureEnabled(page)) {
+		return false;
+	}
+
+	if (process.env.CI) {
+		throw new Error(NO_MAIL_CAPTURE);
+	}
+
+	return true;
+}
+
 /** Everything sent to an address so far, oldest first. */
 async function mailSentTo(page, to) {
 	const response = await page.request.get(
@@ -108,7 +127,7 @@ function linkFromMail(mail, contains) {
 module.exports = {
 	uniqueBookerEmail,
 	setMailCapture,
-	mailCaptureEnabled,
+	shouldSkipWithoutMail,
 	NO_MAIL_CAPTURE,
 	mailSentTo,
 	waitForMail,

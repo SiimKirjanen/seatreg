@@ -4,10 +4,9 @@ const { SettingsPage } = require('../settings/settings-page');
 const { LayoutBuilderPage } = require('../layout-builder/layout-builder-page');
 const { HomePage } = require('../home/home-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
+const { monthsFromNow } = require('../../utils/dates');
 
 const SEAT_COUNT = 3;
-
-const BOOKER = { firstName: 'Riina', lastName: 'Tamm', email: 'riina.tamm@example.com' };
 
 const OVERALL = 'Overall';
 const BALCONY = { name: 'Balcony', seats: 2 };
@@ -57,11 +56,11 @@ test.describe('SeatReg Overview screen', () => {
 
 	test('counts a pending booking apart from an approved one', async () => {
 		await settings.allowBookings();
-		await bookSeat(settings, code, 1);
+		await settings.makeBooking(code, { seats: [1] });
 
 		await settings.open(code);
 		await settings.allowBookings({ approved: true });
-		await bookSeat(settings, code, 2);
+		await settings.makeBooking(code, { seats: [2] });
 
 		await overview.openForRegistration(code);
 
@@ -133,35 +132,6 @@ test.describe('SeatReg Overview screen', () => {
 		await expect(overview.dates.last()).toContainText(writtenOut(end));
 	});
 });
-
-/** Make one booking of one seat, and come back to the settings screen. */
-async function bookSeat(settings, code, seatNumber) {
-	const registration = await settings.openRegistration(code);
-
-	await registration.addSeatToBooking(seatNumber);
-	await registration.openCart();
-	await registration.openCheckout();
-
-	await registration.checkoutField('FirstName').fill(BOOKER.firstName);
-	await registration.checkoutField('LastName').fill(BOOKER.lastName);
-	await registration.checkoutField('Email').fill(BOOKER.email);
-
-	await registration.submitBooking();
-
-	await expect(registration.bookingConfirmed).toBeVisible();
-
-	await registration.page.close();
-}
-
-/** The 15th of a month ahead of this one, a day every month has. */
-function monthsFromNow(months) {
-	const date = new Date();
-
-	date.setDate(15);
-	date.setMonth(date.getMonth() + months);
-
-	return date;
-}
 
 /**
  * The day as the screen writes it out, dd.Mon.yyyy.

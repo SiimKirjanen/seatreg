@@ -3,6 +3,7 @@ const { createHash } = require('crypto');
 const { BookingManagerPage, STATUS_TABS } = require('./booking-manager-page');
 const { SettingsPage } = require('../settings/settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
+const { isoDate, fromIsoDate, dayAfter } = require('../../utils/dates');
 
 const SEAT_COUNT = 4;
 
@@ -76,7 +77,7 @@ test.describe('SeatReg Booking manager screen', () => {
 	});
 
 	test('finds a booking by what it was booked under', async () => {
-		await allowSeatsPerBooking(settings, SEATS.length);
+		await settings.allowSeatsPerBooking(SEATS.length);
 
 		await manager.openForRegistration(code);
 
@@ -97,7 +98,7 @@ test.describe('SeatReg Booking manager screen', () => {
 	});
 
 	test('orders the bookings by the column that was picked', async () => {
-		await allowSeatsPerBooking(settings, SEATS.length);
+		await settings.allowSeatsPerBooking(SEATS.length);
 
 		await manager.openForRegistration(code);
 
@@ -127,7 +128,7 @@ test.describe('SeatReg Booking manager screen', () => {
 
 		/* The day the server put the screen on. Working it out here instead
 		   would mean guessing the site's timezone. */
-		const today = fromIso(await manager.calendarDateValue.inputValue());
+		const today = fromIsoDate(await manager.calendarDateValue.inputValue());
 		const tomorrow = dayAfter(today);
 
 		/* Asked for before anything is booked on it: until a day has been
@@ -150,18 +151,6 @@ test.describe('SeatReg Booking manager screen', () => {
 });
 
 /**
- * Let one booking hold more than a seat.
- *
- * A booking added in the manager is held to the registration's own limit the
- * same as one a visitor makes, and that limit is one seat until the registration
- * says otherwise. Only the tests that book several seats pay for it.
- */
-async function allowSeatsPerBooking(settings, count) {
-	await settings.set('maxSeats', String(count));
-	await settings.save();
-}
-
-/**
  * The id the plugin gives one of the three panels: the sha1 of the registration's
  * name with its spaces replaced, and the list's own ending after it.
  */
@@ -173,26 +162,4 @@ function panelId(registrationName, ending) {
 
 function fullName({ firstName, lastName }) {
 	return `${firstName} ${lastName}`;
-}
-
-/** yyyy-mm-dd, how the day travels in the address and in the picker. */
-function isoDate(date) {
-	return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
-		.map((part, index) => (index === 0 ? part : String(part).padStart(2, '0')))
-		.join('-');
-}
-
-/** Read a yyyy-mm-dd day as a local one, which parsing it whole would not do. */
-function fromIso(iso) {
-	const [year, month, day] = iso.split('-').map(Number);
-
-	return new Date(year, month - 1, day);
-}
-
-function dayAfter(date) {
-	const next = new Date(date);
-
-	next.setDate(next.getDate() + 1);
-
-	return next;
 }

@@ -42,8 +42,7 @@ test.describe('Registration booking', () => {
 	});
 
 	test('takes a seat back out of the booking', async () => {
-		await settings.set('maxSeats', '2');
-		await settings.save();
+		await settings.allowSeatsPerBooking(2);
 
 		const registration = await settings.openRegistration(code);
 
@@ -127,15 +126,13 @@ test.describe('Registration booking', () => {
 
 		const registration = await settings.openRegistration(code);
 
-		await registration.bookSeats(1);
-		await fillBookerDetails(registration);
-		await registration.submitBooking();
+		await registration.completeBooking(BOOKER);
 
 		await expect(registration.bookingConfirmed).toBeVisible();
 
 		/* The address of the new booking's status page is the only thing the
 		   registration ever tells the booker about it. */
-		const statusUrl = await registration.bookingStatusLink.getAttribute('href');
+		const statusUrl = await registration.bookingStatusUrl();
 
 		expect(statusUrl).toContain(`seatreg=booking-status`);
 		expect(statusUrl).toContain(`registration=${code}`);
@@ -204,9 +201,7 @@ test.describe('Registration booking', () => {
 
 		const registration = await settings.openRegistration(code);
 
-		await registration.bookSeats(1);
-		await fillBookerDetails(registration);
-		await registration.submitBooking();
+		await registration.completeBooking(BOOKER);
 
 		await expect(registration.bookingConfirmed).toBeVisible();
 		await expect(registration.bookingConfirmedHeader).toContainText('approved');
@@ -216,10 +211,3 @@ test.describe('Registration booking', () => {
 		await expect(registration.seat(1)).toHaveAttribute('data-status', 'tak');
 	});
 });
-
-/** Fill in the one booking the form is asking about. */
-async function fillBookerDetails(registration) {
-	await registration.checkoutField('FirstName').fill(BOOKER.firstName);
-	await registration.checkoutField('LastName').fill(BOOKER.lastName);
-	await registration.checkoutField('Email').fill(BOOKER.email);
-}

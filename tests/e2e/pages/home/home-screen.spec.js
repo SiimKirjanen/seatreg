@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { HomePage } = require('./home-page');
 const { SEATREG_PAGES, SEATREG_MENU_ITEMS, getSeatRegMenuItem } = require('../../utils/navigation');
 const { uniqueRegistrationName, registrationPublicUrlQuery } = require('../../utils/registrations');
+const { escapeForRegExp } = require('../../utils/text');
 
 test.describe('SeatReg Home screen', () => {
 	let homePage;
@@ -70,7 +71,3 @@ test.describe('SeatReg Home screen', () => {
 		}
 	});
 });
-
-function escapeForRegExp(value) {
-	return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}

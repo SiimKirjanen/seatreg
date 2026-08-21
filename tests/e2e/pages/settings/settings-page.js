@@ -3,6 +3,7 @@ const { TIMEOUTS } = require('../../utils/timeouts');
 const { SEATREG_PAGES, openSeatRegScreen, expectOnSeatRegPage } = require('../../utils/navigation');
 const { clickUntil, pickDatepickerDay } = require('../../utils/interactions');
 const { visitorContext } = require('../../utils/auth');
+const { uniqueBookerEmail } = require('../../utils/mail');
 const { uploadThroughMediaModal } = require('../../utils/media');
 const { HomePage } = require('../home/home-page');
 const { LayoutBuilderPage } = require('../layout-builder/layout-builder-page');
@@ -14,6 +15,9 @@ const ROOM_NAME = 'Settings room';
 
 /* Whatever allowPaidBookings() is not told to use. */
 const PAID_BOOKING_PAYMENT = { title: 'Bank transfer', description: 'Pay to the account on the invoice' };
+
+/* Whoever a test that only needs a booking to exist does not name. */
+const BOOKER = { firstName: 'Riina', lastName: 'Tamm' };
 
 /* Looked up by name rather than by selector so a spec never has to know which
    section a setting sits in. */
@@ -436,6 +440,18 @@ class SettingsPage {
 	}
 
 	/**
+	 * Let one booking hold more than a seat, and save whatever else the caller has
+	 * already set.
+	 *
+	 * A booking added in the manager is held to this limit the same as one a
+	 * visitor makes, and it is one seat until the registration says otherwise.
+	 */
+	async allowSeatsPerBooking(count) {
+		await this.set('maxSeats', String(count));
+		await this.save();
+	}
+
+	/**
 	 * Put the registration in a state where a booking can actually be made.
 	 *
 	 * Email verification is the blocker: with it on the booking is written at a
@@ -779,6 +795,31 @@ class SettingsPage {
 	}
 
 	/**
+	 * Make one booking on the registration and come back, for a test whose subject
+	 * is what the booking leaves behind rather than the making of it. Only for a
+	 * registration allowBookings() has already opened the way for.
+	 *
+	 * The booker is given an address of their own, so the mail log can be read for
+	 * this booking alone (tests/e2e/utils/mail.js).
+	 *
+	 * @param {number|number[]} booking.seats @see RegistrationPage#bookSeats
+	 * @return {Promise<{id: string, email: string}>} How to look the booking up
+	 */
+	async makeBooking(code, { seats = 1, email = uniqueBookerEmail(), ...details } = {}) {
+		const registration = await this.openRegistration(code);
+
+		await registration.completeBooking({ seats, ...BOOKER, ...details, email });
+
+		await expect(registration.bookingConfirmed).toBeVisible();
+
+		const id = await registration.bookingId();
+
+		await registration.page.close();
+
+		return { id, email };
+	}
+
+	/**
 	 * Open the registration in a browser that never had the admin session. The
 	 * address comes off the Home card because the path in front of a
 	 * registration's query string depends on the site's permalink settings.
@@ -812,4 +853,4 @@ class SettingsPage {
 	}
 }
 
-module.exports = { SettingsPage, FIELDS, PAID_BOOKING_PAYMENT };
+module.exports = { SettingsPage, FIELDS, PAID_BOOKING_PAYMENT, BOOKER };

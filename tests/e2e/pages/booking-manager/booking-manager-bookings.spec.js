@@ -40,11 +40,7 @@ test.describe('Booking manager bookings', () => {
 	});
 
 	test('approves every seat of the booking that was selected', async () => {
-		/* A booking added in the manager is held to the registration's own limit
-		   on how many seats one booking may hold, and that limit is one seat
-		   until the registration says otherwise. */
-		await settings.set('maxSeats', String(SEATS.length));
-		await settings.save();
+		await settings.allowSeatsPerBooking(SEATS.length);
 
 		await manager.openForRegistration(code);
 
@@ -135,18 +131,14 @@ test.describe('Booking manager bookings', () => {
 
 		const registration = await settings.openRegistration(code);
 
-		await registration.bookSeats(1);
-		await registration.checkoutField('FirstName').fill(VISITOR.firstName);
-		await registration.checkoutField('LastName').fill(VISITOR.lastName);
-		await registration.checkoutField('Email').fill(VISITOR.email);
-		await registration.submitBooking();
+		await registration.completeBooking(VISITOR);
 
 		await expect(registration.bookingConfirmed).toBeVisible();
 
 		/* The address of the status page is all the booker is told about the
 		   booking, so it is also where its id has to be read from. */
-		const statusUrl = await registration.bookingStatusLink.getAttribute('href');
-		const bookingId = new URL(statusUrl).searchParams.get('id');
+		const statusUrl = await registration.bookingStatusUrl();
+		const bookingId = await registration.bookingId();
 
 		expect(statusUrl).toContain(bookingStatusUrlQuery(code, bookingId));
 

@@ -119,8 +119,7 @@ test.describe('Settings booking flow', () => {
 	});
 
 	test('enters the booking details once for every seat', async () => {
-		await settings.set('maxSeats', String(SEAT_COUNT));
-		await settings.save();
+		await settings.allowSeatsPerBooking(SEAT_COUNT);
 
 		const perSeat = await settings.openRegistration(code);
 
@@ -188,12 +187,10 @@ test.describe('Settings booking flow', () => {
 
 		const registration = await settings.openRegistration(code);
 
-		await registration.bookSeats(1);
-		await registration.checkoutField('FirstName').fill(BOOKER.firstName);
-		await registration.checkoutField('LastName').fill(BOOKER.lastName);
-		await registration.checkoutField('Email').fill(BOOKER.email);
-		await registration.customField(PUBLIC_FIELD.label).locator('input').fill(BOOKER.company);
-		await registration.submitBooking();
+		await registration.completeBooking({
+			...BOOKER,
+			customFields: { [PUBLIC_FIELD.label]: BOOKER.company },
+		});
 
 		await expect(registration.bookingConfirmed).toBeVisible();
 

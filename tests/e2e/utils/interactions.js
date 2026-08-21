@@ -39,6 +39,9 @@ async function expectModalHidden(modal) {
 	await expect(modal.page().locator('.modal-backdrop')).toHaveCount(0);
 }
 
+/** Two years either way, past which the picker is not going to arrive. */
+const MAX_MONTH_STEPS = 24;
+
 /**
  * Click a day in a jQuery UI datepicker, stepping to its month first.
  *
@@ -52,7 +55,7 @@ async function pickDatepickerDay(picker, date) {
 
 	const shownMonth = picker.locator('.ui-datepicker-calendar td[data-month]').first();
 
-	for (let step = 0; step < 24 && (await cell.count()) === 0; step += 1) {
+	for (let step = 0; step < MAX_MONTH_STEPS && (await cell.count()) === 0; step += 1) {
 		const shown = new Date(
 			Number(await shownMonth.getAttribute('data-year')),
 			Number(await shownMonth.getAttribute('data-month')),
@@ -61,6 +64,14 @@ async function pickDatepickerDay(picker, date) {
 		const target = new Date(date.getFullYear(), date.getMonth(), 1);
 
 		await picker.locator(target > shown ? '.ui-datepicker-next' : '.ui-datepicker-prev').click();
+	}
+
+	/* Said plainly here: left to the click, a month that was never reached reads
+	   as a day that is somehow unclickable. */
+	if ((await cell.count()) === 0) {
+		throw new Error(
+			`The datepicker did not reach ${date.getFullYear()}-${date.getMonth() + 1} in ${MAX_MONTH_STEPS} steps`
+		);
 	}
 
 	await cell.click();

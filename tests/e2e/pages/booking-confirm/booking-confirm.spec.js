@@ -1,19 +1,17 @@
 const { test, expect } = require('@playwright/test');
 const { BookingConfirmPage } = require('./booking-confirm-page');
 const { BookingStatusPage } = require('../booking-status/booking-status-page');
-const { SettingsPage } = require('../settings/settings-page');
+const { SettingsPage, BOOKER } = require('../settings/settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 const {
 	uniqueBookerEmail,
-	mailCaptureEnabled,
+	shouldSkipWithoutMail,
 	NO_MAIL_CAPTURE,
 	waitForMail,
 	linkFromMail,
 } = require('../../utils/mail');
 
 const SEAT_COUNT = 1;
-
-const BOOKER = { firstName: 'Riina', lastName: 'Tamm' };
 
 const CONFIRMED = 'Booking confirmed';
 const NOT_CONFIRMED = 'We could not confirm your booking';
@@ -30,7 +28,7 @@ test.describe('Booking confirm page', () => {
 	let code;
 
 	test.beforeEach(async ({ page }) => {
-		test.skip(!(await mailCaptureEnabled(page)), NO_MAIL_CAPTURE);
+		test.skip(await shouldSkipWithoutMail(page), NO_MAIL_CAPTURE);
 
 		settings = new SettingsPage(page);
 		bookingConfirm = new BookingConfirmPage(page);
@@ -87,9 +85,7 @@ async function bookSeatForVerification(settings, code, adminPage) {
 
 	const registration = await settings.openRegistration(code);
 
-	await registration.bookSeats(SEAT_COUNT);
-	await registration.fillBooking({ ...BOOKER, email });
-	await registration.submitBooking();
+	await registration.completeBooking({ seats: SEAT_COUNT, ...BOOKER, email });
 
 	// No booking yet, so no address for one - only word that the link is on its way
 	await expect(registration.emailVerificationSent).toBeVisible();

@@ -394,33 +394,36 @@ class RegistrationPage {
 
 	/** @param {string} direction 'in' or 'out' */
 	async zoomMap(direction) {
-		await this.zoomController.locator(`.zoom-action[data-zoom="${direction}"]`).click();
-		await this.#waitForMapToSettle();
+		await this.#moveTheMap(this.zoomController.locator(`.zoom-action[data-zoom="${direction}"]`));
 	}
 
 	/**
-	 * Only the directions that move it back toward where it started do anything:
-	 * a map already at its corner cannot go further up or left.
+	 * Only the directions that move it back toward where it started do anything,
+	 * and what is waited for is the map having moved - so a map already at its
+	 * corner must not be asked to go further up or left.
 	 *
 	 * @param {string} direction up, down, left or right
 	 */
 	async moveMap(direction) {
-		await this.zoomController.locator(`.move-action[data-move="${direction}"]`).click();
-		await this.#waitForMapToSettle();
+		await this.#moveTheMap(this.zoomController.locator(`.move-action[data-move="${direction}"]`));
 	}
 
 	/**
 	 * Every zoom and pan is animated, so a reading taken when the click returns is
-	 * of somewhere the map was only passing through. Two readings the same is what
-	 * says it has arrived.
+	 * of somewhere the map was only passing through - and one taken before the
+	 * animation has started is of where it has not left yet. Having moved off the
+	 * position it began at says it started; two readings the same say it arrived.
 	 */
-	async #waitForMapToSettle() {
+	async #moveTheMap(control) {
+		const start = JSON.stringify(await this.mapPosition());
 		let previous = null;
+
+		await control.click();
 
 		await expect
 			.poll(async () => {
 				const current = JSON.stringify(await this.mapPosition());
-				const settled = current === previous;
+				const settled = current !== start && current === previous;
 
 				previous = current;
 
@@ -538,10 +541,6 @@ class RegistrationPage {
 	}
 
 	/**
-	 * Walk from an empty map to the booking form. A caller asking for more seats
-	 * than the registration allows has to have raised the limit first.
-	 */
-	/**
 	 * Answer the booking form for every seat taken. Fields are scoped to their own
 	 * block, since the primary email cannot be told apart from the form as a whole.
 	 *
@@ -567,15 +566,50 @@ class RegistrationPage {
 		}
 	}
 
-	async bookSeats(count) {
-		for (let number = 1; number <= count; number += 1) {
+	/**
+	 * Walk from an empty map to the booking form. A caller asking for more seats
+	 * than the registration allows has to have raised the limit first.
+	 *
+	 * @param {number|number[]} seats How many seats from the first, or which ones
+	 */
+	async bookSeats(seats) {
+		const numbers = Array.isArray(seats)
+			? seats
+			: Array.from({ length: seats }, (_, index) => index + 1);
+
+		for (const number of numbers) {
 			await this.addSeatToBooking(number);
 		}
 
-		await expect(this.seatsInCart).toHaveText(String(count));
+		await expect(this.seatsInCart).toHaveText(String(numbers.length));
 
 		await this.openCart();
 		await this.openCheckout();
+	}
+
+	/**
+	 * The whole walk, from an empty map to a submitted booking.
+	 *
+	 * What the page does with it is left to the caller: a booking can be confirmed,
+	 * refused on the registration's own rules, or answered with word that a
+	 * verification link is on its way instead.
+	 *
+	 * @param {number|number[]} booking.seats @see bookSeats
+	 */
+	async completeBooking({ seats = 1, ...details }) {
+		await this.bookSeats(seats);
+		await this.fillBooking(details);
+		await this.submitBooking();
+	}
+
+	/** The address of the booking's status page, all the booker is ever told. */
+	bookingStatusUrl() {
+		return this.bookingStatusLink.getAttribute('href');
+	}
+
+	/** @return {Promise<string>} The new booking's id, read out of that address */
+	async bookingId() {
+		return new URL(await this.bookingStatusUrl()).searchParams.get('id');
 	}
 
 	/** The form is drawn seat by seat when the dialog opens. */

@@ -5,8 +5,6 @@ const { uniqueRegistrationName } = require('../../utils/registrations');
 
 const SEAT_COUNT = 2;
 
-const BOOKER = { firstName: 'Riina', lastName: 'Tamm', email: 'riina.tamm@example.com' };
-
 const PAYMENT = { title: 'Bank transfer', description: 'Pay to the account on the invoice' };
 
 const PAYMENT_INSTRUCTIONS = 'Payment is due a week before the event.';
@@ -56,9 +54,15 @@ test.describe('Settings payment options', () => {
 
 		await expect(settings.customPayment(PAYMENT.title)).toBeVisible();
 
-		const bookingId = await bookSeat(settings, code);
+		/* The status page is the only place the payment settings show, and its
+		   address is only ever given to the booker, so there has to be a booking
+		   to have an id to look one up by. */
+		await settings.open(code);
+		await settings.allowBookings();
 
-		await bookingStatus.goto(code, bookingId);
+		const booking = await settings.makeBooking(code);
+
+		await bookingStatus.goto(code, booking.id);
 
 		await expect(bookingStatus.content).toContainText(PAYMENT_INSTRUCTIONS);
 
@@ -140,33 +144,3 @@ test.describe('Settings payment options', () => {
 		);
 	});
 });
-
-/**
- * Make one booking and hand back its id.
- *
- * The status page is the only place the payment settings show, and the address
- * of one is only ever given to the booker, so a booking has to be made to have
- * an id to look one up by.
- *
- * @return {Promise<string>} The new booking's id
- */
-async function bookSeat(settings, code) {
-	await settings.open(code);
-	await settings.allowBookings();
-
-	const registration = await settings.openRegistration(code);
-
-	await registration.bookSeats(1);
-	await registration.checkoutField('FirstName').fill(BOOKER.firstName);
-	await registration.checkoutField('LastName').fill(BOOKER.lastName);
-	await registration.checkoutField('Email').fill(BOOKER.email);
-	await registration.submitBooking();
-
-	await expect(registration.bookingConfirmed).toBeVisible();
-
-	const statusUrl = await registration.bookingStatusLink.getAttribute('href');
-
-	await registration.page.close();
-
-	return new URL(statusUrl).searchParams.get('id');
-}

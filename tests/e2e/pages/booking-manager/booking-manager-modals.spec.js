@@ -44,7 +44,7 @@ test.describe('Booking manager modals', () => {
 	});
 
 	test('adds a booking of several seats under one booking id', async () => {
-		await allowSeatsPerBooking(settings, SEATS.length);
+		await settings.allowSeatsPerBooking(SEATS.length);
 
 		await manager.openForRegistration(code);
 
@@ -105,7 +105,7 @@ test.describe('Booking manager modals', () => {
 
 	test('changes the seat, name and extra answers of a booking', async () => {
 		await settings.addCustomField(COMPANY);
-		await allowSeatsPerBooking(settings, SEATS.length);
+		await settings.allowSeatsPerBooking(SEATS.length);
 
 		await manager.openForRegistration(code);
 
@@ -151,16 +151,3 @@ test.describe('Booking manager modals', () => {
 		).toContainText(`${COMPANY.label}: ${ANSWERED_AGAIN}`);
 	});
 });
-
-/**
- * Let one booking hold more than a seat, and save whatever else the test has
- * already set.
- *
- * A booking added in the manager is held to the registration's own limit the
- * same as one a visitor makes, and that limit is one seat until the registration
- * says otherwise.
- */
-async function allowSeatsPerBooking(settings, count) {
-	await settings.set('maxSeats', String(count));
-	await settings.save();
-}

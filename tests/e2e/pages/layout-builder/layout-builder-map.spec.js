@@ -3,6 +3,7 @@ const { test, expect } = require('@playwright/test');
 const { LayoutBuilderPage } = require('./layout-builder-page');
 const { HomePage } = require('../home/home-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
+const { escapeForRegExp } = require('../../utils/text');
 
 const ROOM = 'Main hall';
 const SEAT_COUNT = 3;
@@ -233,7 +234,3 @@ test.describe('Layout builder map', () => {
 		await expect(registration.seatsWithLegend(LEGEND)).toHaveCount(1);
 	});
 });
-
-function escapeForRegExp(value) {
-	return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}

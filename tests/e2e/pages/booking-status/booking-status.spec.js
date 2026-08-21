@@ -1,18 +1,15 @@
 const { test, expect } = require('@playwright/test');
 const { BookingStatusPage } = require('./booking-status-page');
-const { SettingsPage, PAID_BOOKING_PAYMENT } = require('../settings/settings-page');
+const { SettingsPage, PAID_BOOKING_PAYMENT, BOOKER } = require('../settings/settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 const {
-	uniqueBookerEmail,
-	mailCaptureEnabled,
+	shouldSkipWithoutMail,
 	NO_MAIL_CAPTURE,
 	mailSentTo,
 	waitForMail,
 } = require('../../utils/mail');
 
 const SEAT_COUNT = 2;
-
-const BOOKER = { firstName: 'Riina', lastName: 'Tamm' };
 
 const CUSTOM_FIELD = { label: 'Meal', type: 'text' };
 const MEAL = 'Vegetarian';
@@ -50,7 +47,10 @@ test.describe('Booking status page', () => {
 		await settings.set('maxSeats', String(SEAT_COUNT));
 		await settings.allowBookings();
 
-		const booking = await bookSeats(settings, code, SEAT_COUNT, { [CUSTOM_FIELD.label]: MEAL });
+		const booking = await settings.makeBooking(code, {
+			seats: SEAT_COUNT,
+			customFields: { [CUSTOM_FIELD.label]: MEAL },
+		});
 
 		await bookingStatus.goto(code, booking.id);
 
@@ -76,7 +76,7 @@ test.describe('Booking status page', () => {
 
 		await settings.priceSeats(code, SEAT_PRICE, SEAT_COUNT);
 
-		const booking = await bookSeats(settings, code, 1);
+		const booking = await settings.makeBooking(code);
 
 		await bookingStatus.goto(code, booking.id);
 
@@ -104,13 +104,13 @@ test.describe('Booking status page', () => {
 
 	test('sends the booking receipt again', async ({ page }) => {
 		// The only one here that needs a receipt to have gone out at all
-		test.skip(!(await mailCaptureEnabled(page)), NO_MAIL_CAPTURE);
+		test.skip(await shouldSkipWithoutMail(page), NO_MAIL_CAPTURE);
 
 		await settings.allowBookings({ approved: true });
 		await settings.set('approvedBookingEmail', true);
 		await settings.save();
 
-		const booking = await bookSeats(settings, code, 1);
+		const booking = await settings.makeBooking(code);
 
 		// The receipt the booking sent, which is what puts the button on the page
 		await waitForMail(page, booking.email);
@@ -128,7 +128,7 @@ test.describe('Booking status page', () => {
 	test('offers the booking as a PDF only while the settings allow one', async () => {
 		await settings.allowBookings({ approved: true });
 
-		const booking = await bookSeats(settings, code, 1);
+		const booking = await settings.makeBooking(code);
 
 		await bookingStatus.goto(code, booking.id);
 
@@ -147,27 +147,3 @@ test.describe('Booking status page', () => {
 		await expect(bookingStatus.pdfLink).toHaveCount(0);
 	});
 });
-
-/**
- * Make one booking and hand back what is needed to look it up.
- *
- * @param {Object} customFields Answers keyed by the field's label
- * @return {Promise<{id: string, email: string}>}
- */
-async function bookSeats(settings, code, seatCount, customFields = {}) {
-	const email = uniqueBookerEmail();
-
-	const registration = await settings.openRegistration(code);
-
-	await registration.bookSeats(seatCount);
-	await registration.fillBooking({ ...BOOKER, email, customFields });
-	await registration.submitBooking();
-
-	await expect(registration.bookingConfirmed).toBeVisible();
-
-	const statusUrl = await registration.bookingStatusLink.getAttribute('href');
-
-	await registration.page.close();
-
-	return { id: new URL(statusUrl).searchParams.get('id'), email };
-}

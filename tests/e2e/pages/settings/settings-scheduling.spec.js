@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { SettingsPage } = require('./settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 const { siteLocalTime } = require('../../utils/site');
+const { isoDate, monthsFromNow, dayNextMonth } = require('../../utils/dates');
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -44,7 +45,7 @@ test.describe('Settings scheduling', () => {
 
 	test('keeps the calendar dates that were picked', async () => {
 		const dates = CALENDAR_DAYS.map(dayNextMonth);
-		const stored = dates.map(storedCalendarDate);
+		const stored = dates.map(isoDate);
 
 		await settings.set('usingCalendar', true);
 		await settings.pickCalendarDates(dates);
@@ -135,26 +136,6 @@ test.describe('Settings scheduling', () => {
 	});
 });
 
-/** The 15th of a month either side of this one. */
-function monthsFromNow(months) {
-	const date = new Date();
-
-	date.setDate(15);
-	date.setMonth(date.getMonth() + months);
-
-	return date;
-}
-
-function dayNextMonth(day) {
-	const date = new Date();
-
-	date.setDate(1);
-	date.setMonth(date.getMonth() + 1);
-	date.setDate(day);
-
-	return date;
-}
-
 /**
  * The milliseconds a picked day is stored as. Both pickers put it at noon UTC so
  * the day survives whatever timezone either end of the trip is in.
@@ -169,13 +150,6 @@ function displayedDate(date) {
 		.map((part) => String(part).padStart(2, '0'))
 		.concat(date.getFullYear())
 		.join('.');
-}
-
-/** yyyy-mm-dd, how the calendar picker stores a day. */
-function storedCalendarDate(date) {
-	return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
-		.map((part, index) => (index === 0 ? part : String(part).padStart(2, '0')))
-		.join('-');
 }
 
 /** How the registration names a date in the notice it shuts visitors out with. */
