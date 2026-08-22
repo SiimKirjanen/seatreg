@@ -87,6 +87,26 @@ test.describe('Booking manager bookings', () => {
 		await expect(manager.pendingNotice).toContainText('1');
 	});
 
+	/* The row's more-info says what a booking is now; this is the only place that
+	   says how it got there, and the only reading of the log a booking keeps. */
+	test('names what happened to the booking in its activity', async () => {
+		await manager.openForRegistration(code);
+
+		const { bookingId } = await manager.addBooking({ seats: [SEATS[0]] });
+
+		await manager.applyBookingAction('pending', bookingId, 'approve');
+
+		await manager.openStatusTab('approved');
+		await manager.openMoreInfo('approved', bookingId);
+		await manager.openBookingActivity('approved', bookingId);
+
+		await expect(manager.activityLogs).toContainText(
+			new RegExp(
+				`Booking approved \\(Booking manager\\) by ${WP_ADMIN_USER.username} \\(id \\d+\\)`
+			)
+		);
+	});
+
 	test('deletes a booking and says who deleted it', async () => {
 		await manager.openForRegistration(code);
 

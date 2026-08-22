@@ -1,8 +1,18 @@
 const { test, expect } = require('@playwright/test');
 const { HomePage } = require('./home-page');
-const { SEATREG_PAGES, SEATREG_MENU_ITEMS, getSeatRegMenuItem } = require('../../utils/navigation');
+const {
+	SEATREG_PAGES,
+	SEATREG_MENU_ITEMS,
+	getSeatRegMenu,
+	getSeatRegMenuItem,
+} = require('../../utils/navigation');
 const { uniqueRegistrationName, registrationPublicUrlQuery } = require('../../utils/registrations');
 const { escapeForRegExp } = require('../../utils/text');
+const { loginToWordPress, visitorContext } = require('../../utils/auth');
+const { createUser } = require('../../utils/fixtures');
+
+/* What WordPress says to anyone the plugin's capabilities do not cover. */
+const NOT_ALLOWED = 'Sorry, you are not allowed to access this page.';
 
 test.describe('SeatReg Home screen', () => {
 	let homePage;
@@ -25,6 +35,28 @@ test.describe('SeatReg Home screen', () => {
 		for (const item of SEATREG_MENU_ITEMS) {
 			await expect(getSeatRegMenuItem(page, item.label)).toBeVisible();
 		}
+	});
+
+	/* The other half of that: the plugin adds its two capabilities to
+	   administrators alone, and every screen is behind one of them. An editor has
+	   the run of wp-admin and none of SeatReg. */
+	test('keeps a non-administrator out of the SeatReg screens', async ({ page, browser }) => {
+		const editor = await createUser(page, { role: 'editor' });
+
+		const context = await visitorContext(browser);
+		const editorPage = await context.newPage();
+
+		await loginToWordPress(editorPage, editor.username, editor.password);
+
+		await expect(getSeatRegMenu(editorPage)).toHaveCount(0);
+
+		/* The menu only hides the way in. The screen itself is what has to turn
+		   them away, since its address is no secret. */
+		await editorPage.goto(`/wp-admin/admin.php?page=${SEATREG_PAGES.HOME}`);
+
+		await expect(editorPage.locator('body')).toContainText(NOT_ALLOWED);
+
+		await context.close();
 	});
 
 	test('refuses to submit an empty registration name', async ({ page }) => {

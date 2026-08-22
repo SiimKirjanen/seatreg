@@ -152,6 +152,37 @@ test.describe('Settings general', () => {
 		   not. */
 		await expect(registration.bookingConfirmed).toBeHidden();
 	});
+
+	/* The sibling of the limit above, and counted differently: that one counts
+	   bookings, this one counts the seats across all of them, so it is only
+	   reached by a booking of more than one seat. */
+	test('turns away a WordPress user who is over their total seat limit', async () => {
+		code = await settings.openForNewRegistrationWithSeats(
+			uniqueRegistrationName('Settings general seat limit'),
+			SEAT_COUNT
+		);
+
+		await settings.set('requireWpLogin', true);
+		await settings.set('wpUserSeatLimit', '2');
+		await settings.set('maxSeats', String(SEAT_COUNT));
+		await settings.allowBookings();
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.completeBooking({ seats: [1, 2], ...BOOKER, email: BOOKER_EMAIL });
+
+		await expect(registration.bookingConfirmed).toBeVisible();
+
+		/* The two seats already booked have used the allowance up, so a third
+		   is refused however few bookings it would make. */
+		await registration.page.reload();
+		await bookSeat(registration, 3);
+
+		await expect(registration.bookingRefusal).toContainText(
+			'Allowed number of total booked seats per user is 2'
+		);
+		await expect(registration.bookingConfirmed).toBeHidden();
+	});
 });
 
 /**

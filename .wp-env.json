@@ -3,7 +3,8 @@
 	"core": null,
 	"plugins": ["."],
 	"mappings": {
-		"wp-content/mu-plugins/seatreg-e2e-mail-log.php": "./tests/e2e/mu-plugins/mail-log.php"
+		"wp-content/mu-plugins/seatreg-e2e-mail-log.php": "./tests/e2e/mu-plugins/mail-log.php",
+		"wp-content/mu-plugins/seatreg-e2e-fixtures.php": "./tests/e2e/mu-plugins/fixtures.php"
 	},
 	"port": 8889,
 	"testsEnvironment": false,

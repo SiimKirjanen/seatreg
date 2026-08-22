@@ -18,4 +18,18 @@ function validateToken(request, token) {
 	return request.get(endpointUrl('validate-token', { api_token: token }));
 }
 
-module.exports = { SEATREG_API_VERSION, endpointUrl, validateToken };
+/**
+ * The bookings the companion and the Android app read.
+ *
+ * A calendar date is asked for whether or not the registration runs on one; it
+ * is only used by those that do, and left out the endpoint answers 400.
+ *
+ * @param {string} calendarDate A yyyy-mm-dd date
+ */
+function bookings(request, token, calendarDate) {
+	return request.get(
+		endpointUrl('bookings', { api_token: token, calendar_date: calendarDate })
+	);
+}
+
+module.exports = { SEATREG_API_VERSION, endpointUrl, validateToken, bookings };

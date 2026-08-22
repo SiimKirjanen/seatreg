@@ -24,9 +24,15 @@ const ANSWERED_AGAIN = 'Beta';
 
 const SEAT_ALREADY_BOOKED = 'Seat is already booked/pending';
 
-/* The two modals a booking is made and changed in. Both talk in seat ids, which
-   are the layout's and not anything a number on screen shows, so every test here
-   either reads one off the id lookup or is handed one back by the booking it made. */
+/* An import file is read by position, fifteen columns to a row, so a row of any
+   other width is turned away before anything in it is looked at. */
+const MALFORMED_CSV = 'Zoe,Vaher,zoe.vaher@example.com\n';
+const CSV_WRONG_COLUMN_COUNT = 'Each row must contain exactly 15 columns';
+
+/* The modals a booking is made, changed and moved in bulk through. All of them
+   talk in seat ids, which are the layout's and not anything a number on screen
+   shows, so every test here either reads one off the id lookup or is handed one
+   back by the booking it made. */
 
 test.describe('Booking manager modals', () => {
 	let manager;
@@ -101,6 +107,78 @@ test.describe('Booking manager modals', () => {
 		/* A booking that was turned down leaves the modal where it is, which is
 		   the whole difference from one that went through. */
 		await expect(manager.addModal).toBeVisible();
+	});
+
+	/* The round trip the import modal itself describes: the file it takes is the
+	   one the booking manager writes. Exported rows carry the seat and room ids
+	   the layout gave them, which is the only place a valid one can come from -
+	   and a fresh booking id, so a row can be imported back without clashing with
+	   the booking it came from. */
+	test('imports the bookings from an exported file, and refuses a file it cannot read', async () => {
+		await manager.openForRegistration(code);
+
+		const { bookingId } = await manager.addBooking({ seats: [SEATS[0]] });
+
+		const exported = await manager.exportedBookings('csv', { s1: 'on', s2: 'on' });
+
+		expect(exported).toContain(SEATS[0].email);
+
+		/* The seat has to be free again before the file can go back in, and only a
+		   permanent delete lets go of it. */
+		await manager.applyBookingAction('pending', bookingId, 'delete');
+		await manager.openStatusTab('deleted');
+		await manager.permanentlyDelete(bookingId);
+
+		await manager.openImportModal();
+		await manager.uploadBookingsCsv(MALFORMED_CSV);
+
+		await expect(manager.importError).toContainText(CSV_WRONG_COLUMN_COUNT);
+
+		/* Reopened rather than handed a second file: nothing lets go of the one
+		   that was refused until the modal is opened again. */
+		await manager.openImportModal();
+		await manager.uploadBookingsCsv(exported);
+
+		await expect(manager.importFinalizationModal).toBeVisible();
+		await expect(manager.importRows).toHaveCount(1);
+		await expect(manager.importSummary).toContainText('total of 1 bookings');
+
+		const answer = await manager.startBookingImport();
+
+		expect(answer.success).toBe(true);
+
+		await manager.reload();
+		await manager.openStatusTab('pending');
+
+		/* Back under a booking id of its own: the export writes a new one into
+		   every row, which is what lets a file be imported beside what it came
+		   from rather than only in place of it. */
+		await expect(
+			manager
+				.statusPanel('pending')
+				.locator(`.reg-seat-item[data-booker-email="${SEATS[0].email}"]`)
+		).toBeVisible();
+	});
+
+	/* The modal filters nothing on screen - it writes the address of the export
+	   and opens it - so the address is the whole of what it does. */
+	test('builds the export address from the filters that were picked', async () => {
+		await manager.openForRegistration(code);
+		await manager.openExportFilters('csv');
+
+		await manager.exportFilter('name').fill(SEATS[0].lastName);
+		await manager.exportFilter('s2').uncheck();
+
+		const generated = new URL(await manager.generateExportUrl('csv'));
+
+		expect(generated.searchParams.get('seatreg')).toBe('csv');
+		expect(generated.searchParams.get('code')).toBe(code);
+		expect(generated.searchParams.get('name')).toBe(SEATS[0].lastName);
+
+		/* The boxes carry no value of their own, and an unticked one is left out
+		   of the address entirely - which is how the server reads it as off. */
+		expect(generated.searchParams.get('s1')).toBe('on');
+		expect(generated.searchParams.has('s2')).toBe(false);
 	});
 
 	test('changes the seat, name and extra answers of a booking', async () => {

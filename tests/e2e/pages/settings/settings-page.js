@@ -30,9 +30,16 @@ const FIELDS = {
 	maxSeats: { tab: 'general', selector: '#registration-max-seats', kind: 'text' },
 	usingSeats: { tab: 'general', selector: '#using-seats', kind: 'checkbox' },
 	wpUserBookingLimit: { tab: 'general', selector: '#wp-user-booking-limit', kind: 'text' },
+	wpUserSeatLimit: { tab: 'general', selector: '#wp-user-bookings-seat-limit', kind: 'text' },
 	bookingEmailLimit: { tab: 'general', selector: '#bookings-email-limit', kind: 'text' },
 
 	usePending: { tab: 'booking-flow', selector: '#use-pending', kind: 'checkbox' },
+	pendingExpiration: { tab: 'booking-flow', selector: '#pending-expiration', kind: 'text' },
+	redirectToStatusPage: {
+		tab: 'booking-flow',
+		selector: '#booking-redirect-status-page',
+		kind: 'checkbox',
+	},
 
 	usingCalendar: { tab: 'scheduling', selector: '#using-calendar', kind: 'checkbox' },
 	startTime: { tab: 'scheduling', selector: '#registration-start-time', kind: 'time' },
@@ -208,6 +215,23 @@ class SettingsPage {
 	/** @param {string} name A key of FIELDS */
 	field(name) {
 		return this.page.locator(this.#fieldConfig(name).selector);
+	}
+
+	/* Booking flow */
+
+	/**
+	 * Carries no id of its own: what it posts is the payment status it names, and
+	 * the plugin reads the box being there at all as the answer.
+	 */
+	get pendingExpirationProcessing() {
+		return this.form.locator(
+			'input[name="pending-expiration-payment-statuses[]"][value="processing"]'
+		);
+	}
+
+	/** Only rendered while WP-Cron looks like it is not running. */
+	get cronWarning() {
+		return this.sectionPanel('booking-flow').locator('.alert-warning');
 	}
 
 	/* Scheduling. Each registration date is a pair: a dd.mm.yyyy display input

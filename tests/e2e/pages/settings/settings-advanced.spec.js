@@ -1,7 +1,8 @@
 const { test, expect } = require('@playwright/test');
-const { SettingsPage } = require('./settings-page');
+const { SettingsPage, BOOKER } = require('./settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
-const { validateToken } = require('../../utils/public-api');
+const { validateToken, bookings } = require('../../utils/public-api');
+const { isoDate } = require('../../utils/dates');
 
 /* One of every kind the builder offers. The select's options are what it puts
    in front of a booker, so they are named rather than counted. */
@@ -197,5 +198,34 @@ test.describe('Settings advanced', () => {
 		const refused = await validateToken(request, secret);
 
 		expect(refused.status()).toBe(403);
+	});
+
+	/* What the API is for: validate-token only says the token is good, this is the
+	   one endpoint that hands the bookings over, and it is what both the companion
+	   app and the Android app are built on. */
+	test('reads the registration bookings with a token', async ({ request }) => {
+		const token = await settings.createApiToken();
+		const secret = await token.getAttribute('data-token');
+
+		await settings.set('publicApi', true);
+		await settings.allowBookings();
+
+		const booking = await settings.makeBooking(code);
+
+		const answered = await bookings(request, secret, isoDate(new Date()));
+
+		expect(answered.ok()).toBe(true);
+
+		const seated = (await answered.json()).bookings.find(
+			(row) => row.booking_id === booking.id
+		);
+
+		expect(seated).toBeTruthy();
+		expect(seated.first_name).toBe(BOOKER.firstName);
+		expect(seated.booker_email).toBe(booking.email);
+
+		/* The room the seat was drawn in is put on the row by the endpoint - it is
+		   in the layout rather than on the booking. */
+		expect(seated.room_name).toBeTruthy();
 	});
 });

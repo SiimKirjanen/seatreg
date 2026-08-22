@@ -162,6 +162,62 @@ class BookingManagerPage {
 			.first();
 	}
 
+	/* Payments, also inside the row's more-info panel. The Deleted list renders
+	   the block read only, so there is nothing to act on there.
+
+	   The log and the box that adds to it are only rendered once the registration
+	   has a way to be paid, or once a log line exists - which is why the specs for
+	   this start from a registration allowPaidBookings() has opened up. */
+
+	paymentStatus(status, bookingId, options) {
+		return this.moreInfo(status, bookingId, options).locator('[data-place="payment-status"]');
+	}
+
+	paymentStatusSelect(status, bookingId, options) {
+		return this.moreInfo(status, bookingId, options).locator('select[name="payment-status"]');
+	}
+
+	changePaymentStatusButton(status, bookingId, options) {
+		return this.moreInfo(status, bookingId, options).locator(
+			'[data-action="change-payment-status"]'
+		);
+	}
+
+	/** Three divs to a line - the status, when it happened and the message. */
+	paymentLog(status, bookingId, options) {
+		return this.moreInfo(status, bookingId, options).locator('.payment-log-wrap');
+	}
+
+	newPaymentLogType(status, bookingId, options) {
+		return this.moreInfo(status, bookingId, options).locator('.payment-log-type');
+	}
+
+	newPaymentLogMessage(status, bookingId, options) {
+		return this.moreInfo(status, bookingId, options).locator('.payment-log-message');
+	}
+
+	addPaymentLogButton(status, bookingId, options) {
+		return this.moreInfo(status, bookingId, options).locator('[data-action="add-payment-log"]');
+	}
+
+	/* Booking activity. One modal for the screen, filled in from the row whose
+	   button was clicked. */
+
+	get activityModal() {
+		return this.panel.locator('#booking-activity-modal');
+	}
+
+	/** Two divs to a line: when it happened, and what happened. */
+	get activityLogs() {
+		return this.activityModal.locator('.activity-modal__logs');
+	}
+
+	viewActivityButton(status, bookingId, options) {
+		return this.moreInfo(status, bookingId, options).locator(
+			'[data-action="view-booking-activity"]'
+		);
+	}
+
 	/* Choosing what to do with a booking, and doing it */
 
 	bookingActionCheckbox(status, bookingId, action, options) {
@@ -314,6 +370,65 @@ class BookingManagerPage {
 		return this.editModal.locator('#edit-update-btn');
 	}
 
+	/* Export filtering. The modal filters nothing on screen: it builds the address
+	   of the export link that opened it, and opens that in a tab of its own. */
+
+	get exportFilterModal() {
+		return this.panel.locator('#bookings-file-modal');
+	}
+
+	/** @param {string} name name, email, s1, s2 or s3 */
+	exportFilter(name) {
+		return this.exportFilterModal.locator(`[name="${name}"]`);
+	}
+
+	get generateExportButton() {
+		return this.exportFilterModal.locator('#generate-bookings-file');
+	}
+
+	/* Importing bookings. Two modals: one takes the file and has the server read
+	   it, the second shows what it made of it and is where the import is run. */
+
+	get importBookingsButton() {
+		return this.panel.locator('.import-bookings');
+	}
+
+	get importModal() {
+		return this.panel.locator('#import-bookings-modal');
+	}
+
+	/** There is no upload button: the file input's change is what asks. */
+	get importFileInput() {
+		return this.importModal.locator('input[name="csv-file"]');
+	}
+
+	get importError() {
+		return this.importModal.locator('.import-booking-modal-error');
+	}
+
+	/** Rendered in place of the form on a registration running on a calendar. */
+	get importUnsupportedNotice() {
+		return this.importModal.locator('.alert-warning');
+	}
+
+	get importFinalizationModal() {
+		return this.panel.locator('#import-bookings-finalization-modal');
+	}
+
+	get importSummary() {
+		return this.importFinalizationModal.locator('[data-element="modal-info"]');
+	}
+
+	get importRows() {
+		return this.importFinalizationModal.locator(
+			'.import-bookings-finalization-modal__booking'
+		);
+	}
+
+	get startImportButton() {
+		return this.importFinalizationModal.locator('[data-action="start-booking-import"]');
+	}
+
 	/* Calendar mode. Only rendered when the registration runs on a calendar. */
 
 	/** Written out for a locale rather than left as a date. */
@@ -389,6 +504,50 @@ class BookingManagerPage {
 		await this.bookingRow(status, bookingId, options).locator('.show-more-info').click();
 
 		await expect(this.moreInfo(status, bookingId, options)).toBeVisible();
+	}
+
+	/**
+	 * Nothing is re-rendered: the page writes the status it picked into every row
+	 * of the booking itself, so the request having finished is what there is to
+	 * wait for.
+	 *
+	 * @param {string} paymentStatus As the option posts it, e.g. 'completed'
+	 */
+	async changePaymentStatus(status, bookingId, paymentStatus, options) {
+		const changed = this.#rerendered('seatreg_booking_payment_status_change');
+
+		await this.paymentStatusSelect(status, bookingId, options).selectOption(paymentStatus);
+		await this.changePaymentStatusButton(status, bookingId, options).click();
+
+		await changed;
+	}
+
+	/** @param {string} log.type ok, error or info */
+	async addPaymentLog(status, bookingId, { type, message }, options) {
+		const added = this.#rerendered('seatreg_create_payment_log');
+
+		await this.newPaymentLogType(status, bookingId, options).selectOption(type);
+		await this.newPaymentLogMessage(status, bookingId, options).fill(message);
+		await this.addPaymentLogButton(status, bookingId, options).click();
+
+		await added;
+	}
+
+	/**
+	 * The modal asks for the log only once it is on screen, and it is emptied
+	 * before every open, so the answer is what says there is anything to read.
+	 * Asked for over GET, unlike everything else on this screen.
+	 */
+	async openBookingActivity(status, bookingId, options) {
+		const fetched = this.page.waitForResponse(
+			(response) => response.url().includes('seatreg_get_booking_logs'),
+			{ timeout: TIMEOUTS.NAVIGATION }
+		);
+
+		await clickUntil(this.viewActivityButton(status, bookingId, options), this.activityModal);
+		await expectModalShown(this.activityModal);
+
+		await fetched;
 	}
 
 	/**
@@ -619,6 +778,122 @@ class BookingManagerPage {
 	async closeModal(modal) {
 		await modal.locator('.modal-footer [data-dismiss="modal"]').click();
 		await expectModalHidden(modal);
+	}
+
+	/** @param {string} type pdf, xlsx, text or csv */
+	async openExportFilters(type) {
+		await clickUntil(this.exportLink(type), this.exportFilterModal);
+		await expectModalShown(this.exportFilterModal);
+	}
+
+	/**
+	 * The address the filters built. Caught on its way out and stopped there:
+	 * what it says is the whole subject, and letting it go would download a file
+	 * into a tab nothing closes.
+	 *
+	 * @return {Promise<string>}
+	 */
+	async generateExportUrl(type) {
+		const context = this.page.context();
+		const wanted = (url) => url.searchParams.get('seatreg') === type;
+
+		let generated = null;
+
+		await context.route(wanted, (route) => {
+			generated = route.request().url();
+
+			return route.abort();
+		});
+
+		await this.generateExportButton.click();
+
+		await expect.poll(() => generated, { timeout: TIMEOUTS.NAVIGATION }).not.toBeNull();
+
+		await context.unroute(wanted);
+
+		return generated;
+	}
+
+	/**
+	 * An export as the server writes it, fetched rather than downloaded.
+	 *
+	 * Nothing is exported unless the address says which lists to draw from, which
+	 * is what the filtering modal is for, so a caller says so here too.
+	 *
+	 * @param {Object} filters Query parameters, e.g. { s1: 'on' }
+	 * @return {Promise<string>} The file's contents
+	 */
+	async exportedBookings(type, filters = {}) {
+		const href = await this.exportLink(type).getAttribute('href');
+		const query = new URLSearchParams(filters);
+
+		const response = await this.page.request.get(`${href}&${query}`);
+
+		expect(response.ok()).toBeTruthy();
+
+		return response.text();
+	}
+
+	/**
+	 * Always onto a screen that has just loaded.
+	 *
+	 * What the server makes of the file is drawn by a handler bound to the
+	 * finalization modal as it stood at load rather than delegated
+	 * (seatreg_admin.js:1107), so anything that re-renders the list - a search, a
+	 * sort, any bulk action - replaces that modal with one nothing is listening
+	 * to, and the import then finalizes an empty list without saying so.
+	 *
+	 * The reload also lets go of a file that was refused. The trigger empties the
+	 * input on its way in, but not while its own backdrop is over it, and until
+	 * something does, picking the same file again is no change for the browser to
+	 * report.
+	 */
+	async openImportModal() {
+		await this.reload();
+
+		await this.importBookingsButton.click();
+		await expectModalShown(this.importModal);
+	}
+
+	/**
+	 * Hand the file over and wait for the server to have read it. Which modal is
+	 * left on screen is the answer, so it is not judged here: a file that was read
+	 * hands over to the finalization modal, one that was not leaves the reason in
+	 * the modal that is already open.
+	 *
+	 * @param {string} csv The whole file
+	 */
+	async uploadBookingsCsv(csv, { fileName = 'bookings.csv' } = {}) {
+		await this.importFileInput.setInputFiles({
+			name: fileName,
+			mimeType: 'text/csv',
+			buffer: Buffer.from(csv),
+		});
+
+		/* Waited for on the screen rather than on the request: the file goes up as
+		   multipart, and a body Playwright cannot decode leaves postData() empty,
+		   so there is nothing there to tell this request from any other. */
+		await expect
+			.poll(
+				async () => {
+					if (await this.importFinalizationModal.isVisible()) {
+						return 'read';
+					}
+
+					return (await this.importError.innerText()).trim() || null;
+				},
+				{ timeout: TIMEOUTS.NAVIGATION }
+			)
+			.not.toBeNull();
+	}
+
+	/** @return {Promise<Object>} The parsed reply. @see submitAddBooking */
+	async startBookingImport() {
+		const imported = this.#rerendered('seatreg_import_bookings');
+
+		await this.startImportButton.click();
+
+		return (await imported).json();
 	}
 
 	/**

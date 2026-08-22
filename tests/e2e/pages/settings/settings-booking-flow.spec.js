@@ -23,11 +23,18 @@ const BOOKER = {
 	company: 'Kalev',
 };
 
+const PENDING_EXPIRATION_MINUTES = 30;
+
+const EXPIRES_AFTER = `a pending booking is automatically removed after ${PENDING_EXPIRATION_MINUTES} minutes`;
+const EXPIRES_WITH_PROCESSING =
+	'Expired pending bookings are also removed even if they have one of these payment statuses: Processing';
+
 /* Everything on this tab shapes the seat map, the cart or the booking form, so
    every test walks a visitor to the part its setting decides.
 
-   Left out: pending bookings and their expiry, the redirect to the status page,
-   and everything under Booking PDF. */
+   Left out: everything under Booking PDF, and the expiry actually running - the
+   shortest one the screen accepts is a minute, which is longer than the whole
+   suite takes. */
 
 test.describe('Settings booking flow', () => {
 	let settings;
@@ -204,5 +211,49 @@ test.describe('Settings booking flow', () => {
 		expect(tooltip).toContain(BOOKER.company);
 
 		expect(tooltip).not.toContain(BOOKER.email);
+	});
+
+	/* The dialog naming the new booking is the whole of what a booker normally
+	   gets; with this on they are taken to the booking instead and never see it. */
+	test('sends the booker to their status page when told to', async () => {
+		await settings.set('redirectToStatusPage', true);
+		await settings.allowBookings();
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.completeBooking({ ...BOOKER });
+
+		await expect(registration.page).toHaveURL(/seatreg=booking-status/);
+
+		/* The dialog is on the page either way, so it is its never being shown
+		   that says the booker was sent on instead. */
+		await expect(registration.bookingConfirmed).toBeHidden();
+
+		await registration.page.close();
+	});
+
+	/* The expiry cannot be watched happening, but the screen writes out what it
+	   will do, and that sentence is worked out from all three of its controls. */
+	test('says when a pending booking will be given up on', async () => {
+		await settings.set('usePending', true);
+		await settings.set('pendingExpiration', String(PENDING_EXPIRATION_MINUTES));
+
+		await settings.openBookingFlowSummary();
+
+		const afterSubmitting = settings.summaryGroup('After submitting');
+
+		await expect(afterSubmitting).toContainText(EXPIRES_AFTER);
+		await expect(afterSubmitting).not.toContainText(EXPIRES_WITH_PROCESSING);
+
+		await settings.pendingExpirationProcessing.check();
+
+		await expect(afterSubmitting).toContainText(EXPIRES_WITH_PROCESSING);
+
+		await settings.save();
+
+		await expect(settings.field('pendingExpiration')).toHaveValue(
+			String(PENDING_EXPIRATION_MINUTES)
+		);
+		await expect(settings.pendingExpirationProcessing).toBeChecked();
 	});
 });
