@@ -70,6 +70,11 @@ class BookingStatusPage {
 		return this.paymentForms.locator('.custom-payment-box').filter({ hasText: title });
 	}
 
+	/** Only drawn for a custom payment that was given one in the settings. */
+	customPaymentIcon(title) {
+		return this.customPaymentButton(title).locator('.custom-payment-box__img');
+	}
+
 	/** Hidden until its button is clicked. Keyed by a payment id the test never sees. */
 	customPaymentDescription(description) {
 		return this.page.locator('#custom-payment-descriptions div').filter({ hasText: description });
@@ -98,8 +103,18 @@ class BookingStatusPage {
 
 	/** The src alone only says where the page looked, not that anything was served. */
 	async logoLoaded() {
-		return this.logo.evaluate((img) => img.complete && img.naturalWidth > 0);
+		return imageLoaded(this.logo);
 	}
+
+	/** @see logoLoaded */
+	async customPaymentIconLoaded(title) {
+		return imageLoaded(this.customPaymentIcon(title));
+	}
+}
+
+/** @param {import('@playwright/test').Locator} image */
+function imageLoaded(image) {
+	return image.evaluate((img) => img.complete && img.naturalWidth > 0);
 }
 
 module.exports = { BookingStatusPage };

@@ -4,8 +4,9 @@ const { expect } = require('@playwright/test');
 const { TIMEOUTS } = require('./timeouts');
 const { clickUntil } = require('./interactions');
 
-/* The plugin's own forms have no file input for an attachment setting: they open
-   the WordPress media modal and take back an id. */
+/* Most attachment settings open the WordPress media modal and take back an id.
+   The custom payment icon is the exception: a file input of the plugin's own,
+   posted over AJAX, which is what imageUpload() is for. */
 
 /** One of the plugin's own images, so the suite carries no binary of its own. */
 const IMAGE_FILE = path.join(__dirname, '../../../img/chairs_med.jpg');
@@ -23,6 +24,19 @@ function uniqueFileName(prefix = 'seatreg-e2e') {
 }
 
 /**
+ * An image to hand a file input, for `setInputFiles()`.
+ *
+ * @return {{name: string, mimeType: string, buffer: Buffer}}
+ */
+function imageUpload(prefix) {
+	return {
+		name: uniqueFileName(prefix),
+		mimeType: 'image/jpeg',
+		buffer: fs.readFileSync(IMAGE_FILE),
+	};
+}
+
+/**
  * Upload an image through an already open media modal and choose it.
  *
  * @param {string} confirmLabel The caption the screen gave the modal's button
@@ -32,17 +46,13 @@ async function uploadThroughMediaModal(page, confirmLabel) {
 	const modal = page.locator('.media-modal');
 	await expect(modal).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
 
-	const fileName = uniqueFileName();
-	const title = path.parse(fileName).name;
+	const file = imageUpload();
+	const title = path.parse(file.name).name;
 
 	/* Scoped to the modal: there is a second, page wide file input for dropping
 	   files anywhere. */
 	await modal.locator('#menu-item-upload').click();
-	await modal.locator('input[type="file"]').first().setInputFiles({
-		name: fileName,
-		mimeType: 'image/jpeg',
-		buffer: fs.readFileSync(IMAGE_FILE),
-	});
+	await modal.locator('input[type="file"]').first().setInputFiles(file);
 
 	/* The upload has no completion to wait for. It is done when the library lists
 	   the attachment, which is also where it has to be chosen. */
@@ -62,4 +72,4 @@ async function uploadThroughMediaModal(page, confirmLabel) {
 	return title;
 }
 
-module.exports = { uniqueFileName, uploadThroughMediaModal };
+module.exports = { imageUpload, uploadThroughMediaModal };

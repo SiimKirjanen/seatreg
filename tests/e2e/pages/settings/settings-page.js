@@ -4,12 +4,13 @@ const { SEATREG_PAGES, openSeatRegScreen, expectOnSeatRegPage } = require('../..
 const { clickUntil, pickDatepickerDay } = require('../../utils/interactions');
 const { visitorContext } = require('../../utils/auth');
 const { uniqueBookerEmail } = require('../../utils/mail');
-const { uploadThroughMediaModal } = require('../../utils/media');
+const { imageUpload, uploadThroughMediaModal } = require('../../utils/media');
 const { HomePage } = require('../home/home-page');
 const { LayoutBuilderPage } = require('../layout-builder/layout-builder-page');
 const { RegistrationPage } = require('../registration/registration-page');
 
-const PAGE_LOGO_CONFIRM_LABEL = 'Use as logo';
+/* Both logo pickers give their media modal the same button. */
+const LOGO_CONFIRM_LABEL = 'Use as logo';
 
 const ROOM_NAME = 'Settings room';
 
@@ -88,6 +89,11 @@ const FIELDS = {
 	},
 	approvedBookingEmail: { tab: 'emails', selector: '#approved-booking-email', kind: 'checkbox' },
 	adminBookingNotification: { tab: 'emails', selector: '#booking-notification', kind: 'checkbox' },
+	customizeEmailColors: { tab: 'emails', selector: '#customize-email-colors', kind: 'checkbox' },
+	emailBackgroundColor: { tab: 'emails', selector: '#email-background-color', kind: 'text' },
+	emailHeadingColor: { tab: 'emails', selector: '#email-heading-color', kind: 'text' },
+	emailTextColor: { tab: 'emails', selector: '#email-text-color', kind: 'text' },
+	emailLogoPosition: { tab: 'emails', selector: '#email-logo-position', kind: 'select' },
 
 	/* The PayPal toggles are id paypal-rest for name paypal-rest-payments, and id
 	   paypal for name paypal-payments. */
@@ -100,7 +106,15 @@ const FIELDS = {
 	paypalLegacyEnabled: { tab: 'payments', selector: '#paypal', kind: 'checkbox' },
 	paypalBusinessEmail: { tab: 'payments', selector: '#paypal-business-email', kind: 'text' },
 	paypalButtonId: { tab: 'payments', selector: '#paypal-button-id', kind: 'text' },
+	/* The legacy custom payment is a single payment held in the settings
+	   themselves, unlike the list the custom payment builder keeps. */
 	customPaymentEnabled: { tab: 'payments', selector: '#custom-payment', kind: 'checkbox' },
+	legacyCustomPaymentTitle: { tab: 'payments', selector: '#custom-payment-title', kind: 'text' },
+	legacyCustomPaymentDescription: {
+		tab: 'payments',
+		selector: '#custom-payment-description',
+		kind: 'text',
+	},
 	paymentInstructions: { tab: 'payments', selector: '#payment-instructions', kind: 'text' },
 	enableCoupons: { tab: 'payments', selector: '#enable-coupons', kind: 'checkbox' },
 
@@ -285,6 +299,17 @@ class SettingsPage {
 		return this.page.locator('#page-logo-remove');
 	}
 
+	/* Emails. Picked the same way the page logo is; what a logo does once it is
+	   picked is covered from there. */
+
+	get emailLogo() {
+		return this.page.locator('#email-logo');
+	}
+
+	get emailLogoSelectButton() {
+		return this.page.locator('#email-logo-select');
+	}
+
 	/* Payments */
 
 	get customPaymentList() {
@@ -296,6 +321,18 @@ class SettingsPage {
 		return this.customPaymentList
 			.locator('.custom-payment')
 			.filter({ has: this.page.locator(`[data-id="custom-payment-title"][value="${title}"]`) });
+	}
+
+	/* An icon is a file input of the plugin's own rather than a media modal, and
+	   it uploads the moment it is given a file - so the row holds an image before
+	   anything is saved. */
+
+	customPaymentIconInput(title) {
+		return this.customPayment(title).locator('[data-action="custom-payment-icon-upload"]');
+	}
+
+	customPaymentIcon(title) {
+		return this.customPayment(title).locator('.current-custom-payment-icon__img');
 	}
 
 	get newCustomPaymentTitle() {
@@ -606,15 +643,37 @@ class SettingsPage {
 	 *
 	 * @return {Promise<string>} The attachment's title
 	 */
-	async selectPageLogo() {
-		await this.openSection('pages');
-		await this.pageLogoSelectButton.click();
+	async #selectLogo(tab, button, field) {
+		await this.openSection(tab);
+		await button.click();
 
-		const title = await uploadThroughMediaModal(this.page, PAGE_LOGO_CONFIRM_LABEL);
+		const title = await uploadThroughMediaModal(this.page, LOGO_CONFIRM_LABEL);
 
-		await expect(this.pageLogo).not.toHaveValue('');
+		await expect(field).not.toHaveValue('');
 
 		return title;
+	}
+
+	/** @see #selectLogo */
+	async selectPageLogo() {
+		return this.#selectLogo('pages', this.pageLogoSelectButton, this.pageLogo);
+	}
+
+	/** @see #selectLogo */
+	async selectEmailLogo() {
+		return this.#selectLogo('emails', this.emailLogoSelectButton, this.emailLogo);
+	}
+
+	/**
+	 * Give a custom payment the icon a booker is shown beside its name. Only works
+	 * on a payment the builder has already drawn a row for.
+	 */
+	async uploadCustomPaymentIcon(title) {
+		await this.openSection('payments');
+
+		await this.customPaymentIconInput(title).setInputFiles(imageUpload('payment-icon'));
+
+		await expect(this.customPaymentIcon(title)).toBeVisible();
 	}
 
 	/**

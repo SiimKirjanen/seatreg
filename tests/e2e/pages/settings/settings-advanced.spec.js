@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { SettingsPage, BOOKER } = require('./settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
+const { uniqueBookerEmail } = require('../../utils/mail');
 const { validateToken, bookings } = require('../../utils/public-api');
 const { isoDate } = require('../../utils/dates');
 
@@ -10,6 +11,9 @@ const TEXT_FIELD = { label: 'Phone', type: 'text' };
 const CHECKBOX_FIELD = { label: 'Newsletter', type: 'checkbox' };
 const SELECT_FIELD = { label: 'Meal', type: 'select', options: ['Fish', 'Meat'] };
 const EXTRA_OPTION = 'Vegetarian';
+
+/* An answer two bookers can be made to give, to have the second one turned down. */
+const TAKEN_PHONE = '5551234';
 
 const PLEASE_ENTER_NAME = 'Please enter name';
 const ILLEGAL_CHARACTERS = 'Illegal characters detected';
@@ -92,6 +96,40 @@ test.describe('Settings advanced', () => {
 			{ label: SELECT_FIELD.label, type: 'select' },
 			PLEASE_ADD_AN_OPTION
 		);
+	});
+
+	/* The unique flag is the one thing a custom field does that the builder cannot
+	   show: it is only ever felt on the registration, by the second booker to give
+	   an answer somebody else already gave. */
+	test('turns away a booker whose unique field value is already taken', async () => {
+		code = await settings.openForNewRegistrationWithSeats(
+			uniqueRegistrationName('Settings advanced unique'),
+			2
+		);
+
+		await settings.addCustomField(TEXT_FIELD);
+		await settings.customField(TEXT_FIELD.label).locator('.unique-input').check();
+		await settings.save();
+
+		await settings.allowBookings();
+
+		await settings.makeBooking(code, { customFields: { [TEXT_FIELD.label]: TAKEN_PHONE } });
+
+		/* A seat of its own and an address of its own, so the only thing this
+		   booking has in common with the first is the answer being claimed. */
+		const registration = await settings.openRegistration(code);
+
+		await registration.completeBooking({
+			seats: [2],
+			...BOOKER,
+			email: uniqueBookerEmail(),
+			customFields: { [TEXT_FIELD.label]: TAKEN_PHONE },
+		});
+
+		await expect(registration.bookingRefusal).toContainText(
+			`${TEXT_FIELD.label} field value is already used`
+		);
+		await expect(registration.bookingConfirmed).toBeHidden();
 	});
 
 	test('removes a custom field after confirming and keeps it when cancelled', async () => {

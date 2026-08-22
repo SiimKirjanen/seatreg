@@ -7,7 +7,13 @@ const SEAT_COUNT = 2;
 
 const PAYMENT = { title: 'Bank transfer', description: 'Pay to the account on the invoice' };
 
+/* The settings keep one payment of their own, from before the builder existed. */
+const LEGACY_PAYMENT = { title: 'Cash on arrival', description: 'Pay at the door' };
+
 const PAYMENT_INSTRUCTIONS = 'Payment is due a week before the event.';
+
+const CURRENCY_CODE = 'EUR';
+const SEAT_PRICE = 15;
 
 const CUSTOM_PAYMENT_TITLE_MISSING = 'Please enter custom payment title';
 const CUSTOM_PAYMENT_DESCRIPTION_MISSING = 'Please enter custom payment description';
@@ -27,10 +33,11 @@ const OUT_OF_RANGE_DISCOUNT = '500';
    make the plugin count payments as turned on, which is what puts the coupon box
    in the cart - so none of this needs an account anywhere.
 
-   The payment buttons themselves are only drawn for a booking that costs
-   something, and are covered from booking-status.spec.js. The instruction text
-   above them has no such condition, so that is what is followed to the booker
-   here. */
+   How the buttons behave once they are on the page belongs to
+   booking-status.spec.js. What is followed to the booker here is only what a
+   setting decided: the instruction text above them, which is shown whether or
+   not there is anything to pay, and the title and icon each button is drawn
+   with, which need a booking that costs something. */
 
 test.describe('Settings payment options', () => {
 	let settings;
@@ -74,6 +81,47 @@ test.describe('Settings payment options', () => {
 		await settings.save();
 
 		await expect(settings.customPayment(PAYMENT.title)).toHaveCount(0);
+	});
+
+	/* The two things a custom payment can be given that only a paying booker ever
+	   sees: the settings' own payment, which the builder knows nothing about, and
+	   an icon, which is uploaded on its own rather than saved with the form. Both
+	   land in the same list on the status page, so one booking shows both. */
+	test('offers the legacy custom payment and the icon a custom payment was given', async ({
+		page,
+	}) => {
+		const bookingStatus = new BookingStatusPage(page);
+
+		await settings.set('customPaymentEnabled', true);
+		await settings.set('legacyCustomPaymentTitle', LEGACY_PAYMENT.title);
+		await settings.set('legacyCustomPaymentDescription', LEGACY_PAYMENT.description);
+		await settings.set('currencyCode', CURRENCY_CODE);
+
+		await settings.addCustomPayment(PAYMENT);
+		await settings.uploadCustomPaymentIcon(PAYMENT.title);
+
+		await settings.allowBookings();
+
+		/* The icon is already on the server by now. What the save has to carry is
+		   the payment remembering which one it was given. The reloaded screen
+		   opens on whichever section was last written to, which is not this one. */
+		await settings.openSection('payments');
+
+		await expect(settings.customPaymentIcon(PAYMENT.title)).toBeVisible();
+
+		await settings.priceSeats(code, SEAT_PRICE, SEAT_COUNT);
+
+		const booking = await settings.makeBooking(code);
+
+		await bookingStatus.goto(code, booking.id);
+
+		await expect(bookingStatus.customPaymentButton(LEGACY_PAYMENT.title)).toBeVisible();
+		await expect(
+			bookingStatus.customPaymentDescription(LEGACY_PAYMENT.description)
+		).toBeHidden();
+
+		await expect(bookingStatus.customPaymentIcon(PAYMENT.title)).toBeVisible();
+		expect(await bookingStatus.customPaymentIconLoaded(PAYMENT.title)).toBe(true);
 	});
 
 	test('refuses a custom payment it cannot use', async () => {
