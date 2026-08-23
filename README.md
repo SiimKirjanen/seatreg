@@ -68,3 +68,35 @@ Compiles the styles of the pages the booker lands on (payment return, booking co
 
 ### build:emails
 Compiles the MJML email templates into HTML
+
+## E2E tests
+End to end tests run with [Playwright](https://playwright.dev/) against a disposable WordPress site started by [wp-env](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/). Docker needs to be running.
+
+First time setup:
+```
+npm install
+npx playwright install chromium
+```
+
+The tests live in `tests/e2e`. The site runs on http://localhost:8889 and the admin user is `admin` / `password`.
+
+### test:e2e
+Starts wp-env and runs all tests
+
+### test:e2e:ci
+Runs all tests, expects wp-env to be running already
+
+### test:e2e:headed
+Runs the tests in a visible browser
+
+### test:e2e:ui
+Opens the Playwright UI mode
+
+### test:e2e:debug
+Runs the tests in the Playwright debugger
+
+### test:e2e:codegen
+Opens the Playwright recorder against the wp-env site
+
+### wp-env:start / wp-env:stop / wp-env:reset / wp-env:cli
+Start, stop and reset the WordPress test environment. `wp-env:cli` runs WP-CLI commands against it
