@@ -13,6 +13,8 @@
     "gulp-uglify": "~1.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.59.1",
+    "@wordpress/env": "11.13.0",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-minify-css": "^1.0.0",
@@ -27,8 +29,22 @@
     "registration-styles": "gulp registration-styles",
     "admin-styles": "gulp admin-styles",
     "builder-styles": "gulp builder-styles",
+    "pages-styles": "gulp pages-styles",
     "build:emails": "mjml php/templates/email/mjml/*.mjml -o php/templates/email --sanitizeStyles",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "test:e2e": "npm run wp-env:start && playwright test",
+    "test:e2e:ci": "playwright test",
+    "test:e2e:headed": "npm run wp-env:start && playwright test --headed",
+    "test:e2e:ui": "npm run wp-env:start && playwright test --ui",
+    "test:e2e:debug": "npm run wp-env:start && playwright test --debug",
+    "test:e2e:codegen": "npm run wp-env:start && playwright codegen http://localhost:8889",
+    "wp-env:start": "wp-env start",
+    "wp-env:stop": "wp-env stop",
+    "wp-env:reset": "wp-env reset",
+    "wp-env:cli": "wp-env run cli"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "author": "Siim Kirjanen",
   "license": "GPLv2 or later"

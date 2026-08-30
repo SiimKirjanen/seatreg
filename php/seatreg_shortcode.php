@@ -8,6 +8,7 @@
             'height'        => '',
             'mobile_height' => '',
             'mobile_max_width'    => '720', // default mobile breakpoint
+            'room'          => '', // name of the room the registration opens on
         ), $atts, 'seatreg' );
 
         if ( empty($atts['code']) || empty($atts['height']) ) {
@@ -30,7 +31,25 @@
             return "Invalid breakpoint value";
         }
         
-        $seatregRegistrationUrl = esc_url(SeatregLinksService::getRegistrationURL() . "?seatreg=registration&c=". $atts['code']);
+        $roomQueryParam = '';
+
+        if ( !empty($atts['room']) ) {
+            $registration = SeatregRegistrationRepository::getRegistrationByCode( $atts['code'] );
+
+            if ( !$registration ) {
+                return "Registration not found";
+            }
+
+            $roomData = SeatregLayoutService::getRoomDataFromLayout( $registration->registration_layout );
+
+            if ( !SeatregLayoutService::findRoomUuidByName( $roomData, $atts['room'] ) ) {
+                return "Room not found";
+            }
+
+            $roomQueryParam = '&room=' . urlencode( $atts['room'] );
+        }
+
+        $seatregRegistrationUrl = esc_url(SeatregLinksService::getRegistrationURL() . "?seatreg=registration&c=". $atts['code'] . $roomQueryParam);
         $height = (int) esc_attr($atts['height']);
         $mobileHeight = (int) esc_attr($atts['mobile_height']);
         $breakpoint = (int) esc_attr($atts['mobile_max_width']);

@@ -97,6 +97,7 @@ function seatreg_custom_pages() {
 	}
 
 	if( seatreg_is_booking_check_page() ) {
+		seatreg_redirect_from_payment_tunnel();
 		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/pages/booking_status.php';
 
 		die();
@@ -108,7 +109,8 @@ function seatreg_custom_pages() {
 		die();
 	}
 
-	if( isset($_GET['seatreg']) && $_GET['seatreg'] === 'payment-return' ) {
+	if( seatreg_is_payment_return_page() ) {
+		seatreg_redirect_from_payment_tunnel();
 		include SEATREG_PLUGIN_FOLDER_DIR  . 'php/payment/return_to_merchant.php';
 
 		die();

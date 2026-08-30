@@ -10,6 +10,11 @@ class SeatregBookingService {
     const EMAIL_TABLE_HEADER_STYLE = 'text-align:left;padding:6px 8px;border:1px solid #e2e8f0;background-color:#f1f4f9;font-weight:600;word-break:break-word;overflow-wrap:break-word;';
     const EMAIL_TABLE_VALUE_STYLE = 'padding:6px 8px;border:1px solid #e2e8f0;word-break:break-word;overflow-wrap:break-word;';
 
+    //Same look for the tables on the booking status page, but sized to their content instead of a fixed email width.
+    const PAGE_TABLE_STYLE = 'border-collapse:collapse;margin:0 auto;';
+    const PAGE_TABLE_HEADER_STYLE = 'text-align:left;padding:8px 10px;border:1px solid #e2e8f0;background-color:#f1f4f9;font-weight:600;white-space:nowrap;';
+    const PAGE_TABLE_VALUE_STYLE = 'padding:8px 10px;border:1px solid #e2e8f0;';
+
     /**
      *
      * Return booking total cost
@@ -226,10 +231,10 @@ class SeatregBookingService {
 
     public static function generateBookingTable($registrationCustomFields, $bookings, $registration) {
         $tableData = self::getBookingTableData($registrationCustomFields, $bookings, $registration);
-        $bookingTable = '<table style="border: 1px solid black;border-collapse: collapse;"><tr>';
+        $bookingTable = '<table style="' . self::PAGE_TABLE_STYLE . '"><tr>';
 
         foreach($tableData['headers'] as $header) {
-            $bookingTable .= '<th style="border:1px solid black;text-align:left;padding: 6px;">' . esc_html($header) . '</th>';
+            $bookingTable .= '<th style="' . self::PAGE_TABLE_HEADER_STYLE . '">' . esc_html($header) . '</th>';
         }
 
         $bookingTable .= '</tr>';
@@ -238,7 +243,7 @@ class SeatregBookingService {
             $bookingTable .= '<tr>';
 
             foreach($row as $field) {
-                $bookingTable .= '<td style="border:1px solid black;padding: 6px;">' . esc_html($field['value'] ?? '') . '</td>';
+                $bookingTable .= '<td style="' . self::PAGE_TABLE_VALUE_STYLE . '">' . esc_html($field['value'] ?? '') . '</td>';
             }
 
             $bookingTable .= '</tr>';
@@ -315,22 +320,22 @@ class SeatregBookingService {
 
     public static function generatePaymentTable($bookingId, $couponsEnabled = false, $appliedCoupon = null) {
         $tableData = self::getPaymentTableData($bookingId, $couponsEnabled, $appliedCoupon);
-        $paymentTable = '<table style="border: 1px solid black;border-collapse: collapse;">
+        $paymentTable = '<table style="' . self::PAGE_TABLE_STYLE . '">
             <tr>
-                <th style="border:1px solid black;text-align: left;padding: 6px;">' . esc_html($tableData['spotName']) . '</th>
-                <th style="border:1px solid black;text-align: left;padding: 6px;">' . esc_html__('Price', 'seatreg') . '</th>
+                <th style="' . self::PAGE_TABLE_HEADER_STYLE . '">' . esc_html($tableData['spotName']) . '</th>
+                <th style="' . self::PAGE_TABLE_HEADER_STYLE . '">' . esc_html__('Price', 'seatreg') . '</th>
             </tr>';
 
         foreach($tableData['rows'] as $row) {
             $paymentTable .= '<tr>';
-                $paymentTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($row['seatNr']) .'</td>';
-                $paymentTable .= '<td style="border:1px solid black;padding: 6px;">'. esc_html($row['price']) . '</td>';
+                $paymentTable .= '<td style="' . self::PAGE_TABLE_VALUE_STYLE . '">'. esc_html($row['seatNr']) .'</td>';
+                $paymentTable .= '<td style="' . self::PAGE_TABLE_VALUE_STYLE . '">'. esc_html($row['price']) . '</td>';
             $paymentTable .= '</tr>';
         }
 
         $paymentTable .= '<tr>';
-            $paymentTable .= '<td style="border:1px solid black;padding: 6px;font-weight:700">'.  esc_html__('Total', 'seatreg') .'</td>';
-            $paymentTable .= '<td style="border:1px solid black;padding: 6px;font-weight:700">'. esc_html($tableData['total']) . '</td>';
+            $paymentTable .= '<td style="' . self::PAGE_TABLE_VALUE_STYLE . 'font-weight:700;">'.  esc_html__('Total', 'seatreg') .'</td>';
+            $paymentTable .= '<td style="' . self::PAGE_TABLE_VALUE_STYLE . 'font-weight:700;">'. esc_html($tableData['total']) . '</td>';
         $paymentTable .= '</tr>';
 
         $paymentTable .= '</table>';
