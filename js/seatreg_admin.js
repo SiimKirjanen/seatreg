@@ -2337,6 +2337,110 @@ $('#seatreg-settings-form #check-paypal-webhook').on('click', function(e) {
 	});
 });
 
+//The setup check runs against the saved settings, so it is only offered when the Stripe fields are unchanged
+var seatregStripeFieldsSelector = '#stripe, #stripe-api-key, #payment-mark-confirmed-stripe';
+var seatregStripeCheckInProgress = false;
+var seatregStripeSavedValues = {};
+
+function seatregStripeFieldValue($field) {
+	return $field.is(':checkbox') ? $field.is(':checked') : $field.val();
+}
+
+function seatregStripeSettingsDirty() {
+	var dirty = false;
+
+	$(seatregStripeFieldsSelector).each(function() {
+		var $field = $(this);
+
+		if(seatregStripeFieldValue($field) !== seatregStripeSavedValues[$field.attr('id')]) {
+			dirty = true;
+		}
+	});
+
+	return dirty;
+}
+
+function seatregUpdateStripeCheckButtonState() {
+	var paymentsOff = seatregStripeSavedValues['stripe'] !== true;
+	var dirty = seatregStripeSettingsDirty();
+
+	$('#check-stripe-webhook').prop('disabled', seatregStripeCheckInProgress || paymentsOff || dirty);
+	$('#stripe-webhook-check-off').toggle(paymentsOff);
+	$('#stripe-webhook-check-unsaved').toggle(!paymentsOff && !seatregStripeCheckInProgress && dirty);
+}
+
+if($('#check-stripe-webhook').length) {
+	$(seatregStripeFieldsSelector).each(function() {
+		var $field = $(this);
+		seatregStripeSavedValues[$field.attr('id')] = seatregStripeFieldValue($field);
+	});
+	seatregUpdateStripeCheckButtonState();
+}
+
+$('#seatreg-settings-form').on('change input', seatregStripeFieldsSelector, function() {
+	seatregUpdateStripeCheckButtonState();
+
+	if(seatregStripeSettingsDirty()) {
+		$('#stripe-webhook-check-result').empty();
+	}
+});
+
+$('#seatreg-settings-form #check-stripe-webhook').on('click', function(e) {
+	e.preventDefault();
+	var $this = $(this);
+	var code = $this.data('registration-code');
+	var $result = $('#stripe-webhook-check-result');
+
+	seatregStripeCheckInProgress = true;
+	seatregUpdateStripeCheckButtonState();
+	$this.text(translator.translate('checkingWebhook'));
+	$result.empty();
+
+	var promise = seaterg_admin_ajax('seatreg_check_stripe_webhook', code);
+	promise.done(function(data) {
+		seatregStripeCheckInProgress = false;
+		seatregUpdateStripeCheckButtonState();
+		$this.text(translator.translate('checkWebhook'));
+
+		var response = data._response;
+
+		if(!response || response.type !== 'ok') {
+			$result.append(
+				$('<div class="alert alert-primary" role="alert"></div>')
+					.text((response && response.text) || translator.translate('somethingWentWrong'))
+			);
+
+			return;
+		}
+
+		var $list = $('<ul class="webhook-check-list"></ul>');
+		response.data.checks.forEach(function(check) {
+			var $item = $('<li></li>')
+				.addClass(check.ok ? 'webhook-check-ok' : 'webhook-check-failed')
+				.text((check.ok ? '✓ ' : '✗ ') + check.label);
+
+			if(check.detail) {
+				$item.append( $('<span class="webhook-check-detail"></span>').text(' (' + check.detail + ')') );
+			}
+
+			$list.append($item);
+		});
+		$result.append($list);
+
+		if(response.data.ok) {
+			alertify.success(translator.translate('stripeWebhookCheckOk'));
+		}else {
+			alertify.error(translator.translate('stripeWebhookCheckProblems'));
+		}
+	});
+	promise.fail(function() {
+		seatregStripeCheckInProgress = false;
+		seatregUpdateStripeCheckButtonState();
+		$this.text(translator.translate('checkWebhook'));
+		alertify.error(translator.translate('somethingWentWrong'));
+	});
+});
+
 $('#seatreg-settings-form #create-api-token').on('click', function(e) {
 	e.preventDefault();
 	var code = $('input[name="registration_code"]').val();
@@ -2372,7 +2476,7 @@ $('#seatreg-settings-submit').on('click', function(e) {
 	var currencyCode = $('#paypal-currency-code').val();
 
 	if($('#stripe').is(":checked")) {
-		if($('#stripe-api-key').val() === "") {
+		if($('#stripe-api-key').val() === "" && $('#stripe-api-key').data('secret-stored') !== 1) {
 			e.preventDefault();
 			alertify.error(translator.translate('pleaseEnterStripeApiKey'));
 

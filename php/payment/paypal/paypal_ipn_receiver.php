@@ -35,8 +35,7 @@
 		$bookingTotalCost,
 		$bookingId,
 		$bookingData->payment_completed_set_booking_confirmed,
-		$bookingData->registration_code,
-		$bookingData->stripe_webhook_secret
+		$bookingData->registration_code
 	);
 	$payPalIPN->run();
 

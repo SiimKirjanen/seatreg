@@ -16,7 +16,7 @@ class SeatregStripePayment extends SeatregPaymentBase {
     public function __construct($currency, $price, $bookingId, $setBookingConfirmed, $registrationCode, $stripeApiKey, $stripeWebhookSecret) {
         parent::__construct($currency, $price, $bookingId, $setBookingConfirmed, $registrationCode, 'Stripe');
 
-        $this->_stripeAPiKey = $stripeApiKey;
+        $this->_stripeApiKey = $stripeApiKey;
         $this->_stripeWebhookSecret = $stripeWebhookSecret;
 
         $payload = @file_get_contents('php://input');

@@ -67,6 +67,9 @@ define('SEATREG_STRIPE_ZERO_DECIMAL_CURRENCIES', array('BIF', 'CLP', 'DJF', 'GNF
 //The version in the prefix lets the cipher change later without having to guess which form an already stored value is in
 define('SEATREG_ENCRYPTED_VALUE_PREFIX', 'seatreg_enc_v1:');
 
+// Migrations
+define('SEATREG_TRIGGER_MIGRATIONS', '3');
+
 // Status
 define('SEATREG_BOOKING_DEFAULT', 0);
 define('SEATREG_BOOKING_PENDING', 1);

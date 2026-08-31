@@ -45,6 +45,8 @@ function seatreg_update_db_check() {
     if ( get_site_option( 'seatreg_db_current_version' ) != SEATREG_DB_VERSION ) {
         seatreg_set_up_db();
     }
+
+    SeatregMigrationsRunner::run();
 }
 
 add_action( 'seatreg_pending_booking_expiration', 'seatreg_pending_bookings_expiration_time_job');

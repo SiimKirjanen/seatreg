@@ -42,45 +42,66 @@ class SeatregOptionsRepository {
 
     /**
      *
+     * Returns the options rows that have Stripe payments turned on with the given API key.
+     *
+     * The API key is stored encrypted with a random IV, so the same key does not give the same
+     * stored value twice and can not be matched in SQL. The rows are decrypted and compared here
+     * instead. There is one options row per registration, so the amount of rows stays small.
+     *
+     * @param string $stripeAPIKey The Stripe API key in plain text
+     * @return array
+     *
+     */
+    private static function getActiveStripeRows($stripeAPIKey) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        $rows = $wpdb->get_results(
+			"SELECT stripe_api_key, stripe_webhook_secret FROM $seatreg_db_table_names->table_seatreg_options
+			WHERE stripe_payments = 1
+            AND stripe_api_key IS NOT NULL"
+		);
+
+        return array_values( array_filter($rows, function($row) use ($stripeAPIKey) {
+            return SeatregEncryptionService::decryptValue($row->stripe_api_key) === $stripeAPIKey;
+        }) );
+    }
+
+    /**
+     *
      * Returns number of enabled stripe API key usages
      *
-     * @param string $stripeAPIKey The Stripe API key
+     * @param string $stripeAPIKey The Stripe API key in plain text
      * @return number
      *
      */
     public static function getActiveStripeKeyUsage($stripeAPIKey) {
-        global $wpdb;
-        global $seatreg_db_table_names;
-
-        return (int)$wpdb->get_var( $wpdb->prepare(
-			"SELECT COUNT(*) FROM $seatreg_db_table_names->table_seatreg_options
-			WHERE stripe_api_key= %s
-            AND stripe_payments = 1",
-			$stripeAPIKey
-		) );
+        return count( self::getActiveStripeRows($stripeAPIKey) );
     }
 
     /**
      *
      * Returns stripe webhook secret
      *
-     * @param string $stripeAPIKey The Stripe API key
-     * @return string
+     * @param string $stripeAPIKey The Stripe API key in plain text
+     * @return string|null The webhook signing secret in plain text, or null when there is none saved
+     *                     for this key or it can not be read
      *
      */
     public static function getActiveStripeWebhookSecret($stripeAPIKey) {
-        global $wpdb;
-        global $seatreg_db_table_names;
+        foreach( self::getActiveStripeRows($stripeAPIKey) as $row ) {
+            if( empty($row->stripe_webhook_secret) ) {
+                continue;
+            }
 
-        $results = $wpdb->get_row( $wpdb->prepare(
-			"SELECT * FROM $seatreg_db_table_names->table_seatreg_options
-			WHERE stripe_api_key = %s
-            AND stripe_payments = 1
-            AND stripe_webhook_secret IS NOT NULL",
-			$stripeAPIKey
-		) );
+            $webhookSecret = SeatregEncryptionService::decryptValue($row->stripe_webhook_secret);
 
-        return $results->stripe_webhook_secret;
+            if( $webhookSecret !== null ) {
+                return $webhookSecret;
+            }
+        }
+
+        return null;
     }
 
     /**
