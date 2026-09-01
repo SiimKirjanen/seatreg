@@ -89,7 +89,7 @@ class HomePage {
 		return this.registrationCardByCode(code).locator('.seatreg-registration-card__footer-date');
 	}
 
-	/** Stands in for the booking counts when today takes no bookings. */
+	/** Stands in for the counted date when today takes no bookings. */
 	footerNotice(code) {
 		return this.registrationCardByCode(code).locator('.seatreg-registration-card__footer-notice');
 	}
