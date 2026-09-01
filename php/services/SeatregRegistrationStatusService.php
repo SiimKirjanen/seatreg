@@ -34,13 +34,13 @@ class SeatregRegistrationStatusService {
     public static function getStatusLabel($status) {
         switch($status) {
             case self::STATUS_CLOSED:
-                return esc_html__('Closed', 'seatreg');
+                return __('Closed', 'seatreg');
             case self::STATUS_SCHEDULED:
-                return esc_html__('Scheduled', 'seatreg');
+                return __('Scheduled', 'seatreg');
             case self::STATUS_ENDED:
-                return esc_html__('Ended', 'seatreg');
+                return __('Ended', 'seatreg');
             default:
-                return esc_html__('Open', 'seatreg');
+                return __('Open', 'seatreg');
         }
     }
 }

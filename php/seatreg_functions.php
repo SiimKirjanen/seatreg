@@ -497,7 +497,7 @@ function seatreg_generate_my_registrations_section() {
 	if( $hasRegistrations ) {
 		$seatregToday = current_datetime();
 		$seatregTodayDate = $seatregToday->format(CALENDAR_DATE_FORMAT);
-		$seatregTodayLabel = SeatregTimeService::getDateStringFromUnix($seatregToday->getTimestamp(), 'M j Y');
+		$seatregTodayLabel = wp_date('M j Y', $seatregToday->getTimestamp());
 		$bookingCounts = SeatregBookingRepository::getBookingCountsByRegistration($seatregTodayDate);
 		$noBookingCounts = array('pending' => 0, 'approved' => 0, 'deleted' => 0);
 

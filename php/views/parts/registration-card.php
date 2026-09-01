@@ -16,8 +16,6 @@
 	$seatregManagerTab = sha1( str_replace(' ', '_', $seatregRegistration->registration_name) );
 	$seatregUsingCalendar = $seatregRegistration->using_calendar === '1';
 	$seatregOpenToday = SeatregCalendarService::isDateAvailable($seatregRegistration->calendar_dates, $seatregTodayDate);
-	//A date can be dropped from the calendar after bookings came in, so counts stay visible even when today is closed
-	$seatregShowStats = !$seatregUsingCalendar || $seatregOpenToday || array_sum($seatregBookingCounts) > 0;
 ?>
 
 <div class="seatreg-registration-card" data-item="registration">
@@ -98,24 +96,22 @@
 			</div>
 		<?php endif; ?>
 
-		<?php if( $seatregShowStats ) : ?>
-			<div class="seatreg-registration-card__stats">
-				<a class="seatreg-registration-card__stat seatreg-registration-card__stat--pending<?php echo $seatregBookingCounts['pending'] > 0 ? ' seatreg-registration-card__stat--highlight' : ''; ?>" href="<?php echo esc_url($seatregBookingsLink . '#' . $seatregManagerTab . 'bron'); ?>">
-					<span class="seatreg-registration-card__stat-value"><?php echo esc_html($seatregBookingCounts['pending']); ?></span>
-					<span class="seatreg-registration-card__stat-label"><?php esc_html_e('Pending', 'seatreg'); ?></span>
-				</a>
+		<div class="seatreg-registration-card__stats">
+			<a class="seatreg-registration-card__stat seatreg-registration-card__stat--pending<?php echo $seatregBookingCounts['pending'] > 0 ? ' seatreg-registration-card__stat--highlight' : ''; ?>" href="<?php echo esc_url($seatregBookingsLink . '#' . $seatregManagerTab . 'bron'); ?>">
+				<span class="seatreg-registration-card__stat-value"><?php echo esc_html($seatregBookingCounts['pending']); ?></span>
+				<span class="seatreg-registration-card__stat-label"><?php esc_html_e('Pending', 'seatreg'); ?></span>
+			</a>
 
-				<a class="seatreg-registration-card__stat seatreg-registration-card__stat--approved" href="<?php echo esc_url($seatregBookingsLink . '#' . $seatregManagerTab . 'taken'); ?>">
-					<span class="seatreg-registration-card__stat-value"><?php echo esc_html($seatregBookingCounts['approved']); ?></span>
-					<span class="seatreg-registration-card__stat-label"><?php esc_html_e('Approved', 'seatreg'); ?></span>
-				</a>
+			<a class="seatreg-registration-card__stat seatreg-registration-card__stat--approved" href="<?php echo esc_url($seatregBookingsLink . '#' . $seatregManagerTab . 'taken'); ?>">
+				<span class="seatreg-registration-card__stat-value"><?php echo esc_html($seatregBookingCounts['approved']); ?></span>
+				<span class="seatreg-registration-card__stat-label"><?php esc_html_e('Approved', 'seatreg'); ?></span>
+			</a>
 
-				<a class="seatreg-registration-card__stat seatreg-registration-card__stat--deleted" href="<?php echo esc_url($seatregBookingsLink . '#' . $seatregManagerTab . 'deleted'); ?>">
-					<span class="seatreg-registration-card__stat-value"><?php echo esc_html($seatregBookingCounts['deleted']); ?></span>
-					<span class="seatreg-registration-card__stat-label"><?php esc_html_e('Deleted', 'seatreg'); ?></span>
-				</a>
-			</div>
-		<?php endif; ?>
+			<a class="seatreg-registration-card__stat seatreg-registration-card__stat--deleted" href="<?php echo esc_url($seatregBookingsLink . '#' . $seatregManagerTab . 'deleted'); ?>">
+				<span class="seatreg-registration-card__stat-value"><?php echo esc_html($seatregBookingCounts['deleted']); ?></span>
+				<span class="seatreg-registration-card__stat-label"><?php esc_html_e('Deleted', 'seatreg'); ?></span>
+			</a>
+		</div>
 	</div>
 
 	<?php
