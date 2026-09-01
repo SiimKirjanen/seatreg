@@ -241,6 +241,49 @@ class SeatregBookingRepository {
         ) );
     }
 
+    /**
+     *
+     * Return the pending, approved and deleted seat row counts of every registration
+     * that has bookings. Split the way the booking manager's three tabs are, and
+     * filtered by date the way the manager filters, so a calendar registration counts
+     * only the given date and every other one counts its undated rows.
+     * @param string $calendarDate Date in CALENDAR_DATE_FORMAT
+     *
+     * @return array Registration code => array of pending, approved and deleted counts
+     *
+     */
+    public static function getBookingCountsByRegistration($calendarDate) {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        $rows = $wpdb->get_results( $wpdb->prepare(
+            "SELECT a.registration_code,
+                SUM(a.status = %d AND a.is_deleted = 0) AS pending,
+                SUM(a.status = %d AND a.is_deleted = 0) AS approved,
+                SUM(a.is_deleted = 1) AS deleted
+            FROM $seatreg_db_table_names->table_seatreg_bookings AS a
+            LEFT JOIN $seatreg_db_table_names->table_seatreg_options AS b
+            ON a.registration_code = b.registration_code
+            WHERE ( b.using_calendar = 1 AND a.calendar_date = %s )
+            OR ( (b.using_calendar IS NULL OR b.using_calendar = 0) AND a.calendar_date IS NULL )
+            GROUP BY a.registration_code",
+            SEATREG_BOOKING_PENDING,
+            SEATREG_BOOKING_APPROVED,
+            $calendarDate
+        ) );
+        $counts = array();
+
+        foreach($rows as $row) {
+            $counts[ $row->registration_code ] = array(
+                'pending' => (int)$row->pending,
+                'approved' => (int)$row->approved,
+                'deleted' => (int)$row->deleted
+            );
+        }
+
+        return $counts;
+    }
+
     public static function getBookingsCountWithSameEmail($registrationCode, $bookerEmail) {
         global $wpdb;
         global $seatreg_db_table_names;

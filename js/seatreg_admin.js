@@ -229,7 +229,7 @@
 			.attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader_small.gif')
 			.addClass('seatreg-layout-loader')
 			.css({ 'width': '16px', 'height': '16px', 'margin-left': '6px', 'vertical-align': 'middle' });
-		$btn.prop('disabled', true).after($loader);
+		$btn.prop('disabled', true).append($loader);
 
 		var promise = seaterg_admin_ajax('get_seatreg_layout_and_bookings', code, null);
 

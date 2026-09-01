@@ -488,57 +488,39 @@ function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filte
 	  <?php		
 }
 
-//generate my registration section. In this section you can see your registration names with links to overview, booking manager and map builder.
+//generate my registration section. In this section you can see a card per registration with its status, booking counts and links to overview, booking manager and map builder.
+//Everything echoed here is a cell of the home grid opened by the caller, the donation panel included.
 function seatreg_generate_my_registrations_section() {
-	$registrations = SeatregRegistrationRepository::getRegistrations();
+	$registrations = SeatregRegistrationRepository::getRegistrationsWithStatusOptions();
+	$hasRegistrations = count($registrations) > 0;
 
-	if( count($registrations) ) {
+	if( $hasRegistrations ) {
+		$seatregToday = current_datetime();
+		$seatregTodayDate = $seatregToday->format(CALENDAR_DATE_FORMAT);
+		$seatregTodayLabel = SeatregTimeService::getDateStringFromUnix($seatregToday->getTimestamp(), 'M j Y');
+		$bookingCounts = SeatregBookingRepository::getBookingCountsByRegistration($seatregTodayDate);
+		$noBookingCounts = array('pending' => 0, 'approved' => 0, 'deleted' => 0);
+
 		echo '<h4 class="your-registrations-header">';
 			esc_html_e('Created registrations', 'seatreg');
 		echo '</h4>';
 	}
-	echo '<div class="seatreg-registrations">';
 
-	foreach($registrations as $key=>$registration) {
-		$registrationLink = SeatregLinksService::getRegistrationURL() . '?seatreg=registration&c=' . esc_html($registration->registration_code) . '&page_id=' . SEATREG_PAGE_ID;
-		
+	if( $hasRegistrations ) {
+		foreach($registrations as $seatregRegistration) {
+			$seatregBookingCounts = isset($bookingCounts[ $seatregRegistration->registration_code ]) ? $bookingCounts[ $seatregRegistration->registration_code ] : $noBookingCounts;
+
+			require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/parts/registration-card.php' );
+		}
+	} else {
 		?>
-			<div class="mb-4" data-item="registration" style="margin-right: 52px">
-				<h5><a class="registration-name-link" href="<?php echo esc_url($registrationLink); ?>" target="_blank"><?php echo esc_html( wp_unslash($registration->registration_name) ); ?></a></h5>
-
-				<a href="<?php echo esc_url($registrationLink); ?>" target="_blank"><?php esc_html_e('Registration', 'seatreg'); ?></a>
-
-				<br>
-
-				<button type="button" class="btn btn-link seatreg-map-popup-btn" data-registration-name="<?php echo esc_attr($registration->registration_name); ?>" data-map-code="<?php echo esc_attr($registration->registration_code); ?>"><?php esc_html_e('Layout', 'seatreg'); ?></button>
-
-				<br>
-
-				<a href="<?php echo esc_url(admin_url( 'admin.php?page=seatreg-overview&tab='.$registration->registration_code )); ?>"><?php esc_html_e('Overview', 'seatreg'); ?></a>
-
-				<br>
-
-				<a href="<?php echo esc_url(admin_url( 'admin.php?page=seatreg-options&tab='.$registration->registration_code )); ?>"><?php esc_html_e('Settings', 'seatreg'); ?></a>
-
-				<br>
-
-				<a href="<?php echo esc_url(admin_url( 'admin.php?page=seatreg-management&tab='.$registration->registration_code )); ?>"><?php esc_html_e('Bookings', 'seatreg'); ?></a>
-
-				<br>
-
-				<a href="#" data-action="view-more-modal" data-registration-id="<?php echo esc_attr($registration->registration_code); ?>"><?php esc_html_e('More', 'seatreg'); ?></a>
-
-				<br>
-
-				<?php
-					seatreg_more_items_modal( $registration->registration_code );
-					seatreg_copy_registration_modal( $registration->registration_code );
-					seatreg_shortcode_modal( $registration->registration_code, SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout) );
-				?>
+			<div class="seatreg-registrations-empty">
+				<?php esc_html_e('No registrations yet. Create your first one above.', 'seatreg'); ?>
 			</div>
 		<?php
 	}
-	echo '</div>';
+
+	include( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/parts/donation-panel.php' );
 }
 
 function seatreg_no_registration_created_info() {

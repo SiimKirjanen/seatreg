@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { HomePage } = require('./home-page');
+const { SettingsPage } = require('../settings/settings-page');
 const {
 	SEATREG_PAGES,
 	SEATREG_MENU_ITEMS,
@@ -13,6 +14,14 @@ const { createUser } = require('../../utils/fixtures');
 
 /* What WordPress says to anyone the plugin's capabilities do not cover. */
 const NOT_ALLOWED = 'Sorry, you are not allowed to access this page.';
+
+function daysFromToday(days) {
+	const date = new Date();
+
+	date.setDate(date.getDate() + days);
+
+	return date;
+}
 
 test.describe('SeatReg Home screen', () => {
 	let homePage;
@@ -101,5 +110,49 @@ test.describe('SeatReg Home screen', () => {
 			await expect(link).toHaveAttribute('href', new RegExp(escapeForRegExp(publicUrlQuery)));
 			await expect(link).toHaveAttribute('target', '_blank');
 		}
+	});
+
+	/* Only the two states a user switches between - the date driven ones are the same rule. */
+	test("shows a registration's status on its card", async ({ page }) => {
+		const settingsPage = new SettingsPage(page);
+		const name = uniqueRegistrationName('Home status');
+		const code = await settingsPage.openForNewRegistration(name);
+
+		await homePage.goto();
+		await expect(homePage.statusBadge(code)).toHaveText('Open');
+
+		await settingsPage.open(code);
+		await settingsPage.set('registrationStatus', false);
+		await settingsPage.save();
+
+		await homePage.goto();
+		await expect(homePage.statusBadge(code)).toHaveText('Closed');
+	});
+
+	/* The card counts the site's today, which the machine running the test need not
+	   agree on, so the dates are picked far enough out that a day either way cannot
+	   decide the outcome. */
+	test('counts one calendar date and says so when today is not one', async ({ page }) => {
+		const settingsPage = new SettingsPage(page);
+		const name = uniqueRegistrationName('Home calendar');
+		const code = await settingsPage.openForNewRegistration(name);
+
+		await settingsPage.set('usingCalendar', true);
+		await settingsPage.pickCalendarDates([daysFromToday(3)]);
+		await settingsPage.save();
+
+		await homePage.goto();
+		await expect(homePage.calendarIcon(code)).toBeVisible();
+		await expect(homePage.footerNotice(code)).toHaveText('Bookings are not taken today');
+		await expect(homePage.countedDate(code)).toHaveCount(0);
+
+		await settingsPage.open(code);
+		await settingsPage.pickCalendarDates([daysFromToday(-1), daysFromToday(0), daysFromToday(1)]);
+		await settingsPage.save();
+
+		await homePage.goto();
+		await expect(homePage.footerNotice(code)).toHaveCount(0);
+		await expect(homePage.countedDate(code)).toBeVisible();
+		await expect(homePage.bookingCount(code, 'pending')).toHaveText('0');
 	});
 });
