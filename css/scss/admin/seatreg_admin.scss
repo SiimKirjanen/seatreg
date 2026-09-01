@@ -91,10 +91,34 @@ html {
   > img {
     margin-right: 12px;
   }
+  .donate-paypal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    p {
+      margin: 0;
+    }
+
+    form {
+      display: flex;
+      margin: 0;
+    }
+  }
   .donate-img {
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
     animation: shake 1s;
     animation-delay: 1s;
     animation-iteration-count: 10;
+
+    &:hover,
+    &:focus-visible {
+      transform: scale(1.05);
+      filter: brightness(1.08);
+    }
   }
   .buy-me-coffee-link {
     img {

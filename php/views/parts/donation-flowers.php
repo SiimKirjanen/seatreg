@@ -24,7 +24,7 @@
     <div class="seatreg-flower-droplet seatreg-flower-droplet-10"></div>
 </div>
 
-<div class="seatreg-flower-container" style="--flower-size: 14px; --flower-delay: 2s; --flower-opacity: 0.1; top:300px; left:400px">
+<div class="seatreg-flower-container" style="--flower-size: 14px; --flower-delay: 2s; --flower-opacity: 0.1; top:260px; left:400px">
     <div class="seatreg-flower-droplet seatreg-flower-droplet-1"></div>
     <div class="seatreg-flower-droplet seatreg-flower-droplet-2"></div>
     <div class="seatreg-flower-droplet seatreg-flower-droplet-3"></div>

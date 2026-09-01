@@ -1,13 +1,16 @@
 <?php if(!defined('ABSPATH')) exit; ?>
 
 <div class="donate-wrap">
-	<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . 'img/donate.svg'); ?>" alt="Donate a little" width="160" />
-	<form action="https://www.paypal.com/donate" method="post" target="_blank">
-		<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
-		<input type="image" class="donate-img" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-	</form>
+	<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . 'img/donate.svg'); ?>" alt="Found my plugin useful? Please donate a little" width="160" />
+	<div class="donate-paypal">
+		<p>With PayPal:</p>
+		<form action="https://www.paypal.com/donate" method="post" target="_blank">
+			<input type="hidden" name="hosted_button_id" value="9QSGHYKHL6NMU" />
+			<input type="image" class="donate-img" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="Donate with PayPal" alt="Donate with PayPal" />
+		</form>
+	</div>
 	<p>
-		Bitcoin address: <code>bc1q2vam0ree3zw4j3f92vkfjd9vvxlwpxxsrpmkhu</code>
+		With Bitcoin: <code>bc1q2vam0ree3zw4j3f92vkfjd9vvxlwpxxsrpmkhu</code>
 	</p>
 	<p style="text-align:center">
 		Don't forget to leave a
