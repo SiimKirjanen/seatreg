@@ -20,6 +20,7 @@
 @import "../animations.scss";
 @import "components/seatreg-flower";
 @import "components/seatreg-update-notice";
+@import "components/registration-cards";
 
 html {
   font-size: 100%;
@@ -64,7 +65,7 @@ html {
   font-family: "Open Sans", sans-serif;
 }
 .seatreg-wp-admin .home-content {
-  display: flex;
+  display: flow-root;
   position: relative;
 }
 .seatreg-wp-admin .jumbotron {
@@ -74,7 +75,7 @@ html {
   margin-bottom: 42px;
 }
 .seatreg-wp-admin .donate-wrap {
-  max-width: 500px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   padding: 0 15px;
@@ -90,10 +91,34 @@ html {
   > img {
     margin-right: 12px;
   }
+  .donate-paypal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    p {
+      margin: 0;
+    }
+
+    form {
+      display: flex;
+      margin: 0;
+    }
+  }
   .donate-img {
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
     animation: shake 1s;
     animation-delay: 1s;
     animation-iteration-count: 10;
+
+    &:hover,
+    &:focus-visible {
+      transform: scale(1.05);
+      filter: brightness(1.08);
+    }
   }
   .buy-me-coffee-link {
     img {
@@ -1125,19 +1150,6 @@ html {
 .seatreg-delete-btn {
   padding: 0;
 }
-.seatreg-wp-admin .registration-name-link {
-  color: rgb(51, 51, 51);
-  font-size: 18px;
-}
-.seatreg-registrations {
-  display: flex;
-  flex-wrap: wrap;
-}
-.seatreg-registrations a {
-  color: rgb(66, 139, 202);
-  font-size: 14px;
-}
-
 .seatreg_page_seatreg-management
   .booking-status-check-wrap
   input[type="checkbox"] {

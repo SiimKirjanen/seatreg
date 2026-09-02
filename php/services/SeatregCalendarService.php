@@ -30,4 +30,22 @@ class SeatregCalendarService {
         }
         return self::getBookingFilteringDate($usingCalendar);
     }
+
+    /**
+     *
+     * Can a date be booked? An empty list of calendar dates leaves every date open,
+     * the way booking validation reads it.
+     * @param string|null $calendarDates Comma separated dates of the registration
+     * @param string $date Date in CALENDAR_DATE_FORMAT
+     *
+     * @return bool
+     *
+    */
+    public static function isDateAvailable($calendarDates, $date) {
+        if( !$calendarDates ) {
+            return true;
+        }
+
+        return in_array( $date, explode(',', $calendarDates) );
+    }
 }

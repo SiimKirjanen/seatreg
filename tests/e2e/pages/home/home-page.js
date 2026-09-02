@@ -70,6 +70,30 @@ class HomePage {
 		return this.registrationCardByCode(code).getByRole('link', { name: 'Registration', exact: true });
 	}
 
+	statusBadge(code) {
+		return this.registrationCardByCode(code).locator('.seatreg-registration-card__badge');
+	}
+
+	/** @param {'pending'|'approved'|'deleted'} type */
+	bookingCount(code, type) {
+		return this.registrationCardByCode(code)
+			.locator(`.seatreg-registration-card__stat--${type} .seatreg-registration-card__stat-value`);
+	}
+
+	calendarIcon(code) {
+		return this.registrationCardByCode(code).locator('.seatreg-registration-card__calendar-icon');
+	}
+
+	/** The date the counts beside it belong to. Calendar registrations only. */
+	countedDate(code) {
+		return this.registrationCardByCode(code).locator('.seatreg-registration-card__footer-date');
+	}
+
+	/** Stands in for the counted date when today takes no bookings. */
+	footerNotice(code) {
+		return this.registrationCardByCode(code).locator('.seatreg-registration-card__footer-notice');
+	}
+
 	layoutButton(code) {
 		return this.page.locator(`.seatreg-map-popup-btn[data-map-code="${code}"]`);
 	}

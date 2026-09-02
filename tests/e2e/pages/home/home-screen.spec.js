@@ -1,5 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { HomePage } = require('./home-page');
+const { SettingsPage } = require('../settings/settings-page');
+const { BookingManagerPage } = require('../booking-manager/booking-manager-page');
 const {
 	SEATREG_PAGES,
 	SEATREG_MENU_ITEMS,
@@ -10,9 +12,19 @@ const { uniqueRegistrationName, registrationPublicUrlQuery } = require('../../ut
 const { escapeForRegExp } = require('../../utils/text');
 const { loginToWordPress, visitorContext } = require('../../utils/auth');
 const { createUser } = require('../../utils/fixtures');
+const { uniqueBookerEmail } = require('../../utils/mail');
+const { fromIsoDate } = require('../../utils/dates');
 
 /* What WordPress says to anyone the plugin's capabilities do not cover. */
 const NOT_ALLOWED = 'Sorry, you are not allowed to access this page.';
+
+function daysFromToday(days) {
+	const date = new Date();
+
+	date.setDate(date.getDate() + days);
+
+	return date;
+}
 
 test.describe('SeatReg Home screen', () => {
 	let homePage;
@@ -101,5 +113,82 @@ test.describe('SeatReg Home screen', () => {
 			await expect(link).toHaveAttribute('href', new RegExp(escapeForRegExp(publicUrlQuery)));
 			await expect(link).toHaveAttribute('target', '_blank');
 		}
+	});
+
+	/* Only the two states a user switches between - the date driven ones are the same rule. */
+	test("shows a registration's status on its card", async ({ page }) => {
+		const settingsPage = new SettingsPage(page);
+		const name = uniqueRegistrationName('Home status');
+		const code = await settingsPage.openForNewRegistration(name);
+
+		await homePage.goto();
+		await expect(homePage.statusBadge(code)).toHaveText('Open');
+
+		await settingsPage.open(code);
+		await settingsPage.set('registrationStatus', false);
+		await settingsPage.save();
+
+		await homePage.goto();
+		await expect(homePage.statusBadge(code)).toHaveText('Closed');
+	});
+
+	/* The card counts the site's today, which the machine running the test need not
+	   agree on, so the dates are picked far enough out that a day either way cannot
+	   decide the outcome. */
+	test('counts one calendar date and says so when today is not one', async ({ page }) => {
+		const settingsPage = new SettingsPage(page);
+		const name = uniqueRegistrationName('Home calendar');
+		const code = await settingsPage.openForNewRegistration(name);
+
+		await settingsPage.set('usingCalendar', true);
+		await settingsPage.pickCalendarDates([daysFromToday(3)]);
+		await settingsPage.save();
+
+		await homePage.goto();
+		await expect(homePage.calendarIcon(code)).toBeVisible();
+		await expect(homePage.footerNotice(code)).toHaveText('Bookings are not taken today');
+		await expect(homePage.countedDate(code)).toHaveCount(0);
+
+		await settingsPage.open(code);
+		await settingsPage.pickCalendarDates([daysFromToday(-1), daysFromToday(0), daysFromToday(1)]);
+		await settingsPage.save();
+
+		await homePage.goto();
+		await expect(homePage.footerNotice(code)).toHaveCount(0);
+		await expect(homePage.countedDate(code)).toBeVisible();
+		await expect(homePage.bookingCount(code, 'pending')).toHaveText('0');
+	});
+
+	/* A day can go off the calendar after it was booked, and the booking manager
+	   goes on listing what was booked for it. The notice cannot swallow the counts
+	   or the card would contradict the screen it links to. The day booked is the
+	   site's own today - the one the card counts - read off the booking manager
+	   rather than guessed at from the machine running the test. */
+	test('keeps the counts on a day it no longer takes bookings for', async ({ page }) => {
+		const settingsPage = new SettingsPage(page);
+		const manager = new BookingManagerPage(page);
+		const name = uniqueRegistrationName('Home closed day');
+		const code = await settingsPage.openForNewRegistrationWithSeats(name, 1);
+
+		await settingsPage.set('usingCalendar', true);
+		await settingsPage.pickCalendarDates([daysFromToday(3)]);
+		await settingsPage.save();
+
+		await manager.openForRegistration(code);
+		await manager.pickCalendarDate(fromIsoDate(await manager.calendarDateValue.inputValue()));
+		await manager.addBooking({
+			seats: [
+				{
+					seat: 1,
+					firstName: 'Closed',
+					lastName: 'Day',
+					email: uniqueBookerEmail('home-closed-day'),
+				},
+			],
+		});
+
+		await homePage.goto();
+		await expect(homePage.footerNotice(code)).toBeVisible();
+		await expect(homePage.bookingCount(code, 'pending')).toHaveText('1');
 	});
 });
