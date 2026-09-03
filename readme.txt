@@ -51,6 +51,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 
 = 1.76.0 =
 * The Home page now shows your registrations as cards, each with its status, dates, and booking counts.
+* Fixed setting up Stripe payments on sites that were updated from an earlier version.
 
 = 1.75.0 =
 * Your Stripe API key and webhook secret are now stored encrypted.
