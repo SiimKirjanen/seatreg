@@ -202,10 +202,7 @@ Generating HTML stuff
 ==================================================================================================================================================================================================================
 */
 
-function seatreg_generate_overview_section($targetRoom) {
-	global $wpdb;
-	global $seatreg_db_table_names;
-
+function seatreg_generate_overview_section() {
 	$active_tab = null;
 
 	if( SeatregDataValidation::tabsDataExists() ) {
@@ -215,277 +212,29 @@ function seatreg_generate_overview_section($targetRoom) {
 		if( !$validation->valid ) {
 			wp_die( esc_html($validation->errorMessage) );
 		}
-	} 
-	$registration = seatreg_get_options( $active_tab )[0];
-	$filterBookingsByDate = SeatregCalendarService::getBookingFilteringDate($registration->using_calendar);
-
-	seatreg_generate_overview_section_html($targetRoom, $active_tab, $filterBookingsByDate);
-}
-
-//generate overview section html.
-function seatreg_generate_overview_section_html($targetRoom, $active_tab, $filterBookingsByDate) {
-	global $wpdb;
-	global $seatreg_db_table_names;
-
-	$registration = seatreg_get_options( $active_tab );
-
-	if( count($registration) == 0 ) {
-		seatreg_no_registration_created_info();
-		 
-	 	return;
-	 }
-
-	$registration = $registration[0];
-
-	$bookings = SeatregBookingRepository::getConfirmedAndApprovedBookingsByRegistrationCode( $registration->registration_code );
-	$pendingBookingsRoomInfo = [];
-	$confirmedBookingsRoomInfo = [];
-
-	if($registration->using_calendar === '1') {
-		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 1 AND is_deleted = 0 GROUP BY room_uuid");
-		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date = '$filterBookingsByDate' AND status = 2 AND is_deleted = 0 GROUP BY room_uuid");
-	}else {
-		$pendingBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date IS NULL AND status = 1 AND is_deleted = 0 GROUP BY room_uuid");
-		$confirmedBookingsRoomInfo = $wpdb->get_results("SELECT room_uuid, COUNT(id) AS total FROM $seatreg_db_table_names->table_seatreg_bookings WHERE registration_code = '$registration->registration_code' AND calendar_date IS NULL AND status = 2 AND is_deleted = 0 GROUP BY room_uuid");
 	}
-	
-	$regStats = seatreg_get_room_seat_info($registration->registration_layout, $pendingBookingsRoomInfo, $confirmedBookingsRoomInfo);
-	$project_name = $registration->registration_name;
-	$start_date = $registration->registration_start_timestamp;
-	$end_date = $registration->registration_end_timestamp;
-	$regUrl =  get_site_url();
-	$roomLoactionInStats = -1;
-	$rName = str_replace(" ", "-", $registration->registration_name); 
 
-	?>
+	$registrations = seatreg_get_options( $active_tab );
 
-	  		<?php echo '<div class="reg-overview" id="existing-regs">';?>
-	  			<input type="hidden" id="seatreg-reg-code" value="<?php echo esc_attr($registration->registration_code); ?>"/>
+	if( count($registrations) === 0 ) {
+		seatreg_no_registration_created_info();
 
-				  <?php if($registration->using_calendar === '1') : ?>
-					<div class="overview-calendar-wrap">
-					<label for="overview-calendar-date"><?php esc_html_e('Date', 'seatreg'); ?> <i class="fa fa-calendar" aria-hidden="true"></i></label>
-						<input type="text" id="overview-calendar-date" class="" value="<?php echo esc_attr($filterBookingsByDate); ?>" autocomplete="off" />
+		return;
+	}
 
-						<input type='hidden' value='<?php echo esc_html($filterBookingsByDate); ?>' id='overview-calendar-date-value' />
-					</div>
-				<?php endif; ?>
+	$seatregRegistration = $registrations[0];
+	$seatregRequestedDate = assignIfNotEmpty( $_GET['calendar-date'], null );
+	$seatregCalendarDate = SeatregCalendarService::getBookingFilteringDateForRegistrationView(
+		$seatregRegistration->using_calendar,
+		$seatregRequestedDate === null ? null : sanitize_text_field( $seatregRequestedDate )
+	);
+	$seatregStats = SeatregLayoutService::getBookingsInfoForLayout(
+		$seatregRegistration->registration_layout,
+		$seatregRegistration->registration_code,
+		$seatregCalendarDate
+	);
 
-				<?php echo '<div class="reg-overview-top">';?>
-	  				<?php 
-	  					if($targetRoom == 'overview') {
-							echo '<div class="reg-overview-top-header">';
-								echo esc_html($project_name); 
-							echo '</div>'; 
-	  					}else {
-							echo '<div class="reg-overview-top-header">';
-								echo esc_html($targetRoom); 
-							echo '</div>';
-	  					}
-	  				?>
-
-					<?php
-						if($targetRoom == 'overview') {
-							echo "<div class='reg-overview-top-bron-notify'>";
-								// translators: %s: Number of pending seats
-								$pendingSeats = sprintf(esc_html__('%s pending seats', 'seatreg'), $regStats['bronSeats']);
-								// translators: %s: Number of pending places
-								$pendingPlaces = sprintf(esc_html__('%s pending places', 'seatreg'), $regStats['bronSeats']);
-								echo esc_html($registration->using_seats === '1' ? $pendingSeats : $pendingPlaces) . '!';
-							echo '</div>';
-						}else {
-							for($i = 0; $i < $regStats['roomCount']; $i++) {
-								if($regStats['roomsInfo'][$i]['roomName'] == $targetRoom) {
-									echo '<div class="reg-overview-top-bron-notify">';
-										if( $registration->using_seats === '1' ) {
-											echo esc_html($regStats['roomsInfo'][$i]['roomBronSeats']),' ', esc_html__('pending seats', 'seatreg'), '!';
-										}else {
-											echo esc_html($regStats['roomsInfo'][$i]['roomBronSeats']),' ', esc_html__('pending places', 'seatreg'), '!';
-										}	
-									echo '</div>'; 
-									
-									$roomLoactionInStats = $i;
-
-									break;
-								}
-							}
-						}
-					?>
-
-					<?php 
-						$start = esc_html__('Start date not set', 'seatreg');
-						$end = esc_html__('End date not set', 'seatreg');
-
-						if(!empty($start_date)) {
-							$start = $start_date;
-						}
-
-						if(!empty($end_date)) {
-							$end = $end_date;
-						}
-						
-						echo "<div class='reg-overview-top-date'><span class='time-block'><i class='fa fa-clock-o' style='color:rgb(4, 145, 4); margin-right:3px'></i><span class='time-stamp'>" . esc_html($start) . "</span></span>  <span class='time-block'><i class='fa fa-clock-o' style='color:rgb(250, 38, 38); margin-right:3px'></i><span class='time-stamp'>" . esc_html($end) . "</span></span></div>"; 
-					?>
-	  				
-				<?php echo '</div>';?>
-
-				<?php echo '<div class="reg-overview-middle-wrap">'; ?>			
-				<?php echo '<div class="reg-overview-aside">';?>
-
-					<ul class="room-list">
-						<li class="room-list-item first-item" <?php if($targetRoom == 'overview') { echo 'data-active="true"';} ?> data-stats-target="overview"><?php esc_html_e('Overall', 'seatreg'); ?> </li>
-
-						<?php
-							for($i = 0; $i < $regStats['roomCount']; $i++) {
-								if($regStats['roomsInfo'][$i]['roomName'] != $targetRoom) {
-									echo '<li class="room-list-item" data-stats-target="', esc_attr($regStats['roomsInfo'][$i]['roomName']),'">', esc_html($regStats['roomsInfo'][$i]['roomName']),'</li>';
-								}else {
-									echo '<li class="room-list-item" data-active="true" data-stats-target="', esc_attr($regStats['roomsInfo'][$i]['roomName']),'">', esc_html($regStats['roomsInfo'][$i]['roomName']),'</li>';
-								}
-							}	
-						?>
-						
-					</ul>
-
-				<?php echo '</div>';?>
-
-				<?php echo '<div class="reg-overview-middle">';?>
-					<div class="overview-middle-box">
-						<div class="overview-middle-box-h">
-							<?php $registration->using_seats === '1' ? esc_html_e('Seats', 'seatreg') : esc_html_e('Places', 'seatreg'); ?>
-						</div>
-						<div class="overview-middle-box-stat">
-							<?php 
-								if($targetRoom == 'overview') {
-									echo esc_html($regStats['seatsTotal']);
-								}else if($roomLoactionInStats >= 0) {
-									echo esc_html($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']);
-								}
-							?>
-						</div>	
-					</div>
-
-					<div class="overview-middle-box">
-						<div class="overview-middle-box-h">
-							<?php esc_html_e('Open', 'seatreg'); ?>
-						</div>
-						<div class="overview-middle-box-stat">
-							<?php 
-								if($targetRoom == 'overview') {
-									echo esc_html($regStats['openSeats']); 
-
-								}else if($roomLoactionInStats >= 0) {
-									echo esc_html($regStats['roomsInfo'][$roomLoactionInStats]['roomOpenSeats']);
-								}
-							?>
-						</div>	
-					</div>
-
-					<div class="overview-middle-box">
-						<div class="overview-middle-box-h">
-							<?php esc_html_e('Confirmed', 'seatreg'); ?>
-						</div>
-						<div class="overview-middle-box-stat">
-							<?php 
-								if($targetRoom == 'overview') {
-									echo esc_html($regStats['takenSeats']); 
-								}else if($roomLoactionInStats >= 0) {
-									echo esc_html($regStats['roomsInfo'][$roomLoactionInStats]['roomTakenSeats']);
-								}
-							?>
-						</div>	
-					</div>
-
-					<div class="overview-middle-box">
-						<div class="overview-middle-box-h">
-							<?php esc_html_e('Pending', 'seatreg'); ?>
-						</div>
-						<div class="overview-middle-box-stat">
-							<?php 
-								if($targetRoom == 'overview') {
-									echo esc_html($regStats['bronSeats']); 
-								}else if($roomLoactionInStats >= 0) {
-									echo esc_html($regStats['roomsInfo'][$roomLoactionInStats]['roomBronSeats']);
-								}
-							?>
-						</div>	
-					</div>	
-
-				<?php echo '</div>';?>
-
-				<?php echo '<div class="reg-overview-donuts">';?>
-
-					<canvas class="stats-doughnut" height="100" width="100"></canvas>
-
-					<div class="stats-doughnut-legend">
-						<?php if($regStats['seatsTotal']): ?>
-
-							<div class="legend-block"><span class="doughnut-legend" style="background-color:#61B329"></span><span style="padding-right: 12px"><?php esc_html_e('Open', 'seatreg'); ?> </span>
-								<span class="legend-block-percent" style="color:#61B329">
-									<?php 
-										if($targetRoom == 'overview') {
-											echo esc_html( round(($regStats['openSeats'] / $regStats['seatsTotal']  ) * 100) ), '%'; 
-										}else if($roomLoactionInStats >= 0) {
-
-											if($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'] > 0) {
-												echo esc_html( round(($regStats['roomsInfo'][$roomLoactionInStats]['roomOpenSeats'] / $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']  ) * 100, 2)), '%'; 
-											}else {
-												echo '0%';
-											}
-										}
-									?>
-								</span>
-							</div>
-							<div class="legend-block"><span class="doughnut-legend" style="background-color:red"></span><span style="padding-right: 12px"><?php esc_html_e('Confirmed', 'seatreg'); ?> </span>
-								<span class="legend-block-percent" style="color:red">
-									<?php 
-										if($targetRoom == 'overview') {
-											echo esc_html(round(($regStats['takenSeats'] / $regStats['seatsTotal']  ) * 100)), '%'; 
-										}else if($roomLoactionInStats >= 0) {
-
-											if($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'] > 0) {
-												echo esc_html(round(($regStats['roomsInfo'][$roomLoactionInStats]['roomTakenSeats'] / $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']  ) * 100, 2)), '%'; 
-											}else {
-												echo '0%';
-											}
-										}
-									?>
-								</span>
-							</div>
-							<div class="legend-block"><span class="doughnut-legend" style="background-color:yellow"></span><span style="padding-right: 12px"><?php esc_html_e('Pending', 'seatreg'); ?> </span>
-								<span class="legend-block-percent" style="color:#26a6d1">
-									<?php 
-										if($targetRoom == 'overview') {
-											echo esc_html(round(($regStats['bronSeats'] / $regStats['seatsTotal']  ) * 100)), '%'; 
-										}else if($roomLoactionInStats >= 0) {
-
-											if($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'] > 0) {
-												echo esc_html(round(($regStats['roomsInfo'][$roomLoactionInStats]['roomBronSeats'] / $regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal'] ) * 100, 2)), '%'; 
-											}else {
-												echo '0%';
-											}											
-										}		
-									?>
-								</span>
-							</div>
-						<?php endif; ?>
-					</div>
-					<?php if($targetRoom == 'overview'): ?>
-						<input type="hidden" class="seats-total-don" value="<?php echo esc_attr($regStats['seatsTotal']); ?>"/>
-						<input type="hidden" class="seats-bron-don" value="<?php echo esc_attr($regStats['bronSeats']); ?>"/>
-						<input type="hidden" class="seats-taken-don" value="<?php echo esc_attr($regStats['takenSeats']); ?>"/>
-						<input type="hidden" class="seats-open-don" value="<?php echo esc_attr($regStats['openSeats']); ?>"/>
-					<?php else: ?>
-						<input type="hidden" class="seats-total-don" value="<?php echo esc_attr($regStats['roomsInfo'][$roomLoactionInStats]['roomSeatsTotal']); ?>"/>
-						<input type="hidden" class="seats-bron-don" value="<?php echo esc_attr($regStats['roomsInfo'][$roomLoactionInStats]['roomBronSeats']); ?>"/>
-						<input type="hidden" class="seats-taken-don" value="<?php echo esc_attr($regStats['roomsInfo'][$roomLoactionInStats]['roomTakenSeats']); ?>"/>
-						<input type="hidden" class="seats-open-don" value="<?php echo esc_attr($regStats['roomsInfo'][$roomLoactionInStats]['roomOpenSeats']); ?>"/>
-					<?php endif; ?>
-
-				<?php echo '</div>';?>
-				<?php echo '</div>'; ?>	
-			<?php echo '</div>';?>
-	  <?php		
+	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/sections/overview.php' );
 }
 
 //generate my registration section. In this section you can see a card per registration with its status, booking counts and links to overview, booking manager and map builder.
@@ -2603,84 +2352,6 @@ function seatreg_generate_registration_code() {
 	return substr(md5( microtime() ), 0, 10);
 }
 
-//return room info. How many bron and taken seats are in a rooms
-function seatreg_get_room_seat_info($struct, $bronRegistrations, $takenRegistrations) {
-	$bronLength = count($bronRegistrations);
-	$takenLength = count($takenRegistrations);
-	$regStructure = ($struct !== null) ? json_decode($struct)->roomData : null;
-	$roomCount = count(is_array($regStructure) ? $regStructure : []);
-	$howManyRegSeats = 0;
-	$howManyOpenSeats = 0;
-	$howManyBronSeats= 0;
-	$howManyTakenSeats = 0;
-	$howManyCustomBoxes = 0;
-	$statsArray = array();
-	$roomsInfo = array();
-
-	for($i = 0; $i < $roomCount; $i++) {
-		$roomBoxes = $regStructure[$i]->boxes;
-
-		//find how many bron seats in this room
-		$roomBoxCount = count($roomBoxes);
-		$roomRegSeats = 0;  //how many reg seats
-		$roomOpenSeats = 0; //how many open reg seats
-		$roomTakenSeats = 0; //how many taken seats
-		$roomBronSeats = 0;	//bron seats
-		$roomCustomBoxes = 0;
-
-		for($k = 0; $k < $bronLength; $k++) {  
-			if( $regStructure[$i]->room->uuid == $bronRegistrations[$k]->room_uuid ) { //find how many bron seats in this room
-				$roomBronSeats = $bronRegistrations[$k]->total;
-				$howManyBronSeats += $bronRegistrations[$k]->total;
-
-				break;
-			}
-		}
-
-		for($k = 0; $k < $takenLength; $k++) {
-			if($regStructure[$i]->room->uuid == $takenRegistrations[$k]->room_uuid) { //find how many taken seats in this room
-				$roomTakenSeats = $takenRegistrations[$k]->total;
-				$howManyTakenSeats += $takenRegistrations[$k]->total;
-
-				break;
-			}
-		}
-		
-		for($j = 0; $j < $roomBoxCount; $j++) {
-			if($roomBoxes[$j]->canRegister == 'true') {
-				if($roomBoxes[$j]->status == 'noStatus') {
-					$howManyOpenSeats++;
-					$roomOpenSeats++;
-				}
-				
-				$howManyRegSeats++;
-				$roomRegSeats++;
-			}else {
-				$howManyCustomBoxes++;
-				$roomCustomBoxes++;
-			}
-		}
-
-		$roomsInfo[] = array(
-			'roomName' => $regStructure[$i]->room->name,
-			'roomSeatsTotal' => $roomRegSeats,
-			'roomOpenSeats' => $roomRegSeats - $roomTakenSeats - $roomBronSeats,
-			'roomTakenSeats' => $roomTakenSeats,
-			'roomBronSeats' => $roomBronSeats,
-			'roomCustomBoxes' => $roomCustomBoxes
-		);
-	}
-
-	$statsArray['seatsTotal'] = $howManyRegSeats;
-	$statsArray['openSeats'] = $howManyOpenSeats - $howManyBronSeats - $howManyTakenSeats;
-	$statsArray['bronSeats'] = $howManyBronSeats;
-	$statsArray['takenSeats'] = $howManyTakenSeats;
-	$statsArray['roomCount'] = $roomCount;
-	$statsArray['roomsInfo'] = $roomsInfo;
-
-	return $statsArray;
-}
-
 function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate) {
 	$registration = seatreg_get_registration_data($code)[0];
 	$structure = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
@@ -4519,16 +4190,6 @@ function seatreg_resend_receipt_callback() {
 	}
 
 	$resp->echoData();
-
-	die();
-}
-
-
-add_action( 'wp_ajax_seatreg_get_room_stats', 'seatreg_get_room_stats_callback' );
-function seatreg_get_room_stats_callback() {
-	seatreg_ajax_security_check(SEATREG_MANAGE_BOOKINGS_CAPABILITY);
-
-	seatreg_generate_overview_section_html($_POST['data']['target'], sanitize_text_field($_POST['code']), $_POST['data']['calendarDate']);
 
 	die();
 }

@@ -1,5 +1,4 @@
 (function($) {
-	var canvasSupport = ($('html').hasClass('no-canvas') ? false : true);
 	var bookingOrderInManager = null;
 	var bookingManagerActiveAddBookingIdLookupIndex = 0;
 	var validCurrencyCodes = [
@@ -38,10 +37,6 @@
 		selectedRegistration: null,
 		bookings: []
 	};
-
-	$('.time-stamp').each(function() {
-		$(this).text(timeStampToDateString($(this).text()));
-	});
 
 	function seaterg_admin_ajax(action, code, data) {
 		return $.ajax({
@@ -179,16 +174,6 @@
 		window.seatreg.bookings = [];
 		window.seatreg.selectedRegistration = null;
 		window.seatreg.selectedRegistrationName = null;
-	}
-
-	function timeStampToDateString(timeStampText) {
-		if(!isNaN(timeStampText)) {
-			var date = new Date(parseInt(timeStampText));
-
-			return date.format("d.M.Y H:i");
-		}
-		
-		return timeStampText;
 	}
 
 	function generateUniqueString() {
@@ -356,19 +341,182 @@ function initOverviewCalendarDatePicker() {
 		altFormat: 'yy-mm-dd',
 		dateFormat: 'yy-mm-dd',
 		onSelect: function(dateText) {
-			$('#overview-calendar-date').val( seatregFormatCalendarDateForDisplay(dateText, WP_Seatreg.SITE_LANGUAGE) );
-			$('#existing-regs .room-list-item[data-active="true"]').trigger('click');
+			setCalendarDateUrlParam(dateText);
+			$('#overview-calendar-date').val( seatregFormatCalendarDateForDisplay(dateText, WP_Seatreg.SEATREG_SITE_LANGUAGE) );
+			alertify.success(translator.translate('reloadingPage'));
+			location.reload();
 		}
 	});
 
 	var initialInternal = $('#overview-calendar-date-value').val();
     if (initialInternal) {
         $('#overview-calendar-date').val(
-            seatregFormatCalendarDateForDisplay(initialInternal, WP_Seatreg.SITE_LANGUAGE)
+            seatregFormatCalendarDateForDisplay(initialInternal, WP_Seatreg.SEATREG_SITE_LANGUAGE)
         );
     }
 }
 initOverviewCalendarDatePicker();
+
+var seatregOverviewChartColors = {
+	confirmed: '#2e7d32',
+	pending: '#dba617',
+	open: '#2271b1'
+};
+
+//Column and bar are the same Chart.js type, told apart by which axis the categories run along
+var seatregOverviewChartTypes = {
+	doughnut: { type: 'doughnut' },
+	pie: { type: 'pie' },
+	column: { type: 'bar', indexAxis: 'x' },
+	bar: { type: 'bar', indexAxis: 'y' }
+};
+
+function seatregOverviewChartConfig(canvas, chartType) {
+	var shape = seatregOverviewChartTypes[chartType] || seatregOverviewChartTypes.doughnut;
+	var isBar = shape.type === 'bar';
+	var values = ['confirmed', 'pending', 'open'].map(function(part) {
+		return parseInt($(canvas).attr('data-' + part), 10) || 0;
+	});
+
+	return {
+		type: shape.type,
+		data: {
+			labels: [
+				translator.translate('overviewConfirmed'),
+				translator.translate('overviewPending'),
+				translator.translate('overviewOpen')
+			],
+			datasets: [{
+				data: values,
+				backgroundColor: [
+					seatregOverviewChartColors.confirmed,
+					seatregOverviewChartColors.pending,
+					seatregOverviewChartColors.open
+				],
+				borderWidth: isBar ? 0 : 2,
+				borderColor: '#fff'
+			}]
+		},
+		options: {
+			indexAxis: shape.indexAxis,
+			responsive: true,
+			maintainAspectRatio: false,
+			animation: false,
+			//The screen has its own legend beside the chart, with the percentages Chart.js does not show
+			plugins: { legend: { display: false } },
+			scales: isBar ? {
+				x: { beginAtZero: true, ticks: { precision: 0 }, grid: { display: shape.indexAxis === 'y' } },
+				y: { beginAtZero: true, ticks: { precision: 0 }, grid: { display: shape.indexAxis === 'x' } }
+			} : {}
+		}
+	};
+}
+
+//Every room's numbers are rendered up front, so switching is only a matter of which panel is shown.
+//A chart is drawn the first time its panel is shown, because Chart.js cannot size a hidden canvas
+function initOverviewRoomTabs() {
+	var $tabs = $('.seatreg-overview__rooms [role="tab"]');
+
+	if( $tabs.length === 0 ) {
+		return;
+	}
+
+	var charts = {};
+	var chartType = $('.seatreg-overview__chart-type[aria-pressed="true"]').first().attr('data-chart-type') || 'doughnut';
+
+	function drawChart($panel) {
+		var canvas = $panel.find('.seatreg-overview__canvas').get(0);
+
+		if( !canvas || typeof Chart === 'undefined' ) {
+			return;
+		}
+
+		var panelId = $panel.attr('id');
+
+		if( charts[panelId] ) {
+			charts[panelId].resize();
+
+			return;
+		}
+
+		charts[panelId] = new Chart(canvas.getContext('2d'), seatregOverviewChartConfig(canvas, chartType));
+	}
+
+	function selectTab($tab, moveFocus) {
+		$tabs.attr('aria-selected', 'false').attr('tabindex', '-1');
+		$('.seatreg-overview__panel').prop('hidden', true);
+
+		$tab.attr('aria-selected', 'true').attr('tabindex', '0');
+
+		var $panel = $('#' + $tab.attr('aria-controls'));
+		$panel.prop('hidden', false);
+		drawChart($panel);
+
+		if( moveFocus ) {
+			$tab.trigger('focus');
+		}
+	}
+
+	$tabs.on('click', function() {
+		selectTab($(this), false);
+	});
+
+	$tabs.on('keydown', function(event) {
+		var index = $tabs.index(this);
+		var nextIndex = null;
+
+		switch(event.key) {
+			case 'ArrowDown':
+			case 'ArrowRight':
+				nextIndex = (index + 1) % $tabs.length;
+				break;
+			case 'ArrowUp':
+			case 'ArrowLeft':
+				nextIndex = (index - 1 + $tabs.length) % $tabs.length;
+				break;
+			case 'Home':
+				nextIndex = 0;
+				break;
+			case 'End':
+				nextIndex = $tabs.length - 1;
+				break;
+			default:
+				return;
+		}
+
+		event.preventDefault();
+		selectTab($tabs.eq(nextIndex), true);
+	});
+
+	//Every panel carries its own set of buttons, so the pressed one is kept in step across all of them
+	$('.seatreg-overview__panels').on('click', '.seatreg-overview__chart-type', function() {
+		var picked = $(this).attr('data-chart-type');
+
+		if( picked === chartType ) {
+			return;
+		}
+
+		chartType = picked;
+
+		$('.seatreg-overview__chart-type').each(function() {
+			$(this).attr('aria-pressed', $(this).attr('data-chart-type') === chartType ? 'true' : 'false');
+		});
+
+		Object.keys(charts).forEach(function(panelId) {
+			charts[panelId].destroy();
+			delete charts[panelId];
+		});
+
+		drawChart($('.seatreg-overview__panel:not([hidden])'));
+	});
+
+	drawChart($('.seatreg-overview__panel:not([hidden])'));
+}
+
+//Chart.js is enqueued on this screen only, so wait for every footer script to have run
+$(function() {
+	initOverviewRoomTabs();
+});
 
 function initBookingManagerCalendarDatePicer() {
 	$('#booking-manager-calendar-date').datepicker({
@@ -377,7 +525,7 @@ function initBookingManagerCalendarDatePicer() {
 		dateFormat: 'yy-mm-dd',
 		onSelect: function(dateText) {
 			setCalendarDateUrlParam(dateText);
-			$('#booking-manager-calendar-date').val( seatregFormatCalendarDateForDisplay(dateText, WP_Seatreg.SITE_LANGUAGE) );
+			$('#booking-manager-calendar-date').val( seatregFormatCalendarDateForDisplay(dateText, WP_Seatreg.SEATREG_SITE_LANGUAGE) );
 			alertify.success(translator.translate('reloadingPage'));
 			location.reload(); 
 		}
@@ -385,7 +533,7 @@ function initBookingManagerCalendarDatePicer() {
 	var initialInternal = $('#booking-manager-calendar-date').val();
     if (initialInternal) {
         $('#booking-manager-calendar-date').val(
-            seatregFormatCalendarDateForDisplay(initialInternal, WP_Seatreg.SITE_LANGUAGE)
+            seatregFormatCalendarDateForDisplay(initialInternal, WP_Seatreg.SEATREG_SITE_LANGUAGE)
         );
     }
 }
@@ -476,77 +624,6 @@ $('#seatreg-booking-manager').on('easytabs:after', '.tab-container', function(e,
 	if(targetPanel && targetPanel.attr('id') && window.history && window.history.replaceState) {
 		window.history.replaceState(null, '', '#' + targetPanel.attr('id'));
 	}
-});
-
-$('#existing-regs-wrap').on('click', '.room-list-item', function() {
-	var code = $('#seatreg-reg-code').val();
-	var target = $(this).attr('data-stats-target');
-	var calendarDate = $('#overview-calendar-date-value').val() || null;
-	var overViewContainer = $(this).closest('.reg-overview');
-	overViewContainer.append($('<img>').attr('src', WP_Seatreg.plugin_dir_url + 'img/ajax_loader.gif').addClass('ajax_loader'));
-
-	var promise = seaterg_admin_ajax2('seatreg_get_room_stats', code, {
-		target: target, 
-		calendarDate: calendarDate
-	});
-
-	promise.done(function(data) {
-		overViewContainer.replaceWith(data).promise().done(function() {
-			$('#existing-regs-wrap .reg-overview').find('.time-stamp').each(function() {
-				$(this).text(timeStampToDateString($(this).text()));
-			});
-
-			var donutWrapper = $('#existing-regs-wrap').find('.reg-overview-donuts');		
-			var doughnutData = [
-				{
-					value: parseInt(donutWrapper.find('.seats-open-don').val()),
-					color:"#61B329"
-				},
-				{
-					value : parseInt(donutWrapper.find('.seats-bron-don').val()),
-					color : "#FFFF00"
-				},
-				{
-					value : parseInt(donutWrapper.find('.seats-taken-don').val()),
-					color : "red"
-				}
-			
-			];
-
-			if( canvasSupport) {
-				var ctx = donutWrapper.find('.stats-doughnut').get(0).getContext("2d");
-				var myNewChart = new Chart(ctx).Doughnut(doughnutData,{animation: false});
-			}
-
-		});
-		initOverviewCalendarDatePicker();
-		
-	});
-	promise.fail = seatreg_admin_ajax_error;
-});
-
-$('.reg-overview-donuts').each(function() {
-	var donutWrapper = $(this);
-	var doughnutData = [
-		{
-			value: parseInt(donutWrapper.find('.seats-open-don').val()),
-			color:"#61B329"
-		},
-		{
-			value : parseInt(donutWrapper.find('.seats-bron-don').val()),
-			color : "#FFFF00"
-		},
-		{
-			value : parseInt(donutWrapper.find('.seats-taken-don').val()),
-			color : "red"
-		}
-	
-	];
-
-	if(canvasSupport) {
-		var ctx = donutWrapper.find('.stats-doughnut').get(0).getContext("2d");
-		var myNewChart = new Chart(ctx).Doughnut(doughnutData,{animation: false});
-	}			
 });
 
 /*

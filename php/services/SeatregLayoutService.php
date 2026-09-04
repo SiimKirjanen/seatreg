@@ -264,7 +264,7 @@ class SeatregLayoutService {
     }
 
     public static function getSeatsStats($struct, $bronRegistrations, $takenRegistrations) {
-        $registration = json_decode($struct);
+        $registration = $struct ? json_decode($struct) : null;
         if(!isset($registration->roomData)) {
             return [];
         }
@@ -324,10 +324,14 @@ class SeatregLayoutService {
                 }
             }
     
+            //roomOpenSeats counts from every bookable seat, roomOpenNoStatusSeats only from the ones left
+            //without a status - the basis the registration wide openSeats below is counted on
             $roomsInfo[] = array(
                 'roomUuid' => $regStructure[$i]->room->uuid,
+                'roomName' => $regStructure[$i]->room->name,
                 'roomSeatsTotal' => $roomRegSeats,
                 'roomOpenSeats' => $roomRegSeats - $roomTakenSeats - $roomBronSeats,
+                'roomOpenNoStatusSeats' => $roomOpenSeats - $roomTakenSeats - $roomBronSeats,
                 'roomTakenSeats' => $roomTakenSeats,
                 'roomBronSeats' => $roomBronSeats,
                 'roomCustomBoxes' => $roomCustomBoxes

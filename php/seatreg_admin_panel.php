@@ -131,9 +131,7 @@ function seatreg_create_overview() {
 				seatreg_generate_tabs('seatreg-overview');
 			?>
 			<div class="seatreg-tabs-content">
-				<div id="existing-regs-wrap">
-					<?php seatreg_generate_overview_section('overview'); ?> 
-				</div>
+				<?php seatreg_generate_overview_section(); ?>
 			</div>
 		</div>
 	<?php

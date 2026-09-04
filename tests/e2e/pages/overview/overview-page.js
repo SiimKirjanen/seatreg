@@ -3,23 +3,19 @@ const { TIMEOUTS } = require('../../utils/timeouts');
 const { SEATREG_PAGES, openSeatRegScreen, expectOnSeatRegPage } = require('../../utils/navigation');
 const { HomePage } = require('../home/home-page');
 
-/**
- * The four counters carry no id and no data attribute, so the heading is the only
- * thing telling them apart - and the first is headed Places instead of Seats on a
- * registration that does not count in seats.
- */
-const STAT_LABELS = {
-	seats: 'Seats',
-	open: 'Open',
-	confirmed: 'Confirmed',
-	pending: 'Pending',
+/** The four counters, by the data-stat each carries. */
+const STATS = {
+	seats: 'seats',
+	open: 'open',
+	confirmed: 'confirmed',
+	pending: 'pending',
 };
 
-/** The doughnut's slices, by the hidden field each is drawn from. */
-const CHART_INPUTS = {
-	open: '.seats-open-don',
-	confirmed: '.seats-taken-don',
-	pending: '.seats-bron-don',
+/** The doughnut's slices and the bar's segments, by the name each is drawn under. */
+const PARTS = {
+	confirmed: 'confirmed',
+	pending: 'pending',
+	open: 'open',
 };
 
 /**
@@ -27,9 +23,9 @@ const CHART_INPUTS = {
  * (admin.php?page=seatreg-overview&tab=<code>).
  *
  * Everything on it is one calculation shown four ways, so a layout is what gives
- * it anything to say and bookings are what make it interesting. Picking a room
- * replaces the whole panel with markup fetched from the server, so nothing may be
- * held on to across a switch.
+ * it anything to say and bookings are what make it interesting. Every room's
+ * numbers are rendered up front and picking one only swaps which panel is shown,
+ * so nothing is fetched and there is nothing to wait for.
  */
 class OverviewPage {
 	constructor(page) {
@@ -39,23 +35,26 @@ class OverviewPage {
 
 	/* Screen shell */
 
-	/** The panel the whole screen is drawn in, and replaced as. */
 	get panel() {
-		return this.page.locator('#existing-regs');
+		return this.page.locator('#seatreg-overview');
 	}
 
-	/** Names the registration, or the room, whichever is being looked at. */
+	/** Names the registration the screen is showing. */
 	get heading() {
-		return this.panel.locator('.reg-overview-top-header');
+		return this.panel.locator('.seatreg-overview__title');
 	}
 
-	get pendingNotice() {
-		return this.panel.locator('.reg-overview-top-bron-notify');
+	get status() {
+		return this.panel.locator('.seatreg-registration-card__badge');
 	}
 
-	/** Scoped to this screen: the Bookings screen puts the same id on the page. */
-	get registrationCode() {
-		return this.panel.locator('#seatreg-reg-code');
+	get dates() {
+		return this.panel.locator('.seatreg-overview__dates');
+	}
+
+	/** Registration, Settings and Bookings, in that order. */
+	link(name) {
+		return this.panel.locator('.seatreg-overview__links a', { hasText: name });
 	}
 
 	registrationTab(code) {
@@ -65,51 +64,81 @@ class OverviewPage {
 	/* Rooms */
 
 	/** @param {string} name A room name, or 'Overall' for the whole registration */
-	roomListItem(name) {
-		return this.panel.locator('.room-list-item').filter({ hasText: name });
-	}
-
-	get activeRoomListItem() {
-		return this.panel.locator('.room-list-item[data-active="true"]');
-	}
-
-	/* Numbers */
-
-	/** @param {string} label A value of STAT_LABELS */
-	statValue(label) {
+	roomTab(name) {
 		return this.panel
-			.locator('.overview-middle-box')
-			.filter({ has: this.page.getByText(label, { exact: true }) })
-			.locator('.overview-middle-box-stat');
+			.locator('.seatreg-overview__room')
+			.filter({ has: this.page.getByText(name, { exact: true }) });
+	}
+
+	get selectedRoomTab() {
+		return this.panel.locator('.seatreg-overview__room[aria-selected="true"]');
+	}
+
+	/** The booked-out-of-total the room list puts beside each room. */
+	roomCount(name) {
+		return this.roomTab(name).locator('.seatreg-overview__room-count');
+	}
+
+	/* Numbers, read from whichever panel is showing */
+
+	get visiblePanel() {
+		return this.panel.locator('.seatreg-overview__panel:not([hidden])');
+	}
+
+	get panelHeading() {
+		return this.visiblePanel.locator('.seatreg-overview__panel-title');
+	}
+
+	/** @param {string} stat A value of STATS */
+	statValue(stat) {
+		return this.visiblePanel.locator(`[data-stat="${stat}"] .seatreg-overview__stat-value`);
+	}
+
+	/** @param {string} stat A value of STATS */
+	statLink(stat) {
+		return this.visiblePanel.locator(`a[data-stat="${stat}"]`);
+	}
+
+	/** @param {string} part A value of PARTS */
+	legendPercent(part) {
+		return this.visiblePanel
+			.locator(`.seatreg-overview__legend-row--${part} .seatreg-overview__legend-percent`);
+	}
+
+	/** @param {string} shape One of doughnut, pie, column, bar */
+	chartTypeButton(shape) {
+		return this.visiblePanel.locator(`.seatreg-overview__chart-type[data-chart-type="${shape}"]`);
+	}
+
+	/** Every panel carries its own set, so this reads the one that is showing. */
+	get pressedChartType() {
+		return this.visiblePanel.locator('.seatreg-overview__chart-type[aria-pressed="true"]');
+	}
+
+	get canvas() {
+		return this.visiblePanel.locator('.seatreg-overview__canvas');
 	}
 
 	/**
-	 * Rounded to whole percents for the registration and to two decimals for a
-	 * single room, so this does not read back the same shape in both.
+	 * Chart.js draws to a canvas, so the numbers it was given are not in the DOM.
+	 * The type it is currently drawing and the values it holds come from the
+	 * instance itself.
 	 */
-	legendPercent(label) {
-		return this.panel
-			.locator('.legend-block')
-			.filter({ hasText: label })
-			.locator('.legend-block-percent');
+	async chartState() {
+		return this.canvas.evaluate((canvas) => {
+			const chart = window.Chart.getChart(canvas);
+
+			return chart && { type: chart.config.type, data: chart.data.datasets[0].data };
+		});
 	}
 
-	/**
-	 * The chart is built out of these hidden fields rather than anything a test
-	 * could reach, so they are where its numbers can be checked.
-	 *
-	 * @param {string} kind A key of CHART_INPUTS
-	 */
-	chartInput(kind) {
-		return this.panel.locator(CHART_INPUTS[kind]);
-	}
+	/** So a chart that quietly failed to draw is not taken for one that did. */
+	async chartWasDrawn() {
+		return this.canvas.evaluate((canvas) => {
+			const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
 
-	get doughnut() {
-		return this.panel.locator('canvas.stats-doughnut');
-	}
-
-	get dates() {
-		return this.panel.locator('.reg-overview-top-date .time-stamp');
+			return pixels.data.some((channel) => channel !== 0);
+		});
 	}
 
 	/* Actions */
@@ -134,35 +163,21 @@ class OverviewPage {
 		await expect(this.panel).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
 	}
 
-	/**
-	 * The panel is fetched again rather than updated, so the reply arriving is
-	 * what says the new numbers are on screen. The loading image is not waited on:
-	 * a request that fails leaves it there for good.
-	 *
-	 * @param {string} name A room name, or 'Overall'
-	 */
-	async selectRoom(name) {
-		const fetched = this.page.waitForResponse(
-			(response) =>
-				response.url().includes('admin-ajax.php') &&
-				(response.request().postData() ?? '').includes('seatreg_get_room_stats'),
-			{ timeout: TIMEOUTS.NAVIGATION }
-		);
-
-		await this.roomListItem(name).click();
-		await fetched;
-
-		await expect(this.activeRoomListItem).toHaveText(new RegExp(name));
+	/** @param {string} shape One of doughnut, pie, column, bar */
+	async pickChartType(shape) {
+		await this.chartTypeButton(shape).click();
 	}
 
-	/** So a chart that quietly failed to draw is not taken for one that did. */
-	async doughnutWasDrawn() {
-		return this.doughnut.evaluate((canvas) => {
-			const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+	/** @param {string} name A room name, or 'Overall' */
+	async selectRoom(name) {
+		await this.roomTab(name).click();
+		await expect(this.selectedRoomTab).toContainText(name);
+	}
 
-			return pixels.data.some((channel) => channel !== 0);
-		});
+	/** Walks the room list with the keyboard, from whichever room is selected. */
+	async selectRoomWithKeyboard(key) {
+		await this.selectedRoomTab.press(key);
 	}
 }
 
-module.exports = { OverviewPage, STAT_LABELS };
+module.exports = { OverviewPage, STATS, PARTS };
