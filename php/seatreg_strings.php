@@ -80,6 +80,9 @@ function seatreg_generate_registration_strings() {
 
 function seatreg_generate_admin_strings() {
     $translations = new stdClass();
+    $translations->overviewConfirmed = esc_html__('Confirmed', 'seatreg');
+    $translations->overviewPending = esc_html__('Pending', 'seatreg');
+    $translations->overviewOpen = esc_html__('Open', 'seatreg');
     $translations->hoverDeleteSuccess = esc_html__('Hover text deleted', 'seatreg');
     $translations->hoverTextAdded = esc_html__('Hover text added', 'seatreg');
     $translations->legendNameChanged = esc_html__('Legend name changed', 'seatreg');

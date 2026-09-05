@@ -21,59 +21,72 @@
 @import "components/seatreg-flower";
 @import "components/seatreg-update-notice";
 @import "components/registration-cards";
+@import "components/overview";
 
 html {
   font-size: 100%;
 }
+
 .index-icon {
   margin-right: 10px;
 }
+
 .btn-default {
   color: #333;
   background-color: #fff;
   border-color: #ccc;
 }
+
 .btn-default:focus {
   color: #333;
   background-color: #e6e6e6;
   border-color: #8c8c8c;
 }
+
 .btn-default:hover {
   color: #333;
   background-color: #e6e6e6;
   border-color: #adadad;
 }
+
 .btn-default:active {
   color: #333;
   background-color: #e6e6e6;
   border-color: #adadad;
 }
+
 .seatreg-wp-admin .btn-primary {
   color: #fff;
   background-color: #428bca;
   border-color: #357ebd;
 }
+
 .seatreg-wp-admin .btn-primary:hover,
 .seatreg-wp-admin .btn-primary:active {
   background-color: #3276b1;
   border-color: #285e8e;
 }
+
 .seatreg-wp-admin input[type="checkbox"]:focus {
   outline: none;
 }
+
 .seatreg-wp-admin {
   font-family: "Open Sans", sans-serif;
 }
+
 .seatreg-wp-admin .home-content {
   display: flow-root;
   position: relative;
 }
+
 .seatreg-wp-admin .jumbotron {
   background-image: url(../img/chairs_med.jpg);
   background-size: cover;
   margin-left: -20px;
   margin-bottom: 42px;
 }
+
 .seatreg-wp-admin .donate-wrap {
   max-width: 100%;
   display: flex;
@@ -91,6 +104,7 @@ html {
   > img {
     margin-right: 12px;
   }
+
   .donate-paypal {
     display: flex;
     align-items: center;
@@ -106,7 +120,9 @@ html {
       display: flex;
       margin: 0;
     }
+
   }
+
   .donate-img {
     cursor: pointer;
     transition: transform 0.15s ease, filter 0.15s ease;
@@ -119,13 +135,17 @@ html {
       transform: scale(1.05);
       filter: brightness(1.08);
     }
+
   }
+
   .buy-me-coffee-link {
     img {
       width: 120px;
     }
+
   }
 }
+
 .seatreg-wp-admin .your-registrations-header {
   margin-top: 28px;
   margin-bottom: 24px;
@@ -134,26 +154,33 @@ html {
 .seatreg-wp-admin .nav-tab:first-of-type {
   margin-left: 0;
 }
+
 .seatreg-wp-admin .nav-tab {
   background: #f2f2f2;
 }
+
 .seatreg-wp-admin .nav-tab.nav-tab-active {
   text-decoration: underline;
 }
+
 .new-reg-title {
   margin-bottom: 24px;
 }
+
 .seatreg-wp-admin .jumbotron .main-heading {
   font-size: 38px;
   font-weight: 600;
 }
+
 .seatreg-wp-admin .jumbotron .jumbotron-text {
   font-size: 21px;
   font-weight: 600;
 }
+
 .seatreg-wp-admin .nav-tabs {
   margin-top: 40px;
 }
+
 .seatreg-tabs-content {
   background-color: #f2f2f2;
   padding: 24px;
@@ -161,12 +188,14 @@ html {
   border-top: none;
   position: relative;
 }
+
 .seatreg-tabs-content .etabs {
   margin: 0;
   padding: 0;
   background-color: #f2f2f2;
   padding-bottom: 6px;
 }
+
 .seatreg-tabs-content .tab {
   display: inline-block;
   margin-right: 2px;
@@ -175,6 +204,7 @@ html {
   *display: inline;
   background: #fff;
 }
+
 .seatreg-tabs-content .tab a {
   font-size: 16px;
   line-height: 2em;
@@ -184,29 +214,37 @@ html {
   text-decoration: none;
   color: #000;
 }
+
 .seatreg-tabs-content .tab a:hover {
   text-decoration: underline;
 }
+
 .seatreg-tabs-content .tab.active {
   background: #404040;
   position: relative;
 }
+
 .seatreg-tabs-content .tab a.active {
   font-weight: bold;
   color: #fff;
 }
+
 .seatreg-tabs-content .tab-container .panel-container {
   overflow: hidden;
 }
+
 .seatreg-tabs-content .form-group {
   margin-bottom: 25px;
 }
+
 .seatreg-settings-form .form-group {
   max-width: 600px;
 }
+
 .seatreg-settings-form .flow-summary-group {
   max-width: none;
 }
+
 .settings-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -215,6 +253,7 @@ html {
   padding: 0;
   background-color: #f2f2f2;
 }
+
 .settings-tab {
   background: #fff;
   border: none;
@@ -224,27 +263,34 @@ html {
   line-height: 2em;
   color: #000;
 }
+
 .settings-tab:hover {
   text-decoration: underline;
 }
+
 .settings-tab.settings-tab--active {
   background: #404040;
   font-weight: 700;
   color: #fff;
 }
+
 .settings-tab.settings-tab--active:hover {
   text-decoration: none;
 }
+
 .settings-tab-panels {
   padding: 32px 0 0;
   background: transparent;
 }
+
 .settings-tab-panel {
   display: none;
 }
+
 .settings-tab-panel.settings-tab-panel--active {
   display: block;
 }
+
 .email-color-fields {
   display: grid;
   grid-template-columns: max-content max-content;
@@ -252,6 +298,7 @@ html {
   gap: 10px 16px;
   margin-top: 12px;
 }
+
 .email-logo-controls {
   display: flex;
   align-items: center;
@@ -259,6 +306,7 @@ html {
   margin: 12px 0;
   flex-wrap: wrap;
 }
+
 #email-logo-preview,
 #page-logo-preview {
   max-height: 60px;
@@ -268,6 +316,7 @@ html {
   padding: 4px;
   background: #fff;
 }
+
 .email-color-field {
   display: contents;
 
@@ -288,11 +337,14 @@ html {
       opacity: 0.5;
       cursor: not-allowed;
     }
+
   }
 }
+
 .seatreg-settings-form #seatreg-settings-submit {
   margin-top: 20px;
 }
+
 .booking-flow-details__summary {
   cursor: pointer;
   font-weight: 700;
@@ -304,63 +356,79 @@ html {
   align-items: center;
   color: #2271b1;
 }
+
 .booking-flow-details__summary::-webkit-details-marker {
   display: none;
 }
+
 .booking-flow-details__summary:hover {
   color: #135e96;
 }
+
 .booking-flow-details__icon {
   margin-right: 8px;
   transition: transform 0.15s ease;
 }
+
 .booking-flow-details[open] .booking-flow-details__icon {
   transform: rotate(90deg);
 }
+
 .booking-flow-details__hint {
   font-weight: 400;
   font-size: 12px;
   color: #777;
   margin-left: 8px;
 }
+
 .booking-flow-details .help-block {
   margin-top: 10px;
 }
+
 #booking-flow-summary .flow-group {
   margin-bottom: 12px;
 }
+
 #booking-flow-summary .flow-group:last-child {
   margin-bottom: 0;
 }
+
 #booking-flow-summary .flow-group__title {
   font-weight: 600;
   margin-bottom: 4px;
 }
+
 #booking-flow-summary .flow-group__list {
   margin: 0;
   padding-left: 20px;
   list-style: disc;
 }
+
 #booking-flow-summary .flow-group__list li {
   margin-bottom: 3px;
 }
+
 #booking-flow-summary .flow-jump {
   margin-left: 6px;
   font-size: 12px;
   color: #2271b1;
   text-decoration: none;
 }
+
 #booking-flow-summary .flow-jump:hover {
   color: #135e96;
 }
+
 .flow-jump-highlight {
   animation: seatregFlowHighlight 1.6s ease;
   border-radius: 4px;
 }
+
 @keyframes seatregFlowHighlight {
   0% {
     background-color: #fff3b0;
   }
+
   100% {
     background-color: transparent;
   }
@@ -371,14 +439,17 @@ html {
   margin: 0 auto;
   font-family: "Open Sans", sans-serif;
 }
+
 .seatreg-tabs-content #my-regs {
   width: 1170px;
   margin: 0 auto;
   padding: 0 15px;
 }
+
 .seatreg-tabs-content #server-response-text {
   font-size: 20px;
 }
+
 .seatreg-tabs-content .log-out-btn {
   display: block;
   float: right;
@@ -388,6 +459,7 @@ html {
   line-height: 33px;
   font-size: 18px;
 }
+
 .seatreg-tabs-content .log-out-btn .l-pic {
   float: left;
   background: url(sprites.png) no-repeat;
@@ -400,190 +472,6 @@ html {
 .seatreg-tabs-content .reg-section {
   overflow: hidden;
   min-height: 608px;
-}
-
-.seatreg-tabs-content .reg-overview-middle-wrap {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-}
-
-.seatreg-tabs-content .reg-overview-top {
-  padding-bottom: 20px;
-  overflow: hidden;
-}
-
-.seatreg-tabs-content .overview-calendar-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-
-  label {
-    margin-bottom: 0;
-    text-transform: uppercase;
-  }
-
-  input {
-    text-align: center;
-    margin-left: 12px;
-    width: 170px;
-  }
-}
-
-.seatreg-tabs-content .reg-overview-aside {
-  width: 220px;
-  float: left;
-  padding-right: 20px;
-  text-overflow: ellipsis;
-  min-height: 180px;
-  margin-bottom: 20px;
-  position: relative;
-  overflow: auto;
-}
-.seatreg-tabs-content .room-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.seatreg-tabs-content .room-list-active {
-  color: #f47a37;
-}
-.seatreg-tabs-content .room-list-item {
-  margin-bottom: 2px;
-  font-size: 18px;
-}
-.seatreg-tabs-content .first-item {
-  margin-bottom: 6px;
-  font-size: 20px;
-  text-transform: uppercase;
-}
-.seatreg-tabs-content .room-list-item:hover {
-  cursor: pointer;
-  color: #f47a37;
-}
-
-.seatreg-tabs-content .reg-overview-top-header {
-  font-size: 24px;
-  font-weight: bold;
-  float: left;
-  min-width: 200px;
-  height: 50px;
-  line-height: 50px;
-  margin-right: 10px;
-  display: none;
-}
-.seatreg-tabs-content .reg-overview-top-header:first-letter {
-  text-transform: capitalize;
-}
-
-.seatreg-tabs-content .reg-overview-top-bron-notify {
-  color: #ea6060;
-  font-size: 14px;
-  float: left;
-  height: 50px;
-  line-height: 50px;
-}
-.seatreg-tabs-content .reg-overview-middle {
-  float: left;
-  width: 640px;
-  margin-bottom: 30px;
-  margin-left: 40px;
-}
-.seatreg-tabs-content .overview-middle-box {
-  float: left;
-  margin-right: 60px;
-}
-.seatreg-tabs-content .overview-middle-box-stat {
-  font-size: 38px;
-}
-.seatreg-tabs-content .overview-last-box {
-  margin-right: 0;
-}
-.seatreg-tabs-content .reg-overview-bottom {
-  background-color: #404040;
-  padding: 20px;
-  clear: both;
-  margin-top: 20px;
-}
-.seatreg-tabs-content .reg-link {
-  display: inline-block;
-  width: 500px;
-  background-color: #fff;
-  padding: 10px;
-  text-decoration: none;
-  color: #000;
-  margin-bottom: 20px;
-}
-.seatreg-tabs-content .ov-bottom-h {
-  color: #fff;
-  font-size: 18px;
-  padding: 0;
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-.seatreg-tabs-content .ov-bottom-h-2 {
-  color: #fff;
-  font-size: 14px;
-  padding: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-  cursor: pointer;
-  padding-left: 10px;
-}
-.seatreg-tabs-content .ov-bottom-h-3 {
-  color: #fff;
-  font-size: 14px;
-  padding: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-  cursor: pointer;
-  padding-left: 10px;
-}
-
-.seatreg-tabs-content .ov-bottom-h-2:hover,
-.seatreg-tabs-content .ov-bottom-h-3:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-
-.seatreg-tabs-content .copy-link-btn {
-  display: inline-block;
-  background-color: #fff;
-  padding: 10px;
-  font-weight: 600;
-}
-
-.seatreg-tabs-content .overview-middle-box-stat {
-  color: orange;
-  font-size: 36px;
-}
-.seatreg-tabs-content .stats-doughnut {
-  margin-left: 40px;
-}
-.seatreg-tabs-content .stats-doughnut-legend {
-  display: inline-block;
-  vertical-align: top;
-  margin-left: 20px;
-  min-width: 160px;
-}
-.seatreg-tabs-content .legend-block {
-  margin-top: 10px;
-}
-.seatreg-tabs-content .doughnut-legend {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  border-radius: 50%;
-  margin-right: 12px;
-  vertical-align: bottom;
-}
-.seatreg-tabs-content .legend-block-percent {
-  float: right;
-}
-.seatreg-tabs-content .reg-overview-top-date {
-  float: right;
-  line-height: 50px;
 }
 
 /*registrations manager*/
@@ -615,11 +503,6 @@ html {
   visibility: hidden;
 }
 
-.seatreg-tabs-content .time-block {
-  margin-bottom: 6px;
-  margin-left: 10px;
-}
-
 .seatreg-tabs-content .registration-manager-labels {
   padding: 16px;
   border-bottom: 3px solid #f0f0f0;
@@ -633,12 +516,15 @@ html {
   background-color: #fff;
   overflow: hidden;
 }
+
 .seatreg-tabs-content .seat-nr-box {
   width: 60px;
 }
+
 .seatreg-tabs-content .seat-id-box {
   margin-right: 30px;
 }
+
 .seatreg-tabs-content .seat-room-box {
   width: 140px;
   text-align: center;
@@ -656,23 +542,28 @@ html {
   white-space: nowrap;
   vertical-align: middle;
 }
+
 .seatreg-tabs-content .payment-status-box {
   min-width: 130px;
   text-align: center;
   margin-right: 40px;
 }
+
 .seatreg-tabs-content .border-box {
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box; /* Firefox, other Gecko */
   box-sizing: border-box; /* Opera/IE 8+ */
 }
+
 .seatreg-tabs-content .seat-date-box {
   width: 140px;
   text-align: center;
 }
+
 .seatreg-tabs-content .action-select {
   float: right;
 }
+
 .seatreg-tabs-content .action-select label {
   margin-left: 10px;
   display: inline-flex;
@@ -682,6 +573,7 @@ html {
 .seatreg-tabs-content .show-more-info {
   margin-right: 16px;
 }
+
 .seatreg-tabs-content .differentBgColor {
   background-color: #f2f2f2;
 }
@@ -689,20 +581,20 @@ html {
 .seatreg-tabs-content .manager-box {
   display: inline-block;
 }
+
 .seatreg-tabs-content .reg-seat-item .booking-id-box {
   min-width: 340px;
 }
+
 .seatreg-tabs-content .manager-box-link:hover {
   cursor: pointer;
   text-decoration: underline;
-}
-.seatreg-tabs-content #existing-regs {
-  position: relative;
 }
 
 .seatreg-tabs-content .seat-date-label {
   margin-right: 60px;
 }
+
 .seatreg-tabs-content .reg-name {
   font-size: 30px;
   word-wrap: break-word;
@@ -750,6 +642,7 @@ html {
 .seatreg-tabs-content .action-control:hover {
   text-decoration: underline;
 }
+
 .seatreg-tabs-content .action-label {
   cursor: pointer;
 }
@@ -792,6 +685,7 @@ html {
   font-size: 16px;
   color: red;
 }
+
 .seatreg-delete-registration-form .delete-registration-btn:hover {
   box-shadow: 1px 1px 10px 0px rgba(204, 204, 204, 0.52);
 }
@@ -811,6 +705,7 @@ html {
   padding: 0;
   border: 0;
 }
+
 .seatreg-tabs-content .del-reg {
   margin: 0;
   padding: 0;
@@ -823,10 +718,12 @@ html {
   width: 160px;
   margin-top: 20px;
 }
+
 .seatreg-tabs-content .del-reg:hover {
   text-decoration: underline;
   color: red;
 }
+
 .seatreg-tabs-content .del-reg:focus {
   outline: none;
 }
@@ -840,9 +737,11 @@ html {
   text-align: center;
   cursor: pointer;
 }
+
 .seatreg-tabs-content .btn-style:hover {
   text-decoration: underline;
 }
+
 .seatreg-tabs-content .btn-style-active {
   background-color: #fff;
   color: #000;
@@ -854,16 +753,20 @@ html {
   float: left;
   background-position: -3px -336px;
 }
+
 .seatreg-tabs-content .a-stats-btn {
   border-bottom: 1px solid #e1e5e7;
 }
+
 .seatreg-tabs-content .a-manage-btn {
   border-bottom: 1px solid #e1e5e7;
 }
+
 .seatreg-tabs-content .a-manage-btn .f-pic {
   float: left;
   background-position: -52px -335px;
 }
+
 .seatreg-tabs-content .adr-btn {
   margin: 4px;
   padding: 4px;
@@ -871,10 +774,12 @@ html {
   height: 54px;
   line-height: 42px;
 }
+
 .seatreg-tabs-content .adr-btn .f-pic {
   float: left;
   background-position: -105px -334px;
 }
+
 .seatreg-tabs-content .a-opt-btn {
   margin: 4px;
   padding: 4px;
@@ -882,17 +787,20 @@ html {
   height: 54px;
   line-height: 42px;
 }
+
 .seatreg-tabs-content .option-box {
   margin-top: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid black;
 }
+
 .seatreg-tabs-content .setting-box {
   width: 98%;
   margin: 0 auto;
   padding: 0 1%;
   border-top: 1px solid black;
 }
+
 .seatreg-tabs-content .a-opt-btn .f-pic {
   float: left;
   background-position: -154px -332px;
@@ -901,6 +809,7 @@ html {
 .seatreg-tabs-content .del-reg-form {
   text-align: center;
 }
+
 .seatreg-tabs-content .del-reg-form:active,
 .seatreg-tabs-content .del-reg-form:focus {
   border: none;
@@ -914,6 +823,7 @@ html {
 .seatreg-tabs-content .a-options-btn {
   border-bottom: 1px solid #e1e5e7;
 }
+
 .seatreg-tabs-content .info-box {
   margin-bottom: 20px;
 }
@@ -932,8 +842,10 @@ html {
 .seatreg-tabs-content .remove-sel-item {
   vertical-align: middle;
 }
+
 .seatreg-tabs-content .reg-status-box {
 }
+
 .seatreg-tabs-content .custom-container {
   display: flex;
   align-items: center;
@@ -985,6 +897,7 @@ html {
   padding: 2px;
   cursor: pointer;
 }
+
 .seatreg-tabs-content .custom-container-move:hover {
   background-color: #ccc;
 }
@@ -996,6 +909,7 @@ html {
 .seatreg-tabs-content .existing-custom-fields {
   margin-left: 24px;
 }
+
 .seatreg-tabs-content .payment-configuration {
   margin-top: 12px;
   margin-left: 24px;
@@ -1038,21 +952,26 @@ html {
   color: red;
   margin-left: 6px;
 }
+
 .seatreg-tabs-content .cust-field-create {
   margin-top: 10px;
   margin-left: 24px;
 }
+
 .seatreg-tabs-content .select-radio-create {
   margin-bottom: 12px;
 }
+
 .seatreg-tabs-content .seatreg-settings-form input[type="text"],
 .seatreg-tabs-content .seatreg-settings-form input[type="number"] {
   height: 32px;
   font-size: 14px;
 }
+
 .seatreg-tabs-content .seatreg-settings-form textarea {
   font-size: 14px;
 }
+
 .seatreg-tabs-content .cust-field-create label {
   font-size: 14px;
 }
@@ -1060,6 +979,7 @@ html {
 .seatreg-tabs-content .cust-field-create .btn {
   margin-bottom: 0.5rem;
 }
+
 .seatreg-tabs-content .select-option {
   margin-bottom: 6px;
 }
@@ -1068,20 +988,24 @@ html {
   margin-right: 10px;
   width: 140px;
 }
+
 .seatreg-tabs-content .custom-field-select {
   margin-right: 10px;
 }
+
 .seatreg-tabs-content .manager-search-wrap {
   width: 200px;
   margin-top: 6px;
   float: right;
 }
+
 .seatreg-tabs-content .manager-search {
   border-color: #ccc;
   border-right: 0;
   height: calc(1.5rem + .75rem + 2px);
   min-height: calc(1.5rem + .75rem + 2px);
 }
+
 .seatreg-tabs-content .manager-search:focus {
   box-shadow: none;
   border-color: #ccc;
@@ -1106,9 +1030,11 @@ html {
     box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
+
 .seatreg-tabs-content .option-label {
   font-size: 16px;
 }
+
 .seatreg-tabs-content .l-text {
   margin-right: 10px;
   font-size: 14px;
@@ -1116,6 +1042,7 @@ html {
 
 .seatreg-tabs-content .option-btn {
 }
+
 .seatreg-tabs-content .edit-btn {
   cursor: pointer;
 }
@@ -1130,10 +1057,6 @@ html {
   border-bottom: 1px solid #e1e5e7;
 }
 
-.seatreg-tabs-content .room-list-item[data-active="true"] {
-  color: orange;
-}
-
 .seatreg-tabs-content .file-type-link {
   float: right;
   margin-top: 10px;
@@ -1146,10 +1069,12 @@ html {
   color: rgb(66, 139, 202);
   font-size: 14px;
 }
+
 .seatreg-map-popup-btn,
 .seatreg-delete-btn {
   padding: 0;
 }
+
 .seatreg_page_seatreg-management
   .booking-status-check-wrap
   input[type="checkbox"] {
@@ -1188,200 +1113,96 @@ html {
   }
 }
 
-@media screen and (max-width: 1199px) {
-  .seatreg-tabs-content #my-regs {
+@media screen and (max-width: 1199px) {  .seatreg-tabs-content #my-regs {
     width: 970px;
     padding: 0 15px;
   }
+
   .seatreg-tabs-content .admin-right-side {
     width: 700px;
   }
+
   .seatreg-tabs-content .admin-right-side {
     margin-right: 5px;
   }
-  .seatreg-tabs-content .reg-overview-middle {
-    width: 440px;
-  }
-  .seatreg-tabs-content .overview-middle-box {
-    margin-right: 30px;
-  }
+
   .seatreg-tabs-content .action-select {
     margin-top: 10px;
     text-align: right;
     float: right;
   }
+
   .seatreg-tabs-content .bg-color {
     padding-top: 80px;
     background-color: #f2f2f2;
   }
+
 }
-@media screen and (max-width: 800px) {
-  .seatreg-tabs-content .manager-box {
+
+@media screen and (max-width: 800px) {  .seatreg-tabs-content .manager-box {
     display: block;
     text-align: left;
   }
+
   .seatreg-tabs-content .action-select {
     margin-top: 0;
   }
+
   .seatreg-tabs-content .file-type-link {
     position: absolute;
     top: 0;
     margin: 0;
   }
+
   .seatreg-tabs-content .pdf-link {
     right: 0;
   }
+
   .seatreg-tabs-content .text-link {
     right: 150px;
   }
+
   .seatreg-tabs-content .xlsx-link {
     right: 70px;
   }
+
   .seatreg-tabs-content .manager-search-wrap {
     margin-top: 40px;
   }
+
   .seatreg-tabs-content .action-select {
     float: none;
     text-align: right;
     display: block;
     margin-top: 10px;
   }
+
 }
 
-@media screen and (max-width: 992px) {
-  .seatreg-tabs-content .reg-section-buttons {
+@media screen and (max-width: 992px) {  .seatreg-tabs-content .reg-section-buttons {
     width: 20%;
-  }
-  .seatreg-tabs-content .reg-overview-middle-wrap {
-    display: block;
   }
 
   .seatreg-tabs-content #my-regs {
     width: auto;
   }
 
-  .seatreg-tabs-content .reg-overview-aside {
-    width: 40%;
-    min-height: none;
-    max-height: none;
-  }
-
   .seatreg-tabs-content .admin-right-side {
     width: 76%;
-  }
-
-  .seatreg-tabs-content .reg-overview {
-    width: 100%;
   }
 
   .seatreg-tabs-content .admin-right-side {
     width: 70%;
     margin: 0;
   }
-  .seatreg-tabs-content .reg-overview-aside {
-    float: none;
-    width: 100%;
-    max-height: none;
-    min-height: 0;
-    text-align: center;
-    margin-bottom: 0;
-    padding-right: 0;
-  }
 
-  .seatreg-tabs-content .room-list-item {
-    display: inline-block;
-  }
-  .seatreg-tabs-content .reg-overview-middle {
-    float: none;
-    overflow: hidden;
-    width: 100%;
-    padding: 20px 20px 10px 20px;
-
-    margin: 0px;
-    text-align: center;
-  }
-  .seatreg-tabs-content .reg-overview-top-date {
-    float: none;
-    clear: both;
-    text-align: center;
-    margin-top: 10px;
-  }
-  .seatreg-tabs-content .reg-overview-top-bron-notify {
-    float: right;
-    height: 30px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-  .seatreg-tabs-content .reg-overview-top-bron-notify,
-  .seatreg-tabs-content .reg-overview-top-header,
-  .seatreg-tabs-content .reg-overview-top-date {
-    line-height: 20px;
-  }
-  .seatreg-tabs-content .time-block {
-    display: inline-block;
-    margin-bottom: 4px;
-  }
-  .seatreg-tabs-content .reg-link {
-    width: 100%;
-    word-wrap: break-word;
-    word-break: break-all;
-  }
-  .seatreg-tabs-content .reg-overview-top-header {
-    float: none;
-    text-align: center;
-    word-wrap: break-word;
-
-    margin-top: 20px;
-  }
-  .seatreg-tabs-content .overview-middle-box {
-    margin-right: 10px;
-    display: inline-block;
-    float: none;
-    margin: 0 4px;
-  }
-  .seatreg-tabs-content .room-list-item {
-    display: inline-block;
-    margin-right: 20px;
-  }
   .seatreg-tabs-content #alertify {
     top: 30%;
   }
 
-  .seatreg-tabs-content .reg-overview-donuts {
-    display: block;
-    width: 100%;
-    margin: 0;
-    text-align: center;
-    float: none;
-    padding: 0;
-  }
-  .seatreg-tabs-content .reg-overview-top-bron-notify {
-    float: none;
-    text-align: center;
-  }
-  .seatreg-tabs-content .reg-overview-top {
-    padding-top: 6px;
-    padding-bottom: 0px;
-    margin-bottom: 10px;
-  }
-  .seatreg-tabs-content .reg-overview-bottom {
-    clear: both;
-    margin-top: 20px;
-  }
-
-  .seatreg-tabs-content .stats-doughnut {
-    margin: 0;
-  }
-  .seatreg-tabs-content .legend-block {
-    text-align: left;
-  }
-  .seatreg-tabs-content .stats-doughnut-legend {
-    margin-left: 0;
-  }
 }
 
-@media screen and (max-width: 776px) {
-  .seatreg-tabs-content .reg-section-buttons {
+@media screen and (max-width: 776px) {  .seatreg-tabs-content .reg-section-buttons {
     width: 25%;
   }
 
@@ -1392,9 +1213,11 @@ html {
     width: 100%;
     margin-bottom: 4px;
   }
+
   .seatreg-tabs-content .account-status {
     margin-bottom: 0;
   }
+
   .seatreg-tabs-content .first-reg-section .tab_container:before {
     margin-top: -300px;
     height: 300px;
@@ -1404,13 +1227,14 @@ html {
     margin-top: -310px;
     height: 310px;
   }
+
   .seatreg-tabs-content .tab a {
     padding: 0px 0px;
   }
+
 }
 
-@media screen and (max-width: 900px) {
-  .seatreg-tabs-content .first-reg-section .tab_container:before {
+@media screen and (max-width: 900px) {  .seatreg-tabs-content .first-reg-section .tab_container:before {
     margin-top: -330px;
     height: 330px;
   }
@@ -1419,14 +1243,17 @@ html {
     margin-top: -250px;
     height: 250px;
   }
+
 }
-@media screen and (max-width: 500px) {
-  .seatreg-tabs-content .bg-color {
+
+@media screen and (max-width: 500px) {  .seatreg-tabs-content .bg-color {
     padding-top: 100px;
   }
+
   .seatreg-tabs-content .reg-section-buttons {
     font-size: 12px;
   }
+
   .seatreg-tabs-content .bg-color {
     background-color: #f2f2f2;
   }
@@ -1440,9 +1267,11 @@ html {
     margin-top: -330px;
     height: 330px;
   }
+
   .seatreg-tabs-content .custom-container input[type="text"] {
     width: 60px;
   }
+
 }
 
 #calendar-dates-list {
@@ -1457,6 +1286,7 @@ html {
     font-size: 12px;
     color: #04357d;
   }
+
   .calendar-date-chip-remove {
     margin-left: 6px;
     padding: 0 3px;
@@ -1472,5 +1302,6 @@ html {
       opacity: 1;
       color: #c00;
     }
+
   }
 }

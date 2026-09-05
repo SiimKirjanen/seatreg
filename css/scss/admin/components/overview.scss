@@ -1,0 +1,345 @@
+.seatreg-overview {
+  --seatreg-overview-confirmed: #2e7d32;
+  --seatreg-overview-pending: #dba617;
+  --seatreg-overview-open: #2271b1;
+  --seatreg-overview-unavailable: #dcdcde;
+
+  font-size: 13px;
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 16px;
+    row-gap: 8px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #dcdcde;
+  }
+
+  &__identity {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    margin-right: auto;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 20px;
+    overflow-wrap: anywhere;
+  }
+
+  &__calendar-icon {
+    color: #646970;
+    font-size: 14px;
+  }
+
+  &__dates {
+    color: #646970;
+  }
+
+  &__links {
+    display: flex;
+    column-gap: 16px;
+
+    a {
+      color: rgb(66, 139, 202);
+      font-size: 14px;
+    }
+  }
+
+  &__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 24px;
+    row-gap: 8px;
+    margin-top: 16px;
+  }
+
+  &__toolbar-field {
+    display: flex;
+    align-items: center;
+    column-gap: 12px;
+
+    label {
+      margin-bottom: 0;
+      color: #646970;
+      text-transform: uppercase;
+    }
+
+    input {
+      width: 170px;
+      text-align: center;
+    }
+
+    select {
+      min-width: 130px;
+    }
+  }
+
+  &__empty {
+    margin-top: 24px;
+    padding: 24px;
+    border: 1px dashed #c3c4c7;
+    border-radius: 4px;
+    color: #646970;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  &__rooms {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+  }
+
+  &__room {
+    display: flex;
+    flex-direction: column;
+    row-gap: 6px;
+    padding: 10px 12px;
+    background-color: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #2271b1;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #2271b1;
+      outline-offset: 1px;
+    }
+
+    &[aria-selected="true"] {
+      border-color: #2271b1;
+      box-shadow: inset 3px 0 0 #2271b1;
+    }
+  }
+
+  &__room-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    column-gap: 8px;
+  }
+
+  &__room-name {
+    font-size: 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  &__room-count {
+    flex-shrink: 0;
+    color: #646970;
+    font-size: 12px;
+  }
+
+  &__bar {
+    display: flex;
+    height: 6px;
+    background-color: var(--seatreg-overview-unavailable);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  &__bar-segment {
+    height: 100%;
+
+    &--confirmed {
+      background-color: var(--seatreg-overview-confirmed);
+    }
+    &--pending {
+      background-color: var(--seatreg-overview-pending);
+    }
+    &--open {
+      background-color: var(--seatreg-overview-open);
+    }
+  }
+
+  &__panel {
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+
+    &:focus-visible {
+      outline: 2px solid #2271b1;
+      outline-offset: 1px;
+    }
+  }
+
+  &__panel-title {
+    margin: 0 0 20px;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+
+    &--link:hover,
+    &--link:focus {
+      text-decoration: none;
+
+      .seatreg-overview__stat-value {
+        color: rgb(66, 139, 202);
+      }
+    }
+
+    &--highlight .seatreg-overview__stat-value {
+      color: #b32d2e;
+    }
+  }
+
+  &__stat-value {
+    color: #1d2327;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  &__stat-label {
+    color: #8c8f94;
+    font-size: 12px;
+  }
+
+  &__sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  &__chart {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #dcdcde;
+  }
+
+  &__chart-types {
+    display: flex;
+    column-gap: 4px;
+  }
+
+  &__chart-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    color: #646970;
+    background-color: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      color: #2271b1;
+      border-color: #2271b1;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #2271b1;
+      outline-offset: 1px;
+    }
+
+    &[aria-pressed="true"] {
+      color: #fff;
+      background-color: #2271b1;
+      border-color: #2271b1;
+    }
+  }
+
+  &__chart-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  &__chart-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 32px;
+    row-gap: 16px;
+  }
+
+  &__canvas-wrap {
+    position: relative;
+    flex: 1 1 260px;
+    max-width: 380px;
+    height: 200px;
+  }
+
+  &__legend {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    min-width: 180px;
+  }
+
+  &__legend-row {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+  }
+
+  &__legend-swatch {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    border-radius: 50%;
+
+    &--confirmed {
+      background-color: var(--seatreg-overview-confirmed);
+    }
+    &--pending {
+      background-color: var(--seatreg-overview-pending);
+    }
+    &--open {
+      background-color: var(--seatreg-overview-open);
+    }
+  }
+
+  &__legend-label {
+    margin-right: auto;
+  }
+
+  &__legend-percent {
+    color: #646970;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .seatreg-overview__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media screen and (max-width: 782px) {
+  .seatreg-overview__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
