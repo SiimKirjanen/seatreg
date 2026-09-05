@@ -116,6 +116,13 @@ define('SEATREG_ACTION_BOOKING_APPROVED', 'seatreg_action_booking_approved');
 define('SEATREG_ACTION_BOOKING_APPROVED_VIA_MANAGER', 'seatreg_action_booking_approved_via_manager');
 define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
 
+// SeatReg filters
+define('SEATREG_FILTER_ROOM_NOUNS', 'seatreg_room_nouns');
+
+// Multilingual
+//The group a translator sees in Polylang and the domain they see in WPML, so it is the plugin name
+define('SEATREG_TRANSLATION_STRING_GROUP', 'SeatReg');
+
 // API
 define('SEATREG_API_OK_MESSAGE', 'ok');
 

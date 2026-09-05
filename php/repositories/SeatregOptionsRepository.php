@@ -22,6 +22,24 @@ class SeatregOptionsRepository {
 			$registrationCode
 		) );
     }
+    /**
+     *
+     * Return the code and room nouns of every registration that renamed its rooms
+     *
+     */
+    public static function getCustomRoomNouns() {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_results(
+            "SELECT b.registration_code, b.room_noun_singular, b.room_noun_plural
+            FROM $seatreg_db_table_names->table_seatreg AS a
+            INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b ON a.registration_code = b.registration_code
+            WHERE a.is_deleted = 0
+            AND ( b.room_noun_singular IS NOT NULL OR b.room_noun_plural IS NOT NULL )"
+        );
+    }
+
      /**
      *
      * Return options by confirmation code

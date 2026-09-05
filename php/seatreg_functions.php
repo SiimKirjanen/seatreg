@@ -391,6 +391,12 @@ function seatreg_generate_settings_form() {
 
 				<label class="form-group-subfield-label" for="room-noun-plural"><?php esc_html_e('Plural', 'seatreg'); ?></label>
 				<input type="text" class="form-control" id="room-noun-plural" name="room-noun-plural" autocomplete="off" maxlength="<?php echo esc_attr(SEATREG_ROOM_NOUN_MAX_LENGTH); ?>" placeholder="<?php esc_attr_e('rooms', 'seatreg'); ?>" value="<?php echo esc_attr($options[0]->room_noun_plural); ?>">
+
+				<?php if( SeatregStringTranslationService::isAvailable() ) : ?>
+					<p class="help-block">
+						<?php esc_html_e('Both words can be translated in your translation plugin, in the SeatReg string group', 'seatreg'); ?>.
+					</p>
+				<?php endif; ?>
 			</div>
 
 			<div class="form-group">
@@ -2546,8 +2552,8 @@ function seatreg_validate_edit_booking($code, $data) {
 		if($booking->seat_id === $data->seatId && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
-			/* translators: %1$s: Seat number, %2$s: the word the admin uses for a room, %3$s: Room name */
-			$resp['text'] = sprintf( esc_html__('Seat %1$s from %2$s %3$s is already booked', 'seatreg'), esc_html($data->roomName), esc_html($roomNouns->singular), esc_html($booking->room_name) );
+			/* translators: %1$s: Seat ID, %2$s: the word the admin uses for a room, %3$s: Room name */
+			$resp['text'] = sprintf( esc_html__('Seat ID %1$s from %2$s %3$s is already booked', 'seatreg'), esc_html($data->seatId), esc_html($roomNouns->singular), esc_html($booking->room_name) );
 
 			break;
 		}

@@ -54,4 +54,12 @@ async function createUser(page, { role, prefix = 'seatreg-e2e' }) {
 	return { username, password };
 }
 
-module.exports = { createPost, createUser };
+/**
+ * Answer the seatreg_room_nouns filter with these words for this registration, the
+ * way a translation plugin would. Only the named registration is affected.
+ */
+function setRoomNouns(page, { code, singular, plural }) {
+	return askFixture(page, 'set_room_nouns', { code, singular, plural });
+}
+
+module.exports = { createPost, createUser, setRoomNouns };

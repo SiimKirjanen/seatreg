@@ -52,6 +52,8 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 = 1.77.0 =
 * The Overview page has been redesigned.
 * You can now rename "room" to any word that fits your registration, such as stall or hall.
+* The word you use for a room can now be translated with Polylang or WPML.
+* A registration embedded with the shortcode now opens in the language of the page it sits on.
 
 = 1.76.0 =
 * The Home page now shows your registrations as cards, each with its status, dates, and booking counts.

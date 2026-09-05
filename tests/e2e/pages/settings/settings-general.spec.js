@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { SettingsPage, BOOKER } = require('./settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
+const { setRoomNouns } = require('../../utils/fixtures');
 
 const CLOSE_REASON = 'The event has sold out.';
 const REGISTRATION_PASSWORD = 'letmein7f3a';
@@ -16,6 +17,11 @@ const PLACE_SELECTED = 'place selected';
 /* What a registration that is not about rooms can call them instead. */
 const ROOM_NOUN = 'stall';
 const ROOM_NOUN_PLURAL = 'stalls';
+
+/* And what a translation plugin, standing behind the seatreg_room_nouns filter,
+   can call them in another language. */
+const TRANSLATED_ROOM_NOUN = 'putka';
+const TRANSLATED_ROOM_NOUN_PLURAL = 'putkad';
 
 /* Who gets to see the registration at all, and how much of it any one booker may
    take, so every one of these is checked on the registration itself. The limits
@@ -102,8 +108,9 @@ test.describe('Settings general', () => {
 	/* The word replaces "room" wherever either side talks about one. The builder is
 	   rendered before a registration is chosen and repainted once its layout loads,
 	   and the registration view gets the word from the page it is served on, so one
-	   of each is checked. */
-	test('calls a room whatever the registration calls it', async () => {
+	   of each is checked. The last of it is the filter a translation plugin answers
+	   through, which nothing else would notice going quiet. */
+	test('calls a room whatever the registration calls it', async ({ page }) => {
 		code = await settings.openForNewRegistrationWithSeats(
 			uniqueRegistrationName('Settings general room noun'),
 			SEAT_COUNT
@@ -122,6 +129,18 @@ test.describe('Settings general', () => {
 		await registration.header.click();
 
 		await expect(registration.infoDialog).toContainText(ROOM_NOUN_PLURAL);
+
+		await setRoomNouns(page, {
+			code,
+			singular: TRANSLATED_ROOM_NOUN,
+			plural: TRANSLATED_ROOM_NOUN_PLURAL,
+		});
+
+		const translated = await settings.openRegistration(code);
+
+		await translated.header.click();
+
+		await expect(translated.infoDialog).toContainText(TRANSLATED_ROOM_NOUN_PLURAL);
 	});
 
 	test('turns away a booker who is over the booking limit for their email address', async () => {

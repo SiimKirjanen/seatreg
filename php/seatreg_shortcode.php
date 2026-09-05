@@ -31,7 +31,10 @@
             return "Invalid breakpoint value";
         }
         
-        $roomQueryParam = '';
+        $queryArgs = array(
+            'seatreg' => 'registration',
+            'c' => $atts['code'],
+        );
 
         if ( !empty($atts['room']) ) {
             $registration = SeatregRegistrationRepository::getRegistrationByCode( $atts['code'] );
@@ -46,14 +49,16 @@
                 return "Room not found";
             }
 
-            $roomQueryParam = '&room=' . urlencode( $atts['room'] );
+            $queryArgs['room'] = $atts['room'];
         }
 
-        $seatregRegistrationUrl = esc_url(SeatregLinksService::getRegistrationURL() . "?seatreg=registration&c=". $atts['code'] . $roomQueryParam);
+        $queryArgs['page_id'] = SEATREG_PAGE_ID;
+
+        //Added as arguments, as the address may already carry the language the page is read in
+        $seatregRegistrationUrl = esc_url( add_query_arg( $queryArgs, SeatregLinksService::getRegistrationURLInCurrentLanguage() ) );
         $height = (int) esc_attr($atts['height']);
         $mobileHeight = (int) esc_attr($atts['mobile_height']);
         $breakpoint = (int) esc_attr($atts['mobile_max_width']);
-        $pageId = esc_attr(SEATREG_PAGE_ID);
         $iframeId = esc_attr('seatreg-shortcode-' . uniqid());
         $styleHandle = 'seatreg-inline-' . $iframeId;
 
@@ -78,6 +83,6 @@
         wp_enqueue_style($styleHandle);
         wp_add_inline_style($styleHandle, $css);
 
-        return "<iframe id='{$iframeId}' src='{$seatregRegistrationUrl}&page_id={$pageId}'></iframe>";
+        return "<iframe id='{$iframeId}' src='{$seatregRegistrationUrl}'></iframe>";
     }
     add_shortcode( 'seatreg', 'seatreg_shortcode' );
