@@ -60,7 +60,8 @@ class SeatregRegistrationRepository {
                 b.registration_open, b.registration_close_reason,
                 b.registration_start_timestamp, b.registration_end_timestamp,
                 b.registration_start_time, b.registration_end_time,
-                b.using_calendar, b.calendar_dates
+                b.using_calendar, b.calendar_dates,
+                b.room_noun_singular, b.room_noun_plural
             FROM $seatreg_db_table_names->table_seatreg AS a
             LEFT JOIN $seatreg_db_table_names->table_seatreg_options AS b
             ON a.registration_code = b.registration_code

@@ -36,13 +36,16 @@
 							</div>
 
 							<button class="btn btn-outline-secondary btn-sm" data-action="select-id" data-seat-id="<?php echo esc_attr($box->id); ?>" data-seat-price="<?php echo esc_attr(json_encode($price)); ?>" data-seat-number="<?php echo esc_attr($seatNumber); ?>" data-room-name="<?php echo esc_attr($roomData->room->name); ?>">
-								<?php echo esc_html('Select ID', 'seatreg'); ?>
+								<?php esc_html_e('Select ID', 'seatreg'); ?>
 							</button>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>
 				<?php if($openSeatCounter === 0): ?>
-					<div class="alert alert-info"><?php echo sprintf(esc_html('No open seats in %s', 'seatreg'), esc_html($roomData->room->name)); ?></div>
+					<div class="alert alert-info"><?php
+						/* translators: %s: Room name */
+						echo sprintf(esc_html__('No open seats in %s', 'seatreg'), esc_html($roomData->room->name));
+					?></div>
 				<?php endif; ?>
 			<?php endforeach; ?>
       </div>

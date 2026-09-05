@@ -51,6 +51,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 
 = 1.77.0 =
 * The Overview page has been redesigned.
+* You can now rename "room" to any word that fits your registration, such as stall or hall.
 
 = 1.76.0 =
 * The Home page now shows your registrations as cards, each with its status, dates, and booking counts.

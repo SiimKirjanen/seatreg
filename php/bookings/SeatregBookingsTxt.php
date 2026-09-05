@@ -37,7 +37,7 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
             $seatLegend = $this->getSeatLegend($registration);
 
             echo esc_html($placeNumberText), ': ', esc_html($registration->seat_nr), esc_html($this->lineBreak());
-            echo esc_html__('Room', 'seatreg'), ': ', esc_html($registration->room_name), esc_html($this->lineBreak());
+            echo esc_html($this->_roomNouns->singularUpper), ': ', esc_html($registration->room_name), esc_html($this->lineBreak());
 
             if( $seatLegend ) {
                 echo esc_html__('Label', 'seatreg'), ': ', esc_html($seatLegend), esc_html($this->lineBreak());

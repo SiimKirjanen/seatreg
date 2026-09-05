@@ -29,7 +29,7 @@
 			</div>
 			
 			<div class="edit-modal-input-wrap">
-				<label for="edit-room"><h5><?php esc_html_e('Room', 'seatreg'); ?></h5></label><br>
+				<label for="edit-room"><h5><?php echo esc_html($roomNouns->singularUpper); ?></h5></label><br>
 				<input type="text" id="edit-room" name="room" autocomplete="off"/> <span id="edit-room-error"></span>
 			</div>
 			

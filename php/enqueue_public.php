@@ -82,8 +82,8 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_script('iscroll-zoom', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/iscroll-zoom.js' , array(), '5.1.3', true);
 		wp_enqueue_script('jquery-powertip', SEATREG_PLUGIN_FOLDER_URL . 'js/jquery.powertip.js' , array(), '1.2.0', true);
 		wp_enqueue_script('pg-calendar', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/js/pignose.calendar.full.min.js' , array('jquery'), '1.4.31', false);
-		wp_enqueue_script('seatreg-utils', SEATREG_PLUGIN_FOLDER_URL . 'js/utils.js' , array(), '1.2.0', true);
-		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.37.0', true);
+		wp_enqueue_script('seatreg-utils', SEATREG_PLUGIN_FOLDER_URL . 'js/utils.js' , array(), '1.3.0', true);
+		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.38.0', true);
 		wp_enqueue_script('alertify', SEATREG_PLUGIN_FOLDER_URL . 'js/alertify.js', array('jquery'), '1.0.0', true);
 
 		$data = seatreg_get_options_reg($_GET['c']);
@@ -127,6 +127,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var payPalCurrencyCode = "'. esc_js($data->paypal_currency_code) . '";';
 			$inlineScript .= 'var receiptEnabled = "'. esc_js( $data->send_approved_booking_email) . '";';
 			$inlineScript .= 'var usingSeats = "'. esc_js( $data->using_seats ) . '";';
+			$inlineScript .= 'var seatregRoomNouns = jQuery.parseJSON(' . wp_json_encode( wp_json_encode( SeatregTerminologyService::getRoomNouns($data) ) ) . ');';
 			$inlineScript .= 'var usingCalendar = "'. esc_js( $data->using_calendar ) . '";';
 			$inlineScript .= 'var calendarDates = "'. esc_js( $data->calendar_dates ) . '";';
 			$inlineScript .= 'var activeCalendarDate = "'. esc_js($filterCalendarDate) . '";';

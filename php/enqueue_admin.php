@@ -34,7 +34,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_style('vanilla_picker_style', plugins_url('js/vanilla-picker/dist/vanilla-picker.csp.css', dirname(__FILE__) ), array(), '2.12.1', 'all');
 		wp_enqueue_style('seatreg_builder_style', plugins_url('css/seatreg_builder.min.css', dirname(__FILE__) ), array(), '1.3.0', 'all');
-		wp_enqueue_style('seatreg_admin_styles', plugins_url('css/seatreg_admin.min.css', dirname(__FILE__) ), array(), '1.48.0', 'all');
+		wp_enqueue_style('seatreg_admin_styles', plugins_url('css/seatreg_admin.min.css', dirname(__FILE__) ), array(), '1.49.0', 'all');
 		wp_enqueue_style('local-open-sans', SEATREG_PLUGIN_FOLDER_URL . 'fonts/open-sans/open-sans.css', array(), '1.0.0', 'all');
 		wp_enqueue_style('powertip_style', plugins_url('css/jquery.powertip.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 
@@ -57,24 +57,36 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('clock-timepicker', plugins_url('js/jquery-clock-timepicker/jquery-clock-timepicker.min.js', dirname(__FILE__) ), array('jquery'), '2.6.4', true);
 		wp_enqueue_script('powertip', plugins_url('js/jquery.powertip.js', dirname(__FILE__) ), array('jquery'), '1.2.0', true);
 		wp_enqueue_script('date-format', plugins_url('js/date.format.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
-		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.2.0', true);
+		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.3.0', true);
 
 		//Only the Overview draws charts, so the library stays off every other screen
 		if( $screen->id === 'seatreg_page_seatreg-overview' ) {
 			wp_enqueue_script('seatreg_admin_chart', plugins_url('js/chart.umd.min.js', dirname(__FILE__) ), array(), '4.4.7', true);
 		}
 
-		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg-utils'), '1.44.0', true);
+		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg-utils'), '1.45.0', true);
 		wp_enqueue_script('jstz', plugins_url('js/jstz-1.0.4.min.js', dirname(__FILE__) ), array(), '1.0.4', true);
-		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip', 'seatreg-utils', 'seatreg_admin'), '1.11.2', true);
+		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip', 'seatreg-utils', 'seatreg_admin'), '1.12.0', true);
 
 		$seatreg_admin_strings_json = wp_json_encode(seatreg_generate_admin_strings());
 		if ($seatreg_admin_strings_json === false) {
 			$seatreg_admin_strings_json = '{}';
 		}
 
+		//Every screen but the builder reloads when the registration changes, so its noun can be resolved here
+		$seatreg_screen_tab = isset($_GET['tab']) ? sanitize_text_field( wp_unslash($_GET['tab']) ) : null;
+
+		if( !$seatreg_screen_tab ) {
+			//Without a tab the screens fall back to the first registration, as seatreg_generate_tabs() does
+			$seatreg_registrations = SeatregRegistrationRepository::getRegistrations();
+			$seatreg_screen_tab = count($seatreg_registrations) !== 0 ? $seatreg_registrations[0]->registration_code : null;
+		}
+
+		$seatreg_screen_options = $seatreg_screen_tab ? SeatregOptionsRepository::getOptionsByRegistrationCode($seatreg_screen_tab) : null;
+
 		wp_localize_script('seatreg_admin', 'WP_Seatreg', array(
 			'nonce' => wp_create_nonce('seatreg-admin-nonce'),
+			'room_nouns' => SeatregTerminologyService::getRoomNouns($seatreg_screen_options),
 			'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
 			'translations' => $seatreg_admin_strings_json,
 			'uploads_url' => SEATREG_TEMP_FOLDER_URL,

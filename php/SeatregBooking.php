@@ -47,13 +47,19 @@ class SeatregBooking {
 	protected $_wp_user_bookings_seat_limit = null;
 	protected $_require_name = true; //require full name from registrants
 	protected $_couponsEnabled = false;
+	protected $_roomNouns = null;
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
     	$seatsString = '';
 
     	for($i = 0; $i < $dataLen; $i++) {
-    		$seatsString .= esc_html__('Seat nr', 'seatreg') . ': <b>' . esc_html($this->_bookings[$i]->seat_nr) . '</b> ' . esc_html__('from room', 'seatreg') . ': <b>' . esc_html($this->_bookings[$i]->room_name) . '</b><br/>'; 
+    		/* translators: %1$s: Seat number, %2$s: the word the admin uses for a room */
+    		$seatsString .= sprintf(
+    			wp_kses( __('Seat nr: <b>%1$s</b> from %2$s', 'seatreg'), array( 'b' => array() ) ),
+    			esc_html($this->_bookings[$i]->seat_nr),
+    			esc_html($this->_roomNouns->singular)
+    		) . ': <b>' . esc_html($this->_bookings[$i]->room_name) . '</b><br/>'; 
 		}
 		
     	return $seatsString;
@@ -68,7 +74,13 @@ class SeatregBooking {
 		for($i = 0; $i < $bookingsLength; $i++) {
 			for($j = 0; $j < $bookedBookingsLength; $j++) {
 				if($this->_bookings[$i]->seat_id == $bookedBookings[$j]->seat_id) {
-					$statusReport = 'Seat <b>'. esc_html($this->_bookings[$i]->seat_nr) . '</b> in room <b>' . esc_html($this->_bookings[$i]->room_name) . '</b > is already confirmed';
+					/* translators: %1$s: Seat number, %2$s: the word the admin uses for a room, %3$s: Room name */
+					$statusReport = sprintf(
+						wp_kses( __('Seat <b>%1$s</b> in %2$s <b>%3$s</b> is already confirmed', 'seatreg'), array( 'b' => array() ) ),
+						esc_html($this->_bookings[$i]->seat_nr),
+						esc_html($this->_roomNouns->singular),
+						esc_html($this->_bookings[$i]->room_name)
+					);
 
 					if( $calendarDate ) {
 						$statusReport .= ' for <b>' . $calendarDate . '<b>';
@@ -232,7 +244,12 @@ class SeatregBooking {
 			}//end of room loop
 
 			if($searchStatus == 'room-searching') {
-				$status = 'Room '. esc_html($this->_bookings[$i]->room_name) . ' was not found';
+				/* translators: %1$s: the word the admin uses for a room, capitalized, %2$s: Room name */
+				$status = sprintf(
+					esc_html__('%1$s %2$s was not found', 'seatreg'),
+					esc_html($this->_roomNouns->singularUpper),
+					esc_html($this->_bookings[$i]->room_name)
+				);
 				$allCorrect = false;
 
 				break;
@@ -336,6 +353,7 @@ class SeatregBooking {
 		$this->_wp_user_bookings_seat_limit = $result->wp_user_bookings_seat_limit ? (int)$result->wp_user_bookings_seat_limit: null;
 		$this->_require_name = $result->require_name === '1';
 		$this->_couponsEnabled = $result->enable_coupons === '1';
+		$this->_roomNouns = SeatregTerminologyService::getRoomNouns($result);
 		
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;

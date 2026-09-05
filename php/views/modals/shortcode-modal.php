@@ -14,10 +14,16 @@
                 <p class="shortcode-instructions"><?php esc_html_e("You can customize the screen width below which the mobile height is applied (default: 720px).", "seatreg"); ?></p>
                 <code class="shortcode-example">[seatreg code=<?php echo esc_html($registrationCode); ?> height=600 mobile_height=500 mobile_max_width=600]</code>
                 <?php if( count($rooms) ) : ?>
-                    <p class="shortcode-instructions"><?php esc_html_e("You can choose which room the registration opens on.", "seatreg"); ?></p>
+                    <p class="shortcode-instructions"><?php
+                        /* translators: %s: the word the admin uses for a room */
+                        echo esc_html( sprintf( __('You can choose which %s the registration opens on. The attribute is always named room.', 'seatreg'), $roomNouns->singular ) );
+                    ?></p>
                     <code class="shortcode-example">[seatreg code=<?php echo esc_html($registrationCode); ?> height=600 room="<?php echo esc_html($rooms[0]->room->name); ?>"]</code>
                     <p class="shortcode-instructions">
-                        <?php esc_html_e("Available rooms", "seatreg"); ?>:
+                        <?php
+                            /* translators: %s: the word the admin uses for rooms, plural */
+                            echo esc_html( sprintf( __('Available %s', 'seatreg'), $roomNouns->plural ) );
+                        ?>:
                         <?php
                             $roomNames = array();
 

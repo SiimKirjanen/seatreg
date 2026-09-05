@@ -35,7 +35,7 @@
 					<div class="add-modal-input-wrap">
 						<label>
 							<h5>
-								<?php esc_html_e('Room', 'seatreg'); ?>
+								<?php echo esc_html($roomNouns->singularUpper); ?>
 							</h5>
 							<select name="room[]">
 								<?php foreach($roomNames as $roomName) : ?>

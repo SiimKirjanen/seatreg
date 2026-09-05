@@ -188,7 +188,8 @@ class SeatregBookingPDF extends tFPDF {
             $seatLegend = SeatregRegistrationService::getSeatLegendFromLayout($this->_roomData, $booking->room_uuid, $booking->seat_id);
 
             $this->Cell(20, 6, $placeNumberText . ': ' . esc_html($booking->seat_nr), 0, 1, 'L');
-            $this->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($booking->room_name), 0, 1, 'L');
+            /* translators: %s: the word the admin uses for a room, capitalized */
+            $this->Cell(20, 6, esc_html( sprintf( __('%s name', 'seatreg'), SeatregTerminologyService::getRoomNouns($this->_bookingData)->singularUpper ) ) . ': ' . esc_html($booking->room_name), 0, 1, 'L');
 
             if( $seatLegend ) {
                 $this->Cell(20, 6, esc_html__('Label', 'seatreg') . ': ' . esc_html($seatLegend), 0, 1, 'L');

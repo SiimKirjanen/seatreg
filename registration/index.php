@@ -24,6 +24,7 @@
 	$registrationTimeRestoriction = SeatregTimeRepository::getTimeInfoForRegistrationView($data->registration_start_time, $data->registration_end_time);
 	$hasFailedTimeRestriction = !$registrationTimeRestoriction->registrationStartCheck  || !$registrationTimeRestoriction->registrationEndCheck;
 	$usingSeats = $data->using_seats === '1';
+	$roomNouns = SeatregTerminologyService::getRoomNouns($data);
 	$requireWPLogin = $data->require_wp_login === '1';
 	$showInfoButton = $data->show_info_button === '1';
 	$requireName = $data->require_name === '1';
@@ -129,7 +130,10 @@
 						<div id="current-room-name"></div>
 						<?php if( SeatregLayoutService::getRoomsLength( SeatregLayoutService::getRoomDataFromLayout($data->registration_layout) ) > 1 ): ?>
 							<div id="room-nav-btn">
-								<?php esc_html_e('Change room', 'seatreg'); ?>
+								<?php
+									/* translators: %s: the word the admin uses for a room */
+									echo esc_html( sprintf( __('Change %s', 'seatreg'), $roomNouns->singular ) );
+								?>
 							</div>
 						<?php endif; ?>	
 					</div>
@@ -162,7 +166,10 @@
 						</div>
 						<div id="room-is-empty" class="dont-display">
 							<p class="room-is-empty-text">
-								<?php esc_html_e('Room is empty', 'seatreg'); ?>
+								<?php
+									/* translators: %s: the word the admin uses for a room, capitalized */
+									echo esc_html( sprintf( __('%s is empty', 'seatreg'), $roomNouns->singularUpper ) );
+								?>
 							</p>
 						</div>	
 						<div id="registration-message" class="dont-display">
@@ -261,7 +268,10 @@
 							}
 						?>
 						<div>
-							<?php esc_html_e('Total rooms', 'seatreg'); ?>: <span class="total-rooms"></span>
+							<?php
+								/* translators: %s: the word the admin uses for rooms, plural */
+								echo esc_html( sprintf( __('Total %s', 'seatreg'), $roomNouns->plural ) );
+							?>: <span class="total-rooms"></span>
 						</div>
 						<div>
 							<?php $usingSeats ? esc_html_e('Total open seats', 'seatreg') : esc_html_e('Total open places', 'seatreg') ; ?>: <span class="total-open"></span>
@@ -351,7 +361,7 @@
 							</div>
 							<div class="row-room">
 								<?php
-									esc_html_e('Room', 'seatreg');
+									echo esc_html($roomNouns->singularUpper);
 								?>
 							</div>
 							<div class="row-label">

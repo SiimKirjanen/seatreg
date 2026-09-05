@@ -112,6 +112,7 @@
 		this.usingCalendar = window.usingCalendar === '1' ? true : false;
 		this.enabledCalendarDates = window.calendarDates ? window.calendarDates.split(',') : [];
 		this.spotName =  this.usingSeats ? translator.translate('seat') : translator.translate('place');
+		this.roomNouns = window.seatregRoomNouns;
 		this.activeCalendarDate = window.activeCalendarDate;
 		this.siteLanguage = window.siteLanguage;
 		this.controlledScrollEnabled = window.controlledScroll === '1';
@@ -558,16 +559,15 @@ SeatReg.prototype.paintRoomInfo = function() {
 	$('#current-room-name').text(this.rooms[this.currentRoom].room.name);
 	var infoLoc = this.rooms[this.currentRoom].room;
 	var documentFragment = $(document.createDocumentFragment());
-	var text = this.usingSeats ? translator.translate('openSeatsInRoom_') : translator.translate('openPlacesInRoom_');
+	var openKey = this.usingSeats ? 'openSeatsInRoom' : 'openPlacesInRoom';
 
 	documentFragment.append(
-		'<div class="info-item open-seats">' + 
-		'<span>' + 
-		text +
-		'</span>' + 
-		infoLoc.roomOpenSeats + 
-		'</div>', 
-		'<div class="info-item"><span class="bron-legend"></span> <span>'+ translator.translate('pendingSeatInRoom_') +'</span>' + infoLoc.roomBronSeats +'</div>', '<div class="info-item"><span class="tak-legend"></span> <span>'+ translator.translate('confirmedSeatInRoom_') +'</span>' + infoLoc.roomTakenSeats +'</div>');
+		'<div class="info-item open-seats">' +
+		'<span>' +
+		seatregFormat(translator.translate(openKey), [this.roomNouns.singular, infoLoc.roomOpenSeats]) +
+		'</span>' +
+		'</div>',
+		'<div class="info-item"><span class="bron-legend"></span> <span>'+ seatregFormat(translator.translate('pendingBookingsInRoom'), [this.roomNouns.singular, infoLoc.roomBronSeats]) +'</span></div>', '<div class="info-item"><span class="tak-legend"></span> <span>'+ seatregFormat(translator.translate('approvedBookingsInRoom'), [this.roomNouns.singular, infoLoc.roomTakenSeats]) +'</span></div>');
 
 	$('#room-nav-info-inner').html(documentFragment);
 };
@@ -1159,7 +1159,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 				}else if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
 					var maxPlacesText = this.usingSeats ? translator.translate('maxSeatsToAdd') : translator.translate('maxPlacesToAdd');
 					
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ translator.translate('add_') + ' ' + this.spotName + ' ' + seatPrefix + nr + translator.translate('_fromRoom_') + ' ' + room + translator.translate('_toSelection') +'</h5><p>'+ maxPlacesText + ' ' + this.seatLimit +'</p>' + '</div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ seatregFormat(translator.translate('addSpotFromRoomToBooking'), [this.spotName, seatPrefix + nr, this.roomNouns.singular, room]) +'</h5><p>'+ maxPlacesText + ' ' + this.seatLimit +'</p>' + '</div>');
 
 					if(this.isPaymentEnabled() && this.payPalCurrencyCode && price > 0) {
 						var placeCostText = this.usingSeats ? translator.translate('seatCosts_') : translator.translate('placeCosts_');
@@ -1167,7 +1167,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + placeCostText + '<strong>' +  getCurrencySymbolFromISO(this.payPalCurrencyCode) + price + '</strong></p>');
 					}
 				}else {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + this.spotName + ' ' + seatPrefix + nr + translator.translate('_fromRoom_')  + room + '</h5></div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + seatregFormat(translator.translate('spotFromRoom'), [this.spotName, seatPrefix + nr, this.roomNouns.singular, room]) + '</h5></div>');
 				}
 
 			}else if(type == 'tak') {

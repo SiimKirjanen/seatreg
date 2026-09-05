@@ -149,6 +149,7 @@ class SeatregBookingService {
             return $customField->label;
         }, is_array( $enteredCustomFieldData) ? $enteredCustomFieldData : [] );
         $spotName = $registration->using_seats ? __('Seat', 'seatreg') : __('Place', 'seatreg');
+        $roomName = SeatregTerminologyService::getRoomNouns($registration)->singularUpper;
         $hasCalendarDate = (boolean)$bookings[0]->calendar_date;
         $roomsLayout = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout ?? null);
         $seatLegends = array();
@@ -158,7 +159,7 @@ class SeatregBookingService {
         }
 
         $hasLegends = count(array_filter($seatLegends)) > 0;
-        $headers = array( __('Name', 'seatreg'), $spotName, __('Room', 'seatreg') );
+        $headers = array( __('Name', 'seatreg'), $spotName, $roomName );
 
         if($hasLegends) {
             $headers[] = __('Label', 'seatreg');
@@ -181,7 +182,7 @@ class SeatregBookingService {
             $row = array(
                 array( 'label' => __('Name', 'seatreg'), 'value' => $booking->first_name . ' ' . $booking->last_name ),
                 array( 'label' => $spotName, 'value' => $booking->seat_nr ),
-                array( 'label' => __('Room', 'seatreg'), 'value' => $booking->room_name ),
+                array( 'label' => $roomName, 'value' => $booking->room_name ),
             );
 
             if($hasLegends) {

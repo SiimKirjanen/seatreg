@@ -13,6 +13,10 @@ const BOOKER_EMAIL = 'riina.tamm@example.com';
 /* The wording a registration that does not count in seats uses for them. */
 const PLACE_SELECTED = 'place selected';
 
+/* What a registration that is not about rooms can call them instead. */
+const ROOM_NOUN = 'stall';
+const ROOM_NOUN_PLURAL = 'stalls';
+
 /* Who gets to see the registration at all, and how much of it any one booker may
    take, so every one of these is checked on the registration itself. The limits
    are checked by making a booking and then trying to go past them. */
@@ -93,6 +97,31 @@ test.describe('Settings general', () => {
 		await registration.openCart();
 
 		await expect(registration.cartInfo).toContainText(PLACE_SELECTED);
+	});
+
+	/* The word replaces "room" wherever either side talks about one. The builder is
+	   rendered before a registration is chosen and repainted once its layout loads,
+	   and the registration view gets the word from the page it is served on, so one
+	   of each is checked. */
+	test('calls a room whatever the registration calls it', async () => {
+		code = await settings.openForNewRegistrationWithSeats(
+			uniqueRegistrationName('Settings general room noun'),
+			SEAT_COUNT
+		);
+
+		await settings.set('roomNounSingular', ROOM_NOUN);
+		await settings.set('roomNounPlural', ROOM_NOUN_PLURAL);
+		await settings.save();
+
+		const builder = await settings.openLayout(code);
+
+		await expect(builder.addRoomButton).toContainText(ROOM_NOUN);
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.header.click();
+
+		await expect(registration.infoDialog).toContainText(ROOM_NOUN_PLURAL);
 	});
 
 	test('turns away a booker who is over the booking limit for their email address', async () => {

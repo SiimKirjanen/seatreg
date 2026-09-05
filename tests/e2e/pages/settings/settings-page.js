@@ -30,6 +30,8 @@ const FIELDS = {
 	requireWpLogin: { tab: 'general', selector: '#require-wp-login', kind: 'checkbox' },
 	maxSeats: { tab: 'general', selector: '#registration-max-seats', kind: 'text' },
 	usingSeats: { tab: 'general', selector: '#using-seats', kind: 'checkbox' },
+	roomNounSingular: { tab: 'general', selector: '#room-noun-singular', kind: 'text' },
+	roomNounPlural: { tab: 'general', selector: '#room-noun-plural', kind: 'text' },
 	wpUserBookingLimit: { tab: 'general', selector: '#wp-user-booking-limit', kind: 'text' },
 	wpUserSeatLimit: { tab: 'general', selector: '#wp-user-bookings-seat-limit', kind: 'text' },
 	bookingEmailLimit: { tab: 'general', selector: '#bookings-email-limit', kind: 'text' },

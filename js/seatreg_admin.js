@@ -239,21 +239,22 @@
 					window.seatreg.uploadedImages = data._response.data.uploadedImages;
 				}
 				$('.reg-title-name').text(registrationName);
-				
+
+				window.seatreg.selectedRegistration = code;
+				window.seatreg.settings = {
+					paypal_payments: data._response.data.registration[0].paypal_payments,
+					paypal_rest_payments: data._response.data.registration[0].paypal_rest_payments,
+					stripe_payments: data._response.data.registration[0].stripe_payments,
+					custom_payment: data._response.data.registration[0].custom_payment,
+					using_seats: data._response.data.registration[0].using_seats
+				};
+				window.seatreg.roomNouns = data._response.data.roomNouns;
+				seatregApplyRoomNouns(window.seatreg.roomNouns);
+
 				if(data._response.data.registration[0].registration_layout == null) {
-					window.seatreg.selectedRegistration = code;				
 					$('.seatreg-builder-popup').css({'display': 'block'});
 					window.seatreg.builder.syncData(null);
 				}else {
-					window.seatreg.selectedRegistration = code;
-					window.seatreg.settings = {
-						paypal_payments: data._response.data.registration[0].paypal_payments,
-						paypal_rest_payments: data._response.data.registration[0].paypal_rest_payments,
-						stripe_payments: data._response.data.registration[0].stripe_payments,
-						custom_payment: data._response.data.registration[0].custom_payment,
-						using_seats: data._response.data.registration[0].using_seats
-					};
-				
 					$('.seatreg-builder-popup').css({'display': 'block'});
 					window.seatreg.builder.syncData( $.parseJSON(data._response.data.registration[0].registration_layout) );
 				}
@@ -1232,7 +1233,7 @@ function seatregGenerateImportBookingBox(bookingData, validationData) {
 	$bookingWrap.append('<div><b>Seat: </b>' + bookingData.seat_nr + '</div>');
 
 	if(validationData.room_name) {
-		$bookingWrap.append('<div><b>Room: </b>' + validationData.room_name + '</div>');
+		$bookingWrap.append('<div><b>' + seatregRoomNouns().singularUpper + ': </b>' + validationData.room_name + '</div>');
 	}
 
 	if( !validationData.is_valid ) {
@@ -1582,8 +1583,8 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			var data = resp.data;
 
 			if(data.status === 'room-searching') {
-				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="room[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('roomNotExist'));
-				alertify.error(translator.translate('roomNotExist'));
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="room[]"]').closest('.add-modal-input-wrap').find('.input-error').text(seatregFormat(translator.translate('roomNotExist'), [seatregRoomNouns().singularUpper]));
+				alertify.error(seatregFormat(translator.translate('roomNotExist'), [seatregRoomNouns().singularUpper]));
 			}
 			if(data.status === 'seat-id-searching') {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-id[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatIdNotExist'));
@@ -1766,8 +1767,8 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 
 		}else {
 			if(data.status == 'room-searching') {
-				$('#edit-room-error').text(translator.translate('roomNotExist'));
-				alertify.error(translator.translate('roomNotExist'));
+				$('#edit-room-error').text(seatregFormat(translator.translate('roomNotExist'), [seatregRoomNouns().singularUpper]));
+				alertify.error(seatregFormat(translator.translate('roomNotExist'), [seatregRoomNouns().singularUpper]));
 			}
 			if(data.status == 'seat-id-searching') {
 				$('#edit-seat-error').text(translator.translate('seatIdNotExist'));
@@ -2755,24 +2756,6 @@ initTooltips();
 	============================================
 */
 
-// Lightweight printf-style replace supporting %s, %d and positional %1$d, %2$s tokens.
-function seatregFlowFormat(template, args) {
-	if (!args || !args.length) {
-		return template;
-	}
-
-	return template
-		.replace(/%(\d+)\$[ds]/g, function(match, position) {
-			return args[parseInt(position, 10) - 1];
-		})
-		.replace(/%[ds]/g, (function() {
-			var index = 0;
-			return function() {
-				return args[index++];
-			};
-		})());
-}
-
 // Appends a titled, bulleted group to the summary box (skipped when it has no items).
 function seatregAppendFlowGroup($box, title, items) {
 	if (!items.length) {
@@ -2816,7 +2799,7 @@ function seatregRenderBookingFlowSummary() {
 		var closedText = t('flowClosed');
 		var closeReason = ($form.find('#registration-close-reason').val() || '').trim();
 		if (closeReason !== '') {
-			closedText += ' ' + seatregFlowFormat(t('flowClosedReason'), [closeReason]);
+			closedText += ' ' + seatregFormat(t('flowClosedReason'), [closeReason]);
 		}
 		$box.text(closedText);
 
@@ -2855,11 +2838,11 @@ function seatregRenderBookingFlowSummary() {
 
 		var wpBookingLimit = parseInt($form.find('#wp-user-booking-limit').val(), 10);
 		if (!isNaN(wpBookingLimit) && wpBookingLimit > 0) {
-			beforeBooking.push(item(seatregFlowFormat(t('flowWpBookingLimit'), [wpBookingLimit, nounPlural]), '#wp-user-booking-limit'));
+			beforeBooking.push(item(seatregFormat(t('flowWpBookingLimit'), [wpBookingLimit, nounPlural]), '#wp-user-booking-limit'));
 		}
 		var wpSeatLimit = parseInt($form.find('#wp-user-bookings-seat-limit').val(), 10);
 		if (!isNaN(wpSeatLimit) && wpSeatLimit > 0) {
-			beforeBooking.push(item(seatregFlowFormat(t('flowWpSeatLimit'), [wpSeatLimit, nounPlural]), '#wp-user-bookings-seat-limit'));
+			beforeBooking.push(item(seatregFormat(t('flowWpSeatLimit'), [wpSeatLimit, nounPlural]), '#wp-user-bookings-seat-limit'));
 		}
 	}
 
@@ -2896,9 +2879,9 @@ function seatregRenderBookingFlowSummary() {
 	// --- Making a booking: selection & checkout ---
 	var maxSeats = parseInt($form.find('#registration-max-seats').val(), 10);
 	if (!isNaN(maxSeats) && maxSeats > 0) {
-		makingBooking.push(item(seatregFlowFormat(t('flowSelectMax'), [nounPlural, maxSeats]), '#registration-max-seats'));
+		makingBooking.push(item(seatregFormat(t('flowSelectMax'), [nounPlural, maxSeats]), '#registration-max-seats'));
 	} else {
-		makingBooking.push(item(seatregFlowFormat(t('flowSelect'), [nounPlural]), '#using-seats'));
+		makingBooking.push(item(seatregFormat(t('flowSelect'), [nounPlural]), '#using-seats'));
 	}
 	// Booking data shown publicly on the map for already-booked seats/places.
 	var shownBookingDetails = [];
@@ -2907,21 +2890,21 @@ function seatregRenderBookingFlowSummary() {
 		shownBookingDetails.push(value === 'name' ? t('flowShowBookingDataFullName') : value);
 	});
 	if (shownBookingDetails.length > 0) {
-		makingBooking.push(item(seatregFlowFormat(t('flowShowBookingData'), [nounPlural, shownBookingDetails.join(', ')]), 'input[name="show-booking-data-registration[]"]'));
+		makingBooking.push(item(seatregFormat(t('flowShowBookingData'), [nounPlural, shownBookingDetails.join(', ')]), 'input[name="show-booking-data-registration[]"]'));
 	}
 	if ($form.find('#automatic-booking-confirm-dialog').is(':checked')) {
-		makingBooking.push(item(seatregFlowFormat(t('flowAutoDialog'), [nounSingular]), '#automatic-booking-confirm-dialog'));
+		makingBooking.push(item(seatregFormat(t('flowAutoDialog'), [nounSingular]), '#automatic-booking-confirm-dialog'));
 	} else {
-		makingBooking.push(item(seatregFlowFormat(t('flowManualDialog'), [nounPlural]), '#automatic-booking-confirm-dialog'));
+		makingBooking.push(item(seatregFormat(t('flowManualDialog'), [nounPlural]), '#automatic-booking-confirm-dialog'));
 	}
 	// Coupons are applied in the cart (only shown when payment is enabled) before entering details.
 	if (paymentsEnabled && $form.find('.existing-coupons .coupon-box').length > 0) {
 		makingBooking.push(item(t('flowCoupons'), '#coupon-management'));
 	}
 	if ($form.find('#one-person-checkout').is(':checked')) {
-		makingBooking.push(item(seatregFlowFormat(t('flowOnePersonCheckout'), [nounSingular]), '#one-person-checkout'));
+		makingBooking.push(item(seatregFormat(t('flowOnePersonCheckout'), [nounSingular]), '#one-person-checkout'));
 	} else {
-		makingBooking.push(item(seatregFlowFormat(t('flowPerSeatCheckout'), [nounSingular]), '#one-person-checkout'));
+		makingBooking.push(item(seatregFormat(t('flowPerSeatCheckout'), [nounSingular]), '#one-person-checkout'));
 	}
 	if ($form.find('#require-name').is(':checked')) {
 		makingBooking.push(item(t('flowRequireName'), '#require-name'));
@@ -2931,7 +2914,7 @@ function seatregRenderBookingFlowSummary() {
 	}
 	var emailLimit = parseInt($form.find('#bookings-email-limit').val(), 10);
 	if (!isNaN(emailLimit) && emailLimit > 0) {
-		makingBooking.push(item(seatregFlowFormat(t('flowEmailLimit'), [emailLimit, nounPlural]), '#bookings-email-limit'));
+		makingBooking.push(item(seatregFormat(t('flowEmailLimit'), [emailLimit, nounPlural]), '#bookings-email-limit'));
 	}
 	var $customFields = $form.find('.existing-custom-fields .custom-container');
 	if ($customFields.length > 0) {
@@ -2969,7 +2952,7 @@ function seatregRenderBookingFlowSummary() {
 		}
 		var pendingExpiration = parseInt($form.find('#pending-expiration').val(), 10);
 		if (!isNaN(pendingExpiration) && pendingExpiration > 0) {
-			var expirationText = seatregFlowFormat(t('flowPendingExpiration'), [pendingExpiration]);
+			var expirationText = seatregFormat(t('flowPendingExpiration'), [pendingExpiration]);
 
 			// Payment statuses that don't block deletion of an expired pending booking.
 			var deletableStatusLabels = [];
@@ -2977,7 +2960,7 @@ function seatregRenderBookingFlowSummary() {
 				deletableStatusLabels.push($(this).closest('label').text().trim());
 			});
 			if (deletableStatusLabels.length > 0) {
-				expirationText += ' ' + seatregFlowFormat(t('flowPendingExpirationStatuses'), [deletableStatusLabels.join(', ')]);
+				expirationText += ' ' + seatregFormat(t('flowPendingExpirationStatuses'), [deletableStatusLabels.join(', ')]);
 			}
 
 			afterBooking.push(item(expirationText, '#pending-expiration'));

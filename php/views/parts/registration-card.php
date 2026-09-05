@@ -117,6 +117,6 @@
 	<?php
 		seatreg_more_items_modal( $seatregCode );
 		seatreg_copy_registration_modal( $seatregCode );
-		seatreg_shortcode_modal( $seatregCode, $seatregRooms );
+		seatreg_shortcode_modal( $seatregCode, $seatregRooms, SeatregTerminologyService::getRoomNouns($seatregRegistration) );
 	?>
 </div>
