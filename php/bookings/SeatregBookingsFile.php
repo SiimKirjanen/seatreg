@@ -16,6 +16,7 @@ class SeatregBookingsFile {
     protected $_calendarDate = null;
     protected $_separateFirstandLastName = false;
     protected $_roomData = null;
+    protected $_roomNouns = null;
 
     public function __construct($showPending, $showConfirmed, $separateFirstandLastName, $registrationCode, $calendarDate) {
         $this->_registrationCode = $registrationCode;
@@ -43,6 +44,7 @@ class SeatregBookingsFile {
         $this->_registrations = $this->filtering( seatreg_get_data_for_booking_file($this->_registrationCode, $this->_showWhat, $this->_calendarDate) );
         $this->_registrationName = esc_html($this->_registrationInfo->registration_name);
         $this->_usingSeats = $this->_registrationInfo->using_seats === '1';
+        $this->_roomNouns = SeatregTerminologyService::getRoomNouns($this->_registrationInfo);
         $this->_roomData = SeatregLayoutService::getRoomDataFromLayout( $this->_registrationInfo->registration_layout );
     }
 

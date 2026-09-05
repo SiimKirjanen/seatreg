@@ -9,7 +9,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.63');
+define('SEATREG_DB_VERSION', '1.64');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));
@@ -22,6 +22,9 @@ define('SEATREG_CUSTOM_PAYMENT_DESCRIPTION', '/^[\p{L}\p{N}+\s.:\/]+$/u');
 define("SEATREG_COUPON_CODE_REGEX", '/^[\p{L}\p{N}_-]{1,20}$/u');
 define("SEATREG_COUPON_UUID_REGEX", '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i');
 define("SEATREG_ROOM_DESCRIPTION_REGEX", '/^[\p{L}\p{N}\s\r\n.,-]+$/u');
+define('SEATREG_ROOM_NOUN_MAX_LENGTH', 50);
+//No % or $ so a room noun can never be mistaken for a sprintf token by the strings it gets substituted into
+define('SEATREG_ROOM_NOUN_REGEX', '/^[\p{L}\p{N} \'-]{1,50}$/u');
 
 // Payments
 define('SEATREG_PAYMENT_PROCESSING', 'processing');
@@ -112,6 +115,13 @@ define('SEATREG_ACTION_BOOKING_PENDING_VIA_MANAGER', 'seatreg_action_booking_pen
 define('SEATREG_ACTION_BOOKING_APPROVED', 'seatreg_action_booking_approved');
 define('SEATREG_ACTION_BOOKING_APPROVED_VIA_MANAGER', 'seatreg_action_booking_approved_via_manager');
 define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
+
+// SeatReg filters
+define('SEATREG_FILTER_ROOM_NOUNS', 'seatreg_room_nouns');
+
+// Multilingual
+//The group a translator sees in Polylang and the domain they see in WPML, so it is the plugin name
+define('SEATREG_TRANSLATION_STRING_GROUP', 'SeatReg');
 
 // API
 define('SEATREG_API_OK_MESSAGE', 'ok');

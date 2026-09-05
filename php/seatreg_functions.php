@@ -382,6 +382,24 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<p class="form-group-title"><?php esc_html_e('Rename rooms', 'seatreg'); ?></p>
+				<p class="help-block">
+					<?php esc_html_e('Your layout is split into rooms. If your registration is not about rooms, enter the word to use instead, for example stall or hall. Both forms are needed. Leave them empty to keep "room"', 'seatreg'); ?>.
+				</p>
+				<label class="form-group-subfield-label" for="room-noun-singular"><?php esc_html_e('Singular', 'seatreg'); ?></label>
+				<input type="text" class="form-control" id="room-noun-singular" name="room-noun-singular" autocomplete="off" maxlength="<?php echo esc_attr(SEATREG_ROOM_NOUN_MAX_LENGTH); ?>" placeholder="<?php esc_attr_e('room', 'seatreg'); ?>" value="<?php echo esc_attr($options[0]->room_noun_singular); ?>">
+
+				<label class="form-group-subfield-label" for="room-noun-plural"><?php esc_html_e('Plural', 'seatreg'); ?></label>
+				<input type="text" class="form-control" id="room-noun-plural" name="room-noun-plural" autocomplete="off" maxlength="<?php echo esc_attr(SEATREG_ROOM_NOUN_MAX_LENGTH); ?>" placeholder="<?php esc_attr_e('rooms', 'seatreg'); ?>" value="<?php echo esc_attr($options[0]->room_noun_plural); ?>">
+
+				<?php if( SeatregStringTranslationService::isAvailable() ) : ?>
+					<p class="help-block">
+						<?php esc_html_e('Both words can be translated in your translation plugin, in the SeatReg string group', 'seatreg'); ?>.
+					</p>
+				<?php endif; ?>
+			</div>
+
+			<div class="form-group">
 				<label for="registration-password"><?php esc_html_e('Password', 'seatreg'); ?></label>
 				<p class="help-block">
 					<?php esc_html_e('You can set a password. Only people who know it can view your registration and make a booking. Leave it empty for no password', 'seatreg'); ?>.
@@ -1715,6 +1733,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 	$row_count3 = count($bookings3);
 	$project_name = str_replace(' ', '_', $project_name_original);
 	$usingSeats = $seatregData->using_seats === '1';
+	$roomNouns = SeatregTerminologyService::getRoomNouns($seatregData);
 	$requireName = $seatregData->require_name;
 	$currencyCode = $seatregData->paypal_currency_code;
 	$zipExtensionLoaded = extension_loaded('zip');
@@ -1777,7 +1796,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 						<div class="seat-nr-box manager-box manager-box-link" data-order="nr">
 							<?php $usingSeats ? esc_html_e('Seat', 'seatreg') : esc_html_e('Place', 'seatreg'); ?>
 						</div>
-						<div class="seat-room-box manager-box manager-box-link" data-order="room"><?php esc_html_e('Room', 'seatreg'); ?></div>
+						<div class="seat-room-box manager-box manager-box-link" data-order="room"><?php echo esc_html($roomNouns->singularUpper); ?></div>
 						<div class="seat-name-box manager-box manager-box-link" data-order="name"><?php esc_html_e('Name', 'seatreg'); ?></div>
 						<div class="seat-name-box manager-box manager-box-link" data-order="date"><?php esc_html_e('Date', 'seatreg'); ?></div>
 						<div class="seat-date-box manager-box manager-box-link" data-order="id"><?php esc_html_e('Booking id', 'seatreg'); ?></div>
@@ -2014,11 +2033,11 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 		</div>
 	<?php
 	
-	seatreg_booking_edit_modal($usingSeats, $calendarDate, $requireName);
-	seatreg_add_booking_modal($usingSeats, $calendarDate, $requireName, $roomsData);
+	seatreg_booking_edit_modal($usingSeats, $calendarDate, $requireName, $roomNouns);
+	seatreg_add_booking_modal($usingSeats, $calendarDate, $requireName, $roomsData, $roomNouns);
 	seatreg_booking_activity_modal();
 	seatreg_bookings_file_modal($custom_fields, $code, $calendarDate);
-	seatreg_seat_id_modal($roomsData, $bookings1, $bookings2);
+	seatreg_seat_id_modal($roomsData, $bookings1, $bookings2, $roomNouns);
 	seatreg_import_bookings_modal($code, $seatregData);
 	seatreg_import_bookings_finalization_modal($code);
 }
@@ -2182,7 +2201,20 @@ function seatreg_generate_payment_section($booking, $optionsData, $readOnly = fa
 	}
 }
 
-function seatreg_add_booking_modal($usingSeats, $calendarDate, $requireName, $roomsData) {
+//The layout builder is rendered once, before any registration is chosen, so it shows the default
+//wording and seatregApplyRoomNouns() repaints these spans from the layout the admin opens.
+function seatreg_room_noun_span($form, $template = '') {
+	$noun = SeatregTerminologyService::getRoomNouns()->$form;
+
+	printf(
+		'<span data-seatreg-noun="%s"%s>%s</span>',
+		esc_attr($form),
+		$template === '' ? '' : ' data-seatreg-noun-template="' . esc_attr($template) . '"',
+		esc_html( $template === '' ? $noun : sprintf($template, $noun) )
+	);
+}
+
+function seatreg_add_booking_modal($usingSeats, $calendarDate, $requireName, $roomsData, $roomNouns) {
 	if(!$roomsData) {
 		return;
 	}
@@ -2193,7 +2225,7 @@ function seatreg_add_booking_modal($usingSeats, $calendarDate, $requireName, $ro
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/add-booking-modal.php' );
 }
 
-function seatreg_booking_edit_modal($usingSeats, $calendarDate, $requireName) {
+function seatreg_booking_edit_modal($usingSeats, $calendarDate, $requireName, $roomNouns) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/booking-edit-modal.php' );
 }
 
@@ -2209,7 +2241,7 @@ function seatreg_copy_registration_modal($registrationCode) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/copy-registration-modal.php' );
 }
 
-function seatreg_shortcode_modal($registrationCode, $rooms) {
+function seatreg_shortcode_modal($registrationCode, $rooms, $roomNouns) {
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/shortcode-modal.php' );
 }
 
@@ -2224,7 +2256,7 @@ function seatreg_bookings_file_modal($customFields, $registrationCode, $calendar
 	require( SEATREG_PLUGIN_FOLDER_DIR . 'php/views/modals/bookings-file-modal.php' );
 }
 
-function seatreg_seat_id_modal($roomsData, $pendingBookings, $approvedBookings) {
+function seatreg_seat_id_modal($roomsData, $pendingBookings, $approvedBookings, $roomNouns) {
 	$combinedBookings = array_merge($pendingBookings, $approvedBookings);
 	$bookingIds = array_map(function($booking) {
 		return $booking->seat_id;
@@ -2355,6 +2387,7 @@ function seatreg_generate_registration_code() {
 function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate) {
 	$registration = seatreg_get_registration_data($code)[0];
 	$structure = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
+	$roomNouns = SeatregTerminologyService::getRoomNouns($registration);
 	$bookingActionLength = count($bookingActions);
 	$seat_id;
 	$allCorrect = true;
@@ -2363,7 +2396,7 @@ function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate
 
 	//step 1. check if room exists and contains seat with nr
 	foreach ($bookingActions as $key => $value) {
-		$step1Desision = seatreg_check_room_and_seat($structure, $value->room_name, $value->seat_nr);
+		$step1Desision = seatreg_check_room_and_seat($structure, $value->room_name, $value->seat_nr, $roomNouns);
 
 		if( $step1Desision['status'] != 'ok') {
 			$allCorrect = false;
@@ -2391,7 +2424,8 @@ function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate
 		foreach ($bookingActions as $bookingAction) {
 			if($booking->seat_nr == $bookingAction->seat_nr && $booking->room_name == $bookingAction->room_name && $booking->status === "2" && $bookingAction->action != 'del' && $bookingAction->action != 'unapprove') {
 				$notBooked = false;
-				$resp['text'] = esc_html__('Seat ', 'seatreg') . esc_html($bookingAction->seat_nr) . esc_html__(' from room ', 'seatreg') . esc_html($bookingAction->room_name) . esc_html__(' is already booked', 'seatreg');
+					/* translators: %1$s: Seat number, %2$s: the word the admin uses for a room, %3$s: Room name */
+				$resp['text'] = sprintf( esc_html__('Seat %1$s from %2$s %3$s is already booked', 'seatreg'), esc_html($bookingAction->seat_nr), esc_html($roomNouns->singular), esc_html($bookingAction->room_name) );
 
 				break 2;
 			}
@@ -2412,10 +2446,11 @@ function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate
 function seatreg_valdiate_add_booking_with_manager($code, $data, $calendarDate) {
 	$registration = seatreg_get_options($code)[0];
 	$structure = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
+	$roomNouns = SeatregTerminologyService::getRoomNouns($registration);
 	$allCorrect = true;
 	$resp = array();
     $resp['status'] = 'ok';
-	$layoutValidation = SeatregLayoutService::validateRoomAndSeatId($structure, $data->roomName, $data->seatId );
+	$layoutValidation = SeatregLayoutService::validateRoomAndSeatId($structure, $data->roomName, $data->seatId, null, $roomNouns );
 
 	if( !$layoutValidation->valid ) {
 		$allCorrect = false;
@@ -2441,7 +2476,8 @@ function seatreg_valdiate_add_booking_with_manager($code, $data, $calendarDate) 
 		if($booking->seat_id === $data->seatId && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
-			$resp['text'] = esc_html__('Seat ID ', 'seatreg') . esc_html($data->seatId) . esc_html__(' from room ', 'seatreg') . esc_html($booking->room_name) . esc_html__(' is already booked', 'seatreg');
+			/* translators: %1$s: Seat ID, %2$s: the word the admin uses for a room, %3$s: Room name */
+			$resp['text'] = sprintf( esc_html__('Seat ID %1$s from %2$s %3$s is already booked', 'seatreg'), esc_html($data->seatId), esc_html($roomNouns->singular), esc_html($booking->room_name) );
 
 			break;
 		}
@@ -2462,10 +2498,11 @@ function seatreg_valdiate_add_booking_with_manager($code, $data, $calendarDate) 
 function seatreg_validate_edit_booking($code, $data) {
 	$registration = seatreg_get_options($code)[0];
 	$structure = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
+	$roomNouns = SeatregTerminologyService::getRoomNouns($registration);
 	$allCorrect = true;
     $resp = array();
     $resp['status'] = 'ok';
-	$layoutValidation = SeatregLayoutService::validateRoomAndSeatId($structure, $data->roomName, $data->seatId );
+	$layoutValidation = SeatregLayoutService::validateRoomAndSeatId($structure, $data->roomName, $data->seatId, null, $roomNouns );
 	$customFieldValidation = SeatregDataValidation::validateCustomFieldManagerSubmit($data->editCustomField, $registration->custom_fields, $registration->registration_code);
 
 	if( $registration->using_calendar ) {
@@ -2515,7 +2552,8 @@ function seatreg_validate_edit_booking($code, $data) {
 		if($booking->seat_id === $data->seatId && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
-			$resp['text'] = esc_html__('Seat ', 'seatreg') . esc_html($data->roomName) . esc_html__(' from room ', 'seatreg') . esc_html($booking->room_name) . esc_html__(' is already booked', 'seatreg');
+			/* translators: %1$s: Seat ID, %2$s: the word the admin uses for a room, %3$s: Room name */
+			$resp['text'] = sprintf( esc_html__('Seat ID %1$s from %2$s %3$s is already booked', 'seatreg'), esc_html($data->seatId), esc_html($roomNouns->singular), esc_html($booking->room_name) );
 
 			break;
 		}
@@ -2537,20 +2575,23 @@ function seatreg_validate_edit_booking($code, $data) {
 }
 
 //check if booking room and seat are present in registration layout
-function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $bookingSeatNr) {
+function seatreg_check_room_and_seat($registrationLayout, $bookingRoomName, $bookingSeatNr, $roomNouns = null) {
 	$layoutLength = count($registrationLayout);
 	$allCorrect = false;
 	$status = array();
 	$searchStatus = '';
 	$errorText = '';
+	$roomNoun = $roomNouns ? $roomNouns->singularUpper : SeatregTerminologyService::getRoomNouns()->singularUpper;
 
 	for($i = 0; $i < $layoutLength; $i++) {
 		$searchStatus = 'room-searching';
-		$errorText = esc_html__('Room ','seatreg') . esc_html($bookingRoomName) . esc_html__(' dose not exist!', 'seatreg');
+		/* translators: %1$s: the word the admin uses for a room, capitalized, %2$s: Room name */
+		$errorText = sprintf( esc_html__('%1$s %2$s does not exist!', 'seatreg'), esc_html($roomNoun), esc_html($bookingRoomName) );
 
 		if($registrationLayout[$i]->room->name == $bookingRoomName) {
 			$searchStatus = 'seat-nr-searching';
-			$errorText = esc_html__('Seat ','seatreg') . esc_html($bookingSeatNr) . esc_html__(' dose not exist in ', 'seatreg') . esc_html($bookingRoomName);
+			/* translators: %1$s: Seat number, %2$s: Room name */
+			$errorText = sprintf( esc_html__('Seat %1$s does not exist in %2$s', 'seatreg'), esc_html($bookingSeatNr), esc_html($bookingRoomName) );
 			$boxLen = count($registrationLayout[$i]->boxes);
 			
 			for($k = 0; $k < $boxLen; $k++) {
@@ -2681,6 +2722,8 @@ function seatreg_set_up_db() {
 			public_api_enabled tinyint(0) NOT NULL DEFAULT 0,
 			custom_footer_text text,
 			seat_selection_btn_text varchar(255) DEFAULT NULL,
+			room_noun_singular varchar(50) DEFAULT NULL,
+			room_noun_plural varchar(50) DEFAULT NULL,
 			custom_payments text,
 			booking_status_page_custom_styles text,
 			booking_confirm_page_custom_styles text,
@@ -2800,7 +2843,7 @@ function seatreg_get_registration_data($code) {
 	global $seatreg_db_table_names;
 
 	$registration = $wpdb->get_results( $wpdb->prepare(
-		"SELECT a.*, b.paypal_payments, b.paypal_rest_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates, b.custom_payments
+		"SELECT a.*, b.paypal_payments, b.paypal_rest_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates, b.custom_payments, b.room_noun_singular, b.room_noun_plural
 		FROM $seatreg_db_table_names->table_seatreg AS a
 		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 		ON a.registration_code = b.registration_code
@@ -3507,6 +3550,22 @@ function seatreg_update() {
 		wp_die( esc_html($registrationNameValidation->errorMessage) );
 	}
 
+	$roomNounSingular = trim( sanitize_text_field( isset($_POST['room-noun-singular']) ? wp_unslash($_POST['room-noun-singular']) : '' ) );
+	$roomNounPlural = trim( sanitize_text_field( isset($_POST['room-noun-plural']) ? wp_unslash($_POST['room-noun-plural']) : '' ) );
+
+	//A lone singular would pair with the default plural and read wrong, and a plural cannot be derived across languages
+	if( ($roomNounSingular === '') !== ($roomNounPlural === '') ) {
+		wp_die('Both the singular and the plural room noun are required');
+	}
+
+	foreach( array($roomNounSingular, $roomNounPlural) as $roomNoun ) {
+		$roomNounValidation = SeatregDataValidation::validateRoomNoun($roomNoun);
+
+		if( !$roomNounValidation->valid ) {
+			wp_die( esc_html($roomNounValidation->errorMessage) );
+		}
+	}
+
 	$customFileds = stripslashes_deep( $_POST['custom-fields'] );
 	$customFiledsValidation = SeatregDataValidation::validateCustomFieldCreation($customFileds);
 
@@ -3831,6 +3890,8 @@ function seatreg_update() {
 				'stripe_api_key' => $stripeApiKeyInput === '' ? $oldOptions->stripe_api_key : SeatregEncryptionService::encryptValue($stripeApiKeyInput),
 				'payment_completed_set_booking_confirmed_stripe' => $_POST['payment-mark-confirmed-stripe'],
 				'using_seats' => $_POST['using-seats'],
+				'room_noun_singular' => $roomNounSingular === '' ? null : $roomNounSingular,
+				'room_noun_plural' => $roomNounPlural === '' ? null : $roomNounPlural,
 				'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null,
 				'email_background_color' => $customizeEmailColors && !empty($_POST['email-background-color']) ? sanitize_hex_color($_POST['email-background-color']) : null,
 				'email_text_color' => $customizeEmailColors && !empty($_POST['email-text-color']) ? sanitize_hex_color($_POST['email-text-color']) : null,
@@ -3991,6 +4052,7 @@ function seatreg_get_registration_layout_and_bookings() {
 	$dataToSend->registration = $registration;
 	$dataToSend->bookings = $bookings;
 	$dataToSend->uploadedImages = $uploadedImages;
+	$dataToSend->roomNouns = SeatregTerminologyService::getRoomNouns( isset($registration[0]) ? $registration[0] : null );
 	$response = new SeatregJsonResponse();
 	$response->setData( $dataToSend);
 	wp_send_json( $response );

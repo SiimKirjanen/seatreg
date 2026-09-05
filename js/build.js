@@ -588,7 +588,7 @@
 			window.seatreg.uploadedImages.forEach(function(uploaded) {
 				var $imgWrap = $("<div class='uploaded-image-box'></div");
 				$imgWrap.append("<img src='" + window.WP_Seatreg.uploads_url + "/room_images/" + window.seatreg.selectedRegistration + "/" + uploaded.file + "' class='uploaded-image' />");
-				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>"+ translator.translate('addToRoomBackground') +"</span>");
+				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>"+ seatregFormat(translator.translate('addToRoomBackground'), [seatregRoomNouns().singular]) +"</span>");
 				$imgWrap.append("<span class='up-img-rem' data-img='"+ uploaded.file +"'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> "+ translator.translate('remove') +"</span>");
 
 				$('#uploaded-images').append($imgWrap);
@@ -966,7 +966,7 @@
 		
 		this.rooms[this.roomLocator] = new Room(
 			this.roomLocator,
-			this.roomLocator + ' ' + translator.translate('room'),
+			this.roomLocator + ' ' + seatregRoomNouns().singular,
 			uuid
 		);
 		$('#active-room').removeAttr('id');
@@ -1037,7 +1037,7 @@
 		var size = Object.size(this.rooms);
 		
 		if(size == 1) {
-			alert(translator.translate('oneRoomNeeded'));
+			alert(seatregFormat(translator.translate('oneRoomNeeded'), [seatregRoomNouns().singular]));
 		}else if(size > 1) {
 			let roomDeletedLocation = this.currentRoom;
 			delete this.rooms[this.currentRoom];
@@ -1202,7 +1202,7 @@
 				},
 				buttonFocus: "ok"  
 			});
-			alertify.alert(translator.translate('alreadyInRoom'));
+			alertify.alert(seatregFormat(translator.translate('alreadyInRoom'), [seatregRoomNouns().singular]));
 		}
 	};
 
@@ -2200,7 +2200,7 @@
 						},
 						buttonFocus: "ok"  
 					});
-		       		alertify.alert(translator.translate('allRoomsNeedName'));
+		       		alertify.alert(seatregFormat(translator.translate('allRoomsNeedName'), [seatregRoomNouns().plural]));
 
 		       		return false;
 		       }
@@ -3391,7 +3391,7 @@
 				buttonFocus: "cancel"  
 			});
 
-			alertify.confirm(translator.translate('deleteRoom_') + reg.rooms[reg.currentRoom].title + " ?", function (e) {
+			alertify.confirm(seatregFormat(translator.translate('deleteRoomConfirm'), [seatregRoomNouns().singular, reg.rooms[reg.currentRoom].title]), function (e) {
 			    if (e) {
 			        reg.deleteCurrentRoom();
 			    }
@@ -3406,7 +3406,7 @@
 				buttonFocus: "ok"  
 			});
 
-			alertify.alert(translator.translate('cantDelRoom_') +'<span class="bold-text">' + reg.rooms[reg.currentRoom].title + '</span>' + translator.translate('_cantDelRoomBecause'));
+			alertify.alert(seatregFormat(translator.translate('cantDeleteRoom'), [seatregRoomNouns().singular, '<span class="bold-text">' + reg.rooms[reg.currentRoom].title + '</span>']));
 		}
 	});
 
@@ -3524,7 +3524,7 @@
 	$('#room-dialog-ok').on('click', function() {
 		if($('#room-name-dialog-input').val() == '') {
 			$('#room-name-dialog-input').focus();
-			$('.room-name-error').text(translator.translate('roomNameMissing')).css('display','block');
+			$('.room-name-error').text(seatregFormat(translator.translate('roomNameMissing'), [seatregRoomNouns().singularUpper])).css('display','block');
 		}else {
 			if(!reg.roomNameExists($('#room-name-dialog-input').val())) {
 				var oldRoomName = reg.rooms[reg.currentRoom].title;
@@ -3538,19 +3538,19 @@
 
 					reg.roomNameChange[initName] = newRoom;
 
-					alertify.success(translator.translate('roomNameChanged'));
+					alertify.success(seatregFormat(translator.translate('roomNameChanged'), [seatregRoomNouns().singularUpper]));
 				}else {
 					if(reg.rooms[reg.currentRoom].initialName == "") {
 						reg.rooms[reg.currentRoom].initialName = reg.rooms[reg.currentRoom].title;
 					}
-					alertify.success(translator.translate('roomNameSet'));
+					alertify.success(seatregFormat(translator.translate('roomNameSet'), [seatregRoomNouns().singular]));
 				}
 				
 				$('#room-name-dialog').modal('toggle');
 				reg.needToSave = true;
 				
 			}else {
-				$('.room-name-error').text(translator.translate('roomNameExists')).css('display','block');
+				$('.room-name-error').text(seatregFormat(translator.translate('roomNameExists'), [seatregRoomNouns().singularUpper])).css('display','block');
 			}
 		}
 	});
@@ -3569,7 +3569,7 @@
 		}
 
 		reg.rooms[reg.currentRoom].description = roomDescription;
-		alertify.success(translator.translate('roomDescriptionSet'));
+		alertify.success(seatregFormat(translator.translate('roomDescriptionSet'), [seatregRoomNouns().singularUpper]));
 		$('#room-description-dialog').modal('toggle');
     });
 	   
@@ -3666,7 +3666,7 @@
 
 					if(reg.rooms[reg.currentRoom].backgroundImage === imgName) {
 						reg.removeCurrentRoomImage();
-						$('#activ-room-img-wrap').empty().text(translator.translate('noBgImageInRoom'));
+						$('#activ-room-img-wrap').empty().text(seatregFormat(translator.translate('noBgImageInRoom'), [seatregRoomNouns().singular]));
 					}
 					
 				}else if(response.type == 'error') {
@@ -3681,7 +3681,7 @@
 
 		var curImgWrap = $('<div class="cur-img-wrap"></div>');
 		var bgImg = $('<img class="uploaded-image" src="' + window.WP_Seatreg.uploads_url + '/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
-		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ translator.translate('removeFromRoom') +'</span>');
+		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ seatregFormat(translator.translate('removeFromRoom'), [seatregRoomNouns().singular]) +'</span>');
 
 		curImgWrap.append(bgImg, remImg);
 
@@ -3694,12 +3694,12 @@
 		if(reg.rooms[reg.currentRoom].backgroundImage !== null) {
 			var curImgWrap = $('<div class="cur-img-wrap"></div>');
 			var bgImg = $('<img class="uploaded-image" src="'+ window.WP_Seatreg.uploads_url + '/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
-			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ translator.translate('removeFromRoom') +'</span>');
+			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ seatregFormat(translator.translate('removeFromRoom'), [seatregRoomNouns().singular]) +'</span>');
 
 			curImgWrap.append(bgImg, remImg);
 			$('#activ-room-img-wrap').append(curImgWrap);
 		}else {
-			$('#activ-room-img-wrap').html(translator.translate('noBgImageInRoom'));
+			$('#activ-room-img-wrap').html(seatregFormat(translator.translate('noBgImageInRoom'), [seatregRoomNouns().singular]));
 		}
 	});
 
@@ -3707,7 +3707,7 @@
 		reg.removeCurrentRoomImage();
 		$('.room-image').remove();
 		$(this).closest('.cur-img-wrap').remove();
-		$('#activ-room-img-wrap').html(translator.translate('noBgImageInRoom'));
+		$('#activ-room-img-wrap').html(seatregFormat(translator.translate('noBgImageInRoom'), [seatregRoomNouns().singular]));
 	});
 	
 	$('#file-sub').on('click', function(e) {

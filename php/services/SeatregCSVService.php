@@ -16,12 +16,14 @@ class SeatregCSVService {
     private $registrationData;
     private $roomData;
     private $existingBookings;
+    private $roomNouns;
 
     public function __construct($code) {
         $this->seatregCode = $code;
         $this->registrationData = SeatregRegistrationRepository::getRegistrationByCode($this->seatregCode);
         $this->roomData = SeatregLayoutService::getRoomDataFromLayout($this->registrationData->registration_layout);
         $this->existingBookings = SeatregBookingRepository::getAllConfirmedAndApprovedBookingsByRegistrationCode($this->seatregCode);
+        $this->roomNouns = SeatregTerminologyService::getRoomNouns( SeatregOptionsRepository::getOptionsByRegistrationCode($this->seatregCode) );
     }
 
     public function validateCSV($file) {
@@ -60,7 +62,7 @@ class SeatregCSVService {
                 $obj->messages[] = 'Invalid room UUID';
             }
             $obj->room_name = $roomName;
-            $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $row[SEATREG_CSV_COL_SEAT_ID], $row[SEATREG_CSV_COL_SEAT_NR]);
+            $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $row[SEATREG_CSV_COL_SEAT_ID], $row[SEATREG_CSV_COL_SEAT_NR], $this->roomNouns);
             if( !$seatAndRoomValidation->valid ) {
                 $obj->is_valid = false;
                 $obj->messages[] = $seatAndRoomValidation->errorText;

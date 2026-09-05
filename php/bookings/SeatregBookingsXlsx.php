@@ -76,7 +76,8 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
         $header = array_merge(
             array(
                 $placeNumberText => 'string',
-                esc_html__('Room name', 'seatreg') => 'string',
+                /* translators: %s: the word the admin uses for a room, capitalized */
+                esc_html( sprintf( __('%s name', 'seatreg'), $this->_roomNouns->singularUpper ) ) => 'string',
             ),
             $labelHeader,
             $nameHeader,

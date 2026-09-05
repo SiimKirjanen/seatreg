@@ -70,7 +70,8 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
             $seatLegend = $this->getSeatLegend($registration);
 
             $this->pdf->Cell(20, 6, $placeNumberText . ': ' . esc_html($registration->seat_nr), 0, 1, 'L');
-            $this->pdf->Cell(20, 6, esc_html__('Room name', 'seatreg') . ': ' . esc_html($registration->room_name), 0, 1, 'L');
+            /* translators: %s: the word the admin uses for a room, capitalized */
+            $this->pdf->Cell(20, 6, esc_html( sprintf( __('%s name', 'seatreg'), $this->_roomNouns->singularUpper ) ) . ': ' . esc_html($registration->room_name), 0, 1, 'L');
 
             if( $seatLegend ) {
                 $this->pdf->Cell(20, 6, esc_html__('Label', 'seatreg') . ': ' . esc_html($seatLegend), 0, 1, 'L');

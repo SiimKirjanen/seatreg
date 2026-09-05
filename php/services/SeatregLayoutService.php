@@ -72,18 +72,19 @@ class SeatregLayoutService {
        return json_encode($layout);
     }
 
-    public static function validateRoomAndSeatId($layout, $bookingRoomName, $bookingSeatId, $seatNr = null) {
+    public static function validateRoomAndSeatId($layout, $bookingRoomName, $bookingSeatId, $seatNr = null, $roomNouns = null) {
         $status = (object) [
             'valid' => false,
             'searchStatus' => '',
             'errorText' => ''
         ];
+        $roomNoun = $roomNouns ? $roomNouns->singularUpper : SeatregTerminologyService::getRoomNouns()->singularUpper;
 
         foreach( $layout as $layoutData ) {
             $room = $layoutData->room;
             $status->searchStatus = 'room-searching';
-            /* translators: %s: Room name */
-            $status->errorText = sprintf( esc_html__('Room %s does not exist!', 'seatreg'), esc_html($bookingRoomName) );
+            /* translators: %1$s: the word the admin uses for a room, capitalized, %2$s: Room name */
+            $status->errorText = sprintf( esc_html__('%1$s %2$s does not exist!', 'seatreg'), esc_html($roomNoun), esc_html($bookingRoomName) );
     
             if( $room->name == $bookingRoomName ) {
                 $status->searchStatus = 'seat-id-searching';

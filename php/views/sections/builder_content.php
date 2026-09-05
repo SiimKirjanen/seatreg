@@ -1,22 +1,23 @@
 <?php
 	if ( ! defined( 'ABSPATH' ) ) {
-		exit(); 
-	}	
+		exit();
+	}
+
 ?>
 
 <div id="construction-wrapper">
 	<div class="build-head">
 		<h1 class="reg-title"><?php esc_html_e('Registration name', 'seatreg'); ?>: <span class="reg-title-name"></span></h1>
 		<h2 class="room-title">
-			<?php esc_html_e('Room', 'seatreg'); ?>: 
+			<?php seatreg_room_noun_span('singularUpper'); ?>:
 			<span class="room-title-name"></span>
 			<span class="change-room-name"><?php esc_html_e('Change name', 'seatreg');?></span>
 			<span class="change-room-description"><?php esc_html_e('Change description', 'seatreg');?></span>
 		</h2>
 		<div id="room-selection-wrapper"></div>
 		<div class="cre-del-room-wrapper">
-			<span id="new-room-create" class="room-action"><i class="fa fa-plus" aria-hidden="true"></i> <?php esc_html_e('Add room', 'seatreg');?> </span>
-			<span id="current-room-delete" class="room-action"><i class="fa fa-minus" aria-hidden="true"></i> <?php esc_html_e('Delete room', 'seatreg');?></span>
+			<span id="new-room-create" class="room-action"><i class="fa fa-plus" aria-hidden="true"></i> <?php seatreg_room_noun_span('singular', _x('Add %s', 'layout builder button that creates a new room', 'seatreg'));?> </span>
+			<span id="current-room-delete" class="room-action"><i class="fa fa-minus" aria-hidden="true"></i> <?php seatreg_room_noun_span('singular', _x('Delete %s', 'layout builder button that deletes the current room', 'seatreg'));?></span>
 		</div>
 	</div> <!-- end of build head-->
 	
@@ -267,7 +268,10 @@
 				</div>
 
 				<div class="legend-dialog-div">
-					<label for="legend-delete-select-room" class="legend-dialog-label"><?php esc_html_e('Remove legend from this room:', 'seatreg');?></label>
+					<label for="legend-delete-select-room" class="legend-dialog-label"><?php
+						/* translators: %s: the word the admin uses for a room */
+						seatreg_room_noun_span('singular', __('Remove legend from this %s:', 'seatreg'));
+					?></label>
 					<select class="legend-select-room" id="legend-delete-select-room"></select> 
 					<button type="button" id="delete-legend-from-room" class="btn btn-secondary d-block btn-sm"><?php esc_html_e('Remove', 'seatreg');?></button>
 				</div>
@@ -372,11 +376,11 @@
 		<div class="modal-dialog vert-modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Room name', 'seatreg');?></h4>
+					<h4 class="modal-title" id="myModalLabel"><?php seatreg_room_noun_span('singularUpper', _x('%s name', 'layout builder dialog title for naming a room', 'seatreg'));?></h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
 				<div class="modal-body">
-					<label for="room-name-dialog-input"><?php esc_html_e('Enter room name:', 'seatreg');?> </label>
+					<label for="room-name-dialog-input"><?php seatreg_room_noun_span('singular', _x('Enter %s name:', 'layout builder room name field label', 'seatreg'));?> </label>
 					<input type="text" id="room-name-dialog-input">
 					<div class="room-name-error"></div>
 				</div>
@@ -392,12 +396,12 @@
 		<div class="modal-dialog modal-lg vert-modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title"><?php esc_html_e('Room description', 'seatreg');?></h4>
+					<h4 class="modal-title"><?php seatreg_room_noun_span('singularUpper', _x('%s description', 'layout builder dialog title for a room description', 'seatreg'));?></h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
 				<div class="modal-body">
 					<p><?php esc_html_e('Will be displayed on the registration view.', 'seatreg'); ?></p>
-					<label for="room-description-input"><?php esc_html_e('Enter room description:', 'seatreg');?> </label><br>
+					<label for="room-description-input"><?php seatreg_room_noun_span('singular', _x('Enter %s description:', 'layout builder room description field label', 'seatreg'));?> </label><br>
 					<textarea id="room-description-input" cols="50"></textarea>
 					<div class="room-description-error"></div>
 				</div>
@@ -565,11 +569,17 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title"><?php esc_html_e('Room background image', 'seatreg');?></h4>
+					<h4 class="modal-title"><?php
+						/* translators: %s: the word the admin uses for a room, capitalized */
+						seatreg_room_noun_span('singularUpper', __('%s background image', 'seatreg'));
+					?></h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
 				<div class="modal-body">
-					<h4><?php esc_html_e('Current room image', 'seatreg');?></h4>
+					<h4><?php
+						/* translators: %s: the word the admin uses for a room */
+						seatreg_room_noun_span('singular', __('Current %s image', 'seatreg'));
+					?></h4>
 					<div id="activ-room-img-wrap"></div>
 					<br>
 

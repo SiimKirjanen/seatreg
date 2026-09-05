@@ -5,6 +5,7 @@ class SeatregImportService {
     private $registrationData;
     private $roomData;
     private $existingBookings;
+    private $roomNouns;
     private $failedImports = array();
     private $successfulImports = array();
     private $importCount = 0;
@@ -14,6 +15,7 @@ class SeatregImportService {
         $this->registrationData = SeatregRegistrationRepository::getRegistrationByCode($this->seatregCode);
         $this->roomData = SeatregLayoutService::getRoomDataFromLayout($this->registrationData->registration_layout);
         $this->existingBookings = SeatregBookingRepository::getAllConfirmedAndApprovedBookingsByRegistrationCode($this->seatregCode);
+        $this->roomNouns = SeatregTerminologyService::getRoomNouns( SeatregOptionsRepository::getOptionsByRegistrationCode($this->seatregCode) );
     }
 
     private function validateData($bookingData) {
@@ -31,7 +33,7 @@ class SeatregImportService {
             return $validation;
         }
 
-        $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $bookingData->seat_id, $bookingData->seat_nr);
+        $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $bookingData->seat_id, $bookingData->seat_nr, $this->roomNouns);
         if( !$seatAndRoomValidation->valid ) {
             $validation->is_valid = false;
             $validation->messages[] = $seatAndRoomValidation->errorText;

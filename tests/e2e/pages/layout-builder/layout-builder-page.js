@@ -504,7 +504,7 @@ class LayoutBuilderPage {
 		await expectModalShown(this.roomNameDialog);
 	}
 
-	/** The builder names it "<n> room" and opens the name dialog straight away. */
+	/** The builder names it "<n> <the registration's word for a room>" and opens the name dialog straight away. */
 	async addRoom(roomName) {
 		await this.addRoomButton.click();
 		await this.waitForRoomNameDialog();

@@ -18,8 +18,10 @@ function seatreg_generate_registration_strings() {
 	$translations->confWillBeSentTo = esc_html__('Confirmation will be sent to:', 'seatreg');
 	$translations->confWillBeSentTogmail = esc_html__('Confirmation will be sent to (Gmail):', 'seatreg');
 	$translations->gmailReq = esc_html__('Email (Gmail required)', 'seatreg');
-	$translations->_fromRoom_ = esc_html__(' from room ', 'seatreg');
-	$translations->_toSelection = esc_html__(' to booking?', 'seatreg');
+	/* translators: %1$s: the word seat or place, %2$s: the seat/place number, %3$s: the word the admin uses for a room, %4$s: the room name */
+	$translations->addSpotFromRoomToBooking = esc_html__('Add %1$s %2$s from %3$s %4$s to booking?', 'seatreg');
+	/* translators: %1$s: the word seat or place, %2$s: the seat/place number, %3$s: the word the admin uses for a room, %4$s: the room name */
+	$translations->spotFromRoom = esc_html__('%1$s %2$s from %3$s %4$s', 'seatreg');
 	$translations->_isOccupied = esc_html__(' is occupied', 'seatreg');
 	$translations->_isPendingState = esc_html__(' is in pending state', 'seatreg');
 	$translations->regOwnerNotConfirmed = esc_html__('(registration admin has not confirmed it)', 'seatreg');
@@ -28,12 +30,15 @@ function seatreg_generate_registration_strings() {
 	$translations->_regUnderConstruction = esc_html__('Under construction', 'seatreg');
 	$translations->emptyField = esc_html__('Empty field', 'seatreg');
 	$translations->remove = esc_html__('Remove', 'seatreg');
-	$translations->add_ = esc_html__('Add ', 'seatreg');
 	$translations->addToBooking = esc_html__('Add to Booking', 'seatreg');
-	$translations->openSeatsInRoom_ = esc_html__('Open seats in the room: ', 'seatreg');
-    $translations->openPlacesInRoom_ = esc_html__('Open places in the room: ', 'seatreg');
-	$translations->pendingSeatInRoom_ = esc_html__('Pending bookings in the room: ', 'seatreg');
-	$translations->confirmedSeatInRoom_ = esc_html__('Approved bookings in the room: ', 'seatreg');
+	/* translators: %1$s: the word the admin uses for a room, %2$s: number of open seats */
+	$translations->openSeatsInRoom = esc_html__('Open seats in the %1$s: %2$s', 'seatreg');
+	/* translators: %1$s: the word the admin uses for a room, %2$s: number of open places */
+    $translations->openPlacesInRoom = esc_html__('Open places in the %1$s: %2$s', 'seatreg');
+	/* translators: %1$s: the word the admin uses for a room, %2$s: number of pending bookings */
+	$translations->pendingBookingsInRoom = esc_html__('Pending bookings in the %1$s: %2$s', 'seatreg');
+	/* translators: %1$s: the word the admin uses for a room, %2$s: number of approved bookings */
+	$translations->approvedBookingsInRoom = esc_html__('Approved bookings in the %1$s: %2$s', 'seatreg');
 	$translations->seat = esc_html__('seat', 'seatreg');
     $translations->place = esc_html__('place', 'seatreg');
 	$translations->firstName = esc_html__('Firstname', 'seatreg');
@@ -88,9 +93,12 @@ function seatreg_generate_admin_strings() {
     $translations->legendNameChanged = esc_html__('Legend name changed', 'seatreg');
     $translations->legendColorChanged = esc_html__('Legend color changed', 'seatreg');
     $translations->buildingGridUpdated = esc_html__('Building grid updated', 'seatreg');
-    $translations->roomNameChanged = esc_html__('Room name changed', 'seatreg');
-    $translations->roomNameSet = esc_html__('New room added', 'seatreg');
-    $translations->roomNotExist = esc_html__('Room does not exist', 'seatreg');
+    /* translators: %s: the word the admin uses for a room, capitalized */
+    $translations->roomNameChanged = esc_html( _x('%s name changed', 'layout builder confirmation after renaming a room', 'seatreg') );
+    /* translators: %s: the word the admin uses for a room */
+    $translations->roomNameSet = esc_html__('New %s added', 'seatreg');
+    /* translators: %s: the word the admin uses for a room, capitalized */
+    $translations->roomNotExist = esc_html( _x('%s does not exist', 'booking manager error when the given room name matches nothing', 'seatreg') );
     $translations->seatNotExist = esc_html__('Seat does not exist', 'seatreg');
     $translations->seatIdNotExist = esc_html__('Seat id dose not exist', 'seatreg');
     $translations->seatAlreadyBookedPending = esc_html__('Seat is already booked/pending', 'seatreg');
@@ -101,18 +109,23 @@ function seatreg_generate_admin_strings() {
     $translations->lagendNameMissing = esc_html__('Legend name missing!', 'seatreg');
     $translations->legendColorTaken = esc_html__('Legend color is taken. Choose another', 'seatreg');
     $translations->legendAddedTo = esc_html__('Legend added to', 'seatreg');
-    $translations->oneRoomNeeded = esc_html__('You must have at least one room', 'seatreg');
-    $translations->alreadyInRoom = esc_html__('Already in this room', 'seatreg');
-    $translations->allRoomsNeedName = esc_html__('All rooms must have name', 'seatreg');
+    /* translators: %s: the word the admin uses for a room */
+    $translations->oneRoomNeeded = esc_html__('You must have at least one %s', 'seatreg');
+    /* translators: %s: the word the admin uses for a room */
+    $translations->alreadyInRoom = esc_html__('Already in this %s', 'seatreg');
+    /* translators: %s: the word the admin uses for rooms, plural */
+    $translations->allRoomsNeedName = esc_html__('All %s must have name', 'seatreg');
     $translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
     $translations->illegalCharactersDetecCouponCode = esc_html__('Illegal characters detected in coupon code', 'seatreg');
     $translations->couponCodeLengthLimitExceeded = esc_html__('Coupon code cant be longer than 20 characters', 'seatreg');
     $translations->illegalCharactersDetecDiscount = esc_html__('Illegal characters detected in discount value', 'seatreg');
     $translations->missingName = esc_html__('Name missing', 'seatreg');
-    $translations->cantDelRoom_ = esc_html__('You can\'t delete room ', 'seatreg');
-    $translations->_cantDelRoomBecause = esc_html__(' because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg');
-    $translations->roomNameMissing = esc_html__('Room name is missing', 'seatreg');
-    $translations->roomNameExists = esc_html__('Room name already exists. You must choose another', 'seatreg');
+    /* translators: %1$s: the word the admin uses for a room, %2$s: the room name */
+    $translations->cantDeleteRoom = esc_html__('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg');
+    /* translators: %s: the word the admin uses for a room, capitalized */
+    $translations->roomNameMissing = esc_html( _x('%s name is missing', 'layout builder, empty room name field', 'seatreg') );
+    /* translators: %s: the word the admin uses for a room, capitalized */
+    $translations->roomNameExists = esc_html( _x('%s name already exists. You must choose another', 'layout builder, duplicate room name', 'seatreg') );
     $translations->youHaveSelected = esc_html__('You have selected', 'seatreg');
     $translations->_boxesSpanLi = esc_html__(' box/boxes</span></li>', 'seatreg');
     $translations->toSelectOneBox_ = esc_html__('To select one box use ', 'seatreg');
@@ -125,7 +138,8 @@ function seatreg_generate_admin_strings() {
     $translations->noLegendsCreated = esc_html__('You have not made and legends yet', 'seatreg');
     $translations->_noSelectBoxToAddLegend = esc_html__(' You have not selected any box/boxes to add legends', 'seatreg');
     $translations->_charRemaining = esc_html__(' characters remaining', 'seatreg');
-    $translations->deleteRoom_ = esc_html__('Are you sure you want to delete room ', 'seatreg');
+    /* translators: %1$s: the word the admin uses for a room, %2$s: the room name */
+    $translations->deleteRoomConfirm = esc_html__('Are you sure you want to delete %1$s %2$s?', 'seatreg');
     $translations->unsavedChanges = esc_html__('Unsaved changes. You sure you want to leave?', 'seatreg');
     $translations->createLegend = esc_html__('Create new legend', 'seatreg');
     $translations->cancelLegendCreation = esc_html__('Cancel legend creation', 'seatreg');
@@ -144,7 +158,6 @@ function seatreg_generate_admin_strings() {
     $translations->save = esc_html__('Save', 'seatreg');
     $translations->saving = esc_html__('Saving...', 'seatreg');
     $translations->saved = esc_html__('Saved', 'seatreg');
-    $translations->room = esc_html__('room', 'seatreg');
     $translations->bookingUpdated = esc_html__('Booking updated', 'seatreg');
     $translations->notSet = esc_html__('Not set', 'seatreg');
     $translations->enterRegistrationName = esc_html__('Please enter registration name', 'seatreg');
@@ -154,11 +167,14 @@ function seatreg_generate_admin_strings() {
     $translations->areYouSure = esc_html__('Are you sure?', 'seatreg');
     $translations->pleaseAddAtLeastOneOption = esc_html__('Please add at least one option', 'seatreg');
     $translations->nameAlreadyUsed = esc_html__('Name already used', 'seatreg');
-    $translations->noBgImageInRoom = esc_html__('Current room does not have background image', 'seatreg');
-    $translations->removeFromRoom = esc_html__('Remove from room', 'seatreg');
+    /* translators: %s: the word the admin uses for a room */
+    $translations->noBgImageInRoom = esc_html__('Current %s does not have background image', 'seatreg');
+    /* translators: %s: the word the admin uses for a room */
+    $translations->removeFromRoom = esc_html( _x('Remove from %s', 'layout builder, remove the background image from the room', 'seatreg') );
     $translations->choosePictureToUpload = esc_html__('Choose a picture to upload', 'seatreg');
     $translations->imageNameIllegalChar = esc_html__('Image name contains illegal characters', 'seatreg');
-    $translations->addToRoomBackground = esc_html__('Add to room background', 'seatreg');
+    /* translators: %s: the word the admin uses for a room */
+    $translations->addToRoomBackground = esc_html__('Add to %s background', 'seatreg');
     $translations->remove = esc_html__('Remove', 'seatreg');
     $translations->showPendingBookings = esc_html__('Show pending bookings', 'seatreg');
     $translations->showApprovedBookings = esc_html__('Show approved bookings', 'seatreg');
@@ -230,7 +246,8 @@ function seatreg_generate_admin_strings() {
     $translations->bookingMainEmail = esc_html__('Booking main email', 'seatreg');
     $translations->editEmailNotValid = esc_html__('Provided email address is not valid', 'seatreg');
     $translations->multiBookingMailEmailEditDesc = esc_html__('Primary contact email if more than one seat is booked', 'seatreg');
-    $translations->roomDescriptionSet = esc_html__('Room description changed', 'seatreg');
+    /* translators: %s: the word the admin uses for a room, capitalized */
+    $translations->roomDescriptionSet = esc_html( _x('%s description changed', 'layout builder confirmation after editing a room description', 'seatreg') );
     $translations->primaryEmailValidationFailed = esc_html__('Booking primary email validation failed', 'seatreg');
     $translations->pleaseEnterBookingPrimaryEmail = esc_html__('Please enter booking primary email', 'seatreg');
     $translations->preventsBookingWhenSameInputValueProvided = esc_html__('Prevents booking when same input value provided', 'seatreg');

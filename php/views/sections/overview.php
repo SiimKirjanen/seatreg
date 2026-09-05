@@ -4,6 +4,7 @@
 	$seatregCode = $seatregRegistration->registration_code;
 	$seatregName = wp_unslash($seatregRegistration->registration_name);
 	$seatregUsingSeats = $seatregRegistration->using_seats === '1';
+	$seatregRoomNouns = SeatregTerminologyService::getRoomNouns($seatregRegistration);
 	$seatregUsingCalendar = $seatregRegistration->using_calendar === '1';
 	$seatregStatus = SeatregRegistrationStatusService::getStatus($seatregRegistration);
 	$seatregStartDate = $seatregRegistration->registration_start_timestamp
@@ -35,7 +36,8 @@
 		$seatregScopes[] = array(
 			'id' => 'overview',
 			'label' => __('Overall', 'seatreg'),
-			'heading' => __('All rooms', 'seatreg'),
+			/* translators: %s: the word the admin uses for rooms, plural */
+			'heading' => sprintf( __('All %s', 'seatreg'), $seatregRoomNouns->plural ),
 			'total' => $seatregStats['seatsTotal'],
 			'open' => $seatregStats['openSeats'],
 			'confirmed' => $seatregStats['takenSeats'],
@@ -134,7 +136,7 @@
 		</div>
 	<?php else : ?>
 		<div class="seatreg-overview__body">
-			<div class="seatreg-overview__rooms" role="tablist" aria-orientation="vertical" aria-label="<?php esc_attr_e('Rooms', 'seatreg'); ?>">
+			<div class="seatreg-overview__rooms" role="tablist" aria-orientation="vertical" aria-label="<?php echo esc_attr($seatregRoomNouns->pluralUpper); ?>">
 				<?php foreach($seatregScopes as $seatregIndex => $seatregScope) : ?>
 					<?php
 						$seatregIsActive = $seatregIndex === 0;
@@ -253,9 +255,11 @@
 							</div>
 						<?php else : ?>
 							<div class="seatreg-overview__empty">
-								<?php echo esc_html( $seatregUsingSeats
-									? __('No seats in this room yet.', 'seatreg')
-									: __('No places in this room yet.', 'seatreg') ); ?>
+								<?php echo esc_html( sprintf( $seatregUsingSeats
+									/* translators: %s: the word the admin uses for a room */
+									? __('No seats in this %s yet.', 'seatreg')
+									/* translators: %s: the word the admin uses for a room */
+									: __('No places in this %s yet.', 'seatreg'), $seatregRoomNouns->singular ) ); ?>
 							</div>
 						<?php endif; ?>
 					</div>

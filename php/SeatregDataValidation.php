@@ -84,6 +84,21 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
+    public static function validateRoomNoun($roomNoun) {
+        $validationStatus = new SeatregValidationStatus();
+
+        //Empty means the registration keeps the default wording
+        if( $roomNoun === '' ) {
+            return $validationStatus;
+        }
+
+        if( preg_match(SEATREG_ROOM_NOUN_REGEX, $roomNoun) !== 1 ) {
+			$validationStatus->setInvalid('Room noun is too long or contains illegal characters');
+		}
+
+        return $validationStatus;
+    }
+
     public static function registrationNameDataExists($method) {
         return !empty( $method[ 'registration-name' ] );
     }

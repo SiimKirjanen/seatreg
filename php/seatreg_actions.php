@@ -56,3 +56,5 @@ function seatreg_pending_bookings_expiration_time_job() {
 
 //.htaccess
 add_action( 'admin_init', 'seatreg_add_rewrite_rule' );
+
+add_action( 'admin_init', array( 'SeatregStringTranslationService', 'registerStrings' ) );
