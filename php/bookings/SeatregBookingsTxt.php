@@ -26,7 +26,8 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
 
         echo esc_html($this->_registrationName), esc_html($this->lineBreak());
         echo esc_html__('Date', 'seatreg'), ': ', esc_html(date('Y-M-d H:i:s e', $this->_currentTimestamp)), esc_html($this->lineBreak()), esc_html($this->lineBreak());
-        $placeNumberText = $this->_usingSeats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
+        /* translators: %s: the word the admin uses for a seat, capitalized */
+        $placeNumberText = esc_html( sprintf( __('%s number', 'seatreg'), $this->_seatNouns->singularUpper ) );
 
         foreach ($this->_registrations as $registration) {
             $registrantCustomData = json_decode($registration->custom_field_data, true);

@@ -3,8 +3,8 @@
 <?php
 	$seatregCode = $seatregRegistration->registration_code;
 	$seatregName = wp_unslash($seatregRegistration->registration_name);
-	$seatregUsingSeats = $seatregRegistration->using_seats === '1';
 	$seatregRoomNouns = SeatregTerminologyService::getRoomNouns($seatregRegistration);
+	$seatregSeatNouns = SeatregTerminologyService::getSeatNouns($seatregRegistration);
 	$seatregUsingCalendar = $seatregRegistration->using_calendar === '1';
 	$seatregStatus = SeatregRegistrationStatusService::getStatus($seatregRegistration);
 	$seatregStartDate = $seatregRegistration->registration_start_timestamp
@@ -23,7 +23,7 @@
 	//The booking manager names its tab panels after the registration, so the same name lands on the same tab
 	$seatregManagerTab = sha1( str_replace(' ', '_', $seatregRegistration->registration_name) );
 	$seatregRooms = isset($seatregStats['roomsInfo']) ? $seatregStats['roomsInfo'] : array();
-	$seatregSeatsLabel = $seatregUsingSeats ? __('Seats', 'seatreg') : __('Places', 'seatreg');
+	$seatregSeatsLabel = $seatregSeatNouns->pluralUpper;
 	$seatregChartTypes = array(
 		'doughnut' => __('Doughnut chart', 'seatreg'),
 		'pie' => __('Pie chart', 'seatreg'),
@@ -255,11 +255,10 @@
 							</div>
 						<?php else : ?>
 							<div class="seatreg-overview__empty">
-								<?php echo esc_html( sprintf( $seatregUsingSeats
-									/* translators: %s: the word the admin uses for a room */
-									? __('No seats in this %s yet.', 'seatreg')
-									/* translators: %s: the word the admin uses for a room */
-									: __('No places in this %s yet.', 'seatreg'), $seatregRoomNouns->singular ) ); ?>
+								<?php
+									/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a room */
+									echo esc_html( sprintf( __('No %1$s in this %2$s yet.', 'seatreg'), $seatregSeatNouns->plural, $seatregRoomNouns->singular ) );
+								?>
 							</div>
 						<?php endif; ?>
 					</div>

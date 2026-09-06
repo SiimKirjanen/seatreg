@@ -48,15 +48,17 @@ class SeatregBooking {
 	protected $_require_name = true; //require full name from registrants
 	protected $_couponsEnabled = false;
 	protected $_roomNouns = null;
+	protected $_seatNouns = null;
 	
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
     	$seatsString = '';
 
     	for($i = 0; $i < $dataLen; $i++) {
-    		/* translators: %1$s: Seat number, %2$s: the word the admin uses for a room */
+    		/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: the word the admin uses for a room */
     		$seatsString .= sprintf(
-    			wp_kses( __('Seat nr: <b>%1$s</b> from %2$s', 'seatreg'), array( 'b' => array() ) ),
+    			wp_kses( __('%1$s nr: <b>%2$s</b> from %3$s', 'seatreg'), array( 'b' => array() ) ),
+    			esc_html($this->_seatNouns->singularUpper),
     			esc_html($this->_bookings[$i]->seat_nr),
     			esc_html($this->_roomNouns->singular)
     		) . ': <b>' . esc_html($this->_bookings[$i]->room_name) . '</b><br/>'; 
@@ -74,9 +76,10 @@ class SeatregBooking {
 		for($i = 0; $i < $bookingsLength; $i++) {
 			for($j = 0; $j < $bookedBookingsLength; $j++) {
 				if($this->_bookings[$i]->seat_id == $bookedBookings[$j]->seat_id) {
-					/* translators: %1$s: Seat number, %2$s: the word the admin uses for a room, %3$s: Room name */
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: the word the admin uses for a room, %4$s: Room name */
 					$statusReport = sprintf(
-						wp_kses( __('Seat <b>%1$s</b> in %2$s <b>%3$s</b> is already confirmed', 'seatreg'), array( 'b' => array() ) ),
+						wp_kses( __('%1$s <b>%2$s</b> in %3$s <b>%4$s</b> is already confirmed', 'seatreg'), array( 'b' => array() ) ),
+						esc_html($this->_seatNouns->singularUpper),
 						esc_html($this->_bookings[$i]->seat_nr),
 						esc_html($this->_roomNouns->singular),
 						esc_html($this->_bookings[$i]->room_name)
@@ -98,8 +101,8 @@ class SeatregBooking {
 
 		foreach( $this->_bookings as $booking ) {
 			if( SeatregLayoutService::checkIfSeatLocked($this->_registrationLayoutFull, $booking->seat_id) ) {
-				/* translators: %s: Seat number */
-				$statusReport = sprintf(esc_html__('Seat %s is locked', 'seatreg'),  $booking->seat_nr);
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number */
+				$statusReport = sprintf(esc_html__('%1$s %2$s is locked', 'seatreg'), esc_html($this->_seatNouns->singularUpper), $booking->seat_nr);
 
 				break;
 			}
@@ -117,8 +120,8 @@ class SeatregBooking {
 				$enteredPassword = array_key_exists($booking->seat_id, $enteredSeatPasswords) ? $enteredSeatPasswords[$booking->seat_id] : '';
 
 				if( SeatregLayoutService::getSeatPassword($this->_registrationLayoutFull, $booking->seat_id) !== $enteredPassword ) {
-					/* translators: %s: Seat number */
-					$statusReport = sprintf(esc_html__('Seat %s password is not correct', 'seatreg'),  $booking->seat_nr);
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number */
+					$statusReport = sprintf(esc_html__('%1$s %2$s password is not correct', 'seatreg'), esc_html($this->_seatNouns->singularUpper), $booking->seat_nr);
 
 					break;
 				}
@@ -354,6 +357,7 @@ class SeatregBooking {
 		$this->_require_name = $result->require_name === '1';
 		$this->_couponsEnabled = $result->enable_coupons === '1';
 		$this->_roomNouns = SeatregTerminologyService::getRoomNouns($result);
+		$this->_seatNouns = SeatregTerminologyService::getSeatNouns($result);
 		
         if($result->gmail_required == '1') {
 			$this->_gmailNeeded = true;

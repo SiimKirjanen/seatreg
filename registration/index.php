@@ -23,8 +23,8 @@
 	$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 	$registrationTimeRestoriction = SeatregTimeRepository::getTimeInfoForRegistrationView($data->registration_start_time, $data->registration_end_time);
 	$hasFailedTimeRestriction = !$registrationTimeRestoriction->registrationStartCheck  || !$registrationTimeRestoriction->registrationEndCheck;
-	$usingSeats = $data->using_seats === '1';
 	$roomNouns = SeatregTerminologyService::getRoomNouns($data);
+	$seatNouns = SeatregTerminologyService::getSeatNouns($data);
 	$requireWPLogin = $data->require_wp_login === '1';
 	$showInfoButton = $data->show_info_button === '1';
 	$requireName = $data->require_name === '1';
@@ -192,7 +192,10 @@
 							<div class="seat-cart-left">
 								<div id="cart-text">
 									<div class="seats-in-cart">0</div>
-									<div><?php $usingSeats ? esc_html_e('seats selected', 'seatreg') : esc_html_e('places selected', 'seatreg'); ?></div> 
+									<div><?php
+									/* translators: %s: the word the admin uses for seats, plural */
+									echo esc_html( sprintf( __('%s selected', 'seatreg'), $seatNouns->plural ) );
+								?></div> 
 								</div>
 							</div>
 
@@ -274,7 +277,10 @@
 							?>: <span class="total-rooms"></span>
 						</div>
 						<div>
-							<?php $usingSeats ? esc_html_e('Total open seats', 'seatreg') : esc_html_e('Total open places', 'seatreg') ; ?>: <span class="total-open"></span>
+							<?php
+								/* translators: %s: the word the admin uses for seats, plural */
+								echo esc_html( sprintf( __('Total open %s', 'seatreg'), $seatNouns->plural ) );
+							?>: <span class="total-open"></span>
 						</div>
 						<div>
 							<?php esc_html_e('Total pending bookings', 'seatreg'); ?>: <span class="total-bron"></span>
@@ -442,8 +448,9 @@
 				<div class="mobile-cart">
 					<div class="cart-icon-text">
 						<span class="seats-in-cart">0</span> 
-						<?php 
-							$usingSeats ? esc_html_e('seats selected', 'seatreg') : esc_html_e('places selected', 'seatreg');
+						<?php
+							/* translators: %s: the word the admin uses for seats, plural */
+							echo esc_html( sprintf( __('%s selected', 'seatreg'), $seatNouns->plural ) );
 						?>
 					</div>
 					<div class="bottom-btn-wrap">

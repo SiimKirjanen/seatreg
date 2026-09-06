@@ -9,64 +9,58 @@ function seatreg_generate_registration_strings() {
 	$translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
 	$translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
 	$translations->somethingWentWrong = esc_html__('Something went wrong. Please try again', 'seatreg');
-	$translations->selectionIsEmpty = esc_html__('Seat selection is empty', 'seatreg');
-    $translations->selectionIsEmptyPlace = esc_html__('Place selection is empty', 'seatreg');
-    $translations->youCanAdd_ = esc_html__('You can add ', 'seatreg');
-    $translations->_toCartClickTab = esc_html__(' to selection by selecting boxes', 'seatreg');
-	$translations->toCartClickTab = esc_html__(' to selection by clicking/tabbing them', 'seatreg');
+	/* translators: %s: the word the admin uses for a seat, capitalized */
+	$translations->selectionIsEmpty = esc_html__('%s selection is empty', 'seatreg');
+	/* translators: %s: the word the admin uses for seats, plural */
+	$translations->youCanAddToSelection = esc_html__('You can add %s to selection by selecting boxes', 'seatreg');
 	$translations->regClosedAtMoment = esc_html__('Registration is closed at the moment', 'seatreg');
 	$translations->confWillBeSentTo = esc_html__('Confirmation will be sent to:', 'seatreg');
 	$translations->confWillBeSentTogmail = esc_html__('Confirmation will be sent to (Gmail):', 'seatreg');
 	$translations->gmailReq = esc_html__('Email (Gmail required)', 'seatreg');
-	/* translators: %1$s: the word seat or place, %2$s: the seat/place number, %3$s: the word the admin uses for a room, %4$s: the room name */
+	/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the word the admin uses for a room, %4$s: the room name */
 	$translations->addSpotFromRoomToBooking = esc_html__('Add %1$s %2$s from %3$s %4$s to booking?', 'seatreg');
-	/* translators: %1$s: the word seat or place, %2$s: the seat/place number, %3$s: the word the admin uses for a room, %4$s: the room name */
+	/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the word the admin uses for a room, %4$s: the room name */
 	$translations->spotFromRoom = esc_html__('%1$s %2$s from %3$s %4$s', 'seatreg');
-	$translations->_isOccupied = esc_html__(' is occupied', 'seatreg');
-	$translations->_isPendingState = esc_html__(' is in pending state', 'seatreg');
+	/* translators: %s: the word the admin uses for a seat */
+	$translations->spotIsOccupied = esc_html__('This %s is occupied', 'seatreg');
+	/* translators: %s: the word the admin uses for a seat */
+	$translations->spotIsPendingState = esc_html__('This %s is in pending state', 'seatreg');
 	$translations->regOwnerNotConfirmed = esc_html__('(registration admin has not confirmed it)', 'seatreg');
 	$translations->selectionIsFull = esc_html__('Booking is full', 'seatreg');
-    $translations->_isAlreadySelected = esc_html__(' is already selected!', 'seatreg');
+	/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: the seat number */
+    $translations->spotAlreadySelected = esc_html__('%1$s %2$s is already selected!', 'seatreg');
 	$translations->_regUnderConstruction = esc_html__('Under construction', 'seatreg');
 	$translations->emptyField = esc_html__('Empty field', 'seatreg');
 	$translations->remove = esc_html__('Remove', 'seatreg');
 	$translations->addToBooking = esc_html__('Add to Booking', 'seatreg');
-	/* translators: %1$s: the word the admin uses for a room, %2$s: number of open seats */
-	$translations->openSeatsInRoom = esc_html__('Open seats in the %1$s: %2$s', 'seatreg');
-	/* translators: %1$s: the word the admin uses for a room, %2$s: number of open places */
-    $translations->openPlacesInRoom = esc_html__('Open places in the %1$s: %2$s', 'seatreg');
+	/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a room, %3$s: number of open seats */
+	$translations->openSpotsInRoom = esc_html__('Open %1$s in the %2$s: %3$s', 'seatreg');
 	/* translators: %1$s: the word the admin uses for a room, %2$s: number of pending bookings */
 	$translations->pendingBookingsInRoom = esc_html__('Pending bookings in the %1$s: %2$s', 'seatreg');
 	/* translators: %1$s: the word the admin uses for a room, %2$s: number of approved bookings */
 	$translations->approvedBookingsInRoom = esc_html__('Approved bookings in the %1$s: %2$s', 'seatreg');
-	$translations->seat = esc_html__('seat', 'seatreg');
-    $translations->place = esc_html__('place', 'seatreg');
 	$translations->firstName = esc_html__('Firstname', 'seatreg');
 	$translations->lastName = esc_html__('Lastname', 'seatreg');
 	$translations->eMail = esc_html__('Email', 'seatreg');
-	$translations->this_ = esc_html__('This ', 'seatreg');
-    $translations->_selected = esc_html__(' selected', 'seatreg');
-    $translations->_seatSelected = esc_html__(' seat selected', 'seatreg');
-    $translations->_seatsSelected = esc_html__(' seats selected', 'seatreg');
-    $translations->_placeSelected = esc_html__(' place selected', 'seatreg');
-    $translations->_placesSelected = esc_html__(' places selected', 'seatreg');
+	/* translators: %1$s: number of selected seats, %2$s: the word the admin uses for a seat, singular or plural to match the number */
+    $translations->spotsSelected = esc_html__('%1$s %2$s selected', 'seatreg');
     $translations->bookingsConfirmed = esc_html__('Your booking is approved', 'seatreg');
     $translations->bookingsConfirmedPending = esc_html__('Your booking is now in pending state. Registration admin needs to approve it', 'seatreg');
-    $translations->selectingGuide = esc_html__('Select a seat you want to add to booking', 'seatreg');
-    $translations->selectingGuidePlace = esc_html__('Select a place you want to add to booking', 'seatreg');
+    /* translators: %s: the word the admin uses for a seat */
+    $translations->selectingGuide = esc_html__('Select a %s you want to add to booking', 'seatreg');
     $translations->Booked = esc_html__('Booked', 'seatreg');
     $translations->Pending = esc_html__('Pending', 'seatreg');
-    $translations->maxSeatsToAdd = esc_html__('Total seats you can add to booking is ', 'seatreg');
-    $translations->maxPlacesToAdd = esc_html__('Total places you can add to booking is ', 'seatreg');
-    $translations->seatCosts_ = esc_html__('Booking this seat costs ', 'seatreg');
-    $translations->placeCosts_ = esc_html__('Booking this place costs ', 'seatreg');
+    /* translators: %1$s: the word the admin uses for seats, plural, %2$s: the maximum number */
+    $translations->maxSpotsToAdd = esc_html__('Total %1$s you can add to booking is %2$s', 'seatreg');
+    /* translators: %1$s: the word the admin uses for a seat, %2$s: the price */
+    $translations->spotCosts = esc_html__('Booking this %1$s costs %2$s', 'seatreg');
     $translations->bookingTotalCostIs_ = esc_html__('Booking total cost is ', 'seatreg');
     $translations->receiptSent = esc_html__('Booking receipt has been sent to your email', 'seatreg');
     $translations->payForBookingLink = esc_html__('Click the following link to pay for the booking', 'seatreg');
     $translations->yes = esc_html__('Yes', 'seatreg');
     $translations->no = esc_html__('No', 'seatreg');
-    $translations->seatIsLocked = esc_html__('Seat is locked', 'seatreg');
-    $translations->placeIsLocked = esc_html__('Place is locked', 'seatreg');
+    /* translators: %s: the word the admin uses for a seat, capitalized */
+    $translations->spotIsLocked = esc_html__('%s is locked', 'seatreg');
     $translations->pleaseEnterPassword = esc_html__('Please enter password', 'seatreg');
     $translations->passwordNotCorrect = esc_html__('Password is not correct', 'seatreg');
     $translations->closedPleaseChooseNewDate = esc_html__('Registration not open for today. Please choose another date', 'seatreg');
@@ -99,9 +93,10 @@ function seatreg_generate_admin_strings() {
     $translations->roomNameSet = esc_html__('New %s added', 'seatreg');
     /* translators: %s: the word the admin uses for a room, capitalized */
     $translations->roomNotExist = esc_html( _x('%s does not exist', 'booking manager error when the given room name matches nothing', 'seatreg') );
-    $translations->seatNotExist = esc_html__('Seat does not exist', 'seatreg');
-    $translations->seatIdNotExist = esc_html__('Seat id dose not exist', 'seatreg');
-    $translations->seatAlreadyBookedPending = esc_html__('Seat is already booked/pending', 'seatreg');
+    /* translators: %s: the word the admin uses for a seat, capitalized */
+    $translations->seatIdNotExist = esc_html__('%s id does not exist', 'seatreg');
+    /* translators: %s: the word the admin uses for a seat, capitalized */
+    $translations->seatAlreadyBookedPending = esc_html__('%s is already booked/pending', 'seatreg');
     $translations->errorBookingUpdate = esc_html__('Error updating booking', 'seatreg');
     $translations->hoverError = esc_html__('Error while creating hover', 'seatreg');
     $translations->legendChangeError = esc_html__('Error while changing legend', 'seatreg');
@@ -151,10 +146,10 @@ function seatreg_generate_admin_strings() {
     $translations->boxes = esc_html__('boxes', 'seatreg');
     $translations->box = esc_html__('box', 'seatreg');
     $translations->noBoxesSelected = esc_html__('No boxes selected', 'seatreg');
-    $translations->pendingSeat = esc_html__('Pending seat', 'seatreg');
-    $translations->pendingPlace = esc_html__('Pending place', 'seatreg');
-    $translations->confirmedSeat = esc_html__('Approved seat', 'seatreg');
-    $translations->confirmedPlace= esc_html__('Approved place', 'seatreg');
+    /* translators: %s: the word the admin uses for a seat */
+    $translations->pendingSeat = esc_html__('Pending %s', 'seatreg');
+    /* translators: %s: the word the admin uses for a seat */
+    $translations->confirmedSeat = esc_html__('Approved %s', 'seatreg');
     $translations->save = esc_html__('Save', 'seatreg');
     $translations->saving = esc_html__('Saving...', 'seatreg');
     $translations->saved = esc_html__('Saved', 'seatreg');
@@ -193,7 +188,8 @@ function seatreg_generate_admin_strings() {
     $translations->pleaseEnterStripeApiKey = esc_html__('Please enter Stripe API key', 'seatreg');
     $translations->pleaseProvideStripeApiSecretKey = esc_html__('Please provide Stripe API secret key', 'seatreg');
     $translations->pricesAdded = esc_html__('Prices added', 'seatreg');
-    $translations->noSeatsSelected = esc_html__('No seats/places selected!', 'seatreg');
+    /* translators: %s: the word the admin uses for seats, plural */
+    $translations->noSeatsSelected = esc_html__('No %s selected!', 'seatreg');
     $translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
     $translations->emailFromNotCorrect = esc_html__('Email FROM address is not correct', 'seatreg');
     $translations->checkEmailAddress = esc_html__('Check your email address', 'seatreg');
@@ -206,12 +202,14 @@ function seatreg_generate_admin_strings() {
     $translations->permanentlyDeleteBookingConfirm = esc_html__('This will permanently delete the selected bookings. This cannot be undone. Are you sure?', 'seatreg');
     $translations->bookingPermanentlyDeleted = esc_html__('Booking permanently deleted', 'seatreg');
     $translations->newBookingWasAddedRefreshingThaPage = esc_html__('Booking was added. Page will refresh in a second', 'seatreg');
-    $translations->duplicateSeatDetected = esc_html__('Duplicate seat detected!', 'seatreg');
+    /* translators: %s: the word the admin uses for a seat */
+    $translations->duplicateSeatDetected = esc_html__('Duplicate %s detected!', 'seatreg');
     $translations->emailTemplateNotCorrect = esc_html__('Email template is missing required keywords', 'seatreg');
     $translations->approvedBookingEmailTemplateIllegalCharacter = esc_html__('The approved booking email template contains disallowed characters.', 'seatreg');
     $translations->pendingBookingEmailTemplateIllegalCharacter = esc_html__('The pending booking email template contains disallowed characters.', 'seatreg');
     $translations->emailVerificationEmailTemplateIllegalCharacter = esc_html__('The email verification template contains disallowed characters.', 'seatreg');
-    $translations->lockSeat = esc_html__('Lock seat', 'seatreg');
+    /* translators: %s: the word the admin uses for a seat */
+    $translations->lockSeat = esc_html__('Lock %s', 'seatreg');
     $translations->setPassword = esc_html__('Set password', 'seatreg');
     $translations->changesApplied = esc_html__('Changes applied', 'seatreg');
     $translations->addPriceDescription = esc_html__('Please add price description', 'seatreg');
@@ -245,7 +243,8 @@ function seatreg_generate_admin_strings() {
     $translations->email = esc_html__('Email', 'seatreg');
     $translations->bookingMainEmail = esc_html__('Booking main email', 'seatreg');
     $translations->editEmailNotValid = esc_html__('Provided email address is not valid', 'seatreg');
-    $translations->multiBookingMailEmailEditDesc = esc_html__('Primary contact email if more than one seat is booked', 'seatreg');
+    /* translators: %s: the word the admin uses for a seat */
+    $translations->multiBookingMailEmailEditDesc = esc_html__('Primary contact email if more than one %s is booked', 'seatreg');
     /* translators: %s: the word the admin uses for a room, capitalized */
     $translations->roomDescriptionSet = esc_html( _x('%s description changed', 'layout builder confirmation after editing a room description', 'seatreg') );
     $translations->primaryEmailValidationFailed = esc_html__('Booking primary email validation failed', 'seatreg');
@@ -260,6 +259,7 @@ function seatreg_generate_admin_strings() {
     $translations->flowGroupBooking = esc_html__('Making a booking', 'seatreg');
     $translations->flowGroupAfter = esc_html__('After submitting', 'seatreg');
     $translations->flowJumpToSetting = esc_html__('Go to this setting', 'seatreg');
+    //The summary previews the form as it is typed, so it needs the words the seats checkbox would pick
     $translations->flowSeatSingular = esc_html__('seat', 'seatreg');
     $translations->flowSeatPlural = esc_html__('seats', 'seatreg');
     $translations->flowPlaceSingular = esc_html__('place', 'seatreg');
@@ -269,9 +269,9 @@ function seatreg_generate_admin_strings() {
     $translations->flowClosedReason = esc_html__('Visitors are shown the following reason: %s', 'seatreg');
     $translations->flowPassword = esc_html__('Visitors must enter the access password to view it.', 'seatreg');
     $translations->flowRequireLogin = esc_html__('Only visitors logged in to your site can book.', 'seatreg');
-    /* translators: %1$d: number of bookings, %2$s: seats or places */
+    /* translators: %1$d: number of bookings, %2$s: the word the admin uses for seats, plural */
     $translations->flowWpBookingLimit = esc_html__('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seatreg');
-    /* translators: %1$d: number of seats, %2$s: seats or places */
+    /* translators: %1$d: number of seats, %2$s: the word the admin uses for seats, plural */
     $translations->flowWpSeatLimit = esc_html__('Across all their bookings, each logged-in user can book at most %1$d %2$s.', 'seatreg');
     $translations->flowDateWindowBoth = esc_html__('Bookings can only be made within the registration\'s scheduled start and end dates.', 'seatreg');
     $translations->flowDateWindowStart = esc_html__('Bookings can only be made once the registration\'s scheduled start date is reached.', 'seatreg');
@@ -284,24 +284,24 @@ function seatreg_generate_admin_strings() {
     $translations->calendarSelectedDates = esc_html__('Selected dates', 'seatreg');
     $translations->calendarNoDatesSelected = esc_html__('No dates selected yet', 'seatreg');
     $translations->calendarRemoveDate = esc_html__('Remove date', 'seatreg');
-    /* translators: %s: seats or places */
+    /* translators: %s: the word the admin uses for seats, plural */
     $translations->flowSelect = esc_html__('Visitors select %s on the map.', 'seatreg');
-    /* translators: %1$s: seats or places, %2$d: maximum number per booking */
+    /* translators: %1$s: the word the admin uses for seats, plural, %2$d: maximum number per booking */
     $translations->flowSelectMax = esc_html__('Visitors select %1$s on the map, up to %2$d per booking.', 'seatreg');
-    /* translators: %1$s: seats or places, %2$s: comma-separated list of shown details */
+    /* translators: %1$s: the word the admin uses for seats, plural, %2$s: comma-separated list of shown details */
     $translations->flowShowBookingData = esc_html__('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seatreg');
     $translations->flowShowBookingDataFullName = esc_html__('full name', 'seatreg');
-    /* translators: %s: seat or place */
+    /* translators: %s: the word the admin uses for a seat */
     $translations->flowAutoDialog = esc_html__('The booking form opens automatically as soon as a %s is selected.', 'seatreg');
-    /* translators: %s: seats or places */
+    /* translators: %s: the word the admin uses for seats, plural */
     $translations->flowManualDialog = esc_html__('After choosing %s, visitors open the selection menu to complete their booking.', 'seatreg');
-    /* translators: %s: seat or place */
+    /* translators: %s: the word the admin uses for a seat */
     $translations->flowOnePersonCheckout = esc_html__('Booking details are entered once and applied to every %s.', 'seatreg');
-    /* translators: %s: seat or place */
+    /* translators: %s: the word the admin uses for a seat */
     $translations->flowPerSeatCheckout = esc_html__('Booking details are entered for each %s.', 'seatreg');
     $translations->flowRequireName = esc_html__('A full name (first and last) is required.', 'seatreg');
     $translations->flowGmailRequired = esc_html__('A Gmail address is required.', 'seatreg');
-    /* translators: %1$d: maximum number of bookings per email, %2$s: seats or places */
+    /* translators: %1$d: maximum number of bookings per email, %2$s: the word the admin uses for seats, plural */
     $translations->flowEmailLimit = esc_html__('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seatreg');
     $translations->flowCustomFields = esc_html__('Bookers also fill in the custom fields you have created, which are required by default.', 'seatreg');
     $translations->flowCustomFieldsOptional = esc_html__('Some custom fields are optional and can be left blank.', 'seatreg');

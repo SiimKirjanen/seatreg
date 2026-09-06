@@ -20,10 +20,10 @@
 			<div class="edit-modal-input-wrap">
 				<label for="edit-seat">
 					<h5>
-						<?php $usingSeats ? esc_html_e('Seat id', 'seatreg') : esc_html_e('Place id', 'seatreg'); ?>
+						<?php echo esc_html( sprintf( __('%s id', 'seatreg'), $seatNouns->singularUpper ) ); ?>
 					</h5>
 				</label> 
-				<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php $usingSeats ? esc_html_e('ID can be seen in map-editor when hovering seats', 'seatreg') : esc_html_e('ID can be seen in map-editor when hovering places', 'seatreg'); ?>"></i>
+				<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php echo esc_attr( sprintf( __('ID can be seen in map-editor when hovering %s', 'seatreg'), $seatNouns->plural ) ); ?>"></i>
 				<br>
 				<input type="text" id="edit-seat" name="seat-id" autocomplete="off"/></label> <span id="edit-seat-error"></span>
 			</div>

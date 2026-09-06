@@ -40,15 +40,22 @@ class SeatregStringTranslationService {
             return;
         }
 
-        foreach( SeatregOptionsRepository::getCustomRoomNouns() as $registration ) {
-            self::register(
-                SeatregTerminologyService::roomNounStringName($registration->registration_code, SeatregTerminologyService::SINGULAR),
-                $registration->room_noun_singular
-            );
-            self::register(
-                SeatregTerminologyService::roomNounStringName($registration->registration_code, SeatregTerminologyService::PLURAL),
-                $registration->room_noun_plural
-            );
+        $nouns = array(
+            SeatregTerminologyService::ROOM => array('room_noun_singular', 'room_noun_plural'),
+            SeatregTerminologyService::SEAT => array('seat_noun_singular', 'seat_noun_plural')
+        );
+
+        foreach( SeatregOptionsRepository::getCustomNouns() as $registration ) {
+            foreach( $nouns as $kind => $columns ) {
+                self::register(
+                    SeatregTerminologyService::nounStringName($kind, $registration->registration_code, SeatregTerminologyService::SINGULAR),
+                    $registration->{$columns[0]}
+                );
+                self::register(
+                    SeatregTerminologyService::nounStringName($kind, $registration->registration_code, SeatregTerminologyService::PLURAL),
+                    $registration->{$columns[1]}
+                );
+            }
         }
     }
 

@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { SettingsPage, BOOKER } = require('./settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
-const { setRoomNouns } = require('../../utils/fixtures');
+const { setRoomNouns, setSeatNouns } = require('../../utils/fixtures');
 
 const CLOSE_REASON = 'The event has sold out.';
 const REGISTRATION_PASSWORD = 'letmein7f3a';
@@ -22,6 +22,12 @@ const ROOM_NOUN_PLURAL = 'stalls';
    can call them in another language. */
 const TRANSLATED_ROOM_NOUN = 'putka';
 const TRANSLATED_ROOM_NOUN_PLURAL = 'putkad';
+
+/* And the same for a registration that is not about seats either. */
+const SEAT_NOUN = 'booth';
+const SEAT_NOUN_PLURAL = 'booths';
+const TRANSLATED_SEAT_NOUN = 'lett';
+const TRANSLATED_SEAT_NOUN_PLURAL = 'letid';
 
 /* Who gets to see the registration at all, and how much of it any one booker may
    take, so every one of these is checked on the registration itself. The limits
@@ -141,6 +147,49 @@ test.describe('Settings general', () => {
 		await translated.header.click();
 
 		await expect(translated.infoDialog).toContainText(TRANSLATED_ROOM_NOUN_PLURAL);
+	});
+
+	/* The word replaces both "seat" and "place" wherever either side talks about one,
+	   and outranks the seats checkbox that would otherwise choose between them. The
+	   builder is repainted once a layout loads and the registration view is served
+	   with the word already in it, so one of each is checked, then the filter a
+	   translation plugin answers through. What happens with no word set is the
+	   places test above. */
+	test('calls a seat whatever the registration calls it', async ({ page }) => {
+		code = await settings.openForNewRegistrationWithSeats(
+			uniqueRegistrationName('Settings general seat noun'),
+			SEAT_COUNT
+		);
+
+		await settings.set('seatNounSingular', SEAT_NOUN);
+		await settings.set('seatNounPlural', SEAT_NOUN_PLURAL);
+		await settings.save();
+
+		const builder = await settings.openLayout(code);
+
+		await builder.openSeatNumberingDialog();
+
+		await expect(builder.noSeatsSelectedAlert).toContainText(SEAT_NOUN_PLURAL);
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.addSeatToBooking(1);
+		await registration.openCart();
+
+		await expect(registration.cartInfo).toContainText(SEAT_NOUN);
+
+		await setSeatNouns(page, {
+			code,
+			singular: TRANSLATED_SEAT_NOUN,
+			plural: TRANSLATED_SEAT_NOUN_PLURAL,
+		});
+
+		const translated = await settings.openRegistration(code);
+
+		await translated.addSeatToBooking(1);
+		await translated.openCart();
+
+		await expect(translated.cartInfo).toContainText(TRANSLATED_SEAT_NOUN);
 	});
 
 	test('turns away a booker who is over the booking limit for their email address', async () => {

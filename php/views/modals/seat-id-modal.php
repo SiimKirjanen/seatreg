@@ -4,7 +4,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-	  	<h4 class="modal-title"><?php esc_html_e('Seat ID lookup', 'seatreg'); ?></h4>
+	  	<h4 class="modal-title"><?php echo esc_html( sprintf( _x('%s ID lookup', 'booking manager dialog title for looking up a seat id', 'seatreg'), $seatNouns->singularUpper ) ); ?></h4>
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php esc_html_e('Close', 'seatreg'); ?></span></button>
       </div>
       <div class="modal-body">
@@ -43,8 +43,8 @@
 				</div>
 				<?php if($openSeatCounter === 0): ?>
 					<div class="alert alert-info"><?php
-						/* translators: %s: Room name */
-						echo sprintf(esc_html__('No open seats in %s', 'seatreg'), esc_html($roomData->room->name));
+						/* translators: %1$s: the word the admin uses for seats, plural, %2$s: Room name */
+						echo sprintf(esc_html__('No open %1$s in %2$s', 'seatreg'), esc_html($seatNouns->plural), esc_html($roomData->room->name));
 					?></div>
 				<?php endif; ?>
 			<?php endforeach; ?>

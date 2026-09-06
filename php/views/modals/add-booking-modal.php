@@ -25,8 +25,8 @@
 					<div class="add-modal-input-wrap">
 						<label>
 							<h5>
-								<?php $usingSeats ? esc_html_e('Seat ID', 'seatreg') : esc_html_e('Place ID', 'seatreg'); ?>
-								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php $usingSeats ? esc_html_e('ID can be seen in map-editor when hovering seats. Or you can use seat ID lookup', 'seatreg') : esc_html_e('ID can be seen in map-editor when hovering places', 'seatreg'); ?>"></i>
+								<?php echo esc_html( sprintf( __('%s ID', 'seatreg'), $seatNouns->singularUpper ) ); ?>
+								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php echo esc_attr( sprintf( __('ID can be seen in map-editor when hovering %1$s. Or you can use %2$s ID lookup', 'seatreg'), $seatNouns->plural, $seatNouns->singular ) ); ?>"></i>
 							</h5>
 							<input type="text" name="seat-id[]" autocomplete="off"/>
 							<div class="input-error"></div>
@@ -84,11 +84,11 @@
 			<div class="bottom-action">
 				<div class="seat-operations">
 					<div class="seat-operation" id="add-modal-add-seat">
-						<?php $usingSeats ? esc_html_e('Add seat', 'seatreg') : esc_html_e('Add place', 'seatreg'); ?>
+						<?php echo esc_html( sprintf( _x('Add %s', 'booking manager button that adds one more seat to the booking being added', 'seatreg'), $seatNouns->singular ) ); ?>
 						<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 					</div>
 					<div class="seat-operation" id="add-modal-remove-seat">
-						<?php $usingSeats ? esc_html_e('Remove seat', 'seatreg') : esc_html_e('Remove place', 'seatreg'); ?>
+						<?php echo esc_html( sprintf( _x('Remove %s', 'booking manager button that removes a seat from the booking being added', 'seatreg'), $seatNouns->singular ) ); ?>
 						<i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i>
 					</div>
 				</div>

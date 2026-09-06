@@ -148,7 +148,7 @@ class SeatregBookingService {
         $customFieldLabels = array_map(function($customField) {
             return $customField->label;
         }, is_array( $enteredCustomFieldData) ? $enteredCustomFieldData : [] );
-        $spotName = $registration->using_seats ? __('Seat', 'seatreg') : __('Place', 'seatreg');
+        $spotName = SeatregTerminologyService::getSeatNouns($registration)->singularUpper;
         $roomName = SeatregTerminologyService::getRoomNouns($registration)->singularUpper;
         $hasCalendarDate = (boolean)$bookings[0]->calendar_date;
         $roomsLayout = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout ?? null);
@@ -313,7 +313,7 @@ class SeatregBookingService {
         }
 
         return array(
-            'spotName' => $bookingData->using_seats ? __('Seat', 'seatreg') : __('Place', 'seatreg'),
+            'spotName' => SeatregTerminologyService::getSeatNouns($bookingData)->singularUpper,
             'rows' => $rows,
             'total' => ( $couponsEnabled ? self::applyCouponDiscountToTotalCost($totalCost, $appliedCoupon) : $totalCost ) . ' ' . $bookingData->paypal_currency_code,
         );

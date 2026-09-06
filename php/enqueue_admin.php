@@ -57,16 +57,16 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('clock-timepicker', plugins_url('js/jquery-clock-timepicker/jquery-clock-timepicker.min.js', dirname(__FILE__) ), array('jquery'), '2.6.4', true);
 		wp_enqueue_script('powertip', plugins_url('js/jquery.powertip.js', dirname(__FILE__) ), array('jquery'), '1.2.0', true);
 		wp_enqueue_script('date-format', plugins_url('js/date.format.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
-		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.3.0', true);
+		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.4.0', true);
 
 		//Only the Overview draws charts, so the library stays off every other screen
 		if( $screen->id === 'seatreg_page_seatreg-overview' ) {
 			wp_enqueue_script('seatreg_admin_chart', plugins_url('js/chart.umd.min.js', dirname(__FILE__) ), array(), '4.4.7', true);
 		}
 
-		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg-utils'), '1.45.0', true);
+		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg-utils'), '1.46.0', true);
 		wp_enqueue_script('jstz', plugins_url('js/jstz-1.0.4.min.js', dirname(__FILE__) ), array(), '1.0.4', true);
-		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip', 'seatreg-utils', 'seatreg_admin'), '1.12.0', true);
+		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip', 'seatreg-utils', 'seatreg_admin'), '1.13.0', true);
 
 		$seatreg_admin_strings_json = wp_json_encode(seatreg_generate_admin_strings());
 		if ($seatreg_admin_strings_json === false) {
@@ -87,6 +87,7 @@ function seatreg_load_admin_scripts($hook) {
 		wp_localize_script('seatreg_admin', 'WP_Seatreg', array(
 			'nonce' => wp_create_nonce('seatreg-admin-nonce'),
 			'room_nouns' => SeatregTerminologyService::getRoomNouns($seatreg_screen_options),
+			'seat_nouns' => SeatregTerminologyService::getSeatNouns($seatreg_screen_options),
 			'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
 			'translations' => $seatreg_admin_strings_json,
 			'uploads_url' => SEATREG_TEMP_FOLDER_URL,

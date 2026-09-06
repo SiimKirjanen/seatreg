@@ -62,4 +62,11 @@ function setRoomNouns(page, { code, singular, plural }) {
 	return askFixture(page, 'set_room_nouns', { code, singular, plural });
 }
 
-module.exports = { createPost, createUser, setRoomNouns };
+/**
+ * The same for the word a registration uses for a seat, through seatreg_seat_nouns.
+ */
+function setSeatNouns(page, { code, singular, plural }) {
+	return askFixture(page, 'set_seat_nouns', { code, singular, plural });
+}
+
+module.exports = { createPost, createUser, setRoomNouns, setSeatNouns };

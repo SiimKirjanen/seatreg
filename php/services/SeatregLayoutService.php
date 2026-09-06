@@ -72,13 +72,14 @@ class SeatregLayoutService {
        return json_encode($layout);
     }
 
-    public static function validateRoomAndSeatId($layout, $bookingRoomName, $bookingSeatId, $seatNr = null, $roomNouns = null) {
+    public static function validateRoomAndSeatId($layout, $bookingRoomName, $bookingSeatId, $seatNr = null, $roomNouns = null, $seatNouns = null) {
         $status = (object) [
             'valid' => false,
             'searchStatus' => '',
             'errorText' => ''
         ];
         $roomNoun = $roomNouns ? $roomNouns->singularUpper : SeatregTerminologyService::getRoomNouns()->singularUpper;
+        $seatNoun = $seatNouns ? $seatNouns->singularUpper : SeatregTerminologyService::getSeatNouns()->singularUpper;
 
         foreach( $layout as $layoutData ) {
             $room = $layoutData->room;
@@ -90,11 +91,11 @@ class SeatregLayoutService {
                 $status->searchStatus = 'seat-id-searching';
 
                 if ($seatNr !== null) {
-                    /* translators: %1$s: Seat ID, %2$s: Seat number, %3$s: Room name */
-                    $status->errorText = sprintf(esc_html__('Seat id %1$s with number %2$s does not exist in %3$s', 'seatreg'), esc_html($bookingSeatId), esc_html($seatNr), esc_html($bookingRoomName));
+                    /* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat ID, %3$s: Seat number, %4$s: Room name */
+                    $status->errorText = sprintf(esc_html__('%1$s id %2$s with number %3$s does not exist in %4$s', 'seatreg'), esc_html($seatNoun), esc_html($bookingSeatId), esc_html($seatNr), esc_html($bookingRoomName));
                 } else {
-                    /* translators: %1$s: Seat ID, %2$s: Room name */
-                    $status->errorText = sprintf(esc_html__('Seat id %1$s does not exist in %2$s', 'seatreg'), esc_html($bookingSeatId), esc_html($bookingRoomName));
+                    /* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat ID, %3$s: Room name */
+                    $status->errorText = sprintf(esc_html__('%1$s id %2$s does not exist in %3$s', 'seatreg'), esc_html($seatNoun), esc_html($bookingSeatId), esc_html($bookingRoomName));
                 }
                 
                 foreach( $layoutData->boxes as $box ) {    
