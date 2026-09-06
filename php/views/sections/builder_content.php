@@ -9,15 +9,15 @@
 	<div class="build-head">
 		<h1 class="reg-title"><?php esc_html_e('Registration name', 'seatreg'); ?>: <span class="reg-title-name"></span></h1>
 		<h2 class="room-title">
-			<?php seatreg_room_noun_span('singularUpper'); ?>:
+			<?php seatreg_noun_span('room', 'singularUpper'); ?>:
 			<span class="room-title-name"></span>
 			<span class="change-room-name"><?php esc_html_e('Change name', 'seatreg');?></span>
 			<span class="change-room-description"><?php esc_html_e('Change description', 'seatreg');?></span>
 		</h2>
 		<div id="room-selection-wrapper"></div>
 		<div class="cre-del-room-wrapper">
-			<span id="new-room-create" class="room-action"><i class="fa fa-plus" aria-hidden="true"></i> <?php seatreg_room_noun_span('singular', _x('Add %s', 'layout builder button that creates a new room', 'seatreg'));?> </span>
-			<span id="current-room-delete" class="room-action"><i class="fa fa-minus" aria-hidden="true"></i> <?php seatreg_room_noun_span('singular', _x('Delete %s', 'layout builder button that deletes the current room', 'seatreg'));?></span>
+			<span id="new-room-create" class="room-action"><i class="fa fa-plus" aria-hidden="true"></i> <?php seatreg_noun_span('room', 'singular', _x('Add %s', 'layout builder button that creates a new room', 'seatreg'));?> </span>
+			<span id="current-room-delete" class="room-action"><i class="fa fa-minus" aria-hidden="true"></i> <?php seatreg_noun_span('room', 'singular', _x('Delete %s', 'layout builder button that deletes the current room', 'seatreg'));?></span>
 		</div>
 	</div> <!-- end of build head-->
 	
@@ -28,7 +28,8 @@
 			<div class="mouse-action-boxes">
 				<div data-action="1" class="mouse-option action1" id="mouse-option-active" title="<?php esc_attr_e('Select, move and resize tool', 'seatreg'); ?>"></div>
 				<div data-action="4" class="mouse-option action4" title="<?php esc_attr_e('Lasso select tool', 'seatreg'); ?>"></div>
-				<div data-action="2" class="mouse-option action2" title="<?php esc_attr_e('Seat/place creation tool', 'seatreg'); ?>"></div>
+				<?php $seatregSeatToolTitle = _x('%s creation tool', 'layout builder tool that creates seats', 'seatreg'); ?>
+				<div data-action="2" class="mouse-option action2" title="<?php echo esc_attr( seatreg_noun_text('seat', 'singularUpper', $seatregSeatToolTitle) ); ?>"<?php echo seatreg_noun_markers('seat', 'singularUpper', $seatregSeatToolTitle, 'title'); ?>></div>
 				<div data-action="5" class="mouse-option action5" title="<?php esc_attr_e('Custom box tool', 'seatreg'); ?>"></div>
 				<div data-action="9" class="mouse-option action9" title="<?php esc_attr_e('Text tool', 'seatreg'); ?>"></div>
 				<div data-action="3" class="mouse-option action3" title="<?php esc_attr_e('Eraser tool', 'seatreg'); ?>"></div>
@@ -75,7 +76,7 @@
 	<div class="build-controls">
 		<div class="legends"></div>
 		<div id="build-section-message-wrap" data-toggle="modal" data-target="#limit-dialog">
-			<span class="message-text"><span style="vertical-align:middle"><?php esc_html_e('Pending and booked seats can\'t be deleted', 'seatreg');?></span><span class="more-message-btn"></span></span>
+			<span class="message-text"><span style="vertical-align:middle"><?php seatreg_noun_span('seat', 'plural', __('Pending and booked %s can\'t be deleted', 'seatreg'));?></span><span class="more-message-btn"></span></span>
 		</div>
 		<div class="update-wrapper">
 			<div id="update-data">
@@ -173,7 +174,7 @@
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Seat/place pricing', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php seatreg_noun_span('seat', 'singularUpper', _x('%s pricing', 'layout builder dialog title for setting seat prices', 'seatreg'));?></h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
@@ -181,7 +182,7 @@
 					<?php esc_html_e('You need to enable PayPal, Stripe, or custom payment options in the settings to activate pricing functionality.', 'seatreg'); ?>
 				</div>
 				<div class="set-price-wrap">
-					<div><label for="price-for-all-selected"><?php esc_html_e('Fill price to all selected seats', 'seatreg'); ?></label></div>
+					<div><label for="price-for-all-selected"><?php seatreg_noun_span('seat', 'plural', __('Fill price to all selected %s', 'seatreg')); ?></label></div>
 					<input type="number" min="0" oninput="this.value = Math.abs(this.value)" id="price-for-all-selected" value="0" />
 					<button type="button" class="btn btn-success btn-sm" id="fill-price-for-all-selected"><?php esc_html_e('Fill prices', 'seatreg'); ?></button>
 				</div>
@@ -199,12 +200,12 @@
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Lock seats/places', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php seatreg_noun_span('seat', 'pluralUpper', _x('Lock %s', 'layout builder dialog title for locking seats', 'seatreg'));?></h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
 				<div class="set-password-wrap">
-					<div><label for="password-for-all-selected"><?php esc_html_e('Fill password to all selected seats', 'seatreg'); ?></label></div>
+					<div><label for="password-for-all-selected"><?php seatreg_noun_span('seat', 'plural', __('Fill password to all selected %s', 'seatreg')); ?></label></div>
 					<input type="text" id="password-for-all-selected" />
 					<button type="button" class="btn btn-success btn-sm" id="fill-password-for-all-selected"><?php esc_html_e('Fill password', 'seatreg'); ?></button>
 				</div>
@@ -222,22 +223,22 @@
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel"><?php esc_html_e('Seat/place numbering', 'seatreg');?></h4>
+				<h4 class="modal-title" id="myModalLabel"><?php seatreg_noun_span('seat', 'singularUpper', _x('%s numbering', 'layout builder dialog title for changing seat numbers', 'seatreg'));?></h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
-				<div class="alert alert-primary d-none" id="seat-nr-change-no-selection"><?php esc_html_e('No seats/places selected', 'seatreg'); ?></div>
-				<div class="alert alert-primary d-none" id="seat-nr-change-warning"><?php esc_html_e('Pending or booked seat numbers can\'t be changed', 'seatreg'); ?></div>
+				<div class="alert alert-primary d-none" id="seat-nr-change-no-selection"><?php seatreg_noun_span('seat', 'plural', _x('No %s selected', 'layout builder seat numbering dialog, nothing is selected', 'seatreg')); ?></div>
+				<div class="alert alert-primary d-none" id="seat-nr-change-warning"><?php seatreg_noun_span('seat', 'singular', __('Pending or booked %s numbers can\'t be changed', 'seatreg')); ?></div>
 				<div id="seat-numbering-wrap">
 					<div>
-						<div><label for="seat-prefix"><?php esc_html_e('Seat prefix for selected seats', 'seatreg'); ?></label></div>
+						<div><label for="seat-prefix"><?php seatreg_noun_span('seat', 'singularUpper', _x('%s prefix for the selected ones', 'layout builder seat numbering field label', 'seatreg')); ?></label></div>
 						<input type="text" id="seat-prefix" style="width:60px" />
 						<button type="button" class="btn btn-success btn-sm" id="set-seat-prefix"><?php esc_html_e('Set prefix', 'seatreg'); ?></button>
 					</div><br>
 					<div>
-						<div><label for="seat-reorder"><?php esc_html_e('Reorder selected seats starting from', 'seatreg'); ?></label></div>
+						<div><label for="seat-reorder"><?php seatreg_noun_span('seat', 'plural', __('Reorder selected %s starting from', 'seatreg')); ?></label></div>
 						<input type="number" id="seat-reorder" size="3" style="width:60px" />
-						<button type="button" class="btn btn-success btn-sm" id="reorder-seats"><?php esc_html_e('Reorder seats', 'seatreg'); ?></button>
+						<button type="button" class="btn btn-success btn-sm" id="reorder-seats"><?php seatreg_noun_span('seat', 'pluralUpper', _x('Reorder %s', 'layout builder button that renumbers the selected seats', 'seatreg')); ?></button>
 					</div>
 				</div>
 			</div>
@@ -270,7 +271,7 @@
 				<div class="legend-dialog-div">
 					<label for="legend-delete-select-room" class="legend-dialog-label"><?php
 						/* translators: %s: the word the admin uses for a room */
-						seatreg_room_noun_span('singular', __('Remove legend from this %s:', 'seatreg'));
+						seatreg_noun_span('room', 'singular', __('Remove legend from this %s:', 'seatreg'));
 					?></label>
 					<select class="legend-select-room" id="legend-delete-select-room"></select> 
 					<button type="button" id="delete-legend-from-room" class="btn btn-secondary d-block btn-sm"><?php esc_html_e('Remove', 'seatreg');?></button>
@@ -376,11 +377,11 @@
 		<div class="modal-dialog vert-modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel"><?php seatreg_room_noun_span('singularUpper', _x('%s name', 'layout builder dialog title for naming a room', 'seatreg'));?></h4>
+					<h4 class="modal-title" id="myModalLabel"><?php seatreg_noun_span('room', 'singularUpper', _x('%s name', 'layout builder dialog title for naming a room', 'seatreg'));?></h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
 				<div class="modal-body">
-					<label for="room-name-dialog-input"><?php seatreg_room_noun_span('singular', _x('Enter %s name:', 'layout builder room name field label', 'seatreg'));?> </label>
+					<label for="room-name-dialog-input"><?php seatreg_noun_span('room', 'singular', _x('Enter %s name:', 'layout builder room name field label', 'seatreg'));?> </label>
 					<input type="text" id="room-name-dialog-input">
 					<div class="room-name-error"></div>
 				</div>
@@ -396,12 +397,12 @@
 		<div class="modal-dialog modal-lg vert-modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title"><?php seatreg_room_noun_span('singularUpper', _x('%s description', 'layout builder dialog title for a room description', 'seatreg'));?></h4>
+					<h4 class="modal-title"><?php seatreg_noun_span('room', 'singularUpper', _x('%s description', 'layout builder dialog title for a room description', 'seatreg'));?></h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
 				<div class="modal-body">
 					<p><?php esc_html_e('Will be displayed on the registration view.', 'seatreg'); ?></p>
-					<label for="room-description-input"><?php seatreg_room_noun_span('singular', _x('Enter %s description:', 'layout builder room description field label', 'seatreg'));?> </label><br>
+					<label for="room-description-input"><?php seatreg_noun_span('room', 'singular', _x('Enter %s description:', 'layout builder room description field label', 'seatreg'));?> </label><br>
 					<textarea id="room-description-input" cols="50"></textarea>
 					<div class="room-description-error"></div>
 				</div>
@@ -439,7 +440,7 @@
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-add"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('With this tool you can create seats/places. Simply click on gray dotted box and new seat/place will be created. You can create multiple seats/places at once by dragging cursor over gray boxes.', 'seatreg');?>
+							<?php seatreg_noun_span('seat', 'plural,singular,plural', __('With this tool you can create %1$s. Simply click on gray dotted box and new %2$s will be created. You can create multiple %3$s at once by dragging cursor over gray boxes.', 'seatreg'));?>
 						</p>
 					</div>
 
@@ -502,21 +503,21 @@
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-price"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Lets you add prices to seats/places. You also need to configure paypal in settings to enable payments.', 'seatreg');?>
+							<?php seatreg_noun_span('seat', 'plural', __('Lets you add prices to %s. You also need to configure paypal in settings to enable payments.', 'seatreg'));?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-lock"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Lets you lock or set password to seats/places. When seat/place is locked then only admin can book it using booking-manager. If password is added then it is required before booking can be made.', 'seatreg');?>
+							<?php seatreg_noun_span('seat', 'plural,singular', __('Lets you lock or set password to %1$s. When a %2$s is locked then only admin can book it using booking-manager. If password is added then it is required before booking can be made.', 'seatreg'));?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-seat-nr"></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Lets you change seat/place numbers. Pending and booked seat/place numbers can\'t be changed.', 'seatreg');?>
+							<?php seatreg_noun_span('seat', 'singular,singular', __('Lets you change %1$s numbers. Pending and booked %2$s numbers can\'t be changed.', 'seatreg'));?>
 						</p>
 					</div>
 
@@ -571,14 +572,14 @@
 				<div class="modal-header">
 					<h4 class="modal-title"><?php
 						/* translators: %s: the word the admin uses for a room, capitalized */
-						seatreg_room_noun_span('singularUpper', __('%s background image', 'seatreg'));
+						seatreg_noun_span('room', 'singularUpper', __('%s background image', 'seatreg'));
 					?></h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
 				<div class="modal-body">
 					<h4><?php
 						/* translators: %s: the word the admin uses for a room */
-						seatreg_room_noun_span('singular', __('Current %s image', 'seatreg'));
+						seatreg_noun_span('room', 'singular', __('Current %s image', 'seatreg'));
 					?></h4>
 					<div id="activ-room-img-wrap"></div>
 					<br>

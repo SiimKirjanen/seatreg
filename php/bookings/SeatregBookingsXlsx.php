@@ -57,7 +57,8 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
     }
     
     public function printXlsx() {
-        $placeNumberText = $this->_usingSeats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
+        /* translators: %s: the word the admin uses for a seat, capitalized */
+        $placeNumberText = esc_html( sprintf( __('%s number', 'seatreg'), $this->_seatNouns->singularUpper ) );
         $hasSeatLegends = $this->hasSeatLegends();
 
         $labelHeader = $hasSeatLegends

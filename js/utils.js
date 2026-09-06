@@ -47,8 +47,8 @@ function seatregFormat(template, args) {
 
 /**
  * The word a registration uses for a room, in all four forms. The builder swaps registrations
- * without a reload so its nouns arrive with the layout; every other screen reloads and gets
- * them from the localized object.
+ * without a reload so its nouns arrive with the layout, and so does the registration view, which
+ * has no localized object; every other screen reloads and gets them from that.
  * @returns {Object} with singular, plural, singularUpper and pluralUpper
  */
 function seatregRoomNouns() {
@@ -56,23 +56,59 @@ function seatregRoomNouns() {
 		return window.seatreg.roomNouns;
 	}
 
-	return WP_Seatreg.room_nouns;
+	return window.WP_Seatreg && WP_Seatreg.room_nouns;
+}
+
+/**
+ * The word a registration uses for a seat, in the same four forms and reaching the screen the
+ * same two ways.
+ * @returns {Object} with singular, plural, singularUpper and pluralUpper
+ */
+function seatregSeatNouns() {
+	if (window.seatreg && window.seatreg.seatNouns) {
+		return window.seatreg.seatNouns;
+	}
+
+	return window.WP_Seatreg && WP_Seatreg.seat_nouns;
 }
 
 /**
  * Repaints the builder chrome, which is rendered once for no registration in particular.
- * A node names the form it wants in data-seatreg-noun and, when the noun sits inside a
- * sentence, that sentence in data-seatreg-noun-template.
- * @param {Object} nouns - as returned by seatregRoomNouns()
+ * A node names the noun it wants in data-seatreg-noun-kind and data-seatreg-noun and, when the
+ * noun sits inside a sentence, that sentence in data-seatreg-noun-template. A sentence needing
+ * more than one form lists them comma separated, in the order the sentence takes them.
+ * data-seatreg-noun-attr writes to that attribute instead of the node's text.
  */
-function seatregApplyRoomNouns(nouns) {
+function seatregApplyNouns() {
 	var nodes = document.querySelectorAll('[data-seatreg-noun]');
+	var nouns = {
+		room: seatregRoomNouns(),
+		seat: seatregSeatNouns()
+	};
 
 	for (var i = 0; i < nodes.length; i++) {
-		var noun = nouns[nodes[i].getAttribute('data-seatreg-noun')];
-		var template = nodes[i].getAttribute('data-seatreg-noun-template');
+		var kind = nouns[nodes[i].getAttribute('data-seatreg-noun-kind')];
 
-		nodes[i].textContent = template ? seatregFormat(template, [noun]) : noun;
+		if (!kind) {
+			continue;
+		}
+
+		var forms = nodes[i].getAttribute('data-seatreg-noun').split(',');
+		var template = nodes[i].getAttribute('data-seatreg-noun-template');
+		var attribute = nodes[i].getAttribute('data-seatreg-noun-attr');
+		var nounArgs = [];
+
+		for (var j = 0; j < forms.length; j++) {
+			nounArgs.push(kind[forms[j]]);
+		}
+
+		var text = template ? seatregFormat(template, nounArgs) : nounArgs[0];
+
+		if (attribute) {
+			nodes[i].setAttribute(attribute, text);
+		} else {
+			nodes[i].textContent = text;
+		}
 	}
 }
 

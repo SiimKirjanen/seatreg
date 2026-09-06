@@ -525,7 +525,6 @@
 		this.needToChangeStructure = false;
 		this.needToSave = false;  //if user makes changes this will be true. when saved this will be false
 		this.roomNameChange = {};  //if room name got changed. store old and new here
-		this.usingSeats = true; //do we use seats or generic place
 		this.settings = {};
 		this.hasCustomPayments = false; //does registration have custom payments (new ones, not legacy)
 	}
@@ -816,12 +815,12 @@
 					colorBox.css({
 						'background-color':'yellow',
 					}).addClass('legend-box-circle');
-					textSpan.text(this.using_seats ? translator.translate('pendingSeat') : translator.translate('pendingPlace'));
+					textSpan.text(seatregFormat(translator.translate('pendingSeat'), [seatregSeatNouns().singular]));
 					break;
 
 				case 1:
 					colorBox.css('background-color','red').addClass('legend-box-circle');
-					textSpan.text(this.using_seats ? translator.translate('confirmedSeat') : translator.translate('confirmedPlace'));
+					textSpan.text(seatregFormat(translator.translate('confirmedSeat'), [seatregSeatNouns().singular]));
 					break;
 			}
 			$('.legends').append(colorBox,textSpan);
@@ -2334,7 +2333,6 @@
 			this.setBuilderHeight();
 		}else {
 			this.settings = window.seatreg.settings;
-			this.usingSeats = window.seatreg.settings.using_seats === '1';
 			this.hasCustomPayments = window.seatreg.settings.custom_payments !== '[]' && window.seatreg.settings.custom_payments !== null;
 
 			var roomData = responseObj.roomData;
@@ -2696,7 +2694,7 @@
 			$('.set-password-wrap').addClass('d-none');
 			$('#set-seat-locks').addClass('d-none');
 			$lockWrap.append(
-				'<div class="alert alert-primary">'+ translator.translate('noSeatsSelected') +'</div>'
+				'<div class="alert alert-primary">'+ seatregFormat(translator.translate('noSeatsSelected'), [seatregSeatNouns().plural]) +'</div>'
 			);
 		}else if(selectedBoxes.length == 1) {
 			$('.set-password-wrap').addClass('d-none');
@@ -2713,7 +2711,7 @@
 				$lockWrap.append(
 					'<div class="lock-item" data-box-location="' + boxLocation + '">' + 
 						'<div class="lock-item-seat">'  + box.seat  + '</div>' +
-						'<label>' + translator.translate('lockSeat') +
+						'<label>' + seatregFormat(translator.translate('lockSeat'), [seatregSeatNouns().singular]) +
 							'<input type="checkbox" ' + (box.lock ? "checked" : "") + ' />' + 
 						'</label>' +
 						'<label>' + translator.translate('setPassword') + 
@@ -2748,7 +2746,7 @@
 			$('.set-price-wrap').addClass('d-none');
 			$('#set-prices').addClass('d-none');
 			$pricingWrap.append(
-				'<div class="alert alert-primary">'+ translator.translate('noSeatsSelected') +'</div>'
+				'<div class="alert alert-primary">'+ seatregFormat(translator.translate('noSeatsSelected'), [seatregSeatNouns().plural]) +'</div>'
 			);
 		}else if(selectedBoxes.length == 1) {
 			$('.set-price-wrap').addClass('d-none');

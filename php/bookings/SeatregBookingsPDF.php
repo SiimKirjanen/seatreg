@@ -59,12 +59,13 @@ class SeatregBookingsPDF extends SeatregBookingsFile {
     public function printPDF() {
         $registrationsLenght = count($this->_registrations);
         $customFieldsLength = count($this->_customFields);
+        /* translators: %s: the word the admin uses for a seat, capitalized */
+        $placeNumberText = esc_html( sprintf( __('%s number', 'seatreg'), $this->_seatNouns->singularUpper ) );
 
         foreach ($this->_registrations as $registration) {
             $registrantCustomData = json_decode($registration->custom_field_data, true);
             $status = $this->getStatus($registration->status);
             $bookingDate = SeatregTimeService::getDateStringFromUnix($registration->booking_date);
-            $placeNumberText = $this->_usingSeats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($registration, $this->_roomData);
             $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
             $seatLegend = $this->getSeatLegend($registration);

@@ -8,7 +8,6 @@ class SeatregBookingPDF extends tFPDF {
     private $_bookings;
     private $_bookingData;
     private $_payment;
-    private $_usingSeats;
     private $_customFields;
     private $_roomData;
     private $_logoPath;
@@ -177,9 +176,12 @@ class SeatregBookingPDF extends tFPDF {
     }
 
     protected function buildDocument() {
+        /* translators: %s: the word the admin uses for a seat, capitalized */
+        $placeNumberText = esc_html( sprintf( __('%s number', 'seatreg'), SeatregTerminologyService::getSeatNouns($this->_bookingData)->singularUpper ) );
+        /* translators: %s: the word the admin uses for a room, capitalized */
+        $roomNameText = esc_html( sprintf( __('%s name', 'seatreg'), SeatregTerminologyService::getRoomNouns($this->_bookingData)->singularUpper ) );
 
         foreach( $this->_bookings as $booking ) {
-            $placeNumberText = $this->_bookingData->using_seats ? esc_html__('Seat number', 'seatreg') : esc_html__('Place number', 'seatreg');
             $bookingDate = SeatregTimeService::getDateStringFromUnix($booking->booking_date);
             $status = $this->getStatus($booking->status);
             $paymentStatus = $this->_payment->payment_status ?? null;
@@ -188,8 +190,7 @@ class SeatregBookingPDF extends tFPDF {
             $seatLegend = SeatregRegistrationService::getSeatLegendFromLayout($this->_roomData, $booking->room_uuid, $booking->seat_id);
 
             $this->Cell(20, 6, $placeNumberText . ': ' . esc_html($booking->seat_nr), 0, 1, 'L');
-            /* translators: %s: the word the admin uses for a room, capitalized */
-            $this->Cell(20, 6, esc_html( sprintf( __('%s name', 'seatreg'), SeatregTerminologyService::getRoomNouns($this->_bookingData)->singularUpper ) ) . ': ' . esc_html($booking->room_name), 0, 1, 'L');
+            $this->Cell(20, 6, $roomNameText . ': ' . esc_html($booking->room_name), 0, 1, 'L');
 
             if( $seatLegend ) {
                 $this->Cell(20, 6, esc_html__('Label', 'seatreg') . ': ' . esc_html($seatLegend), 0, 1, 'L');

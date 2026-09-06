@@ -249,7 +249,8 @@
 					using_seats: data._response.data.registration[0].using_seats
 				};
 				window.seatreg.roomNouns = data._response.data.roomNouns;
-				seatregApplyRoomNouns(window.seatreg.roomNouns);
+				window.seatreg.seatNouns = data._response.data.seatNouns;
+				seatregApplyNouns();
 
 				if(data._response.data.registration[0].registration_layout == null) {
 					$('.seatreg-builder-popup').css({'display': 'block'});
@@ -1230,7 +1231,7 @@ function seatregGenerateImportBookingBox(bookingData, validationData) {
 	
 	$bookingWrap.append('<div><b>Name: </b>' + bookingData.first_name + ',</div>');
 	$bookingWrap.append('<div>' + bookingData.last_name + ',</div>');
-	$bookingWrap.append('<div><b>Seat: </b>' + bookingData.seat_nr + '</div>');
+	$bookingWrap.append('<div><b>' + seatregSeatNouns().singularUpper + ': </b>' + bookingData.seat_nr + '</div>');
 
 	if(validationData.room_name) {
 		$bookingWrap.append('<div><b>' + seatregRoomNouns().singularUpper + ': </b>' + validationData.room_name + '</div>');
@@ -1382,7 +1383,7 @@ $('#seatreg-booking-manager').on('click', '.edit-btn', function() {
 			'<input type="email" id="email-change-field" name="email" class="modal-email-input" style="margin-bottom:12px" value="'+ info.data('email') +'" /><br>' +
 			'<label for="booker-email-change-field"><h5>' +
 				translator.translate('bookingMainEmail') +
-			'</h5></label> <i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="' + translator.translate('multiBookingMailEmailEditDesc') + '"></i><br>' +
+			'</h5></label> <i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="' + seatregFormat(translator.translate('multiBookingMailEmailEditDesc'), [seatregSeatNouns().singular]) + '"></i><br>' +
 			'<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />'
 		);
 	}
@@ -1587,12 +1588,12 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 				alertify.error(seatregFormat(translator.translate('roomNotExist'), [seatregRoomNouns().singularUpper]));
 			}
 			if(data.status === 'seat-id-searching') {
-				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-id[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatIdNotExist'));
-				alertify.error(translator.translate('seatIdNotExist'));
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-id[]"]').closest('.add-modal-input-wrap').find('.input-error').text(seatregFormat(translator.translate('seatIdNotExist'), [seatregSeatNouns().singularUpper]));
+				alertify.error(seatregFormat(translator.translate('seatIdNotExist'), [seatregSeatNouns().singularUpper]));
 			}
 			if(data.status === 'seat-booked') {
-				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-id[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('seatAlreadyBookedPending'));
-				alertify.error(translator.translate('seatAlreadyBookedPending'));
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-id[]"]').closest('.add-modal-input-wrap').find('.input-error').text(seatregFormat(translator.translate('seatAlreadyBookedPending'), [seatregSeatNouns().singularUpper]));
+				alertify.error(seatregFormat(translator.translate('seatAlreadyBookedPending'), [seatregSeatNouns().singularUpper]));
 			}
 			if(data.status === 'create failed') {
 				alert(translator.translate('errorBookingUpdate'));
@@ -1605,7 +1606,7 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 				}
 			}
 			if(data.status === 'duplicate-seat') {
-				alertify.error(translator.translate('duplicateSeatDetected'));
+				alertify.error(seatregFormat(translator.translate('duplicateSeatDetected'), [seatregSeatNouns().singular]));
 			}
 			if(data.status === 'seat-price-not-found') {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-multi-price[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('priceNotFound'));
@@ -1771,12 +1772,12 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 				alertify.error(seatregFormat(translator.translate('roomNotExist'), [seatregRoomNouns().singularUpper]));
 			}
 			if(data.status == 'seat-id-searching') {
-				$('#edit-seat-error').text(translator.translate('seatIdNotExist'));
-				alertify.error(translator.translate('seatIdNotExist'));
+				$('#edit-seat-error').text(seatregFormat(translator.translate('seatIdNotExist'), [seatregSeatNouns().singularUpper]));
+				alertify.error(seatregFormat(translator.translate('seatIdNotExist'), [seatregSeatNouns().singularUpper]));
 			}
 			if(data.status == 'seat-booked') {
-				$('#edit-seat-error').text(translator.translate('seatAlreadyBookedPending'));
-				alertify.error(translator.translate('seatAlreadyBookedPending'));
+				$('#edit-seat-error').text(seatregFormat(translator.translate('seatAlreadyBookedPending'), [seatregSeatNouns().singularUpper]));
+				alertify.error(seatregFormat(translator.translate('seatAlreadyBookedPending'), [seatregSeatNouns().singularUpper]));
 			}
 			if(data.status == 'update failed') {
 				alert(translator.translate('errorBookingUpdate'));
@@ -2806,9 +2807,14 @@ function seatregRenderBookingFlowSummary() {
 		return;
 	}
 
+	// The summary follows the form as it is typed, so it reads the noun fields rather than the
+	// saved nouns, and falls back to the checkbox the same way the server does.
+	var typedSingular = ($form.find('#seat-noun-singular').val() || '').trim();
+	var typedPlural = ($form.find('#seat-noun-plural').val() || '').trim();
+	var renamed = typedSingular !== '' && typedPlural !== '';
 	var usingSeats = $form.find('#using-seats').is(':checked');
-	var nounSingular = usingSeats ? t('flowSeatSingular') : t('flowPlaceSingular');
-	var nounPlural = usingSeats ? t('flowSeatPlural') : t('flowPlacePlural');
+	var nounSingular = renamed ? typedSingular : (usingSeats ? t('flowSeatSingular') : t('flowPlaceSingular'));
+	var nounPlural = renamed ? typedPlural : (usingSeats ? t('flowSeatPlural') : t('flowPlacePlural'));
 
 	// Each item carries its sentence and the selector of the setting it describes (for the jump link).
 	var item = function(text, target) {

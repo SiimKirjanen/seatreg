@@ -59,46 +59,70 @@ add_action(
 	}
 );
 
-/* Stands in for the multilingual plugin a site would translate its room noun with,
-   which the suite cannot install. Kept to one registration at a time so the filter,
-   which the plugin runs for every registration, only answers for the one the asking
-   test owns and leaves the other three workers alone. */
+/* Stands in for the multilingual plugin a site would translate its nouns with,
+   which the suite cannot install. Kept to one registration at a time so the filters,
+   which the plugin runs for every registration, only answer for the one the asking
+   test owns and leave the other three workers alone. */
+function seatreg_e2e_set_nouns( $kind ) {
+	seatreg_e2e_fixtures_guard();
+
+	$code     = isset( $_GET['code'] ) ? sanitize_text_field( wp_unslash( $_GET['code'] ) ) : '';
+	$singular = isset( $_GET['singular'] ) ? sanitize_text_field( wp_unslash( $_GET['singular'] ) ) : '';
+	$plural   = isset( $_GET['plural'] ) ? sanitize_text_field( wp_unslash( $_GET['plural'] ) ) : '';
+
+	if ( '' === $code || '' === $singular || '' === $plural ) {
+		wp_send_json_error( 'code, singular and plural are required', 400 );
+	}
+
+	update_option(
+		'seatreg_e2e_' . $kind . '_nouns_' . $code,
+		array(
+			'singular' => $singular,
+			'plural'   => $plural,
+		)
+	);
+
+	wp_send_json( array( 'code' => $code ) );
+}
+
+function seatreg_e2e_filter_nouns( $kind, $nouns, $registrationCode ) {
+	$override = $registrationCode ? get_option( 'seatreg_e2e_' . $kind . '_nouns_' . $registrationCode ) : false;
+
+	if ( is_array( $override ) ) {
+		$nouns->singular = $override['singular'];
+		$nouns->plural   = $override['plural'];
+	}
+
+	return $nouns;
+}
+
 add_action(
 	'wp_ajax_seatreg_e2e_set_room_nouns',
 	function () {
-		seatreg_e2e_fixtures_guard();
+		seatreg_e2e_set_nouns( 'room' );
+	}
+);
 
-		$code     = isset( $_GET['code'] ) ? sanitize_text_field( wp_unslash( $_GET['code'] ) ) : '';
-		$singular = isset( $_GET['singular'] ) ? sanitize_text_field( wp_unslash( $_GET['singular'] ) ) : '';
-		$plural   = isset( $_GET['plural'] ) ? sanitize_text_field( wp_unslash( $_GET['plural'] ) ) : '';
-
-		if ( '' === $code || '' === $singular || '' === $plural ) {
-			wp_send_json_error( 'code, singular and plural are required', 400 );
-		}
-
-		update_option(
-			'seatreg_e2e_room_nouns_' . $code,
-			array(
-				'singular' => $singular,
-				'plural'   => $plural,
-			)
-		);
-
-		wp_send_json( array( 'code' => $code ) );
+add_action(
+	'wp_ajax_seatreg_e2e_set_seat_nouns',
+	function () {
+		seatreg_e2e_set_nouns( 'seat' );
 	}
 );
 
 add_filter(
 	'seatreg_room_nouns',
 	function ( $nouns, $registrationCode ) {
-		$override = $registrationCode ? get_option( 'seatreg_e2e_room_nouns_' . $registrationCode ) : false;
+		return seatreg_e2e_filter_nouns( 'room', $nouns, $registrationCode );
+	},
+	10,
+	2
+);
 
-		if ( is_array( $override ) ) {
-			$nouns->singular = $override['singular'];
-			$nouns->plural   = $override['plural'];
-		}
-
-		return $nouns;
+add_filter(
+	'seatreg_seat_nouns',
+	function ( $nouns, $registrationCode ) {
+		return seatreg_e2e_filter_nouns( 'seat', $nouns, $registrationCode );
 	},
 	10,
 	2
