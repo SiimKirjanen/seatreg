@@ -1,51 +1,20 @@
-<div class="seatreg-flower-container" style="--flower-size: 12px; --flower-delay: 0s; --flower-opacity: 0.1; top:42px;left:46px">
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-1"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-2"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-3"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-4"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-5"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-6"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-7"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-8"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-9"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-10"></div>
-</div>
+<?php
+if(!defined('ABSPATH')) exit;
 
-<div class="seatreg-flower-container" style="--flower-size: 18px; --flower-delay: 1s; --flower-opacity: 0.1; top:0px; left:380px">
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-1"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-2"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-3"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-4"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-5"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-6"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-7"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-8"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-9"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-10"></div>
-</div>
+$seatreg_flowers = array(
+	array( 'size' => '12px', 'delay' => '0s', 'position' => 'top: 24%; left: 24px;' ),
+	array( 'size' => '18px', 'delay' => '1s', 'position' => 'top: 12px; right: 64px;' ),
+	array( 'size' => '14px', 'delay' => '2s', 'position' => 'bottom: 26%; right: 48px;' ),
+	array( 'size' => '10px', 'delay' => '4s', 'position' => 'bottom: 0; left: 16px;' ),
+);
+?>
 
-<div class="seatreg-flower-container" style="--flower-size: 14px; --flower-delay: 2s; --flower-opacity: 0.1; top:260px; left:400px">
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-1"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-2"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-3"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-4"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-5"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-6"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-7"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-8"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-9"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-10"></div>
-</div>
-
-<div class="seatreg-flower-container" style="--flower-size: 10px; --flower-delay: 4s; --flower-opacity: 0.1; top:320px; left:40px">
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-1"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-2"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-3"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-4"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-5"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-6"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-7"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-8"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-9"></div>
-    <div class="seatreg-flower-droplet seatreg-flower-droplet-10"></div>
+<div class="seatreg-flower-layer" aria-hidden="true">
+	<?php foreach($seatreg_flowers as $seatreg_flower) : ?>
+		<div class="seatreg-flower-container" style="--flower-size: <?php echo esc_attr($seatreg_flower['size']); ?>; --flower-delay: <?php echo esc_attr($seatreg_flower['delay']); ?>; --flower-opacity: 0.1; <?php echo esc_attr($seatreg_flower['position']); ?>">
+			<?php for($seatreg_droplet = 1; $seatreg_droplet <= 10; $seatreg_droplet++) : ?>
+				<div class="seatreg-flower-droplet seatreg-flower-droplet-<?php echo esc_attr($seatreg_droplet); ?>"></div>
+			<?php endfor; ?>
+		</div>
+	<?php endforeach; ?>
 </div>

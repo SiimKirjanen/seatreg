@@ -96,6 +96,7 @@ html {
   text-align: center;
   row-gap: 12px;
   position: relative;
+  isolation: isolate;
 
   p {
     margin-bottom: 0.6rem;

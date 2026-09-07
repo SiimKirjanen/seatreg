@@ -1,9 +1,18 @@
+.seatreg-flower-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
 .seatreg-flower-container {
     --flower-size: 12px;
     --flower-delay: 0s;
     --flower-opacity: 0.2;
-    width: var(--flower-size);
-    height: var(--flower-size);
+    --flower-petal-reach: calc(var(--flower-size) * 1.42);
+    width: calc(var(--flower-petal-reach) * 2);
+    height: calc(var(--flower-petal-reach) * 2);
     position: absolute;
 }
 
@@ -14,8 +23,8 @@
     height: var(--flower-size);
     width: var(--flower-size);
     position: absolute;
-    top: var(--flower-size);
-    left: var(--flower-size);
+    top: 50%;
+    left: 50%;
     transform-origin: left top;
     opacity: 0;
 }

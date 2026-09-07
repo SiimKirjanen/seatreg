@@ -3,7 +3,7 @@ Donate link: https://www.paypal.com/donate?hosted_button_id=9QSGHYKHL6NMU&source
 Tags: reservation, online booking, event management, online registration, seat plan
 Requires at least: 5.3
 Requires PHP: 7.2.28
-Tested up to: 7.0
+Tested up to: 7.1
 Stable tag: 1.77.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
