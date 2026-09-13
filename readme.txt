@@ -53,7 +53,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 * The Overview page has been redesigned.
 * You can now rename "room" to any word that fits your registration, such as stall or hall.
 * You can now rename "seat" to any word that fits your registration, such as booth or bed.
-* The words you use for a room and a seat can now be translated with Polylang or WPML.
+* The words you use for a room and a seat can now be translated with Polylang.
 * A registration embedded with the shortcode now opens in the language of the page it sits on.
 
 = 1.76.0 =
