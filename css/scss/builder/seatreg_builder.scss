@@ -2,6 +2,7 @@
 @import 'modal/skeleton';
 @import 'modal/color';
 @import 'modal/legends';
+@import 'modal/layout-start';
 
 .seatreg-map-builder-page .seatreg-builder-popup .fa-times-circle {
 	color: red;
@@ -950,6 +951,21 @@
 	background-color: #418ac6;
 	color: #fff !important;
 	text-decoration: none;
+}
+
+.seatreg-map-builder-page #export-layout {
+	padding: 10px 20px;
+	background-color: #6c757d;
+	color: #fff;
+	cursor: pointer;
+}
+
+.seatreg-map-builder-page #export-layout:hover {
+	background-color: #5a6268;
+}
+
+.seatreg-map-builder-page #export-layout-form {
+	display: none;
 }
 
 .seatreg-map-builder-page #server-response {

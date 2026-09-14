@@ -44,6 +44,24 @@ class SeatregRegistrationRepository {
 
     /**
      *
+     * Return the registrations a layout could be copied from. Newest first. The layout
+     * comes along so the caller can tell an empty one from a drawn one.
+     *
+     */
+    public static function getRegistrationsWithLayout() {
+        global $wpdb;
+	    global $seatreg_db_table_names;
+
+        return $wpdb->get_results(
+            "SELECT registration_code, registration_name, registration_layout
+            FROM $seatreg_db_table_names->table_seatreg
+            WHERE is_deleted = 0 AND registration_layout IS NOT NULL
+            ORDER BY registration_create_timestamp DESC, id DESC"
+        );
+    }
+
+    /**
+     *
      * Return all registrations that are not deleted, with the options needed to show
      * their status. Newest first. Left join, as the options row is written after the
      * registration and a half created one still has to show up.

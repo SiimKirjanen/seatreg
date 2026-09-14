@@ -324,6 +324,19 @@ function seatreg_generate_admin_strings() {
     $translations->flowPayment = esc_html__('Payment is requested on the booking status page after the booking is made.', 'seatreg');
     $translations->flowCoupons = esc_html__('In the cart, bookers can apply a coupon code to receive a discount.', 'seatreg');
     $translations->flowRedirectStatus = esc_html__('Afterward, visitors are redirected to their booking status page.', 'seatreg');
+    $translations->exportUnsavedChanges = esc_html__('The file holds the layout as it was last saved, so your unsaved changes will not be in it. Export anyway?', 'seatreg');
+    $translations->layoutSourcesLoadFailed = esc_html__('Could not load the registrations to copy from', 'seatreg');
+    $translations->noLayoutsToCopy = esc_html__('No other registration on this site has a layout yet.', 'seatreg');
+    $translations->chooseLayoutFile = esc_html__('Choose a layout file', 'seatreg');
+    $translations->invalidLayoutFile = esc_html__('That is not a SeatReg layout file.', 'seatreg');
+    $translations->layoutFileFromNewerVersion = esc_html__('That file was made by a newer version of SeatReg. Update the plugin and try again.', 'seatreg');
+    $translations->layoutFileUnreadable = esc_html__('That file could not be read.', 'seatreg');
+    $translations->layoutImported = esc_html__('Layout loaded. Press Save to keep it.', 'seatreg');
+    $translations->layoutImportFailed = esc_html__('That layout could not be loaded.', 'seatreg');
+    $translations->layoutCopyFailed = esc_html__('Could not copy that layout', 'seatreg');
+    $translations->roomImagesCopyFailed = esc_html__('The layout was copied, but its background images could not be. Upload them again.', 'seatreg');
+    /* translators: %s: comma-separated list of room names */
+    $translations->layoutImportDescriptionWarning = esc_html__('These descriptions use characters that are no longer allowed and have to be edited before saving: %s', 'seatreg');
 
     return $translations;
 }
