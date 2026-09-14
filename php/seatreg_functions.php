@@ -3494,8 +3494,44 @@ function seatreg_copy_registration_handler() {
 	}
 }
 
+add_action('admin_post_seatreg_export_layout', 'seatreg_export_layout_handler');
+function seatreg_export_layout_handler() {
+	seatreg_nonce_check();
+
+	if( empty($_POST['registration-code']) ) {
+		wp_die('Code is missing');
+	}
+
+	$registrationCode = sanitize_text_field($_POST['registration-code']);
+	$registration = SeatregRegistrationRepository::getRegistrationByCode($registrationCode);
+
+	if( !$registration || $registration->is_deleted ) {
+		wp_die( esc_html__('Registration not found', 'seatreg') );
+	}
+
+	if( $registration->registration_layout === null ) {
+		wp_die( esc_html__('This registration has no layout to export', 'seatreg') );
+	}
+
+	$export = SeatregLayoutExportService::buildExport($registration);
+
+	if( $export === null ) {
+		wp_die( esc_html__('This registration layout could not be read', 'seatreg') );
+	}
+
+	seatreg_add_activity_log('map', $registrationCode, 'Registration layout exported');
+
+	nocache_headers();
+	header('Content-Type: application/json; charset=utf-8');
+	header('Content-Disposition: attachment; filename="' . SeatregLayoutExportService::getFileName($registration) . '"');
+
+	echo wp_json_encode($export);
+
+	die();
+}
+
 //handle registration delete
-add_action('admin_post_seatreg_delete_registration', 'seatreg_delete_registration_handler'); 
+add_action('admin_post_seatreg_delete_registration', 'seatreg_delete_registration_handler');
 function seatreg_delete_registration_handler() {
 	global $wpdb;
 	global $seatreg_db_table_names;
@@ -4110,6 +4146,109 @@ function seatreg_get_registration_layout_and_bookings() {
 	$dataToSend->seatNouns = SeatregTerminologyService::getSeatNouns( isset($registration[0]) ? $registration[0] : null );
 	$response = new SeatregJsonResponse();
 	$response->setData( $dataToSend);
+	wp_send_json( $response );
+}
+
+add_action('wp_ajax_seatreg_get_layout_sources', 'seatreg_get_layout_sources');
+function seatreg_get_layout_sources() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
+
+	$currentCode = isset($_POST['code']) ? sanitize_text_field($_POST['code']) : '';
+	$sources = array();
+
+	foreach(SeatregRegistrationRepository::getRegistrationsWithLayout() as $registration) {
+		if($registration->registration_code === $currentCode) {
+			continue;
+		}
+
+		$rooms = SeatregLayoutService::getRoomDataFromLayout($registration->registration_layout);
+
+		if( count($rooms) === 0 ) {
+			continue;
+		}
+
+		$source = new stdClass();
+		$source->code = $registration->registration_code;
+		$source->name = $registration->registration_name;
+		$sources[] = $source;
+	}
+
+	$response = new SeatregJsonResponse();
+	$response->setData($sources);
+	wp_send_json( $response );
+}
+
+add_action('wp_ajax_seatreg_copy_registration_layout', 'seatreg_copy_registration_layout');
+function seatreg_copy_registration_layout() {
+	seatreg_ajax_security_check(SEATREG_MANAGE_EVENTS_CAPABILITY);
+	$response = new SeatregJsonResponse();
+
+	if( empty($_POST['code']) || empty($_POST['data']) ) {
+		$response->setError('Missing data');
+		wp_send_json( $response );
+
+		die();
+	}
+
+	$targetCode = sanitize_text_field($_POST['code']);
+	$sourceCode = sanitize_text_field($_POST['data']);
+	$target = SeatregRegistrationRepository::getRegistrationByCode($targetCode);
+	$source = SeatregRegistrationRepository::getRegistrationByCode($sourceCode);
+
+	if( $targetCode === $sourceCode || !$target || !$source || $target->is_deleted || $source->is_deleted ) {
+		$response->setError( esc_html__('Registration not found', 'seatreg') );
+		wp_send_json( $response );
+
+		die();
+	}
+
+	if( $source->registration_layout === null ) {
+		$response->setError( esc_html__('That registration has no layout to copy', 'seatreg') );
+		wp_send_json( $response );
+
+		die();
+	}
+
+	//nothing is overwritten here, but a layout saved in another tab means the images are no longer wanted
+	if( $target->registration_layout !== null ) {
+		$response->setError( esc_html__('This registration already has a layout', 'seatreg') );
+		wp_send_json( $response );
+
+		die();
+	}
+
+	$layout = json_decode($source->registration_layout);
+
+	if( !is_object($layout) ) {
+		$response->setError( esc_html__('That registration layout could not be read', 'seatreg') );
+		wp_send_json( $response );
+
+		die();
+	}
+
+	$imagesCopied = SeatregImageCopyService::copyRegistrationRoomImages($sourceCode, $targetCode);
+	$imagesFolder = SeatregUploadsRepository::getCustomRoomImagesLocationDir($targetCode);
+
+	//only the server can see which of the names the layout carries have a file behind them
+	if( isset($layout->roomData) && is_array($layout->roomData) ) {
+		foreach($layout->roomData as $roomData) {
+			if( !isset($roomData->room->backgroundImage) ) {
+				continue;
+			}
+
+			if( !file_exists($imagesFolder . '/' . basename($roomData->room->backgroundImage)) ) {
+				$roomData->room->backgroundImage = null;
+			}
+		}
+	}
+
+	seatreg_add_activity_log('map', $targetCode, "Room images copied from registration $sourceCode");
+
+	$dataToSend = new stdClass();
+	$dataToSend->layout = $layout;
+	$dataToSend->imagesCopied = $imagesCopied;
+	$dataToSend->uploadedImages = seatreg_get_registration_uploaded_images($targetCode);
+	$response->setData($dataToSend);
 	wp_send_json( $response );
 }
 

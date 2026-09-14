@@ -35,7 +35,8 @@
 	window.seatreg = {
 		builder: null,
 		selectedRegistration: null,
-		bookings: []
+		bookings: [],
+		uploadedImages: []
 	};
 
 	function seaterg_admin_ajax(action, code, data) {
@@ -172,6 +173,7 @@
 	function seatreg_clear_builder_data() {
 		window.seatreg.builder.clearRegistrationData();
 		window.seatreg.bookings = [];
+		window.seatreg.uploadedImages = [];
 		window.seatreg.selectedRegistration = null;
 		window.seatreg.selectedRegistrationName = null;
 	}
@@ -235,9 +237,7 @@
 					}
 				}
 
-				if(data._response.data.uploadedImages.length > 0) {
-					window.seatreg.uploadedImages = data._response.data.uploadedImages;
-				}
+				window.seatreg.uploadedImages = data._response.data.uploadedImages;
 				$('.reg-title-name').text(registrationName);
 
 				window.seatreg.selectedRegistration = code;
