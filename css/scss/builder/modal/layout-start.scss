@@ -1,0 +1,53 @@
+.seatreg-map-builder-page {
+    #layout-start-dialog {
+        .layout-start__step {
+            label {
+                display: block;
+                margin-bottom: 6px;
+            }
+
+            select,
+            input[type='file'] {
+                width: 100%;
+                max-width: 420px;
+            }
+
+            p {
+                margin-top: 12px;
+                color: #646970;
+            }
+        }
+
+        .layout-start__choice {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 12px;
+            text-align: left;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+
+            &:hover {
+                box-shadow: 1px 1px 10px 0px rgba(204, 204, 204, 0.52);
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .layout-start__loading {
+            margin-top: 12px;
+        }
+
+        .layout-start__message {
+            margin-top: 12px;
+
+            &:empty {
+                margin-top: 0;
+            }
+        }
+    }
+}

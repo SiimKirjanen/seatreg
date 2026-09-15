@@ -172,7 +172,7 @@
 	}
 
 	Box.prototype.calculateInputBoxDimentions = function() {
-		$testingBox = $('<span id="font-size-width-test" style="font-size:'+ this.inputSize +'px">'+ this.input +'</span>');
+		$testingBox = $('<span>').attr('id', 'font-size-width-test').css('font-size', this.inputSize + 'px').text(this.input);
 		$('.seatreg-builder-popup').append($testingBox);
 		var testElementWidth = $('#font-size-width-test').width();
 		var testElementHeight = $('#font-size-width-test').height();
@@ -527,6 +527,7 @@
 		this.roomNameChange = {};  //if room name got changed. store old and new here
 		this.settings = {};
 		this.hasCustomPayments = false; //does registration have custom payments (new ones, not legacy)
+		this.hasSavedLayout = false; //export sends the saved layout, so it needs one to exist
 	}
 
 	Registration.prototype.clearRegistrationData = function() {
@@ -550,8 +551,13 @@
 		this.needToChangeStructure = false;
 		this.needToSave = false;  //if user makes changes this will be true. when saved this will be false
 		this.roomNameChange = {};  //if room name got changed. store old and new here
+		this.hasSavedLayout = false; //export sends the saved layout, so it needs one to exist
 
 		$('#room-selection-wrapper').empty();
+	};
+
+	Registration.prototype.setExportAvailability = function() {
+		$('#export-layout').toggle(this.hasSavedLayout);
 	};
 
 	Registration.prototype.setRoomImage = function(imgLog, size) {
@@ -583,6 +589,8 @@
 	};
 
 	Registration.prototype.generatePrevUploadedImgMarkup = function() {
+		$('#uploaded-images').empty();
+
 		if(window.seatreg.uploadedImages && window.seatreg.uploadedImages.length > 0) {
 			window.seatreg.uploadedImages.forEach(function(uploaded) {
 				var $imgWrap = $("<div class='uploaded-image-box'></div");
@@ -1813,7 +1821,7 @@
 						var boxInput = regScope.rooms[regScope.currentRoom].boxes[i].input;
 						var boxInputFontSize = regScope.rooms[regScope.currentRoom].boxes[i].inputSize;
 
-						$this.append('<input class="text-box-input" value="' + boxInput + '" />');
+						$this.append( $('<input>').addClass('text-box-input').val(boxInput) );
 						$this.append('<i class="fa fa-plus text-size-control" data-action="increase" style="display:none"></i>');
 						$this.append('<i class="fa fa-minus text-size-control" data-action="degrease" style="display:none"></i>');
 						$this.find('.text-box-input').css({
@@ -2271,6 +2279,8 @@
 				$('#update-data').find('.save-text').text(translator.translate('save'));
 				if(data._response.type == 'ok') {
 					scope.needToSave = false;
+					scope.hasSavedLayout = true;
+					scope.setExportAvailability();
 
 					//set initialName to title
 					for (var property in scope.rooms) {
@@ -2325,114 +2335,165 @@
 	};
 
 	//SyncData from server
-	Registration.prototype.syncData = function(responseObj) {		
+	Registration.prototype.syncData = function(responseObj) {
+		this.settings = window.seatreg.settings;
+		this.hasCustomPayments = window.seatreg.settings.custom_payments !== '[]' && window.seatreg.settings.custom_payments !== null;
+		this.hasSavedLayout = !$.isEmptyObject(responseObj);
+		this.setExportAvailability();
+
 		if($.isEmptyObject(responseObj)){
-			this.addRoom(false,false,true, generateUUID(), 1);
 			$('#build-area-loading-wrap').remove();
-			$('#room-name-dialog').modal("toggle");
-			this.setBuilderHeight();
-		}else {
-			this.settings = window.seatreg.settings;
-			this.hasCustomPayments = window.seatreg.settings.custom_payments !== '[]' && window.seatreg.settings.custom_payments !== null;
+			this.showLayoutStartDialog();
 
-			var roomData = responseObj.roomData;
-			this.regBoxCounter = responseObj.global.boxCounter;
-			var globalLegendsLength = responseObj.global.legends.length;
-	
-			for(var r = 0; r < globalLegendsLength; r++) {
-				this.syncAllLegends(responseObj.global.legends[r].text, responseObj.global.legends[r].color);
-			}
-
-			for (var property in roomData) {
-			    if (roomData.hasOwnProperty(property)) {
-					let roomOrder = null;
-
-					if(roomData[property]['room'].order) {
-						roomOrder = roomData[property]['room'].order;
-					}else {
-						//If room order not provided
-						roomOrder = parseInt(property, 10) + 1;
-					}
-
-			    	this.addRoom(true, false, false, roomData[property]['room'].uuid, roomOrder);
-			    	this.rooms[this.currentRoom].title = roomData[property]['room'].name;
-			    	this.rooms[this.currentRoom].initialName = roomData[property]['room'].name;
-					this.rooms[this.currentRoom].description = roomData[property]['room'].description;
-					var roomBackgroundImage = roomData[property]['room'].backgroundImage;
-			    	if(typeof roomBackgroundImage !== 'undefined' && roomBackgroundImage !== null) {
-			    		this.rooms[this.currentRoom].backgroundImage = roomBackgroundImage;
-			    	}
-			    		
-			    	//update skeleton
-			    	var skeleton = roomData[property]['skeleton'];
-			    	this.rooms[this.currentRoom].skeleton.changeSkeleton(
-						skeleton.width, 
-						skeleton.height, 
-						skeleton.countX, 
-						skeleton.countY, 
-						skeleton.marginX, 
-						skeleton.marginY, 
-						skeleton.buildGrid
-					);
-					var roomLegends = roomData[property]['room'].legends;
-			    	var roomLegendsLength = roomData[property]['room'].legends.length;
-
-			    	for(var k = 0; k < roomLegendsLength; k++) {
-			    		this.rooms[this.currentRoom].legends.push(new Legend(roomLegends[k].text, roomLegends[k].color));
-			    	}
-
-					$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"] .room-title').text(reg.rooms[reg.currentRoom].title);
-			    	var arr = roomData[property]['boxes'];
-			    	var arrLength = arr.length;
-
-			    	for(var i = 0; i < arrLength; i++) {  //adding boxes
-			    		var canReg = arr[i].canRegister;
-
-			    		if(canReg == 'true') {
-			    			canReg = true;
-			    		}else if(canReg == 'false'){
-			    			canReg = false;
-			    		}
-			    		this.rooms[this.currentRoom].addBoxS(
-							arr[i].legend,
-							arr[i].xPosition,
-							arr[i].yPosition, 
-							arr[i].width, 
-							arr[i].height, 
-							arr[i].id, 
-							arr[i].color, 
-							arr[i].hoverText.replace(/\^/g,'<br>'), 
-							canReg, 
-							arr[i].status, 
-							arr[i].zIndex,
-							arr[i].price,
-							arr[i].type,
-							arr[i].input,
-							arr[i].fontColor,
-							arr[i].inputSize,
-							arr[i].lock,
-							arr[i].password,
-							arr[i].prefix,
-							arr[i].seat
-						);
-			    	}
-			    }
-			}
-			
-			if(window.seatreg.bookings.length > 0) {
-				this.syncBoxStatuses(window.seatreg.bookings);
-			}
-			
-			this.generatePrevUploadedImgMarkup();
-			this.setBuilderHeight();
-			this.reorderRoomsSelection();
-			this.updateRoomsSelectionReorderMarkup();
-
-			var roomElem = $('#room-selection-wrapper .room-selection').first();
-			this.changeRoom(roomElem.attr('data-room-location'), roomElem, true, false);
-
-			$('#build-area-loading-wrap').remove();
+			return;
 		}
+
+		this.loadLayout(responseObj);
+	};
+
+	Registration.prototype.startFromScratch = function() {
+		this.addRoom(false,false,true, generateUUID(), 1);
+		$('#room-name-dialog').modal("toggle");
+		this.setBuilderHeight();
+	};
+
+	Registration.prototype.loadLayout = function(responseObj) {
+		var roomData = responseObj.roomData;
+		this.regBoxCounter = responseObj.global.boxCounter;
+		var globalLegendsLength = responseObj.global.legends.length;
+
+		for(var r = 0; r < globalLegendsLength; r++) {
+			this.syncAllLegends(responseObj.global.legends[r].text, responseObj.global.legends[r].color);
+		}
+
+		for (var property in roomData) {
+		    if (roomData.hasOwnProperty(property)) {
+				let roomOrder = null;
+
+				if(roomData[property]['room'].order) {
+					roomOrder = roomData[property]['room'].order;
+				}else {
+					//If room order not provided
+					roomOrder = parseInt(property, 10) + 1;
+				}
+
+		    	this.addRoom(true, false, false, roomData[property]['room'].uuid, roomOrder);
+		    	this.rooms[this.currentRoom].title = roomData[property]['room'].name;
+		    	this.rooms[this.currentRoom].initialName = roomData[property]['room'].name;
+				this.rooms[this.currentRoom].description = roomData[property]['room'].description;
+				var roomBackgroundImage = roomData[property]['room'].backgroundImage;
+		    	if(typeof roomBackgroundImage !== 'undefined' && roomBackgroundImage !== null) {
+		    		this.rooms[this.currentRoom].backgroundImage = roomBackgroundImage;
+		    	}
+		    		
+		    	//update skeleton
+		    	var skeleton = roomData[property]['skeleton'];
+		    	this.rooms[this.currentRoom].skeleton.changeSkeleton(
+					skeleton.width, 
+					skeleton.height, 
+					skeleton.countX, 
+					skeleton.countY, 
+					skeleton.marginX, 
+					skeleton.marginY, 
+					skeleton.buildGrid
+				);
+				var roomLegends = roomData[property]['room'].legends;
+		    	var roomLegendsLength = roomData[property]['room'].legends.length;
+
+		    	for(var k = 0; k < roomLegendsLength; k++) {
+		    		this.rooms[this.currentRoom].legends.push(new Legend(roomLegends[k].text, roomLegends[k].color));
+		    	}
+
+				$('#room-selection-wrapper .room-selection[data-room-location="'+ reg.currentRoom +'"] .room-title').text(reg.rooms[reg.currentRoom].title);
+		    	var arr = roomData[property]['boxes'];
+		    	var arrLength = arr.length;
+
+		    	for(var i = 0; i < arrLength; i++) {  //adding boxes
+		    		var canReg = arr[i].canRegister;
+
+		    		if(canReg == 'true') {
+		    			canReg = true;
+		    		}else if(canReg == 'false'){
+		    			canReg = false;
+		    		}
+		    		this.rooms[this.currentRoom].addBoxS(
+						arr[i].legend,
+						arr[i].xPosition,
+						arr[i].yPosition, 
+						arr[i].width, 
+						arr[i].height, 
+						arr[i].id, 
+						arr[i].color, 
+						arr[i].hoverText.replace(/\^/g,'<br>'), 
+						canReg, 
+						arr[i].status, 
+						arr[i].zIndex,
+						arr[i].price,
+						arr[i].type,
+						arr[i].input,
+						arr[i].fontColor,
+						arr[i].inputSize,
+						arr[i].lock,
+						arr[i].password,
+						arr[i].prefix,
+						arr[i].seat
+					);
+		    	}
+		    }
+		}
+		
+		if(window.seatreg.bookings.length > 0) {
+			this.syncBoxStatuses(window.seatreg.bookings);
+		}
+		
+		this.generatePrevUploadedImgMarkup();
+		this.setBuilderHeight();
+		this.reorderRoomsSelection();
+		this.updateRoomsSelectionReorderMarkup();
+
+		var roomElem = $('#room-selection-wrapper .room-selection').first();
+		this.changeRoom(roomElem.attr('data-room-location'), roomElem, true, false);
+
+		$('#build-area-loading-wrap').remove();
+	};
+
+	//load a layout that came from elsewhere. Stays unsaved until the user presses Save
+	Registration.prototype.importLayout = function(layout, warnings) {
+		var scope = this;
+
+		showBuildAreaLoading();
+
+		//a large layout renders synchronously, so let the loader paint first
+		setTimeout(function() {
+			scope.clearRegistrationData();
+
+			//a layout that fails halfway through leaves no usable rooms behind
+			try {
+				scope.loadLayout(layout);
+			} catch(e) {
+				$('#build-area-loading-wrap').remove();
+				scope.clearRegistrationData();
+				scope.startFromScratch();
+				alertify.error(translator.translate('layoutImportFailed'));
+
+				return;
+			}
+
+			scope.regBoxCounter = Math.max(scope.regBoxCounter, highestBoxNumber(layout) + 1);
+			scope.needToSave = true;
+
+			alertify.success(translator.translate('layoutImported'));
+
+			if(warnings.length > 0) {
+				alertify.set({
+					labels: {
+						ok: translator.translate('ok')
+					},
+					buttonFocus: "ok"
+				});
+				alertify.alert(warnings.join('<br>'));
+			}
+		}, 50);
 	};
 
 	//check if legend not exist add new legend
@@ -2590,6 +2651,166 @@
 		}) + new Date().valueOf();
 	}
 
+	var LAYOUT_EXPORT_VERSION = 1;
+	//mirrors SEATREG_ROOM_DESCRIPTION_REGEX, which the server enforces on save
+	var ROOM_DESCRIPTION_REGEX = /^[\p{L}\p{N}\s\r\n.,-]+$/u;
+
+	function showBuildAreaLoading() {
+		var loadingImg = $('<img>', {
+			"src": window.WP_Seatreg.plugin_dir_url + "img/loading.png",
+			"id": "loading-img"
+		});
+		var imgWrap = $('<div>', {
+			"id": "build-area-loading-wrap"
+		}).append(loadingImg, "<span class='loading-text'>"+ translator.translate('loading') +"</span>");
+
+		$('#build-section').append(imgWrap);
+	}
+
+	//new boxes are named after this counter, so it has to clear every id the layout already uses
+	function highestBoxNumber(layout) {
+		var highest = 0;
+
+		layout.roomData.forEach(function(roomData) {
+			if( !Array.isArray(roomData.boxes) ) {
+				return;
+			}
+
+			roomData.boxes.forEach(function(box) {
+				var number = parseInt(String(box.id).replace('b', ''), 10);
+
+				if( !isNaN(number) && number > highest ) {
+					highest = number;
+				}
+			});
+		});
+
+		return highest;
+	}
+
+	//the builder concatenates several of these into markup, and an imported file is not ours
+	function escapeAngleBrackets(value) {
+		return typeof value === 'string' ? value.replace(/</g, '&lt;').replace(/>/g, '&gt;') : value;
+	}
+
+	function isPlainObject(value) {
+		return typeof value === 'object' && value !== null && !Array.isArray(value);
+	}
+
+	//loadLayout reads these off every entry, so an entry without them throws mid-render
+	function legendIsUsable(legend) {
+		return isPlainObject(legend) && typeof legend.text === 'string';
+	}
+
+	//the lock and price dialogs show these and the save sends them back, so a number has to be one
+	function isNumeric(value) {
+		return typeof value === 'number' ?
+			isFinite(value) :
+			typeof value === 'string' && value.trim() !== '' && isFinite(Number(value));
+	}
+
+	function priceIsUsable(price) {
+		if( isNumeric(price) || price === null || typeof price === 'undefined' ) {
+			return true;
+		}
+
+		return Array.isArray(price) && price.every(function(entry) {
+			return isPlainObject(entry) && isNumeric(entry.price) && typeof entry.description === 'string';
+		});
+	}
+
+	function boxIsUsable(box) {
+		return isPlainObject(box) &&
+			typeof box.hoverText === 'string' &&
+			isNumeric(box.seat) &&
+			(typeof box.password === 'string' || box.password === null || typeof box.password === 'undefined') &&
+			priceIsUsable(box.price);
+	}
+
+	//rooms whose description the server would reject, so the user hears it now and not at save time
+	function roomsWithInvalidDescription(layout) {
+		return layout.roomData.filter(function(roomData) {
+			var description = roomData.room ? roomData.room.description : '';
+
+			return typeof description === 'string' && description !== '' && !ROOM_DESCRIPTION_REGEX.test(description);
+		}).map(function(roomData) {
+			return escapeAngleBrackets(roomData.room.name);
+		});
+	}
+
+	/*
+		Read a layout export file. Checks only what loading the layout dereferences - the layout
+		is validated in full on the server when the user saves it.
+	*/
+	function parseLayoutExportFile(text) {
+		var file;
+
+		try {
+			file = JSON.parse(text);
+		} catch(e) {
+			return { error: translator.translate('invalidLayoutFile') };
+		}
+
+		if( !isPlainObject(file) || typeof file.seatregLayoutExport !== 'number' ) {
+			return { error: translator.translate('invalidLayoutFile') };
+		}
+
+		if( file.seatregLayoutExport > LAYOUT_EXPORT_VERSION ) {
+			return { error: translator.translate('layoutFileFromNewerVersion') };
+		}
+
+		var layout = file.layout;
+
+		if( !isPlainObject(layout) || !isPlainObject(layout.global) || !Array.isArray(layout.roomData) || layout.roomData.length === 0 ) {
+			return { error: translator.translate('invalidLayoutFile') };
+		}
+
+		if( typeof layout.global.boxCounter !== 'number' || !Array.isArray(layout.global.legends) || !layout.global.legends.every(legendIsUsable) ) {
+			return { error: translator.translate('invalidLayoutFile') };
+		}
+
+		var roomsAreUsable = layout.roomData.every(function(roomData) {
+			return isPlainObject(roomData) &&
+				isPlainObject(roomData.skeleton) &&
+				isPlainObject(roomData.room) &&
+				Array.isArray(roomData.room.legends) &&
+				roomData.room.legends.every(legendIsUsable) &&
+				Array.isArray(roomData.boxes) &&
+				roomData.boxes.every(boxIsUsable);
+		});
+
+		if( !roomsAreUsable ) {
+			return { error: translator.translate('invalidLayoutFile') };
+		}
+
+		layout.roomData.forEach(function(roomData) {
+			//the file carries no image bytes, so a name in it points at nothing here
+			roomData.room.backgroundImage = null;
+			roomData.room.name = escapeAngleBrackets(roomData.room.name);
+			roomData.room.text = escapeAngleBrackets(roomData.room.text);
+			roomData.room.description = escapeAngleBrackets(roomData.room.description);
+
+			roomData.boxes.forEach(function(box) {
+				box.hoverText = escapeAngleBrackets(box.hoverText);
+				box.legend = escapeAngleBrackets(box.legend);
+				box.input = escapeAngleBrackets(box.input);
+				box.seat = Number(box.seat);
+				box.password = typeof box.password === 'string' ? box.password : '';
+
+				if( Array.isArray(box.price) ) {
+					box.price.forEach(function(entry) {
+						entry.price = Number(entry.price);
+						entry.uuid = typeof entry.uuid === 'string' ? entry.uuid : generateUUID();
+					});
+				}else {
+					box.price = isNumeric(box.price) ? Number(box.price) : 0;
+				}
+			});
+		});
+
+		return { layout: layout };
+	}
+
 	/*
 
 		*----------Init jquery ui and other ----------
@@ -2707,22 +2928,32 @@
 		selectedBoxes.forEach(function(box) {
 			if(box.canRegister) {
 				var boxLocation = currentRoom.findBox(box.id);
+				var $lockLabel = $('<label>')
+					.text(seatregFormat(translator.translate('lockSeat'), [seatregSeatNouns().singular]))
+					.append( $('<input>').attr('type', 'checkbox').prop('checked', box.lock === true) );
+				var $passwordLabel = $('<label>')
+					.text(translator.translate('setPassword'))
+					.append( $('<input>').attr('type', 'text').val(box.password) );
 
 				$lockWrap.append(
-					'<div class="lock-item" data-box-location="' + boxLocation + '">' + 
-						'<div class="lock-item-seat">'  + box.seat  + '</div>' +
-						'<label>' + seatregFormat(translator.translate('lockSeat'), [seatregSeatNouns().singular]) +
-							'<input type="checkbox" ' + (box.lock ? "checked" : "") + ' />' + 
-						'</label>' +
-						'<label>' + translator.translate('setPassword') + 
-							'<input type="text" value="' + box.password + '" />' + 
-						'</label>' + 
-					'</div>'
+					$('<div>').addClass('lock-item').attr('data-box-location', boxLocation).append(
+						$('<div>').addClass('lock-item-seat').text(box.seat),
+						$lockLabel,
+						$passwordLabel
+					)
 				);
 			}
 		});
 
 	});
+
+	function createPriceInput(value, inputEnabled) {
+		return $('<input>')
+			.addClass('price-input')
+			.attr({ type: 'number', min: '0', oninput: 'this.value = Math.abs(this.value)' })
+			.prop('disabled', !inputEnabled)
+			.val(value);
+	}
 
 	$('#price-dialog').on('show.bs.modal', function() {
 		var $pricingWrap = $('#selected-seats-for-pricing');
@@ -2759,27 +2990,40 @@
 				var boxLocation = currentRoom.findBox(box.id);
 				var hasMultiPrice = Array.isArray(box.price);
 				var inputEnabled = box.status === 'noStatus';
+				var $prices = $('<div>').addClass('prices');
 
 				$pricingWrap.append(
-					'<div class="price-item" data-box-location="' + boxLocation + '">' + 
-						'<div class="price-item-seat">NR: '  + box.seat  + '</div>' +
-						'<div class="prices"></div>' +
-						(inputEnabled ? '<div class="price-controls"><i class="fa fa-plus add-price" aria-hidden="true" title="Add price"></i></div>' : '<div class="alert alert-info">Occupied seat price cant be changed</div>') +
-					'</div>'
+					$('<div>').addClass('price-item').attr('data-box-location', boxLocation).append(
+						$('<div>').addClass('price-item-seat').text('NR: ' + box.seat),
+						$prices,
+						inputEnabled ?
+							$('<div>').addClass('price-controls').append(
+								$('<i>').addClass('fa fa-plus add-price').attr({ 'aria-hidden': 'true', 'title': 'Add price' })
+							) :
+							$('<div>').addClass('alert alert-info').text('Occupied seat price cant be changed')
+					)
 				);
 
 				if(hasMultiPrice) {
 					box.price.forEach(function(price) {
-						$pricingWrap.find('.price-item[data-box-location="'+ boxLocation +'"] .prices').append('<div class="input-wrap multi-input" data-price-uuid="' + price.uuid + '">' +
-							'<input type="number" class="price-input" min="0"' + (!inputEnabled ? " disabled ": " ") + 'oninput="this.value = Math.abs(this.value)" value="' + price.price + '" />' + 
-							'<input type="text" class="text-input" placeholder="Description"' + (!inputEnabled ? " disabled ": " ") + 'value="' + price.description + '" />' + 
-							(inputEnabled ? '<i class="fa fa-trash remove-price" aria-hidden="true"></i>': '') +
-						'</div>');
+						var $inputWrap = $('<div>').addClass('input-wrap multi-input').attr('data-price-uuid', price.uuid).append(
+							createPriceInput(price.price, inputEnabled),
+							$('<input>').attr({ type: 'text', placeholder: 'Description' })
+								.addClass('text-input')
+								.prop('disabled', !inputEnabled)
+								.val(price.description)
+						);
+
+						if(inputEnabled) {
+							$inputWrap.append( $('<i>').addClass('fa fa-trash remove-price').attr('aria-hidden', 'true') );
+						}
+
+						$prices.append($inputWrap);
 					});
 				}else {
-					$pricingWrap.find('.price-item[data-box-location="'+ boxLocation +'"] .prices').append('<div class="input-wrap">' +
-						'<input type="number" class="price-input" min="0"' + (!inputEnabled ? " disabled ": " ") + 'oninput="this.value = Math.abs(this.value)" value="' + box.price + '" />' + 
-					'</div>');
+					$prices.append(
+						$('<div>').addClass('input-wrap').append( createPriceInput(box.price, inputEnabled) )
+					);
 				}
 			}
 		});
@@ -3421,6 +3665,36 @@
 		$(this).blur().prop('disabled', false);
 	});
 
+	function submitLayoutExport() {
+		var $form = $('#export-layout-form');
+
+		$form.find('[name="registration-code"]').val(window.seatreg.selectedRegistration);
+		$form.submit();
+	}
+
+	$('#export-layout').on('click', function() {
+		//the file comes from the server, so it holds the last save and not what is on screen
+		if(reg.needToSave) {
+			alertify.set({
+				labels: {
+					ok: translator.translate('ok'),
+					cancel: translator.translate('cancel')
+				},
+				buttonFocus: "cancel"
+			});
+
+			alertify.confirm(translator.translate('exportUnsavedChanges'), function(e) {
+				if(e) {
+					submitLayoutExport();
+				}
+			});
+
+			return;
+		}
+
+		submitLayoutExport();
+	});
+
 	$('#box-hover-submit').on('click', function() {
 		reg.checkBubbles();
 
@@ -3708,6 +3982,238 @@
 		$('#activ-room-img-wrap').html(seatregFormat(translator.translate('noBgImageInRoom'), [seatregRoomNouns().singular]));
 	});
 	
+	/*
+
+		*----------Layout start dialog ----------
+	*/
+
+	var layoutStartChoiceMade = false;
+
+	Registration.prototype.showLayoutStartDialog = function() {
+		$('#layout-start-dialog').modal('show');
+	};
+
+	function layoutStartShowStep(step) {
+		var isChoice = step === 'choice';
+
+		$('#layout-start-dialog .layout-start__step').hide();
+		$('#layout-start-dialog .layout-start__step[data-step="' + step + '"]').show();
+		$('#layout-start-dialog .layout-start__back').toggle(!isChoice);
+		$('#layout-start-dialog .layout-start__load').toggle(!isChoice);
+		layoutStartMessage('');
+	}
+
+	function layoutStartMessage(text, type) {
+		var $message = $('#layout-start-dialog .layout-start__message');
+
+		if(text === '') {
+			$message.empty();
+
+			return;
+		}
+
+		$message.html(
+			$('<div>').addClass('alert alert-' + (type || 'danger')).attr('role', 'alert').text(text)
+		);
+	}
+
+	function layoutStartLoading(isLoading) {
+		$('#layout-start-dialog .layout-start__loading').toggle(isLoading);
+		$('#layout-start-dialog .layout-start__load').prop('disabled', isLoading);
+	}
+
+	function layoutStartApplyImport(layout, warnings) {
+		var badDescriptionRooms = roomsWithInvalidDescription(layout);
+
+		if(badDescriptionRooms.length > 0) {
+			warnings.push(
+				seatregFormat(translator.translate('layoutImportDescriptionWarning'), [badDescriptionRooms.join(', ')])
+			);
+		}
+
+		layoutStartChoiceMade = true;
+
+		//dismissed while the load was running, so there is no hide left to wait for and a scratch room is already up
+		if( !$('#layout-start-dialog').is(':visible') ) {
+			$('#room-name-dialog').modal('hide');
+			reg.importLayout(layout, warnings);
+
+			return;
+		}
+
+		$('#layout-start-dialog').one('hidden.bs.modal', function() {
+			reg.importLayout(layout, warnings);
+		}).modal('hide');
+	}
+
+	function layoutStartLoadSources() {
+		var $select = $('#layout-start-source');
+		var promise = $.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'seatreg_get_layout_sources',
+				security: WP_Seatreg.nonce,
+				code: window.seatreg.selectedRegistration
+			}
+		});
+
+		$select.empty();
+		layoutStartLoading(true);
+
+		promise.always(function() {
+			layoutStartLoading(false);
+		});
+
+		promise.done(function(data) {
+			if(data._response.type !== 'ok') {
+				layoutStartMessage(translator.translate('layoutSourcesLoadFailed'));
+
+				return;
+			}
+
+			if(data._response.data.length === 0) {
+				$('#layout-start-dialog .layout-start__load').hide();
+				layoutStartMessage(translator.translate('noLayoutsToCopy'), 'info');
+
+				return;
+			}
+
+			data._response.data.forEach(function(source) {
+				$select.append( $('<option>').attr('value', source.code).text(source.name) );
+			});
+		});
+
+		promise.fail(function() {
+			layoutStartMessage(translator.translate('layoutSourcesLoadFailed'));
+		});
+	}
+
+	function layoutStartCopyFromRegistration() {
+		var sourceCode = $('#layout-start-source').val();
+		var promise;
+
+		if(!sourceCode) {
+			return;
+		}
+
+		promise = $.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'seatreg_copy_registration_layout',
+				security: WP_Seatreg.nonce,
+				code: window.seatreg.selectedRegistration,
+				data: sourceCode
+			}
+		});
+
+		layoutStartMessage('');
+		layoutStartLoading(true);
+
+		promise.always(function() {
+			layoutStartLoading(false);
+		});
+
+		promise.done(function(data) {
+			if(data._response.type !== 'ok') {
+				layoutStartMessage(data._response.text || translator.translate('layoutCopyFailed'));
+
+				return;
+			}
+
+			window.seatreg.uploadedImages = data._response.data.uploadedImages;
+			layoutStartApplyImport(
+				data._response.data.layout,
+				data._response.data.imagesCopied ? [] : [translator.translate('roomImagesCopyFailed')]
+			);
+		});
+
+		promise.fail(function() {
+			layoutStartMessage(translator.translate('layoutCopyFailed'));
+		});
+	}
+
+	function layoutStartImportFile() {
+		var file = $('#layout-start-file')[0].files[0];
+		var fileReader;
+
+		if(!file) {
+			layoutStartMessage(translator.translate('chooseLayoutFile'));
+
+			return;
+		}
+
+		fileReader = new FileReader();
+		layoutStartMessage('');
+		layoutStartLoading(true);
+
+		fileReader.onload = function() {
+			var parsed = parseLayoutExportFile(fileReader.result);
+
+			layoutStartLoading(false);
+
+			if(parsed.error) {
+				layoutStartMessage(parsed.error);
+
+				return;
+			}
+
+			layoutStartApplyImport(parsed.layout, []);
+		};
+
+		fileReader.onerror = function() {
+			layoutStartLoading(false);
+			layoutStartMessage(translator.translate('layoutFileUnreadable'));
+		};
+
+		fileReader.readAsText(file);
+	}
+
+	$('#layout-start-dialog').on('show.bs.modal', function() {
+		layoutStartChoiceMade = false;
+		$('#layout-start-file').val('');
+		layoutStartShowStep('choice');
+	});
+
+	//with no rooms nothing in the builder works, so closing the dialog has to leave one behind
+	$('#layout-start-dialog').on('hidden.bs.modal', function() {
+		if(!layoutStartChoiceMade) {
+			reg.startFromScratch();
+		}
+	});
+
+	$('#layout-start-dialog').on('click', '.layout-start__choice', function() {
+		var choice = $(this).attr('data-choice');
+
+		//an empty layout is what closing the dialog already does
+		if(choice === 'scratch') {
+			$('#layout-start-dialog').modal('hide');
+
+			return;
+		}
+
+		layoutStartShowStep(choice);
+
+		if(choice === 'registration') {
+			layoutStartLoadSources();
+		}
+	});
+
+	$('#layout-start-dialog').on('click', '.layout-start__back', function() {
+		layoutStartShowStep('choice');
+	});
+
+	$('#layout-start-dialog').on('click', '.layout-start__load', function() {
+		if( $('#layout-start-dialog .layout-start__step[data-step="registration"]').is(':visible') ) {
+			layoutStartCopyFromRegistration();
+		}else {
+			layoutStartImportFile();
+		}
+	});
+
 	$('#file-sub').on('click', function(e) {
 		var picName = $('#img-upload').val().split(/(\\|\/)/g).pop();
 		var re = /^[0-9a-zA-Z\-._]{1,90}$/;

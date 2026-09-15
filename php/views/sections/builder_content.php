@@ -86,7 +86,18 @@
 			<a id="registration-link" class="save-check view-btn" target="_blank" href="<?php echo esc_url(SeatregLinksService::getRegistrationURL()); ?>">
 				<span style="margin-left:4px" class="link-text"><?php esc_html_e('View registration', 'seatreg');?></span>
 			</a>
+			<div id="export-layout" title="<?php esc_attr_e('Download the saved layout as a file you can import into a registration that has none yet, on this site or another one. Background images are not included, and any seat passwords are in the file in plain text.', 'seatreg'); ?>">
+				<i class="fa fa-download"></i>
+				<span style="margin-left:4px"><?php esc_html_e('Export', 'seatreg');?></span>
+			</div>
 		</div>
+
+		<?php /* Submitted by the Export button, which fills the code in for the registration being edited. */ ?>
+		<form id="export-layout-form" action="<?php echo esc_url(get_admin_url()); ?>admin-post.php" method="post">
+			<input type="hidden" name="registration-code" value="" />
+			<input type="hidden" name="action" value="seatreg_export_layout" />
+			<?php echo seatrag_generate_nonce_field('seatreg-admin-nonce'); ?>
+		</form>
 		<div id="server-response"></div>
 	</div><!-- end of build-controls -->
 
@@ -372,7 +383,46 @@
 	</div> 
 
 	<!-- end of #legend-dialog -->
-	
+
+	<div class="modal vert-modal fade" id="layout-start-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog vert-modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title"><?php esc_html_e('How would you like to start?', 'seatreg');?></h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<div class="layout-start__step" data-step="choice">
+						<button type="button" class="layout-start__choice" data-choice="scratch"><?php esc_html_e('Start with an empty layout', 'seatreg');?></button>
+						<button type="button" class="layout-start__choice" data-choice="registration"><?php esc_html_e('Copy a layout from another registration', 'seatreg');?></button>
+						<button type="button" class="layout-start__choice" data-choice="file"><?php esc_html_e('Import a layout file', 'seatreg');?></button>
+					</div>
+
+					<div class="layout-start__step" data-step="registration" style="display:none">
+						<label for="layout-start-source"><?php esc_html_e('Copy the layout of:', 'seatreg');?></label>
+						<select id="layout-start-source"></select>
+						<p><?php esc_html_e('Background images are copied along with it. Nothing is saved until you press Save.', 'seatreg');?></p>
+					</div>
+
+					<div class="layout-start__step" data-step="file" style="display:none">
+						<label for="layout-start-file"><?php esc_html_e('Choose a layout file:', 'seatreg');?></label>
+						<input type="file" id="layout-start-file" accept=".json,application/json">
+						<p><?php esc_html_e('Use a file exported from a registration, on this site or another one. Background images are not part of the file. Nothing is saved until you press Save.', 'seatreg');?></p>
+					</div>
+
+					<div class="layout-start__loading" style="display:none">
+						<img src="<?php echo esc_url(SEATREG_PLUGIN_FOLDER_URL . 'img/ajax_loader.gif'); ?>" alt="Loading...">
+					</div>
+					<div class="layout-start__message"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default layout-start__back" style="display:none"><?php esc_html_e('Back', 'seatreg');?></button>
+					<button type="button" class="btn btn-primary layout-start__load" style="display:none"><?php esc_html_e('Load', 'seatreg');?></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="modal vert-modal fade" id="room-name-dialog" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog vert-modal-dialog">
 			<div class="modal-content">

@@ -123,8 +123,13 @@ class SeatregDataValidation {
         $validationStatus = new SeatregValidationStatus();
         $layout = json_decode($data);
 
-        if( !property_exists($layout, 'global') ) {
-            $validationStatus->setInvalid('global property is missing');
+        if( !is_object($layout) ) {
+            $validationStatus->setInvalid('Layout is not valid JSON');
+            return $validationStatus;
+        }
+
+        if( !property_exists($layout, 'global') || !is_object($layout->global) ) {
+            $validationStatus->setInvalid('global property is missing or invalid');
             return $validationStatus;
         }
 
@@ -168,8 +173,13 @@ class SeatregDataValidation {
         }
 
         foreach($layout->roomData as $roomData) {
-            if( !property_exists($roomData, 'skeleton') ) {
-                $validationStatus->setInvalid('skeleton missing in room');
+            if( !is_object($roomData) ) {
+                $validationStatus->setInvalid('roomData entry is invalid');
+                return $validationStatus;
+            }
+
+            if( !property_exists($roomData, 'skeleton') || !is_object($roomData->skeleton) ) {
+                $validationStatus->setInvalid('skeleton missing or invalid in room');
                 return $validationStatus;
             }
 
@@ -208,8 +218,8 @@ class SeatregDataValidation {
                 return $validationStatus;
             }
 
-            if( !property_exists($roomData, 'room') ) {
-                $validationStatus->setInvalid('room missing in room');
+            if( !property_exists($roomData, 'room') || !is_object($roomData->room) ) {
+                $validationStatus->setInvalid('room missing or invalid in room');
                 return $validationStatus;
             }
 
@@ -350,7 +360,7 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($box, 'seat') ) {
+                if( !property_exists($box, 'seat') || !is_numeric($box->seat) ) {
                     $validationStatus->setInvalid('box seat is missing or invalid');
                     return $validationStatus;
                 }
@@ -377,11 +387,11 @@ class SeatregDataValidation {
                             return $validationStatus;
                         }
         
-                        if( !property_exists($price, 'price') ) {
-                            $validationStatus->setInvalid('Price is missing (multi price)');
+                        if( !property_exists($price, 'price') || !( is_numeric($price->price) || is_null($price->price) ) ) {
+                            $validationStatus->setInvalid('Price is missing or invalid (multi price)');
                             return $validationStatus;
                         }
-        
+
                         if( !property_exists($price, 'description') || !is_string($price->description) || strlen($price->description) === 0) {
                             $validationStatus->setInvalid('Price description is missing or invalid (multi price)');
                             return $validationStatus;
@@ -391,6 +401,11 @@ class SeatregDataValidation {
 
                 if( !property_exists($box, 'lock') || !is_bool($box->lock) ) {
                     $validationStatus->setInvalid('box lock is missing or invalid');
+                    return $validationStatus;
+                }
+
+                if( property_exists($box, 'password') && !( is_string($box->password) || is_null($box->password) ) ) {
+                    $validationStatus->setInvalid('box password is invalid');
                     return $validationStatus;
                 }
             }
