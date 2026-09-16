@@ -35,7 +35,8 @@
 	window.seatreg = {
 		builder: null,
 		selectedRegistration: null,
-		bookings: []
+		bookings: [],
+		uploadedImages: []
 	};
 
 	function seaterg_admin_ajax(action, code, data) {
@@ -172,6 +173,7 @@
 	function seatreg_clear_builder_data() {
 		window.seatreg.builder.clearRegistrationData();
 		window.seatreg.bookings = [];
+		window.seatreg.uploadedImages = [];
 		window.seatreg.selectedRegistration = null;
 		window.seatreg.selectedRegistrationName = null;
 	}
@@ -235,9 +237,7 @@
 					}
 				}
 
-				if(data._response.data.uploadedImages.length > 0) {
-					window.seatreg.uploadedImages = data._response.data.uploadedImages;
-				}
+				window.seatreg.uploadedImages = data._response.data.uploadedImages;
 				$('.reg-title-name').text(registrationName);
 
 				window.seatreg.selectedRegistration = code;
@@ -1464,21 +1464,23 @@ $('#seatreg-booking-manager').on('change keyup', '#add-booking-modal-form input[
 	$modalBodyItem.find('input[name="seat-multi-price[]"]').remove();
 
 	if(Array.isArray(seatPrice)) {
-		$modalBodyItem.find('.add-modal-input-wrap').last().after(`
-			<div class="add-modal-input-wrap" data-type="price-selection">
-				<label>
-					<h5>
-						${translator.translate('price')}
-					</h5>
-					<select name="seat-multi-price[]">
-						${seatPrice.map((price) => {
-							return `<option value="${price.uuid}">${price.price} (${price.description})</option>`;
-						}).join('')}
-					</select>
-					<div class="input-error"></div>
-				</label>
-			</div>
-		`);
+		const $priceSelect = $('<select>').attr('name', 'seat-multi-price[]');
+
+		seatPrice.forEach((price) => {
+			$priceSelect.append(
+				$('<option>').val(price.uuid).text(`${price.price} (${price.description})`)
+			);
+		});
+
+		$modalBodyItem.find('.add-modal-input-wrap').last().after(
+			$('<div>').addClass('add-modal-input-wrap').attr('data-type', 'price-selection').append(
+				$('<label>').append(
+					$('<h5>').text(translator.translate('price')),
+					$priceSelect,
+					$('<div>').addClass('input-error')
+				)
+			)
+		);
 	}else {
 		$modalBodyItem.find('.add-modal-input-wrap').last().after(`
 			<input type="hidden" name="seat-multi-price[]" value="" />			

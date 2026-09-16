@@ -1,4 +1,5 @@
 const path = require('path');
+const { readFile } = require('fs/promises');
 const { expect } = require('@playwright/test');
 const { TIMEOUTS } = require('../../utils/timeouts');
 const { clickUntil, expectModalShown, expectModalHidden } = require('../../utils/interactions');
@@ -479,9 +480,114 @@ class LayoutBuilderPage {
 	 * an ignored click. Safe to retry: the handler disables the button in flight.
 	 */
 	async open(code) {
+		await this.openRaw(code);
+
+		/* A registration with no layout yet is asked how it wants to start. Every
+		   test that is not about that dialog wants the empty layout it used to get. */
+		if (await this.startDialog.isVisible()) {
+			await this.startFromScratch();
+		}
+	}
+
+	/**
+	 * Open the builder and leave whatever it puts up alone - the start dialog for a
+	 * registration with no layout, the loaded rooms for one that has a saved one.
+	 * Settling on one of those is what says the layout finished loading.
+	 */
+	async openRaw(code) {
 		await clickUntil(this.homePage.layoutButton(code), this.popup, {
 			reaction: TIMEOUTS.DEFAULT,
 		});
+
+		/* Only one of these ever arrives, so the other is left to time out quietly. */
+		await Promise.race([
+			this.startDialog.waitFor({ state: 'visible', timeout: TIMEOUTS.NAVIGATION }).catch(() => {}),
+			this.roomSelections
+				.first()
+				.waitFor({ state: 'visible', timeout: TIMEOUTS.NAVIGATION })
+				.catch(() => {}),
+		]);
+	}
+
+	/* Start dialog, shown only while the registration has no saved layout */
+
+	get startDialog() {
+		return this.page.locator('#layout-start-dialog');
+	}
+
+	/** @param {string} choice 'scratch', 'registration' or 'file' */
+	startChoice(choice) {
+		return this.startDialog.locator(`.layout-start__choice[data-choice="${choice}"]`);
+	}
+
+	get startDialogSource() {
+		return this.page.locator('#layout-start-source');
+	}
+
+	get startDialogFileInput() {
+		return this.page.locator('#layout-start-file');
+	}
+
+	get startDialogMessage() {
+		return this.startDialog.locator('.layout-start__message');
+	}
+
+	get startDialogLoadButton() {
+		return this.startDialog.locator('.layout-start__load');
+	}
+
+	/** The room name dialog takes over from here, so its backdrop stays up. */
+	async startFromScratch() {
+		await this.startChoice('scratch').click();
+		await expect(this.startDialog).toBeHidden();
+		await this.waitForRoomNameDialog();
+	}
+
+	async copyLayoutFrom(sourceCode) {
+		await this.startChoice('registration').click();
+		await this.startDialogSource.selectOption(sourceCode);
+		await this.startDialogLoadButton.click();
+		await expectModalHidden(this.startDialog);
+	}
+
+	/* Export */
+
+	get exportButton() {
+		return this.page.locator('#export-layout');
+	}
+
+	/**
+	 * Download the layout as it was last saved.
+	 *
+	 * @param {boolean} options.discardingUnsavedChanges Answer the confirm the
+	 * builder puts up when there are changes the file will not hold.
+	 * @return {Promise<{contents: object, path: string}>} The parsed file and where
+	 * Playwright put it, so a test can hand the same artifact to importLayoutFile().
+	 */
+	async exportLayout({ discardingUnsavedChanges = false } = {}) {
+		const started = this.page.waitForEvent('download', { timeout: TIMEOUTS.NAVIGATION });
+
+		await this.exportButton.click();
+
+		if (discardingUnsavedChanges) {
+			await expect(this.confirmDialog).toBeVisible();
+			await this.confirmOkButton.click();
+		}
+
+		const download = await started;
+		const filePath = await download.path();
+
+		return { contents: JSON.parse(await readFile(filePath, 'utf8')), path: filePath };
+	}
+
+	/** A refused file leaves the dialog on its file step, ready for another try. */
+	async importLayoutFile(filePath) {
+		if (await this.startChoice('file').isVisible()) {
+			await this.startChoice('file').click();
+		}
+
+		await this.startDialogFileInput.setInputFiles(filePath);
+		await this.startDialogLoadButton.click();
 	}
 
 	async nameFirstRoom(roomName) {
@@ -574,7 +680,8 @@ class LayoutBuilderPage {
 
 	/**
 	 * The builder creates a seat on mousedown over a grid box and leaves the new
-	 * seat sitting on top of it, so each grid box is only ever used once.
+	 * seat sitting on top of it, so each grid box is only ever used once - the ones
+	 * the room already covered are skipped, letting a test place seats in rounds.
 	 */
 	async placeSeats(count) {
 		await this.seatTool.click();
@@ -582,7 +689,7 @@ class LayoutBuilderPage {
 		const placed = await this.seats.count();
 
 		for (let i = 0; i < count; i++) {
-			await this.gridBoxes.nth(i).click();
+			await this.gridBoxes.nth(placed + i).click();
 		}
 
 		await expect(this.seats).toHaveCount(placed + count);
@@ -830,12 +937,16 @@ class LayoutBuilderPage {
 
 	/**
 	 * The builder marks itself as having unsaved changes as soon as it loads a
-	 * registration, so closing always asks for confirmation first.
+	 * registration, so closing asks for confirmation unless save() cleared that
+	 * first. Discards whatever is pending.
 	 */
 	async close() {
 		await this.closeButton.click();
-		await expect(this.confirmDialog).toBeVisible();
-		await this.confirmOkButton.click();
+
+		if (await this.confirmDialog.isVisible()) {
+			await this.confirmOkButton.click();
+		}
+
 		await expect(this.popup).toBeHidden();
 	}
 }

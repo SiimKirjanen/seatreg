@@ -73,6 +73,12 @@ define('SEATREG_ENCRYPTED_VALUE_PREFIX', 'seatreg_enc_v1:');
 // Migrations
 define('SEATREG_TRIGGER_MIGRATIONS', '4');
 
+// Layout export
+//Exported layout .json files can move between sites, so every export is stamped with this number and a plugin refuses one stamped higher than its own
+//Bump it when a layout change breaks older export, say a seat price turning from a number into an object
+//parseLayoutExportFile in js/build.js then decides what becomes of those older files
+define('SEATREG_LAYOUT_EXPORT_VERSION', 1);
+
 // Status
 define('SEATREG_BOOKING_DEFAULT', 0);
 define('SEATREG_BOOKING_PENDING', 1);
