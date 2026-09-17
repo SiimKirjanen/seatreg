@@ -50,6 +50,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 == Changelog ==
 
 = 1.78.0 =
+* Custom field labels and their dropdown options can now be translated with Polylang.
 * You can now export a layout to a file from the layout editor.
 * A registration without a layout can now start from another registration's layout or from an exported layout file.
 

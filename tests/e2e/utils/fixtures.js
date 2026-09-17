@@ -69,4 +69,19 @@ function setSeatNouns(page, { code, singular, plural }) {
 	return askFixture(page, 'set_seat_nouns', { code, singular, plural });
 }
 
-module.exports = { createPost, createUser, setRoomNouns, setSeatNouns };
+/**
+ * Answer the custom field filters with this text, the way a translation plugin
+ * would. Stored under the label or the option it translates, so a caller naming
+ * its own is the only one affected.
+ */
+function setCustomFieldTranslation(page, { text, translation }) {
+	return askFixture(page, 'set_custom_field_translation', { text, translation });
+}
+
+module.exports = {
+	createPost,
+	createUser,
+	setRoomNouns,
+	setSeatNouns,
+	setCustomFieldTranslation,
+};

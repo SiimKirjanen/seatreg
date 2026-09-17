@@ -3,6 +3,7 @@ const { SettingsPage, BOOKER } = require('./settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 const { uniqueBookerEmail } = require('../../utils/mail');
 const { validateToken, bookings } = require('../../utils/public-api');
+const { setCustomFieldTranslation } = require('../../utils/fixtures');
 const { isoDate } = require('../../utils/dates');
 
 /* One of every kind the builder offers. The select's options are what it puts
@@ -24,6 +25,25 @@ const AT_LEAST_ONE_OPTION = 'You must have at least one option.';
 /* A name with characters the builder does not allow: it takes letters, digits,
    a plus and spaces, and nothing else. */
 const ILLEGAL_LABEL = 'E-mail?';
+
+/* What a translation plugin, standing behind the custom field filters, calls a
+   label and a select option in another language. */
+const TRANSLATED_LABEL = 'Telefon';
+const TRANSLATED_OPTION = 'Kala';
+
+/* The plugin names a custom field string after the text itself, not after the
+   registration, so a label two workers share would be one string. Everything the
+   translation test names is its own, spelled the way the builder allows. */
+let textCounter = 0;
+
+function uniqueCustomFieldText(prefix) {
+	textCounter += 1;
+
+	const run = Date.now().toString(36);
+	const worker = process.env.TEST_WORKER_INDEX ?? '0';
+
+	return `${prefix} ${run}${worker}${textCounter}`;
+}
 
 /* A rule that can be measured off a seat once the registration draws one.
    Nothing here may use > or quotes: the plugin escapes the styles twice on the
@@ -78,6 +98,62 @@ test.describe('Settings advanced', () => {
 		);
 
 		expect(await registration.customFieldLabels()).toEqual(listed);
+	});
+
+	/* A label is what the booking is stored under and what every lookup matches on,
+	   so a translation may only reach the booker's eyes. The booking going through
+	   is what proves it did: the server turns down an answer to a field it cannot
+	   find by the label it was given. */
+	test('shows a booker the translated custom field while keeping the words it was given', async ({
+		page,
+	}) => {
+		const textLabel = uniqueCustomFieldText('Phone');
+		const selectLabel = uniqueCustomFieldText('Meal');
+		const firstOption = uniqueCustomFieldText('Fish');
+		const secondOption = uniqueCustomFieldText('Meat');
+
+		await settings.addCustomField({ label: textLabel, type: 'text' });
+		await settings.addCustomField({
+			label: selectLabel,
+			type: 'select',
+			options: [firstOption, secondOption],
+		});
+
+		await settings.allowBookings();
+
+		await setCustomFieldTranslation(page, { text: textLabel, translation: TRANSLATED_LABEL });
+		await setCustomFieldTranslation(page, { text: firstOption, translation: TRANSLATED_OPTION });
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.bookSeats(1);
+
+		expect(await registration.customFieldLabels()).toEqual([TRANSLATED_LABEL, selectLabel]);
+		await expect(registration.checkoutField(selectLabel).locator('option')).toHaveText([
+			TRANSLATED_OPTION,
+			secondOption,
+		]);
+
+		/* The field is still reached by the label the admin typed, and the option
+		   still carries it as its value. */
+		await expect(registration.customField(textLabel)).toBeVisible();
+		await expect(registration.checkoutField(selectLabel).locator('option').first()).toHaveValue(
+			firstOption
+		);
+
+		await registration.fillBooking({
+			...BOOKER,
+			email: uniqueBookerEmail(),
+			customFields: { [textLabel]: TAKEN_PHONE },
+		});
+		await registration.submitBooking();
+
+		await expect(registration.bookingConfirmed).toBeVisible();
+
+		await settings.open(code);
+		await settings.openSection('advanced');
+
+		expect(await settings.customFieldLabels()).toEqual([textLabel, selectLabel]);
 	});
 
 	test('refuses a custom field it cannot use', async () => {

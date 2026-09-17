@@ -115,7 +115,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var NotifyBookerPendingBooking = ' . esc_js($data->notify_booker_pending_booking) . ';';
 			$inlineScript .= 'var dataReg = jQuery.parseJSON(' . wp_json_encode(SeatregLayoutService::hideSensitiveData($data->registration_layout)) . ');';
 			$inlineScript .= 'var roomsInfo = jQuery.parseJSON(' . wp_json_encode($seatsInfo) . ');';
-			$inlineScript .= 'var custF = jQuery.parseJSON(' . wp_json_encode($data->custom_fields) . ');';
+			$inlineScript .= 'var custF = jQuery.parseJSON(' . wp_json_encode( wp_json_encode( SeatregCustomFieldService::translateDefinitions($data->custom_fields) ) ) . ');';
 			$inlineScript .= 'var regTime = "' . esc_js($registrationTime) . '";';
 			$inlineScript .= 'var registrations = jQuery.parseJSON(' . wp_json_encode($registrations) . ');';
 			$inlineScript .= 'var ajaxUrl = "'. admin_url('admin-ajax.php') . '";';

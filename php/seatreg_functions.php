@@ -1504,6 +1504,11 @@ function seatreg_generate_settings_form() {
 					<p class="help-block">
 						<?php esc_html_e('Custom fields allow you to ask extra information in bookings.', 'seatreg'); ?>
 					</p>
+					<?php if( SeatregStringTranslationService::isAvailable() ) : ?>
+						<p class="help-block">
+							<?php esc_html_e('Labels and dropdown options can be translated in your translation plugin, in the SeatReg string group', 'seatreg'); ?>.
+						</p>
+					<?php endif; ?>
 					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
 
 					<div class="existing-custom-fields">

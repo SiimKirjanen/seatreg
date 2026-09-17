@@ -41,6 +41,25 @@ class SeatregOptionsRepository {
         );
     }
 
+    /**
+     *
+     * Return the custom fields of every registration that has any
+     *
+     */
+    public static function getCustomFields() {
+        global $wpdb;
+        global $seatreg_db_table_names;
+
+        return $wpdb->get_results(
+            "SELECT b.custom_fields
+            FROM $seatreg_db_table_names->table_seatreg AS a
+            INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b ON a.registration_code = b.registration_code
+            WHERE a.is_deleted = 0
+            AND b.custom_fields IS NOT NULL
+            AND b.custom_fields NOT IN ('', '[]')"
+        );
+    }
+
      /**
      *
      * Return options by confirmation code

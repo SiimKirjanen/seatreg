@@ -250,7 +250,7 @@ class SeatregBookingPDF extends tFPDF {
     protected function customFieldsWithValues($customField, $customData) {
         $cust_len = count(is_array($customData) ? $customData : []);
         $foundIt = false;
-	    $string = $customField['label'] . ': ';
+	    $string = SeatregCustomFieldService::translateLabel($customField['label']) . ': ';
 
         for($k = 0; $k < $cust_len; $k++) {
             if($customData[$k]['label'] == $customField['label'] ) {
@@ -261,6 +261,8 @@ class SeatregBookingPDF extends tFPDF {
                     }else if($customData[$k]['value'] === '0') {
                         $string .= esc_html__('Unchecked', 'seatreg');
                     }
+                }else if($customField['type'] === 'sel') {
+                    $string .= esc_html( SeatregCustomFieldService::translateOption($customField['label'], $customData[$k]['value']) );
                 }else {
                     $string .= esc_html($customData[$k]['value']);
                 }
