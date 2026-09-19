@@ -554,6 +554,10 @@
 		this.hasSavedLayout = false; //export sends the saved layout, so it needs one to exist
 
 		$('#room-selection-wrapper').empty();
+		clearBuildArea();
+		$('.legends').empty();
+		$('#uploaded-images').empty();
+		$('#activ-room-img-wrap').empty();
 	};
 
 	Registration.prototype.setExportAvailability = function() {

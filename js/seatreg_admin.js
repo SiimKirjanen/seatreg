@@ -277,7 +277,7 @@ $('.builder-popup-close').on('click', function() {
 		alertify.confirm(translator.translate('unsavedChanges'),function(e) {
 			if (e) {
 				$('.seatreg-builder-popup').css({'display':'none'});
-				window.seatreg.builder.clearRegistrationData();
+				seatreg_clear_builder_data();
 			} 
 		});
 	}else {
