@@ -99,6 +99,16 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
+    public static function validateCustomFieldLabel($label) {
+        $validationStatus = new SeatregValidationStatus();
+
+        if( !is_string($label) || preg_match(SEATREG_CUSTOM_FIELD_LABEL_REGEX, $label) !== 1 ) {
+            $validationStatus->setInvalid('Custom field label is missing or invalid');
+        }
+
+        return $validationStatus;
+    }
+
     public static function registrationNameDataExists($method) {
         return !empty( $method[ 'registration-name' ] );
     }
@@ -469,7 +479,7 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($customFieldDecoded, 'label') || !is_string($customFieldDecoded->label) || !preg_match('/^[\p{L}\p{N}+\s]+$/u', $customFieldDecoded->label) ) {
+                if( !property_exists($customFieldDecoded, 'label') || !self::validateCustomFieldLabel($customFieldDecoded->label)->valid ) {
                     $validationStatus->setInvalid('Custom field label is missing or invalid');
                     return $validationStatus;
                 }
@@ -663,7 +673,7 @@ class SeatregDataValidation {
 
                 if($foundExistingUnique) {
                     /* translators: %s: Custom field label */
-                    $validationStatus->setInvalid(sprintf(esc_html__('%s field value is already used', 'seatreg'), $assosiatedCustomField->label));
+                    $validationStatus->setInvalid(sprintf(esc_html__('%s field value is already used', 'seatreg'), esc_html( SeatregCustomFieldService::translateLabel($assosiatedCustomField->label) )));
                     return $validationStatus;
                 }
             }

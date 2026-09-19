@@ -462,9 +462,11 @@
 
 						if(createdCustomField.type === 'check') {
 							customFieldValue = customFieldValue === '1' ? translator.translate('yes') : translator.translate('no');
-						}	
+						}else if(createdCustomField.type === 'sel') {
+							customFieldValue = customFieldOptionText(createdCustomField, customFieldValue);
+						}
 
-						tooltipContent += '<div class="seatreg-tooltip-row">' + userEnteredCustomFieldData.label + ': ' + customFieldValue + '</div>';
+						tooltipContent += '<div class="seatreg-tooltip-row">' + escapeHtml(customFieldLabelText(createdCustomField)) + ': ' + escapeHtml(customFieldValue) + '</div>';
 					}
 				});
 			}
@@ -1000,8 +1002,30 @@ SeatReg.prototype.generateCustomFooterFextField = function (customFooterText) {
 	return div;
 };
 
+//For the places that build markup as a string. A translator is not always an administrator
+function escapeHtml(text) {
+	return $('<span></span>').text(text).html();
+}
+
+function customFieldLabelText(custom) {
+	return custom.labelTranslated || custom.label;
+}
+
+function customFieldOptionText(custom, option) {
+	var index = Array.isArray(custom.options) ? custom.options.indexOf(option) : -1;
+
+	if(index === -1 || !Array.isArray(custom.optionsTranslated)) {
+		return option;
+	}
+
+	return custom.optionsTranslated[index] || option;
+}
+
 SeatReg.prototype.generateCustomField = function(custom) {
-	var label = $('<label class="field-label custom-input" data-label="' + custom.label + '"><span class="l-text">' + custom.label +  '</span></label>');
+	//Shown translated, sent back as the admin wrote it, which is what the booking is stored under
+	var label = $('<label class="field-label custom-input"></label>')
+		.attr('data-label', custom.label)
+		.append( $('<span class="l-text"></span>').text(customFieldLabelText(custom)) );
 
 	if(custom.type == 'text') {
 		var optional = custom.optional === true ? true : false;
@@ -1013,7 +1037,7 @@ SeatReg.prototype.generateCustomField = function(custom) {
 		var arrLen = custom.options.length;
 
 		for(var i = 0; i < arrLen; i++) {
-			fieldInput.append('<option value="'+ custom.options[i] +'">' + custom.options[i] + '</option>');
+			fieldInput.append( $('<option></option>').attr('value', custom.options[i]).text(customFieldOptionText(custom, custom.options[i])) );
 		}
 	}
 

@@ -172,7 +172,7 @@ class SeatregBookingService {
         }
 
         foreach($customFieldLabels as $customFieldLabel) {
-            $headers[] = $customFieldLabel;
+            $headers[] = SeatregCustomFieldService::translateLabel($customFieldLabel);
         }
 
         $rows = array();
@@ -205,9 +205,14 @@ class SeatregBookingService {
 
                     if( count($customFieldObject) > 0 && $customFieldObject[0]->type === 'check' ) {
                         $valueToDisplay = $bookingCustomField->value === '1' ? __('Yes', 'seatreg') : __('No', 'seatreg');
+                    }else if( count($customFieldObject) > 0 && $customFieldObject[0]->type === 'sel' ) {
+                        $valueToDisplay = SeatregCustomFieldService::translateOption($bookingCustomField->label, $bookingCustomField->value);
                     }
 
-                    $row[] = array( 'label' => $bookingCustomField->label, 'value' => $valueToDisplay );
+                    $row[] = array(
+                        'label' => SeatregCustomFieldService::translateLabel($bookingCustomField->label),
+                        'value' => $valueToDisplay
+                    );
                 }
             }
 

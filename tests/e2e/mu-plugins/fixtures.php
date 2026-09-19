@@ -128,6 +128,41 @@ add_filter(
 	2
 );
 
+/* The same stand-in for a custom field label and for one option of a select field.
+   The plugin names those strings after the text itself rather than after a
+   registration, so the answer is stored under the text as well, and a test that
+   names its own label leaves the other three workers alone. */
+function seatreg_e2e_custom_field_option( $text ) {
+	return 'seatreg_e2e_custom_field_' . md5( $text );
+}
+
+add_action(
+	'wp_ajax_seatreg_e2e_set_custom_field_translation',
+	function () {
+		seatreg_e2e_fixtures_guard();
+
+		$text        = isset( $_GET['text'] ) ? sanitize_text_field( wp_unslash( $_GET['text'] ) ) : '';
+		$translation = isset( $_GET['translation'] ) ? sanitize_text_field( wp_unslash( $_GET['translation'] ) ) : '';
+
+		if ( '' === $text || '' === $translation ) {
+			wp_send_json_error( 'text and translation are required', 400 );
+		}
+
+		update_option( seatreg_e2e_custom_field_option( $text ), $translation );
+
+		wp_send_json( array( 'text' => $text ) );
+	}
+);
+
+function seatreg_e2e_filter_custom_field_text( $translated, $original ) {
+	$override = get_option( seatreg_e2e_custom_field_option( $original ) );
+
+	return is_string( $override ) && '' !== $override ? $override : $translated;
+}
+
+add_filter( 'seatreg_custom_field_label', 'seatreg_e2e_filter_custom_field_text', 10, 2 );
+add_filter( 'seatreg_custom_field_option', 'seatreg_e2e_filter_custom_field_text', 10, 2 );
+
 /* For asking what someone without the plugin's capabilities can reach. The role is
    whatever the caller names, so nothing here decides what that proves. */
 add_action(

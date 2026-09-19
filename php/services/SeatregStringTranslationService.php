@@ -57,6 +57,32 @@ class SeatregStringTranslationService {
                 );
             }
         }
+
+        foreach( SeatregOptionsRepository::getCustomFields() as $registration ) {
+            $customFields = json_decode($registration->custom_fields);
+
+            if( !is_array($customFields) ) {
+                continue;
+            }
+
+            foreach( $customFields as $customField ) {
+                if( !isset($customField->label) || !is_string($customField->label) ) {
+                    continue;
+                }
+
+                self::register( SeatregCustomFieldService::labelStringName($customField->label), $customField->label );
+
+                if( !isset($customField->options) || !is_array($customField->options) ) {
+                    continue;
+                }
+
+                foreach( $customField->options as $option ) {
+                    if( is_string($option) ) {
+                        self::register( SeatregCustomFieldService::optionStringName($customField->label, $option), $option );
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -96,6 +122,8 @@ class SeatregStringTranslationService {
 
         if( function_exists('pll_register_string') ) {
             pll_register_string($name, $value, SEATREG_TRANSLATION_STRING_GROUP, false);
+
+            return; // Polylang answers the WPML action too, and registering through both lists the string twice
         }
 
         if( has_action('wpml_register_single_string') ) {

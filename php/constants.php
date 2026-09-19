@@ -16,6 +16,7 @@ define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr'
 define('SEATREG_REGISTRATION_NAME_MAX_LENGTH', 255);
 define('SEATREG_REGISTRATION_SEARCH_MAX_LENGTH', 60);
 define('SEATREG_CUSTOM_FIELD_TYPES', array('text', 'check', 'sel'));
+define('SEATREG_CUSTOM_FIELD_LABEL_REGEX', '/^[\p{L}\p{N}+\s]+$/u');
 define('SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH', 100);
 define('SEATREG_DEFAULT_INPUT_MAX_LENGHT', 100);
 define('SEATREG_CUSTOM_PAYMENT_DESCRIPTION', '/^[\p{L}\p{N}+\s.:\/]+$/u');
@@ -125,6 +126,8 @@ define('SEATREG_ACTION_BOOKING_REMOVED', 'seatreg_action_booking_removed');
 // SeatReg filters
 define('SEATREG_FILTER_ROOM_NOUNS', 'seatreg_room_nouns');
 define('SEATREG_FILTER_SEAT_NOUNS', 'seatreg_seat_nouns');
+define('SEATREG_FILTER_CUSTOM_FIELD_LABEL', 'seatreg_custom_field_label');
+define('SEATREG_FILTER_CUSTOM_FIELD_OPTION', 'seatreg_custom_field_option');
 
 // Multilingual
 //The group a translator sees in Polylang and the domain they see in WPML, so it is the plugin name
