@@ -2987,6 +2987,8 @@ function seatreg_get_specific_bookings( $code, $order, $searchTerm, $bookingStat
 		case 'payment-status':
 			$order = 'payment_status';
 			break;
+		default:
+			$order = 'booking_date, seat_nr';
 	}
 
 	if( $calendarDate ) {
