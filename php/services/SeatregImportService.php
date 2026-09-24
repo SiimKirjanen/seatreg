@@ -59,8 +59,8 @@ class SeatregImportService {
 
     private function insertData($bookingData) {
         return seatreg_add_booking(
-            $bookingData->first_name,
-            $bookingData->last_name,
+            sanitize_text_field($bookingData->first_name),
+            sanitize_text_field($bookingData->last_name),
             $bookingData->email,
             json_decode($bookingData->custom_field_data),
             $bookingData->seat_nr,

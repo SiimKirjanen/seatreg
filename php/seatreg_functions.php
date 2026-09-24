@@ -4315,9 +4315,7 @@ function seatreg_seat_password_check_callback() {
 	$hasPassword = SeatregLayoutService::checkIfSeatHasPassword($layout, $_POST['seat-id']);
 
 	if($hasPassword) {
-		$seatPassword = SeatregLayoutService::getSeatPassword($layout, $_POST['seat-id']);
-
-		if($seatPassword === $_POST['password']) {
+		if( SeatregLayoutService::seatPasswordMatches($layout, $_POST['seat-id'], wp_unslash($_POST['password'])) ) {
 			wp_send_json_success("Password correct");
 		}else {
 			wp_send_json_error("Password missmatch");

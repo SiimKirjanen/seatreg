@@ -8,7 +8,7 @@ const BOOKER = { firstName: 'Riina', lastName: 'Tamm', email: 'riina.tamm@exampl
 const MALFORMED_EMAIL = 'riina.tamm.example.com';
 const PLUS_ADDRESSED_EMAIL = 'riina.tamm+seatreg@example.com';
 
-const SEAT_PASSWORD = 'letmein7f3a';
+const SEAT_PASSWORD = "let'me in7f3a";
 const WRONG_PASSWORD = 'notthepassword';
 const PLUS_PASSWORD = 'let+me&in';
 

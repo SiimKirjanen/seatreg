@@ -437,7 +437,7 @@
 			}
 
 			if(loc[i].hasOwnProperty('registrantName')) {
-				tooltipContent += '<div class="seatreg-tooltip-row">' + loc[i].registrantName + '</div>';
+				tooltipContent += '<div class="seatreg-tooltip-row">' + escapeHtml(loc[i].registrantName) + '</div>';
 			}
 
 			if(loc[i].hasOwnProperty('customFieldData')) {

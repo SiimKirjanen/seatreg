@@ -17,7 +17,7 @@ class SeatregLayoutService {
             }
        }
 
-       return $box;
+       return $targetBox;
     }
 
     public static function checkIfSeatLocked($layout, $boxId) {
@@ -50,6 +50,12 @@ class SeatregLayoutService {
         if($box) {
             return $box->password;
         }
+    }
+
+    public static function seatPasswordMatches($layout, $boxId, $enteredPassword) {
+        $seatPassword = self::getSeatPassword($layout, $boxId);
+
+        return is_string($seatPassword) && is_string($enteredPassword) && hash_equals($seatPassword, $enteredPassword);
     }
 
     public static function hideSensitiveData($layout) {   
