@@ -86,7 +86,7 @@ class SeatregBooking {
 					);
 
 					if( $calendarDate ) {
-						$statusReport .= ' for <b>' . $calendarDate . '<b>';
+						$statusReport .= ' for <b>' . esc_html($calendarDate) . '</b>';
 					}
 					break 2;
 				}
