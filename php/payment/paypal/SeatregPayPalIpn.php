@@ -86,9 +86,8 @@ require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/emails.php' );
 				 $gotCurlIpnResponse = true;
 				 $retryCounter = 999;			 
 			} else if (strcmp ($result , "INVALID") == 0) {
-				// IPN invalid, log for manual investigation
+				// IPN invalid, log for manual investigation. Anyone can post one, so the payment status is left alone
 				$this->log(esc_html__('The IPN is invalid', 'seatreg'), SEATREG_PAYMENT_LOG_ERROR);
-				$this->changePaymentStatus(SEATREG_PAYMENT_VALIDATION_FAILED);
 				$gotCurlIpnResponse = true;
 				$retryCounter = 999;
 			}else {

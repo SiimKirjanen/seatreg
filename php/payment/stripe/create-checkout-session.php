@@ -58,7 +58,8 @@ $checkout_session = \Stripe\Checkout\Session::create([
     'quantity' => 1,
   ]],
   'mode' => 'payment',
-  'success_url' => SEATREG_STRIPE_WEBHOOK_SUCCESS_URL . '&id=' . $bookingId,
+  'client_reference_id' => $bookingId,
+  'success_url' => SEATREG_STRIPE_WEBHOOK_SUCCESS_URL . '&id=' . $bookingId . '&session_id={CHECKOUT_SESSION_ID}',
   'cancel_url' => SEATREG_STRIPE_WEBHOOK_CANCEL_URL . '&registration=' . $bookingData->registration_code . '&id=' . $bookingId,
   'payment_intent_data' => [
     'metadata' => [
