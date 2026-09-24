@@ -4808,6 +4808,10 @@ function seatreg_add_booking_with_manager_callback() {
 	$customFields = json_decode($customFieldsInput);
 
 	foreach ( $_POST['first-name'] as $key => $value ) {
+		if( !is_email($_POST['email'][$key]) ) {
+			wp_send_json_error( array('status' => 'email-validation-failed', 'index' => $key) );
+		}
+
 		$bookingToAdd = new stdClass();
 		$bookingToAdd->firstName = sanitize_text_field($_POST['first-name'][$key]);
 		$bookingToAdd->lastName = sanitize_text_field($_POST['last-name'][$key]);

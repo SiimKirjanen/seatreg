@@ -762,7 +762,7 @@ $(document).on('shown.bs.modal', '#booking-activity-modal', function () {
 
 		if(Array.isArray(logs) && logs.length > 0) {
 			logs.forEach(function(log) {
-				logsWrap.append('<div>'+ log.log_date +'</div>').append('<div>'+ log.log_message +'</div>');
+				logsWrap.append($('<div>').text(log.log_date)).append($('<div>').text(log.log_message));
 			});
 		}else {
 			logsWrap.append(translator.translate('noActivityLogged'));
@@ -791,7 +791,7 @@ $('#registration-activity-modal').on('shown.bs.modal', function () {
 
 		if(Array.isArray(logs) && logs.length > 0) {
 			logs.forEach(function(log) {
-				logsWrap.append('<div>'+ log.log_date +'</div>').append('<div>'+ log.log_message +'</div>');
+				logsWrap.append($('<div>').text(log.log_date)).append($('<div>').text(log.log_message));
 			});
 		}else {
 			logsWrap.append(translator.translate('noActivityLogged'));
@@ -1374,17 +1374,21 @@ $('#seatreg-booking-manager').on('click', '.edit-btn', function() {
 	modal.find('#edit-booking-seat-nr').val(info.find('.seat-nr-box').text());
 
 	if(isSingleBooking) {
-		modalEmail.append('<label for="booker-email-change-field"><h5>'+ translator.translate('email') +'</h5></label><br><input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />');
+		modalEmail.append(
+			'<label for="booker-email-change-field"><h5>'+ translator.translate('email') +'</h5></label><br>',
+			$('<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" />').val(info.data('booker-email'))
+		);
 	}else {
 		modalEmail.append(
 			'<label for="email-change-field"><h5>' +
 				translator.translate('email') +
-			'</h5></label><br>' +
-			'<input type="email" id="email-change-field" name="email" class="modal-email-input" style="margin-bottom:12px" value="'+ info.data('email') +'" /><br>' +
+			'</h5></label><br>',
+			$('<input type="email" id="email-change-field" name="email" class="modal-email-input" style="margin-bottom:12px" />').val(info.data('email')),
+			'<br>' +
 			'<label for="booker-email-change-field"><h5>' +
 				translator.translate('bookingMainEmail') +
-			'</h5></label> <i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="' + seatregFormat(translator.translate('multiBookingMailEmailEditDesc'), [seatregSeatNouns().singular]) + '"></i><br>' +
-			'<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />'
+			'</h5></label> <i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="' + seatregFormat(translator.translate('multiBookingMailEmailEditDesc'), [seatregSeatNouns().singular]) + '"></i><br>',
+			$('<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" />').val(info.data('booker-email'))
 		);
 	}
 
@@ -1612,6 +1616,10 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			}
 			if(data.status === 'seat-price-not-found') {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-multi-price[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('priceNotFound'));
+			}
+			if(data.status === 'email-validation-failed') {
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="email[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('editEmailNotValid'));
+				alertify.error(translator.translate('editEmailNotValid'));
 			}
 			if(data.status === 'primary-email-validation-failed') {
 				$('#multi-booking-primary-email .bottom-action-item__input-error').text(translator.translate('primaryEmailValidationFailed'));

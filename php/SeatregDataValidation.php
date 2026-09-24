@@ -758,7 +758,7 @@ class SeatregDataValidation {
     }
 
     public static function validateEmailAddress($email) {
-        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+        return (bool) is_email($email);
     }
 
     public static function validateCurrencyCode($currencyCode) {

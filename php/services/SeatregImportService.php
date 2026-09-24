@@ -36,6 +36,16 @@ class SeatregImportService {
             return $validation;
         }
 
+        if( !is_email($bookingData->email) ) {
+            $validation->is_valid = false;
+            $validation->messages[] = 'Invalid email';
+        }
+
+        if( !is_email($bookingData->booker_email) ) {
+            $validation->is_valid = false;
+            $validation->messages[] = 'Invalid booker email';
+        }
+
         $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $bookingData->seat_id, $bookingData->seat_nr, $this->roomNouns, $this->seatNouns);
         if( !$seatAndRoomValidation->valid ) {
             $validation->is_valid = false;

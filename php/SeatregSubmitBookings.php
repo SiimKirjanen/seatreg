@@ -23,7 +23,13 @@ class SeatregSubmitBookings extends SeatregBooking {
     }
 
     public function validateAndPopulateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords, $multiPriceUUID, $couponCode) {
-    	$this->_bookerEmail = $emailToSend;
+		if( !is_email($emailToSend) ) {
+			$this->response->setValidationError('Email is not correct');
+
+			return false;
+		}
+
+    	$this->_bookerEmail = sanitize_email($emailToSend);
         $this->_submittedPassword = $pw;
 		$this->_seatPasswords = json_decode(stripslashes_deep($passwords));
 
