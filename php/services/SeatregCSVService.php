@@ -65,6 +65,13 @@ class SeatregCSVService {
                 $obj->messages[] = 'Invalid room UUID';
             }
             $obj->room_name = $roomName;
+
+            $emailErrors = SeatregDataValidation::importedBookingEmailErrors($row[SEATREG_CSV_COL_EMAIL], $row[SEATREG_CSV_COL_BOOKER_EMAIL]);
+            if( $emailErrors ) {
+                $obj->is_valid = false;
+                $obj->messages = array_merge($obj->messages, $emailErrors);
+            }
+
             $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $row[SEATREG_CSV_COL_SEAT_ID], $row[SEATREG_CSV_COL_SEAT_NR], $this->roomNouns, $this->seatNouns);
             if( !$seatAndRoomValidation->valid ) {
                 $obj->is_valid = false;

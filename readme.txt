@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 7.1
-Stable tag: 1.78.2
+Stable tag: 1.78.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -48,6 +48,10 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.78.3 =
+* Fixed security issues and small bugs in bookings and on the registration page.
+* Fixed a payment showing as processing before the payment provider had confirmed it.
 
 = 1.78.2 =
 * Fixed a security issue in sorting bookings in the booking manager.

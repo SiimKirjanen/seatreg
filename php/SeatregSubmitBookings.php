@@ -23,12 +23,18 @@ class SeatregSubmitBookings extends SeatregBooking {
     }
 
     public function validateAndPopulateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords, $multiPriceUUID, $couponCode) {
-    	$this->_bookerEmail = $emailToSend;
+		if( !SeatregDataValidation::validateEmailAddress($emailToSend) ) {
+			$this->response->setValidationError('Email is not correct');
+
+			return false;
+		}
+
+    	$this->_bookerEmail = sanitize_email($emailToSend);
         $this->_submittedPassword = $pw;
 		$this->_seatPasswords = json_decode(stripslashes_deep($passwords));
 
 		if( $this->_usingCalendar ) {
-			$this->_userSelectedCalendarDate = $_POST['selected-calendar-date'];
+			$this->_userSelectedCalendarDate = $_POST['selected-calendar-date'] ?? null;
 		}
     
 		$customFields = stripslashes_deep($customFields);
@@ -54,6 +60,12 @@ class SeatregSubmitBookings extends SeatregBooking {
 
 		$bookings = [];
 		$customFieldData = json_decode( $customFields );
+
+		if( !is_array($firstname) || count($customFieldData) !== count($firstname) ) {
+			$this->response->setValidationError('Custom fields do not match the booked seats');
+
+			return false;
+		}
 
     	foreach ($firstname as $key => $value) {
 
@@ -102,14 +114,10 @@ class SeatregSubmitBookings extends SeatregBooking {
     }
 
 	public function validateBooking() {
-		//password check if needed
-		if($this->_registrationPassword != null) {
-			if($this->_registrationPassword != $this->_submittedPassword) {
-				//registration password and user submitted passwords are not the same
-				$this->response->setError(esc_html__('Error. Password mismatch!', 'seatreg'));
-				
-				return;
-			}
+		if( !SeatregAuthService::registrationPasswordMatches($this->_registrationPassword, $this->_submittedPassword) ) {
+			$this->response->setError(esc_html__('Error. Password mismatch!', 'seatreg'));
+
+			return;
 		}
 
 		//WP logged in check if needed
@@ -182,34 +190,26 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//6.step. Check if seat/seats are allready taken
-		$bookStatus = $this->isAllSelectedSeatsOpen($this->_userSelectedCalendarDate); 
-		if($bookStatus != 'ok') {
-			$this->response->setError($bookStatus);
-
-			return;
-		}
-
-		//7.step. In calendar mode 
+		//6.step. In calendar mode
 		//Make sure that booking date is avalidable
 		//Make sure the booking date is not in the past
 		if( $this->_usingCalendar ) {
 
-			$calendarDateFormatCheck = $this->calendarDateFormatCheck( $_POST['selected-calendar-date'] );
+			$calendarDateFormatCheck = $this->calendarDateFormatCheck( $this->_userSelectedCalendarDate );
 			if($calendarDateFormatCheck != 'ok') {
 				$this->response->setValidationError( $calendarDateFormatCheck );
 
 				return;
 			}
 
-			$calendarDateCheck = $this->calendarDateValidation( $_POST['selected-calendar-date'] );
+			$calendarDateCheck = $this->calendarDateValidation( $this->_userSelectedCalendarDate );
 			if($calendarDateCheck != 'ok') {
 				$this->response->setValidationError( $calendarDateCheck );
 
 				return;
 			}
 
-			$calendarDatePastCheck = $this->calendarDatePastDateCheck( $_POST['selected-calendar-date'] );
+			$calendarDatePastCheck = $this->calendarDatePastDateCheck( $this->_userSelectedCalendarDate );
 			if($calendarDatePastCheck != 'ok') {
 				$this->response->setValidationError( $calendarDatePastCheck );
 
@@ -217,7 +217,15 @@ class SeatregSubmitBookings extends SeatregBooking {
 			}
 
 		}
-	
+
+		//7.step. Check if seat/seats are allready taken
+		$bookStatus = $this->isAllSelectedSeatsOpen($this->_userSelectedCalendarDate);
+		if($bookStatus != 'ok') {
+			$this->response->setError($bookStatus);
+
+			return;
+		}
+
 		//8.step. Check if seat/seats are locked
 		$lockStatus = $this->seatLockCheck();
 		if($lockStatus != 'ok') {
@@ -311,8 +319,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 			$dataLength = count($this->_bookings);
 			$inserted = true;
 			$bookingStatus = 0;
-			$confCode = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
-			$this->_bookingId = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
+			$confCode = SeatregRandomGenerator::generateRandom();
+			$this->_bookingId = SeatregRandomGenerator::generateRandom();
 			$currentTimeStamp = time();
 			$registrationConfirmDate = null;
 			$seatsString = $this->generateSeatString();

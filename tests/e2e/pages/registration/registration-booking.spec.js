@@ -6,9 +6,11 @@ const SEAT_COUNT = 3;
 
 const BOOKER = { firstName: 'Riina', lastName: 'Tamm', email: 'riina.tamm@example.com' };
 const MALFORMED_EMAIL = 'riina.tamm.example.com';
+const PLUS_ADDRESSED_EMAIL = 'riina.tamm+seatreg@example.com';
 
-const SEAT_PASSWORD = 'letmein7f3a';
+const SEAT_PASSWORD = "let'me in7f3a";
 const WRONG_PASSWORD = 'notthepassword';
+const PLUS_PASSWORD = 'let+me&in';
 
 const SEAT_PRICE = 25;
 
@@ -119,6 +121,18 @@ test.describe('Registration booking', () => {
 
 		/* Neither attempt was sent anywhere: the form is still on screen. */
 		await expect(registration.checkoutArea).toBeVisible();
+	});
+
+	test('books with a plus in the email address and in the registration password', async () => {
+		await settings.set('registrationPassword', PLUS_PASSWORD);
+		await settings.allowBookings();
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.submitPassword(PLUS_PASSWORD);
+		await registration.completeBooking({ ...BOOKER, email: PLUS_ADDRESSED_EMAIL });
+
+		await expect(registration.bookingConfirmed).toBeVisible();
 	});
 
 	test('books a seat and hands back the link to its status', async () => {

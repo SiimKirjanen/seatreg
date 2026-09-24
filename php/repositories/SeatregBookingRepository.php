@@ -366,7 +366,7 @@ class SeatregBookingRepository {
             }
             if( $selectedShowRegistrationData ) {
                 $bookingCustomFieldData = json_decode( $booking->custom_field_data );
-                $bookingCustomFieldData = array_filter($bookingCustomFieldData, function($customField) use($selectedShowRegistrationData) {
+                $bookingCustomFieldData = array_filter(is_array($bookingCustomFieldData) ? $bookingCustomFieldData : [], function($customField) use($selectedShowRegistrationData) {
                     return in_array($customField->label, $selectedShowRegistrationData);
                 });
                 $booking->custom_field_data = json_encode(array_values($bookingCustomFieldData));

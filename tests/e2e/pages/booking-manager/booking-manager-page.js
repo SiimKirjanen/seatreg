@@ -425,6 +425,13 @@ class BookingManagerPage {
 		);
 	}
 
+	/** The rows the server said cannot go in. The import leaves them out. */
+	get importConflicts() {
+		return this.importFinalizationModal.locator(
+			'.import-bookings-finalization-modal__booking--invalid'
+		);
+	}
+
 	get startImportButton() {
 		return this.importFinalizationModal.locator('[data-action="start-booking-import"]');
 	}

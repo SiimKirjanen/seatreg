@@ -154,7 +154,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		//5 step. Check if seat/seats is already bron or taken
 		$seatsOpenCheck = $this->isAllSelectedSeatsOpen($this->_selectedBookingCalendarDate);
 		if($seatsOpenCheck != 'ok') {
-			echo esc_html($seatsOpenCheck);
+			echo wp_kses($seatsOpenCheck, array('b' => array()));
 
 			return;
 		}

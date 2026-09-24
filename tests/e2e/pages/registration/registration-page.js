@@ -619,15 +619,6 @@ class RegistrationPage {
 		await expect(this.checkoutArea).toBeVisible();
 		await expect(this.checkoutItems.first()).toBeVisible();
 	}
-
-	/**
-	 * For asserting that something never reached a visitor. The layout arrives as
-	 * JSON in the markup, so a value that leaked shows up here even when no
-	 * element renders it.
-	 */
-	async html() {
-		return this.page.content();
-	}
 }
 
 module.exports = { RegistrationPage };

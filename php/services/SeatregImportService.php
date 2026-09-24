@@ -36,6 +36,12 @@ class SeatregImportService {
             return $validation;
         }
 
+        $emailErrors = SeatregDataValidation::importedBookingEmailErrors($bookingData->email, $bookingData->booker_email);
+        if( $emailErrors ) {
+            $validation->is_valid = false;
+            $validation->messages = array_merge($validation->messages, $emailErrors);
+        }
+
         $seatAndRoomValidation = SeatregLayoutService::validateRoomAndSeatId($this->roomData, $roomName, $bookingData->seat_id, $bookingData->seat_nr, $this->roomNouns, $this->seatNouns);
         if( !$seatAndRoomValidation->valid ) {
             $validation->is_valid = false;
@@ -53,8 +59,8 @@ class SeatregImportService {
 
     private function insertData($bookingData) {
         return seatreg_add_booking(
-            $bookingData->first_name,
-            $bookingData->last_name,
+            sanitize_text_field($bookingData->first_name),
+            sanitize_text_field($bookingData->last_name),
             $bookingData->email,
             json_decode($bookingData->custom_field_data),
             $bookingData->seat_nr,
@@ -63,7 +69,7 @@ class SeatregImportService {
             $this->seatregCode,
             $bookingData->status,
             $bookingData->booking_id,
-            SeatregRandomGenerator::generateRandom($bookingData->email),
+            SeatregRandomGenerator::generateRandom(),
             null,
             $bookingData->multi_price_selection,
             $bookingData->booker_email

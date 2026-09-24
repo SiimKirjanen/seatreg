@@ -598,6 +598,11 @@ class SeatregDataValidation {
             }
 
             foreach($customFieldsDecoded as $personCustomFields) {
+                if( !is_array($personCustomFields) ) {
+                    $validationStatus->setInvalid('Custom fields not array');
+                    return $validationStatus;
+                }
+
                 foreach($personCustomFields as $personCustomField) {
                     $personCustomFieldValidation = self::validateSingleCustomFieldSubmit($personCustomField, $personCustomFields,  $createdCustomFields, $registrationCode);
 
@@ -709,7 +714,7 @@ class SeatregDataValidation {
             }
         }
 
-        if(!is_email($email)) {
+        if(!self::validateEmailAddress($email)) {
             $validationStatus->setInvalid('Email is not correct');
             return $validationStatus;
         }
@@ -758,7 +763,22 @@ class SeatregDataValidation {
     }
 
     public static function validateEmailAddress($email) {
-        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+        return is_string($email) && (bool) is_email($email);
+    }
+
+    public static function importedBookingEmailErrors($email, $bookerEmail) {
+        $errors = array();
+
+        if( !self::validateEmailAddress($email) ) {
+            $errors[] = 'Invalid email';
+        }
+
+        // Bookings made before 1.7.0 have no booker email
+        if( $bookerEmail !== '' && !self::validateEmailAddress($bookerEmail) ) {
+            $errors[] = 'Invalid booker email';
+        }
+
+        return $errors;
     }
 
     public static function validateCurrencyCode($currencyCode) {

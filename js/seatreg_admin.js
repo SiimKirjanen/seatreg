@@ -762,7 +762,7 @@ $(document).on('shown.bs.modal', '#booking-activity-modal', function () {
 
 		if(Array.isArray(logs) && logs.length > 0) {
 			logs.forEach(function(log) {
-				logsWrap.append('<div>'+ log.log_date +'</div>').append('<div>'+ log.log_message +'</div>');
+				logsWrap.append($('<div>').text(log.log_date)).append($('<div>').text(log.log_message));
 			});
 		}else {
 			logsWrap.append(translator.translate('noActivityLogged'));
@@ -791,7 +791,7 @@ $('#registration-activity-modal').on('shown.bs.modal', function () {
 
 		if(Array.isArray(logs) && logs.length > 0) {
 			logs.forEach(function(log) {
-				logsWrap.append('<div>'+ log.log_date +'</div>').append('<div>'+ log.log_message +'</div>');
+				logsWrap.append($('<div>').text(log.log_date)).append($('<div>').text(log.log_message));
 			});
 		}else {
 			logsWrap.append(translator.translate('noActivityLogged'));
@@ -1229,39 +1229,24 @@ function seatregGenerateImportBookingBox(bookingData, validationData) {
 		$bookingWrap.attr('data-is-valid', 'true');
 	}
 	
-	$bookingWrap.append('<div><b>Name: </b>' + bookingData.first_name + ',</div>');
-	$bookingWrap.append('<div>' + bookingData.last_name + ',</div>');
-	$bookingWrap.append('<div><b>' + seatregSeatNouns().singularUpper + ': </b>' + bookingData.seat_nr + '</div>');
+	$bookingWrap.append($('<div>').append('<b>Name: </b>', document.createTextNode(bookingData.first_name + ',')));
+	$bookingWrap.append($('<div>').text(bookingData.last_name + ','));
+	$bookingWrap.append($('<div>').append($('<b>').text(seatregSeatNouns().singularUpper + ': '), document.createTextNode(bookingData.seat_nr)));
 
 	if(validationData.room_name) {
-		$bookingWrap.append('<div><b>' + seatregRoomNouns().singularUpper + ': </b>' + validationData.room_name + '</div>');
+		$bookingWrap.append($('<div>').append($('<b>').text(seatregRoomNouns().singularUpper + ': '), document.createTextNode(validationData.room_name)));
 	}
 
 	if( !validationData.is_valid ) {
-		$bookingWrap.append('<i class="fa fa-exclamation-triangle import-bookings-finalization-modal__warning-icon" aria-hidden="true" data-powertip="' +  validationData.messages.join(', ')  + '"></i>');
+		$bookingWrap.append($('<i class="fa fa-exclamation-triangle import-bookings-finalization-modal__warning-icon" aria-hidden="true"></i>').attr('data-powertip', validationData.messages.join(', ')));
 	}else {
 		$bookingWrap.append('<i class="fa fa-trash-o import-bookings-finalization-modal__trash-icon" data-action="remove-row" aria-hidden="true" data-powertip="Remove from the import"></i>');
 	}
 
-	var hiddenInputs = [
-		'<input type="hidden" data-name="first_name" value="' + bookingData.first_name + '" />',
-		'<input type="hidden" data-name="last_name" value="' + bookingData.last_name + '" />',
-		'<input type="hidden" data-name="email" value="' + bookingData.email + '" />',
-		'<input type="hidden" data-name="seat_id" value="' + bookingData.seat_id + '" />',
-		'<input type="hidden" data-name="seat_nr" value="' + bookingData.seat_nr + '" />',
-		'<input type="hidden" data-name="room_uuid" value="' + bookingData.room_uuid + '" />',
-		'<input type="hidden" data-name="booking_date" value="' + bookingData.booking_date + '" />',
-		'<input type="hidden" data-name="booking_confirm_date" value="' + bookingData.booking_confirm_date + '" />',
-		'<input type="hidden" data-name="custom_field_data" value=\'' + bookingData.custom_field_data + '\' />',
-		'<input type="hidden" data-name="status" value="' + bookingData.status + '" />',
-		'<input type="hidden" data-name="booking_id" value="' + bookingData.booking_id + '" />',
-		'<input type="hidden" data-name="booker_email" value="' + bookingData.booker_email + '" />',
-		'<input type="hidden" data-name="multi_price_selection" value="' + bookingData.multi_price_selection + '" />',
-		'<input type="hidden" data-name="logged_in_user_id" value="' + bookingData.logged_in_user_id + '" />'
-	].join('');
-	
-	$bookingWrap.append(hiddenInputs);
-        	
+	Object.keys(bookingData).forEach(function(name) {
+		$bookingWrap.append($('<input type="hidden" />').attr('data-name', name).val(bookingData[name]));
+	});
+
 	return $bookingWrap;
 }
 
@@ -1374,43 +1359,56 @@ $('#seatreg-booking-manager').on('click', '.edit-btn', function() {
 	modal.find('#edit-booking-seat-nr').val(info.find('.seat-nr-box').text());
 
 	if(isSingleBooking) {
-		modalEmail.append('<label for="booker-email-change-field"><h5>'+ translator.translate('email') +'</h5></label><br><input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />');
+		modalEmail.append(
+			'<label for="booker-email-change-field"><h5>'+ translator.translate('email') +'</h5></label><br>',
+			$('<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" />').val(info.data('booker-email'))
+		);
 	}else {
 		modalEmail.append(
 			'<label for="email-change-field"><h5>' +
 				translator.translate('email') +
-			'</h5></label><br>' +
-			'<input type="email" id="email-change-field" name="email" class="modal-email-input" style="margin-bottom:12px" value="'+ info.data('email') +'" /><br>' +
+			'</h5></label><br>',
+			$('<input type="email" id="email-change-field" name="email" class="modal-email-input" style="margin-bottom:12px" />').val(info.data('email')),
+			'<br>' +
 			'<label for="booker-email-change-field"><h5>' +
 				translator.translate('bookingMainEmail') +
-			'</h5></label> <i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="' + seatregFormat(translator.translate('multiBookingMailEmailEditDesc'), [seatregSeatNouns().singular]) + '"></i><br>' +
-			'<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" value="'+ info.data('booker-email') +'" />'
+			'</h5></label> ',
+			$('<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true"></i>').attr('title', seatregFormat(translator.translate('multiBookingMailEmailEditDesc'), [seatregSeatNouns().singular])),
+			'<br>',
+			$('<input type="email" id="booker-email-change-field" name="booker-email" class="modal-email-input" />').val(info.data('booker-email'))
 		);
 	}
 
 	info.find('.custom-field').each(function() {
 		var type = $(this).data('type');
+		var label = $(this).find('.custom-field-label').text();
+		var $value = $(this).find('.custom-field-value');
+		var $input;
 
 		if(type === "check") {
-			var isChecked = $(this).find('.custom-field-value').data('checked') === true ? 'checked' : '';
-
-			modalCutsom.append('<div class="modal-custom" data-type="check"><label for="'+ $(this).find('.custom-field-label').text() +'" class="modal-custom-l"><h5>'+ $(this).find('.custom-field-label').text() +'</h5></label><br><input type="checkbox" id="'+ $(this).find('.custom-field-label').text() +'" class="modal-custom-v" ' + isChecked +' /></div>');
+			$input = $('<input type="checkbox" />').prop('checked', $value.data('checked') === true);
 		}else if(type === "sel") {
-			var selectOptions = $(this).find('.custom-field-value').data('options');
-			var selectedOption = $(this).find('.custom-field-value').text().trim();
+			var selectOptions = $value.data('options');
+			var selectedOption = $value.text().trim();
 
-			if(Array.isArray(selectOptions)) {
-				modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l" for="'+ $(this).find('.custom-field-label').text() +'"><h5>'+ $(this).find('.custom-field-label').text() + '</h5></label><br><select id="'+ $(this).find('.custom-field-label').text() +'" class="modal-custom-v">' +  selectOptions.map((option) => {
-					if(option === selectedOption) {
-						return '<option selected>' + option + '</option>';
-					}
-					return '<option>' + option + '</option>';
-				})  + '</select>' + '</div>');
+			if(!Array.isArray(selectOptions)) {
+				return;
 			}
 
+			$input = $('<select>').append(selectOptions.map(function(option) {
+				return $('<option>').text(option).prop('selected', option === selectedOption);
+			}));
 		}else {
-			modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l" for="'+ $(this).find('.custom-field-label').text() +'"><h5>'+ $(this).find('.custom-field-label').text() +'</h5></label><br><input type="text" id="'+ $(this).find('.custom-field-label').text() +'" class="modal-custom-v" value="'+ $(this).find('.custom-field-value').text() +'" /></div>');
+			$input = $('<input type="text" />').val($value.text());
 		}
+
+		modalCutsom.append(
+			$('<div class="modal-custom">').attr('data-type', type === "check" ? type : null).append(
+				$('<label class="modal-custom-l">').attr('for', label).append($('<h5>').text(label)),
+				'<br>',
+				$input.attr('id', label).addClass('modal-custom-v')
+			)
+		);
 	});
 
 	$('#edit-room-error, #edit-seat-error').text('');
@@ -1613,9 +1611,16 @@ $('#seatreg-booking-manager').on('click', '#add-booking-btn', function() {
 			if(data.status === 'seat-price-not-found') {
 				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="seat-multi-price[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('priceNotFound'));
 			}
+			if(data.status === 'email-validation-failed') {
+				$('#add-booking-modal-form .modal-body-item').eq(data.index).find('[name="email[]"]').closest('.add-modal-input-wrap').find('.input-error').text(translator.translate('editEmailNotValid'));
+				alertify.error(translator.translate('editEmailNotValid'));
+			}
 			if(data.status === 'primary-email-validation-failed') {
 				$('#multi-booking-primary-email .bottom-action-item__input-error').text(translator.translate('primaryEmailValidationFailed'));
 				alertify.error(translator.translate('primaryEmailValidationFailed'));
+			}
+			if(data.status === 'date not correct') {
+				alertify.error(translator.translate('dateNotCorrect'));
 			}
 		}
 	});
@@ -1721,7 +1726,7 @@ $('#seatreg-booking-manager').on('click', '#edit-update-btn', function() {
 			bookingInfo.find('.seat-name-box').attr('title', first_name + ' ' + last_name).find('.full-name').text(first_name + ' ' + last_name);
 			bookingInfo.find('.f-name').val(first_name);
 			bookingInfo.find('.l-name').val(last_name);
-			bookingInfo.attr('data-email', editInfo.email);
+			bookingInfo.attr('data-email', editInfo.email).data('email', editInfo.email);
 
 			if (editInfo.email) {
 				bookingInfo.find('[data-more-info="email"]').text(editInfo.email);

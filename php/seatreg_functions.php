@@ -4315,9 +4315,7 @@ function seatreg_seat_password_check_callback() {
 	$hasPassword = SeatregLayoutService::checkIfSeatHasPassword($layout, $_POST['seat-id']);
 
 	if($hasPassword) {
-		$seatPassword = SeatregLayoutService::getSeatPassword($layout, $_POST['seat-id']);
-
-		if($seatPassword === $_POST['password']) {
+		if( SeatregLayoutService::seatPasswordMatches($layout, $_POST['seat-id'], wp_unslash($_POST['password'])) ) {
 			wp_send_json_success("Password correct");
 		}else {
 			wp_send_json_error("Password missmatch");
@@ -4353,10 +4351,15 @@ function seatreg_check_coupon_callback() {
 add_action( 'wp_ajax_seatreg_fetch_bookings_and_info', 'seatreg_fetch_bookings_and_info_callback' );
 add_action( 'wp_ajax_nopriv_seatreg_fetch_bookings_and_info', 'seatreg_fetch_bookings_and_info_callback' );
 function seatreg_fetch_bookings_and_info_callback() {
-	$data = SeatregRegistrationRepository::getRegistrationWithOptionsByCode( $_GET['registration-code'] );
+	$data = SeatregRegistrationRepository::getRegistrationWithOptionsByCode( $_POST['registration-code'] ?? null );
+
+	if( !$data || !SeatregAuthService::registrationPasswordMatches($data->registration_password, wp_unslash($_POST['pw'] ?? '')) ) {
+		wp_send_json_error('Not allowed', 403);
+	}
+
 	$selectedShowRegistrationData = $data->show_bookings_data_in_registration ? explode(',', $data->show_bookings_data_in_registration) : [];
-	$bookings = SeatregBookingRepository::getBookingsForRegistrationPage( $_GET['registration-code'], $selectedShowRegistrationData, $_GET['date']);
-	$roomsBookingInfo = json_encode( SeatregLayoutService::getBookingsInfoForLayout($data->registration_layout, $data->registration_code, $_GET['date']) );
+	$bookings = SeatregBookingRepository::getBookingsForRegistrationPage( $data->registration_code, $selectedShowRegistrationData, $_POST['date'] ?? null);
+	$roomsBookingInfo = json_encode( SeatregLayoutService::getBookingsInfoForLayout($data->registration_layout, $data->registration_code, $_POST['date'] ?? null) );
 	$responseData = (object)[
 		'bookings' => $bookings,
 		'roomsBookingInfo' => $roomsBookingInfo
@@ -4411,12 +4414,12 @@ function seatreg_booking_submit_callback() {
 	if( $newBooking->validateAndPopulateBookingData(
 			$_POST['FirstName'], 
 			$_POST['LastName'], 
-			$_POST['Email'], 
+			wp_unslash($_POST['Email']), 
 			$_POST['item-id'], 
 			$_POST['item-nr'], 
-			$_POST['em'], 
+			wp_unslash($_POST['em']), 
 			$_POST['c'], 
-			$_POST['pw'], 
+			wp_unslash($_POST['pw']), 
 			$_POST['custom'],
 			$_POST['room-uuid'],
 			$_POST['passwords'],
@@ -4789,16 +4792,25 @@ function seatreg_add_booking_with_manager_callback() {
 	}
 
 	$registrationCode = sanitize_text_field( $_POST['registration-code'] );
-	$calendarDate = !empty( $_POST['calendar-date'] ) ? $_POST['calendar-date'] : null;
-	$bookingsToAdd = [];
 	$options = SeatregOptionsRepository::getOptionsByRegistrationCode($registrationCode);
+	$calendarDate = null;
+
+	if( $options->using_calendar === '1' ) {
+		$calendarDate = $_POST['calendar-date'] ?? null;
+
+		if( !is_string($calendarDate) || !preg_match(CALENDAR_DATE_PICKER_REGEX, $calendarDate) ) {
+			wp_send_json_error( array('status' => 'date not correct') );
+		}
+	}
+
+	$bookingsToAdd = [];
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
 	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields), $options->registration_code);
 	$bookingStatus = sanitize_text_field($_POST['booking-status']);
 	$sendBookingConfirmToBooker = isset($_POST['send-booking-confirmation']) && sanitize_text_field($_POST['send-booking-confirmation']) === '1';
 	$singleBooking = count($_POST['first-name']) === 1;
 
-	if (!$singleBooking && !is_email($_POST['multi-booking-primary-email'])) {
+	if (!$singleBooking && !SeatregDataValidation::validateEmailAddress(wp_unslash($_POST['multi-booking-primary-email']))) {
 		wp_send_json_error(array('message' => 'Primary email required for multi-booking', 'status' => 'primary-email-validation-failed'));
 	}
 
@@ -4808,13 +4820,19 @@ function seatreg_add_booking_with_manager_callback() {
 	$customFields = json_decode($customFieldsInput);
 
 	foreach ( $_POST['first-name'] as $key => $value ) {
+		$email = wp_unslash($_POST['email'][$key] ?? null);
+
+		if( !SeatregDataValidation::validateEmailAddress($email) ) {
+			wp_send_json_error( array('status' => 'email-validation-failed', 'index' => $key) );
+		}
+
 		$bookingToAdd = new stdClass();
 		$bookingToAdd->firstName = sanitize_text_field($_POST['first-name'][$key]);
 		$bookingToAdd->lastName = sanitize_text_field($_POST['last-name'][$key]);
 		$bookingToAdd->seatId = sanitize_text_field($_POST['seat-id'][$key]);
 		$bookingToAdd->roomName = sanitize_text_field($_POST['room'][$key]);
 		$bookingToAdd->customfield = $customFields[$key];
-		$bookingToAdd->email = sanitize_text_field($_POST['email'][$key]);
+		$bookingToAdd->email = sanitize_email($email);
 		$bookingToAdd->status = $bookingStatus;
 		$bookingToAdd->multiPriceSelection = $_POST['seat-multi-price'][$key] ?? null;
 
@@ -4843,10 +4861,10 @@ function seatreg_add_booking_with_manager_callback() {
 		}
 	}
 
-	$bookingId = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
-	$confCode = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
+	$bookingId = SeatregRandomGenerator::generateRandom();
+	$confCode = SeatregRandomGenerator::generateRandom();
 	$addingStatus = [];
-	$primaryEmail = $singleBooking ? $bookingsToAdd[0]->email : sanitize_text_field($_POST['multi-booking-primary-email']);
+	$primaryEmail = $singleBooking ? $bookingsToAdd[0]->email : sanitize_email(wp_unslash($_POST['multi-booking-primary-email']));
 
 	foreach( $bookingsToAdd as $booking ) {
 		$addingStatus[] = seatreg_add_booking( 
@@ -4883,7 +4901,7 @@ function seatreg_add_booking_with_manager_callback() {
 		if($bookingStatus === "2" && $sendBookingConfirmToBooker) {
 			seatreg_send_approved_booking_email($bookingId, $registrationCode, $bookingData->approved_booking_email_template);
 		}else if ($bookingStatus === "1" && $sendBookingConfirmToBooker) {
-			seatreg_send_pending_booking_email($bookingData->registration_name, $_POST['email'][0], $bookingCheckURL, $bookingData->pending_booking_email_template, $bookingData->email_from_address, $bookingData->pending_booking_email_subject, array('bg' => $bookingData->email_background_color, 'text' => $bookingData->email_text_color, 'heading' => $bookingData->email_heading_color, 'logo' => $bookingData->email_logo, 'logoPosition' => $bookingData->email_logo_position));
+			seatreg_send_pending_booking_email($bookingData->registration_name, $primaryEmail, $bookingCheckURL, $bookingData->pending_booking_email_template, $bookingData->email_from_address, $bookingData->pending_booking_email_subject, array('bg' => $bookingData->email_background_color, 'text' => $bookingData->email_text_color, 'heading' => $bookingData->email_heading_color, 'logo' => $bookingData->email_logo, 'logoPosition' => $bookingData->email_logo_position));
 		}
 		wp_send_json_success( array('status' => 'created') );
 	}else if( $successStatusCount !== $addingStatusCount ) {
@@ -4907,8 +4925,8 @@ function seatreg_edit_booking_callback() {
 	$bookingEdit->editCustomField = stripslashes_deep($_POST['customfield']);
 	$bookingEdit->id = sanitize_text_field($_POST['id']);
 	$bookingEdit->calendarDate = !empty($_POST['calendarDate']) ? sanitize_text_field($_POST['calendarDate']): null;
-	$bookingEdit->bookerEmail = $_POST['bookerEmail'];
-	$bookingEdit->email = !empty($_POST['email']) ? $_POST['email'] : null;
+	$bookingEdit->bookerEmail = wp_unslash($_POST['bookerEmail']);
+	$bookingEdit->email = !empty($_POST['email']) ? wp_unslash($_POST['email']) : null;
 
 	$statusArray = seatreg_validate_edit_booking( sanitize_text_field($_POST['code']), $bookingEdit );
 

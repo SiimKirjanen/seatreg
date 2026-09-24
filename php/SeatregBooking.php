@@ -86,7 +86,7 @@ class SeatregBooking {
 					);
 
 					if( $calendarDate ) {
-						$statusReport .= ' for <b>' . $calendarDate . '<b>';
+						$statusReport .= ' for <b>' . esc_html($calendarDate) . '</b>';
 					}
 					break 2;
 				}
@@ -119,7 +119,7 @@ class SeatregBooking {
 				$enteredSeatPasswords = get_object_vars($this->_seatPasswords);
 				$enteredPassword = array_key_exists($booking->seat_id, $enteredSeatPasswords) ? $enteredSeatPasswords[$booking->seat_id] : '';
 
-				if( SeatregLayoutService::getSeatPassword($this->_registrationLayoutFull, $booking->seat_id) !== $enteredPassword ) {
+				if( !SeatregLayoutService::seatPasswordMatches($this->_registrationLayoutFull, $booking->seat_id, $enteredPassword) ) {
 					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number */
 					$statusReport = sprintf(esc_html__('%1$s %2$s password is not correct', 'seatreg'), esc_html($this->_seatNouns->singularUpper), $booking->seat_nr);
 
@@ -181,7 +181,7 @@ class SeatregBooking {
 	protected function calendarDateFormatCheck($bookingSelectedDate) {
 		$statusReport = 'ok';
 
-		if( !preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $bookingSelectedDate ) ) {
+		if( !is_string($bookingSelectedDate) || !preg_match(CALENDAR_DATE_PICKER_REGEX, $bookingSelectedDate ) ) {
 			$statusReport = esc_html__('Selected calendar date is not valid', 'seatreg');
 		}
 

@@ -19,7 +19,7 @@
 	}
 
 	$registrationName = esc_html(wp_unslash($data->registration_name));
-	$showPwdForm = false;
+	$showPwdForm = !SeatregAuthService::registrationPasswordMatches($data->registration_password, $_POST['reg_pwd'] ?? null);
 	$registrationTime = seatreg_registration_time_status( $data->registration_start_timestamp,  $data->registration_end_timestamp );
 	$registrationTimeRestoriction = SeatregTimeRepository::getTimeInfoForRegistrationView($data->registration_start_time, $data->registration_end_time);
 	$hasFailedTimeRestriction = !$registrationTimeRestoriction->registrationStartCheck  || !$registrationTimeRestoriction->registrationEndCheck;
@@ -32,20 +32,6 @@
 	$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($data->registration_code);
 	
 	$needsToLogIn = $requireWPLogin && !SeatregAuthService::isLoggedIn();
-
-	if($data->registration_password != null ) {
-		//registration password is set
-		if(empty($_POST['reg_pwd'])) {
-			//need to ask pwd
-			$showPwdForm = true;
-
-		}else if(!empty($_POST['reg_pwd'])) {
-			//ok pwd is entered
-			if($_POST['reg_pwd'] != $data->registration_password ) {
-				$showPwdForm = true;
-			}
-		}
-	}
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>

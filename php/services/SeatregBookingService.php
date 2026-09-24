@@ -434,7 +434,7 @@ class SeatregBookingService {
             
                 if( $existingBookings[$i]->seat_id == $seatId) {
                     $statusReport->is_valid = false;
-                    $statusReport->messages[] = 'Seat '. esc_html($seatNr) . ' with ID ' . $seatId . ' is already booked';
+                    $statusReport->messages[] = 'Seat '. esc_html($seatNr) . ' with ID ' . esc_html($seatId) . ' is already booked';
     
                     break;
                 }
