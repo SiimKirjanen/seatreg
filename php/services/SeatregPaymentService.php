@@ -29,6 +29,42 @@ class SeatregPaymentService {
         }
     }
 
+    /**
+     *
+     * Whether Stripe says the checkout session was completed for this booking
+     *
+     * @param object $bookingData Data related to the booking
+     * @param string $bookingId The booking id
+     * @param string $sessionId The checkout session id Stripe put in the return address
+     * @return boolean
+     *
+    */
+    public static function isStripeCheckoutCompleted($bookingData, $bookingId, $sessionId) {
+        if( $bookingData->stripe_payments !== '1' || !preg_match('/^cs_[A-Za-z0-9_]+$/', $sessionId) ) {
+            return false;
+        }
+
+        $stripeApiKey = SeatregEncryptionService::decryptValue($bookingData->stripe_api_key);
+
+        if( $stripeApiKey === null ) {
+            return false;
+        }
+
+        require_once( SEATREG_PLUGIN_FOLDER_DIR . 'php/libs/stripe-php/init.php' );
+
+        try {
+            $stripe = new \Stripe\StripeClient([
+                'api_key' => $stripeApiKey,
+                'stripe_version' => SEATREG_STRIPE_API_VERSION
+            ]);
+            $session = $stripe->checkout->sessions->retrieve($sessionId);
+        } catch(\Exception $e) {
+            return false;
+        }
+
+        return $session->status === 'complete' && $session->client_reference_id === $bookingId;
+    }
+
     public static function insertOrUpdatePayment($bookingId, $status, $txnId = null, $paymentCurrency = null, $paymentTotalPrice = null) {
         global $seatreg_db_table_names;
         global $wpdb;

@@ -23,7 +23,8 @@
 	$paymentStatus = $bookingData->payment_status;
 	$paymentInProgress = $paymentStatus === null || $paymentStatus === SEATREG_PAYMENT_PROCESSING;
 
-	if($paymentStatus === null) {
+	//A processing payment keeps the booking from expiring, so only one the provider confirmed is recorded. PayPal records it when capturing
+	if( $paymentStatus === null && !empty($_GET['session_id']) && SeatregPaymentService::isStripeCheckoutCompleted($bookingData, $bookingId, sanitize_text_field($_GET['session_id'])) ) {
 		SeatregPaymentService::insertProcessingPayment($bookingId);
 	}
 ?>
