@@ -50,9 +50,10 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 == Changelog ==
 
 = 1.78.3 =
-* Fixed a security issue with the booker's email address in bookings.
-* Fixed a security issue with the selected date when booking in calendar mode.
-* Fixed a pending booking not expiring after the booker returned from the payment page without completing the payment.
+* Fixed security issues in bookings.
+* Fixed a payment showing as processing before the payment provider had confirmed it.
+* Fixed bookings failing when the email address or registration password contained certain characters.
+* Fixed small issues in the booking manager and on the booking confirmation page.
 
 = 1.78.2 =
 * Fixed a security issue in sorting bookings in the booking manager.

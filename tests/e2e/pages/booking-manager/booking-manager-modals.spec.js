@@ -11,23 +11,49 @@ const SEATS = [
 ];
 
 const BOOKER_EMAIL = 'booker@example.com';
+const MALFORMED_EMAIL = 'zoe.vaher.example.com';
+const APOSTROPHE_EMAIL = "zoe.o'vaher@example.com";
 
 /* A seat the layout has and no test books, so the lookup always lists it and the
    edit modal always has somewhere to move a booking to. */
 const FREE_SEAT = 4;
 
 const RENAMED_TO = 'Mari';
+const READDRESSED_TO = 'mari.vaher@example.com';
 
 const COMPANY = { label: 'Company', type: 'text' };
 const ANSWERED = 'Alpha';
 const ANSWERED_AGAIN = 'Beta';
 
+/* Breaks out of any attribute it is pasted into, and leaves an img behind. */
+const MARKUP = 'x"><img src=x>';
+
 const SEAT_ALREADY_BOOKED = 'Seat is already booked/pending';
+const EMAIL_NOT_VALID = 'Provided email address is not valid';
 
 /* An import file is read by position, fifteen columns to a row, so a row of any
    other width is turned away before anything in it is looked at. */
 const MALFORMED_CSV = 'Zoe,Vaher,zoe.vaher@example.com\n';
 const CSV_WRONG_COLUMN_COUNT = 'Each row must contain exactly 15 columns';
+
+/** A cell as PHP writes one. */
+function csvCell(value) {
+	return `"${value.replaceAll('"', '""')}"`;
+}
+
+/* The answers cell of a booking with one answer. A quote in the answer is written
+   as JSON's " rather than \", which PHP's reader takes as an escaped quote. */
+function answersCell(value) {
+	return csvCell(JSON.stringify([{ label: COMPANY.label, value }]).replaceAll('\\"', '\\u0022'));
+}
+
+/* Bookings made before 1.7.0 have no booker address, and are exported with that
+   cell empty. It is the last cell of a single seat's row holding the address. */
+function withoutBookerEmail(row, email) {
+	const at = row.lastIndexOf(email);
+
+	return row.slice(0, at) + row.slice(at + email.length);
+}
 
 /* The modals a booking is made, changed and moved in bulk through. All of them
    talk in seat ids, which are the layout's and not anything a number on screen
@@ -109,6 +135,32 @@ test.describe('Booking manager modals', () => {
 		await expect(manager.addModal).toBeVisible();
 	});
 
+	test('refuses an address that is not one, and takes one with an apostrophe in it', async () => {
+		await manager.openForRegistration(code);
+
+		const seatIds = [await manager.seatIdFor(SEATS[0].seat)];
+
+		await manager.openAddBookingModal();
+		await manager.fillAddBooking({ seats: [{ ...SEATS[0], email: MALFORMED_EMAIL }], seatIds });
+
+		const answer = await manager.submitAddBooking();
+
+		expect(answer.data.status).toBe('email-validation-failed');
+		await expect(manager.addModalFieldError(0, 'email')).toHaveText(EMAIL_NOT_VALID);
+
+		await manager.closeModal(manager.addModal);
+
+		/* WordPress adds a backslash before every apostrophe it is posted. */
+		const { bookingId } = await manager.addBooking({
+			seats: [{ ...SEATS[0], email: APOSTROPHE_EMAIL }],
+		});
+
+		await expect(manager.bookingRow('pending', bookingId)).toHaveAttribute(
+			'data-email',
+			APOSTROPHE_EMAIL
+		);
+	});
+
 	/* The round trip the import modal itself describes: the file it takes is the
 	   one the booking manager writes. Exported rows carry the seat and room ids
 	   the layout gave them, which is the only place a valid one can come from -
@@ -160,6 +212,57 @@ test.describe('Booking manager modals', () => {
 		).toBeVisible();
 	});
 
+	/* A file from an older booking, and one edited by hand. Neither can be made
+	   through the modals, which check what they are given. */
+	test('imports an older booking as it was written, and holds back a row whose address is not one', async () => {
+		await settings.addCustomField(COMPANY);
+		await settings.save();
+
+		await manager.openForRegistration(code);
+
+		const { bookingId } = await manager.addBooking({
+			seats: [SEATS[0]],
+			customFields: { [COMPANY.label]: ANSWERED },
+		});
+
+		const [exported] = (await manager.exportedBookings('csv', { s1: 'on', s2: 'on' })).split('\n');
+
+		const older = withoutBookerEmail(exported, SEATS[0].email).replace(
+			answersCell(ANSWERED),
+			answersCell(MARKUP)
+		);
+		const unaddressed = exported.replace(SEATS[0].email, csvCell(MARKUP));
+
+		await manager.applyBookingAction('pending', bookingId, 'delete');
+		await manager.openStatusTab('deleted');
+		await manager.permanentlyDelete(bookingId);
+
+		await manager.openImportModal();
+		await manager.uploadBookingsCsv(`${older}\n${unaddressed}\n`);
+
+		await expect(manager.importRows).toHaveCount(2);
+		await expect(manager.importConflicts).toHaveCount(1);
+		await expect(manager.importFinalizationModal.locator('img')).toHaveCount(0);
+
+		const answer = await manager.startBookingImport();
+
+		expect(answer.success).toBe(true);
+
+		await manager.reload();
+		await manager.openStatusTab('pending');
+
+		const imported = manager
+			.statusPanel('pending')
+			.locator(`.reg-seat-item[data-email="${SEATS[0].email}"]`);
+
+		await expect(imported).toHaveAttribute('data-booker-email', '');
+
+		await manager.openEditModal('pending', await imported.getAttribute('data-booking-id'));
+
+		await expect(manager.editCustomField(COMPANY.label)).toHaveValue(MARKUP);
+		await expect(manager.editModal.locator('img')).toHaveCount(0);
+	});
+
 	/* The modal filters nothing on screen - it writes the address of the export
 	   and opens it - so the address is the whole of what it does. */
 	test('builds the export address from the filters that were picked', async () => {
@@ -181,7 +284,7 @@ test.describe('Booking manager modals', () => {
 		expect(generated.searchParams.has('s2')).toBe(false);
 	});
 
-	test('changes the seat, name and extra answers of a booking', async () => {
+	test('changes the seat, name, address and extra answers of a booking', async () => {
 		await settings.addCustomField(COMPANY);
 		await settings.allowSeatsPerBooking(SEATS.length);
 
@@ -207,6 +310,7 @@ test.describe('Booking manager modals', () => {
 
 		await manager.editSeatId.fill(freeSeatId);
 		await manager.editFirstName.fill(RENAMED_TO);
+		await manager.editSeatEmail.fill(READDRESSED_TO);
 		await manager.editCustomField(COMPANY.label).fill(ANSWERED_AGAIN);
 
 		await manager.saveEditModal();
@@ -217,6 +321,12 @@ test.describe('Booking manager modals', () => {
 		await expect(manager.bookedName('pending', bookingId, { seat: FREE_SEAT })).toHaveText(
 			`${RENAMED_TO} ${SEATS[0].lastName}`
 		);
+
+		/* Opened again from the row as the save left it. A modal still showing the
+		   old address would write it back on the next save. */
+		await manager.openEditModal('pending', bookingId, { seat: FREE_SEAT });
+		await expect(manager.editSeatEmail).toHaveValue(READDRESSED_TO);
+		await manager.closeModal(manager.editModal);
 
 		await manager.reload();
 		await manager.openMoreInfo('pending', bookingId, { seat: FREE_SEAT });

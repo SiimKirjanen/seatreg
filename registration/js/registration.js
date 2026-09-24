@@ -1637,7 +1637,7 @@ function sendData(customFieldBack, registrationCode) {
 	$.ajax({
 		type: 'POST',
 		url: ajaxUrl,
-		data: $('#checkoput-area-inner').serialize() + '&custom=' + encodeURIComponent(customFieldBack) +'&action=' + 'seatreg_booking_submit' + '&c=' + registrationCode + '&em=' + encodeURIComponent(mailToSend) + '&pw=' + $('#sub-pwd').val() + '&passwords=' + encodeURIComponent(seatPasswords) + '&coupon=' +  (seatReg.appliedCoupon ? encodeURIComponent(seatReg.appliedCoupon.couponCode) : ''),
+		data: $('#checkoput-area-inner').serialize() + '&custom=' + encodeURIComponent(customFieldBack) +'&action=' + 'seatreg_booking_submit' + '&c=' + registrationCode + '&em=' + encodeURIComponent(mailToSend) + '&pw=' + encodeURIComponent($('#sub-pwd').val()) + '&passwords=' + encodeURIComponent(seatPasswords) + '&coupon=' +  (seatReg.appliedCoupon ? encodeURIComponent(seatReg.appliedCoupon.couponCode) : ''),
 		success: function(data) {
 			var is_JSON = true;
 			

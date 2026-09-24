@@ -23,7 +23,7 @@ class SeatregSubmitBookings extends SeatregBooking {
     }
 
     public function validateAndPopulateBookingData($firstname, $lastname, $email, $seatID, $seatNr, $emailToSend, $code, $pw, $customFields, $roomUUID, $passwords, $multiPriceUUID, $couponCode) {
-		if( !is_email($emailToSend) ) {
+		if( !SeatregDataValidation::validateEmailAddress($emailToSend) ) {
 			$this->response->setValidationError('Email is not correct');
 
 			return false;
@@ -34,7 +34,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 		$this->_seatPasswords = json_decode(stripslashes_deep($passwords));
 
 		if( $this->_usingCalendar ) {
-			$this->_userSelectedCalendarDate = $_POST['selected-calendar-date'];
+			$this->_userSelectedCalendarDate = $_POST['selected-calendar-date'] ?? null;
 		}
     
 		$customFields = stripslashes_deep($customFields);
@@ -188,34 +188,26 @@ class SeatregSubmitBookings extends SeatregBooking {
 			return;
 		}
 
-		//6.step. Check if seat/seats are allready taken
-		$bookStatus = $this->isAllSelectedSeatsOpen($this->_userSelectedCalendarDate); 
-		if($bookStatus != 'ok') {
-			$this->response->setError($bookStatus);
-
-			return;
-		}
-
-		//7.step. In calendar mode 
+		//6.step. In calendar mode
 		//Make sure that booking date is avalidable
 		//Make sure the booking date is not in the past
 		if( $this->_usingCalendar ) {
 
-			$calendarDateFormatCheck = $this->calendarDateFormatCheck( $_POST['selected-calendar-date'] );
+			$calendarDateFormatCheck = $this->calendarDateFormatCheck( $this->_userSelectedCalendarDate );
 			if($calendarDateFormatCheck != 'ok') {
 				$this->response->setValidationError( $calendarDateFormatCheck );
 
 				return;
 			}
 
-			$calendarDateCheck = $this->calendarDateValidation( $_POST['selected-calendar-date'] );
+			$calendarDateCheck = $this->calendarDateValidation( $this->_userSelectedCalendarDate );
 			if($calendarDateCheck != 'ok') {
 				$this->response->setValidationError( $calendarDateCheck );
 
 				return;
 			}
 
-			$calendarDatePastCheck = $this->calendarDatePastDateCheck( $_POST['selected-calendar-date'] );
+			$calendarDatePastCheck = $this->calendarDatePastDateCheck( $this->_userSelectedCalendarDate );
 			if($calendarDatePastCheck != 'ok') {
 				$this->response->setValidationError( $calendarDatePastCheck );
 
@@ -223,7 +215,15 @@ class SeatregSubmitBookings extends SeatregBooking {
 			}
 
 		}
-	
+
+		//7.step. Check if seat/seats are allready taken
+		$bookStatus = $this->isAllSelectedSeatsOpen($this->_userSelectedCalendarDate);
+		if($bookStatus != 'ok') {
+			$this->response->setError($bookStatus);
+
+			return;
+		}
+
 		//8.step. Check if seat/seats are locked
 		$lockStatus = $this->seatLockCheck();
 		if($lockStatus != 'ok') {

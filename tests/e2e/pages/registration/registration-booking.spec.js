@@ -11,6 +11,7 @@ const MARKUP_EMAIL = 'x" autofocus onfocus="alert(1)';
 
 const SEAT_PASSWORD = 'letmein7f3a';
 const WRONG_PASSWORD = 'notthepassword';
+const PLUS_PASSWORD = 'let+me&in';
 
 const SEAT_PRICE = 25;
 
@@ -136,11 +137,13 @@ test.describe('Registration booking', () => {
 		await expect(registration.bookingConfirmed).toBeHidden();
 	});
 
-	test('books with an email address that has a plus in it', async () => {
+	test('books with a plus in the email address and in the registration password', async () => {
+		await settings.set('registrationPassword', PLUS_PASSWORD);
 		await settings.allowBookings();
 
 		const registration = await settings.openRegistration(code);
 
+		await registration.submitPassword(PLUS_PASSWORD);
 		await registration.completeBooking({ ...BOOKER, email: PLUS_ADDRESSED_EMAIL });
 
 		await expect(registration.bookingConfirmed).toBeVisible();

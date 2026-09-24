@@ -181,7 +181,7 @@ class SeatregBooking {
 	protected function calendarDateFormatCheck($bookingSelectedDate) {
 		$statusReport = 'ok';
 
-		if( !preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $bookingSelectedDate ) ) {
+		if( !is_string($bookingSelectedDate) || !preg_match(CALENDAR_DATE_PICKER_REGEX, $bookingSelectedDate ) ) {
 			$statusReport = esc_html__('Selected calendar date is not valid', 'seatreg');
 		}
 
