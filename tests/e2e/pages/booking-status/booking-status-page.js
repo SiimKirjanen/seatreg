@@ -101,6 +101,12 @@ class BookingStatusPage {
 		await expect(this.shell).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
 	}
 
+	/** Where PayPal and Stripe send the booker back to. Anyone can open it for any booking. */
+	async gotoPaymentReturn(bookingId) {
+		await this.page.goto(`/?seatreg=payment-return&id=${bookingId}`);
+		await expect(this.shell).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
+	}
+
 	/** The src alone only says where the page looked, not that anything was served. */
 	async logoLoaded() {
 		return imageLoaded(this.logo);

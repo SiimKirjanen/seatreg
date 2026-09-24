@@ -38,27 +38,30 @@ function seatreg_capture_paypal_order($bookingId, $orderId, $bookingData) {
         return;
     }
 
+    $sandbox = $bookingData->paypal_rest_sandbox_mode === '1';
     $response = SeatregPayPalApiService::captureOrder(
         $orderId,
         $bookingData->paypal_client_id,
         $clientSecret,
-        $bookingData->paypal_rest_sandbox_mode === '1',
+        $sandbox,
         $bookingId
     );
 
     if( $response->success ) {
         SeatregPaymentLogService::log($bookingId, esc_html__('PayPal order was captured', 'seatreg'), SEATREG_PAYMENT_LOG_INFO);
+    }else if( !SeatregPayPalApiService::hasIssue($response->body, 'ORDER_ALREADY_CAPTURED') ) {
+        /* translators: %s: error message */
+        SeatregPaymentLogService::log($bookingId, sprintf(esc_html__('Could not capture PayPal order. %s', 'seatreg'), $response->error), SEATREG_PAYMENT_LOG_ERROR);
 
         return;
     }
 
-    if( SeatregPayPalApiService::hasIssue($response->body, 'ORDER_ALREADY_CAPTURED') ) {
-        //The approved order webhook captured it first
-        return;
-    }
+    //Already captured means the approved order webhook got there first. Either way the order has to be this booking's
+    $order = SeatregPayPalApiService::getOrder($orderId, $bookingData->paypal_client_id, $clientSecret, $sandbox);
 
-    /* translators: %s: error message */
-    SeatregPaymentLogService::log($bookingId, sprintf(esc_html__('Could not capture PayPal order. %s', 'seatreg'), $response->error), SEATREG_PAYMENT_LOG_ERROR);
+    if( $order->success && isset($order->body->status, $order->body->purchase_units[0]->custom_id) && $order->body->status === 'COMPLETED' && $order->body->purchase_units[0]->custom_id === $bookingId ) {
+        SeatregPaymentService::insertProcessingPayment($bookingId);
+    }
 }
 
 if( SeatregPaymentRepository::isPayPalRestUsable($capturedBookingData) && !empty($_GET['token']) ) {

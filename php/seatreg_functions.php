@@ -143,7 +143,7 @@ function seatreg_redirect_from_payment_tunnel() {
 	//Rebuilt from the known parameters instead of forwarding the query string as it came in
 	$queryArgs = array();
 
-	foreach( array('seatreg', 'id', 'registration') as $param ) {
+	foreach( array('seatreg', 'id', 'registration', 'session_id') as $param ) {
 		if( !empty($_GET[$param]) ) {
 			$queryArgs[$param] = sanitize_text_field($_GET[$param]);
 		}

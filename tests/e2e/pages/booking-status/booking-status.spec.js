@@ -102,6 +102,20 @@ test.describe('Booking status page', () => {
 		).toBeVisible();
 	});
 
+	test('still takes payment after the payment return page was opened without paying', async () => {
+		await settings.allowPaidBookings();
+		await settings.priceSeats(code, SEAT_PRICE, 1);
+
+		const booking = await settings.makeBooking(code);
+
+		/* Marking the booking's payment as processing would also have kept it from
+		   ever expiring, so only a payment the provider confirmed may do that. */
+		await bookingStatus.gotoPaymentReturn(booking.id);
+		await bookingStatus.goto(code, booking.id);
+
+		await expect(bookingStatus.customPaymentButton(PAID_BOOKING_PAYMENT.title)).toBeVisible();
+	});
+
 	test('sends the booking receipt again', async ({ page }) => {
 		// The only one here that needs a receipt to have gone out at all
 		test.skip(await shouldSkipWithoutMail(page), NO_MAIL_CAPTURE);
