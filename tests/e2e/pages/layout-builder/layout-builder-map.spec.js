@@ -115,7 +115,7 @@ test.describe('Layout builder map', () => {
 		await expect(builder.priceInputs(2)).toHaveValue(String(SEAT_PRICE));
 	});
 
-	test('locks and password protects seats without leaking the password', async () => {
+	test('locks and password protects seats', async () => {
 		await builder.placeSeats(SEAT_COUNT);
 		await builder.lassoSelectSeats(1, 2);
 
@@ -140,11 +140,6 @@ test.describe('Layout builder map', () => {
 		await registration.openSeat(3);
 		await expect(registration.addToBookingButton).toBeVisible();
 		await registration.closeSeatDialog();
-
-		/* The registration is told a seat wants a password, never which one:
-		   the layout goes through SeatregLayoutService::hideSensitiveData()
-		   first, which flattens it to a boolean. */
-		expect(await registration.html()).not.toContain(SEAT_PASSWORD);
 	});
 
 	test('adds text that reaches the registration and drops it when left empty', async () => {

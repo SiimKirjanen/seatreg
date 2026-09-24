@@ -31,18 +31,6 @@
 	    return size;
 	};
 
-	var qs = (function(a) {
-	    if (a == "") return {};
-	    var b = {};
-	    for (var i = 0; i < a.length; ++i)
-	    {
-	        var p=a[i].split('=');
-	        if (p.length != 2) continue;
-	        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-	    }
-	    return b;
-	})(window.location.search.substr(1).split('&'));
-
 	function deepCopyObject(object) {
 		return JSON.parse(JSON.stringify(object))
 	}
@@ -297,11 +285,12 @@
 		$('#calendar-date-change-loading').css('display', 'block');
 
 		$.ajax({
-			type: 'GET',
+			type: 'POST',
 			url: window.ajaxUrl,
 			data: {
 				date: this.activeCalendarDate,
 				'registration-code': getRegistrationCode(),
+				pw: $('#sub-pwd').val(),
 				action: 'seatreg_fetch_bookings_and_info'
 			},
 			success: function(response) {
@@ -533,7 +522,9 @@
 		$('#boxes').html(documentFragment);
 
 		if(this.rooms[this.currentRoom].room.backgroundImage !== null && this.rooms[this.currentRoom].room.backgroundImage.indexOf('.') !== -1) {  //dose room have a background image?
-			$('#boxes').append('<img class="room-image" src="' + WP_Seatreg.uploads_url + '/room_images/' + qs['c'] + '/' + this.rooms[this.currentRoom].room.backgroundImage + '" />');
+			$('#boxes').append(
+				$('<img class="room-image" />').attr('src', WP_Seatreg.uploads_url + '/room_images/' + getRegistrationCode() + '/' + this.rooms[this.currentRoom].room.backgroundImage)
+			);
 		}
 
 		$('#boxes .box[data-powertip]').powerTip({
@@ -1739,7 +1730,7 @@ function bookingsConfirmedInfo(data, status) {
 }
 
 function getRegistrationCode() {
-	return qs['c'];
+	return WP_Seatreg.registrationCode;
 }
 
 function sanitizeClassName(inputString) {
@@ -1803,7 +1794,7 @@ $('#seat-cart-popup').on('click', '#apply-coupon-btn', function() {
 		data: {
 			action: 'seatreg_check_coupon',
 			coupon: couponCode,
-			'registration-code': qs['c'],
+			'registration-code': getRegistrationCode(),
 		},
 		success: function(data) {
 			if (data.success) {
@@ -1883,7 +1874,7 @@ $('#confirm-dialog-mob-text').on('click', '#password-check', function() {
 		data: {
 			action: 'seatreg_seat_password_check',
 			password: $('#seat-password').val(),
-			'registration-code': qs['c'],
+			'registration-code': getRegistrationCode(),
 			'seat-id': seatId
 		},
 		success: function(data) {

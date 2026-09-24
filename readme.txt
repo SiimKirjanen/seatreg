@@ -50,10 +50,8 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 == Changelog ==
 
 = 1.78.3 =
-* Fixed security issues in bookings.
+* Fixed security issues and small bugs in bookings and on the registration page.
 * Fixed a payment showing as processing before the payment provider had confirmed it.
-* Fixed bookings failing when the email address or registration password contained certain characters.
-* Fixed small issues in the booking manager and on the booking confirmation page.
 
 = 1.78.2 =
 * Fixed a security issue in sorting bookings in the booking manager.

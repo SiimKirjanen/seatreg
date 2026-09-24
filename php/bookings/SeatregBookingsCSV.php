@@ -30,7 +30,7 @@ class SeatregBookingsCSV extends SeatregBookingsFile {
         $output = fopen('php://output', 'w');
 
         foreach ($this->_registrations as $registration) {
-            $booking_id = sha1(mt_rand(10000,99999).time().$registration->booker_email);
+            $booking_id = SeatregRandomGenerator::generateRandom();
             $csvRow = array_fill(0, 14, '');
             $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
 

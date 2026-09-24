@@ -160,6 +160,7 @@ function seatreg_public_scripts_and_styles() {
 
 		wp_add_inline_script('seatreg-registration', $inlineScript, 'before');
 		wp_localize_script('seatreg-registration', 'WP_Seatreg', array(
+			'registrationCode' => $data->registration_code,
 			'SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH' => SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH,
 			'plugin_dir_url' => plugin_dir_url( dirname( __FILE__ ) ),
 			'uploads_url' => SEATREG_TEMP_FOLDER_URL,

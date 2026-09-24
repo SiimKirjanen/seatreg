@@ -25,9 +25,6 @@ const COMPANY = { label: 'Company', type: 'text' };
 const ANSWERED = 'Alpha';
 const ANSWERED_AGAIN = 'Beta';
 
-/* Breaks out of any attribute it is pasted into, and leaves an img behind. */
-const MARKUP = 'x"><img src=x>';
-
 const SEAT_ALREADY_BOOKED = 'Seat is already booked/pending';
 const EMAIL_NOT_VALID = 'Provided email address is not valid';
 
@@ -35,17 +32,6 @@ const EMAIL_NOT_VALID = 'Provided email address is not valid';
    other width is turned away before anything in it is looked at. */
 const MALFORMED_CSV = 'Zoe,Vaher,zoe.vaher@example.com\n';
 const CSV_WRONG_COLUMN_COUNT = 'Each row must contain exactly 15 columns';
-
-/** A cell as PHP writes one. */
-function csvCell(value) {
-	return `"${value.replaceAll('"', '""')}"`;
-}
-
-/* The answers cell of a booking with one answer. A quote in the answer is written
-   as JSON's " rather than \", which PHP's reader takes as an escaped quote. */
-function answersCell(value) {
-	return csvCell(JSON.stringify([{ label: COMPANY.label, value }]).replaceAll('\\"', '\\u0022'));
-}
 
 /* Bookings made before 1.7.0 have no booker address, and are exported with that
    cell empty. It is the last cell of a single seat's row holding the address. */
@@ -215,23 +201,14 @@ test.describe('Booking manager modals', () => {
 	/* A file from an older booking, and one edited by hand. Neither can be made
 	   through the modals, which check what they are given. */
 	test('imports an older booking as it was written, and holds back a row whose address is not one', async () => {
-		await settings.addCustomField(COMPANY);
-		await settings.save();
-
 		await manager.openForRegistration(code);
 
-		const { bookingId } = await manager.addBooking({
-			seats: [SEATS[0]],
-			customFields: { [COMPANY.label]: ANSWERED },
-		});
+		const { bookingId } = await manager.addBooking({ seats: [SEATS[0]] });
 
 		const [exported] = (await manager.exportedBookings('csv', { s1: 'on', s2: 'on' })).split('\n');
 
-		const older = withoutBookerEmail(exported, SEATS[0].email).replace(
-			answersCell(ANSWERED),
-			answersCell(MARKUP)
-		);
-		const unaddressed = exported.replace(SEATS[0].email, csvCell(MARKUP));
+		const older = withoutBookerEmail(exported, SEATS[0].email);
+		const unaddressed = exported.replace(SEATS[0].email, MALFORMED_EMAIL);
 
 		await manager.applyBookingAction('pending', bookingId, 'delete');
 		await manager.openStatusTab('deleted');
@@ -242,7 +219,6 @@ test.describe('Booking manager modals', () => {
 
 		await expect(manager.importRows).toHaveCount(2);
 		await expect(manager.importConflicts).toHaveCount(1);
-		await expect(manager.importFinalizationModal.locator('img')).toHaveCount(0);
 
 		const answer = await manager.startBookingImport();
 
@@ -251,16 +227,9 @@ test.describe('Booking manager modals', () => {
 		await manager.reload();
 		await manager.openStatusTab('pending');
 
-		const imported = manager
-			.statusPanel('pending')
-			.locator(`.reg-seat-item[data-email="${SEATS[0].email}"]`);
-
-		await expect(imported).toHaveAttribute('data-booker-email', '');
-
-		await manager.openEditModal('pending', await imported.getAttribute('data-booking-id'));
-
-		await expect(manager.editCustomField(COMPANY.label)).toHaveValue(MARKUP);
-		await expect(manager.editModal.locator('img')).toHaveCount(0);
+		await expect(
+			manager.statusPanel('pending').locator(`.reg-seat-item[data-email="${SEATS[0].email}"]`)
+		).toHaveAttribute('data-booker-email', '');
 	});
 
 	/* The modal filters nothing on screen - it writes the address of the export

@@ -108,14 +108,10 @@ class SeatregSubmitBookings extends SeatregBooking {
     }
 
 	public function validateBooking() {
-		//password check if needed
-		if($this->_registrationPassword != null) {
-			if($this->_registrationPassword != $this->_submittedPassword) {
-				//registration password and user submitted passwords are not the same
-				$this->response->setError(esc_html__('Error. Password mismatch!', 'seatreg'));
-				
-				return;
-			}
+		if( !SeatregAuthService::registrationPasswordMatches($this->_registrationPassword, $this->_submittedPassword) ) {
+			$this->response->setError(esc_html__('Error. Password mismatch!', 'seatreg'));
+
+			return;
 		}
 
 		//WP logged in check if needed
@@ -317,8 +313,8 @@ class SeatregSubmitBookings extends SeatregBooking {
 			$dataLength = count($this->_bookings);
 			$inserted = true;
 			$bookingStatus = 0;
-			$confCode = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
-			$this->_bookingId = sha1(mt_rand(10000,99999).time().$this->_bookerEmail);
+			$confCode = SeatregRandomGenerator::generateRandom();
+			$this->_bookingId = SeatregRandomGenerator::generateRandom();
 			$currentTimeStamp = time();
 			$registrationConfirmDate = null;
 			$seatsString = $this->generateSeatString();

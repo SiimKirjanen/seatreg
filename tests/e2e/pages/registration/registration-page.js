@@ -480,24 +480,6 @@ class RegistrationPage {
 	}
 
 	/**
-	 * Swap the booker email on its way to the server, for a value the form's own
-	 * checks would never let through.
-	 */
-	async sendBookerEmailAs(email) {
-		await this.page.route('**/admin-ajax.php', async (route) => {
-			const body = new URLSearchParams(route.request().postData() ?? '');
-
-			if (body.get('action') !== 'seatreg_booking_submit') {
-				return route.continue();
-			}
-
-			body.set('em', email);
-
-			return route.continue({ postData: body.toString() });
-		});
-	}
-
-	/**
 	 * The button pulses on a loop that never ends, so it will never hold still
 	 * long enough for a click to wait for it. The animation only scales it, so
 	 * where it stands is the middle either way.
@@ -636,15 +618,6 @@ class RegistrationPage {
 
 		await expect(this.checkoutArea).toBeVisible();
 		await expect(this.checkoutItems.first()).toBeVisible();
-	}
-
-	/**
-	 * For asserting that something never reached a visitor. The layout arrives as
-	 * JSON in the markup, so a value that leaked shows up here even when no
-	 * element renders it.
-	 */
-	async html() {
-		return this.page.content();
 	}
 }
 

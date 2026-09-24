@@ -23,4 +23,18 @@ class SeatregAuthService {
     public static function getCurrentUserId() {
         return get_current_user_id();
     }
+
+     /**
+     *
+     * Check the password a visitor entered against the registration password
+     * * @param boolean True if the registration has no password or the password matches.
+     *
+    */
+    public static function registrationPasswordMatches($registrationPassword, $submittedPassword) {
+        if( $registrationPassword === null || $registrationPassword === '' ) {
+            return true;
+        }
+
+        return is_string($submittedPassword) && hash_equals($registrationPassword, $submittedPassword);
+    }
 }

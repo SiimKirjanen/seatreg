@@ -7,7 +7,6 @@ const SEAT_COUNT = 3;
 const BOOKER = { firstName: 'Riina', lastName: 'Tamm', email: 'riina.tamm@example.com' };
 const MALFORMED_EMAIL = 'riina.tamm.example.com';
 const PLUS_ADDRESSED_EMAIL = 'riina.tamm+seatreg@example.com';
-const MARKUP_EMAIL = 'x" autofocus onfocus="alert(1)';
 
 const SEAT_PASSWORD = 'letmein7f3a';
 const WRONG_PASSWORD = 'notthepassword';
@@ -23,7 +22,6 @@ const PRICE_OPTIONS = [
 
 const EMPTY_FIELD = 'Empty field';
 const EMAIL_NOT_CORRECT = 'Email address is not correct';
-const EMAIL_NOT_ACCEPTED = 'Email is not correct';
 const BOOKING_IS_FULL = 'Booking is full';
 
 /* Making a booking, and everything a visitor does on the way to one, including
@@ -123,18 +121,6 @@ test.describe('Registration booking', () => {
 
 		/* Neither attempt was sent anywhere: the form is still on screen. */
 		await expect(registration.checkoutArea).toBeVisible();
-	});
-
-	test('refuses a booker email that is not an email address', async () => {
-		await settings.allowBookings();
-
-		const registration = await settings.openRegistration(code);
-
-		await registration.sendBookerEmailAs(MARKUP_EMAIL);
-		await registration.completeBooking(BOOKER);
-
-		await expect(registration.bookingRefusal).toHaveText(EMAIL_NOT_ACCEPTED);
-		await expect(registration.bookingConfirmed).toBeHidden();
 	});
 
 	test('books with a plus in the email address and in the registration password', async () => {

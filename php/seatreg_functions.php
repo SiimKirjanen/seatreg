@@ -4353,10 +4353,15 @@ function seatreg_check_coupon_callback() {
 add_action( 'wp_ajax_seatreg_fetch_bookings_and_info', 'seatreg_fetch_bookings_and_info_callback' );
 add_action( 'wp_ajax_nopriv_seatreg_fetch_bookings_and_info', 'seatreg_fetch_bookings_and_info_callback' );
 function seatreg_fetch_bookings_and_info_callback() {
-	$data = SeatregRegistrationRepository::getRegistrationWithOptionsByCode( $_GET['registration-code'] );
+	$data = SeatregRegistrationRepository::getRegistrationWithOptionsByCode( $_POST['registration-code'] ?? null );
+
+	if( !$data || !SeatregAuthService::registrationPasswordMatches($data->registration_password, wp_unslash($_POST['pw'] ?? '')) ) {
+		wp_send_json_error('Not allowed', 403);
+	}
+
 	$selectedShowRegistrationData = $data->show_bookings_data_in_registration ? explode(',', $data->show_bookings_data_in_registration) : [];
-	$bookings = SeatregBookingRepository::getBookingsForRegistrationPage( $_GET['registration-code'], $selectedShowRegistrationData, $_GET['date']);
-	$roomsBookingInfo = json_encode( SeatregLayoutService::getBookingsInfoForLayout($data->registration_layout, $data->registration_code, $_GET['date']) );
+	$bookings = SeatregBookingRepository::getBookingsForRegistrationPage( $data->registration_code, $selectedShowRegistrationData, $_POST['date'] ?? null);
+	$roomsBookingInfo = json_encode( SeatregLayoutService::getBookingsInfoForLayout($data->registration_layout, $data->registration_code, $_POST['date'] ?? null) );
 	$responseData = (object)[
 		'bookings' => $bookings,
 		'roomsBookingInfo' => $roomsBookingInfo
@@ -4416,7 +4421,7 @@ function seatreg_booking_submit_callback() {
 			$_POST['item-nr'], 
 			wp_unslash($_POST['em']), 
 			$_POST['c'], 
-			$_POST['pw'], 
+			wp_unslash($_POST['pw']), 
 			$_POST['custom'],
 			$_POST['room-uuid'],
 			$_POST['passwords'],
@@ -4858,8 +4863,8 @@ function seatreg_add_booking_with_manager_callback() {
 		}
 	}
 
-	$bookingId = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
-	$confCode = sha1(mt_rand(10000,99999).time().$bookingsToAdd[0]->email);
+	$bookingId = SeatregRandomGenerator::generateRandom();
+	$confCode = SeatregRandomGenerator::generateRandom();
 	$addingStatus = [];
 	$primaryEmail = $singleBooking ? $bookingsToAdd[0]->email : sanitize_email(wp_unslash($_POST['multi-booking-primary-email']));
 

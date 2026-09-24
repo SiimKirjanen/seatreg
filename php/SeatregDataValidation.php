@@ -598,6 +598,11 @@ class SeatregDataValidation {
             }
 
             foreach($customFieldsDecoded as $personCustomFields) {
+                if( !is_array($personCustomFields) ) {
+                    $validationStatus->setInvalid('Custom fields not array');
+                    return $validationStatus;
+                }
+
                 foreach($personCustomFields as $personCustomField) {
                     $personCustomFieldValidation = self::validateSingleCustomFieldSubmit($personCustomField, $personCustomFields,  $createdCustomFields, $registrationCode);
 
