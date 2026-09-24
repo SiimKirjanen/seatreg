@@ -61,6 +61,12 @@ class SeatregSubmitBookings extends SeatregBooking {
 		$bookings = [];
 		$customFieldData = json_decode( $customFields );
 
+		if( !is_array($firstname) || count($customFieldData) !== count($firstname) ) {
+			$this->response->setValidationError('Custom fields do not match the booked seats');
+
+			return false;
+		}
+
     	foreach ($firstname as $key => $value) {
 
 			//default field validation
