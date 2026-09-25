@@ -238,7 +238,7 @@ class SeatregDataValidation {
                 return $validationStatus;
             }
 
-            if( !property_exists($roomData->room, 'uuid') || !is_string($roomData->room->uuid) ) {
+            if( !property_exists($roomData->room, 'uuid') || !is_string($roomData->room->uuid) || !preg_match(SEATREG_LAYOUT_UUID_REGEX, $roomData->room->uuid) ) {
                 $validationStatus->setInvalid('room uuid missing or invalid');
                 return $validationStatus;
             }
@@ -360,7 +360,12 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($box, 'id') || !is_string($box->id) ) {
+                if( property_exists($box, 'input') && !is_string($box->input) ) {
+                    $validationStatus->setInvalid('box input is invalid');
+                    return $validationStatus;
+                }
+
+                if( !property_exists($box, 'id') || !is_string($box->id) || !preg_match(SEATREG_SEAT_ID_REGEX, $box->id) ) {
                     $validationStatus->setInvalid('box id is missing or invalid');
                     return $validationStatus;
                 }
@@ -385,7 +390,7 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($box, 'price') || (is_int($box->price) && $box->price < 0) ) {
+                if( !property_exists($box, 'price') || !( is_numeric($box->price) || is_array($box->price) || is_null($box->price) ) || (is_int($box->price) && $box->price < 0) ) {
                     $validationStatus->setInvalid('box price is missing or invalid');
                     return $validationStatus;
                 }
@@ -404,6 +409,11 @@ class SeatregDataValidation {
 
                         if( !property_exists($price, 'description') || !is_string($price->description) || strlen($price->description) === 0) {
                             $validationStatus->setInvalid('Price description is missing or invalid (multi price)');
+                            return $validationStatus;
+                        }
+
+                        if( isset($price->uuid) && ( !is_string($price->uuid) || !preg_match(SEATREG_LAYOUT_UUID_REGEX, $price->uuid) ) ) {
+                            $validationStatus->setInvalid('Price uuid is invalid (multi price)');
                             return $validationStatus;
                         }
                     }
@@ -725,12 +735,12 @@ class SeatregDataValidation {
     public static function validateBookingData($seatId, $seatNr, $roomUUID) {
         $validationStatus = new SeatregValidationStatus();
 
-        if(!preg_match('/^[\p{L}\p{N}]+$/u', $seatId)) {
+        if(!preg_match(SEATREG_SEAT_ID_REGEX, $seatId)) {
             $validationStatus->setInvalid('Illegal characters in booking data');
             return $validationStatus;
         }
 
-        if(!preg_match('/^[\p{L}\p{N}-]+$/u', $roomUUID)) {
+        if(!preg_match(SEATREG_LAYOUT_UUID_REGEX, $roomUUID)) {
             $validationStatus->setInvalid('Illegal characters in booking data');
             return $validationStatus;
         }

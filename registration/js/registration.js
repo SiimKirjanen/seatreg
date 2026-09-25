@@ -384,7 +384,7 @@
 				box.style.color = loc[i].fontColor;
 				box.style.fontSize = loc[i].inputSize + 'px';
 				box.style.pointerEvents = 'none';
-				box.innerHTML = loc[i].input;
+				box.textContent = loc[i].input;
 			}
 
 			if(legend !== 'noLegend') {
@@ -579,7 +579,12 @@ SeatReg.prototype.paintRoomLegends = function() {
 	var documentFragment = $(document.createDocumentFragment());
 
 	for(var i = 0; i < legendsCount; i++) {
-		documentFragment.append($('<div class="legend-div" data-target-legend='+ this.rooms[this.currentRoom].room.legends[i].text.replace(/\s+/g, '_').toLowerCase() +'></div>').append('<div class="legend-box" style="background-color:'+ this.rooms[this.currentRoom].room.legends[i].color +'"></div>', '<div class="legend-name">'+ this.rooms[this.currentRoom].room.legends[i].text +'</div>'));
+		var roomLegend = this.rooms[this.currentRoom].room.legends[i];
+
+		documentFragment.append($('<div class="legend-div"></div>').attr('data-target-legend', roomLegend.text.replace(/\s+/g, '_').toLowerCase()).append(
+			$('<div class="legend-box"></div>').css('background-color', roomLegend.color),
+			$('<div class="legend-name"></div>').text(roomLegend.text)
+		));
 	}
 
 	$('#legends').append(documentFragment);
@@ -734,9 +739,9 @@ SeatReg.prototype.addSeatToCart = function() {
 
 	//add to seat cart popup
 	var cartItem = $('<div class="cart-item" data-cart-id="' + seatId + '" data-room-uuid="'+ roomUUID +'"></div>');
-	var seatNumberDiv = $('<div class="cart-item-nr">' + seatNr + '</div>');
+	var seatNumberDiv = $('<div class="cart-item-nr"></div>').text(seatNr);
 	var legendDiv = $('<div class="cart-item-label"></div>').text(legend);
-	var roomNameDiv = $('<div class="cart-item-room">' + roomName + '</div>');
+	var roomNameDiv = $('<div class="cart-item-room"></div>').text(roomName);
 	var delItem = $('<div class="remove-cart-item"><i class="fa fa-times-circle"></i><span style="padding-left:6px">'+ translator.translate('remove') +'</span></div>').on('click', function() {
 		var item = $(this).closest('.cart-item');
 		var removeId = item.attr('data-cart-id');
@@ -882,7 +887,7 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 
 	for(var i = 0; i < arrLen; i++) {
 		var checkItem = $('<div class="check-item"></div>');
-		var checkItemHeader = $('<div class="check-item-head">No. <span>' + this.selectedSeats[i].nr + '</span><br><span>' + this.selectedSeats[i].room + '</span></div>');
+		var checkItemHeader = $('<div class="check-item-head">No. <span>' + escapeHtml(this.selectedSeats[i].nr) + '</span><br><span>' + escapeHtml(this.selectedSeats[i].room) + '</span></div>');
 		var documentFragment2 = $(document.createDocumentFragment());
 		var arrLen2 = this.selectedSeats[i].defFields.length;
 		var isLastCheckItem = i === arrLen - 1 || this.onePersonCheckout;
@@ -926,7 +931,7 @@ SeatReg.prototype.generateCheckout = function(arrLen) {
 		}
 
 		var seatId = $('<input type="hidden" class="item-id" name="item-id[]" value="' + this.selectedSeats[i].id + '" />');
-		var seatNr = $('<input type="hidden" class="item-nr" name="item-nr[]" value="' + this.selectedSeats[i].nr + '" />');
+		var seatNr = $('<input type="hidden" class="item-nr" name="item-nr[]" />').val(this.selectedSeats[i].nr);
 		var roomUUID = $('<input type="hidden" name="room-uuid[]" value="' + this.selectedSeats[i].roomUUID + '" />');
 		var multiPriceUUID = $('<input type="hidden" name="multi-price-uuid[]" value="' + this.selectedSeats[i].multiPriceUUID + '" />');
 		var selectedCalendarDate = null;
@@ -1128,7 +1133,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 		$('#confirm-dialog-bottom').append('<div class="multi-price-title">Price selction</div><div class="multi-price-wrap"></div>');
 
 		price.forEach(function(price) {
-			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ getCurrencySymbolFromISO(this.payPalCurrencyCode) + price.price + '</strong> <span class="mullti-price-description">' + price.description  + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '" data-price-uuid="' + price.uuid + '">' + translator.translate('addToBooking') + '</div>');
+			$('#confirm-dialog-bottom .multi-price-wrap').append('<div><strong>'+ getCurrencySymbolFromISO(this.payPalCurrencyCode) + price.price + '</strong> <span class="mullti-price-description">' + escapeHtml(price.description) + '</span></div><div class="seatreg-btn green-btn add-to-cart" data-price="' + price.price + '" data-price-uuid="' + price.uuid + '">' + translator.translate('addToBooking') + '</div>');
 		});
 	}else {
 		//Fallback
@@ -1159,7 +1164,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 				}else if( this.status == 'run' && !this.hasFailedTimeRestrictions() ) {
 					var maxPlacesText = seatregFormat(translator.translate('maxSpotsToAdd'), [this.seatNouns.plural, this.seatLimit]);
 
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ seatregFormat(translator.translate('addSpotFromRoomToBooking'), [this.seatNouns.singular, seatPrefix + nr, this.roomNouns.singular, room]) +'</h5><p>'+ maxPlacesText +'</p>' + '</div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>'+ seatregFormat(translator.translate('addSpotFromRoomToBooking'), [this.seatNouns.singular, escapeHtml(seatPrefix + nr), this.roomNouns.singular, escapeHtml(room)]) +'</h5><p>'+ maxPlacesText +'</p>' + '</div>');
 
 					if(this.isPaymentEnabled() && this.payPalCurrencyCode && price > 0) {
 						var placeCostText = seatregFormat(translator.translate('spotCosts'), [this.seatNouns.singular, '<strong>' + getCurrencySymbolFromISO(this.payPalCurrencyCode) + price + '</strong>']);
@@ -1167,7 +1172,7 @@ SeatReg.prototype.paintSeatDialog = function(clickBox) {
 						$('#confirm-dialog-mob-text .add-seat-text').append('<p>' + placeCostText + '</p>');
 					}
 				}else {
-					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + seatregFormat(translator.translate('spotFromRoom'), [this.seatNouns.singular, seatPrefix + nr, this.roomNouns.singular, room]) + '</h5></div>');
+					$('#confirm-dialog-mob-text').html('<div class="add-seat-text"><h5>' + seatregFormat(translator.translate('spotFromRoom'), [this.seatNouns.singular, escapeHtml(seatPrefix + nr), this.roomNouns.singular, escapeHtml(room)]) + '</h5></div>');
 				}
 
 			}else if(type == 'tak') {

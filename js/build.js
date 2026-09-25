@@ -2800,7 +2800,6 @@
 				box.id = escapeAngleBrackets(box.id);
 				box.hoverText = escapeAngleBrackets(box.hoverText);
 				box.legend = escapeAngleBrackets(box.legend);
-				box.input = escapeAngleBrackets(box.input);
 				box.seat = Number(box.seat);
 				box.password = typeof box.password === 'string' ? box.password : '';
 
