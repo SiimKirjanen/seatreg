@@ -3,6 +3,13 @@ const { BookingManagerPage } = require('./booking-manager-page');
 const { SettingsPage } = require('../settings/settings-page');
 const { WP_ADMIN_USER } = require('../../utils/auth');
 const { uniqueRegistrationName, bookingStatusUrlQuery } = require('../../utils/registrations');
+const {
+	uniqueBookerEmail,
+	shouldSkipWithoutMail,
+	mailSentTo,
+	waitForMail,
+	linkFromMail,
+} = require('../../utils/mail');
 
 const SEAT_COUNT = 4;
 
@@ -10,8 +17,6 @@ const SEATS = [
 	{ seat: 1, firstName: 'Zoe', lastName: 'Vaher', email: 'zoe.vaher@example.com' },
 	{ seat: 2, firstName: 'Anna', lastName: 'Kask', email: 'anna.kask@example.com' },
 ];
-
-const BOOKER_EMAIL = 'booker@example.com';
 
 const VISITOR = { firstName: 'Riina', lastName: 'Tamm', email: 'riina.tamm@example.com' };
 
@@ -39,15 +44,16 @@ test.describe('Booking manager bookings', () => {
 		);
 	});
 
-	test('approves every seat of the booking that was selected', async () => {
+	test('approves every seat of the booking that was selected, and tells the booker once', async ({
+		page,
+	}) => {
+		const bookerEmail = uniqueBookerEmail('approved');
+
 		await settings.allowSeatsPerBooking(SEATS.length);
 
 		await manager.openForRegistration(code);
 
-		const { bookingId } = await manager.addBooking({
-			seats: SEATS,
-			bookerEmail: BOOKER_EMAIL,
-		});
+		const { bookingId } = await manager.addBooking({ seats: SEATS, bookerEmail });
 
 		await manager.selectBookingAction('pending', bookingId, 'approve');
 
@@ -67,6 +73,19 @@ test.describe('Booking manager bookings', () => {
 
 		await expect(manager.bookingRow('approved', bookingId)).toHaveCount(SEATS.length);
 		await expect(manager.statusTab('approved')).toContainText(`(${SEATS.length})`);
+
+		// Approving does not wait on the mail, so only the receipt needs it captured
+		if (await shouldSkipWithoutMail(page)) {
+			return;
+		}
+
+		/* One receipt for the booking, not one for each of its seats. */
+		const receipt = await waitForMail(page, bookerEmail);
+
+		expect(linkFromMail(receipt, 'seatreg=booking-status')).toContain(
+			bookingStatusUrlQuery(code, bookingId)
+		);
+		expect(await mailSentTo(page, bookerEmail)).toHaveLength(1);
 	});
 
 	test('unapproves the booking that was selected', async () => {
@@ -107,7 +126,7 @@ test.describe('Booking manager bookings', () => {
 		);
 	});
 
-	test('deletes a booking and says who deleted it', async () => {
+	test('deletes a booking, says who deleted it, and deletes it for good', async () => {
 		await manager.openForRegistration(code);
 
 		const { bookingId } = await manager.addBooking({ seats: [SEATS[0]] });
@@ -124,15 +143,6 @@ test.describe('Booking manager bookings', () => {
 		);
 
 		await expect(manager.editButton('deleted', bookingId)).toHaveCount(0);
-	});
-
-	test('permanently deletes a deleted booking, or keeps it', async () => {
-		await manager.openForRegistration(code);
-
-		const { bookingId } = await manager.addBooking({ seats: [SEATS[0]] });
-
-		await manager.applyBookingAction('pending', bookingId, 'delete');
-		await manager.openStatusTab('deleted');
 
 		const question = await manager.permanentlyDelete(bookingId, { confirm: false });
 

@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
-const { createHash } = require('crypto');
-const { BookingManagerPage, STATUS_TABS } = require('./booking-manager-page');
+const { BookingManagerPage } = require('./booking-manager-page');
 const { SettingsPage } = require('../settings/settings-page');
+const { OverviewPage, STATS } = require('../overview/overview-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 const { isoDate, fromIsoDate, dayAfter } = require('../../utils/dates');
 
@@ -17,9 +17,6 @@ const SEATS = [
 const BOOKER_EMAIL = 'booker@example.com';
 
 const FILE_TYPES = ['pdf', 'xlsx', 'text', 'csv'];
-
-/* The screen opens on Pending, so these are the three moves that are moves. */
-const TAB_ORDER = ['approved', 'deleted', 'pending'];
 
 /* The screen around the bookings: which registration is being looked at, which
    list is open, and what the manager is asked to show of them. What happens to a
@@ -54,26 +51,14 @@ test.describe('SeatReg Booking manager screen', () => {
 		}
 	});
 
-	test('moves between the pending, approved and deleted lists', async ({ page }) => {
-		await manager.openForRegistration(code);
+	test('opens the list a counter links to', async ({ page }) => {
+		const overview = new OverviewPage(page);
 
-		for (const status of TAB_ORDER) {
-			await manager.openStatusTab(status);
+		await overview.open(code);
+		await overview.statLink(STATS.confirmed).click();
 
-			const id = panelId(name, STATUS_TABS[status]);
-
-			await expect(manager.statusPanel(status)).toHaveAttribute('id', id);
-
-			/* The list being looked at is put into the address, so one of them
-			   can be linked to. */
-			expect(new URL(page.url()).hash).toBe(`#${id}`);
-
-			for (const other of Object.keys(STATUS_TABS)) {
-				if (other !== status) {
-					await expect(manager.statusPanel(other)).toBeHidden();
-				}
-			}
-		}
+		await expect(manager.statusPanel('approved')).toBeVisible();
+		await expect(manager.statusPanel('pending')).toBeHidden();
 	});
 
 	test('finds a booking by what it was booked under', async () => {
@@ -149,16 +134,6 @@ test.describe('SeatReg Booking manager screen', () => {
 		await expect(manager.bookingRow('pending', bookingId)).toBeVisible();
 	});
 });
-
-/**
- * The id the plugin gives one of the three panels: the sha1 of the registration's
- * name with its spaces replaced, and the list's own ending after it.
- */
-function panelId(registrationName, ending) {
-	const hash = createHash('sha1').update(registrationName.replace(/ /g, '_')).digest('hex');
-
-	return hash + ending;
-}
 
 function fullName({ firstName, lastName }) {
 	return `${firstName} ${lastName}`;

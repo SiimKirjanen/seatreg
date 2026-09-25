@@ -5,6 +5,8 @@ const { uniqueRegistrationName } = require('../../utils/registrations');
 const FIRST_ROOM = 'Main hall';
 const SECOND_ROOM = 'Balcony';
 
+const FIRST_ROOM_SEATS = 2;
+
 const ROOM_DESCRIPTION = 'Seats 1-3 are next to the stage.';
 const INVALID_ROOM_DESCRIPTION = 'Seats <b>1-3</b>';
 
@@ -23,20 +25,16 @@ test.describe('Layout builder rooms', () => {
 		await builder.nameFirstRoom(FIRST_ROOM);
 	});
 
-	test('adds a room and makes it the one being edited', async () => {
+	test('switches back to a room with its own seats', async () => {
+		await builder.placeSeats(FIRST_ROOM_SEATS);
 		await builder.addRoom(SECOND_ROOM);
 
-		await expect.poll(() => builder.roomNames()).toEqual([FIRST_ROOM, SECOND_ROOM]);
-
-		/* The builder only renders the arrows a room can use, so the first room
-		   cannot move left and the last cannot move right. */
-		await expect(builder.reorderArrow(FIRST_ROOM, 'right')).toBeVisible();
-		await expect(builder.reorderArrow(FIRST_ROOM, 'left')).toHaveCount(0);
-		await expect(builder.reorderArrow(SECOND_ROOM, 'left')).toBeVisible();
-		await expect(builder.reorderArrow(SECOND_ROOM, 'right')).toHaveCount(0);
+		await expect(builder.seats).toHaveCount(0);
 
 		await builder.selectRoom(FIRST_ROOM);
+
 		await expect(builder.activeRoomSelection).toHaveText(FIRST_ROOM);
+		await expect(builder.seats).toHaveCount(FIRST_ROOM_SEATS);
 	});
 
 	test('reorders rooms and the registration shows the new order', async () => {

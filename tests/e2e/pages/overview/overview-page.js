@@ -39,11 +39,6 @@ class OverviewPage {
 		return this.page.locator('#seatreg-overview');
 	}
 
-	/** Names the registration the screen is showing. */
-	get heading() {
-		return this.panel.locator('.seatreg-overview__title');
-	}
-
 	get status() {
 		return this.panel.locator('.seatreg-registration-card__badge');
 	}

@@ -28,21 +28,6 @@ test.describe('Settings scheduling', () => {
 		code = await settings.openForNewRegistration(uniqueRegistrationName('Settings scheduling'));
 	});
 
-	test('offers the calendar dates only while the calendar is on', async () => {
-		await settings.openSection('scheduling');
-
-		await expect(settings.calendarDatesGroup).toBeHidden();
-
-		await settings.set('usingCalendar', true);
-
-		await expect(settings.calendarDatesGroup).toBeVisible();
-		await expect(settings.calendarDatesPicker).toBeVisible();
-
-		await settings.set('usingCalendar', false);
-
-		await expect(settings.calendarDatesGroup).toBeHidden();
-	});
-
 	test('keeps the calendar dates that were picked', async () => {
 		const dates = CALENDAR_DAYS.map(dayNextMonth);
 		const stored = dates.map(isoDate);

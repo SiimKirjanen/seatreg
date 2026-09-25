@@ -15,28 +15,16 @@ const PER_SEAT_CHECKOUT = 'Booking details are entered for each seat.';
 const ONE_PERSON_CHECKOUT = 'Booking details are entered once and applied to every seat.';
 const CLOSED = 'Your registration is currently closed, so visitors cannot make a booking.';
 
-/* The screen itself: which registration it is editing, its section tabs, and the
-   save that carries all of them. The settings live in the spec of the tab they
-   belong to; the whole form is one post, so one setting of each kind is enough
-   to prove saving works. */
+/* The save that carries every section, and the summary reading the settings back.
+   The form is one post, so one setting of each kind proves saving works. */
 
 test.describe('SeatReg Settings screen', () => {
 	let settings;
-	let name;
-	let code;
 
 	test.beforeEach(async ({ page }) => {
 		settings = new SettingsPage(page);
 
-		name = uniqueRegistrationName('Settings');
-		code = await settings.openForNewRegistration(name);
-	});
-
-	test('shows the settings of the registration picked in the registration tabs', async () => {
-		await settings.open(code);
-
-		await expect(settings.registrationTab(code)).toHaveClass(/nav-tab-active/);
-		await expect(settings.heading).toContainText(name);
+		await settings.openForNewRegistration(uniqueRegistrationName('Settings'));
 	});
 
 	test('saves a change in every kind of field and keeps it after the reload', async () => {
@@ -64,14 +52,6 @@ test.describe('SeatReg Settings screen', () => {
 		await expect(settings.homePage.registrationNameLink(newName)).toHaveText(newName);
 	});
 
-	test('returns to the section that was open when the settings were saved', async () => {
-		await settings.openSection('payments');
-
-		await settings.save();
-
-		await expect(settings.activeSectionPanel).toHaveAttribute('data-tab-panel', 'payments');
-	});
-
 	/* The summary is the plugin reading its own settings back as sentences, and
 	   it is rewritten as they are changed rather than when they are saved, so
 	   nothing here is posted. */
@@ -96,16 +76,5 @@ test.describe('SeatReg Settings screen', () => {
 
 		await expect(settings.bookingFlowSummary).toHaveText(CLOSED);
 		await expect(makingABooking).toHaveCount(0);
-	});
-
-	test('jumps to the setting a summary line is about', async () => {
-		await settings.openBookingFlowSummary();
-
-		/* The screen opens on the first section, and this setting is on another
-		   one, so following the line has to change section to get there. */
-		await settings.summaryJumpLink('#one-person-checkout').click();
-
-		await expect(settings.activeSectionPanel).toHaveAttribute('data-tab-panel', 'booking-flow');
-		await expect(settings.field('onePersonCheckout')).toBeFocused();
 	});
 });

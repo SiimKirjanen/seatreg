@@ -265,7 +265,7 @@ test.describe('Settings advanced', () => {
 		await expect(registration.seat(1)).toHaveCSS('border-radius', STYLED_SEAT_RADIUS);
 	});
 
-	test('hides an API token until it is asked for', async () => {
+	test('hides an API token until it is asked for, and removes it once confirmed', async () => {
 		const token = await settings.createApiToken();
 
 		const secret = await token.getAttribute('data-token');

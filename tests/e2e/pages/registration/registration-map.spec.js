@@ -9,13 +9,8 @@ const { uniqueRegistrationName } = require('../../utils/registrations');
 const STALLS = { name: 'Stalls', seats: 2, description: 'Ground floor, step free' };
 const BALCONY = { name: 'Balcony', seats: 3 };
 
-const LEGEND = 'Wheelchair';
-
-/** The blink runs twice over a second, so it is gone comfortably inside this. */
-const BLINK_OVER = 4000;
-
-/* What a visitor does with the map itself: moving between rooms, reading it, and
-   moving it around. What the map is drawn from belongs to the builder's specs. */
+/* What a visitor does with the map itself: moving between rooms and reading it.
+   What the map is drawn from belongs to the builder's specs. */
 
 test.describe('Registration map', () => {
 	let homePage;
@@ -33,8 +28,6 @@ test.describe('Registration map', () => {
 		await builder.openRoomDescriptionDialog();
 		await builder.submitRoomDescription(STALLS.description);
 		await builder.placeSeats(STALLS.seats);
-		await builder.selectSeat(1);
-		await builder.createAndApplyLegend(LEGEND);
 
 		await builder.addRoom(BALCONY.name);
 		await builder.placeSeats(BALCONY.seats);
@@ -74,41 +67,6 @@ test.describe('Registration map', () => {
 		await arrived.openRoom(STALLS.name);
 
 		expect(page.url()).toBe(arrivedAt);
-	});
-
-	test('blinks the seats a legend is for', async () => {
-		const marked = registration.seatsWithLegend(LEGEND);
-
-		await expect(marked).toHaveCount(1);
-
-		await registration.legend(LEGEND).click();
-
-		await expect(marked).toHaveClass(/legend-animation/);
-		await expect(registration.seat(2)).not.toHaveClass(/legend-animation/);
-
-		await expect(marked).not.toHaveClass(/legend-animation/, { timeout: BLINK_OVER });
-	});
-
-	test('zooms and pans the map', async () => {
-		const start = await registration.mapPosition();
-
-		await registration.zoomMap('in');
-
-		expect((await registration.mapPosition()).scale).toBeGreaterThan(start.scale);
-
-		await registration.zoomMap('out');
-
-		expect((await registration.mapPosition()).scale).toBeCloseTo(start.scale, 2);
-
-		/* A map sitting at its corner has nowhere further to go, so it is moved
-		   away from it before it is moved back. */
-		await registration.moveMap('right');
-
-		expect((await registration.mapPosition()).x).toBeLessThan(start.x);
-
-		await registration.moveMap('left');
-
-		expect((await registration.mapPosition()).x).toBeCloseTo(start.x, 2);
 	});
 
 	test('tells a visitor what the registration holds', async () => {

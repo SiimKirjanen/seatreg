@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { SettingsPage, BOOKER } = require('./settings-page');
 const { uniqueRegistrationName, bookingStatusUrlQuery } = require('../../utils/registrations');
 const {
+	uniqueBookerEmail,
 	shouldSkipWithoutMail,
 	NO_MAIL_CAPTURE,
 	waitForMail,
@@ -84,6 +85,36 @@ test.describe('Settings emails', () => {
 		/* [booking-table] is the only one that expands to more than a value: a
 		   table of the booking, a row to a seat. */
 		expect(receipt.message).toContain(`${BOOKER.firstName} ${BOOKER.lastName}`);
+	});
+
+	/* A booking waiting for approval sends two mails: the site owner hears of it at
+	   the address the settings give, and the booker is sent the way back to it. */
+	test('tells the site owner and the booker about a pending booking', async ({ page }) => {
+		test.skip(await shouldSkipWithoutMail(page), NO_MAIL_CAPTURE);
+
+		const name = uniqueRegistrationName('Settings emails pending');
+		const owner = uniqueBookerEmail('owner');
+		const code = await settings.openForNewRegistrationWithSeats(name, 1);
+
+		// Verification would hold the booking back from ever being pending
+		await settings.set('emailConfirm', false);
+		await settings.set('adminBookingNotification', true);
+		await settings.set('notificationEmail', owner);
+		await settings.set('bookerPendingNotification', true);
+		await settings.save();
+
+		const booking = await settings.makeBooking(code);
+
+		const notification = await waitForMail(page, owner);
+
+		expect(notification.subject).toContain(name);
+		expect(notification.message).toContain(`${BOOKER.firstName} ${BOOKER.lastName}`);
+
+		const pending = await waitForMail(page, booking.email);
+
+		expect(linkFromMail(pending, 'seatreg=booking-status')).toContain(
+			bookingStatusUrlQuery(code, booking.id)
+		);
 	});
 
 	/* The wrapper every one of the plugin's emails is written into. What is worth

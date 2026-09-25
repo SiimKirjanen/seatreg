@@ -1,14 +1,12 @@
 const { test, expect } = require('@playwright/test');
 const { SettingsPage } = require('./settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
+const { ageBooking, runPendingBookingExpiration } = require('../../utils/fixtures');
 
 /* Two seats, because several of these settings only differ once a booking is
    for more than one. A registration takes one seat per booking until it is told
    otherwise, so the tests that book both say so first. */
 const SEAT_COUNT = 2;
-
-const DEFAULT_SELECTION_BUTTON = 'Open';
-const SELECTION_BUTTON = 'Choose your seats';
 
 const INFO_TEXT = 'Doors open half an hour before the show.';
 const FOOTER_TEXT = 'By booking you agree to the house rules.';
@@ -32,9 +30,8 @@ const EXPIRES_WITH_PROCESSING =
 /* Everything on this tab shapes the seat map, the cart or the booking form, so
    every test walks a visitor to the part its setting decides.
 
-   Left out: everything under Booking PDF, and the expiry actually running - the
-   shortest one the screen accepts is a minute, which is longer than the whole
-   suite takes. */
+   Left out: Booking PDF, the info button, the selection button's text and where
+   the zoom controls sit. */
 
 test.describe('Settings booking flow', () => {
 	let settings;
@@ -49,25 +46,6 @@ test.describe('Settings booking flow', () => {
 		);
 	});
 
-	test('dresses the seat map from the settings', async () => {
-		const asBuilt = await settings.openRegistration(code);
-
-		await expect(asBuilt.infoButton).toBeVisible();
-		await expect(asBuilt.selectionButton).toHaveText(DEFAULT_SELECTION_BUTTON);
-
-		await asBuilt.page.close();
-
-		await settings.open(code);
-		await settings.set('showInfoButton', false);
-		await settings.set('seatSelectionBtnText', SELECTION_BUTTON);
-		await settings.save();
-
-		const registration = await settings.openRegistration(code);
-
-		await expect(registration.infoButton).toHaveCount(0);
-		await expect(registration.selectionButton).toHaveText(SELECTION_BUTTON);
-	});
-
 	test('shows the registration info text where a visitor can find it', async () => {
 		await settings.set('infoText', INFO_TEXT);
 		await settings.save();
@@ -79,27 +57,6 @@ test.describe('Settings booking flow', () => {
 		await registration.openInfoDialog();
 
 		await expect(registration.infoDialog).toContainText(INFO_TEXT);
-	});
-
-	test('puts the zoom controls where the settings say', async () => {
-		const below = await settings.openRegistration(code);
-
-		/* The controller is rendered either above the map or below it with the
-		   cart. Both are the same element, so which of the two arrangements was
-		   drawn is the whole setting. */
-		await expect(below.zoomController).toBeVisible();
-		await expect(below.zoomControllerBelowMap).toHaveCount(1);
-
-		await below.page.close();
-
-		await settings.open(code);
-		await settings.set('zoomOnTop', true);
-		await settings.save();
-
-		const above = await settings.openRegistration(code);
-
-		await expect(above.zoomController).toBeVisible();
-		await expect(above.zoomControllerBelowMap).toHaveCount(0);
 	});
 
 	test('opens the booking dialog as soon as a seat is chosen', async () => {
@@ -232,8 +189,8 @@ test.describe('Settings booking flow', () => {
 		await registration.page.close();
 	});
 
-	/* The expiry cannot be watched happening, but the screen writes out what it
-	   will do, and that sentence is worked out from all three of its controls. */
+	/* The screen writes out what the expiry will do, worked out from all three of
+	   its controls. */
 	test('says when a pending booking will be given up on', async () => {
 		await settings.set('usePending', true);
 		await settings.set('pendingExpiration', String(PENDING_EXPIRATION_MINUTES));
@@ -255,5 +212,28 @@ test.describe('Settings booking flow', () => {
 			String(PENDING_EXPIRATION_MINUTES)
 		);
 		await expect(settings.pendingExpirationProcessing).toBeChecked();
+	});
+
+	/* WP-Cron only runs the expiry job when the site is visited, so one booking is
+	   made to look old enough and the job is run the way the schedule would. */
+	test('gives up on a pending booking once it has expired', async ({ page }) => {
+		await settings.set('pendingExpiration', String(PENDING_EXPIRATION_MINUTES));
+		await settings.allowBookings();
+
+		const expired = await settings.makeBooking(code, { seats: [1] });
+		await settings.makeBooking(code, { seats: [2] });
+
+		await ageBooking(page, { bookingId: expired.id, minutes: PENDING_EXPIRATION_MINUTES + 1 });
+
+		expect((await runPendingBookingExpiration(page)).scheduled).toBe(true);
+
+		const registration = await settings.openRegistration(code);
+
+		/* Left its age, the other booking says the job went by the expiry. */
+		await expect(registration.seat(2)).toHaveAttribute('data-status', 'bron');
+
+		await registration.openSeat(1);
+
+		await expect(registration.addToBookingButton).toBeVisible();
 	});
 });

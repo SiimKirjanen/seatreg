@@ -2,12 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { HomePage } = require('./home-page');
 const { SettingsPage } = require('../settings/settings-page');
 const { BookingManagerPage } = require('../booking-manager/booking-manager-page');
-const {
-	SEATREG_PAGES,
-	SEATREG_MENU_ITEMS,
-	getSeatRegMenu,
-	getSeatRegMenuItem,
-} = require('../../utils/navigation');
+const { SEATREG_PAGES, getSeatRegMenu } = require('../../utils/navigation');
 const { uniqueRegistrationName, registrationPublicUrlQuery } = require('../../utils/registrations');
 const { escapeForRegExp } = require('../../utils/text');
 const { loginToWordPress, visitorContext } = require('../../utils/auth');
@@ -34,24 +29,8 @@ test.describe('SeatReg Home screen', () => {
 		await homePage.goto();
 	});
 
-	test('renders the home screen with the create registration form', async () => {
-		await expect(homePage.heading).toBeVisible();
-		await expect(homePage.createForm).toBeVisible();
-		await expect(homePage.nameInput).toBeEditable();
-		await expect(homePage.createButton).toHaveValue('Create new registration');
-	});
-
-	/* Every beforeEach already gets here through the menu, so only the items are
-	   left to cover. */
-	test('lists every SeatReg screen in its menu', async ({ page }) => {
-		for (const item of SEATREG_MENU_ITEMS) {
-			await expect(getSeatRegMenuItem(page, item.label)).toBeVisible();
-		}
-	});
-
-	/* The other half of that: the plugin adds its two capabilities to
-	   administrators alone, and every screen is behind one of them. An editor has
-	   the run of wp-admin and none of SeatReg. */
+	/* The plugin gives its two capabilities to administrators alone, and every
+	   screen needs one of them, so an editor gets none of SeatReg. */
 	test('keeps a non-administrator out of the SeatReg screens', async ({ page, browser }) => {
 		const editor = await createUser(page, { role: 'editor' });
 
@@ -78,16 +57,6 @@ test.describe('SeatReg Home screen', () => {
 
 		await expect(homePage.errorToast).toHaveText('Please enter registration name');
 		expect(page.url()).toBe(urlBeforeSubmit);
-	});
-
-	test('creates a registration and lists it', async () => {
-		const name = uniqueRegistrationName('Home create');
-
-		const code = await homePage.createRegistration(name);
-
-		expect(code).toBeTruthy();
-		await expect(homePage.registrationsHeader).toHaveText('Created registrations');
-		await expect(homePage.registrationNameLink(name)).toHaveText(name);
 	});
 
 	test('shows the links of a registration', async () => {

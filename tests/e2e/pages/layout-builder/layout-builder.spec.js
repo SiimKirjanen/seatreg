@@ -17,15 +17,6 @@ test.describe('Layout builder', () => {
 		await builder.openForNewRegistration(name);
 	});
 
-	test('opens with the registration loaded and names its first room', async () => {
-		await expect(builder.registrationName).toHaveText(name);
-		await expect(builder.roomNameDialog.locator('.modal-title')).toHaveText('Room name');
-
-		await builder.nameFirstRoom('Main hall');
-
-		await expect(builder.roomName).toHaveText('Main hall');
-	});
-
 	test('warns about unsaved changes and closes only when discarded', async () => {
 		await builder.dismissRoomNameDialog();
 

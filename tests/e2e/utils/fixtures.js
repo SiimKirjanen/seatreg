@@ -78,10 +78,29 @@ function setCustomFieldTranslation(page, { text, translation }) {
 	return askFixture(page, 'set_custom_field_translation', { text, translation });
 }
 
+/**
+ * Move a booking back in time by this many minutes, as if it had been made that
+ * long ago.
+ */
+function ageBooking(page, { bookingId, minutes }) {
+	return askFixture(page, 'age_booking', { booking_id: bookingId, minutes });
+}
+
+/**
+ * Run the pending booking expiry job now rather than when WP-Cron gets to it.
+ *
+ * @return {Promise<{scheduled: boolean}>} Whether the site has the job on its schedule
+ */
+function runPendingBookingExpiration(page) {
+	return askFixture(page, 'run_pending_booking_expiration', {});
+}
+
 module.exports = {
 	createPost,
 	createUser,
 	setRoomNouns,
 	setSeatNouns,
 	setCustomFieldTranslation,
+	ageBooking,
+	runPendingBookingExpiration,
 };
