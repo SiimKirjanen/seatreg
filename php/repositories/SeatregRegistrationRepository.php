@@ -38,7 +38,9 @@ class SeatregRegistrationRepository {
 	    global $seatreg_db_table_names;
 
         return $wpdb->get_results(
-            "SELECT * FROM $seatreg_db_table_names->table_seatreg WHERE is_deleted = 0"
+            "SELECT * FROM $seatreg_db_table_names->table_seatreg
+            WHERE is_deleted = 0
+            ORDER BY registration_create_timestamp DESC, id DESC"
         );
     }
 
