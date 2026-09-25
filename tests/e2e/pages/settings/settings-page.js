@@ -445,7 +445,8 @@ class SettingsPage {
 
 	/**
 	 * Create a registration on Home and open its settings. Goes through the Home
-	 * card because the menu opens the oldest registration rather than this one.
+	 * card because the menu opens the newest registration, which another worker
+	 * may have made since.
 	 *
 	 * @return {Promise<string>} The registration's code
 	 */

@@ -46,7 +46,6 @@ function seatreg_send_booking_notification_email($registrationCode, $bookingId, 
 function seatreg_send_approved_booking_email($bookingId, $registrationCode, $template) {
     global $phpmailer;
 
-    $GLOBALS['seatreg_qr_code_bookingid'] = $bookingId;
     $bookings = SeatregBookingRepository::getBookingsById($bookingId);
     $registration = SeatregRegistrationRepository::getRegistrationWithOptionsByCode($registrationCode);
     $registrationCustomFields = json_decode($registration->custom_fields);
@@ -120,15 +119,19 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
 
     SeatregEmailTemplateService::prepareBookingPdfAttachment($pdfContent, $pdfFileName);
 
+    $qrImage = null;
+
     if( extension_loaded('gd') && $qrType ) {
         $qrContent = SeatregRegQRCodeService::getQRCodeContent( $bookingId, $registration->registration_code, $qrType);
-        SeatregRegQRCodeService::generateQRCodeImage($qrContent, $bookingId);
-        
-        add_action( 'phpmailer_init', function($phpmailer){
-            $bookingId = $GLOBALS['seatreg_qr_code_bookingid'];
-            $phpmailer->AddEmbeddedImage( SEATREG_TEMP_FOLDER_DIR. '/' .$bookingId.'.png', 'qrcode', 'qrcode.png');
-        });
-        
+        $qrImage = SeatregRegQRCodeService::generateQRCodeImageData($qrContent);
+    }
+
+    $embedQrCode = function($phpmailer) use ($qrImage) {
+        $phpmailer->addStringEmbeddedImage($qrImage, 'qrcode', 'qrcode.png', 'base64', 'image/png');
+    };
+
+    if( $qrImage ) {
+        add_action( 'phpmailer_init', $embedQrCode );
         $message .= '<br><img src="cid:qrcode" />';
     }
 
@@ -145,11 +148,12 @@ function seatreg_send_approved_booking_email($bookingId, $registrationCode, $tem
         "FROM: $fromEmail"
     ));
 
-    //Release the PDF so later emails in this request don't get it attached.
+    //Release the PDF and QR code so later emails in this request don't get them attached.
     SeatregEmailTemplateService::prepareBookingPdfAttachment();
+    remove_action( 'phpmailer_init', $embedQrCode );
 
     if($isSent) {
-        $activityMessage = $qrType ? "Approved booking email with QR Code sent to $bookerEmail": "Approved booking email sent to $bookerEmail";
+        $activityMessage = $qrImage ? "Approved booking email with QR Code sent to $bookerEmail": "Approved booking email sent to $bookerEmail";
 
         if( $pdfAttached ) {
             $activityMessage .= ' with booking PDF attached';

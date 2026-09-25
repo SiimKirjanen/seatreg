@@ -16,6 +16,7 @@ class SeatregMigrationsRunner {
     private static $migrations = array(
         'SeatregEncryptStripeCredentialsMigration',
         'SeatregBackfillStripeWebhookUrlMigration',
+        'SeatregRemoveQrCodeImagesMigration',
     );
 
     /**

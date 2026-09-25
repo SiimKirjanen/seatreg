@@ -6,7 +6,7 @@
 	Author: Siim Kirjanen
 	Author URI: https://github.com/SiimKirjanen
 	Text Domain: seatreg
-	Version: 1.78.3
+	Version: 1.78.4
 	Requires at least: 5.3
 	Requires PHP: 7.2.28
 	License: GPLv2 or later
@@ -77,6 +77,7 @@ require( 'php/services/SeatregTerminologyService.php' );
 require( 'php/services/SeatregStringTranslationService.php' );
 require( 'php/migrations/SeatregEncryptStripeCredentialsMigration.php' );
 require( 'php/migrations/SeatregBackfillStripeWebhookUrlMigration.php' );
+require( 'php/migrations/SeatregRemoveQrCodeImagesMigration.php' );
 require( 'php/migrations/SeatregMigrationsRunner.php' );
 
 require( 'php/emails.php' );

@@ -8,11 +8,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SeatregRegQRCodeService {
     /**
      *
-     * Generate QR Image
+     * Generate QR image into a temporary file outside the uploads folder. The caller deletes the file.
+     * Null when no temporary file could be made.
      *
     */
-    public static function generateQRCodeImage($qrContent, $bookingId) {
-        QRcode::png($qrContent, SEATREG_TEMP_FOLDER_DIR. '/' . $bookingId . '.png', QR_ECLEVEL_L, 4);
+    public static function generateQRCodeImage($qrContent) {
+        $qrFile = tempnam(get_temp_dir(), 'seatreg-qr');
+
+        if( $qrFile === false ) {
+            return null;
+        }
+
+        QRcode::png($qrContent, $qrFile, QR_ECLEVEL_L, 4);
+
+        return $qrFile;
+    }
+
+    /**
+     *
+     * Generate QR image and return its PNG data. Null when it could not be made.
+     *
+    */
+    public static function generateQRCodeImageData($qrContent) {
+        $qrFile = self::generateQRCodeImage($qrContent);
+
+        if( $qrFile === null ) {
+            return null;
+        }
+
+        $qrImage = file_get_contents($qrFile);
+        unlink($qrFile);
+
+        return $qrImage ? $qrImage : null;
     }
 
     /**

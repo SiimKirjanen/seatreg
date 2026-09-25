@@ -72,7 +72,7 @@ define('SEATREG_STRIPE_ZERO_DECIMAL_CURRENCIES', array('BIF', 'CLP', 'DJF', 'GNF
 define('SEATREG_ENCRYPTED_VALUE_PREFIX', 'seatreg_enc_v1:');
 
 // Migrations
-define('SEATREG_TRIGGER_MIGRATIONS', '4');
+define('SEATREG_TRIGGER_MIGRATIONS', '6');
 
 // Layout export
 //Exported layout .json files can move between sites, so every export is stamped with this number and a plugin refuses one stamped higher than its own

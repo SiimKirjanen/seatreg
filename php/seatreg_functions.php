@@ -3088,7 +3088,7 @@ function seatreg_get_options($code) {
 			INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 			ON a.registration_code = b.registration_code
 			WHERE a.is_deleted = false
-			ORDER BY a.registration_create_timestamp
+			ORDER BY a.registration_create_timestamp DESC, a.id DESC
 			LIMIT 1"
 		);
 	}
