@@ -102,7 +102,7 @@ class SeatregBooking {
 		foreach( $this->_bookings as $booking ) {
 			if( SeatregLayoutService::checkIfSeatLocked($this->_registrationLayoutFull, $booking->seat_id) ) {
 				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number */
-				$statusReport = sprintf(esc_html__('%1$s %2$s is locked', 'seatreg'), esc_html($this->_seatNouns->singularUpper), $booking->seat_nr);
+				$statusReport = sprintf(esc_html__('%1$s %2$s is locked', 'seatreg'), esc_html($this->_seatNouns->singularUpper), esc_html($booking->seat_nr));
 
 				break;
 			}
@@ -121,7 +121,7 @@ class SeatregBooking {
 
 				if( !SeatregLayoutService::seatPasswordMatches($this->_registrationLayoutFull, $booking->seat_id, $enteredPassword) ) {
 					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number */
-					$statusReport = sprintf(esc_html__('%1$s %2$s password is not correct', 'seatreg'), esc_html($this->_seatNouns->singularUpper), $booking->seat_nr);
+					$statusReport = sprintf(esc_html__('%1$s %2$s password is not correct', 'seatreg'), esc_html($this->_seatNouns->singularUpper), esc_html($booking->seat_nr));
 
 					break;
 				}

@@ -50,7 +50,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 == Changelog ==
 
 = 1.78.4 =
-* Fixed a security issue with booking QR codes.
+* Fixed security issues with booking QR codes and on the registration page.
 * The booking manager, settings and overview now list registrations newest first, the same as the home page.
 
 = 1.78.3 =
