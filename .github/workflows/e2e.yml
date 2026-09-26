@@ -10,8 +10,13 @@ on:
 
 jobs:
   e2e-tests:
-    name: E2E Tests
+    name: E2E Tests (${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
 
     steps:
       - name: Checkout repository
@@ -32,13 +37,13 @@ jobs:
         run: npm run wp-env:start
 
       - name: Run E2E Tests
-        run: npm run test:e2e:ci
+        run: npm run test:e2e:ci -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Upload test report
         if: failure()
         uses: actions/upload-artifact@v5
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shardIndex }}
           path: playwright-report/
           retention-days: 7
 
@@ -46,6 +51,17 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v5
         with:
-          name: test-results
+          name: test-results-${{ matrix.shardIndex }}
           path: test-results/
           retention-days: 7
+
+  e2e-result:
+    name: E2E Tests
+    needs: e2e-tests
+    # A skipped job passes a required check, so this has to run even when a shard fails.
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check all shards passed
+        run: test "${{ needs.e2e-tests.result }}" = "success"
