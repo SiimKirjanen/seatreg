@@ -44,10 +44,22 @@ test.describe('Booking confirm page', () => {
 		await settings.save();
 	});
 
-	test('confirms the booking from the link in the verification email', async ({ page }) => {
+	test('confirms the booking from the link in the verification email, and only once', async ({
+		page,
+	}) => {
 		const bookingStatus = new BookingStatusPage(page);
+		const email = uniqueBookerEmail();
 
-		const link = await bookSeatForVerification(settings, code, page);
+		const registration = await settings.openRegistration(code);
+
+		await registration.completeBooking({ seats: SEAT_COUNT, ...BOOKER, email });
+
+		// No booking yet, so no address for one - only word that the link is on its way
+		await expect(registration.emailVerificationSent).toBeVisible();
+
+		await registration.page.close();
+
+		const link = linkFromMail(await waitForMail(page, email), 'seatreg=booking-confirm');
 
 		await bookingConfirm.open(link);
 
@@ -59,14 +71,6 @@ test.describe('Booking confirm page', () => {
 		await page.goto(statusUrl);
 
 		await expect(bookingStatus.bookingTable).toContainText(BOOKER.firstName);
-	});
-
-	test('turns down a confirmation link that has already been used', async ({ page }) => {
-		const link = await bookSeatForVerification(settings, code, page);
-
-		await bookingConfirm.open(link);
-
-		await expect(bookingConfirm.title).toHaveText(CONFIRMED);
 
 		await bookingConfirm.open(link);
 
@@ -74,25 +78,3 @@ test.describe('Booking confirm page', () => {
 		await expect(bookingConfirm.content).toContainText(ALREADY_USED);
 	});
 });
-
-/**
- * Book a seat and hand back the confirmation link that was mailed for it.
- *
- * @return {Promise<string>} The address out of the booker's mail
- */
-async function bookSeatForVerification(settings, code, adminPage) {
-	const email = uniqueBookerEmail();
-
-	const registration = await settings.openRegistration(code);
-
-	await registration.completeBooking({ seats: SEAT_COUNT, ...BOOKER, email });
-
-	// No booking yet, so no address for one - only word that the link is on its way
-	await expect(registration.emailVerificationSent).toBeVisible();
-
-	await registration.page.close();
-
-	const mail = await waitForMail(adminPage, email);
-
-	return linkFromMail(mail, 'seatreg=booking-confirm');
-}

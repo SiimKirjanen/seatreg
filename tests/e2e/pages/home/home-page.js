@@ -20,16 +20,6 @@ class HomePage {
 		this.page = page;
 	}
 
-	/* Page shell */
-
-	get heading() {
-		return this.page.getByRole('heading', { name: 'Create and manage online registrations' });
-	}
-
-	get registrationsHeader() {
-		return this.page.locator('h4.your-registrations-header');
-	}
-
 	/* Create registration form */
 
 	get createForm() {
@@ -151,10 +141,7 @@ class HomePage {
 		await this.nameInput.fill(name);
 		await this.createButton.click();
 
-		const card = this.registrationCard(name);
-		await expect(card).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
-
-		return card.locator('[data-registration-id]').first().getAttribute('data-registration-id');
+		return this.#codeOnCard(name);
 	}
 
 	/**
@@ -208,11 +195,6 @@ class HomePage {
 		await expectModalShown(this.moreModal(code));
 	}
 
-	async closeMoreModal(code) {
-		await this.moreModal(code).locator('.modal-footer button[data-dismiss="modal"]').click();
-		await expect(this.moreModal(code)).toBeHidden();
-	}
-
 	/* Copy and Shortcode are opened from inside the More modal, which stays open
 	   behind them. */
 
@@ -234,6 +216,7 @@ class HomePage {
 		await expectModalShown(this.logsModal);
 	}
 
+	/** @return {Promise<string>} The copy's code */
 	async copyRegistration(code, newName) {
 		await this.openCopyModal(code);
 
@@ -241,7 +224,7 @@ class HomePage {
 		await modal.locator(`[id="copy-registration-${code}"]`).fill(newName);
 		await modal.locator('input[type="submit"]').click();
 
-		await expect(this.registrationCard(newName)).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
+		return this.#codeOnCard(newName);
 	}
 
 	/** @return {Promise<string>} The confirm dialog's message */
@@ -260,6 +243,14 @@ class HomePage {
 		});
 
 		return dialogMessage;
+	}
+
+	/** @return {Promise<string>} The code of the registration, once its card is listed */
+	async #codeOnCard(name) {
+		const card = this.registrationCard(name);
+		await expect(card).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
+
+		return card.locator('[data-registration-id]').first().getAttribute('data-registration-id');
 	}
 }
 

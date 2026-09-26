@@ -114,17 +114,6 @@ class RegistrationPage {
 		return this.page.locator('#seat-cart .seats-in-cart');
 	}
 
-	/* Zoom. The same controller is rendered either above the map or below it with
-	   the cart, so where it is, is the whole setting. */
-
-	get zoomController() {
-		return this.page.locator('#zoom-controller');
-	}
-
-	get zoomControllerBelowMap() {
-		return this.page.locator('#controls-wrapper #zoom-controller');
-	}
-
 	/* Seats */
 
 	get seats() {
@@ -374,62 +363,6 @@ class RegistrationPage {
 		await this.roomLink(name).click();
 
 		await expect(this.roomLink(name)).toHaveClass(/active-nav-link/);
-	}
-
-	/**
-	 * Where the zoom and move buttons have put the map. Between them they do one
-	 * thing - write a transform onto the seats - so this is the whole of it.
-	 *
-	 * @return {Promise<{scale: number, x: number, y: number}>}
-	 */
-	async mapPosition() {
-		return this.page.locator('#boxes').evaluate((boxes) => {
-			const transform = getComputedStyle(boxes).transform;
-			/* A map nothing has moved yet carries no transform at all. */
-			const matrix = new DOMMatrixReadOnly(transform === 'none' ? '' : transform);
-
-			return { scale: matrix.a, x: matrix.e, y: matrix.f };
-		});
-	}
-
-	/** @param {string} direction 'in' or 'out' */
-	async zoomMap(direction) {
-		await this.#moveTheMap(this.zoomController.locator(`.zoom-action[data-zoom="${direction}"]`));
-	}
-
-	/**
-	 * Only the directions that move it back toward where it started do anything,
-	 * and what is waited for is the map having moved - so a map already at its
-	 * corner must not be asked to go further up or left.
-	 *
-	 * @param {string} direction up, down, left or right
-	 */
-	async moveMap(direction) {
-		await this.#moveTheMap(this.zoomController.locator(`.move-action[data-move="${direction}"]`));
-	}
-
-	/**
-	 * Every zoom and pan is animated, so a reading taken when the click returns is
-	 * of somewhere the map was only passing through - and one taken before the
-	 * animation has started is of where it has not left yet. Having moved off the
-	 * position it began at says it started; two readings the same say it arrived.
-	 */
-	async #moveTheMap(control) {
-		const start = JSON.stringify(await this.mapPosition());
-		let previous = null;
-
-		await control.click();
-
-		await expect
-			.poll(async () => {
-				const current = JSON.stringify(await this.mapPosition());
-				const settled = current !== start && current === previous;
-
-				previous = current;
-
-				return settled;
-			})
-			.toBe(true);
 	}
 
 	/** @param {number} number The seat's number, as the cart lists it */

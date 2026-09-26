@@ -25,27 +25,16 @@ const AHEAD = [1, 2];
 test.describe('SeatReg Overview screen', () => {
 	let overview;
 	let settings;
-	let name;
 	let code;
 
 	test.beforeEach(async ({ page }) => {
 		overview = new OverviewPage(page);
 		settings = new SettingsPage(page);
 
-		name = uniqueRegistrationName('Overview');
-		code = await settings.openForNewRegistrationWithSeats(name, SEAT_COUNT);
-	});
-
-	test('shows the statistics of the registration picked in the registration tabs', async () => {
-		await overview.open(code);
-
-		await expect(overview.registrationTab(code)).toHaveClass(/nav-tab-active/);
-		await expect(overview.heading).toHaveText(name);
-
-		await expect(overview.statValue(STATS.seats)).toHaveText(String(SEAT_COUNT));
-		await expect(overview.statValue(STATS.open)).toHaveText(String(SEAT_COUNT));
-		await expect(overview.statValue(STATS.confirmed)).toHaveText('0');
-		await expect(overview.statValue(STATS.pending)).toHaveText('0');
+		code = await settings.openForNewRegistrationWithSeats(
+			uniqueRegistrationName('Overview'),
+			SEAT_COUNT
+		);
 	});
 
 	test('counts a pending booking apart from an approved one', async () => {

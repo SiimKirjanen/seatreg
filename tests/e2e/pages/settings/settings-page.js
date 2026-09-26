@@ -71,12 +71,6 @@ const FIELDS = {
 	},
 	requireName: { tab: 'booking-flow', selector: '#require-name', kind: 'checkbox' },
 	gmailRequired: { tab: 'booking-flow', selector: '#gmail-required', kind: 'checkbox' },
-	zoomOnTop: { tab: 'booking-flow', selector: '#zoom-on-top', kind: 'checkbox' },
-	seatSelectionBtnText: {
-		tab: 'booking-flow',
-		selector: '#seat-selection-btn-text',
-		kind: 'text',
-	},
 	customFooterText: {
 		tab: 'booking-flow',
 		selector: '#customFooterTextEditor',
@@ -93,6 +87,7 @@ const FIELDS = {
 	},
 	approvedBookingEmail: { tab: 'emails', selector: '#approved-booking-email', kind: 'checkbox' },
 	adminBookingNotification: { tab: 'emails', selector: '#booking-notification', kind: 'checkbox' },
+	notificationEmail: { tab: 'emails', selector: '#notification-email', kind: 'text' },
 	customizeEmailColors: { tab: 'emails', selector: '#customize-email-colors', kind: 'checkbox' },
 	emailBackgroundColor: { tab: 'emails', selector: '#email-background-color', kind: 'text' },
 	emailHeadingColor: { tab: 'emails', selector: '#email-heading-color', kind: 'text' },
@@ -209,11 +204,6 @@ class SettingsPage {
 			.filter({ has: this.page.getByText(title, { exact: true }) });
 	}
 
-	/** @param {string} target The setting's selector, as the link names it */
-	summaryJumpLink(target) {
-		return this.bookingFlowSummary.locator(`.flow-jump[data-target="${target}"]`);
-	}
-
 	/* Sections */
 
 	sectionTab(tab) {
@@ -222,10 +212,6 @@ class SettingsPage {
 
 	sectionPanel(tab) {
 		return this.form.locator(`.settings-tab-panel[data-tab-panel="${tab}"]`);
-	}
-
-	get activeSectionPanel() {
-		return this.form.locator('.settings-tab-panel--active');
 	}
 
 	/* Settings */
@@ -263,10 +249,6 @@ class SettingsPage {
 
 	registrationDateValue(which) {
 		return this.page.locator(`#${which}-timestamp`);
-	}
-
-	get calendarDatesGroup() {
-		return this.form.locator('.form-group').filter({ has: this.page.locator('#calendar-dates') });
 	}
 
 	/** Part of the form, unlike the registration dates' popup picker. */

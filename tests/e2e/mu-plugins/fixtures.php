@@ -199,3 +199,54 @@ add_action(
 		);
 	}
 );
+
+/* Stands in for time passing: the shortest pending expiry the settings take is a
+   minute, so the booking is moved back rather than the clock forward. */
+add_action(
+	'wp_ajax_seatreg_e2e_age_booking',
+	function () {
+		global $wpdb, $seatreg_db_table_names;
+
+		seatreg_e2e_fixtures_guard();
+
+		$booking_id = isset( $_GET['booking_id'] ) ? sanitize_text_field( wp_unslash( $_GET['booking_id'] ) ) : '';
+		$minutes    = isset( $_GET['minutes'] ) ? absint( $_GET['minutes'] ) : 0;
+
+		if ( '' === $booking_id || 0 === $minutes ) {
+			wp_send_json_error( 'booking_id and minutes are required', 400 );
+		}
+
+		$aged = $wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$seatreg_db_table_names->table_seatreg_bookings} SET booking_date = booking_date - %d WHERE booking_id = %s",
+				$minutes * MINUTE_IN_SECONDS,
+				$booking_id
+			)
+		);
+
+		if ( false === $aged ) {
+			wp_send_json_error( $wpdb->last_error, 500 );
+		}
+
+		if ( 0 === $aged ) {
+			wp_send_json_error( 'no such booking', 404 );
+		}
+
+		wp_send_json( array( 'booking_id' => $booking_id ) );
+	}
+);
+
+/* Runs the expiry job now, since WP-Cron only runs on a visit and cannot be waited
+   on. Whether the job is scheduled at all is handed back for the test to judge. */
+add_action(
+	'wp_ajax_seatreg_e2e_run_pending_booking_expiration',
+	function () {
+		seatreg_e2e_fixtures_guard();
+
+		$scheduled = (bool) wp_next_scheduled( 'seatreg_pending_booking_expiration' );
+
+		do_action( 'seatreg_pending_booking_expiration' );
+
+		wp_send_json( array( 'scheduled' => $scheduled ) );
+	}
+);

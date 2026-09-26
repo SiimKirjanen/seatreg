@@ -83,10 +83,8 @@ async function expectOnSeatRegPage(page, slug, params = {}) {
 
 module.exports = {
 	SEATREG_PAGES,
-	SEATREG_MENU_ITEMS,
 	gotoWpAdmin,
 	getSeatRegMenu,
-	getSeatRegMenuItem,
 	openSeatRegMenuItem,
 	openSeatRegScreen,
 	expectOnSeatRegPage,
