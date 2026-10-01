@@ -330,8 +330,8 @@ function seatreg_generate_settings_form() {
 
 			<nav class="settings-tabs" role="tablist">
 				<button type="button" class="settings-tab settings-tab--active" data-tab="general" role="tab"><?php esc_html_e('General', 'seatreg'); ?></button>
-				<button type="button" class="settings-tab" data-tab="scheduling" role="tab"><?php esc_html_e('Scheduling & calendar', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="booking-flow" role="tab"><?php esc_html_e('Booking flow & display', 'seatreg'); ?></button>
+				<button type="button" class="settings-tab" data-tab="scheduling" role="tab"><?php esc_html_e('Scheduling & calendar', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="emails" role="tab"><?php esc_html_e('Emails & notifications', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="payments" role="tab"><?php esc_html_e('Payments & coupons', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="pages" role="tab"><?php esc_html_e('Pages', 'seatreg'); ?></button>
@@ -475,68 +475,6 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			</div><!-- /.settings-tab-panel general -->
-			<div class="settings-tab-panel" data-tab-panel="scheduling">
-
-			<div class="form-group">
-				<label for="using-calendar"><?php esc_html_e('Registration calendar', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Please check if you want to enable calendar functionality, as it allows registration to reset on each day.', 'seatreg'); ?>.</p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="using-calendar" name="using-calendar" value="1" <?php echo $options[0]->using_calendar == '1' ? 'checked="checked"':''; ?> >
-			      		<?php esc_html_e('Turn on calendar', 'seatreg'); ?>
-			    	</label>
-			  	</div>
-			</div>
-
-			<div class="form-group ml-4 mt-n3" <?php if( $options[0]->using_calendar === '0' ) { echo ' style="display:none;"'; } ?>>
-				<label for="calendar-dates"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Click the dates when registration is open. Leave empty for no date restrictions', 'seatreg'); ?>.
-				</p>
-				<div id="calendar-dates-list" class="mb-2"></div>
-				<div id="calendar-dates-picker"></div>
-				<input type="hidden" id="calendar-dates" name="calendar-dates" value="<?php echo esc_attr($options[0]->calendar_dates ? $options[0]->calendar_dates : ""); ?>">
-			</div>
-		
-			<div class="form-group">
-				<label for="registration-start-timestamp"><i class="fa fa-calendar" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.
-					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
-				</p>
-				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
-				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_start_timestamp); ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
-			</div>
-
-			<div class="form-group">
-				<label for="registration-start-time"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start time', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Set registration start time (24 hours time format)', 'seatreg'); ?>.
-					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
-				</p>
-				<input id="registration-start-time" name="registration-start-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_start_time); ?>" />
-			</div>
-
-			<div class="form-group">
-				<label for="registration-end-timestamp"><i class="fa fa-calendar" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end date', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.
-					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
-				</p>
-				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
-				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_end_timestamp); ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
-			</div>
-
-			<div class="form-group">
-				<label for="registration-end-time"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end time', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Set registration end time (24 hours time format)', 'seatreg'); ?>.
-					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
-				</p>
-				<input id="registration-end-time" name="registration-end-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_end_time); ?>"  />
-			</div>
-
-			</div><!-- /.settings-tab-panel scheduling -->
 			<div class="settings-tab-panel" data-tab-panel="booking-flow">
 
 			<div class="form-group">
@@ -887,6 +825,68 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			</div><!-- /.settings-tab-panel booking-flow -->
+			<div class="settings-tab-panel" data-tab-panel="scheduling">
+
+			<div class="form-group">
+				<label for="using-calendar"><?php esc_html_e('Registration calendar', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Please check if you want to enable calendar functionality, as it allows registration to reset on each day.', 'seatreg'); ?>.</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="using-calendar" name="using-calendar" value="1" <?php echo $options[0]->using_calendar == '1' ? 'checked="checked"':''; ?> >
+			      		<?php esc_html_e('Turn on calendar', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group ml-4 mt-n3" <?php if( $options[0]->using_calendar === '0' ) { echo ' style="display:none;"'; } ?>>
+				<label for="calendar-dates"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Click the dates when registration is open. Leave empty for no date restrictions', 'seatreg'); ?>.
+				</p>
+				<div id="calendar-dates-list" class="mb-2"></div>
+				<div id="calendar-dates-picker"></div>
+				<input type="hidden" id="calendar-dates" name="calendar-dates" value="<?php echo esc_attr($options[0]->calendar_dates ? $options[0]->calendar_dates : ""); ?>">
+			</div>
+		
+			<div class="form-group">
+				<label for="registration-start-timestamp"><i class="fa fa-calendar" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
+				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_start_timestamp); ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-start-time"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start time', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration start time (24 hours time format)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input id="registration-start-time" name="registration-start-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_start_time); ?>" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-end-timestamp"><i class="fa fa-calendar" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end date', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
+				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_end_timestamp); ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-end-time"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end time', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration end time (24 hours time format)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input id="registration-end-time" name="registration-end-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_end_time); ?>"  />
+			</div>
+
+			</div><!-- /.settings-tab-panel scheduling -->
 			<div class="settings-tab-panel" data-tab-panel="emails">
 
 			<div class="form-group">
