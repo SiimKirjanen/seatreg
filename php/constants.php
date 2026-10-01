@@ -9,7 +9,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.65');
+define('SEATREG_DB_VERSION', '1.66');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));
@@ -101,6 +101,12 @@ define('SEATREG_EMAIL_DEFAULT_HEADING_COLOR', '#1a2233');
 define('SEATREG_PAGE_DEFAULT_BG_COLOR', '#f4f6fa');
 define('SEATREG_PAGE_DEFAULT_TEXT_COLOR', '#3d4759');
 define('SEATREG_PAGE_DEFAULT_HEADING_COLOR', '#1a2233');
+
+// Where the registration page seat color pickers start. Pending and approved match the status dots in registration.scss
+define('SEATREG_SEAT_DEFAULT_PENDING_COLOR', '#ffff00');
+define('SEATREG_SEAT_DEFAULT_APPROVED_COLOR', '#ff0000');
+define('SEATREG_SEAT_DEFAULT_SELECTED_COLOR', '#2196f3');
+define('SEATREG_SEAT_DEFAULT_LOCKED_COLOR', '#9e9e9e');
 
 // Email template keywords
 define('SEATREG_TEMPLATE_STATUS_LINK', '[status-link]');

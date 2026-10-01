@@ -3125,6 +3125,10 @@ $('#seatreg-settings-form').on('change', '#customize-page-colors', function() {
 	$('#page-background-color, #page-heading-color, #page-text-color').prop('disabled', !enabled);
 });
 
+$('#seatreg-settings-form').on('change', '.seat-color-toggle', function() {
+	$('#' + $(this).data('color-input')).prop('disabled', !$(this).is(':checked'));
+});
+
 var seatregPageLogoFrame = null;
 $('#seatreg-settings-form').on('click', '#page-logo-select', function(e) {
 	e.preventDefault();

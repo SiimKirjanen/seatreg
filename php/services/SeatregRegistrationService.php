@@ -151,7 +151,11 @@ class SeatregRegistrationService {
                 'page_background_color' => $registrationData->page_background_color,
                 'page_text_color' => $registrationData->page_text_color,
                 'page_heading_color' => $registrationData->page_heading_color,
-                'page_logo' => $registrationData->page_logo
+                'page_logo' => $registrationData->page_logo,
+                'pending_seat_color' => $registrationData->pending_seat_color,
+                'approved_seat_color' => $registrationData->approved_seat_color,
+                'selected_seat_color' => $registrationData->selected_seat_color,
+                'locked_seat_color' => $registrationData->locked_seat_color
             ),
     		'%s'
     	);

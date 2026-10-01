@@ -19,6 +19,23 @@ const DEFAULT_COLORS = {
 
 const NOT_FOUND_TEXT = 'Write to us and we will look your booking up.';
 
+/* One seat for each state the seat colors cover, and one left in none of them. */
+const SEAT_COUNT = 5;
+const PENDING_SEAT = 1;
+const APPROVED_SEAT = 2;
+const LOCKED_SEAT = 3;
+const SELECTED_SEAT = 4;
+const UNTOUCHED_SEAT = 5;
+
+const SEAT_COLORS = {
+	pending: { value: '#ff9800', computed: 'rgb(255, 152, 0)' },
+	approved: { value: '#4a148c', computed: 'rgb(74, 20, 140)' },
+	selected: { value: '#00bcd4', computed: 'rgb(0, 188, 212)' },
+	locked: { value: '#607d8b', computed: 'rgb(96, 125, 139)' },
+};
+const LAYOUT_SEAT_COLOR = 'rgb(97, 179, 41)';
+const WHITE = 'rgb(255, 255, 255)';
+
 /* One rule for each of the three boxes. The two for the standalone pages hide a
    different part of the page shell, so what took effect says which box it came
    from. Nothing here may use > or quotes: the plugin escapes the styles twice on
@@ -46,7 +63,7 @@ test.describe('Settings pages', () => {
 
 		code = await settings.openForNewRegistrationWithSeats(
 			uniqueRegistrationName('Settings pages'),
-			1
+			SEAT_COUNT
 		);
 	});
 
@@ -156,6 +173,71 @@ test.describe('Settings pages', () => {
 
 		await expect(bookingStatus.registrationName).toBeHidden();
 		await expect(bookingStatus.title).toBeVisible();
+	});
+
+	test('paints each seat in the color picked for its state', async () => {
+		await settings.lockSeat(code, LOCKED_SEAT);
+		await settings.open(code);
+
+		for (const [state, color] of Object.entries(SEAT_COLORS)) {
+			await settings.setSeatColor(state, color.value);
+		}
+
+		await settings.allowBookings();
+		await settings.makeBooking(code, { seats: [PENDING_SEAT] });
+
+		await settings.open(code);
+		await settings.allowBookings({ approved: true });
+		await settings.makeBooking(code, { seats: [APPROVED_SEAT] });
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.addSeatToBooking(SELECTED_SEAT);
+
+		const pendingSeat = registration.seat(PENDING_SEAT);
+		const approvedSeat = registration.seat(APPROVED_SEAT);
+
+		await expect(pendingSeat).toHaveCSS('background-color', SEAT_COLORS.pending.computed);
+		await expect(approvedSeat).toHaveCSS('background-color', SEAT_COLORS.approved.computed);
+		await expect(registration.seat(LOCKED_SEAT)).toHaveCSS(
+			'background-color',
+			SEAT_COLORS.locked.computed
+		);
+		await expect(registration.seat(SELECTED_SEAT)).toHaveCSS(
+			'background-color',
+			SEAT_COLORS.selected.computed
+		);
+		await expect(registration.seat(UNTOUCHED_SEAT)).toHaveCSS(
+			'background-color',
+			LAYOUT_SEAT_COLOR
+		);
+
+		/* The fill says what the dot used to, so the dot goes. The number is
+		   turned light to stay readable on a dark fill. */
+		await expect(pendingSeat.locator('.bron-sign')).toBeHidden();
+		await expect(approvedSeat.locator('.taken-sign')).toBeHidden();
+		await expect(approvedSeat).toHaveCSS('color', WHITE);
+
+		/* What each color means is told beside the room's counts, and a locked
+		   seat only gets a line there once it has a color of its own. */
+		await expect(registration.roomCounts.locator('.bron-legend')).toHaveCSS(
+			'background-color',
+			SEAT_COLORS.pending.computed
+		);
+		await expect(registration.roomCounts.locator('.tak-legend')).toHaveCSS(
+			'background-color',
+			SEAT_COLORS.approved.computed
+		);
+
+		const lockedCount = registration.roomCounts.filter({
+			has: registration.page.locator('.locked-legend'),
+		});
+
+		await expect(lockedCount).toContainText(': 1');
+		await expect(lockedCount.locator('.locked-legend')).toHaveCSS(
+			'background-color',
+			SEAT_COLORS.locked.computed
+		);
 	});
 });
 

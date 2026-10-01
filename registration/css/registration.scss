@@ -909,7 +909,7 @@ body {
 .taken-sign {
 	background-color: red;
 }
-.bron-legend, .tak-legend {
+.bron-legend, .tak-legend, .locked-legend {
 	display: inline-block;
 	width: 10px;
 	height: 10px;
@@ -1924,7 +1924,7 @@ body {
 	#room-nav-info, #room-nav-info .info-item {
 		font-size: 14px;
 	}
-	#room-nav-info .bron-legend, #room-nav-info .tak-legend {
+	#room-nav-info .bron-legend, #room-nav-info .tak-legend, #room-nav-info .locked-legend {
 		display: none;
 	}
 	

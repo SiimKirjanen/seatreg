@@ -109,6 +109,7 @@
 		this.automaticBookingConfirmDialog = window.automaticBookingConfirmDialog === '1';
 		this.couponsEnabled = window.seatregCouponsEnabled === '1';
 		this.zoomControlsOnTop = window.zoomControlsOnTop === '1';
+		this.lockedSeatColorEnabled = window.lockedSeatColorEnabled === '1';
 		this.initialRoomUuid = window.seatregInitialRoomUuid || null;
 		this.appliedCoupon = null;
 	}
@@ -555,6 +556,18 @@ SeatReg.prototype.paintRoomInfo = function() {
 		'</span>' +
 		'</div>',
 		'<div class="info-item"><span class="bron-legend"></span> <span>'+ seatregFormat(translator.translate('pendingBookingsInRoom'), [this.roomNouns.singular, infoLoc.roomBronSeats]) +'</span></div>', '<div class="info-item"><span class="tak-legend"></span> <span>'+ seatregFormat(translator.translate('approvedBookingsInRoom'), [this.roomNouns.singular, infoLoc.roomTakenSeats]) +'</span></div>');
+
+	if (this.lockedSeatColorEnabled) {
+		var roomLockedSeats = this.rooms[this.currentRoom].boxes.filter(function(box) {
+			return box.lock && box.status === 'noStatus';
+		}).length;
+
+		if (roomLockedSeats > 0) {
+			documentFragment.append(
+				'<div class="info-item"><span class="locked-legend"></span> <span>'+ seatregFormat(translator.translate('lockedSpotsInRoom'), [this.seatNouns.plural, this.roomNouns.singular, roomLockedSeats]) +'</span></div>'
+			);
+		}
+	}
 
 	$('#room-nav-info-inner').html(documentFragment);
 };
