@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 7.1
-Stable tag: 1.78.4
+Stable tag: 1.79.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -48,6 +48,12 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.79.0 =
+* You can now choose the colors of pending, approved, selected and locked seats on the registration page.
+* The registration settings tabs have been reorganized: all custom CSS is on the Pages tab and custom fields are on the Booking flow & display tab.
+* Locked seats are no longer counted as open seats on the registration page.
+* Fixed the Add booking button in the booking manager doing nothing for a registration without seats.
 
 = 1.78.4 =
 * Fixed security issues with booking QR codes and on the registration page.

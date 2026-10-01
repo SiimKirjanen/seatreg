@@ -1798,7 +1798,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 				</div>
 			<?php endif; ?>
 			<div class="management-extra-actions">
-				<div class="add-booking" data-custom-fields='<?php echo json_encode($custom_fields); ?>' data-registration-code="<?php echo esc_attr($code); ?>" data-has-layout="<?php echo $roomsData ? 'true' : 'false'; ?>">
+				<div class="add-booking" data-custom-fields='<?php echo json_encode($custom_fields); ?>' data-registration-code="<?php echo esc_attr($code); ?>" data-has-seats="<?php echo SeatregLayoutService::hasSeats($roomsData) ? 'true' : 'false'; ?>">
 					<span><?php esc_html_e('Add booking', 'seatreg'); ?></span>
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 				</div>

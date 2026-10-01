@@ -177,6 +177,18 @@ class SeatregLayoutService {
         return count($roomData);
     }
 
+    public static function hasSeats($roomData) {
+        foreach( $roomData ?? array() as $room ) {
+            foreach( $room->boxes as $box ) {
+                if( $box->canRegister === 'true' ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
      /**
      *
      * Return room data from registration layout

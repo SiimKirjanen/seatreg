@@ -29,11 +29,11 @@ class SeatregSeatColorService {
         }
 
         if ( $selected ) {
-            $css .= self::fill( '.box.selected-box', $selected ) . '.box.selected-box{--animationColor:' . $selected . ' !important;}';
+            $css .= self::fill( '.box[data-selectedbox=true]', $selected ) . '.box[data-selectedbox=true]{--animationColor:' . $selected . ' !important;}';
         }
 
         if ( $locked ) {
-            $css .= self::fill( '.box[data-lock=true]:not([data-status])', $locked ) . self::swatch( '.locked-legend', $locked );
+            $css .= self::fill( '.box[data-seat][data-lock=true]:not([data-status])', $locked ) . self::swatch( '.locked-legend', $locked );
         }
 
         return $css;

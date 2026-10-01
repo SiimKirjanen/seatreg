@@ -25,7 +25,7 @@ const COMPANY = { label: 'Company', type: 'text' };
 const ANSWERED = 'Alpha';
 const ANSWERED_AGAIN = 'Beta';
 
-const NO_LAYOUT = 'This registration has no seats yet. Create its layout before adding bookings.';
+const NO_SEATS = 'This registration has no seats yet. Add them to its layout before adding bookings.';
 const SEAT_ALREADY_BOOKED = 'Seat is already booked/pending';
 const EMAIL_NOT_VALID = 'Provided email address is not valid';
 
@@ -97,7 +97,7 @@ test.describe('Booking manager modals', () => {
 		await manager.openForRegistration(withoutLayout);
 		await manager.addBookingButton.click();
 
-		await expect(manager.errorToast).toHaveText(NO_LAYOUT);
+		await expect(manager.errorToast).toHaveText(NO_SEATS);
 		await expect(manager.addModal).toHaveCount(0);
 	});
 

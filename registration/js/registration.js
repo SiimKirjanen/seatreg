@@ -194,9 +194,15 @@
 			seatReg.fillCustom(custF);
 		}
 
+		var lockedSeats = 0;
+
+		for(var r = 0; r < this.rooms.length; r++) {
+			lockedSeats += this.countLockedSeats(this.rooms[r].boxes);
+		}
+
 		//fill extra info
 		$('.total-rooms').text(roomsInfo.roomCount);
-		$('.total-open').text(roomsInfo.openSeats);
+		$('.total-open').text(roomsInfo.openSeats - lockedSeats);
 		$('.total-bron').text(roomsInfo.bronSeats);
 		$('.total-tak').text(roomsInfo.takenSeats);
 		
@@ -548,28 +554,30 @@ SeatReg.prototype.paintRoomInfo = function() {
 	//room-nav-info
 	$('#current-room-name').text(this.rooms[this.currentRoom].room.name);
 	var infoLoc = this.rooms[this.currentRoom].room;
+	var roomLockedSeats = this.countLockedSeats(this.rooms[this.currentRoom].boxes);
 	var documentFragment = $(document.createDocumentFragment());
 	documentFragment.append(
 		'<div class="info-item open-seats">' +
 		'<span>' +
-		seatregFormat(translator.translate('openSpotsInRoom'), [this.seatNouns.plural, this.roomNouns.singular, infoLoc.roomOpenSeats]) +
+		seatregFormat(translator.translate('openSpotsInRoom'), [this.seatNouns.plural, this.roomNouns.singular, infoLoc.roomOpenSeats - roomLockedSeats]) +
 		'</span>' +
 		'</div>',
 		'<div class="info-item"><span class="bron-legend"></span> <span>'+ seatregFormat(translator.translate('pendingBookingsInRoom'), [this.roomNouns.singular, infoLoc.roomBronSeats]) +'</span></div>', '<div class="info-item"><span class="tak-legend"></span> <span>'+ seatregFormat(translator.translate('approvedBookingsInRoom'), [this.roomNouns.singular, infoLoc.roomTakenSeats]) +'</span></div>');
 
-	if (this.lockedSeatColorEnabled) {
-		var roomLockedSeats = this.rooms[this.currentRoom].boxes.filter(function(box) {
-			return box.lock && box.status === 'noStatus';
-		}).length;
-
-		if (roomLockedSeats > 0) {
-			documentFragment.append(
-				'<div class="info-item"><span class="locked-legend"></span> <span>'+ seatregFormat(translator.translate('lockedSpotsInRoom'), [this.seatNouns.plural, this.roomNouns.singular, roomLockedSeats]) +'</span></div>'
-			);
-		}
+	if (this.lockedSeatColorEnabled && roomLockedSeats > 0) {
+		documentFragment.append(
+			'<div class="info-item"><span class="locked-legend"></span> <span>'+ seatregFormat(translator.translate('lockedSpotsInRoom'), [this.seatNouns.plural, this.roomNouns.singular, roomLockedSeats]) +'</span></div>'
+		);
 	}
 
 	$('#room-nav-info-inner').html(documentFragment);
+};
+
+//Locked seats that are still free. A booked one already counts as pending or approved
+SeatReg.prototype.countLockedSeats = function(boxes) {
+	return boxes.filter(function(box) {
+		return box.canRegister == "true" && String(box.lock) === 'true' && box.status === 'noStatus';
+	}).length;
 };
 
 SeatReg.prototype.paintRoomLegends = function() {

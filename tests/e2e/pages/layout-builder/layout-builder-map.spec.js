@@ -100,6 +100,9 @@ test.describe('Layout builder map', () => {
 		await registration.openSeat(3);
 		await expect(registration.addToBookingButton).toBeVisible();
 		await registration.closeSeatDialog();
+
+		/* Only the locked seat is out of reach, so only it stops counting as open. */
+		await expect(registration.roomCounts.first()).toContainText(`: ${SEAT_COUNT - 1}`);
 	});
 
 	test('adds text that reaches the registration and drops it when left empty', async () => {
