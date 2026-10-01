@@ -669,7 +669,7 @@ class SettingsPage {
 	 * @param {string[]} field.options The choices a select field offers
 	 */
 	async #fillNewCustomField({ label, type, options = [] }) {
-		await this.openSection('advanced');
+		await this.openSection('booking-flow');
 
 		await this.newCustomFieldLabel.fill(label);
 		await this.newCustomFieldType.selectOption({ label: CUSTOM_FIELD_TYPES[type] });
@@ -792,7 +792,7 @@ class SettingsPage {
 	}
 
 	async openEditOptions(label) {
-		await this.openSection('advanced');
+		await this.openSection('booking-flow');
 		await this.customField(label).locator('.edit-options').click();
 
 		await expect(this.editOptionsDialog).toBeVisible();

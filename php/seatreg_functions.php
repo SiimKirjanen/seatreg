@@ -631,6 +631,114 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
+				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
+					<label><?php esc_html_e('Custom fields', 'seatreg'); ?></label>
+					<p class="help-block">
+						<?php esc_html_e('Custom fields allow you to ask extra information in bookings.', 'seatreg'); ?>
+					</p>
+					<?php if( SeatregStringTranslationService::isAvailable() ) : ?>
+						<p class="help-block">
+							<?php esc_html_e('Labels and dropdown options can be translated in your translation plugin, in the SeatReg string group', 'seatreg'); ?>.
+						</p>
+					<?php endif; ?>
+					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
+
+					<div class="existing-custom-fields">
+						<?php if( $custLen > 0 ) : ?>
+							
+							<div style="margin-bottom: 6px"><?php esc_html_e('Existing custom fields', 'seatreg'); ?></div>
+							<p>
+								<?php esc_html_e('Custom fields you have already created', 'seatreg'); ?>
+							</p>
+							<?php
+								for($i = 0; $i < $custLen; $i++) {
+									if($custFields[$i]->type == 'sel') {
+										$optLen = count($custFields[$i]->options);
+										echo '<div class="custom-container" data-type="sel" data-label="'. esc_html($custFields[$i]->label) .'">';
+											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
+											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>';
+												echo '<select id="custom-select-'. esc_attr($i) .'">';
+
+													for($j = 0; $j < $optLen; $j++) {
+														echo '<option><span class="option-value">', esc_html($custFields[$i]->options[$j]) ,'</span></option>';
+													}
+
+												echo '</select>';
+											echo '</label>';
+											echo '<div class="custom-container-controls">';
+												echo ' <i class="fa fa-pencil edit-options mr-1 btn btn-primary" data-select-id="custom-select-'. esc_attr($i) .'"></i>';
+												echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
+											echo '</div>';
+
+										echo '</div>';
+
+									}else if($custFields[$i]->type == 'text'){
+										?>
+											<div class="custom-container" data-type="text" data-label="<?php echo esc_attr($custFields[$i]->label); ?>">
+												<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>
+												<label><span class="l-text"><?php echo esc_html($custFields[$i]->label); ?> </span>
+													<input type="text" />
+												</label>
+												<div class="custom-container-controls">
+													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Prevents booking when same input value already provided', 'seatreg');?>"><?php esc_html_e('Unique', 'seatreg');?></span> <input type="checkbox" class="unique-input" <?php echo $custFields[$i]->unique ? 'checked' : ''; ?> />
+													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Make field optional', 'seatreg');?>"><?php esc_html_e('Optional', 'seatreg');?></span> 
+													<input type="checkbox" class="optional-input" <?php echo isset($custFields[$i]->optional) && $custFields[$i]->optional ? 'checked' : ''; ?> />
+													<i class="fa fa-times-circle remove-cust-item"></i>
+												</div>
+
+											</div>
+										<?php
+
+									}else if($custFields[$i]->type == 'check') {
+										echo '<div class="custom-container" data-type="check" data-label="'. esc_attr($custFields[$i]->label) .'">';
+											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
+											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span> <input type="checkbox" /></label>';
+											echo '<div class="custom-container-controls">';
+												echo '<i class="fa fa-times-circle remove-cust-item"></i>';
+											echo '</div>';
+										echo '</div>';
+									}
+								}
+							?>
+							
+						<?php endif; ?>
+					</div>
+
+					<div class="cust-field-create">
+						<div style="margin-bottom: 6px"><?php esc_html_e('New custom field', 'seatreg'); ?></div>
+						<p>
+							<?php esc_html_e('Create a new custom field', 'seatreg'); ?>
+						</p>
+						<div style="margin-left: 24px">
+							<label><?php esc_html_e('Name', 'seatreg'); ?>:
+								<input type="text" class="cust-input-label" maxlenght="30"/>
+							</label>
+
+							<label><?php esc_html_e('Type', 'seatreg'); ?>:
+								<select class="custom-field-select">
+									<option data-type="field"><?php esc_html_e('Text', 'seatreg'); ?></option>
+									<option data-type="checkbox"><?php esc_html_e('Checkbox', 'seatreg'); ?></option>
+									<option data-type="select"><?php esc_html_e('Select', 'seatreg'); ?></option> 
+								</select>
+							</label>
+
+							<div class="select-radio-create">
+								<ul class="existing-options"></ul>
+
+								<label><?php esc_html_e('Option name', 'seatreg'); ?>
+									<input type="text" class="option-name">
+								</label>
+
+								<button class="btn btn-default btn-sm add-select-option"><?php esc_html_e('Add option', 'seatreg'); ?></button>
+								<div class="select-error"></div>
+							</div>
+							<button class="btn btn-default btn-sm apply-custom-field" type="button"><?php esc_html_e('Add custom field', 'seatreg'); ?></button>
+						</div>
+					</div>
+				</div>	
+			</div>
+
+			<div class="form-group">
 				<label for="zoom-on-top"><?php esc_html_e('Zoom controls on top', 'seatreg'); ?></label>
 				<p class="help-block"><?php esc_html_e('Show the zoom controls before the seat map, or after it', 'seatreg'); ?></label>
 				<div class="checkbox">
@@ -1509,114 +1617,6 @@ function seatreg_generate_settings_form() {
 
 			</div><!-- /.settings-tab-panel pages -->
 			<div class="settings-tab-panel" data-tab-panel="advanced">
-
-			<div class="form-group">
-				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
-					<label><?php esc_html_e('Custom fields', 'seatreg'); ?></label>
-					<p class="help-block">
-						<?php esc_html_e('Custom fields allow you to ask extra information in bookings.', 'seatreg'); ?>
-					</p>
-					<?php if( SeatregStringTranslationService::isAvailable() ) : ?>
-						<p class="help-block">
-							<?php esc_html_e('Labels and dropdown options can be translated in your translation plugin, in the SeatReg string group', 'seatreg'); ?>.
-						</p>
-					<?php endif; ?>
-					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
-
-					<div class="existing-custom-fields">
-						<?php if( $custLen > 0 ) : ?>
-							
-							<div style="margin-bottom: 6px"><?php esc_html_e('Existing custom fields', 'seatreg'); ?></div>
-							<p>
-								<?php esc_html_e('Custom fields you have already created', 'seatreg'); ?>
-							</p>
-							<?php
-								for($i = 0; $i < $custLen; $i++) {
-									if($custFields[$i]->type == 'sel') {
-										$optLen = count($custFields[$i]->options);
-										echo '<div class="custom-container" data-type="sel" data-label="'. esc_html($custFields[$i]->label) .'">';
-											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
-											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>';
-												echo '<select id="custom-select-'. esc_attr($i) .'">';
-
-													for($j = 0; $j < $optLen; $j++) {
-														echo '<option><span class="option-value">', esc_html($custFields[$i]->options[$j]) ,'</span></option>';
-													}
-
-												echo '</select>';
-											echo '</label>';
-											echo '<div class="custom-container-controls">';
-												echo ' <i class="fa fa-pencil edit-options mr-1 btn btn-primary" data-select-id="custom-select-'. esc_attr($i) .'"></i>';
-												echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
-											echo '</div>';
-
-										echo '</div>';
-
-									}else if($custFields[$i]->type == 'text'){
-										?>
-											<div class="custom-container" data-type="text" data-label="<?php echo esc_attr($custFields[$i]->label); ?>">
-												<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>
-												<label><span class="l-text"><?php echo esc_html($custFields[$i]->label); ?> </span>
-													<input type="text" />
-												</label>
-												<div class="custom-container-controls">
-													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Prevents booking when same input value already provided', 'seatreg');?>"><?php esc_html_e('Unique', 'seatreg');?></span> <input type="checkbox" class="unique-input" <?php echo $custFields[$i]->unique ? 'checked' : ''; ?> />
-													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Make field optional', 'seatreg');?>"><?php esc_html_e('Optional', 'seatreg');?></span> 
-													<input type="checkbox" class="optional-input" <?php echo isset($custFields[$i]->optional) && $custFields[$i]->optional ? 'checked' : ''; ?> />
-													<i class="fa fa-times-circle remove-cust-item"></i>
-												</div>
-
-											</div>
-										<?php
-
-									}else if($custFields[$i]->type == 'check') {
-										echo '<div class="custom-container" data-type="check" data-label="'. esc_attr($custFields[$i]->label) .'">';
-											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
-											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span> <input type="checkbox" /></label>';
-											echo '<div class="custom-container-controls">';
-												echo '<i class="fa fa-times-circle remove-cust-item"></i>';
-											echo '</div>';
-										echo '</div>';
-									}
-								}
-							?>
-							
-						<?php endif; ?>
-					</div>
-
-					<div class="cust-field-create">
-						<div style="margin-bottom: 6px"><?php esc_html_e('New custom field', 'seatreg'); ?></div>
-						<p>
-							<?php esc_html_e('Create a new custom field', 'seatreg'); ?>
-						</p>
-						<div style="margin-left: 24px">
-							<label><?php esc_html_e('Name', 'seatreg'); ?>:
-								<input type="text" class="cust-input-label" maxlenght="30"/>
-							</label>
-
-							<label><?php esc_html_e('Type', 'seatreg'); ?>:
-								<select class="custom-field-select">
-									<option data-type="field"><?php esc_html_e('Text', 'seatreg'); ?></option>
-									<option data-type="checkbox"><?php esc_html_e('Checkbox', 'seatreg'); ?></option>
-									<option data-type="select"><?php esc_html_e('Select', 'seatreg'); ?></option> 
-								</select>
-							</label>
-
-							<div class="select-radio-create">
-								<ul class="existing-options"></ul>
-
-								<label><?php esc_html_e('Option name', 'seatreg'); ?>
-									<input type="text" class="option-name">
-								</label>
-
-								<button class="btn btn-default btn-sm add-select-option"><?php esc_html_e('Add option', 'seatreg'); ?></button>
-								<div class="select-error"></div>
-							</div>
-							<button class="btn btn-default btn-sm apply-custom-field" type="button"><?php esc_html_e('Add custom field', 'seatreg'); ?></button>
-						</div>
-					</div>
-				</div>	
-			</div>
 
 			<div class="form-group">
 				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
