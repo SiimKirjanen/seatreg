@@ -25,6 +25,7 @@ const COMPANY = { label: 'Company', type: 'text' };
 const ANSWERED = 'Alpha';
 const ANSWERED_AGAIN = 'Beta';
 
+const NO_LAYOUT = 'This registration has no seats yet. Create its layout before adding bookings.';
 const SEAT_ALREADY_BOOKED = 'Seat is already booked/pending';
 const EMAIL_NOT_VALID = 'Provided email address is not valid';
 
@@ -84,6 +85,20 @@ test.describe('Booking manager modals', () => {
 		await manager.openStatusTab('pending');
 
 		await expect(manager.bookingRow('pending', bookingId)).toHaveCount(0);
+	});
+
+	test('says why a booking cannot be added before the registration has a layout', async () => {
+		await manager.homePage.goto();
+
+		const withoutLayout = await manager.homePage.createRegistration(
+			uniqueRegistrationName('Booking manager no layout')
+		);
+
+		await manager.openForRegistration(withoutLayout);
+		await manager.addBookingButton.click();
+
+		await expect(manager.errorToast).toHaveText(NO_LAYOUT);
+		await expect(manager.addModal).toHaveCount(0);
 	});
 
 	test('fills the seat id in from the id lookup', async () => {

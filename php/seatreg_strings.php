@@ -95,6 +95,8 @@ function seatreg_generate_admin_strings() {
     $translations->roomNameSet = esc_html__('New %s added', 'seatreg');
     /* translators: %s: the word the admin uses for a room, capitalized */
     $translations->roomNotExist = esc_html( _x('%s does not exist', 'booking manager error when the given room name matches nothing', 'seatreg') );
+    /* translators: %s: the word the admin uses for seats, plural */
+    $translations->noLayoutToBook = esc_html__('This registration has no %s yet. Create its layout before adding bookings.', 'seatreg');
     /* translators: %s: the word the admin uses for a seat, capitalized */
     $translations->seatIdNotExist = esc_html__('%s id does not exist', 'seatreg');
     /* translators: %s: the word the admin uses for a seat, capitalized */
