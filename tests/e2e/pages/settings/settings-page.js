@@ -122,6 +122,7 @@ const FIELDS = {
 	pageHeadingColor: { tab: 'pages', selector: '#page-heading-color', kind: 'text' },
 	pageTextColor: { tab: 'pages', selector: '#page-text-color', kind: 'text' },
 	bookingNotFoundText: { tab: 'pages', selector: '#bookingNotFoundTextEditor', kind: 'richText' },
+	registrationStyles: { tab: 'pages', selector: '#custom-styles', kind: 'text' },
 	bookingStatusStyles: {
 		tab: 'pages',
 		selector: 'textarea[name="booking-status-custom-styles"]',
@@ -133,7 +134,6 @@ const FIELDS = {
 		kind: 'text',
 	},
 
-	customStyles: { tab: 'advanced', selector: '#custom-styles', kind: 'text' },
 	publicApi: { tab: 'advanced', selector: '#public-api', kind: 'checkbox' },
 };
 

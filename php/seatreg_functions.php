@@ -1397,7 +1397,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<p class="help-block">
-					<?php esc_html_e('These settings control how the pages a booker lands on look: the booking status page, the booking confirm page and the page they return to after paying.', 'seatreg'); ?>
+					<?php esc_html_e('These settings control how the pages a booker sees look: the registration page, the booking status page, the booking confirm page and the page they return to after paying.', 'seatreg'); ?>
 				</p>
 			</div>
 
@@ -1409,7 +1409,7 @@ function seatreg_generate_settings_form() {
 			?>
 			<div class="form-group">
 				<label><?php esc_html_e('Page appearance', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Customize the colors of the pages shown to bookers. When disabled, default colors are used.', 'seatreg'); ?></p>
+				<p class="help-block"><?php esc_html_e('Customize the colors of the booking status, booking confirm and payment return pages. When disabled, default colors are used.', 'seatreg'); ?></p>
 				<div class="checkbox">
 					<label>
 						<input type="checkbox" id="customize-page-colors" name="customize-page-colors" value="1" <?php echo $pageColorsCustomized ? 'checked' : ''; ?>>
@@ -1438,7 +1438,7 @@ function seatreg_generate_settings_form() {
 			?>
 			<div class="form-group">
 				<label><?php esc_html_e('Page logo', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Add a logo to show at the top of the pages shown to bookers.', 'seatreg'); ?></p>
+				<p class="help-block"><?php esc_html_e('Add a logo to show at the top of the booking status, booking confirm and payment return pages.', 'seatreg'); ?></p>
 				<input type="hidden" id="page-logo" name="page-logo" value="<?php echo esc_attr($pageLogoId ? $pageLogoId : ''); ?>">
 				<div class="email-logo-controls">
 					<img id="page-logo-preview" src="<?php echo esc_url($pageLogoUrl); ?>" alt="" style="<?php echo $pageLogoUrl ? '' : 'display:none;'; ?>">
@@ -1486,7 +1486,19 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
+				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
+
+				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
+				<p class="help-block">
+					<?php esc_html_e('For example:', 'seatreg'); ?><br />
+					<?php esc_html_e('Change pending box color', 'seatreg'); ?>
+					<code>.box[data-status=bron]{background-color:#6495ED !important;}</code><br />
+					<?php esc_html_e('Change approved box color', 'seatreg'); ?>
+					<code>.box[data-status=tak]{background-color:#1cdff2 !important;}</code><br />
+					<?php esc_html_e('For round seats', 'seatreg'); ?>
+					<code>.box[data-seat] {border-radius:50%}</code>
+				</p>
+				<textarea class="form-control mb-2" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
 
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking status page', 'seatreg'); ?>.</p>
 				<textarea class="form-control mb-2" name="booking-status-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_status_page_custom_styles); ?></textarea>
@@ -1604,23 +1616,6 @@ function seatreg_generate_settings_form() {
 						</div>
 					</div>
 				</div>	
-			</div>
-
-			<div class="form-group">
-				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
-				<p class="help-block">
-					<?php esc_html_e('For example:', 'seatreg'); ?><br />
-					<?php esc_html_e('Change pending box color', 'seatreg'); ?>
-					<code>.box[data-status=bron]{background-color:#6495ED !important;}</code><br />
-					<?php esc_html_e('Change approved box color', 'seatreg'); ?>
-					<code>.box[data-status=tak]{background-color:#1cdff2 !important;}</code><br />
-					<?php esc_html_e('For round seats', 'seatreg'); ?>				
-					<code>.box[data-seat] {border-radius:50%}</code>
-	
-				</p>
-
-				<textarea class="form-control" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
 			</div>
 
 			<div class="form-group">

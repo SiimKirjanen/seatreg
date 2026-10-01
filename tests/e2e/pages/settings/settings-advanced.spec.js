@@ -45,15 +45,9 @@ function uniqueCustomFieldText(prefix) {
 	return `${prefix} ${run}${worker}${textCounter}`;
 }
 
-/* A rule that can be measured off a seat once the registration draws one.
-   Nothing here may use > or quotes: the plugin escapes the styles twice on the
-   way out, so neither survives being typed in. */
-const CUSTOM_STYLE = '.box[data-seat]{border-radius:50%}';
-const STYLED_SEAT_RADIUS = '50%';
-
-/* Three unrelated things - the custom field builder, a stylesheet for the
-   registration, and the public API - each checked where it ends up. Nothing here
-   is validated on the server beyond what the builder turns down on the page. */
+/* Two unrelated things - the custom field builder and the public API - each
+   checked where it ends up. Nothing here is validated on the server beyond what
+   the builder turns down on the page. */
 
 test.describe('Settings advanced', () => {
 	let settings;
@@ -254,15 +248,6 @@ test.describe('Settings advanced', () => {
 			SELECT_FIELD.options[1],
 			EXTRA_OPTION,
 		]);
-	});
-
-	test('styles the registration with the css it was given', async () => {
-		await settings.set('customStyles', CUSTOM_STYLE);
-		await settings.save();
-
-		const registration = await settings.openRegistration(code);
-
-		await expect(registration.seat(1)).toHaveCSS('border-radius', STYLED_SEAT_RADIUS);
 	});
 
 	test('hides an API token until it is asked for, and removes it once confirmed', async () => {

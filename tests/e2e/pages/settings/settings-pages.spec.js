@@ -19,13 +19,18 @@ const DEFAULT_COLORS = {
 
 const NOT_FOUND_TEXT = 'Write to us and we will look your booking up.';
 
-/* One rule for each of the two boxes, each hiding a different part of the page
-   shell, so what took effect says which box it came from. */
+/* One rule for each of the three boxes. The two for the standalone pages hide a
+   different part of the page shell, so what took effect says which box it came
+   from. Nothing here may use > or quotes: the plugin escapes the styles twice on
+   the way out, so neither survives being typed in. */
+const REGISTRATION_RULE = '.box[data-seat]{border-radius:50%}';
+const STYLED_SEAT_RADIUS = '50%';
 const STATUS_PAGE_RULE = '.seatreg-card__name{display:none}';
 const CONFIRM_PAGE_RULE = '.seatreg-card__title{display:none}';
 
-/* The standalone pages a booker lands on. The booking status page is the one
-   reachable without a booking, so it stands for all three.
+/* Apart from the registration's styles, everything here is for the standalone
+   pages a booker lands on. The booking status page is the one reachable without
+   a booking, so it stands for all three.
 
    The payment return page's text is not covered: visiting that page starts a
    payment. */
@@ -39,7 +44,10 @@ test.describe('Settings pages', () => {
 		settings = new SettingsPage(page);
 		bookingStatus = new BookingStatusPage(page);
 
-		code = await settings.openForNewRegistration(uniqueRegistrationName('Settings pages'));
+		code = await settings.openForNewRegistrationWithSeats(
+			uniqueRegistrationName('Settings pages'),
+			1
+		);
 	});
 
 	test('paints the pages a booker lands on in the colors that were picked', async () => {
@@ -131,12 +139,18 @@ test.describe('Settings pages', () => {
 	});
 
 	test('applies the custom styles to the page they were written for', async () => {
+		await settings.set('registrationStyles', REGISTRATION_RULE);
 		await settings.set('bookingStatusStyles', STATUS_PAGE_RULE);
 		await settings.set('bookingConfirmStyles', CONFIRM_PAGE_RULE);
 		await settings.save();
 
+		await expect(settings.field('registrationStyles')).toHaveValue(REGISTRATION_RULE);
 		await expect(settings.field('bookingStatusStyles')).toHaveValue(STATUS_PAGE_RULE);
 		await expect(settings.field('bookingConfirmStyles')).toHaveValue(CONFIRM_PAGE_RULE);
+
+		const registration = await settings.openRegistration(code);
+
+		await expect(registration.seat(1)).toHaveCSS('border-radius', STYLED_SEAT_RADIUS);
 
 		await bookingStatus.goto(code, noSuchBooking());
 
