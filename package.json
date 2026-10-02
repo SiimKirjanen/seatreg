@@ -22,6 +22,7 @@
     "gulp-rev": "^9.0.0",
     "gulp-sass": "^5.0.0",
     "mjml": "^5.4.0",
+    "newman": "^6.2.2",
     "sass": "^1.39.0"
   },
   "scripts": {
@@ -38,6 +39,9 @@
     "test:e2e:ui": "npm run wp-env:start && playwright test --ui",
     "test:e2e:debug": "npm run wp-env:start && playwright test --debug",
     "test:e2e:codegen": "npm run wp-env:start && playwright codegen http://localhost:8889",
+    "test:api": "npm run wp-env:start && npm run test:api:ci",
+    "test:api:ci": "npm run test:api:seed && newman run tests/api/seatreg.postman_collection.json",
+    "test:api:seed": "wp-env run cli wp eval-file wp-content/plugins/seatreg/tests/api/seed.php",
     "wp-env:start": "wp-env start",
     "wp-env:stop": "wp-env stop",
     "wp-env:reset": "wp-env reset",
