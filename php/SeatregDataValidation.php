@@ -153,6 +153,20 @@ class SeatregDataValidation {
             return $validationStatus;
         }
 
+        if( property_exists($layout->global, 'seatColors') ) {
+            if( !is_object($layout->global->seatColors) ) {
+                $validationStatus->setInvalid('seatColors property is invalid');
+                return $validationStatus;
+            }
+
+            foreach($layout->global->seatColors as $status => $color) {
+                if( !in_array($status, array('pending', 'approved', 'selected', 'locked'), true) || !is_string($color) || !self::validateHexColor($color) ) {
+                    $validationStatus->setInvalid('seat color is invalid');
+                    return $validationStatus;
+                }
+            }
+        }
+
         if( !property_exists($layout, 'roomData') || !is_array($layout->roomData) ) {
             $validationStatus->setInvalid('roomData property is missing or invalid');
             return $validationStatus;

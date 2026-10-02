@@ -285,13 +285,6 @@ class SettingsPage {
 		return this.page.locator('#page-logo-remove');
 	}
 
-	/** @param {string} state pending, approved, selected or locked */
-	async setSeatColor(state, color) {
-		await this.openSection('pages');
-		await this.page.locator(`.seat-color-toggle[data-color-input="${state}-seat-color"]`).check();
-		await this.page.locator(`#${state}-seat-color`).fill(color);
-	}
-
 	/* Emails. Picked the same way the page logo is; what a logo does once it is
 	   picked is covered from there. */
 
@@ -491,15 +484,6 @@ class SettingsPage {
 
 		await builder.lassoSelectSeats(1, seatCount);
 		await builder.setSeatPrices(price);
-		await builder.save();
-	}
-
-	/** A lock belongs to the seat as well. */
-	async lockSeat(code, seatNumber) {
-		const builder = await this.openLayout(code);
-
-		await builder.lassoSelectSeats(seatNumber, seatNumber);
-		await builder.applySeatLocks({ lock: [seatNumber] });
 		await builder.save();
 	}
 

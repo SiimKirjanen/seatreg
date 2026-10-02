@@ -1593,30 +1593,6 @@ function seatreg_generate_settings_form() {
 				?>
 			</div>
 
-			<?php
-				$seatColorSettings = array(
-					array('name' => 'pending-seat-color', 'value' => $options[0]->pending_seat_color, 'default' => SEATREG_SEAT_DEFAULT_PENDING_COLOR, 'label' => __('Pending seats', 'seatreg')),
-					array('name' => 'approved-seat-color', 'value' => $options[0]->approved_seat_color, 'default' => SEATREG_SEAT_DEFAULT_APPROVED_COLOR, 'label' => __('Approved seats', 'seatreg')),
-					array('name' => 'selected-seat-color', 'value' => $options[0]->selected_seat_color, 'default' => SEATREG_SEAT_DEFAULT_SELECTED_COLOR, 'label' => __('Selected seats', 'seatreg')),
-					array('name' => 'locked-seat-color', 'value' => $options[0]->locked_seat_color, 'default' => SEATREG_SEAT_DEFAULT_LOCKED_COLOR, 'label' => __('Locked seats', 'seatreg')),
-				);
-			?>
-			<div class="form-group">
-				<label><?php esc_html_e('Seat colors', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Fill seats on the registration page with a color that shows their state. A state you leave unticked keeps the seat color from the layout, and pending and approved seats are then marked with a dot.', 'seatreg'); ?></p>
-				<div class="email-color-fields">
-					<?php foreach( $seatColorSettings as $seatColor ) : ?>
-						<div class="email-color-field">
-							<label>
-								<input type="checkbox" class="seat-color-toggle" data-color-input="<?php echo esc_attr($seatColor['name']); ?>" <?php echo $seatColor['value'] ? 'checked' : ''; ?>>
-								<?php echo esc_html($seatColor['label']); ?>
-							</label>
-							<input type="color" id="<?php echo esc_attr($seatColor['name']); ?>" name="<?php echo esc_attr($seatColor['name']); ?>" aria-label="<?php echo esc_attr($seatColor['label']); ?>" value="<?php echo esc_attr($seatColor['value'] ? $seatColor['value'] : $seatColor['default']); ?>" <?php echo $seatColor['value'] ? '' : 'disabled'; ?>>
-						</div>
-					<?php endforeach; ?>
-				</div>
-			</div>
-
 			<div class="form-group">
 				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
 
@@ -2818,10 +2794,6 @@ function seatreg_set_up_db() {
 			page_text_color varchar(7) DEFAULT NULL,
 			page_heading_color varchar(7) DEFAULT NULL,
 			page_logo int(11) DEFAULT NULL,
-			pending_seat_color varchar(7) DEFAULT NULL,
-			approved_seat_color varchar(7) DEFAULT NULL,
-			selected_seat_color varchar(7) DEFAULT NULL,
-			locked_seat_color varchar(7) DEFAULT NULL,
 			PRIMARY KEY  (id)
 		) $charset_collate;";
 	  
@@ -3958,12 +3930,6 @@ function seatreg_update() {
 		}
 	}
 
-	foreach( array('pending-seat-color', 'approved-seat-color', 'selected-seat-color', 'locked-seat-color') as $colorField ) {
-		if( !empty($_POST[$colorField]) && !SeatregDataValidation::validateHexColor($_POST[$colorField]) ) {
-			wp_die('Seat color not valid');
-		}
-	}
-
 	try {
         $wpdb->query('START TRANSACTION');
 
@@ -4059,10 +4025,6 @@ function seatreg_update() {
 				'page_text_color' => $customizePageColors && !empty($_POST['page-text-color']) ? sanitize_hex_color($_POST['page-text-color']) : null,
 				'page_heading_color' => $customizePageColors && !empty($_POST['page-heading-color']) ? sanitize_hex_color($_POST['page-heading-color']) : null,
 				'page_logo' => !empty($_POST['page-logo']) ? absint($_POST['page-logo']) : null,
-				'pending_seat_color' => !empty($_POST['pending-seat-color']) ? sanitize_hex_color($_POST['pending-seat-color']) : null,
-				'approved_seat_color' => !empty($_POST['approved-seat-color']) ? sanitize_hex_color($_POST['approved-seat-color']) : null,
-				'selected_seat_color' => !empty($_POST['selected-seat-color']) ? sanitize_hex_color($_POST['selected-seat-color']) : null,
-				'locked_seat_color' => !empty($_POST['locked-seat-color']) ? sanitize_hex_color($_POST['locked-seat-color']) : null,
 			 ),
 			array(
 				'registration_code' => sanitize_text_field($_POST['registration_code'])

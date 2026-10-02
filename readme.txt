@@ -50,7 +50,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 == Changelog ==
 
 = 1.79.0 =
-* You can now choose the colors of pending, approved, selected and locked seats on the registration page.
+* In the layout builder you can now choose the colors of pending, approved, selected and locked seats.
 * The registration settings tabs have been reorganized: all custom CSS is on the Pages tab and custom fields are on the Booking flow & display tab.
 * Locked seats are no longer counted as open seats on the registration page.
 * Fixed the Add booking button in the booking manager doing nothing for a registration without seats.

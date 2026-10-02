@@ -7,17 +7,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SeatregSeatColorService {
 
     /**
-     * Registration page CSS for the seat states that have a color picked. A state without one keeps
+     * The status colors picked in the layout builder. A status without one is null.
+     *
+     * @param string|null $layout Registration layout JSON
+     * @return array Color keyed by pending, approved, selected and locked
+     */
+    public static function getColors( $layout ) {
+        $seatColors = json_decode( $layout ?? '' )->global->seatColors ?? null;
+        $colors     = array();
+
+        foreach ( array( 'pending', 'approved', 'selected', 'locked' ) as $status ) {
+            $colors[ $status ] = is_string( $seatColors->$status ?? null ) ? sanitize_hex_color( $seatColors->$status ) : null;
+        }
+
+        return $colors;
+    }
+
+    /**
+     * Registration page CSS for the seat statuses that have a color picked. A status without one keeps
      * the seat color from the layout and its status dot.
      *
-     * @param object $options Registration options row
+     * @param array $colors From getColors()
      * @return string CSS
      */
-    public static function getStyles( $options ) {
-        $pending  = sanitize_hex_color( $options->pending_seat_color ?? '' );
-        $approved = sanitize_hex_color( $options->approved_seat_color ?? '' );
-        $selected = sanitize_hex_color( $options->selected_seat_color ?? '' );
-        $locked   = sanitize_hex_color( $options->locked_seat_color ?? '' );
+    public static function getStyles( $colors ) {
+        $pending  = $colors['pending'];
+        $approved = $colors['approved'];
+        $selected = $colors['selected'];
+        $locked   = $colors['locked'];
         $css      = '';
 
         if ( $pending ) {

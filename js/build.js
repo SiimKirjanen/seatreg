@@ -528,6 +528,7 @@
 		this.settings = {};
 		this.hasCustomPayments = false; //does registration have custom payments (new ones, not legacy)
 		this.hasSavedLayout = false; //export sends the saved layout, so it needs one to exist
+		this.seatColors = {}; //registration page fill per seat status, only for the statuses that have one
 	}
 
 	Registration.prototype.clearRegistrationData = function() {
@@ -552,6 +553,8 @@
 		this.needToSave = false;  //if user makes changes this will be true. when saved this will be false
 		this.roomNameChange = {};  //if room name got changed. store old and new here
 		this.hasSavedLayout = false; //export sends the saved layout, so it needs one to exist
+		this.seatColors = {};
+		this.paintSeatColors();
 
 		$('#room-selection-wrapper').empty();
 		clearBuildArea();
@@ -562,6 +565,41 @@
 
 	Registration.prototype.setExportAvailability = function() {
 		$('#export-layout').toggle(this.hasSavedLayout);
+	};
+
+	Registration.prototype.changeSeatColor = function(status, color) {
+		if(color) {
+			this.seatColors[status] = color;
+		}else {
+			delete this.seatColors[status];
+		}
+
+		this.needToSave = true;
+		this.paintSeatColors();
+	};
+
+	//the fills SeatregSeatColorService gives the registration page, on the seats the builder can show in that status
+	Registration.prototype.paintSeatColors = function() {
+		var colors = this.seatColors;
+		var css = '';
+
+		if(colors.pending) {
+			css += seatColorFill('.seatreg-map-builder-page .build-area .can-register[data-status="bron"]', colors.pending) +
+				'.seatreg-map-builder-page .build-area .bron-sign{display:none;}' +
+				seatColorSwatch('.seatreg-map-builder-page .legends .pending-legend-box', colors.pending);
+		}
+
+		if(colors.approved) {
+			css += seatColorFill('.seatreg-map-builder-page .build-area .can-register[data-status="tak"]', colors.approved) +
+				'.seatreg-map-builder-page .build-area .taken-sign{display:none;}' +
+				seatColorSwatch('.seatreg-map-builder-page .legends .approved-legend-box', colors.approved);
+		}
+
+		if(colors.locked) {
+			css += seatColorFill('.seatreg-map-builder-page .build-area .can-register[data-lock="true"]:not([data-status])', colors.locked);
+		}
+
+		$seatColorsPreview.text(css);
 	};
 
 	Registration.prototype.setRoomImage = function(imgLog, size) {
@@ -826,12 +864,12 @@
 				case 0:
 					colorBox.css({
 						'background-color':'yellow',
-					}).addClass('legend-box-circle');
+					}).addClass('legend-box-circle pending-legend-box');
 					textSpan.text(seatregFormat(translator.translate('pendingSeat'), [seatregSeatNouns().singular]));
 					break;
 
 				case 1:
-					colorBox.css('background-color','red').addClass('legend-box-circle');
+					colorBox.css('background-color','red').addClass('legend-box-circle approved-legend-box');
 					textSpan.text(seatregFormat(translator.translate('confirmedSeat'), [seatregSeatNouns().singular]));
 					break;
 			}
@@ -1805,14 +1843,17 @@
 				}
 			}).appendTo('.build-area').each(function(){
 				if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister === true) {
-					$(this).addClass('can-register').attr('data-seatnr', regScope.rooms[regScope.currentRoom].boxes[i].seat);
+					$(this).addClass('can-register').attr({
+						'data-seatnr': regScope.rooms[regScope.currentRoom].boxes[i].seat,
+						'data-lock': String(regScope.rooms[regScope.currentRoom].boxes[i].lock)
+					});
 
 					$(this).append($('<div>').addClass('seat-number').text(regScope.rooms[regScope.currentRoom].boxes[i].prefix + regScope.rooms[regScope.currentRoom].boxes[i].seat));
 
 					if(regScope.rooms[regScope.currentRoom].boxes[i].status == 'bronRegister') {
-						$(this).append($('<div>').addClass('bron-sign'));
+						$(this).attr('data-status', 'bron').append($('<div>').addClass('bron-sign'));
 					}else if(regScope.rooms[regScope.currentRoom].boxes[i].status == 'takenRegister') {
-						$(this).addClass('bron-register').append($('<div>').addClass('taken-sign'));
+						$(this).attr('data-status', 'tak').addClass('bron-register').append($('<div>').addClass('taken-sign'));
 					}
 				}else {
 					var $this = $(this);
@@ -2233,6 +2274,8 @@
 		};
 		var allLegendsLength = this.allLegends.length;
 
+		data.global.seatColors = this.seatColors;
+
 		for( var j = 0; j < allLegendsLength; j++) {
 			data.global.legends.push({
 				text: this.allLegends[j].text,
@@ -2369,6 +2412,9 @@
 		for(var r = 0; r < globalLegendsLength; r++) {
 			this.syncAllLegends(responseObj.global.legends[r].text, responseObj.global.legends[r].color);
 		}
+
+		this.seatColors = usableSeatColors(responseObj.global.seatColors);
+		this.paintSeatColors();
 
 		for (var property in roomData) {
 		    if (roomData.hasOwnProperty(property)) {
@@ -2634,6 +2680,53 @@
 	/*
 		*------Create Registrstion object
 	*/
+
+	//where a status color starts when it is ticked. Pending and approved match the status dots
+	var SEAT_COLOR_DEFAULTS = {
+		pending: '#ffff00',
+		approved: '#ff0000',
+		selected: '#2196f3',
+		locked: '#9e9e9e'
+	};
+	var $seatColorsPreview = $('<style>').attr('id', 'seat-colors-preview').appendTo('head');
+
+	//an imported file is not ours, so only the statuses and hex colors the server accepts get through
+	function usableSeatColors(seatColors) {
+		var colors = {};
+
+		if(!isPlainObject(seatColors)) {
+			return colors;
+		}
+
+		Object.keys(SEAT_COLOR_DEFAULTS).forEach(function(status) {
+			if(typeof seatColors[status] === 'string' && /^#([0-9a-f]{3}){1,2}$/i.test(seatColors[status])) {
+				colors[status] = seatColors[status];
+			}
+		});
+
+		return colors;
+	}
+
+	//mirrors SeatregSeatColorService::fill(), with the seat number kept readable on the fill
+	function seatColorFill(selector, color) {
+		var hex = color.slice(1);
+
+		if(hex.length === 3) {
+			hex = hex.replace(/./g, '$&$&');
+		}
+
+		var luminance = [0.2126, 0.7152, 0.0722].reduce(function(sum, weight, i) {
+			var value = parseInt(hex.substr(i * 2, 2), 16) / 255;
+
+			return sum + weight * (value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4));
+		}, 0);
+
+		return selector + '{background-color:' + color + ' !important;color:' + (luminance > 0.179 ? '#000' : '#fff') + ';}';
+	}
+
+	function seatColorSwatch(selector, color) {
+		return selector + '{background-color:' + color + ' !important;border-radius:0;}';
+	}
 
 	var reg = new Registration();
 	window.seatreg.builder = reg;
@@ -3135,12 +3228,31 @@
 
 			box.changePassword(password);
 			box.changeLock(locked);
+			$('.build-area .drag-box[data-id="' + box.id + '"]').attr('data-lock', String(locked));
 			reg.needToSave = true;
 		});
 
 		if(reg.activeBoxArray.length) {
 			alertify.success(translator.translate('changesApplied'));
 		}
+	});
+
+	$('#seat-colors-dialog').on('show.bs.modal', function() {
+		$(this).find('.seat-color-input').each(function() {
+			var status = $(this).data('status');
+			var color = reg.seatColors[status];
+
+			$(this).val(color || SEAT_COLOR_DEFAULTS[status]).prop('disabled', !color);
+			$('#seat-colors-dialog .seat-color-toggle[data-status="' + status + '"]').prop('checked', !!color);
+		});
+	}).on('change', '.seat-color-toggle', function() {
+		var status = $(this).data('status');
+		var $input = $('#seat-colors-dialog .seat-color-input[data-status="' + status + '"]');
+
+		$input.prop('disabled', !this.checked);
+		reg.changeSeatColor(status, this.checked ? $input.val() : null);
+	}).on('input', '.seat-color-input', function() {
+		reg.changeSeatColor($(this).data('status'), $(this).val());
 	});
 
     $('#legend-dialog').dialog({
