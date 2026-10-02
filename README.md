@@ -100,3 +100,17 @@ Opens the Playwright recorder against the wp-env site
 
 ### wp-env:start / wp-env:stop / wp-env:reset / wp-env:cli
 Start, stop and reset the WordPress test environment. `wp-env:cli` runs WP-CLI commands against it
+
+## API tests
+The public REST API is tested with a Postman collection, `tests/api/seatreg.postman_collection.json`, run by [Newman](https://github.com/postmanlabs/newman) against the same wp-env site. `tests/api/seed.php` puts the registrations, tokens and bookings the collection asks about into the site, replacing what an earlier run left.
+
+To edit the tests, import the collection into Postman, run `npm run test:api:seed` once, change the requests and export the collection (v2.1) back over the file.
+
+### test:api
+Starts wp-env, seeds the test data and runs the collection
+
+### test:api:ci
+Seeds the test data and runs the collection, expects wp-env to be running already
+
+### test:api:seed
+Seeds the test data only, for working on the collection in Postman

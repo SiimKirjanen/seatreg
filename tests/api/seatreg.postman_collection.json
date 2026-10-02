@@ -1,0 +1,530 @@
+{
+	"info": {
+		"name": "SeatReg public API",
+		"description": "Runs against the wp-env site after `npm run test:api:seed`. See README.md.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Echo",
+			"item": [
+				{
+					"name": "Answers without a token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 200 ok\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().message).to.eql(\"ok\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/echo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"echo"
+							],
+							"query": []
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Validate token",
+			"item": [
+				{
+					"name": "Valid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 200 ok\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().message).to.eql(\"ok\");",
+									"});",
+									"",
+									"pm.test(\"names the token's registration\", () => {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body.apiToken).to.eql(pm.variables.get(\"token\"));",
+									"    pm.expect(body.registrationName).to.eql(\"API test registration\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/validate-token?api_token={{token}}&seatreg_api={{apiVersion}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"validate-token"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "seatreg_api",
+									"value": "{{apiVersion}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Missing token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 401 no_token\", () => {",
+									"    pm.response.to.have.status(401);",
+									"    pm.expect(pm.response.json().code).to.eql(\"no_token\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/validate-token?seatreg_api={{apiVersion}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"validate-token"
+							],
+							"query": [
+								{
+									"key": "seatreg_api",
+									"value": "{{apiVersion}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Unknown token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 401 token_not_found\", () => {",
+									"    pm.response.to.have.status(401);",
+									"    pm.expect(pm.response.json().code).to.eql(\"token_not_found\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/validate-token?api_token=not-a-real-token&seatreg_api={{apiVersion}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"validate-token"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "not-a-real-token"
+								},
+								{
+									"key": "seatreg_api",
+									"value": "{{apiVersion}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Plugin older than required",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 401 plugin_version_not_supported\", () => {",
+									"    pm.response.to.have.status(401);",
+									"    pm.expect(pm.response.json().code).to.eql(\"plugin_version_not_supported\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/validate-token?api_token={{token}}&seatreg_api=999.0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"validate-token"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "seatreg_api",
+									"value": "999.0"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Public API turned off",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 403 public_api_not_enabled\", () => {",
+									"    pm.response.to.have.status(403);",
+									"    pm.expect(pm.response.json().code).to.eql(\"public_api_not_enabled\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/validate-token?api_token={{disabledToken}}&seatreg_api={{apiVersion}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"validate-token"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "{{disabledToken}}"
+								},
+								{
+									"key": "seatreg_api",
+									"value": "{{apiVersion}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Bookings",
+			"item": [
+				{
+					"name": "Missing calendar date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 400 calendar_date_not_provided\", () => {",
+									"    pm.response.to.have.status(400);",
+									"    pm.expect(pm.response.json().code).to.eql(\"calendar_date_not_provided\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bookings?api_token={{token}}&seatreg_api={{apiVersion}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bookings"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "seatreg_api",
+									"value": "{{apiVersion}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Confirmed and approved bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 200 ok\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().message).to.eql(\"ok\");",
+									"});",
+									"",
+									"pm.test(\"returns only Approved and Pending\", () => {",
+									"    const names = pm.response.json().bookings.map((booking) => booking.first_name).sort();",
+									"    pm.expect(names).to.eql([\"Approved\",\"Pending\"]);",
+									"});",
+									"",
+									"pm.test(\"names the room each booking is in\", () => {",
+									"    pm.response.json().bookings.forEach((booking) => pm.expect(booking.room_name).to.eql(\"API hall\"));",
+									"});",
+									"",
+									"pm.test(\"says calendar mode is off\", () => {",
+									"    pm.expect(pm.response.json().options.usingCalendar).to.eql(\"0\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bookings?api_token={{token}}&seatreg_api={{apiVersion}}&calendar_date=2030-01-10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bookings"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "seatreg_api",
+									"value": "{{apiVersion}}"
+								},
+								{
+									"key": "calendar_date",
+									"value": "2030-01-10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Calendar registration filters by date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 200 ok\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().message).to.eql(\"ok\");",
+									"});",
+									"",
+									"pm.test(\"returns only First day\", () => {",
+									"    const names = pm.response.json().bookings.map((booking) => booking.first_name).sort();",
+									"    pm.expect(names).to.eql([\"First day\"]);",
+									"});",
+									"",
+									"pm.test(\"hands back the calendar dates\", () => {",
+									"    const options = pm.response.json().options;",
+									"    pm.expect(options.usingCalendar).to.eql(\"1\");",
+									"    pm.expect(options.calendarDates).to.eql(\"2030-01-10,2030-01-11\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bookings?api_token={{calendarToken}}&seatreg_api={{apiVersion}}&calendar_date=2030-01-10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bookings"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "{{calendarToken}}"
+								},
+								{
+									"key": "seatreg_api",
+									"value": "{{apiVersion}}"
+								},
+								{
+									"key": "calendar_date",
+									"value": "2030-01-10"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Notification bookings",
+			"item": [
+				{
+					"name": "Confirmed and approved bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 200 ok\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().message).to.eql(\"ok\");",
+									"});",
+									"",
+									"pm.test(\"returns only Approved and Pending\", () => {",
+									"    const names = pm.response.json().bookings.map((booking) => booking.first_name).sort();",
+									"    pm.expect(names).to.eql([\"Approved\",\"Pending\"]);",
+									"});",
+									"",
+									"pm.test(\"names the room each booking is in\", () => {",
+									"    pm.response.json().bookings.forEach((booking) => pm.expect(booking.room_name).to.eql(\"API hall\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/notification-bookings?api_token={{token}}&seatreg_api={{apiVersion}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notification-bookings"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "seatreg_api",
+									"value": "{{apiVersion}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Calendar registration returns every date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"answers 200 ok\", () => {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().message).to.eql(\"ok\");",
+									"});",
+									"",
+									"pm.test(\"returns only First day and Second day\", () => {",
+									"    const names = pm.response.json().bookings.map((booking) => booking.first_name).sort();",
+									"    pm.expect(names).to.eql([\"First day\",\"Second day\"]);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/notification-bookings?api_token={{calendarToken}}&seatreg_api={{apiVersion}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notification-bookings"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "{{calendarToken}}"
+								},
+								{
+									"key": "seatreg_api",
+									"value": "{{apiVersion}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8889/wp-json/seatreg/v1"
+		},
+		{
+			"key": "apiVersion",
+			"value": "1.0"
+		},
+		{
+			"key": "token",
+			"value": "apitest-token-enabled"
+		},
+		{
+			"key": "disabledToken",
+			"value": "apitest-token-disabled"
+		},
+		{
+			"key": "calendarToken",
+			"value": "apitest-token-calendar"
+		}
+	]
+}
