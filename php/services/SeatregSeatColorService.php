@@ -50,7 +50,7 @@ class SeatregSeatColorService {
         }
 
         if ( $locked ) {
-            $css .= self::fill( '.box[data-seat][data-lock=true]:not([data-status])', $locked ) . self::swatch( '.locked-legend', $locked );
+            $css .= self::fill( '.box[data-seat][data-lock=true]:not([data-status]):not([data-selectedbox=true])', $locked ) . self::swatch( '.locked-legend', $locked );
         }
 
         return $css;
