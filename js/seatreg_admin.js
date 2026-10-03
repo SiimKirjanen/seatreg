@@ -1099,6 +1099,12 @@ $('#seatreg-booking-manager').on('click', '#add-modal-remove-seat', function() {
 });
 
 $('#seatreg-booking-manager').on('click', '.add-booking', function() {
+	if (!$(this).data('has-seats')) {
+		alertify.error(seatregFormat(translator.translate('noSeatsToBook'), [seatregSeatNouns().plural]));
+
+		return;
+	}
+
 	var customFields = $(this).data('custom-fields') || [];
 	var registrationCode = $(this).data('registration-code');
 	var modal = $('#add-booking-modal');

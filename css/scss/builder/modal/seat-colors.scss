@@ -1,0 +1,70 @@
+.seatreg-map-builder-page {
+	.build-area-side .side-option.seat-colors-icon,
+	.guide-item2.seat-colors-icon {
+		display: grid;
+		grid-template-columns: repeat(2, 11px);
+		grid-template-rows: repeat(2, 11px);
+		gap: 3px;
+		place-content: center;
+		box-sizing: border-box;
+		width: 41px;
+		height: 41px;
+		padding: 0;
+		background: #999;
+		border: 1px solid #000;
+	}
+
+	.build-area-side .side-option.seat-colors-icon:hover {
+		background: #f9a326;
+	}
+
+	.seat-colors-icon__swatch {
+		border: 1px solid #000;
+	}
+
+	.seat-colors-icon__swatch--pending {
+		background: #ffff00;
+	}
+
+	.seat-colors-icon__swatch--approved {
+		background: #ff0000;
+	}
+
+	.seat-colors-icon__swatch--selected {
+		background: #2196f3;
+	}
+
+	.seat-colors-icon__swatch--locked {
+		background: #9e9e9e;
+	}
+
+	.seat-color-fields {
+		display: grid;
+		grid-template-columns: max-content max-content;
+		align-items: center;
+		gap: 10px 16px;
+	}
+
+	.seat-color-field {
+		display: contents;
+
+		label {
+			margin: 0;
+			font-weight: normal;
+		}
+
+		input[type="color"] {
+			width: 48px;
+			height: 32px;
+			padding: 0;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			cursor: pointer;
+
+			&:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+			}
+		}
+	}
+}

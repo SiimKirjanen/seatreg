@@ -257,9 +257,13 @@ class BookingManagerPage {
 		return this.page.locator('#alertify-cancel');
 	}
 
+	get errorToast() {
+		return this.page.locator('.alertify-log-error');
+	}
+
 	/* Add booking modal. Rendered inside the panel, and not rendered at all on a
-	   registration with no layout - which is why every spec here starts from one
-	   that has seats. */
+	   registration with no layout - the button says why instead - which is why
+	   every spec here starts from one that has seats. */
 
 	get addModal() {
 		return this.panel.locator('#add-booking-modal');
