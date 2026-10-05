@@ -330,8 +330,8 @@ function seatreg_generate_settings_form() {
 
 			<nav class="settings-tabs" role="tablist">
 				<button type="button" class="settings-tab settings-tab--active" data-tab="general" role="tab"><?php esc_html_e('General', 'seatreg'); ?></button>
-				<button type="button" class="settings-tab" data-tab="scheduling" role="tab"><?php esc_html_e('Scheduling & calendar', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="booking-flow" role="tab"><?php esc_html_e('Booking flow & display', 'seatreg'); ?></button>
+				<button type="button" class="settings-tab" data-tab="scheduling" role="tab"><?php esc_html_e('Scheduling & calendar', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="emails" role="tab"><?php esc_html_e('Emails & notifications', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="payments" role="tab"><?php esc_html_e('Payments & coupons', 'seatreg'); ?></button>
 				<button type="button" class="settings-tab" data-tab="pages" role="tab"><?php esc_html_e('Pages', 'seatreg'); ?></button>
@@ -475,68 +475,6 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			</div><!-- /.settings-tab-panel general -->
-			<div class="settings-tab-panel" data-tab-panel="scheduling">
-
-			<div class="form-group">
-				<label for="using-calendar"><?php esc_html_e('Registration calendar', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Please check if you want to enable calendar functionality, as it allows registration to reset on each day.', 'seatreg'); ?>.</p>
-				<div class="checkbox">
-			    	<label>
-			      		<input type="checkbox" id="using-calendar" name="using-calendar" value="1" <?php echo $options[0]->using_calendar == '1' ? 'checked="checked"':''; ?> >
-			      		<?php esc_html_e('Turn on calendar', 'seatreg'); ?>
-			    	</label>
-			  	</div>
-			</div>
-
-			<div class="form-group ml-4 mt-n3" <?php if( $options[0]->using_calendar === '0' ) { echo ' style="display:none;"'; } ?>>
-				<label for="calendar-dates"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Click the dates when registration is open. Leave empty for no date restrictions', 'seatreg'); ?>.
-				</p>
-				<div id="calendar-dates-list" class="mb-2"></div>
-				<div id="calendar-dates-picker"></div>
-				<input type="hidden" id="calendar-dates" name="calendar-dates" value="<?php echo esc_attr($options[0]->calendar_dates ? $options[0]->calendar_dates : ""); ?>">
-			</div>
-		
-			<div class="form-group">
-				<label for="registration-start-timestamp"><i class="fa fa-calendar" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.
-					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
-				</p>
-				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
-				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_start_timestamp); ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
-			</div>
-
-			<div class="form-group">
-				<label for="registration-start-time"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start time', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Set registration start time (24 hours time format)', 'seatreg'); ?>.
-					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
-				</p>
-				<input id="registration-start-time" name="registration-start-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_start_time); ?>" />
-			</div>
-
-			<div class="form-group">
-				<label for="registration-end-timestamp"><i class="fa fa-calendar" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end date', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.
-					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
-				</p>
-				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
-				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_end_timestamp); ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
-			</div>
-
-			<div class="form-group">
-				<label for="registration-end-time"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end time', 'seatreg'); ?></label>
-				<p class="help-block">
-					<?php esc_html_e('Set registration end time (24 hours time format)', 'seatreg'); ?>.
-					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
-				</p>
-				<input id="registration-end-time" name="registration-end-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_end_time); ?>"  />
-			</div>
-
-			</div><!-- /.settings-tab-panel scheduling -->
 			<div class="settings-tab-panel" data-tab-panel="booking-flow">
 
 			<div class="form-group">
@@ -628,6 +566,114 @@ function seatreg_generate_settings_form() {
 						<?php esc_html_e('Allow only gmail address', 'seatreg'); ?>
 					</label>
 				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
+					<label><?php esc_html_e('Custom fields', 'seatreg'); ?></label>
+					<p class="help-block">
+						<?php esc_html_e('Custom fields allow you to ask extra information in bookings.', 'seatreg'); ?>
+					</p>
+					<?php if( SeatregStringTranslationService::isAvailable() ) : ?>
+						<p class="help-block">
+							<?php esc_html_e('Labels and dropdown options can be translated in your translation plugin, in the SeatReg string group', 'seatreg'); ?>.
+						</p>
+					<?php endif; ?>
+					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
+
+					<div class="existing-custom-fields">
+						<?php if( $custLen > 0 ) : ?>
+							
+							<div style="margin-bottom: 6px"><?php esc_html_e('Existing custom fields', 'seatreg'); ?></div>
+							<p>
+								<?php esc_html_e('Custom fields you have already created', 'seatreg'); ?>
+							</p>
+							<?php
+								for($i = 0; $i < $custLen; $i++) {
+									if($custFields[$i]->type == 'sel') {
+										$optLen = count($custFields[$i]->options);
+										echo '<div class="custom-container" data-type="sel" data-label="'. esc_html($custFields[$i]->label) .'">';
+											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
+											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>';
+												echo '<select id="custom-select-'. esc_attr($i) .'">';
+
+													for($j = 0; $j < $optLen; $j++) {
+														echo '<option><span class="option-value">', esc_html($custFields[$i]->options[$j]) ,'</span></option>';
+													}
+
+												echo '</select>';
+											echo '</label>';
+											echo '<div class="custom-container-controls">';
+												echo ' <i class="fa fa-pencil edit-options mr-1 btn btn-primary" data-select-id="custom-select-'. esc_attr($i) .'"></i>';
+												echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
+											echo '</div>';
+
+										echo '</div>';
+
+									}else if($custFields[$i]->type == 'text'){
+										?>
+											<div class="custom-container" data-type="text" data-label="<?php echo esc_attr($custFields[$i]->label); ?>">
+												<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>
+												<label><span class="l-text"><?php echo esc_html($custFields[$i]->label); ?> </span>
+													<input type="text" />
+												</label>
+												<div class="custom-container-controls">
+													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Prevents booking when same input value already provided', 'seatreg');?>"><?php esc_html_e('Unique', 'seatreg');?></span> <input type="checkbox" class="unique-input" <?php echo $custFields[$i]->unique ? 'checked' : ''; ?> />
+													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Make field optional', 'seatreg');?>"><?php esc_html_e('Optional', 'seatreg');?></span> 
+													<input type="checkbox" class="optional-input" <?php echo isset($custFields[$i]->optional) && $custFields[$i]->optional ? 'checked' : ''; ?> />
+													<i class="fa fa-times-circle remove-cust-item"></i>
+												</div>
+
+											</div>
+										<?php
+
+									}else if($custFields[$i]->type == 'check') {
+										echo '<div class="custom-container" data-type="check" data-label="'. esc_attr($custFields[$i]->label) .'">';
+											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
+											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span> <input type="checkbox" /></label>';
+											echo '<div class="custom-container-controls">';
+												echo '<i class="fa fa-times-circle remove-cust-item"></i>';
+											echo '</div>';
+										echo '</div>';
+									}
+								}
+							?>
+							
+						<?php endif; ?>
+					</div>
+
+					<div class="cust-field-create">
+						<div style="margin-bottom: 6px"><?php esc_html_e('New custom field', 'seatreg'); ?></div>
+						<p>
+							<?php esc_html_e('Create a new custom field', 'seatreg'); ?>
+						</p>
+						<div style="margin-left: 24px">
+							<label><?php esc_html_e('Name', 'seatreg'); ?>:
+								<input type="text" class="cust-input-label" maxlenght="30"/>
+							</label>
+
+							<label><?php esc_html_e('Type', 'seatreg'); ?>:
+								<select class="custom-field-select">
+									<option data-type="field"><?php esc_html_e('Text', 'seatreg'); ?></option>
+									<option data-type="checkbox"><?php esc_html_e('Checkbox', 'seatreg'); ?></option>
+									<option data-type="select"><?php esc_html_e('Select', 'seatreg'); ?></option> 
+								</select>
+							</label>
+
+							<div class="select-radio-create">
+								<ul class="existing-options"></ul>
+
+								<label><?php esc_html_e('Option name', 'seatreg'); ?>
+									<input type="text" class="option-name">
+								</label>
+
+								<button class="btn btn-default btn-sm add-select-option"><?php esc_html_e('Add option', 'seatreg'); ?></button>
+								<div class="select-error"></div>
+							</div>
+							<button class="btn btn-default btn-sm apply-custom-field" type="button"><?php esc_html_e('Add custom field', 'seatreg'); ?></button>
+						</div>
+					</div>
+				</div>	
 			</div>
 
 			<div class="form-group">
@@ -779,6 +825,68 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			</div><!-- /.settings-tab-panel booking-flow -->
+			<div class="settings-tab-panel" data-tab-panel="scheduling">
+
+			<div class="form-group">
+				<label for="using-calendar"><?php esc_html_e('Registration calendar', 'seatreg'); ?></label>
+				<p class="help-block"><?php esc_html_e('Please check if you want to enable calendar functionality, as it allows registration to reset on each day.', 'seatreg'); ?>.</p>
+				<div class="checkbox">
+			    	<label>
+			      		<input type="checkbox" id="using-calendar" name="using-calendar" value="1" <?php echo $options[0]->using_calendar == '1' ? 'checked="checked"':''; ?> >
+			      		<?php esc_html_e('Turn on calendar', 'seatreg'); ?>
+			    	</label>
+			  	</div>
+			</div>
+
+			<div class="form-group ml-4 mt-n3" <?php if( $options[0]->using_calendar === '0' ) { echo ' style="display:none;"'; } ?>>
+				<label for="calendar-dates"><?php esc_html_e('Calendar dates', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Click the dates when registration is open. Leave empty for no date restrictions', 'seatreg'); ?>.
+				</p>
+				<div id="calendar-dates-list" class="mb-2"></div>
+				<div id="calendar-dates-picker"></div>
+				<input type="hidden" id="calendar-dates" name="calendar-dates" value="<?php echo esc_attr($options[0]->calendar_dates ? $options[0]->calendar_dates : ""); ?>">
+			</div>
+		
+			<div class="form-group">
+				<label for="registration-start-timestamp"><i class="fa fa-calendar" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start date', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration start date (dd.mm.yyyy)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input type="text" id="registration-start-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
+				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_start_timestamp); ?>' id='start-timestamp' class="datepicker-altfield" name="start-timestamp" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-start-time"><i class="fa fa-clock-o" style="color:rgb(4, 145, 4); margin-right:6px"></i><?php esc_html_e('Registration start time', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration start time (24 hours time format)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input id="registration-start-time" name="registration-start-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_start_time); ?>" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-end-timestamp"><i class="fa fa-calendar" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end date', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration end date (dd.mm.yyyy)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input type="text" id="registration-end-timestamp" class="form-control option-datepicker" placeholder="(dd.mm.yyyy)" autocomplete="off" />
+				<input type='hidden' value='<?php echo esc_attr($options[0]->registration_end_timestamp); ?>' id="end-timestamp" class="datepicker-altfield" name="end-timestamp" />
+			</div>
+
+			<div class="form-group">
+				<label for="registration-end-time"><i class="fa fa-clock-o" style="color:rgb(250, 38, 38); margin-right:6px"></i><?php esc_html_e('Registration end time', 'seatreg'); ?></label>
+				<p class="help-block">
+					<?php esc_html_e('Set registration end time (24 hours time format)', 'seatreg'); ?>.
+					<?php esc_html_e('Make sure that you have a correct timezone in WordPress settings (settings->general)', 'seatreg'); ?>.
+				</p>
+				<input id="registration-end-time" name="registration-end-time" class="time" type="text" value="<?php echo esc_attr($options[0]->registration_end_time); ?>"  />
+			</div>
+
+			</div><!-- /.settings-tab-panel scheduling -->
 			<div class="settings-tab-panel" data-tab-panel="emails">
 
 			<div class="form-group">
@@ -1397,7 +1505,7 @@ function seatreg_generate_settings_form() {
 
 			<div class="form-group">
 				<p class="help-block">
-					<?php esc_html_e('These settings control how the pages a booker lands on look: the booking status page, the booking confirm page and the page they return to after paying.', 'seatreg'); ?>
+					<?php esc_html_e('These settings control how the pages a booker sees look: the registration page, the booking status page, the booking confirm page and the page they return to after paying.', 'seatreg'); ?>
 				</p>
 			</div>
 
@@ -1409,7 +1517,7 @@ function seatreg_generate_settings_form() {
 			?>
 			<div class="form-group">
 				<label><?php esc_html_e('Page appearance', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Customize the colors of the pages shown to bookers. When disabled, default colors are used.', 'seatreg'); ?></p>
+				<p class="help-block"><?php esc_html_e('Customize the colors of the booking status, booking confirm and payment return pages. When disabled, default colors are used.', 'seatreg'); ?></p>
 				<div class="checkbox">
 					<label>
 						<input type="checkbox" id="customize-page-colors" name="customize-page-colors" value="1" <?php echo $pageColorsCustomized ? 'checked' : ''; ?>>
@@ -1438,7 +1546,7 @@ function seatreg_generate_settings_form() {
 			?>
 			<div class="form-group">
 				<label><?php esc_html_e('Page logo', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Add a logo to show at the top of the pages shown to bookers.', 'seatreg'); ?></p>
+				<p class="help-block"><?php esc_html_e('Add a logo to show at the top of the booking status, booking confirm and payment return pages.', 'seatreg'); ?></p>
 				<input type="hidden" id="page-logo" name="page-logo" value="<?php echo esc_attr($pageLogoId ? $pageLogoId : ''); ?>">
 				<div class="email-logo-controls">
 					<img id="page-logo-preview" src="<?php echo esc_url($pageLogoUrl); ?>" alt="" style="<?php echo $pageLogoUrl ? '' : 'display:none;'; ?>">
@@ -1486,7 +1594,15 @@ function seatreg_generate_settings_form() {
 			</div>
 
 			<div class="form-group">
-				<label><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
+				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
+
+				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
+				<p class="help-block">
+					<?php esc_html_e('For example:', 'seatreg'); ?><br />
+					<?php esc_html_e('For round seats', 'seatreg'); ?>
+					<code>.box[data-seat] {border-radius:50%}</code>
+				</p>
+				<textarea class="form-control mb-2" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
 
 				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for booking status page', 'seatreg'); ?>.</p>
 				<textarea class="form-control mb-2" name="booking-status-custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->booking_status_page_custom_styles); ?></textarea>
@@ -1497,131 +1613,6 @@ function seatreg_generate_settings_form() {
 
 			</div><!-- /.settings-tab-panel pages -->
 			<div class="settings-tab-panel" data-tab-panel="advanced">
-
-			<div class="form-group">
-				<div class="user-custom-field-options border-box option-box" style="border-bottom:none">
-					<label><?php esc_html_e('Custom fields', 'seatreg'); ?></label>
-					<p class="help-block">
-						<?php esc_html_e('Custom fields allow you to ask extra information in bookings.', 'seatreg'); ?>
-					</p>
-					<?php if( SeatregStringTranslationService::isAvailable() ) : ?>
-						<p class="help-block">
-							<?php esc_html_e('Labels and dropdown options can be translated in your translation plugin, in the SeatReg string group', 'seatreg'); ?>.
-						</p>
-					<?php endif; ?>
-					<input type="hidden" name="custom-fields" id="custom-fields" value=""/>
-
-					<div class="existing-custom-fields">
-						<?php if( $custLen > 0 ) : ?>
-							
-							<div style="margin-bottom: 6px"><?php esc_html_e('Existing custom fields', 'seatreg'); ?></div>
-							<p>
-								<?php esc_html_e('Custom fields you have already created', 'seatreg'); ?>
-							</p>
-							<?php
-								for($i = 0; $i < $custLen; $i++) {
-									if($custFields[$i]->type == 'sel') {
-										$optLen = count($custFields[$i]->options);
-										echo '<div class="custom-container" data-type="sel" data-label="'. esc_html($custFields[$i]->label) .'">';
-											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
-											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span>';
-												echo '<select id="custom-select-'. esc_attr($i) .'">';
-
-													for($j = 0; $j < $optLen; $j++) {
-														echo '<option><span class="option-value">', esc_html($custFields[$i]->options[$j]) ,'</span></option>';
-													}
-
-												echo '</select>';
-											echo '</label>';
-											echo '<div class="custom-container-controls">';
-												echo ' <i class="fa fa-pencil edit-options mr-1 btn btn-primary" data-select-id="custom-select-'. esc_attr($i) .'"></i>';
-												echo ' <i class="fa fa-times-circle remove-cust-item"></i>';
-											echo '</div>';
-
-										echo '</div>';
-
-									}else if($custFields[$i]->type == 'text'){
-										?>
-											<div class="custom-container" data-type="text" data-label="<?php echo esc_attr($custFields[$i]->label); ?>">
-												<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>
-												<label><span class="l-text"><?php echo esc_html($custFields[$i]->label); ?> </span>
-													<input type="text" />
-												</label>
-												<div class="custom-container-controls">
-													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Prevents booking when same input value already provided', 'seatreg');?>"><?php esc_html_e('Unique', 'seatreg');?></span> <input type="checkbox" class="unique-input" <?php echo $custFields[$i]->unique ? 'checked' : ''; ?> />
-													<span class="seatreg-ui-tooltip" title="<?php esc_attr_e('Make field optional', 'seatreg');?>"><?php esc_html_e('Optional', 'seatreg');?></span> 
-													<input type="checkbox" class="optional-input" <?php echo isset($custFields[$i]->optional) && $custFields[$i]->optional ? 'checked' : ''; ?> />
-													<i class="fa fa-times-circle remove-cust-item"></i>
-												</div>
-
-											</div>
-										<?php
-
-									}else if($custFields[$i]->type == 'check') {
-										echo '<div class="custom-container" data-type="check" data-label="'. esc_attr($custFields[$i]->label) .'">';
-											echo '<i class="custom-container-move custom-container-move-up">▲</i> <i class="custom-container-move custom-container-move-down">▼</i>';
-											echo '<label><span class="l-text">', esc_html($custFields[$i]->label), '</span> <input type="checkbox" /></label>';
-											echo '<div class="custom-container-controls">';
-												echo '<i class="fa fa-times-circle remove-cust-item"></i>';
-											echo '</div>';
-										echo '</div>';
-									}
-								}
-							?>
-							
-						<?php endif; ?>
-					</div>
-
-					<div class="cust-field-create">
-						<div style="margin-bottom: 6px"><?php esc_html_e('New custom field', 'seatreg'); ?></div>
-						<p>
-							<?php esc_html_e('Create a new custom field', 'seatreg'); ?>
-						</p>
-						<div style="margin-left: 24px">
-							<label><?php esc_html_e('Name', 'seatreg'); ?>:
-								<input type="text" class="cust-input-label" maxlenght="30"/>
-							</label>
-
-							<label><?php esc_html_e('Type', 'seatreg'); ?>:
-								<select class="custom-field-select">
-									<option data-type="field"><?php esc_html_e('Text', 'seatreg'); ?></option>
-									<option data-type="checkbox"><?php esc_html_e('Checkbox', 'seatreg'); ?></option>
-									<option data-type="select"><?php esc_html_e('Select', 'seatreg'); ?></option> 
-								</select>
-							</label>
-
-							<div class="select-radio-create">
-								<ul class="existing-options"></ul>
-
-								<label><?php esc_html_e('Option name', 'seatreg'); ?>
-									<input type="text" class="option-name">
-								</label>
-
-								<button class="btn btn-default btn-sm add-select-option"><?php esc_html_e('Add option', 'seatreg'); ?></button>
-								<div class="select-error"></div>
-							</div>
-							<button class="btn btn-default btn-sm apply-custom-field" type="button"><?php esc_html_e('Add custom field', 'seatreg'); ?></button>
-						</div>
-					</div>
-				</div>	
-			</div>
-
-			<div class="form-group">
-				<label for="custom-styles"><?php esc_html_e('Custom styles', 'seatreg'); ?></label>
-				<p class="help-block"><?php esc_html_e('Enter custom CSS rules for registration page', 'seatreg'); ?>.</p>
-				<p class="help-block">
-					<?php esc_html_e('For example:', 'seatreg'); ?><br />
-					<?php esc_html_e('Change pending box color', 'seatreg'); ?>
-					<code>.box[data-status=bron]{background-color:#6495ED !important;}</code><br />
-					<?php esc_html_e('Change approved box color', 'seatreg'); ?>
-					<code>.box[data-status=tak]{background-color:#1cdff2 !important;}</code><br />
-					<?php esc_html_e('For round seats', 'seatreg'); ?>				
-					<code>.box[data-seat] {border-radius:50%}</code>
-	
-				</p>
-
-				<textarea class="form-control" id="custom-styles" name="custom-styles" placeholder="<?php esc_html_e('Enter CSS rules', 'seatreg')?>"><?php echo esc_html($options[0]->custom_styles); ?></textarea>
-			</div>
 
 			<div class="form-group">
 				<label for="public-api"><?php esc_html_e('SeatReg public API', 'seatreg'); ?></label>
@@ -1783,7 +1774,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 				</div>
 			<?php endif; ?>
 			<div class="management-extra-actions">
-				<div class="add-booking" data-custom-fields='<?php echo json_encode($custom_fields); ?>' data-registration-code="<?php echo esc_attr($code); ?>">
+				<div class="add-booking" data-custom-fields='<?php echo json_encode($custom_fields); ?>' data-registration-code="<?php echo esc_attr($code); ?>" data-has-seats="<?php echo SeatregLayoutService::hasSeats($roomsData) ? 'true' : 'false'; ?>">
 					<span><?php esc_html_e('Add booking', 'seatreg'); ?></span>
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 				</div>

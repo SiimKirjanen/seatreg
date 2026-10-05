@@ -122,6 +122,7 @@ const FIELDS = {
 	pageHeadingColor: { tab: 'pages', selector: '#page-heading-color', kind: 'text' },
 	pageTextColor: { tab: 'pages', selector: '#page-text-color', kind: 'text' },
 	bookingNotFoundText: { tab: 'pages', selector: '#bookingNotFoundTextEditor', kind: 'richText' },
+	registrationStyles: { tab: 'pages', selector: '#custom-styles', kind: 'text' },
 	bookingStatusStyles: {
 		tab: 'pages',
 		selector: 'textarea[name="booking-status-custom-styles"]',
@@ -133,7 +134,6 @@ const FIELDS = {
 		kind: 'text',
 	},
 
-	customStyles: { tab: 'advanced', selector: '#custom-styles', kind: 'text' },
 	publicApi: { tab: 'advanced', selector: '#public-api', kind: 'checkbox' },
 };
 
@@ -669,7 +669,7 @@ class SettingsPage {
 	 * @param {string[]} field.options The choices a select field offers
 	 */
 	async #fillNewCustomField({ label, type, options = [] }) {
-		await this.openSection('advanced');
+		await this.openSection('booking-flow');
 
 		await this.newCustomFieldLabel.fill(label);
 		await this.newCustomFieldType.selectOption({ label: CUSTOM_FIELD_TYPES[type] });
@@ -792,7 +792,7 @@ class SettingsPage {
 	}
 
 	async openEditOptions(label) {
-		await this.openSection('advanced');
+		await this.openSection('booking-flow');
 		await this.customField(label).locator('.edit-options').click();
 
 		await expect(this.editOptionsDialog).toBeVisible();

@@ -83,7 +83,7 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_script('jquery-powertip', SEATREG_PLUGIN_FOLDER_URL . 'js/jquery.powertip.js' , array(), '1.2.0', true);
 		wp_enqueue_script('pg-calendar', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/js/pignose.calendar.full.min.js' , array('jquery'), '1.4.31', false);
 		wp_enqueue_script('seatreg-utils', SEATREG_PLUGIN_FOLDER_URL . 'js/utils.js' , array(), '1.4.0', true);
-		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.39.2', true);
+		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.40.0', true);
 		wp_enqueue_script('alertify', SEATREG_PLUGIN_FOLDER_URL . 'js/alertify.js', array('jquery'), '1.0.0', true);
 
 		$data = seatreg_get_options_reg($_GET['c']);
@@ -96,6 +96,7 @@ function seatreg_public_scripts_and_styles() {
 		$registrationTimeRestrictions = json_encode( SeatregTimeRepository::getTimeInfoForRegistrationView($data->registration_start_time, $data->registration_end_time) );
 		$isLoggedIn = SeatregAuthService::isLoggedIn();
 		$couponsEnabled = SeatregCouponRepository::areCouponsEnabled($data->registration_code);
+		$seatColors = SeatregSeatColorService::getColors($data->registration_layout);
 		$initialRoomUuid = !empty($_GET['room']) ? SeatregLayoutService::findRoomUuidByName(
 			SeatregLayoutService::getRoomDataFromLayout($data->registration_layout),
 			sanitize_text_field( wp_unslash($_GET['room']) )
@@ -146,11 +147,18 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var automaticBookingConfirmDialog = "' . esc_js($data->automatic_booking_confirm_dialog ? '1' : '0') . '";';
 			$inlineScript .= 'var seatregCouponsEnabled = "' . esc_js($couponsEnabled ? '1' : '0') . '";';
 			$inlineScript .= 'var seatregInitialRoomUuid = "' . esc_js($initialRoomUuid) . '";';
+			$inlineScript .= 'var lockedSeatColorEnabled = "' . esc_js($seatColors['locked'] ? '1' : '0') . '";';
 			$inlineScript .= '} catch(err) {';
 				$inlineScript .= "showErrorView('Data initialization failed');";
 				$inlineScript .= "console.log(err);";
 			$inlineScript .= 
 		$inlineScript .= '}';
+
+		$seatColorStyles = SeatregSeatColorService::getStyles($seatColors);
+
+		if( $seatColorStyles ) {
+			wp_add_inline_style('seatreg-registration-style', $seatColorStyles);
+		}
 
 		if( $data->custom_styles ) {
 			add_action('wp_head', function() use ($data) {

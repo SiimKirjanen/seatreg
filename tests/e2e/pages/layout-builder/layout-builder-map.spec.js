@@ -1,6 +1,7 @@
 const path = require('path');
 const { test, expect } = require('@playwright/test');
 const { LayoutBuilderPage } = require('./layout-builder-page');
+const { SettingsPage } = require('../settings/settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 const { escapeForRegExp } = require('../../utils/text');
 
@@ -18,6 +19,23 @@ const LAYOUT_TEXT = 'Stage';
 const SEAT_COLOR = '#e91e63';
 const SEAT_COLOR_RGB = 'rgb(233, 30, 99)';
 
+/* One seat for each status the status colors cover, and one left in none of them. */
+const STATUS_SEAT_COUNT = 5;
+const PENDING_SEAT = 1;
+const APPROVED_SEAT = 2;
+const LOCKED_SEAT = 3;
+const SELECTED_SEAT = 4;
+const UNTOUCHED_SEAT = 5;
+
+const SEAT_STATUS_COLORS = {
+	pending: { value: '#ff9800', computed: 'rgb(255, 152, 0)' },
+	approved: { value: '#4a148c', computed: 'rgb(74, 20, 140)' },
+	selected: { value: '#00bcd4', computed: 'rgb(0, 188, 212)' },
+	locked: { value: '#607d8b', computed: 'rgb(96, 125, 139)' },
+};
+const LAYOUT_SEAT_COLOR = 'rgb(97, 179, 41)';
+const WHITE = 'rgb(255, 255, 255)';
+
 const HOVER_TEXT_LINES = ['Extra legroom', 'Next to the exit'];
 
 /* One of the plugin's own images, so the suite carries no binary of its own.
@@ -30,11 +48,12 @@ const BACKGROUND_IMAGE = path.join(__dirname, '../../../../img/chairs_med.jpg');
 
 test.describe('Layout builder map', () => {
 	let builder;
+	let code;
 
 	test.beforeEach(async ({ page }) => {
 		builder = new LayoutBuilderPage(page);
 
-		await builder.openForNewRegistration(uniqueRegistrationName('Layout map'));
+		code = await builder.openForNewRegistration(uniqueRegistrationName('Layout map'));
 		await builder.nameFirstRoom(ROOM);
 	});
 
@@ -100,6 +119,9 @@ test.describe('Layout builder map', () => {
 		await registration.openSeat(3);
 		await expect(registration.addToBookingButton).toBeVisible();
 		await registration.closeSeatDialog();
+
+		/* Only the locked seat is out of reach, so only it stops counting as open. */
+		await expect(registration.roomCounts.first()).toContainText(`: ${SEAT_COUNT - 1}`);
 	});
 
 	test('adds text that reaches the registration and drops it when left empty', async () => {
@@ -131,6 +153,84 @@ test.describe('Layout builder map', () => {
 		const registration = await builder.openRegistration();
 		await expect(registration.seat(1)).toHaveCSS('background-color', SEAT_COLOR_RGB);
 		await expect(registration.seat(2)).not.toHaveCSS('background-color', SEAT_COLOR_RGB);
+	});
+
+	test('paints each seat in the color picked for its status', async ({ page }) => {
+		const settings = new SettingsPage(page);
+
+		await builder.placeSeats(STATUS_SEAT_COUNT);
+		await builder.lassoSelectSeats(LOCKED_SEAT, LOCKED_SEAT);
+		await builder.applySeatLocks({ lock: [LOCKED_SEAT] });
+		await builder.save();
+
+		await settings.open(code);
+		await settings.allowBookings();
+		await settings.makeBooking(code, { seats: [PENDING_SEAT] });
+
+		await settings.open(code);
+		await settings.allowBookings({ approved: true });
+		await settings.makeBooking(code, { seats: [APPROVED_SEAT] });
+
+		await settings.openLayout(code);
+		await builder.setSeatStatusColors(
+			Object.fromEntries(Object.entries(SEAT_STATUS_COLORS).map(([status, color]) => [status, color.value]))
+		);
+
+		/* The builder knows which seats are booked or locked, so it shows their fill
+		   before anything is saved. Selecting only happens on the registration. */
+		await expect(builder.seat(PENDING_SEAT)).toHaveCSS('background-color', SEAT_STATUS_COLORS.pending.computed);
+		await expect(builder.seat(APPROVED_SEAT)).toHaveCSS('background-color', SEAT_STATUS_COLORS.approved.computed);
+		await expect(builder.seat(LOCKED_SEAT)).toHaveCSS('background-color', SEAT_STATUS_COLORS.locked.computed);
+		await expect(builder.seat(UNTOUCHED_SEAT)).toHaveCSS('background-color', LAYOUT_SEAT_COLOR);
+		await expect(builder.seat(PENDING_SEAT).locator('.bron-sign')).toBeHidden();
+
+		await builder.save();
+
+		const registration = await builder.openRegistration();
+
+		await registration.addSeatToBooking(SELECTED_SEAT);
+
+		const pendingSeat = registration.seat(PENDING_SEAT);
+		const approvedSeat = registration.seat(APPROVED_SEAT);
+
+		await expect(pendingSeat).toHaveCSS('background-color', SEAT_STATUS_COLORS.pending.computed);
+		await expect(approvedSeat).toHaveCSS('background-color', SEAT_STATUS_COLORS.approved.computed);
+		await expect(registration.seat(LOCKED_SEAT)).toHaveCSS(
+			'background-color',
+			SEAT_STATUS_COLORS.locked.computed
+		);
+		await expect(registration.seat(SELECTED_SEAT)).toHaveCSS(
+			'background-color',
+			SEAT_STATUS_COLORS.selected.computed
+		);
+		await expect(registration.seat(UNTOUCHED_SEAT)).toHaveCSS('background-color', LAYOUT_SEAT_COLOR);
+
+		/* The fill says what the dot used to, so the dot goes. The number is
+		   turned light to stay readable on a dark fill. */
+		await expect(pendingSeat.locator('.bron-sign')).toBeHidden();
+		await expect(approvedSeat.locator('.taken-sign')).toBeHidden();
+		await expect(approvedSeat).toHaveCSS('color', WHITE);
+
+		/* What each color means is told beside the room's counts, and a locked
+		   seat only gets a line there once it has a color of its own. */
+		await expect(registration.roomCounts.locator('.bron-legend')).toHaveCSS(
+			'background-color',
+			SEAT_STATUS_COLORS.pending.computed
+		);
+		await expect(registration.roomCounts.locator('.tak-legend')).toHaveCSS(
+			'background-color',
+			SEAT_STATUS_COLORS.approved.computed
+		);
+
+		const lockedCount = registration.roomCounts.filter({
+			has: registration.page.locator('.locked-legend'),
+		});
+
+		await expect(lockedCount).toContainText(': 1');
+		await expect(lockedCount.locator('.locked-legend')).toHaveCSS(
+			'background-color',
+			SEAT_STATUS_COLORS.locked.computed
+		);
 	});
 
 	test('adds hover text that the registration shows on the seat', async () => {

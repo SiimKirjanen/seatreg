@@ -56,6 +56,13 @@
 			<div class="side-option legend-option" data-action="2" title="Legends" data-toggle="modal" data-target="#legends-dialog"></div>
 			<div class="side-option bubble-text" data-action="4" title="Hover text"></div>
 			<div class="side-option palette-call" data-action="5" title="Color"></div>
+			<?php $seatregSeatColorsTitle = _x('%s status colors', 'layout builder button and dialog title for the colors of booked, selected and locked seats', 'seatreg'); ?>
+			<div class="side-option seat-colors-option seat-colors-icon" data-action="12" title="<?php echo esc_attr( seatreg_noun_text('seat', 'singularUpper', $seatregSeatColorsTitle) ); ?>"<?php echo seatreg_noun_markers('seat', 'singularUpper', $seatregSeatColorsTitle, 'title'); ?> data-toggle="modal" data-target="#seat-colors-dialog">
+				<span class="seat-colors-icon__swatch seat-colors-icon__swatch--pending"></span>
+				<span class="seat-colors-icon__swatch seat-colors-icon__swatch--approved"></span>
+				<span class="seat-colors-icon__swatch seat-colors-icon__swatch--selected"></span>
+				<span class="seat-colors-icon__swatch seat-colors-icon__swatch--locked"></span>
+			</div>
 			<div class="side-option background-image" data-action="7" title="Background image" data-toggle="modal" data-target="#background-image-modal"></div>
 			<div class="side-option grid-stats" data-action="6" title="Grid settings" data-toggle="modal" data-target="#skeleton-dialog"></div>
 			<div class="side-option price-option" data-action="8" title="Price" data-toggle="modal" data-target="#price-dialog"></div>
@@ -115,7 +122,43 @@
 				<div id="picker" class="color-picker-wrap"></div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>			
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+			</div>
+		</div>
+		</div>
+	</div>
+
+	<?php
+		$seatregSeatStatusColors = array(
+			'pending' => __('Pending', 'seatreg'),
+			'approved' => __('Approved', 'seatreg'),
+			'selected' => __('Selected', 'seatreg'),
+			'locked' => __('Locked', 'seatreg'),
+		);
+	?>
+	<div class="modal vert-modal fade" id="seat-colors-dialog" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog vert-modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title"><?php seatreg_noun_span('seat', 'singularUpper', $seatregSeatColorsTitle); ?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<p><?php seatreg_noun_span('seat', 'plural', __('Color %s by their status. An unticked status keeps the layout color.', 'seatreg')); ?></p>
+				<div class="seat-color-fields">
+					<?php foreach( $seatregSeatStatusColors as $status => $label ) : ?>
+						<div class="seat-color-field">
+							<label>
+								<input type="checkbox" class="seat-color-toggle" data-status="<?php echo esc_attr($status); ?>">
+								<?php echo esc_html($label); ?>
+							</label>
+							<input type="color" class="seat-color-input" data-status="<?php echo esc_attr($status); ?>" aria-label="<?php echo esc_attr($label); ?>" disabled>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
 			</div>
 		</div>
 		</div>
@@ -540,6 +583,18 @@
 						<div class="guide-item2 guide-item-pallette"></div>
 						<p class="help-dialog-text">
 							<?php esc_html_e('Opens up color dialog where you can apply colors to selected objects.', 'seatreg');?>
+						</p>
+					</div>
+
+					<div class="help-dialog-row">
+						<div class="guide-item2 seat-colors-icon">
+							<span class="seat-colors-icon__swatch seat-colors-icon__swatch--pending"></span>
+							<span class="seat-colors-icon__swatch seat-colors-icon__swatch--approved"></span>
+							<span class="seat-colors-icon__swatch seat-colors-icon__swatch--selected"></span>
+							<span class="seat-colors-icon__swatch seat-colors-icon__swatch--locked"></span>
+						</div>
+						<p class="help-dialog-text">
+							<?php seatreg_noun_span('seat', 'plural', __('Lets you color pending, approved, selected and locked %s by their status. The colors apply to every room.', 'seatreg'));?>
 						</p>
 					</div>
 

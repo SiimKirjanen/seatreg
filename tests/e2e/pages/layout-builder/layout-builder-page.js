@@ -296,6 +296,34 @@ class LayoutBuilderPage {
 		return this.page.locator('#set-seat-locks');
 	}
 
+	/* Seat status colors dialog. It belongs to the registration rather than to a
+	   selection, and every change is applied as it is made. */
+
+	get seatColorsButton() {
+		return this.page.locator('.seat-colors-option');
+	}
+
+	get seatColorsDialog() {
+		return this.page.locator('#seat-colors-dialog');
+	}
+
+	/**
+	 * @param {Object<string, string>} colors Hex color keyed by pending, approved,
+	 * selected or locked
+	 */
+	async setSeatStatusColors(colors) {
+		await this.seatColorsButton.click();
+		await expectModalShown(this.seatColorsDialog);
+
+		for (const [status, color] of Object.entries(colors)) {
+			await this.seatColorsDialog.locator(`.seat-color-toggle[data-status="${status}"]`).check();
+			await this.seatColorsDialog.locator(`.seat-color-input[data-status="${status}"]`).fill(color);
+		}
+
+		await this.seatColorsDialog.locator('.modal-footer button[data-dismiss="modal"]').click();
+		await expectModalHidden(this.seatColorsDialog);
+	}
+
 	/* Price dialog. Like the lock one it reads the selection when it opens.
 
 	   builder_content.php renders it twice - once by requiring seat-price-modal.php

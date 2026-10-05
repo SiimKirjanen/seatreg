@@ -39,6 +39,8 @@ function seatreg_generate_registration_strings() {
 	$translations->pendingBookingsInRoom = esc_html__('Pending bookings in the %1$s: %2$s', 'seatreg');
 	/* translators: %1$s: the word the admin uses for a room, %2$s: number of approved bookings */
 	$translations->approvedBookingsInRoom = esc_html__('Approved bookings in the %1$s: %2$s', 'seatreg');
+	/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a room, %3$s: number of locked seats */
+	$translations->lockedSpotsInRoom = esc_html__('Locked %1$s in the %2$s: %3$s', 'seatreg');
 	$translations->firstName = esc_html__('Firstname', 'seatreg');
 	$translations->lastName = esc_html__('Lastname', 'seatreg');
 	$translations->eMail = esc_html__('Email', 'seatreg');
@@ -93,6 +95,8 @@ function seatreg_generate_admin_strings() {
     $translations->roomNameSet = esc_html__('New %s added', 'seatreg');
     /* translators: %s: the word the admin uses for a room, capitalized */
     $translations->roomNotExist = esc_html( _x('%s does not exist', 'booking manager error when the given room name matches nothing', 'seatreg') );
+    /* translators: %s: the word the admin uses for seats, plural */
+    $translations->noSeatsToBook =esc_html__('This registration has no %s yet. Add them to its layout before adding bookings.', 'seatreg');
     /* translators: %s: the word the admin uses for a seat, capitalized */
     $translations->seatIdNotExist = esc_html__('%s id does not exist', 'seatreg');
     /* translators: %s: the word the admin uses for a seat, capitalized */
