@@ -17,52 +17,107 @@ function seatreg_generate_registration_strings() {
 	$translations->confWillBeSentTo = esc_html__('Confirmation will be sent to:', 'seatreg');
 	$translations->confWillBeSentTogmail = esc_html__('Confirmation will be sent to (Gmail):', 'seatreg');
 	$translations->gmailReq = esc_html__('Email (Gmail required)', 'seatreg');
-	/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the word the admin uses for a room, %4$s: the room name */
-	$translations->addSpotFromRoomToBooking = esc_html__('Add %1$s %2$s from %3$s %4$s to booking?', 'seatreg');
-	/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the word the admin uses for a room, %4$s: the room name */
-	$translations->spotFromRoom = esc_html__('%1$s %2$s from %3$s %4$s', 'seatreg');
-	/* translators: %s: the word the admin uses for a seat */
-	$translations->spotIsOccupied = esc_html__('This %s is occupied', 'seatreg');
-	/* translators: %s: the word the admin uses for a seat */
-	$translations->spotIsPendingState = esc_html__('This %s is in pending state', 'seatreg');
+	$translations->addSpotFromRoomToBooking = SeatregTerminologyService::variants(
+		/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the room name */
+		esc_html__('Add %1$s %2$s from %3$s to booking?', 'seatreg'),
+		esc_html_x('Add %1$s %2$s from %3$s to booking?', 'seat word is masculine', 'seatreg'),
+		esc_html_x('Add %1$s %2$s from %3$s to booking?', 'seat word is feminine', 'seatreg'),
+		esc_html_x('Add %1$s %2$s from %3$s to booking?', 'seat word is neuter', 'seatreg')
+	);
+	/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the room name */
+	$translations->spotFromRoom = esc_html__('%1$s %2$s from %3$s', 'seatreg');
+	$translations->spotIsOccupied = SeatregTerminologyService::variants(
+		/* translators: %s: the word the admin uses for a seat */
+		esc_html__('This %s is occupied', 'seatreg'),
+		esc_html_x('This %s is occupied', 'seat word is masculine', 'seatreg'),
+		esc_html_x('This %s is occupied', 'seat word is feminine', 'seatreg'),
+		esc_html_x('This %s is occupied', 'seat word is neuter', 'seatreg')
+	);
+	$translations->spotIsPendingState = SeatregTerminologyService::variants(
+		/* translators: %s: the word the admin uses for a seat */
+		esc_html__('This %s is in pending state', 'seatreg'),
+		esc_html_x('This %s is in pending state', 'seat word is masculine', 'seatreg'),
+		esc_html_x('This %s is in pending state', 'seat word is feminine', 'seatreg'),
+		esc_html_x('This %s is in pending state', 'seat word is neuter', 'seatreg')
+	);
 	$translations->regOwnerNotConfirmed = esc_html__('(registration admin has not confirmed it)', 'seatreg');
 	$translations->selectionIsFull = esc_html__('Booking is full', 'seatreg');
-	/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: the seat number */
-    $translations->spotAlreadySelected = esc_html__('%1$s %2$s is already selected!', 'seatreg');
+    $translations->spotAlreadySelected = SeatregTerminologyService::variants(
+        /* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: the seat number */
+        esc_html__('%1$s %2$s is already selected!', 'seatreg'),
+        esc_html_x('%1$s %2$s is already selected!', 'seat word is masculine', 'seatreg'),
+        esc_html_x('%1$s %2$s is already selected!', 'seat word is feminine', 'seatreg'),
+        esc_html_x('%1$s %2$s is already selected!', 'seat word is neuter', 'seatreg')
+    );
 	$translations->_regUnderConstruction = esc_html__('Under construction', 'seatreg');
 	$translations->emptyField = esc_html__('Empty field', 'seatreg');
 	$translations->remove = esc_html__('Remove', 'seatreg');
 	$translations->addToBooking = esc_html__('Add to Booking', 'seatreg');
-	/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a room, %3$s: number of open seats */
-	$translations->openSpotsInRoom = esc_html__('Open %1$s in the %2$s: %3$s', 'seatreg');
-	/* translators: %1$s: the word the admin uses for a room, %2$s: number of pending bookings */
-	$translations->pendingBookingsInRoom = esc_html__('Pending bookings in the %1$s: %2$s', 'seatreg');
-	/* translators: %1$s: the word the admin uses for a room, %2$s: number of approved bookings */
-	$translations->approvedBookingsInRoom = esc_html__('Approved bookings in the %1$s: %2$s', 'seatreg');
-	/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a room, %3$s: number of locked seats */
-	$translations->lockedSpotsInRoom = esc_html__('Locked %1$s in the %2$s: %3$s', 'seatreg');
+	$translations->openSpotsInRoom = SeatregTerminologyService::variants(
+		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of open seats in the room on screen */
+		esc_html__('Open %1$s: %2$s', 'seatreg'),
+		esc_html_x('Open %1$s: %2$s', 'seat word is masculine', 'seatreg'),
+		esc_html_x('Open %1$s: %2$s', 'seat word is feminine', 'seatreg'),
+		esc_html_x('Open %1$s: %2$s', 'seat word is neuter', 'seatreg')
+	);
+	/* translators: %s: number of pending bookings in the room on screen */
+	$translations->pendingBookingsInRoom = esc_html__('Pending bookings: %s', 'seatreg');
+	/* translators: %s: number of approved bookings in the room on screen */
+	$translations->approvedBookingsInRoom = esc_html__('Approved bookings: %s', 'seatreg');
+	$translations->lockedSpotsInRoom = SeatregTerminologyService::variants(
+		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of locked seats in the room on screen */
+		esc_html__('Locked %1$s: %2$s', 'seatreg'),
+		esc_html_x('Locked %1$s: %2$s', 'seat word is masculine', 'seatreg'),
+		esc_html_x('Locked %1$s: %2$s', 'seat word is feminine', 'seatreg'),
+		esc_html_x('Locked %1$s: %2$s', 'seat word is neuter', 'seatreg')
+	);
 	$translations->firstName = esc_html__('Firstname', 'seatreg');
 	$translations->lastName = esc_html__('Lastname', 'seatreg');
 	$translations->eMail = esc_html__('Email', 'seatreg');
-	/* translators: %1$s: number of selected seats, %2$s: the word the admin uses for a seat, singular or plural to match the number */
-    $translations->spotsSelected = esc_html__('%1$s %2$s selected', 'seatreg');
+    $translations->spotsSelected = SeatregTerminologyService::variants(
+        /* translators: %1$s: number of selected seats, %2$s: the word the admin uses for a seat, singular or plural to match the number */
+        esc_html__('%1$s %2$s selected', 'seatreg'),
+        esc_html_x('%1$s %2$s selected', 'seat word is masculine', 'seatreg'),
+        esc_html_x('%1$s %2$s selected', 'seat word is feminine', 'seatreg'),
+        esc_html_x('%1$s %2$s selected', 'seat word is neuter', 'seatreg')
+    );
     $translations->bookingsConfirmed = esc_html__('Your booking is approved', 'seatreg');
     $translations->bookingsConfirmedPending = esc_html__('Your booking is now in pending state. Registration admin needs to approve it', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat */
-    $translations->selectingGuide = esc_html__('Select a %s you want to add to booking', 'seatreg');
+    $translations->selectingGuide = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat */
+        esc_html__('Select a %s you want to add to booking', 'seatreg'),
+        esc_html_x('Select a %s you want to add to booking', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Select a %s you want to add to booking', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Select a %s you want to add to booking', 'seat word is neuter', 'seatreg')
+    );
     $translations->Booked = esc_html__('Booked', 'seatreg');
     $translations->Pending = esc_html__('Pending', 'seatreg');
-    /* translators: %1$s: the word the admin uses for seats, plural, %2$s: the maximum number */
-    $translations->maxSpotsToAdd = esc_html__('Total %1$s you can add to booking is %2$s', 'seatreg');
-    /* translators: %1$s: the word the admin uses for a seat, %2$s: the price */
-    $translations->spotCosts = esc_html__('Booking this %1$s costs %2$s', 'seatreg');
+    $translations->maxSpotsToAdd = SeatregTerminologyService::variants(
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$s: the maximum number */
+        esc_html__('Total %1$s you can add to booking is %2$s', 'seatreg'),
+        esc_html_x('Total %1$s you can add to booking is %2$s', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Total %1$s you can add to booking is %2$s', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Total %1$s you can add to booking is %2$s', 'seat word is neuter', 'seatreg')
+    );
+    $translations->spotCosts = SeatregTerminologyService::variants(
+        /* translators: %1$s: the word the admin uses for a seat, %2$s: the price */
+        esc_html__('Booking this %1$s costs %2$s', 'seatreg'),
+        esc_html_x('Booking this %1$s costs %2$s', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Booking this %1$s costs %2$s', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Booking this %1$s costs %2$s', 'seat word is neuter', 'seatreg')
+    );
     $translations->bookingTotalCostIs_ = esc_html__('Booking total cost is ', 'seatreg');
     $translations->receiptSent = esc_html__('Booking receipt has been sent to your email', 'seatreg');
     $translations->payForBookingLink = esc_html__('Click the following link to pay for the booking', 'seatreg');
     $translations->yes = esc_html__('Yes', 'seatreg');
     $translations->no = esc_html__('No', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat, capitalized */
-    $translations->spotIsLocked = esc_html__('%s is locked', 'seatreg');
+    $translations->spotIsLocked = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat, capitalized */
+        esc_html__('%s is locked', 'seatreg'),
+        esc_html_x('%s is locked', 'seat word is masculine', 'seatreg'),
+        esc_html_x('%s is locked', 'seat word is feminine', 'seatreg'),
+        esc_html_x('%s is locked', 'seat word is neuter', 'seatreg')
+    );
     $translations->pleaseEnterPassword = esc_html__('Please enter password', 'seatreg');
     $translations->passwordNotCorrect = esc_html__('Password is not correct', 'seatreg');
     $translations->closedPleaseChooseNewDate = esc_html__('Registration not open for today. Please choose another date', 'seatreg');
@@ -91,16 +146,31 @@ function seatreg_generate_admin_strings() {
     $translations->buildingGridUpdated = esc_html__('Building grid updated', 'seatreg');
     /* translators: %s: the word the admin uses for a room, capitalized */
     $translations->roomNameChanged = esc_html( _x('%s name changed', 'layout builder confirmation after renaming a room', 'seatreg') );
-    /* translators: %s: the word the admin uses for a room */
-    $translations->roomNameSet = esc_html__('New %s added', 'seatreg');
+    $translations->roomNameSet = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a room */
+        esc_html__('New %s added', 'seatreg'),
+        esc_html_x('New %s added', 'room word is masculine', 'seatreg'),
+        esc_html_x('New %s added', 'room word is feminine', 'seatreg'),
+        esc_html_x('New %s added', 'room word is neuter', 'seatreg')
+    );
     /* translators: %s: the word the admin uses for a room, capitalized */
     $translations->roomNotExist = esc_html( _x('%s does not exist', 'booking manager error when the given room name matches nothing', 'seatreg') );
-    /* translators: %s: the word the admin uses for seats, plural */
-    $translations->noSeatsToBook =esc_html__('This registration has no %s yet. Add them to its layout before adding bookings.', 'seatreg');
+    $translations->noSeatsToBook = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for seats, plural */
+        esc_html__('This registration has no %s yet. Add them to its layout before adding bookings.', 'seatreg'),
+        esc_html_x('This registration has no %s yet. Add them to its layout before adding bookings.', 'seat word is masculine', 'seatreg'),
+        esc_html_x('This registration has no %s yet. Add them to its layout before adding bookings.', 'seat word is feminine', 'seatreg'),
+        esc_html_x('This registration has no %s yet. Add them to its layout before adding bookings.', 'seat word is neuter', 'seatreg')
+    );
     /* translators: %s: the word the admin uses for a seat, capitalized */
     $translations->seatIdNotExist = esc_html__('%s id does not exist', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat, capitalized */
-    $translations->seatAlreadyBookedPending = esc_html__('%s is already booked/pending', 'seatreg');
+    $translations->seatAlreadyBookedPending = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat, capitalized */
+        esc_html__('%s is already booked/pending', 'seatreg'),
+        esc_html_x('%s is already booked/pending', 'seat word is masculine', 'seatreg'),
+        esc_html_x('%s is already booked/pending', 'seat word is feminine', 'seatreg'),
+        esc_html_x('%s is already booked/pending', 'seat word is neuter', 'seatreg')
+    );
     $translations->errorBookingUpdate = esc_html__('Error updating booking', 'seatreg');
     $translations->hoverError = esc_html__('Error while creating hover', 'seatreg');
     $translations->legendChangeError = esc_html__('Error while changing legend', 'seatreg');
@@ -108,19 +178,39 @@ function seatreg_generate_admin_strings() {
     $translations->lagendNameMissing = esc_html__('Legend name missing!', 'seatreg');
     $translations->legendColorTaken = esc_html__('Legend color is taken. Choose another', 'seatreg');
     $translations->legendAddedTo = esc_html__('Legend added to', 'seatreg');
-    /* translators: %s: the word the admin uses for a room */
-    $translations->oneRoomNeeded = esc_html__('You must have at least one %s', 'seatreg');
-    /* translators: %s: the word the admin uses for a room */
-    $translations->alreadyInRoom = esc_html__('Already in this %s', 'seatreg');
-    /* translators: %s: the word the admin uses for rooms, plural */
-    $translations->allRoomsNeedName = esc_html__('All %s must have name', 'seatreg');
+    $translations->oneRoomNeeded = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a room */
+        esc_html__('You must have at least one %s', 'seatreg'),
+        esc_html_x('You must have at least one %s', 'room word is masculine', 'seatreg'),
+        esc_html_x('You must have at least one %s', 'room word is feminine', 'seatreg'),
+        esc_html_x('You must have at least one %s', 'room word is neuter', 'seatreg')
+    );
+    $translations->alreadyInRoom = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a room */
+        esc_html__('Already in this %s', 'seatreg'),
+        esc_html_x('Already in this %s', 'room word is masculine', 'seatreg'),
+        esc_html_x('Already in this %s', 'room word is feminine', 'seatreg'),
+        esc_html_x('Already in this %s', 'room word is neuter', 'seatreg')
+    );
+    $translations->allRoomsNeedName = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for rooms, plural */
+        esc_html__('All %s must have name', 'seatreg'),
+        esc_html_x('All %s must have name', 'room word is masculine', 'seatreg'),
+        esc_html_x('All %s must have name', 'room word is feminine', 'seatreg'),
+        esc_html_x('All %s must have name', 'room word is neuter', 'seatreg')
+    );
     $translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
     $translations->illegalCharactersDetecCouponCode = esc_html__('Illegal characters detected in coupon code', 'seatreg');
     $translations->couponCodeLengthLimitExceeded = esc_html__('Coupon code cant be longer than 20 characters', 'seatreg');
     $translations->illegalCharactersDetecDiscount = esc_html__('Illegal characters detected in discount value', 'seatreg');
     $translations->missingName = esc_html__('Name missing', 'seatreg');
-    /* translators: %1$s: the word the admin uses for a room, %2$s: the room name */
-    $translations->cantDeleteRoom = esc_html__('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg');
+    $translations->cantDeleteRoom = SeatregTerminologyService::variants(
+        /* translators: %1$s: the word the admin uses for a room, %2$s: the room name */
+        esc_html__('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg'),
+        esc_html_x('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'room word is masculine', 'seatreg'),
+        esc_html_x('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'room word is feminine', 'seatreg'),
+        esc_html_x('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'room word is neuter', 'seatreg')
+    );
     /* translators: %s: the word the admin uses for a room, capitalized */
     $translations->roomNameMissing = esc_html( _x('%s name is missing', 'layout builder, empty room name field', 'seatreg') );
     /* translators: %s: the word the admin uses for a room, capitalized */
@@ -137,8 +227,13 @@ function seatreg_generate_admin_strings() {
     $translations->noLegendsCreated = esc_html__('You have not made and legends yet', 'seatreg');
     $translations->_noSelectBoxToAddLegend = esc_html__(' You have not selected any box/boxes to add legends', 'seatreg');
     $translations->_charRemaining = esc_html__(' characters remaining', 'seatreg');
-    /* translators: %1$s: the word the admin uses for a room, %2$s: the room name */
-    $translations->deleteRoomConfirm = esc_html__('Are you sure you want to delete %1$s %2$s?', 'seatreg');
+    $translations->deleteRoomConfirm = SeatregTerminologyService::variants(
+        /* translators: %1$s: the word the admin uses for a room, %2$s: the room name */
+        esc_html__('Are you sure you want to delete %1$s %2$s?', 'seatreg'),
+        esc_html_x('Are you sure you want to delete %1$s %2$s?', 'room word is masculine', 'seatreg'),
+        esc_html_x('Are you sure you want to delete %1$s %2$s?', 'room word is feminine', 'seatreg'),
+        esc_html_x('Are you sure you want to delete %1$s %2$s?', 'room word is neuter', 'seatreg')
+    );
     $translations->unsavedChanges = esc_html__('Unsaved changes. You sure you want to leave?', 'seatreg');
     $translations->createLegend = esc_html__('Create new legend', 'seatreg');
     $translations->cancelLegendCreation = esc_html__('Cancel legend creation', 'seatreg');
@@ -150,10 +245,20 @@ function seatreg_generate_admin_strings() {
     $translations->boxes = esc_html__('boxes', 'seatreg');
     $translations->box = esc_html__('box', 'seatreg');
     $translations->noBoxesSelected = esc_html__('No boxes selected', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat */
-    $translations->pendingSeat = esc_html__('Pending %s', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat */
-    $translations->confirmedSeat = esc_html__('Approved %s', 'seatreg');
+    $translations->pendingSeat = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat */
+        esc_html__('Pending %s', 'seatreg'),
+        esc_html_x('Pending %s', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Pending %s', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Pending %s', 'seat word is neuter', 'seatreg')
+    );
+    $translations->confirmedSeat = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat */
+        esc_html__('Approved %s', 'seatreg'),
+        esc_html_x('Approved %s', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Approved %s', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Approved %s', 'seat word is neuter', 'seatreg')
+    );
     $translations->save = esc_html__('Save', 'seatreg');
     $translations->saving = esc_html__('Saving...', 'seatreg');
     $translations->saved = esc_html__('Saved', 'seatreg');
@@ -166,14 +271,29 @@ function seatreg_generate_admin_strings() {
     $translations->areYouSure = esc_html__('Are you sure?', 'seatreg');
     $translations->pleaseAddAtLeastOneOption = esc_html__('Please add at least one option', 'seatreg');
     $translations->nameAlreadyUsed = esc_html__('Name already used', 'seatreg');
-    /* translators: %s: the word the admin uses for a room */
-    $translations->noBgImageInRoom = esc_html__('Current %s does not have background image', 'seatreg');
-    /* translators: %s: the word the admin uses for a room */
-    $translations->removeFromRoom = esc_html( _x('Remove from %s', 'layout builder, remove the background image from the room', 'seatreg') );
+    $translations->noBgImageInRoom = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a room */
+        esc_html__('Current %s does not have background image', 'seatreg'),
+        esc_html_x('Current %s does not have background image', 'room word is masculine', 'seatreg'),
+        esc_html_x('Current %s does not have background image', 'room word is feminine', 'seatreg'),
+        esc_html_x('Current %s does not have background image', 'room word is neuter', 'seatreg')
+    );
+    $translations->removeFromRoom = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a room */
+        esc_html_x('Remove from %s', 'layout builder, remove the background image from the room', 'seatreg'),
+        esc_html_x('Remove from %s', 'layout builder, remove the background image from the room; room word is masculine', 'seatreg'),
+        esc_html_x('Remove from %s', 'layout builder, remove the background image from the room; room word is feminine', 'seatreg'),
+        esc_html_x('Remove from %s', 'layout builder, remove the background image from the room; room word is neuter', 'seatreg')
+    );
     $translations->choosePictureToUpload = esc_html__('Choose a picture to upload', 'seatreg');
     $translations->imageNameIllegalChar = esc_html__('Image name contains illegal characters', 'seatreg');
-    /* translators: %s: the word the admin uses for a room */
-    $translations->addToRoomBackground = esc_html__('Add to %s background', 'seatreg');
+    $translations->addToRoomBackground = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a room */
+        esc_html__('Add to %s background', 'seatreg'),
+        esc_html_x('Add to %s background', 'room word is masculine', 'seatreg'),
+        esc_html_x('Add to %s background', 'room word is feminine', 'seatreg'),
+        esc_html_x('Add to %s background', 'room word is neuter', 'seatreg')
+    );
     $translations->remove = esc_html__('Remove', 'seatreg');
     $translations->showPendingBookings = esc_html__('Show pending bookings', 'seatreg');
     $translations->showApprovedBookings = esc_html__('Show approved bookings', 'seatreg');
@@ -192,8 +312,13 @@ function seatreg_generate_admin_strings() {
     $translations->pleaseEnterStripeApiKey = esc_html__('Please enter Stripe API key', 'seatreg');
     $translations->pleaseProvideStripeApiSecretKey = esc_html__('Please provide Stripe API secret key', 'seatreg');
     $translations->pricesAdded = esc_html__('Prices added', 'seatreg');
-    /* translators: %s: the word the admin uses for seats, plural */
-    $translations->noSeatsSelected = esc_html__('No %s selected!', 'seatreg');
+    $translations->noSeatsSelected = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for seats, plural */
+        esc_html__('No %s selected!', 'seatreg'),
+        esc_html_x('No %s selected!', 'seat word is masculine', 'seatreg'),
+        esc_html_x('No %s selected!', 'seat word is feminine', 'seatreg'),
+        esc_html_x('No %s selected!', 'seat word is neuter', 'seatreg')
+    );
     $translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
     $translations->emailFromNotCorrect = esc_html__('Email FROM address is not correct', 'seatreg');
     $translations->checkEmailAddress = esc_html__('Check your email address', 'seatreg');
@@ -206,8 +331,13 @@ function seatreg_generate_admin_strings() {
     $translations->permanentlyDeleteBookingConfirm = esc_html__('This will permanently delete the selected bookings. This cannot be undone. Are you sure?', 'seatreg');
     $translations->bookingPermanentlyDeleted = esc_html__('Booking permanently deleted', 'seatreg');
     $translations->newBookingWasAddedRefreshingThaPage = esc_html__('Booking was added. Page will refresh in a second', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat */
-    $translations->duplicateSeatDetected = esc_html__('Duplicate %s detected!', 'seatreg');
+    $translations->duplicateSeatDetected = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat */
+        esc_html__('Duplicate %s detected!', 'seatreg'),
+        esc_html_x('Duplicate %s detected!', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Duplicate %s detected!', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Duplicate %s detected!', 'seat word is neuter', 'seatreg')
+    );
     $translations->emailTemplateNotCorrect = esc_html__('Email template is missing required keywords', 'seatreg');
     $translations->approvedBookingEmailTemplateIllegalCharacter = esc_html__('The approved booking email template contains disallowed characters.', 'seatreg');
     $translations->pendingBookingEmailTemplateIllegalCharacter = esc_html__('The pending booking email template contains disallowed characters.', 'seatreg');
@@ -247,8 +377,13 @@ function seatreg_generate_admin_strings() {
     $translations->email = esc_html__('Email', 'seatreg');
     $translations->bookingMainEmail = esc_html__('Booking main email', 'seatreg');
     $translations->editEmailNotValid = esc_html__('Provided email address is not valid', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat */
-    $translations->multiBookingMailEmailEditDesc = esc_html__('Primary contact email if more than one %s is booked', 'seatreg');
+    $translations->multiBookingMailEmailEditDesc = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat */
+        esc_html__('Primary contact email if more than one %s is booked', 'seatreg'),
+        esc_html_x('Primary contact email if more than one %s is booked', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Primary contact email if more than one %s is booked', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Primary contact email if more than one %s is booked', 'seat word is neuter', 'seatreg')
+    );
     /* translators: %s: the word the admin uses for a room, capitalized */
     $translations->roomDescriptionSet = esc_html( _x('%s description changed', 'layout builder confirmation after editing a room description', 'seatreg') );
     $translations->primaryEmailValidationFailed = esc_html__('Booking primary email validation failed', 'seatreg');
@@ -268,13 +403,20 @@ function seatreg_generate_admin_strings() {
     $translations->flowSeatPlural = esc_html__('seats', 'seatreg');
     $translations->flowPlaceSingular = esc_html__('place', 'seatreg');
     $translations->flowPlacePlural = esc_html__('places', 'seatreg');
+    $translations->flowSeatGender = SeatregTerminologyService::getSeatNouns( (object) array('using_seats' => '1') )->gender;
+    $translations->flowPlaceGender = SeatregTerminologyService::getSeatNouns( (object) array('using_seats' => '0') )->gender;
     $translations->flowClosed = esc_html__('Your registration is currently closed, so visitors cannot make a booking.', 'seatreg');
     /* translators: %s: the close reason text entered by the admin */
     $translations->flowClosedReason = esc_html__('Visitors are shown the following reason: %s', 'seatreg');
     $translations->flowPassword = esc_html__('Visitors must enter the access password to view it.', 'seatreg');
     $translations->flowRequireLogin = esc_html__('Only visitors logged in to your site can book.', 'seatreg');
-    /* translators: %1$d: number of bookings, %2$s: the word the admin uses for seats, plural */
-    $translations->flowWpBookingLimit = esc_html__('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seatreg');
+    $translations->flowWpBookingLimit = SeatregTerminologyService::variants(
+        /* translators: %1$d: number of bookings, %2$s: the word the admin uses for seats, plural */
+        esc_html__('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seatreg'),
+        esc_html_x('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seat word is neuter', 'seatreg')
+    );
     /* translators: %1$d: number of seats, %2$s: the word the admin uses for seats, plural */
     $translations->flowWpSeatLimit = esc_html__('Across all their bookings, each logged-in user can book at most %1$d %2$s.', 'seatreg');
     $translations->flowDateWindowBoth = esc_html__('Bookings can only be made within the registration\'s scheduled start and end dates.', 'seatreg');
@@ -288,25 +430,65 @@ function seatreg_generate_admin_strings() {
     $translations->calendarSelectedDates = esc_html__('Selected dates', 'seatreg');
     $translations->calendarNoDatesSelected = esc_html__('No dates selected yet', 'seatreg');
     $translations->calendarRemoveDate = esc_html__('Remove date', 'seatreg');
-    /* translators: %s: the word the admin uses for seats, plural */
-    $translations->flowSelect = esc_html__('Visitors select %s on the map.', 'seatreg');
-    /* translators: %1$s: the word the admin uses for seats, plural, %2$d: maximum number per booking */
-    $translations->flowSelectMax = esc_html__('Visitors select %1$s on the map, up to %2$d per booking.', 'seatreg');
-    /* translators: %1$s: the word the admin uses for seats, plural, %2$s: comma-separated list of shown details */
-    $translations->flowShowBookingData = esc_html__('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seatreg');
+    $translations->flowSelect = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for seats, plural */
+        esc_html__('Visitors select %s on the map.', 'seatreg'),
+        esc_html_x('Visitors select %s on the map.', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Visitors select %s on the map.', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Visitors select %s on the map.', 'seat word is neuter', 'seatreg')
+    );
+    $translations->flowSelectMax = SeatregTerminologyService::variants(
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$d: maximum number per booking */
+        esc_html__('Visitors select %1$s on the map, up to %2$d per booking.', 'seatreg'),
+        esc_html_x('Visitors select %1$s on the map, up to %2$d per booking.', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Visitors select %1$s on the map, up to %2$d per booking.', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Visitors select %1$s on the map, up to %2$d per booking.', 'seat word is neuter', 'seatreg')
+    );
+    $translations->flowShowBookingData = SeatregTerminologyService::variants(
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$s: comma-separated list of shown details */
+        esc_html__('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seatreg'),
+        esc_html_x('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seat word is neuter', 'seatreg')
+    );
     $translations->flowShowBookingDataFullName = esc_html__('full name', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat */
-    $translations->flowAutoDialog = esc_html__('The booking form opens automatically as soon as a %s is selected.', 'seatreg');
-    /* translators: %s: the word the admin uses for seats, plural */
-    $translations->flowManualDialog = esc_html__('After choosing %s, visitors open the selection menu to complete their booking.', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat */
-    $translations->flowOnePersonCheckout = esc_html__('Booking details are entered once and applied to every %s.', 'seatreg');
-    /* translators: %s: the word the admin uses for a seat */
-    $translations->flowPerSeatCheckout = esc_html__('Booking details are entered for each %s.', 'seatreg');
+    $translations->flowAutoDialog = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat */
+        esc_html__('The booking form opens automatically as soon as a %s is selected.', 'seatreg'),
+        esc_html_x('The booking form opens automatically as soon as a %s is selected.', 'seat word is masculine', 'seatreg'),
+        esc_html_x('The booking form opens automatically as soon as a %s is selected.', 'seat word is feminine', 'seatreg'),
+        esc_html_x('The booking form opens automatically as soon as a %s is selected.', 'seat word is neuter', 'seatreg')
+    );
+    $translations->flowManualDialog = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for seats, plural */
+        esc_html__('After choosing %s, visitors open the selection menu to complete their booking.', 'seatreg'),
+        esc_html_x('After choosing %s, visitors open the selection menu to complete their booking.', 'seat word is masculine', 'seatreg'),
+        esc_html_x('After choosing %s, visitors open the selection menu to complete their booking.', 'seat word is feminine', 'seatreg'),
+        esc_html_x('After choosing %s, visitors open the selection menu to complete their booking.', 'seat word is neuter', 'seatreg')
+    );
+    $translations->flowOnePersonCheckout = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat */
+        esc_html__('Booking details are entered once and applied to every %s.', 'seatreg'),
+        esc_html_x('Booking details are entered once and applied to every %s.', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Booking details are entered once and applied to every %s.', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Booking details are entered once and applied to every %s.', 'seat word is neuter', 'seatreg')
+    );
+    $translations->flowPerSeatCheckout = SeatregTerminologyService::variants(
+        /* translators: %s: the word the admin uses for a seat */
+        esc_html__('Booking details are entered for each %s.', 'seatreg'),
+        esc_html_x('Booking details are entered for each %s.', 'seat word is masculine', 'seatreg'),
+        esc_html_x('Booking details are entered for each %s.', 'seat word is feminine', 'seatreg'),
+        esc_html_x('Booking details are entered for each %s.', 'seat word is neuter', 'seatreg')
+    );
     $translations->flowRequireName = esc_html__('A full name (first and last) is required.', 'seatreg');
     $translations->flowGmailRequired = esc_html__('A Gmail address is required.', 'seatreg');
-    /* translators: %1$d: maximum number of bookings per email, %2$s: the word the admin uses for seats, plural */
-    $translations->flowEmailLimit = esc_html__('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seatreg');
+    $translations->flowEmailLimit = SeatregTerminologyService::variants(
+        /* translators: %1$d: maximum number of bookings per email, %2$s: the word the admin uses for seats, plural */
+        esc_html__('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seatreg'),
+        esc_html_x('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seat word is masculine', 'seatreg'),
+        esc_html_x('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seat word is feminine', 'seatreg'),
+        esc_html_x('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seat word is neuter', 'seatreg')
+    );
     $translations->flowCustomFields = esc_html__('Bookers also fill in the custom fields you have created, which are required by default.', 'seatreg');
     $translations->flowCustomFieldsOptional = esc_html__('Some custom fields are optional and can be left blank.', 'seatreg');
     $translations->flowCustomFieldsUnique = esc_html__('Some custom fields must contain a value that no other booking has used.', 'seatreg');

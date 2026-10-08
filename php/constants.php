@@ -9,7 +9,7 @@ define('SEATREG_SETTINGS_PAGE', admin_url('/admin.php?page=seatreg-options'));
 define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
-define('SEATREG_DB_VERSION', '1.65');
+define('SEATREG_DB_VERSION', '1.66');
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));
@@ -28,6 +28,7 @@ define('SEATREG_LAYOUT_UUID_REGEX', '/^[\p{L}\p{N}-]+$/u');
 define('SEATREG_NOUN_MAX_LENGTH', 50);
 //No % or $ so a noun can never be mistaken for a sprintf token by the strings it gets substituted into
 define('SEATREG_NOUN_REGEX', '/^[\p{L}\p{N} \'-]{1,50}$/u');
+define('SEATREG_NOUN_GENDERS', array('masculine', 'feminine', 'neuter'));
 
 // Payments
 define('SEATREG_PAYMENT_PROCESSING', 'processing');

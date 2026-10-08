@@ -57,16 +57,16 @@ function seatreg_load_admin_scripts($hook) {
 		wp_enqueue_script('clock-timepicker', plugins_url('js/jquery-clock-timepicker/jquery-clock-timepicker.min.js', dirname(__FILE__) ), array('jquery'), '2.6.4', true);
 		wp_enqueue_script('powertip', plugins_url('js/jquery.powertip.js', dirname(__FILE__) ), array('jquery'), '1.2.0', true);
 		wp_enqueue_script('date-format', plugins_url('js/date.format.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
-		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.4.0', true);
+		wp_enqueue_script('seatreg-utils', plugins_url('js/utils.js', dirname(__FILE__) ) , array(), '1.5.0', true);
 
 		//Only the Overview draws charts, so the library stays off every other screen
 		if( $screen->id === 'seatreg_page_seatreg-overview' ) {
 			wp_enqueue_script('seatreg_admin_chart', plugins_url('js/chart.umd.min.js', dirname(__FILE__) ), array(), '4.4.7', true);
 		}
 
-		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg-utils'), '1.48.0', true);
+		wp_enqueue_script('seatreg_admin', plugins_url('js/seatreg_admin.js', dirname(__FILE__) ), array('jquery', 'powertip', 'seatreg-utils'), '1.49.0', true);
 		wp_enqueue_script('jstz', plugins_url('js/jstz-1.0.4.min.js', dirname(__FILE__) ), array(), '1.0.4', true);
-		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip', 'seatreg-utils', 'seatreg_admin'), '1.15.0', true);
+		wp_enqueue_script('seatreg_builder_script', plugins_url('js/build.js', dirname(__FILE__) ), array('jquery','jquery-ui-core','alertify','vanilla_picker','powertip', 'seatreg-utils', 'seatreg_admin'), '1.16.0', true);
 
 		$seatreg_admin_strings_json = wp_json_encode(seatreg_generate_admin_strings());
 		if ($seatreg_admin_strings_json === false) {

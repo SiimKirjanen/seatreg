@@ -26,7 +26,13 @@
 						<label>
 							<h5>
 								<?php echo esc_html( sprintf( __('%s ID', 'seatreg'), $seatNouns->singularUpper ) ); ?>
-								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php echo esc_attr( sprintf( __('ID can be seen in map-editor when hovering %1$s. Or you can use %2$s ID lookup', 'seatreg'), $seatNouns->plural, $seatNouns->singular ) ); ?>"></i>
+								<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php echo esc_attr( sprintf( SeatregTerminologyService::agree(
+									$seatNouns,
+									__('ID can be seen in map-editor when hovering %1$s. Or you can use %2$s ID lookup', 'seatreg'),
+									_x('ID can be seen in map-editor when hovering %1$s. Or you can use %2$s ID lookup', 'seat word is masculine', 'seatreg'),
+									_x('ID can be seen in map-editor when hovering %1$s. Or you can use %2$s ID lookup', 'seat word is feminine', 'seatreg'),
+									_x('ID can be seen in map-editor when hovering %1$s. Or you can use %2$s ID lookup', 'seat word is neuter', 'seatreg')
+								), $seatNouns->plural, $seatNouns->singular ) ); ?>"></i>
 							</h5>
 							<input type="text" name="seat-id[]" autocomplete="off"/>
 							<div class="input-error"></div>

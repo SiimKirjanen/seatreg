@@ -36,8 +36,14 @@
 		$seatregScopes[] = array(
 			'id' => 'overview',
 			'label' => __('Overall', 'seatreg'),
-			/* translators: %s: the word the admin uses for rooms, plural */
-			'heading' => sprintf( __('All %s', 'seatreg'), $seatregRoomNouns->plural ),
+			'heading' => sprintf( SeatregTerminologyService::agree(
+				$seatregRoomNouns,
+				/* translators: %s: the word the admin uses for rooms, plural */
+				__('All %s', 'seatreg'),
+				_x('All %s', 'room word is masculine', 'seatreg'),
+				_x('All %s', 'room word is feminine', 'seatreg'),
+				_x('All %s', 'room word is neuter', 'seatreg')
+			), $seatregRoomNouns->plural ),
 			'total' => $seatregStats['seatsTotal'],
 			'open' => $seatregStats['openSeats'],
 			'confirmed' => $seatregStats['takenSeats'],
@@ -256,8 +262,14 @@
 						<?php else : ?>
 							<div class="seatreg-overview__empty">
 								<?php
-									/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a room */
-									echo esc_html( sprintf( __('No %1$s in this %2$s yet.', 'seatreg'), $seatregSeatNouns->plural, $seatregRoomNouns->singular ) );
+									echo esc_html( sprintf( SeatregTerminologyService::agree(
+										$seatregSeatNouns,
+										/* translators: %s: the word the admin uses for seats, plural */
+										__('No %s here yet.', 'seatreg'),
+										_x('No %s here yet.', 'seat word is masculine', 'seatreg'),
+										_x('No %s here yet.', 'seat word is feminine', 'seatreg'),
+										_x('No %s here yet.', 'seat word is neuter', 'seatreg')
+									), $seatregSeatNouns->plural ) );
 								?>
 							</div>
 						<?php endif; ?>

@@ -637,7 +637,7 @@
 			window.seatreg.uploadedImages.forEach(function(uploaded) {
 				var $imgWrap = $("<div class='uploaded-image-box'></div");
 				$imgWrap.append("<img src='" + window.WP_Seatreg.uploads_url + "/room_images/" + window.seatreg.selectedRegistration + "/" + uploaded.file + "' class='uploaded-image' />");
-				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>"+ seatregFormat(translator.translate('addToRoomBackground'), [seatregRoomNouns().singular]) +"</span>");
+				$imgWrap.append("<span class='add-img-room' data-img='"+ uploaded.file +"' data-size='" + uploaded.size[0] + "," + uploaded.size[1] + "'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span>"+ seatregFormat(seatregAgree(translator.translate('addToRoomBackground'), seatregRoomNouns()), [seatregRoomNouns().singular]) +"</span>");
 				$imgWrap.append("<span class='up-img-rem' data-img='"+ uploaded.file +"'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> "+ translator.translate('remove') +"</span>");
 
 				$('#uploaded-images').append($imgWrap);
@@ -865,12 +865,12 @@
 					colorBox.css({
 						'background-color':'yellow',
 					}).addClass('legend-box-circle pending-legend-box');
-					textSpan.text(seatregFormat(translator.translate('pendingSeat'), [seatregSeatNouns().singular]));
+					textSpan.text(seatregFormat(seatregAgree(translator.translate('pendingSeat'), seatregSeatNouns()), [seatregSeatNouns().singular]));
 					break;
 
 				case 1:
 					colorBox.css('background-color','red').addClass('legend-box-circle approved-legend-box');
-					textSpan.text(seatregFormat(translator.translate('confirmedSeat'), [seatregSeatNouns().singular]));
+					textSpan.text(seatregFormat(seatregAgree(translator.translate('confirmedSeat'), seatregSeatNouns()), [seatregSeatNouns().singular]));
 					break;
 			}
 			$('.legends').append(colorBox,textSpan);
@@ -1086,7 +1086,7 @@
 		var size = Object.size(this.rooms);
 		
 		if(size == 1) {
-			alert(seatregFormat(translator.translate('oneRoomNeeded'), [seatregRoomNouns().singular]));
+			alert(seatregFormat(seatregAgree(translator.translate('oneRoomNeeded'), seatregRoomNouns()), [seatregRoomNouns().singular]));
 		}else if(size > 1) {
 			let roomDeletedLocation = this.currentRoom;
 			delete this.rooms[this.currentRoom];
@@ -1251,7 +1251,7 @@
 				},
 				buttonFocus: "ok"  
 			});
-			alertify.alert(seatregFormat(translator.translate('alreadyInRoom'), [seatregRoomNouns().singular]));
+			alertify.alert(seatregFormat(seatregAgree(translator.translate('alreadyInRoom'), seatregRoomNouns()), [seatregRoomNouns().singular]));
 		}
 	};
 
@@ -2252,7 +2252,7 @@
 						},
 						buttonFocus: "ok"  
 					});
-		       		alertify.alert(seatregFormat(translator.translate('allRoomsNeedName'), [seatregRoomNouns().plural]));
+		       		alertify.alert(seatregFormat(seatregAgree(translator.translate('allRoomsNeedName'), seatregRoomNouns()), [seatregRoomNouns().plural]));
 
 		       		return false;
 		       }
@@ -3014,7 +3014,7 @@
 			$('.set-password-wrap').addClass('d-none');
 			$('#set-seat-locks').addClass('d-none');
 			$lockWrap.append(
-				'<div class="alert alert-primary">'+ seatregFormat(translator.translate('noSeatsSelected'), [seatregSeatNouns().plural]) +'</div>'
+				'<div class="alert alert-primary">'+ seatregFormat(seatregAgree(translator.translate('noSeatsSelected'), seatregSeatNouns()), [seatregSeatNouns().plural]) +'</div>'
 			);
 		}else if(selectedBoxes.length == 1) {
 			$('.set-password-wrap').addClass('d-none');
@@ -3075,7 +3075,7 @@
 			$('.set-price-wrap').addClass('d-none');
 			$('#set-prices').addClass('d-none');
 			$pricingWrap.append(
-				'<div class="alert alert-primary">'+ seatregFormat(translator.translate('noSeatsSelected'), [seatregSeatNouns().plural]) +'</div>'
+				'<div class="alert alert-primary">'+ seatregFormat(seatregAgree(translator.translate('noSeatsSelected'), seatregSeatNouns()), [seatregSeatNouns().plural]) +'</div>'
 			);
 		}else if(selectedBoxes.length == 1) {
 			$('.set-price-wrap').addClass('d-none');
@@ -3750,7 +3750,7 @@
 				buttonFocus: "cancel"  
 			});
 
-			alertify.confirm(seatregFormat(translator.translate('deleteRoomConfirm'), [seatregRoomNouns().singular, reg.rooms[reg.currentRoom].title]), function (e) {
+			alertify.confirm(seatregFormat(seatregAgree(translator.translate('deleteRoomConfirm'), seatregRoomNouns()), [seatregRoomNouns().singular, reg.rooms[reg.currentRoom].title]), function (e) {
 			    if (e) {
 			        reg.deleteCurrentRoom();
 			    }
@@ -3765,7 +3765,7 @@
 				buttonFocus: "ok"  
 			});
 
-			alertify.alert(seatregFormat(translator.translate('cantDeleteRoom'), [seatregRoomNouns().singular, '<span class="bold-text">' + reg.rooms[reg.currentRoom].title + '</span>']));
+			alertify.alert(seatregFormat(seatregAgree(translator.translate('cantDeleteRoom'), seatregRoomNouns()), [seatregRoomNouns().singular, '<span class="bold-text">' + reg.rooms[reg.currentRoom].title + '</span>']));
 		}
 	});
 
@@ -3932,7 +3932,7 @@
 					if(reg.rooms[reg.currentRoom].initialName == "") {
 						reg.rooms[reg.currentRoom].initialName = reg.rooms[reg.currentRoom].title;
 					}
-					alertify.success(seatregFormat(translator.translate('roomNameSet'), [seatregRoomNouns().singular]));
+					alertify.success(seatregFormat(seatregAgree(translator.translate('roomNameSet'), seatregRoomNouns()), [seatregRoomNouns().singular]));
 				}
 				
 				$('#room-name-dialog').modal('toggle');
@@ -4055,7 +4055,7 @@
 
 					if(reg.rooms[reg.currentRoom].backgroundImage === imgName) {
 						reg.removeCurrentRoomImage();
-						$('#activ-room-img-wrap').empty().text(seatregFormat(translator.translate('noBgImageInRoom'), [seatregRoomNouns().singular]));
+						$('#activ-room-img-wrap').empty().text(seatregFormat(seatregAgree(translator.translate('noBgImageInRoom'), seatregRoomNouns()), [seatregRoomNouns().singular]));
 					}
 					
 				}else if(response.type == 'error') {
@@ -4070,7 +4070,7 @@
 
 		var curImgWrap = $('<div class="cur-img-wrap"></div>');
 		var bgImg = $('<img class="uploaded-image" src="' + window.WP_Seatreg.uploads_url + '/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
-		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ seatregFormat(translator.translate('removeFromRoom'), [seatregRoomNouns().singular]) +'</span>');
+		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ seatregFormat(seatregAgree(translator.translate('removeFromRoom'), seatregRoomNouns()), [seatregRoomNouns().singular]) +'</span>');
 
 		curImgWrap.append(bgImg, remImg);
 
@@ -4083,12 +4083,12 @@
 		if(reg.rooms[reg.currentRoom].backgroundImage !== null) {
 			var curImgWrap = $('<div class="cur-img-wrap"></div>');
 			var bgImg = $('<img class="uploaded-image" src="'+ window.WP_Seatreg.uploads_url + '/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
-			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ seatregFormat(translator.translate('removeFromRoom'), [seatregRoomNouns().singular]) +'</span>');
+			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ seatregFormat(seatregAgree(translator.translate('removeFromRoom'), seatregRoomNouns()), [seatregRoomNouns().singular]) +'</span>');
 
 			curImgWrap.append(bgImg, remImg);
 			$('#activ-room-img-wrap').append(curImgWrap);
 		}else {
-			$('#activ-room-img-wrap').html(seatregFormat(translator.translate('noBgImageInRoom'), [seatregRoomNouns().singular]));
+			$('#activ-room-img-wrap').html(seatregFormat(seatregAgree(translator.translate('noBgImageInRoom'), seatregRoomNouns()), [seatregRoomNouns().singular]));
 		}
 	});
 
@@ -4096,7 +4096,7 @@
 		reg.removeCurrentRoomImage();
 		$('.room-image').remove();
 		$(this).closest('.cur-img-wrap').remove();
-		$('#activ-room-img-wrap').html(seatregFormat(translator.translate('noBgImageInRoom'), [seatregRoomNouns().singular]));
+		$('#activ-room-img-wrap').html(seatregFormat(seatregAgree(translator.translate('noBgImageInRoom'), seatregRoomNouns()), [seatregRoomNouns().singular]));
 	});
 	
 	/*

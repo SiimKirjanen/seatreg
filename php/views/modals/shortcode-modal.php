@@ -15,8 +15,14 @@
                 <code class="shortcode-example">[seatreg code=<?php echo esc_html($registrationCode); ?> height=600 mobile_height=500 mobile_max_width=600]</code>
                 <?php if( count($rooms) ) : ?>
                     <p class="shortcode-instructions"><?php
-                        /* translators: %s: the word the admin uses for a room */
-                        echo esc_html( sprintf( __('You can choose which %s the registration opens on. The attribute is always named room.', 'seatreg'), $roomNouns->singular ) );
+                        echo esc_html( sprintf( SeatregTerminologyService::agree(
+                            $roomNouns,
+                            /* translators: %s: the word the admin uses for a room */
+                            __('You can choose which %s the registration opens on. The attribute is always named room.', 'seatreg'),
+                            _x('You can choose which %s the registration opens on. The attribute is always named room.', 'room word is masculine', 'seatreg'),
+                            _x('You can choose which %s the registration opens on. The attribute is always named room.', 'room word is feminine', 'seatreg'),
+                            _x('You can choose which %s the registration opens on. The attribute is always named room.', 'room word is neuter', 'seatreg')
+                        ), $roomNouns->singular ) );
                     ?></p>
                     <code class="shortcode-example">[seatreg code=<?php echo esc_html($registrationCode); ?> height=600 room="<?php echo esc_html($rooms[0]->room->name); ?>"]</code>
                     <p class="shortcode-instructions">

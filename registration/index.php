@@ -153,8 +153,14 @@
 						<div id="room-is-empty" class="dont-display">
 							<p class="room-is-empty-text">
 								<?php
-									/* translators: %s: the word the admin uses for a room, capitalized */
-									echo esc_html( sprintf( __('%s is empty', 'seatreg'), $roomNouns->singularUpper ) );
+									echo esc_html( sprintf( SeatregTerminologyService::agree(
+										$roomNouns,
+										/* translators: %s: the word the admin uses for a room, capitalized */
+										__('%s is empty', 'seatreg'),
+										_x('%s is empty', 'room word is masculine', 'seatreg'),
+										_x('%s is empty', 'room word is feminine', 'seatreg'),
+										_x('%s is empty', 'room word is neuter', 'seatreg')
+									), $roomNouns->singularUpper ) );
 								?>
 							</p>
 						</div>	
@@ -179,8 +185,14 @@
 								<div id="cart-text">
 									<div class="seats-in-cart">0</div>
 									<div><?php
-									/* translators: %s: the word the admin uses for seats, plural */
-									echo esc_html( sprintf( __('%s selected', 'seatreg'), $seatNouns->plural ) );
+									echo esc_html( sprintf( SeatregTerminologyService::agree(
+										$seatNouns,
+										/* translators: %s: the word the admin uses for seats, plural */
+										__('%s selected', 'seatreg'),
+										_x('%s selected', 'seat word is masculine', 'seatreg'),
+										_x('%s selected', 'seat word is feminine', 'seatreg'),
+										_x('%s selected', 'seat word is neuter', 'seatreg')
+									), $seatNouns->plural ) );
 								?></div> 
 								</div>
 							</div>
@@ -264,8 +276,14 @@
 						</div>
 						<div>
 							<?php
-								/* translators: %s: the word the admin uses for seats, plural */
-								echo esc_html( sprintf( __('Total open %s', 'seatreg'), $seatNouns->plural ) );
+								echo esc_html( sprintf( SeatregTerminologyService::agree(
+									$seatNouns,
+									/* translators: %s: the word the admin uses for seats, plural */
+									__('Total open %s', 'seatreg'),
+									_x('Total open %s', 'seat word is masculine', 'seatreg'),
+									_x('Total open %s', 'seat word is feminine', 'seatreg'),
+									_x('Total open %s', 'seat word is neuter', 'seatreg')
+								), $seatNouns->plural ) );
 							?>: <span class="total-open"></span>
 						</div>
 						<div>
@@ -435,8 +453,14 @@
 					<div class="cart-icon-text">
 						<span class="seats-in-cart">0</span> 
 						<?php
-							/* translators: %s: the word the admin uses for seats, plural */
-							echo esc_html( sprintf( __('%s selected', 'seatreg'), $seatNouns->plural ) );
+							echo esc_html( sprintf( SeatregTerminologyService::agree(
+								$seatNouns,
+								/* translators: %s: the word the admin uses for seats, plural */
+								__('%s selected', 'seatreg'),
+								_x('%s selected', 'seat word is masculine', 'seatreg'),
+								_x('%s selected', 'seat word is feminine', 'seatreg'),
+								_x('%s selected', 'seat word is neuter', 'seatreg')
+							), $seatNouns->plural ) );
 						?>
 					</div>
 					<div class="bottom-btn-wrap">
