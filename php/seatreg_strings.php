@@ -20,8 +20,11 @@ function seatreg_generate_registration_strings() {
 	$translations->addSpotFromRoomToBooking = SeatregTerminologyService::variants(
 		/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the room name */
 		esc_html__('Add %1$s %2$s from %3$s to booking?', 'seatreg'),
+		/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the room name. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('Add %1$s %2$s from %3$s to booking?', 'seat word is masculine', 'seatreg'),
+		/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the room name. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('Add %1$s %2$s from %3$s to booking?', 'seat word is feminine', 'seatreg'),
+		/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the room name. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('Add %1$s %2$s from %3$s to booking?', 'seat word is neuter', 'seatreg')
 	);
 	/* translators: %1$s: the word the admin uses for a seat, %2$s: the seat number, %3$s: the room name */
@@ -29,15 +32,21 @@ function seatreg_generate_registration_strings() {
 	$translations->spotIsOccupied = SeatregTerminologyService::variants(
 		/* translators: %s: the word the admin uses for a seat */
 		esc_html__('This %s is occupied', 'seatreg'),
+		/* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('This %s is occupied', 'seat word is masculine', 'seatreg'),
+		/* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('This %s is occupied', 'seat word is feminine', 'seatreg'),
+		/* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('This %s is occupied', 'seat word is neuter', 'seatreg')
 	);
 	$translations->spotIsPendingState = SeatregTerminologyService::variants(
 		/* translators: %s: the word the admin uses for a seat */
 		esc_html__('This %s is in pending state', 'seatreg'),
+		/* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('This %s is in pending state', 'seat word is masculine', 'seatreg'),
+		/* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('This %s is in pending state', 'seat word is feminine', 'seatreg'),
+		/* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('This %s is in pending state', 'seat word is neuter', 'seatreg')
 	);
 	$translations->regOwnerNotConfirmed = esc_html__('(registration admin has not confirmed it)', 'seatreg');
@@ -45,8 +54,11 @@ function seatreg_generate_registration_strings() {
     $translations->spotAlreadySelected = SeatregTerminologyService::variants(
         /* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: the seat number */
         esc_html__('%1$s %2$s is already selected!', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: the seat number. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%1$s %2$s is already selected!', 'seat word is masculine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: the seat number. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%1$s %2$s is already selected!', 'seat word is feminine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: the seat number. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%1$s %2$s is already selected!', 'seat word is neuter', 'seatreg')
     );
 	$translations->_regUnderConstruction = esc_html__('Under construction', 'seatreg');
@@ -56,8 +68,11 @@ function seatreg_generate_registration_strings() {
 	$translations->openSpotsInRoom = SeatregTerminologyService::variants(
 		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of open seats in the room on screen */
 		esc_html__('Open %1$s: %2$s', 'seatreg'),
+		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of open seats in the room on screen. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('Open %1$s: %2$s', 'seat word is masculine', 'seatreg'),
+		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of open seats in the room on screen. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('Open %1$s: %2$s', 'seat word is feminine', 'seatreg'),
+		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of open seats in the room on screen. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('Open %1$s: %2$s', 'seat word is neuter', 'seatreg')
 	);
 	/* translators: %s: number of pending bookings in the room on screen */
@@ -67,8 +82,11 @@ function seatreg_generate_registration_strings() {
 	$translations->lockedSpotsInRoom = SeatregTerminologyService::variants(
 		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of locked seats in the room on screen */
 		esc_html__('Locked %1$s: %2$s', 'seatreg'),
+		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of locked seats in the room on screen. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('Locked %1$s: %2$s', 'seat word is masculine', 'seatreg'),
+		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of locked seats in the room on screen. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('Locked %1$s: %2$s', 'seat word is feminine', 'seatreg'),
+		/* translators: %1$s: the word the admin uses for seats, plural, %2$s: number of locked seats in the room on screen. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 		esc_html_x('Locked %1$s: %2$s', 'seat word is neuter', 'seatreg')
 	);
 	$translations->firstName = esc_html__('Firstname', 'seatreg');
@@ -77,8 +95,11 @@ function seatreg_generate_registration_strings() {
     $translations->spotsSelected = SeatregTerminologyService::variants(
         /* translators: %1$s: number of selected seats, %2$s: the word the admin uses for a seat, singular or plural to match the number */
         esc_html__('%1$s %2$s selected', 'seatreg'),
+        /* translators: %1$s: number of selected seats, %2$s: the word the admin uses for a seat, singular or plural to match the number. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%1$s %2$s selected', 'seat word is masculine', 'seatreg'),
+        /* translators: %1$s: number of selected seats, %2$s: the word the admin uses for a seat, singular or plural to match the number. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%1$s %2$s selected', 'seat word is feminine', 'seatreg'),
+        /* translators: %1$s: number of selected seats, %2$s: the word the admin uses for a seat, singular or plural to match the number. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%1$s %2$s selected', 'seat word is neuter', 'seatreg')
     );
     $translations->bookingsConfirmed = esc_html__('Your booking is approved', 'seatreg');
@@ -86,8 +107,11 @@ function seatreg_generate_registration_strings() {
     $translations->selectingGuide = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat */
         esc_html__('Select a %s you want to add to booking', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Select a %s you want to add to booking', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Select a %s you want to add to booking', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Select a %s you want to add to booking', 'seat word is neuter', 'seatreg')
     );
     $translations->Booked = esc_html__('Booked', 'seatreg');
@@ -95,15 +119,21 @@ function seatreg_generate_registration_strings() {
     $translations->maxSpotsToAdd = SeatregTerminologyService::variants(
         /* translators: %1$s: the word the admin uses for seats, plural, %2$s: the maximum number */
         esc_html__('Total %1$s you can add to booking is %2$s', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$s: the maximum number. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Total %1$s you can add to booking is %2$s', 'seat word is masculine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$s: the maximum number. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Total %1$s you can add to booking is %2$s', 'seat word is feminine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$s: the maximum number. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Total %1$s you can add to booking is %2$s', 'seat word is neuter', 'seatreg')
     );
     $translations->spotCosts = SeatregTerminologyService::variants(
         /* translators: %1$s: the word the admin uses for a seat, %2$s: the price */
         esc_html__('Booking this %1$s costs %2$s', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a seat, %2$s: the price. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Booking this %1$s costs %2$s', 'seat word is masculine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a seat, %2$s: the price. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Booking this %1$s costs %2$s', 'seat word is feminine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a seat, %2$s: the price. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Booking this %1$s costs %2$s', 'seat word is neuter', 'seatreg')
     );
     $translations->bookingTotalCostIs_ = esc_html__('Booking total cost is ', 'seatreg');
@@ -114,8 +144,11 @@ function seatreg_generate_registration_strings() {
     $translations->spotIsLocked = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat, capitalized */
         esc_html__('%s is locked', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat, capitalized. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%s is locked', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat, capitalized. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%s is locked', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat, capitalized. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%s is locked', 'seat word is neuter', 'seatreg')
     );
     $translations->pleaseEnterPassword = esc_html__('Please enter password', 'seatreg');
@@ -149,8 +182,11 @@ function seatreg_generate_admin_strings() {
     $translations->roomNameSet = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a room */
         esc_html__('New %s added', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('New %s added', 'room word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('New %s added', 'room word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('New %s added', 'room word is neuter', 'seatreg')
     );
     /* translators: %s: the word the admin uses for a room, capitalized */
@@ -158,8 +194,11 @@ function seatreg_generate_admin_strings() {
     $translations->noSeatsToBook = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for seats, plural */
         esc_html__('This registration has no %s yet. Add them to its layout before adding bookings.', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('This registration has no %s yet. Add them to its layout before adding bookings.', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('This registration has no %s yet. Add them to its layout before adding bookings.', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('This registration has no %s yet. Add them to its layout before adding bookings.', 'seat word is neuter', 'seatreg')
     );
     /* translators: %s: the word the admin uses for a seat, capitalized */
@@ -167,8 +206,11 @@ function seatreg_generate_admin_strings() {
     $translations->seatAlreadyBookedPending = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat, capitalized */
         esc_html__('%s is already booked/pending', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat, capitalized. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%s is already booked/pending', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat, capitalized. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%s is already booked/pending', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat, capitalized. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('%s is already booked/pending', 'seat word is neuter', 'seatreg')
     );
     $translations->errorBookingUpdate = esc_html__('Error updating booking', 'seatreg');
@@ -181,22 +223,31 @@ function seatreg_generate_admin_strings() {
     $translations->oneRoomNeeded = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a room */
         esc_html__('You must have at least one %s', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('You must have at least one %s', 'room word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('You must have at least one %s', 'room word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('You must have at least one %s', 'room word is neuter', 'seatreg')
     );
     $translations->alreadyInRoom = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a room */
         esc_html__('Already in this %s', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Already in this %s', 'room word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Already in this %s', 'room word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Already in this %s', 'room word is neuter', 'seatreg')
     );
     $translations->allRoomsNeedName = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for rooms, plural */
         esc_html__('All %s must have name', 'seatreg'),
+        /* translators: %s: the word the admin uses for rooms, plural. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('All %s must have name', 'room word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for rooms, plural. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('All %s must have name', 'room word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for rooms, plural. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('All %s must have name', 'room word is neuter', 'seatreg')
     );
     $translations->illegalCharactersDetec = esc_html__('Illegal characters detected', 'seatreg');
@@ -207,8 +258,11 @@ function seatreg_generate_admin_strings() {
     $translations->cantDeleteRoom = SeatregTerminologyService::variants(
         /* translators: %1$s: the word the admin uses for a room, %2$s: the room name */
         esc_html__('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a room, %2$s: the room name. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'room word is masculine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a room, %2$s: the room name. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'room word is feminine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a room, %2$s: the room name. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('You can\'t delete %1$s %2$s because it contains pending or confirmed seats. You must remove them with manager first.', 'room word is neuter', 'seatreg')
     );
     /* translators: %s: the word the admin uses for a room, capitalized */
@@ -230,8 +284,11 @@ function seatreg_generate_admin_strings() {
     $translations->deleteRoomConfirm = SeatregTerminologyService::variants(
         /* translators: %1$s: the word the admin uses for a room, %2$s: the room name */
         esc_html__('Are you sure you want to delete %1$s %2$s?', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a room, %2$s: the room name. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Are you sure you want to delete %1$s %2$s?', 'room word is masculine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a room, %2$s: the room name. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Are you sure you want to delete %1$s %2$s?', 'room word is feminine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for a room, %2$s: the room name. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Are you sure you want to delete %1$s %2$s?', 'room word is neuter', 'seatreg')
     );
     $translations->unsavedChanges = esc_html__('Unsaved changes. You sure you want to leave?', 'seatreg');
@@ -248,15 +305,21 @@ function seatreg_generate_admin_strings() {
     $translations->pendingSeat = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat */
         esc_html__('Pending %s', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Pending %s', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Pending %s', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Pending %s', 'seat word is neuter', 'seatreg')
     );
     $translations->confirmedSeat = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat */
         esc_html__('Approved %s', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Approved %s', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Approved %s', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Approved %s', 'seat word is neuter', 'seatreg')
     );
     $translations->save = esc_html__('Save', 'seatreg');
@@ -274,15 +337,21 @@ function seatreg_generate_admin_strings() {
     $translations->noBgImageInRoom = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a room */
         esc_html__('Current %s does not have background image', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Current %s does not have background image', 'room word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Current %s does not have background image', 'room word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Current %s does not have background image', 'room word is neuter', 'seatreg')
     );
     $translations->removeFromRoom = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a room */
         esc_html_x('Remove from %s', 'layout builder, remove the background image from the room', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Remove from %s', 'layout builder, remove the background image from the room; room word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Remove from %s', 'layout builder, remove the background image from the room; room word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Remove from %s', 'layout builder, remove the background image from the room; room word is neuter', 'seatreg')
     );
     $translations->choosePictureToUpload = esc_html__('Choose a picture to upload', 'seatreg');
@@ -290,8 +359,11 @@ function seatreg_generate_admin_strings() {
     $translations->addToRoomBackground = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a room */
         esc_html__('Add to %s background', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Add to %s background', 'room word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Add to %s background', 'room word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Add to %s background', 'room word is neuter', 'seatreg')
     );
     $translations->remove = esc_html__('Remove', 'seatreg');
@@ -315,8 +387,11 @@ function seatreg_generate_admin_strings() {
     $translations->noSeatsSelected = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for seats, plural */
         esc_html__('No %s selected!', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('No %s selected!', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('No %s selected!', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('No %s selected!', 'seat word is neuter', 'seatreg')
     );
     $translations->emailNotCorrect = esc_html__('Email address is not correct', 'seatreg');
@@ -334,8 +409,11 @@ function seatreg_generate_admin_strings() {
     $translations->duplicateSeatDetected = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat */
         esc_html__('Duplicate %s detected!', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Duplicate %s detected!', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Duplicate %s detected!', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Duplicate %s detected!', 'seat word is neuter', 'seatreg')
     );
     $translations->emailTemplateNotCorrect = esc_html__('Email template is missing required keywords', 'seatreg');
@@ -380,8 +458,11 @@ function seatreg_generate_admin_strings() {
     $translations->multiBookingMailEmailEditDesc = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat */
         esc_html__('Primary contact email if more than one %s is booked', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Primary contact email if more than one %s is booked', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Primary contact email if more than one %s is booked', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Primary contact email if more than one %s is booked', 'seat word is neuter', 'seatreg')
     );
     /* translators: %s: the word the admin uses for a room, capitalized */
@@ -413,8 +494,11 @@ function seatreg_generate_admin_strings() {
     $translations->flowWpBookingLimit = SeatregTerminologyService::variants(
         /* translators: %1$d: number of bookings, %2$s: the word the admin uses for seats, plural */
         esc_html__('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seatreg'),
+        /* translators: %1$d: number of bookings, %2$s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seat word is masculine', 'seatreg'),
+        /* translators: %1$d: number of bookings, %2$s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seat word is feminine', 'seatreg'),
+        /* translators: %1$d: number of bookings, %2$s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Each logged-in user can make at most %1$d separate bookings (a single booking can include several %2$s).', 'seat word is neuter', 'seatreg')
     );
     /* translators: %1$d: number of seats, %2$s: the word the admin uses for seats, plural */
@@ -433,51 +517,72 @@ function seatreg_generate_admin_strings() {
     $translations->flowSelect = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for seats, plural */
         esc_html__('Visitors select %s on the map.', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Visitors select %s on the map.', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Visitors select %s on the map.', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Visitors select %s on the map.', 'seat word is neuter', 'seatreg')
     );
     $translations->flowSelectMax = SeatregTerminologyService::variants(
         /* translators: %1$s: the word the admin uses for seats, plural, %2$d: maximum number per booking */
         esc_html__('Visitors select %1$s on the map, up to %2$d per booking.', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$d: maximum number per booking. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Visitors select %1$s on the map, up to %2$d per booking.', 'seat word is masculine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$d: maximum number per booking. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Visitors select %1$s on the map, up to %2$d per booking.', 'seat word is feminine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$d: maximum number per booking. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Visitors select %1$s on the map, up to %2$d per booking.', 'seat word is neuter', 'seatreg')
     );
     $translations->flowShowBookingData = SeatregTerminologyService::variants(
         /* translators: %1$s: the word the admin uses for seats, plural, %2$s: comma-separated list of shown details */
         esc_html__('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$s: comma-separated list of shown details. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seat word is masculine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$s: comma-separated list of shown details. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seat word is feminine', 'seatreg'),
+        /* translators: %1$s: the word the admin uses for seats, plural, %2$s: comma-separated list of shown details. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Already-booked %1$s publicly display the booking details you have chosen to show (%2$s).', 'seat word is neuter', 'seatreg')
     );
     $translations->flowShowBookingDataFullName = esc_html__('full name', 'seatreg');
     $translations->flowAutoDialog = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat */
         esc_html__('The booking form opens automatically as soon as a %s is selected.', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('The booking form opens automatically as soon as a %s is selected.', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('The booking form opens automatically as soon as a %s is selected.', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('The booking form opens automatically as soon as a %s is selected.', 'seat word is neuter', 'seatreg')
     );
     $translations->flowManualDialog = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for seats, plural */
         esc_html__('After choosing %s, visitors open the selection menu to complete their booking.', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('After choosing %s, visitors open the selection menu to complete their booking.', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('After choosing %s, visitors open the selection menu to complete their booking.', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('After choosing %s, visitors open the selection menu to complete their booking.', 'seat word is neuter', 'seatreg')
     );
     $translations->flowOnePersonCheckout = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat */
         esc_html__('Booking details are entered once and applied to every %s.', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Booking details are entered once and applied to every %s.', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Booking details are entered once and applied to every %s.', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Booking details are entered once and applied to every %s.', 'seat word is neuter', 'seatreg')
     );
     $translations->flowPerSeatCheckout = SeatregTerminologyService::variants(
         /* translators: %s: the word the admin uses for a seat */
         esc_html__('Booking details are entered for each %s.', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Booking details are entered for each %s.', 'seat word is masculine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Booking details are entered for each %s.', 'seat word is feminine', 'seatreg'),
+        /* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('Booking details are entered for each %s.', 'seat word is neuter', 'seatreg')
     );
     $translations->flowRequireName = esc_html__('A full name (first and last) is required.', 'seatreg');
@@ -485,8 +590,11 @@ function seatreg_generate_admin_strings() {
     $translations->flowEmailLimit = SeatregTerminologyService::variants(
         /* translators: %1$d: maximum number of bookings per email, %2$s: the word the admin uses for seats, plural */
         esc_html__('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seatreg'),
+        /* translators: %1$d: maximum number of bookings per email, %2$s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seat word is masculine', 'seatreg'),
+        /* translators: %1$d: maximum number of bookings per email, %2$s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seat word is feminine', 'seatreg'),
+        /* translators: %1$d: maximum number of bookings per email, %2$s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
         esc_html_x('A booking\'s main contact email can be used for at most %1$d bookings (a single booking can include several %2$s).', 'seat word is neuter', 'seatreg')
     );
     $translations->flowCustomFields = esc_html__('Bookers also fill in the custom fields you have created, which are required by default.', 'seatreg');

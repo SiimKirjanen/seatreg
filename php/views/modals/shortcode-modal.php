@@ -19,8 +19,11 @@
                             $roomNouns,
                             /* translators: %s: the word the admin uses for a room */
                             __('You can choose which %s the registration opens on. The attribute is always named room.', 'seatreg'),
+                            /* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
                             _x('You can choose which %s the registration opens on. The attribute is always named room.', 'room word is masculine', 'seatreg'),
+                            /* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
                             _x('You can choose which %s the registration opens on. The attribute is always named room.', 'room word is feminine', 'seatreg'),
+                            /* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
                             _x('You can choose which %s the registration opens on. The attribute is always named room.', 'room word is neuter', 'seatreg')
                         ), $roomNouns->singular ) );
                     ?></p>

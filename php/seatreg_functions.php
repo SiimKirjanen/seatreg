@@ -2500,8 +2500,11 @@ function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate
 					$seatNouns,
 					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name */
 					esc_html__('%1$s %2$s from %3$s is already booked', 'seatreg'),
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 					esc_html_x('%1$s %2$s from %3$s is already booked', 'seat word is masculine', 'seatreg'),
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 					esc_html_x('%1$s %2$s from %3$s is already booked', 'seat word is feminine', 'seatreg'),
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 					esc_html_x('%1$s %2$s from %3$s is already booked', 'seat word is neuter', 'seatreg')
 				), esc_html($seatNouns->singularUpper), esc_html($bookingAction->seat_nr), esc_html($bookingAction->room_name) );
 
@@ -2559,8 +2562,11 @@ function seatreg_valdiate_add_booking_with_manager($code, $data, $calendarDate) 
 				$seatNouns,
 				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name */
 				esc_html__('%1$s ID %2$s from %3$s is already booked', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is masculine', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is feminine', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is neuter', 'seatreg')
 			), esc_html($seatNouns->singularUpper), esc_html($data->seatId), esc_html($booking->room_name) );
 
@@ -2642,8 +2648,11 @@ function seatreg_validate_edit_booking($code, $data) {
 				$seatNouns,
 				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name */
 				esc_html__('%1$s ID %2$s from %3$s is already booked', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is masculine', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is feminine', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is neuter', 'seatreg')
 			), esc_html($seatNouns->singularUpper), esc_html($data->seatId), esc_html($booking->room_name) );
 

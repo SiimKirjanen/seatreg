@@ -40,8 +40,11 @@
 				$seatregRoomNouns,
 				/* translators: %s: the word the admin uses for rooms, plural */
 				__('All %s', 'seatreg'),
+				/* translators: %s: the word the admin uses for rooms, plural. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 				_x('All %s', 'room word is masculine', 'seatreg'),
+				/* translators: %s: the word the admin uses for rooms, plural. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 				_x('All %s', 'room word is feminine', 'seatreg'),
+				/* translators: %s: the word the admin uses for rooms, plural. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 				_x('All %s', 'room word is neuter', 'seatreg')
 			), $seatregRoomNouns->plural ),
 			'total' => $seatregStats['seatsTotal'],
@@ -266,8 +269,11 @@
 										$seatregSeatNouns,
 										/* translators: %s: the word the admin uses for seats, plural */
 										__('No %s here yet.', 'seatreg'),
+										/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 										_x('No %s here yet.', 'seat word is masculine', 'seatreg'),
+										/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 										_x('No %s here yet.', 'seat word is feminine', 'seatreg'),
+										/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 										_x('No %s here yet.', 'seat word is neuter', 'seatreg')
 									), $seatregSeatNouns->plural ) );
 								?>

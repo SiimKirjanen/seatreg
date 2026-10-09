@@ -157,8 +157,11 @@
 										$roomNouns,
 										/* translators: %s: the word the admin uses for a room, capitalized */
 										__('%s is empty', 'seatreg'),
+										/* translators: %s: the word the admin uses for a room, capitalized. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 										_x('%s is empty', 'room word is masculine', 'seatreg'),
+										/* translators: %s: the word the admin uses for a room, capitalized. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 										_x('%s is empty', 'room word is feminine', 'seatreg'),
+										/* translators: %s: the word the admin uses for a room, capitalized. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 										_x('%s is empty', 'room word is neuter', 'seatreg')
 									), $roomNouns->singularUpper ) );
 								?>
@@ -189,8 +192,11 @@
 										$seatNouns,
 										/* translators: %s: the word the admin uses for seats, plural */
 										__('%s selected', 'seatreg'),
+										/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 										_x('%s selected', 'seat word is masculine', 'seatreg'),
+										/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 										_x('%s selected', 'seat word is feminine', 'seatreg'),
+										/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 										_x('%s selected', 'seat word is neuter', 'seatreg')
 									), $seatNouns->plural ) );
 								?></div> 
@@ -280,8 +286,11 @@
 									$seatNouns,
 									/* translators: %s: the word the admin uses for seats, plural */
 									__('Total open %s', 'seatreg'),
+									/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 									_x('Total open %s', 'seat word is masculine', 'seatreg'),
+									/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 									_x('Total open %s', 'seat word is feminine', 'seatreg'),
+									/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 									_x('Total open %s', 'seat word is neuter', 'seatreg')
 								), $seatNouns->plural ) );
 							?>: <span class="total-open"></span>
@@ -457,8 +466,11 @@
 								$seatNouns,
 								/* translators: %s: the word the admin uses for seats, plural */
 								__('%s selected', 'seatreg'),
+								/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 								_x('%s selected', 'seat word is masculine', 'seatreg'),
+								/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 								_x('%s selected', 'seat word is feminine', 'seatreg'),
+								/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 								_x('%s selected', 'seat word is neuter', 'seatreg')
 							), $seatNouns->plural ) );
 						?>
