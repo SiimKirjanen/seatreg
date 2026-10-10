@@ -392,6 +392,8 @@ function seatreg_generate_settings_form() {
 				<label class="form-group-subfield-label" for="seat-noun-plural"><?php esc_html_e('Plural', 'seatreg'); ?></label>
 				<input type="text" class="form-control" id="seat-noun-plural" name="seat-noun-plural" autocomplete="off" maxlength="<?php echo esc_attr(SEATREG_NOUN_MAX_LENGTH); ?>" placeholder="<?php echo esc_attr($options[0]->using_seats == '1' ? __('seats', 'seatreg') : __('places', 'seatreg')); ?>" value="<?php echo esc_attr($options[0]->seat_noun_plural); ?>">
 
+				<?php seatreg_noun_gender_select('seat-noun-gender', $options[0]->seat_noun_gender); ?>
+
 				<?php if( SeatregStringTranslationService::isAvailable() ) : ?>
 					<p class="help-block">
 						<?php esc_html_e('Both words can be translated in your translation plugin, in the SeatReg string group', 'seatreg'); ?>.
@@ -409,6 +411,8 @@ function seatreg_generate_settings_form() {
 
 				<label class="form-group-subfield-label" for="room-noun-plural"><?php esc_html_e('Plural', 'seatreg'); ?></label>
 				<input type="text" class="form-control" id="room-noun-plural" name="room-noun-plural" autocomplete="off" maxlength="<?php echo esc_attr(SEATREG_NOUN_MAX_LENGTH); ?>" placeholder="<?php esc_attr_e('rooms', 'seatreg'); ?>" value="<?php echo esc_attr($options[0]->room_noun_plural); ?>">
+
+				<?php seatreg_noun_gender_select('room-noun-gender', $options[0]->room_noun_gender); ?>
 
 				<?php if( SeatregStringTranslationService::isAvailable() ) : ?>
 					<p class="help-block">
@@ -2217,13 +2221,18 @@ function seatreg_generate_payment_section($booking, $optionsData, $readOnly = fa
 
 //The layout builder is rendered once, before any registration is chosen, so it shows the default
 //wording and seatregApplyNouns() repaints it from the layout the admin opens.
-//$form names one form, or the comma separated forms a sentence needs in the order it needs them
+//$form names one form, or the comma separated forms a sentence needs in the order it needs them.
+//$template is a sentence, or its gendered variants from SeatregTerminologyService::variants().
 function seatreg_noun_text($kind, $form, $template = '') {
 	$nouns = $kind === 'seat' ? SeatregTerminologyService::getSeatNouns() : SeatregTerminologyService::getRoomNouns();
 	$forms = explode(',', $form);
 
 	if( $template === '' ) {
 		return $nouns->{$forms[0]};
+	}
+
+	if( is_array($template) ) {
+		$template = SeatregTerminologyService::pick($nouns, $template);
 	}
 
 	return vsprintf($template, array_map(function($singleForm) use ($nouns) {
@@ -2233,11 +2242,17 @@ function seatreg_noun_text($kind, $form, $template = '') {
 
 //What seatregApplyNouns() looks for. Every piece is escaped, so the caller echoes it as it is.
 function seatreg_noun_markers($kind, $form, $template = '', $attribute = '') {
+	if( is_array($template) ) {
+		$templateMarker = ' data-seatreg-noun-variants="' . esc_attr( wp_json_encode($template) ) . '"';
+	}else {
+		$templateMarker = $template === '' ? '' : ' data-seatreg-noun-template="' . esc_attr($template) . '"';
+	}
+
 	return sprintf(
 		' data-seatreg-noun-kind="%s" data-seatreg-noun="%s"%s%s',
 		esc_attr($kind),
 		esc_attr($form),
-		$template === '' ? '' : ' data-seatreg-noun-template="' . esc_attr($template) . '"',
+		$templateMarker,
 		$attribute === '' ? '' : ' data-seatreg-noun-attr="' . esc_attr($attribute) . '"'
 	);
 }
@@ -2248,6 +2263,26 @@ function seatreg_noun_span($kind, $form, $template = '') {
 		seatreg_noun_markers($kind, $form, $template),
 		esc_html( seatreg_noun_text($kind, $form, $template) )
 	);
+}
+
+function seatreg_noun_gender_select($name, $selectedGender) {
+	$genders = array(
+		'' => __('None', 'seatreg'),
+		'masculine' => __('Masculine', 'seatreg'),
+		'feminine' => __('Feminine', 'seatreg'),
+		'neuter' => __('Neuter', 'seatreg')
+	);
+	?>
+	<label class="form-group-subfield-label" for="<?php echo esc_attr($name); ?>"><?php esc_html_e('Grammatical gender', 'seatreg'); ?></label>
+	<p class="help-block">
+		<?php esc_html_e('In languages such as Italian or German, words like "this" or "booked" change with the gender of the word they go with. Choose the gender of your word so the sentences around it agree with it', 'seatreg'); ?>.
+	</p>
+	<select class="form-control" id="<?php echo esc_attr($name); ?>" name="<?php echo esc_attr($name); ?>">
+		<?php foreach( $genders as $gender => $label ) : ?>
+			<option value="<?php echo esc_attr($gender); ?>" <?php selected((string) $selectedGender, $gender); ?>><?php echo esc_html($label); ?></option>
+		<?php endforeach; ?>
+	</select>
+	<?php
 }
 
 function seatreg_add_booking_modal($calendarDate, $requireName, $roomsData, $roomNouns, $seatNouns) {
@@ -2461,8 +2496,17 @@ function seatreg_validate_del_conf_booking($code, $bookingActions, $calendarDate
 		foreach ($bookingActions as $bookingAction) {
 			if($booking->seat_nr == $bookingAction->seat_nr && $booking->room_name == $bookingAction->room_name && $booking->status === "2" && $bookingAction->action != 'del' && $bookingAction->action != 'unapprove') {
 				$notBooked = false;
-				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: the word the admin uses for a room, %4$s: Room name */
-				$resp['text'] = sprintf( esc_html__('%1$s %2$s from %3$s %4$s is already booked', 'seatreg'), esc_html($seatNouns->singularUpper), esc_html($bookingAction->seat_nr), esc_html($roomNouns->singular), esc_html($bookingAction->room_name) );
+				$resp['text'] = sprintf( SeatregTerminologyService::agree(
+					$seatNouns,
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name */
+					esc_html__('%1$s %2$s from %3$s is already booked', 'seatreg'),
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					esc_html_x('%1$s %2$s from %3$s is already booked', 'seat word is masculine', 'seatreg'),
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					esc_html_x('%1$s %2$s from %3$s is already booked', 'seat word is feminine', 'seatreg'),
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					esc_html_x('%1$s %2$s from %3$s is already booked', 'seat word is neuter', 'seatreg')
+				), esc_html($seatNouns->singularUpper), esc_html($bookingAction->seat_nr), esc_html($bookingAction->room_name) );
 
 				break 2;
 			}
@@ -2514,8 +2558,17 @@ function seatreg_valdiate_add_booking_with_manager($code, $data, $calendarDate) 
 		if($booking->seat_id === $data->seatId && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
-			/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: the word the admin uses for a room, %4$s: Room name */
-			$resp['text'] = sprintf( esc_html__('%1$s ID %2$s from %3$s %4$s is already booked', 'seatreg'), esc_html($seatNouns->singularUpper), esc_html($data->seatId), esc_html($roomNouns->singular), esc_html($booking->room_name) );
+			$resp['text'] = sprintf( SeatregTerminologyService::agree(
+				$seatNouns,
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name */
+				esc_html__('%1$s ID %2$s from %3$s is already booked', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is masculine', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is feminine', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is neuter', 'seatreg')
+			), esc_html($seatNouns->singularUpper), esc_html($data->seatId), esc_html($booking->room_name) );
 
 			break;
 		}
@@ -2591,8 +2644,17 @@ function seatreg_validate_edit_booking($code, $data) {
 		if($booking->seat_id === $data->seatId && $booking->room_name === $data->roomName && ($booking->status === "2" || $booking->status === "1") ) {
 			$notBooked = false;
 			$resp['status'] = 'seat-booked';
-			/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: the word the admin uses for a room, %4$s: Room name */
-			$resp['text'] = sprintf( esc_html__('%1$s ID %2$s from %3$s %4$s is already booked', 'seatreg'), esc_html($seatNouns->singularUpper), esc_html($data->seatId), esc_html($roomNouns->singular), esc_html($booking->room_name) );
+			$resp['text'] = sprintf( SeatregTerminologyService::agree(
+				$seatNouns,
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name */
+				esc_html__('%1$s ID %2$s from %3$s is already booked', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is masculine', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is feminine', 'seatreg'),
+				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat id, %3$s: Room name. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+				esc_html_x('%1$s ID %2$s from %3$s is already booked', 'seat word is neuter', 'seatreg')
+			), esc_html($seatNouns->singularUpper), esc_html($data->seatId), esc_html($booking->room_name) );
 
 			break;
 		}
@@ -2764,8 +2826,10 @@ function seatreg_set_up_db() {
 			seat_selection_btn_text varchar(255) DEFAULT NULL,
 			room_noun_singular varchar(50) DEFAULT NULL,
 			room_noun_plural varchar(50) DEFAULT NULL,
+			room_noun_gender varchar(9) DEFAULT NULL,
 			seat_noun_singular varchar(50) DEFAULT NULL,
 			seat_noun_plural varchar(50) DEFAULT NULL,
+			seat_noun_gender varchar(9) DEFAULT NULL,
 			custom_payments text,
 			booking_status_page_custom_styles text,
 			booking_confirm_page_custom_styles text,
@@ -2885,7 +2949,7 @@ function seatreg_get_registration_data($code) {
 	global $seatreg_db_table_names;
 
 	$registration = $wpdb->get_results( $wpdb->prepare(
-		"SELECT a.*, b.paypal_payments, b.paypal_rest_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates, b.custom_payments, b.room_noun_singular, b.room_noun_plural, b.seat_noun_singular, b.seat_noun_plural
+		"SELECT a.*, b.paypal_payments, b.paypal_rest_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates, b.custom_payments, b.room_noun_singular, b.room_noun_plural, b.room_noun_gender, b.seat_noun_singular, b.seat_noun_plural, b.seat_noun_gender
 		FROM $seatreg_db_table_names->table_seatreg AS a
 		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 		ON a.registration_code = b.registration_code
@@ -3652,6 +3716,17 @@ function seatreg_update() {
 		}
 	}
 
+	$roomNounGender = isset($_POST['room-noun-gender']) ? sanitize_text_field( wp_unslash($_POST['room-noun-gender']) ) : '';
+	$seatNounGender = isset($_POST['seat-noun-gender']) ? sanitize_text_field( wp_unslash($_POST['seat-noun-gender']) ) : '';
+
+	foreach( array($roomNounGender, $seatNounGender) as $gender ) {
+		$genderValidation = SeatregDataValidation::validateNounGender($gender);
+
+		if( !$genderValidation->valid ) {
+			wp_die( esc_html($genderValidation->errorMessage) );
+		}
+	}
+
 	$customFileds = stripslashes_deep( $_POST['custom-fields'] );
 	$customFiledsValidation = SeatregDataValidation::validateCustomFieldCreation($customFileds);
 
@@ -3978,8 +4053,10 @@ function seatreg_update() {
 				'using_seats' => $_POST['using-seats'],
 				'room_noun_singular' => $roomNounSingular === '' ? null : $roomNounSingular,
 				'room_noun_plural' => $roomNounPlural === '' ? null : $roomNounPlural,
+				'room_noun_gender' => $roomNounSingular === '' || $roomNounGender === '' ? null : $roomNounGender,
 				'seat_noun_singular' => $seatNounSingular === '' ? null : $seatNounSingular,
 				'seat_noun_plural' => $seatNounPlural === '' ? null : $seatNounPlural,
+				'seat_noun_gender' => $seatNounSingular === '' || $seatNounGender === '' ? null : $seatNounGender,
 				'email_from_address' => !empty($_POST['email-from']) ? $_POST['email-from'] : null,
 				'email_background_color' => $customizeEmailColors && !empty($_POST['email-background-color']) ? sanitize_hex_color($_POST['email-background-color']) : null,
 				'email_text_color' => $customizeEmailColors && !empty($_POST['email-text-color']) ? sanitize_hex_color($_POST['email-text-color']) : null,

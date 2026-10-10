@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 7.1
-Stable tag: 1.79.0
+Stable tag: 1.80.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -48,6 +48,9 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 7. Seat custom numbering
 
 == Changelog ==
+
+= 1.80.0 =
+* In languages that need it, you can now choose the grammatical gender of the word you use for a seat or a room, so the sentences around it match.
 
 = 1.79.0 =
 * In the layout builder you can now choose the colors of pending, approved, selected and locked seats.

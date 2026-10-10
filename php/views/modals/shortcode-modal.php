@@ -15,8 +15,17 @@
                 <code class="shortcode-example">[seatreg code=<?php echo esc_html($registrationCode); ?> height=600 mobile_height=500 mobile_max_width=600]</code>
                 <?php if( count($rooms) ) : ?>
                     <p class="shortcode-instructions"><?php
-                        /* translators: %s: the word the admin uses for a room */
-                        echo esc_html( sprintf( __('You can choose which %s the registration opens on. The attribute is always named room.', 'seatreg'), $roomNouns->singular ) );
+                        echo esc_html( sprintf( SeatregTerminologyService::agree(
+                            $roomNouns,
+                            /* translators: %s: the word the admin uses for a room */
+                            __('You can choose which %s the registration opens on. The attribute is always named room.', 'seatreg'),
+                            /* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+                            _x('You can choose which %s the registration opens on. The attribute is always named room.', 'room word is masculine', 'seatreg'),
+                            /* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+                            _x('You can choose which %s the registration opens on. The attribute is always named room.', 'room word is feminine', 'seatreg'),
+                            /* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+                            _x('You can choose which %s the registration opens on. The attribute is always named room.', 'room word is neuter', 'seatreg')
+                        ), $roomNouns->singular ) );
                     ?></p>
                     <code class="shortcode-example">[seatreg code=<?php echo esc_html($registrationCode); ?> height=600 room="<?php echo esc_html($rooms[0]->room->name); ?>"]</code>
                     <p class="shortcode-instructions">

@@ -99,6 +99,16 @@ class SeatregDataValidation {
         return $validationStatus;
     }
 
+    public static function validateNounGender($gender) {
+        $validationStatus = new SeatregValidationStatus();
+
+        if( $gender !== '' && !in_array($gender, SEATREG_NOUN_GENDERS, true) ) {
+			$validationStatus->setInvalid('Unknown noun gender');
+		}
+
+        return $validationStatus;
+    }
+
     public static function validateCustomFieldLabel($label) {
         $validationStatus = new SeatregValidationStatus();
 

@@ -23,7 +23,17 @@
 						<?php echo esc_html( sprintf( __('%s id', 'seatreg'), $seatNouns->singularUpper ) ); ?>
 					</h5>
 				</label> 
-				<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php echo esc_attr( sprintf( __('ID can be seen in map-editor when hovering %s', 'seatreg'), $seatNouns->plural ) ); ?>"></i>
+				<i class="fa fa-question-circle seatreg-ui-tooltip" aria-hidden="true" title="<?php echo esc_attr( sprintf( SeatregTerminologyService::agree(
+					$seatNouns,
+					/* translators: %s: the word the admin uses for seats, plural */
+					__('ID can be seen in map-editor when hovering %s', 'seatreg'),
+					/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('ID can be seen in map-editor when hovering %s', 'seat word is masculine', 'seatreg'),
+					/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('ID can be seen in map-editor when hovering %s', 'seat word is feminine', 'seatreg'),
+					/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('ID can be seen in map-editor when hovering %s', 'seat word is neuter', 'seatreg')
+				), $seatNouns->plural ) ); ?>"></i>
 				<br>
 				<input type="text" id="edit-seat" name="seat-id" autocomplete="off"/></label> <span id="edit-seat-error"></span>
 			</div>

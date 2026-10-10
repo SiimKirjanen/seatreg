@@ -55,13 +55,13 @@ class SeatregBooking {
     	$seatsString = '';
 
     	for($i = 0; $i < $dataLen; $i++) {
-    		/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: the word the admin uses for a room */
     		$seatsString .= sprintf(
-    			wp_kses( __('%1$s nr: <b>%2$s</b> from %3$s', 'seatreg'), array( 'b' => array() ) ),
+    			/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name */
+    			wp_kses( __('%1$s nr: <b>%2$s</b> from <b>%3$s</b>', 'seatreg'), array( 'b' => array() ) ),
     			esc_html($this->_seatNouns->singularUpper),
     			esc_html($this->_bookings[$i]->seat_nr),
-    			esc_html($this->_roomNouns->singular)
-    		) . ': <b>' . esc_html($this->_bookings[$i]->room_name) . '</b><br/>'; 
+    			esc_html($this->_bookings[$i]->room_name)
+    		) . '<br/>';
 		}
 		
     	return $seatsString;
@@ -76,12 +76,20 @@ class SeatregBooking {
 		for($i = 0; $i < $bookingsLength; $i++) {
 			for($j = 0; $j < $bookedBookingsLength; $j++) {
 				if($this->_bookings[$i]->seat_id == $bookedBookings[$j]->seat_id) {
-					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: the word the admin uses for a room, %4$s: Room name */
 					$statusReport = sprintf(
-						wp_kses( __('%1$s <b>%2$s</b> in %3$s <b>%4$s</b> is already confirmed', 'seatreg'), array( 'b' => array() ) ),
+						wp_kses( SeatregTerminologyService::agree(
+							$this->_seatNouns,
+							/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name */
+							__('%1$s <b>%2$s</b> in <b>%3$s</b> is already confirmed', 'seatreg'),
+							/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('%1$s <b>%2$s</b> in <b>%3$s</b> is already confirmed', 'seat word is masculine', 'seatreg'),
+							/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('%1$s <b>%2$s</b> in <b>%3$s</b> is already confirmed', 'seat word is feminine', 'seatreg'),
+							/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number, %3$s: Room name. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('%1$s <b>%2$s</b> in <b>%3$s</b> is already confirmed', 'seat word is neuter', 'seatreg')
+						), array( 'b' => array() ) ),
 						esc_html($this->_seatNouns->singularUpper),
 						esc_html($this->_bookings[$i]->seat_nr),
-						esc_html($this->_roomNouns->singular),
 						esc_html($this->_bookings[$i]->room_name)
 					);
 
@@ -101,8 +109,17 @@ class SeatregBooking {
 
 		foreach( $this->_bookings as $booking ) {
 			if( SeatregLayoutService::checkIfSeatLocked($this->_registrationLayoutFull, $booking->seat_id) ) {
-				/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number */
-				$statusReport = sprintf(esc_html__('%1$s %2$s is locked', 'seatreg'), esc_html($this->_seatNouns->singularUpper), esc_html($booking->seat_nr));
+				$statusReport = sprintf(SeatregTerminologyService::agree(
+					$this->_seatNouns,
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number */
+					esc_html__('%1$s %2$s is locked', 'seatreg'),
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					esc_html_x('%1$s %2$s is locked', 'seat word is masculine', 'seatreg'),
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					esc_html_x('%1$s %2$s is locked', 'seat word is feminine', 'seatreg'),
+					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					esc_html_x('%1$s %2$s is locked', 'seat word is neuter', 'seatreg')
+				), esc_html($this->_seatNouns->singularUpper), esc_html($booking->seat_nr));
 
 				break;
 			}
@@ -120,8 +137,17 @@ class SeatregBooking {
 				$enteredPassword = array_key_exists($booking->seat_id, $enteredSeatPasswords) ? $enteredSeatPasswords[$booking->seat_id] : '';
 
 				if( !SeatregLayoutService::seatPasswordMatches($this->_registrationLayoutFull, $booking->seat_id, $enteredPassword) ) {
-					/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number */
-					$statusReport = sprintf(esc_html__('%1$s %2$s password is not correct', 'seatreg'), esc_html($this->_seatNouns->singularUpper), esc_html($booking->seat_nr));
+					$statusReport = sprintf(SeatregTerminologyService::agree(
+						$this->_seatNouns,
+						/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number */
+						esc_html__('%1$s %2$s password is not correct', 'seatreg'),
+						/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						esc_html_x('%1$s %2$s password is not correct', 'seat word is masculine', 'seatreg'),
+						/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						esc_html_x('%1$s %2$s password is not correct', 'seat word is feminine', 'seatreg'),
+						/* translators: %1$s: the word the admin uses for a seat, capitalized, %2$s: Seat number. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						esc_html_x('%1$s %2$s password is not correct', 'seat word is neuter', 'seatreg')
+					), esc_html($this->_seatNouns->singularUpper), esc_html($booking->seat_nr));
 
 					break;
 				}
@@ -247,9 +273,18 @@ class SeatregBooking {
 			}//end of room loop
 
 			if($searchStatus == 'room-searching') {
-				/* translators: %1$s: the word the admin uses for a room, capitalized, %2$s: Room name */
 				$status = sprintf(
-					esc_html__('%1$s %2$s was not found', 'seatreg'),
+					SeatregTerminologyService::agree(
+						$this->_roomNouns,
+						/* translators: %1$s: the word the admin uses for a room, capitalized, %2$s: Room name */
+						esc_html__('%1$s %2$s was not found', 'seatreg'),
+						/* translators: %1$s: the word the admin uses for a room, capitalized, %2$s: Room name. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						esc_html_x('%1$s %2$s was not found', 'room word is masculine', 'seatreg'),
+						/* translators: %1$s: the word the admin uses for a room, capitalized, %2$s: Room name. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						esc_html_x('%1$s %2$s was not found', 'room word is feminine', 'seatreg'),
+						/* translators: %1$s: the word the admin uses for a room, capitalized, %2$s: Room name. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						esc_html_x('%1$s %2$s was not found', 'room word is neuter', 'seatreg')
+					),
 					esc_html($this->_roomNouns->singularUpper),
 					esc_html($this->_bookings[$i]->room_name)
 				);

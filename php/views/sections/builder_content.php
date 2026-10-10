@@ -83,7 +83,16 @@
 	<div class="build-controls">
 		<div class="legends"></div>
 		<div id="build-section-message-wrap" data-toggle="modal" data-target="#limit-dialog">
-			<span class="message-text"><span style="vertical-align:middle"><?php seatreg_noun_span('seat', 'plural', __('Pending and booked %s can\'t be deleted', 'seatreg'));?></span><span class="more-message-btn"></span></span>
+			<span class="message-text"><span style="vertical-align:middle"><?php seatreg_noun_span('seat', 'plural', SeatregTerminologyService::variants(
+				/* translators: %s: the word the admin uses for seats, plural */
+				__('Pending and booked %s can\'t be deleted', 'seatreg'),
+				/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+				_x('Pending and booked %s can\'t be deleted', 'seat word is masculine', 'seatreg'),
+				/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+				_x('Pending and booked %s can\'t be deleted', 'seat word is feminine', 'seatreg'),
+				/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+				_x('Pending and booked %s can\'t be deleted', 'seat word is neuter', 'seatreg')
+			));?></span><span class="more-message-btn"></span></span>
 		</div>
 		<div class="update-wrapper">
 			<div id="update-data">
@@ -144,7 +153,16 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
-				<p><?php seatreg_noun_span('seat', 'plural', __('Color %s by their status. An unticked status keeps the layout color.', 'seatreg')); ?></p>
+				<p><?php seatreg_noun_span('seat', 'plural', SeatregTerminologyService::variants(
+					/* translators: %s: the word the admin uses for seats, plural */
+					__('Color %s by their status. An unticked status keeps the layout color.', 'seatreg'),
+					/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('Color %s by their status. An unticked status keeps the layout color.', 'seat word is masculine', 'seatreg'),
+					/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('Color %s by their status. An unticked status keeps the layout color.', 'seat word is feminine', 'seatreg'),
+					/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('Color %s by their status. An unticked status keeps the layout color.', 'seat word is neuter', 'seatreg')
+				)); ?></p>
 				<div class="seat-color-fields">
 					<?php foreach( $seatregSeatStatusColors as $status => $label ) : ?>
 						<div class="seat-color-field">
@@ -236,7 +254,16 @@
 					<?php esc_html_e('You need to enable PayPal, Stripe, or custom payment options in the settings to activate pricing functionality.', 'seatreg'); ?>
 				</div>
 				<div class="set-price-wrap">
-					<div><label for="price-for-all-selected"><?php seatreg_noun_span('seat', 'plural', __('Fill price to all selected %s', 'seatreg')); ?></label></div>
+					<div><label for="price-for-all-selected"><?php seatreg_noun_span('seat', 'plural', SeatregTerminologyService::variants(
+						/* translators: %s: the word the admin uses for seats, plural */
+						__('Fill price to all selected %s', 'seatreg'),
+						/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						_x('Fill price to all selected %s', 'seat word is masculine', 'seatreg'),
+						/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						_x('Fill price to all selected %s', 'seat word is feminine', 'seatreg'),
+						/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						_x('Fill price to all selected %s', 'seat word is neuter', 'seatreg')
+					)); ?></label></div>
 					<input type="number" min="0" oninput="this.value = Math.abs(this.value)" id="price-for-all-selected" value="0" />
 					<button type="button" class="btn btn-success btn-sm" id="fill-price-for-all-selected"><?php esc_html_e('Fill prices', 'seatreg'); ?></button>
 				</div>
@@ -259,7 +286,16 @@
 			</div>
 			<div class="modal-body">
 				<div class="set-password-wrap">
-					<div><label for="password-for-all-selected"><?php seatreg_noun_span('seat', 'plural', __('Fill password to all selected %s', 'seatreg')); ?></label></div>
+					<div><label for="password-for-all-selected"><?php seatreg_noun_span('seat', 'plural', SeatregTerminologyService::variants(
+						/* translators: %s: the word the admin uses for seats, plural */
+						__('Fill password to all selected %s', 'seatreg'),
+						/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						_x('Fill password to all selected %s', 'seat word is masculine', 'seatreg'),
+						/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						_x('Fill password to all selected %s', 'seat word is feminine', 'seatreg'),
+						/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+						_x('Fill password to all selected %s', 'seat word is neuter', 'seatreg')
+					)); ?></label></div>
 					<input type="text" id="password-for-all-selected" />
 					<button type="button" class="btn btn-success btn-sm" id="fill-password-for-all-selected"><?php esc_html_e('Fill password', 'seatreg'); ?></button>
 				</div>
@@ -281,16 +317,52 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
-				<div class="alert alert-primary d-none" id="seat-nr-change-no-selection"><?php seatreg_noun_span('seat', 'plural', _x('No %s selected', 'layout builder seat numbering dialog, nothing is selected', 'seatreg')); ?></div>
-				<div class="alert alert-primary d-none" id="seat-nr-change-warning"><?php seatreg_noun_span('seat', 'singular', __('Pending or booked %s numbers can\'t be changed', 'seatreg')); ?></div>
+				<div class="alert alert-primary d-none" id="seat-nr-change-no-selection"><?php seatreg_noun_span('seat', 'plural', SeatregTerminologyService::variants(
+					/* translators: %s: the word the admin uses for seats, plural */
+					_x('No %s selected', 'layout builder seat numbering dialog, nothing is selected', 'seatreg'),
+					/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('No %s selected', 'layout builder seat numbering dialog, nothing is selected; seat word is masculine', 'seatreg'),
+					/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('No %s selected', 'layout builder seat numbering dialog, nothing is selected; seat word is feminine', 'seatreg'),
+					/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('No %s selected', 'layout builder seat numbering dialog, nothing is selected; seat word is neuter', 'seatreg')
+				)); ?></div>
+				<div class="alert alert-primary d-none" id="seat-nr-change-warning"><?php seatreg_noun_span('seat', 'singular', SeatregTerminologyService::variants(
+					/* translators: %s: the word the admin uses for a seat */
+					__('Pending or booked %s numbers can\'t be changed', 'seatreg'),
+					/* translators: %s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('Pending or booked %s numbers can\'t be changed', 'seat word is masculine', 'seatreg'),
+					/* translators: %s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('Pending or booked %s numbers can\'t be changed', 'seat word is feminine', 'seatreg'),
+					/* translators: %s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+					_x('Pending or booked %s numbers can\'t be changed', 'seat word is neuter', 'seatreg')
+				)); ?></div>
 				<div id="seat-numbering-wrap">
 					<div>
-						<div><label for="seat-prefix"><?php seatreg_noun_span('seat', 'singularUpper', _x('%s prefix for the selected ones', 'layout builder seat numbering field label', 'seatreg')); ?></label></div>
+						<div><label for="seat-prefix"><?php seatreg_noun_span('seat', 'singularUpper', SeatregTerminologyService::variants(
+							/* translators: %s: the word the admin uses for a seat, capitalized */
+							_x('%s prefix for the selected ones', 'layout builder seat numbering field label', 'seatreg'),
+							/* translators: %s: the word the admin uses for a seat, capitalized. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('%s prefix for the selected ones', 'layout builder seat numbering field label; seat word is masculine', 'seatreg'),
+							/* translators: %s: the word the admin uses for a seat, capitalized. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('%s prefix for the selected ones', 'layout builder seat numbering field label; seat word is feminine', 'seatreg'),
+							/* translators: %s: the word the admin uses for a seat, capitalized. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('%s prefix for the selected ones', 'layout builder seat numbering field label; seat word is neuter', 'seatreg')
+						)); ?></label></div>
 						<input type="text" id="seat-prefix" style="width:60px" />
 						<button type="button" class="btn btn-success btn-sm" id="set-seat-prefix"><?php esc_html_e('Set prefix', 'seatreg'); ?></button>
 					</div><br>
 					<div>
-						<div><label for="seat-reorder"><?php seatreg_noun_span('seat', 'plural', __('Reorder selected %s starting from', 'seatreg')); ?></label></div>
+						<div><label for="seat-reorder"><?php seatreg_noun_span('seat', 'plural', SeatregTerminologyService::variants(
+							/* translators: %s: the word the admin uses for seats, plural */
+							__('Reorder selected %s starting from', 'seatreg'),
+							/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('Reorder selected %s starting from', 'seat word is masculine', 'seatreg'),
+							/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('Reorder selected %s starting from', 'seat word is feminine', 'seatreg'),
+							/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('Reorder selected %s starting from', 'seat word is neuter', 'seatreg')
+						)); ?></label></div>
 						<input type="number" id="seat-reorder" size="3" style="width:60px" />
 						<button type="button" class="btn btn-success btn-sm" id="reorder-seats"><?php seatreg_noun_span('seat', 'pluralUpper', _x('Reorder %s', 'layout builder button that renumbers the selected seats', 'seatreg')); ?></button>
 					</div>
@@ -324,8 +396,16 @@
 
 				<div class="legend-dialog-div">
 					<label for="legend-delete-select-room" class="legend-dialog-label"><?php
-						/* translators: %s: the word the admin uses for a room */
-						seatreg_noun_span('room', 'singular', __('Remove legend from this %s:', 'seatreg'));
+						seatreg_noun_span('room', 'singular', SeatregTerminologyService::variants(
+							/* translators: %s: the word the admin uses for a room */
+							__('Remove legend from this %s:', 'seatreg'),
+							/* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('Remove legend from this %s:', 'room word is masculine', 'seatreg'),
+							/* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('Remove legend from this %s:', 'room word is feminine', 'seatreg'),
+							/* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('Remove legend from this %s:', 'room word is neuter', 'seatreg')
+						));
 					?></label>
 					<select class="legend-select-room" id="legend-delete-select-room"></select> 
 					<button type="button" id="delete-legend-from-room" class="btn btn-secondary d-block btn-sm"><?php esc_html_e('Remove', 'seatreg');?></button>
@@ -533,7 +613,16 @@
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-add"></div>
 						<p class="help-dialog-text">
-							<?php seatreg_noun_span('seat', 'plural,singular,plural', __('With this tool you can create %1$s. Simply click on gray dotted box and new %2$s will be created. You can create multiple %3$s at once by dragging cursor over gray boxes.', 'seatreg'));?>
+							<?php seatreg_noun_span('seat', 'plural,singular,plural', SeatregTerminologyService::variants(
+								/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a seat, %3$s: the word the admin uses for seats, plural */
+								__('With this tool you can create %1$s. Simply click on gray dotted box and new %2$s will be created. You can create multiple %3$s at once by dragging cursor over gray boxes.', 'seatreg'),
+								/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a seat, %3$s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('With this tool you can create %1$s. Simply click on gray dotted box and new %2$s will be created. You can create multiple %3$s at once by dragging cursor over gray boxes.', 'seat word is masculine', 'seatreg'),
+								/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a seat, %3$s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('With this tool you can create %1$s. Simply click on gray dotted box and new %2$s will be created. You can create multiple %3$s at once by dragging cursor over gray boxes.', 'seat word is feminine', 'seatreg'),
+								/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a seat, %3$s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('With this tool you can create %1$s. Simply click on gray dotted box and new %2$s will be created. You can create multiple %3$s at once by dragging cursor over gray boxes.', 'seat word is neuter', 'seatreg')
+							));?>
 						</p>
 					</div>
 
@@ -594,7 +683,16 @@
 							<span class="seat-colors-icon__swatch seat-colors-icon__swatch--locked"></span>
 						</div>
 						<p class="help-dialog-text">
-							<?php seatreg_noun_span('seat', 'plural', __('Lets you color pending, approved, selected and locked %s by their status. The colors apply to every room.', 'seatreg'));?>
+							<?php seatreg_noun_span('seat', 'plural', SeatregTerminologyService::variants(
+								/* translators: %s: the word the admin uses for seats, plural */
+								__('Lets you color pending, approved, selected and locked %s by their status. The colors apply to every room.', 'seatreg'),
+								/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you color pending, approved, selected and locked %s by their status. The colors apply to every room.', 'seat word is masculine', 'seatreg'),
+								/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you color pending, approved, selected and locked %s by their status. The colors apply to every room.', 'seat word is feminine', 'seatreg'),
+								/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you color pending, approved, selected and locked %s by their status. The colors apply to every room.', 'seat word is neuter', 'seatreg')
+							));?>
 						</p>
 					</div>
 
@@ -608,21 +706,48 @@
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-price"></div>
 						<p class="help-dialog-text">
-							<?php seatreg_noun_span('seat', 'plural', __('Lets you add prices to %s. You also need to configure paypal in settings to enable payments.', 'seatreg'));?>
+							<?php seatreg_noun_span('seat', 'plural', SeatregTerminologyService::variants(
+								/* translators: %s: the word the admin uses for seats, plural */
+								__('Lets you add prices to %s. You also need to configure paypal in settings to enable payments.', 'seatreg'),
+								/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you add prices to %s. You also need to configure paypal in settings to enable payments.', 'seat word is masculine', 'seatreg'),
+								/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you add prices to %s. You also need to configure paypal in settings to enable payments.', 'seat word is feminine', 'seatreg'),
+								/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you add prices to %s. You also need to configure paypal in settings to enable payments.', 'seat word is neuter', 'seatreg')
+							));?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-lock"></div>
 						<p class="help-dialog-text">
-							<?php seatreg_noun_span('seat', 'plural,singular', __('Lets you lock or set password to %1$s. When a %2$s is locked then only admin can book it using booking-manager. If password is added then it is required before booking can be made.', 'seatreg'));?>
+							<?php seatreg_noun_span('seat', 'plural,singular', SeatregTerminologyService::variants(
+								/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a seat */
+								__('Lets you lock or set password to %1$s. When a %2$s is locked then only admin can book it using booking-manager. If password is added then it is required before booking can be made.', 'seatreg'),
+								/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you lock or set password to %1$s. When a %2$s is locked then only admin can book it using booking-manager. If password is added then it is required before booking can be made.', 'seat word is masculine', 'seatreg'),
+								/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you lock or set password to %1$s. When a %2$s is locked then only admin can book it using booking-manager. If password is added then it is required before booking can be made.', 'seat word is feminine', 'seatreg'),
+								/* translators: %1$s: the word the admin uses for seats, plural, %2$s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you lock or set password to %1$s. When a %2$s is locked then only admin can book it using booking-manager. If password is added then it is required before booking can be made.', 'seat word is neuter', 'seatreg')
+							));?>
 						</p>
 					</div>
 
 					<div class="help-dialog-row">
 						<div class="guide-item2 guide-item-seat-nr"></div>
 						<p class="help-dialog-text">
-							<?php seatreg_noun_span('seat', 'singular,singular', __('Lets you change %1$s numbers. Pending and booked %2$s numbers can\'t be changed.', 'seatreg'));?>
+							<?php seatreg_noun_span('seat', 'singular,singular', SeatregTerminologyService::variants(
+								/* translators: %1$s: the word the admin uses for a seat, %2$s: the word the admin uses for a seat */
+								__('Lets you change %1$s numbers. Pending and booked %2$s numbers can\'t be changed.', 'seatreg'),
+								/* translators: %1$s: the word the admin uses for a seat, %2$s: the word the admin uses for a seat. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you change %1$s numbers. Pending and booked %2$s numbers can\'t be changed.', 'seat word is masculine', 'seatreg'),
+								/* translators: %1$s: the word the admin uses for a seat, %2$s: the word the admin uses for a seat. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you change %1$s numbers. Pending and booked %2$s numbers can\'t be changed.', 'seat word is feminine', 'seatreg'),
+								/* translators: %1$s: the word the admin uses for a seat, %2$s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+								_x('Lets you change %1$s numbers. Pending and booked %2$s numbers can\'t be changed.', 'seat word is neuter', 'seatreg')
+							));?>
 						</p>
 					</div>
 
@@ -683,8 +808,16 @@
 				</div>
 				<div class="modal-body">
 					<h4><?php
-						/* translators: %s: the word the admin uses for a room */
-						seatreg_noun_span('room', 'singular', __('Current %s image', 'seatreg'));
+						seatreg_noun_span('room', 'singular', SeatregTerminologyService::variants(
+							/* translators: %s: the word the admin uses for a room */
+							__('Current %s image', 'seatreg'),
+							/* translators: %s: the word the admin uses for a room. Only used when the room word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('Current %s image', 'room word is masculine', 'seatreg'),
+							/* translators: %s: the word the admin uses for a room. Only used when the room word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('Current %s image', 'room word is feminine', 'seatreg'),
+							/* translators: %s: the word the admin uses for a room. Only used when the room word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							_x('Current %s image', 'room word is neuter', 'seatreg')
+						));
 					?></h4>
 					<div id="activ-room-img-wrap"></div>
 					<br>

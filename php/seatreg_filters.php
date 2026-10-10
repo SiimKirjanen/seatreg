@@ -181,3 +181,5 @@ function seatreg_expiration_booking_interval( $schedules ) {
 
     return $schedules;
 }
+
+add_filter( 'gettext_with_context', array('SeatregTerminologyService', 'fallBackToPlainTranslation'), 10, 4 );

@@ -73,10 +73,21 @@ function seatregSeatNouns() {
 }
 
 /**
+ * The translation of a sentence whose words agree with the noun's grammatical gender.
+ * @param {Object} variants - none, masculine, feminine and neuter, as SeatregTerminologyService::variants() gives them
+ * @param {Object} nouns - as returned by seatregRoomNouns() or seatregSeatNouns()
+ * @returns {string}
+ */
+function seatregAgree(variants, nouns) {
+	return (nouns && variants[nouns.gender]) || variants.none;
+}
+
+/**
  * Repaints the builder chrome, which is rendered once for no registration in particular.
  * A node names the noun it wants in data-seatreg-noun-kind and data-seatreg-noun and, when the
- * noun sits inside a sentence, that sentence in data-seatreg-noun-template. A sentence needing
- * more than one form lists them comma separated, in the order the sentence takes them.
+ * noun sits inside a sentence, that sentence in data-seatreg-noun-template, or its gendered
+ * variants as JSON in data-seatreg-noun-variants. A sentence needing more than one form lists
+ * them comma separated, in the order the sentence takes them.
  * data-seatreg-noun-attr writes to that attribute instead of the node's text.
  */
 function seatregApplyNouns() {
@@ -94,7 +105,8 @@ function seatregApplyNouns() {
 		}
 
 		var forms = nodes[i].getAttribute('data-seatreg-noun').split(',');
-		var template = nodes[i].getAttribute('data-seatreg-noun-template');
+		var variants = nodes[i].getAttribute('data-seatreg-noun-variants');
+		var template = variants ? seatregAgree(JSON.parse(variants), kind) : nodes[i].getAttribute('data-seatreg-noun-template');
 		var attribute = nodes[i].getAttribute('data-seatreg-noun-attr');
 		var nounArgs = [];
 

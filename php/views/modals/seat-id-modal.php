@@ -43,8 +43,17 @@
 				</div>
 				<?php if($openSeatCounter === 0): ?>
 					<div class="alert alert-info"><?php
-						/* translators: %1$s: the word the admin uses for seats, plural, %2$s: Room name */
-						echo sprintf(esc_html__('No open %1$s in %2$s', 'seatreg'), esc_html($seatNouns->plural), esc_html($roomData->room->name));
+						echo sprintf(SeatregTerminologyService::agree(
+							$seatNouns,
+							/* translators: %1$s: the word the admin uses for seats, plural, %2$s: Room name */
+							esc_html__('No open %1$s in %2$s', 'seatreg'),
+							/* translators: %1$s: the word the admin uses for seats, plural, %2$s: Room name. Only used when the seat word is masculine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							esc_html_x('No open %1$s in %2$s', 'seat word is masculine', 'seatreg'),
+							/* translators: %1$s: the word the admin uses for seats, plural, %2$s: Room name. Only used when the seat word is feminine in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							esc_html_x('No open %1$s in %2$s', 'seat word is feminine', 'seatreg'),
+							/* translators: %1$s: the word the admin uses for seats, plural, %2$s: Room name. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
+							esc_html_x('No open %1$s in %2$s', 'seat word is neuter', 'seatreg')
+						), esc_html($seatNouns->plural), esc_html($roomData->room->name));
 					?></div>
 				<?php endif; ?>
 			<?php endforeach; ?>
