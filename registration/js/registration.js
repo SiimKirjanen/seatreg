@@ -492,10 +492,6 @@
 			}
 					
 			if (!this.ie8){
-				box.addEventListener('touchstart',function(e) {
-					e.preventDefault();
-					scope.openSeatDialog(this);
-				});
 				box.addEventListener('click',function() {
 					scope.openSeatDialog(this);
 				});
@@ -1461,6 +1457,8 @@ function initScroll(needHorizScroll, needVerticScroll) {
 				zoomMax: 30,
 				zoomMin: 0.1,
 				mouseWheelSpeed: 20,
+				// Pinch zoom only reads touch events, which pointer events would otherwise take over from
+				disablePointer: true,
 			});
 
 			if(needToZoom) {

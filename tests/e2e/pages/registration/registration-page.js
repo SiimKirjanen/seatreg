@@ -354,6 +354,70 @@ class RegistrationPage {
 		await expect(this.seatDialog).toBeVisible();
 	}
 
+	/** Needs a context with hasTouch. */
+	async tapSeat(number) {
+		await this.seat(number).tap();
+		await expect(this.seatDialog).toBeVisible();
+	}
+
+	/** iScroll zooms the map by scaling the seats' container. */
+	async mapScale() {
+		return this.page
+			.locator('#boxes')
+			.evaluate((boxes) => new DOMMatrix(getComputedStyle(boxes).transform).a);
+	}
+
+	/* Playwright can tap but not drag a finger, so the gestures below go through
+	   Chromium's DevTools protocol. They start on a seat, where a visitor's
+	   fingers mostly land on a crowded map. */
+
+	async swipeFromSeat(number, { distance = 120, steps = 6 } = {}) {
+		const { x, y } = await this.seatCentre(number);
+
+		await this.touchGesture(
+			Array.from({ length: steps + 1 }, (_, step) => [
+				{ x: x - (distance * step) / steps, y },
+			])
+		);
+	}
+
+	/** Spread two fingers apart, the first of them on the seat. */
+	async pinchOutFromSeat(number, { spread = 80, steps = 8 } = {}) {
+		const { x, y } = await this.seatCentre(number);
+
+		await this.touchGesture(
+			Array.from({ length: steps + 1 }, (_, step) => {
+				const offset = (spread * step) / steps;
+
+				return [
+					{ id: 0, x: x - offset, y: y - offset },
+					{ id: 1, x: x + 20 + offset, y: y + 20 + offset },
+				];
+			})
+		);
+	}
+
+	async seatCentre(number) {
+		const seat = await this.seat(number).boundingBox();
+
+		return { x: seat.x + seat.width / 2, y: seat.y + seat.height / 2 };
+	}
+
+	/** @param {Array<Array<{x: number, y: number}>>} frames Where the fingers are, the first frame putting them down */
+	async touchGesture([start, ...moves]) {
+		const cdp = await this.page.context().newCDPSession(this.page);
+		const touch = (type, touchPoints) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints });
+
+		await touch('touchStart', start);
+
+		for (const frame of moves) {
+			await touch('touchMove', frame);
+		}
+
+		await touch('touchEnd', []);
+		await cdp.detach();
+	}
+
 	async closeSeatDialog() {
 		await this.seatDialogCloseButton.click();
 		await expect(this.seatDialog).toBeHidden();
