@@ -79,4 +79,26 @@ test.describe('Registration map', () => {
 		await expect(registration.totalPendingBookings).toHaveText('0');
 		await expect(registration.totalApprovedBookings).toHaveText('0');
 	});
+
+	test.describe('on a touch screen', () => {
+		test.use({ hasTouch: true });
+
+		test('opens a seat on a tap but not on a pan that starts on it', async () => {
+			await registration.tapSeat(1);
+			await registration.closeSeatDialog();
+
+			await registration.swipeFromSeat(1);
+
+			await expect(registration.seatDialog).toBeHidden();
+		});
+
+		test('zooms the map with two fingers', async () => {
+			const scaleBefore = await registration.mapScale();
+
+			await registration.pinchOutFromSeat(1);
+
+			await expect.poll(() => registration.mapScale()).toBeGreaterThan(scaleBefore);
+			await expect(registration.seatDialog).toBeHidden();
+		});
+	});
 });
