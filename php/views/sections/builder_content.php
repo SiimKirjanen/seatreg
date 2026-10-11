@@ -68,7 +68,7 @@
 			<div class="side-option price-option" data-action="8" title="Price" data-toggle="modal" data-target="#price-dialog"></div>
 			<div class="side-option lock-option" data-action="10" title="Lock" data-toggle="modal" data-target="#lock-seat-dialog"></div>
 			<div class="side-option numbering-option" data-action="11" title="Change numbering" data-toggle="modal" data-target="#seat-numbering-dialog"></div>
-			<div class="side-option rotate-option rotate-icon" data-action="13" title="<?php esc_attr_e('Turn selection', 'seatreg'); ?>" data-toggle="modal" data-target="#rotate-dialog"><i class="fa fa-rotate-right" aria-hidden="true"></i></div>
+			<div class="side-option rotate-option rotate-icon" data-action="13" title="<?php esc_attr_e('Turn selection', 'seatreg'); ?>" data-toggle="modal" data-target="#rotate-dialog"><span class="rotate-icon__boxes"><span class="rotate-icon__box rotate-icon__box--first"></span><span class="rotate-icon__box"></span><span class="rotate-icon__box rotate-icon__box--third"></span></span><i class="fa fa-rotate-right rotate-icon__arrow" aria-hidden="true"></i></div>
 		</div>
 	
 		<div class="build-area-wrapper" data-cursor="1">
@@ -808,7 +808,7 @@
 					</div>
 
 					<div class="help-dialog-row">
-						<div class="guide-item2 rotate-icon"><i class="fa fa-rotate-right" aria-hidden="true"></i></div>
+						<div class="guide-item2 rotate-icon"><span class="rotate-icon__boxes"><span class="rotate-icon__box rotate-icon__box--first"></span><span class="rotate-icon__box"></span><span class="rotate-icon__box rotate-icon__box--third"></span></span><i class="fa fa-rotate-right rotate-icon__arrow" aria-hidden="true"></i></div>
 						<p class="help-dialog-text">
 							<?php esc_html_e('Moves the selected boxes along a circle around the middle of the selection, turns each box around its own center, or moves the boxes closer together or further apart. Numbers always stay upright. Change the numbering of a row before you move it along a circle, as numbering follows straight rows.', 'seatreg');?>
 						</p>

@@ -8,9 +8,38 @@
 		width: 41px;
 		height: 41px;
 		padding: 0;
+		position: relative;
 		background: #999;
 		border: 1px solid #000;
-		font-size: 24px;
+	}
+
+	.rotate-icon__boxes {
+		display: flex;
+		gap: 1px;
+		margin-top: 4px;
+	}
+
+	.rotate-icon__box {
+		width: 8px;
+		height: 8px;
+		border: 1px solid #000;
+		background: #61b329;
+		transform: rotate(45deg);
+	}
+
+	.rotate-icon__box--first {
+		transform: translateY(-9px) rotate(45deg);
+	}
+
+	.rotate-icon__box--third {
+		transform: translateY(9px) rotate(45deg);
+	}
+
+	.rotate-icon__arrow {
+		position: absolute;
+		top: 2px;
+		right: 3px;
+		font-size: 13px;
 		color: #000;
 	}
 
