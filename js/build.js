@@ -1084,6 +1084,8 @@
 		this.currentRoom = this.roomLocator;
 		this.rooms[this.currentRoom].order = roomOrder;
 		this.roomLocator++;
+		this.activeBoxArray.length = 0;
+		this.showClickControls();
 		clearBuildArea();
 
 		if(buildSkeleton) {
@@ -1156,12 +1158,17 @@
 				var roomHeight = 0;
 
 				for(var i = 0; i < arrLen; i++) {
-					if(this.rooms[property].boxes[i].width + this.rooms[property].boxes[i].xPosition > roomWidth) {
-						roomWidth = this.rooms[property].boxes[i].width + this.rooms[property].boxes[i].xPosition;
+					var box = this.rooms[property].boxes[i];
+					var outer = turnedSize(Number(box.width), Number(box.height), box.rotation);
+					var right = Number(box.xPosition) + (Number(box.width) + outer.width) / 2;
+					var bottom = Number(box.yPosition) + (Number(box.height) + outer.height) / 2;
+
+					if(right > roomWidth) {
+						roomWidth = Math.ceil(right);
 					}
 
-					if(this.rooms[property].boxes[i].height + this.rooms[property].boxes[i].yPosition > roomHeight) {
-						roomHeight = this.rooms[property].boxes[i].height + this.rooms[property].boxes[i].yPosition;
+					if(bottom > roomHeight) {
+						roomHeight = Math.ceil(bottom);
 					}
 				}
 
@@ -1966,8 +1973,8 @@
 			drag: function(event, ui) {
 				var dragCorrection = $(this).data('dragCorrection');
 
-				ui.position.left += dragCorrection.left;
-				ui.position.top += dragCorrection.top;
+				ui.position.left = Math.max(0, ui.position.left + dragCorrection.left);
+				ui.position.top = Math.max(0, ui.position.top + dragCorrection.top);
 
 				if(regScope.needMultiDrag) {
 					var currentLoc = $(this).position();
@@ -2856,11 +2863,20 @@
 		});
 	}
 
+	function turnedSize(width, height, degrees) {
+		var turn = degrees * Math.PI / 180;
+
+		return {
+			width: width * Math.abs(Math.cos(turn)) + height * Math.abs(Math.sin(turn)),
+			height: width * Math.abs(Math.sin(turn)) + height * Math.abs(Math.cos(turn))
+		};
+	}
+
 	function turnBoxElement($box, degrees) {
 		$box.toggleClass('turned-box', degrees !== 0).css('--box-turn', degrees + 'deg');
 	}
 
-	//turns and scales the box centres around the middle of the group, the boxes themselves stay upright
+	//turns and scales the box centres around the middle of the group, and keeps every box inside the room
 	function arrangedPositions(boxes, startPositions, degrees, scale, rotations) {
 		var widths = boxes.map(function(box) { return Number(box.width); });
 		var heights = boxes.map(function(box) { return Number(box.height); });
@@ -2884,13 +2900,11 @@
 			};
 		});
 		var outerEdges = positions.map(function(position, i) {
-			var turn = rotations[i] * Math.PI / 180;
-			var outerWidth = widths[i] * Math.abs(Math.cos(turn)) + heights[i] * Math.abs(Math.sin(turn));
-			var outerHeight = widths[i] * Math.abs(Math.sin(turn)) + heights[i] * Math.abs(Math.cos(turn));
+			var outer = turnedSize(widths[i], heights[i], rotations[i]);
 
 			return {
-				left: position.x + (widths[i] - outerWidth) / 2,
-				top: position.y + (heights[i] - outerHeight) / 2
+				left: Math.min(position.x, position.x + (widths[i] - outer.width) / 2),
+				top: Math.min(position.y, position.y + (heights[i] - outer.height) / 2)
 			};
 		});
 		var overflowLeft = Math.ceil(Math.max(0, -Math.min.apply(null, outerEdges.map(function(edge) { return edge.left; }))));
@@ -4128,37 +4142,39 @@
 		$('#rotate-controls').toggleClass('d-none', !hasSelection);
 	});
 
-	$('#rotate-dialog [data-rotation]').on('click', function() {
-		var degrees = Math.abs(parseFloat($('#rotate-degrees').val()));
+	function positiveNumberFrom($input) {
+		var value = Math.abs(parseFloat($input.val()));
 
-		if(isNaN(degrees)) {
-			$('#rotate-degrees').trigger('focus');
-			return;
+		if(!isFinite(value)) {
+			$input.trigger('focus');
+			return null;
 		}
 
-		reg.arrangeActiveBoxes($(this).data('rotation') === 'clockwise' ? degrees : -degrees, 0, 0);
+		return value;
+	}
+
+	$('#rotate-dialog [data-rotation]').on('click', function() {
+		var degrees = positiveNumberFrom($('#rotate-degrees'));
+
+		if(degrees !== null) {
+			reg.arrangeActiveBoxes($(this).data('rotation') === 'clockwise' ? degrees : -degrees, 0, 0);
+		}
 	});
 
 	$('#rotate-dialog [data-box-rotation]').on('click', function() {
-		var degrees = Math.abs(parseFloat($('#box-turn-degrees').val()));
+		var degrees = positiveNumberFrom($('#box-turn-degrees'));
 
-		if(isNaN(degrees)) {
-			$('#box-turn-degrees').trigger('focus');
-			return;
+		if(degrees !== null) {
+			reg.arrangeActiveBoxes(0, 0, $(this).data('box-rotation') === 'clockwise' ? degrees : -degrees);
 		}
-
-		reg.arrangeActiveBoxes(0, 0, $(this).data('box-rotation') === 'clockwise' ? degrees : -degrees);
 	});
 
 	$('#rotate-dialog [data-spacing]').on('click', function() {
-		var percent = Math.abs(parseFloat($('#spacing-percent').val()));
+		var percent = positiveNumberFrom($('#spacing-percent'));
 
-		if(isNaN(percent)) {
-			$('#spacing-percent').trigger('focus');
-			return;
+		if(percent !== null) {
+			reg.arrangeActiveBoxes(0, ($(this).data('spacing') === 'apart' ? percent : -percent) / 100, 0);
 		}
-
-		reg.arrangeActiveBoxes(0, ($(this).data('spacing') === 'apart' ? percent : -percent) / 100, 0);
 	});
 
 	$('.progress').css({'display': 'none'});

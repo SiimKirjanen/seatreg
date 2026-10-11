@@ -98,10 +98,8 @@ test.describe('Layout builder map', () => {
 		await expect(registration.seats).toHaveText(['3', '2', '1']);
 	});
 
-	/* Turning moves the seats along a circle around the middle of the selection
-	   and spacing moves them towards or away from it, the seats stay upright.
-	   Two 45 degree turns land exactly where one of 90 would, and undoing both
-	   lands exactly on the start, so rounding does not build up. */
+	/* Turns and spacing are worked out from where the selection started, so
+	   rounding never builds up and undoing them lands exactly on the start. */
 	test('turns and spaces the selected seats as a group', async () => {
 		await builder.placeSeats(SEAT_COUNT);
 		const row = await builder.seatPositions();

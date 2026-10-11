@@ -810,7 +810,7 @@
 					<div class="help-dialog-row">
 						<div class="guide-item2 rotate-icon"><span class="rotate-icon__boxes"><span class="rotate-icon__box rotate-icon__box--first"></span><span class="rotate-icon__box"></span><span class="rotate-icon__box rotate-icon__box--third"></span></span><i class="fa fa-rotate-right rotate-icon__arrow" aria-hidden="true"></i></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Moves the selected boxes along a circle around the middle of the selection, turns each box around its own center, or moves the boxes closer together or further apart. Numbers always stay upright. Change the numbering of a row before you move it along a circle, as numbering follows straight rows.', 'seatreg');?>
+							<?php esc_html_e('Moves the selected boxes along a circle around the middle of the selection, turns each box around its own center, or moves the boxes closer together or further apart. Numbers always stay upright.', 'seatreg');?>
 						</p>
 					</div>
 
