@@ -4,6 +4,7 @@ const { LayoutBuilderPage } = require('./layout-builder-page');
 const { SettingsPage } = require('../settings/settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 const { escapeForRegExp } = require('../../utils/text');
+const { seatAngles } = require('../../utils/seats');
 
 const ROOM = 'Main hall';
 const SEAT_COUNT = 3;
@@ -129,6 +130,21 @@ test.describe('Layout builder map', () => {
 		await builder.changeSelectionSpacing(50, 'closer');
 		await builder.rotateSelection(90, 'counterclockwise');
 		expect(await builder.seatPositions()).toEqual(row);
+	});
+
+	test('turns a seat itself and keeps its number upright', async () => {
+		await builder.placeSeats(2);
+		await builder.selectSeat(1);
+		await builder.turnSelectedBoxes(90, 'clockwise');
+
+		expect(await seatAngles(builder.seat(1))).toEqual({ seat: 90, number: 0 });
+		expect(await seatAngles(builder.seat(2))).toEqual({ seat: 0, number: 0 });
+
+		await builder.save();
+
+		const registration = await builder.openRegistration();
+		expect(await seatAngles(registration.seat(1))).toEqual({ seat: 90, number: 0 });
+		expect(await seatAngles(registration.seat(2))).toEqual({ seat: 0, number: 0 });
 	});
 
 	test('locks and password protects seats', async () => {

@@ -190,6 +190,15 @@ class LayoutBuilderPage {
 		return this.rotateDialog.locator(`[data-rotation="${direction}"]`);
 	}
 
+	get boxTurnDegreesInput() {
+		return this.page.locator('#box-turn-degrees');
+	}
+
+	/** @param {string} direction clockwise or counterclockwise */
+	boxTurnButton(direction) {
+		return this.rotateDialog.locator(`[data-box-rotation="${direction}"]`);
+	}
+
 	get spacingPercentInput() {
 		return this.page.locator('#spacing-percent');
 	}
@@ -812,6 +821,13 @@ class LayoutBuilderPage {
 		await this.inRotateDialog(async () => {
 			await this.rotateDegreesInput.fill(String(degrees));
 			await this.rotateButton(direction).click();
+		});
+	}
+
+	async turnSelectedBoxes(degrees, direction) {
+		await this.inRotateDialog(async () => {
+			await this.boxTurnDegreesInput.fill(String(degrees));
+			await this.boxTurnButton(direction).click();
 		});
 	}
 

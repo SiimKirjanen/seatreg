@@ -90,6 +90,7 @@
 		this.lock = false;
 		this.password = '';
 		this.prefix = '';
+		this.rotation = 0;
 	}
 
 	//Change box values. position and size
@@ -201,6 +202,13 @@
 		$('.build-area .drag-box[data-id="'+ this.id +'"] .seat-number').text(this.prefix + this.seat);
 	};
 
+	Box.prototype.changeRotation = function(degrees) {
+		this.rotation = ((degrees % 360) + 360) % 360;
+		reg.needToSave = true;
+
+		turnBoxElement($('.build-area .drag-box[data-id="'+ this.id +'"]'), this.rotation);
+	};
+
 	Box.prototype.changePrefix = function(newPrefix) {
 		this.prefix = newPrefix;
 		reg.needToSave = true;
@@ -310,6 +318,7 @@
 				lock: this.boxes[i].lock,
 				password: this.boxes[i].password,
 				prefix: this.boxes[i].prefix,
+				rotation: this.boxes[i].rotation,
 			});
 		}
 
@@ -355,7 +364,7 @@
 	};
 
 	//add box to room from server data
-	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize, lock, password, prefix, seatNr) {
+	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize, lock, password, prefix, seatNr, rotation) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
@@ -366,6 +375,7 @@
 		box.password = password;
 		box.lock = lock;
 		box.prefix = prefix ? prefix : '';
+		box.rotation = isNumeric(rotation) ? Number(rotation) : 0;
 		this.boxes.push(box);
 		this.boxCounter++;
 		this.setBuildingAreaDimentions();
@@ -1846,6 +1856,8 @@
 					$.powerTip.hide();
 				}
 			}).appendTo('.build-area').each(function(){
+				turnBoxElement($(this), regScope.rooms[regScope.currentRoom].boxes[i].rotation);
+
 				if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister === true) {
 					$(this).addClass('can-register').attr({
 						'data-seatnr': regScope.rooms[regScope.currentRoom].boxes[i].seat,
@@ -1935,7 +1947,13 @@
 			scrollSpeed: 30, 
 			stack: ".drag-box",
 			disabled: disableDrag,
-			start: function(){
+			start: function(event, ui){
+				//jQuery UI places a turned box by its outer corner, so keep the drag where the box really is
+				$(this).data('dragCorrection', {
+					left: parseFloat($(this).css('left')) - ui.position.left,
+					top: parseFloat($(this).css('top')) - ui.position.top
+				});
+
 				if(!regScope.needMultiDrag) {
 					regScope.activeBoxArray.length = 0;  //make sure activebox in empty.
 					regScope.activeBoxArray.push($(this).attr('data-id'));	//this box in now active
@@ -1946,6 +1964,11 @@
 				}	
 			},
 			drag: function(event, ui) {
+				var dragCorrection = $(this).data('dragCorrection');
+
+				ui.position.left += dragCorrection.left;
+				ui.position.top += dragCorrection.top;
+
 				if(regScope.needMultiDrag) {
 					var currentLoc = $(this).position();
 					var prevLoc = $(this).data('prevLoc');
@@ -1959,9 +1982,8 @@
 
 					multiDragBoxes.each(function(){
 						$this =$(this);
-						var p = $this.position();
-						var l = p.left;
-						var t = p.top;
+						var l = parseFloat($this.css('left'));
+						var t = parseFloat($this.css('top'));
 						
 						if(l + offsetLeft <= 0 || t + offsetTop <= 0) {					        
 							outOfContainer = true;
@@ -1971,9 +1993,8 @@
 					if(!outOfContainer) {
 						multiDragBoxes.each(function(){
 							$this =$(this);
-							var p = $this.position();
-							var l = p.left;
-							var t = p.top;
+							var l = parseFloat($this.css('left'));
+							var t = parseFloat($this.css('top'));
 							$this.css('left', l+offsetLeft);
 							$this.css('top', t+offsetTop);
 						});
@@ -2468,7 +2489,8 @@
 						arr[i].lock,
 						arr[i].password,
 						arr[i].prefix,
-						arr[i].seat
+						arr[i].seat,
+						arr[i].rotation
 					);
 		    	}
 		    }
@@ -2625,7 +2647,7 @@
 		}
 	};
 
-	Registration.prototype.arrangeActiveBoxes = function(degreesChange, scaleChange) {
+	Registration.prototype.arrangeActiveBoxes = function(degreesChange, scaleChange, boxDegreesChange) {
 		var currentRoom = this.rooms[this.currentRoom];
 		var boxes = this.activeBoxArray.map(function(id) {
 			return currentRoom.findAndReturnBox(id);
@@ -2645,7 +2667,11 @@
 				startPositions: boxes.map(function(box) {
 					return {x: Number(box.xPosition), y: Number(box.yPosition)};
 				}),
+				startRotations: boxes.map(function(box) {
+					return box.rotation;
+				}),
 				degrees: 0,
+				boxDegrees: 0,
 				scale: 1
 			};
 		}
@@ -2656,9 +2682,16 @@
 
 		arrangement.degrees += degreesChange;
 		arrangement.scale += scaleChange;
-		arrangement.positions = arrangedPositions(boxes, arrangement.startPositions, arrangement.degrees, arrangement.scale);
+		arrangement.boxDegrees += boxDegreesChange;
+
+		var rotations = arrangement.startRotations.map(function(rotation) {
+			return rotation + arrangement.boxDegrees;
+		});
+
+		arrangement.positions = arrangedPositions(boxes, arrangement.startPositions, arrangement.degrees, arrangement.scale, rotations);
 
 		boxes.forEach(function(box, i) {
+			box.changeRotation(rotations[i]);
 			box.changePosition(arrangement.positions[i].x, arrangement.positions[i].y);
 			$('.build-area .drag-box[data-id="' + box.id + '"]').css({
 				left: arrangement.positions[i].x,
@@ -2823,8 +2856,12 @@
 		});
 	}
 
+	function turnBoxElement($box, degrees) {
+		$box.toggleClass('turned-box', degrees !== 0).css('--box-turn', degrees + 'deg');
+	}
+
 	//turns and scales the box centres around the middle of the group, the boxes themselves stay upright
-	function arrangedPositions(boxes, startPositions, degrees, scale) {
+	function arrangedPositions(boxes, startPositions, degrees, scale, rotations) {
 		var widths = boxes.map(function(box) { return Number(box.width); });
 		var heights = boxes.map(function(box) { return Number(box.height); });
 		var left = Math.min.apply(null, startPositions.map(function(position) { return position.x; }));
@@ -2846,8 +2883,18 @@
 				y: Math.round(pivotY + fromPivotX * sin + fromPivotY * cos - heights[i] / 2)
 			};
 		});
-		var overflowLeft = Math.max(0, -Math.min.apply(null, positions.map(function(position) { return position.x; })));
-		var overflowTop = Math.max(0, -Math.min.apply(null, positions.map(function(position) { return position.y; })));
+		var outerEdges = positions.map(function(position, i) {
+			var turn = rotations[i] * Math.PI / 180;
+			var outerWidth = widths[i] * Math.abs(Math.cos(turn)) + heights[i] * Math.abs(Math.sin(turn));
+			var outerHeight = widths[i] * Math.abs(Math.sin(turn)) + heights[i] * Math.abs(Math.cos(turn));
+
+			return {
+				left: position.x + (widths[i] - outerWidth) / 2,
+				top: position.y + (heights[i] - outerHeight) / 2
+			};
+		});
+		var overflowLeft = Math.ceil(Math.max(0, -Math.min.apply(null, outerEdges.map(function(edge) { return edge.left; }))));
+		var overflowTop = Math.ceil(Math.max(0, -Math.min.apply(null, outerEdges.map(function(edge) { return edge.top; }))));
 
 		return positions.map(function(position) {
 			return {x: position.x + overflowLeft, y: position.y + overflowTop};
@@ -2963,6 +3010,7 @@
 				box.hoverText = escapeAngleBrackets(box.hoverText);
 				box.legend = escapeAngleBrackets(box.legend);
 				box.seat = Number(box.seat);
+				box.rotation = isNumeric(box.rotation) ? Number(box.rotation) : 0;
 				box.password = typeof box.password === 'string' ? box.password : '';
 
 				if( Array.isArray(box.price) ) {
@@ -4088,7 +4136,18 @@
 			return;
 		}
 
-		reg.arrangeActiveBoxes($(this).data('rotation') === 'clockwise' ? degrees : -degrees, 0);
+		reg.arrangeActiveBoxes($(this).data('rotation') === 'clockwise' ? degrees : -degrees, 0, 0);
+	});
+
+	$('#rotate-dialog [data-box-rotation]').on('click', function() {
+		var degrees = Math.abs(parseFloat($('#box-turn-degrees').val()));
+
+		if(isNaN(degrees)) {
+			$('#box-turn-degrees').trigger('focus');
+			return;
+		}
+
+		reg.arrangeActiveBoxes(0, 0, $(this).data('box-rotation') === 'clockwise' ? degrees : -degrees);
 	});
 
 	$('#rotate-dialog [data-spacing]').on('click', function() {
@@ -4099,7 +4158,7 @@
 			return;
 		}
 
-		reg.arrangeActiveBoxes(0, ($(this).data('spacing') === 'apart' ? percent : -percent) / 100);
+		reg.arrangeActiveBoxes(0, ($(this).data('spacing') === 'apart' ? percent : -percent) / 100, 0);
 	});
 
 	$('.progress').css({'display': 'none'});

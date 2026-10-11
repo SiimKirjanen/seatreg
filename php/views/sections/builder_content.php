@@ -320,16 +320,38 @@
 			<div class="modal-body">
 				<div class="alert alert-primary d-none" id="rotate-no-selection"><?php esc_html_e('No boxes selected', 'seatreg'); ?></div>
 				<div id="rotate-controls">
-					<p><?php esc_html_e('The selected boxes move along a circle around the middle of the selection. Each box stays upright.', 'seatreg'); ?></p>
-					<div><label for="rotate-degrees"><?php esc_html_e('Degrees', 'seatreg'); ?></label></div>
-					<input type="number" id="rotate-degrees" value="15" style="width:60px" />
-					<button type="button" class="btn btn-success btn-sm" data-rotation="counterclockwise"><i class="fa fa-rotate-left" aria-hidden="true"></i> <?php esc_html_e('Counterclockwise', 'seatreg'); ?></button>
-					<button type="button" class="btn btn-success btn-sm" data-rotation="clockwise"><i class="fa fa-rotate-right" aria-hidden="true"></i> <?php esc_html_e('Clockwise', 'seatreg'); ?></button>
-					<br><br>
-					<div><label for="spacing-percent"><?php esc_html_e('Spacing (%)', 'seatreg'); ?></label></div>
-					<input type="number" id="spacing-percent" value="10" style="width:60px" />
-					<button type="button" class="btn btn-success btn-sm" data-spacing="closer"><i class="fa fa-compress" aria-hidden="true"></i> <?php esc_html_e('Closer', 'seatreg'); ?></button>
-					<button type="button" class="btn btn-success btn-sm" data-spacing="apart"><i class="fa fa-expand" aria-hidden="true"></i> <?php esc_html_e('Further apart', 'seatreg'); ?></button>
+					<div class="turn-section" role="group" aria-labelledby="turn-circle-title">
+						<h5 class="turn-section-title" id="turn-circle-title"><?php esc_html_e('Move along a circle', 'seatreg'); ?></h5>
+						<p class="turn-section-text"><?php esc_html_e('Moves the selected boxes along a circle around the middle of the selection. Each box keeps its own angle.', 'seatreg'); ?></p>
+						<label for="rotate-degrees"><?php esc_html_e('Degrees', 'seatreg'); ?></label>
+						<div>
+							<input type="number" id="rotate-degrees" value="15" />
+							<button type="button" class="btn btn-success btn-sm" data-rotation="counterclockwise"><i class="fa fa-rotate-left" aria-hidden="true"></i> <?php esc_html_e('Counterclockwise', 'seatreg'); ?></button>
+							<button type="button" class="btn btn-success btn-sm" data-rotation="clockwise"><i class="fa fa-rotate-right" aria-hidden="true"></i> <?php esc_html_e('Clockwise', 'seatreg'); ?></button>
+						</div>
+					</div>
+
+					<div class="turn-section" role="group" aria-labelledby="turn-boxes-title">
+						<h5 class="turn-section-title" id="turn-boxes-title"><?php esc_html_e('Turn each box', 'seatreg'); ?></h5>
+						<p class="turn-section-text"><?php esc_html_e('Turns each selected box around its own center without moving it. Numbers stay upright.', 'seatreg'); ?></p>
+						<label for="box-turn-degrees"><?php esc_html_e('Degrees', 'seatreg'); ?></label>
+						<div>
+							<input type="number" id="box-turn-degrees" value="15" />
+							<button type="button" class="btn btn-success btn-sm" data-box-rotation="counterclockwise"><i class="fa fa-rotate-left" aria-hidden="true"></i> <?php esc_html_e('Counterclockwise', 'seatreg'); ?></button>
+							<button type="button" class="btn btn-success btn-sm" data-box-rotation="clockwise"><i class="fa fa-rotate-right" aria-hidden="true"></i> <?php esc_html_e('Clockwise', 'seatreg'); ?></button>
+						</div>
+					</div>
+
+					<div class="turn-section" role="group" aria-labelledby="turn-spacing-title">
+						<h5 class="turn-section-title" id="turn-spacing-title"><?php esc_html_e('Spacing', 'seatreg'); ?></h5>
+						<p class="turn-section-text"><?php esc_html_e('Moves the selected boxes closer to or further from the middle of the selection.', 'seatreg'); ?></p>
+						<label for="spacing-percent"><?php esc_html_e('Percent', 'seatreg'); ?></label>
+						<div>
+							<input type="number" id="spacing-percent" value="10" />
+							<button type="button" class="btn btn-success btn-sm" data-spacing="closer"><i class="fa fa-compress" aria-hidden="true"></i> <?php esc_html_e('Closer', 'seatreg'); ?></button>
+							<button type="button" class="btn btn-success btn-sm" data-spacing="apart"><i class="fa fa-expand" aria-hidden="true"></i> <?php esc_html_e('Further apart', 'seatreg'); ?></button>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -788,7 +810,7 @@
 					<div class="help-dialog-row">
 						<div class="guide-item2 rotate-icon"><i class="fa fa-rotate-right" aria-hidden="true"></i></div>
 						<p class="help-dialog-text">
-							<?php esc_html_e('Turns the selection clockwise or counterclockwise: the selected boxes move along a circle around the middle of the selection and each box stays upright. Spacing moves the boxes closer to or further from that middle. Change the numbering of a row before you turn it, as numbering follows straight rows.', 'seatreg');?>
+							<?php esc_html_e('Moves the selected boxes along a circle around the middle of the selection, turns each box around its own center, or moves the boxes closer together or further apart. Numbers always stay upright. Change the numbering of a row before you move it along a circle, as numbering follows straight rows.', 'seatreg');?>
 						</p>
 					</div>
 

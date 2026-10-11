@@ -17,4 +17,33 @@
 	.build-area-side .side-option.rotate-icon:hover {
 		background: #f9a326;
 	}
+
+	#rotate-dialog {
+		.turn-section + .turn-section {
+			margin-top: 16px;
+			padding-top: 16px;
+			border-top: 1px solid #dee2e6;
+		}
+
+		.turn-section-title {
+			margin-bottom: 4px;
+			font-size: 16px;
+			font-weight: 600;
+		}
+
+		.turn-section-text {
+			margin-bottom: 8px;
+			font-size: 13px;
+			color: #6c757d;
+		}
+
+		label {
+			margin-bottom: 2px;
+		}
+
+		input[type="number"] {
+			width: 80px;
+			padding-right: 4px;
+		}
+	}
 }

@@ -386,6 +386,11 @@
 			box.style.width = loc[i].width + 'px';
 			box.style.height = loc[i].height + 'px';
 
+			if(Number(loc[i].rotation)) {
+				box.classList.add('turned-box');
+				box.style.setProperty('--box-turn', Number(loc[i].rotation) + 'deg');
+			}
+
 			if(loc[i].type === 'text-box') {
 				box.className = box.className + ' text-box';
 				box.style.color = loc[i].fontColor;

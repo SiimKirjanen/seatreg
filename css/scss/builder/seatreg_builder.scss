@@ -727,6 +727,17 @@
 .seatreg-map-builder-page .seat-number {
 	text-align: center;
 }
+.seatreg-map-builder-page .drag-box.turned-box {
+	transform: rotate(var(--box-turn));
+}
+.seatreg-map-builder-page .drag-box.turned-box .seat-number {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	transform: rotate(calc(-1 * var(--box-turn)));
+}
 /*scrollbar*/
 
 
