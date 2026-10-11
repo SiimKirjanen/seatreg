@@ -3,6 +3,7 @@ const { readFile } = require('fs/promises');
 const { expect } = require('@playwright/test');
 const { TIMEOUTS } = require('../../utils/timeouts');
 const { clickUntil, expectModalShown, expectModalHidden } = require('../../utils/interactions');
+const { seatPositions } = require('../../utils/seats');
 const { HomePage } = require('../home/home-page');
 const { RegistrationPage } = require('../registration/registration-page');
 
@@ -163,6 +164,39 @@ class LayoutBuilderPage {
 
 	get textBoxes() {
 		return this.page.locator('.build-area .text-box');
+	}
+
+	/** In the order the seats were placed. */
+	async seatPositions() {
+		return seatPositions(this.seats);
+	}
+
+	/* Rotate dialog. It turns whatever is selected at the moment a button is clicked. */
+
+	get rotateDialogButton() {
+		return this.page.locator('.rotate-option');
+	}
+
+	get rotateDialog() {
+		return this.page.locator('#rotate-dialog');
+	}
+
+	get rotateDegreesInput() {
+		return this.page.locator('#rotate-degrees');
+	}
+
+	/** @param {string} direction clockwise or counterclockwise */
+	rotateButton(direction) {
+		return this.rotateDialog.locator(`[data-rotation="${direction}"]`);
+	}
+
+	get spacingPercentInput() {
+		return this.page.locator('#spacing-percent');
+	}
+
+	/** @param {string} direction closer or apart */
+	spacingButton(direction) {
+		return this.rotateDialog.locator(`[data-spacing="${direction}"]`);
 	}
 
 	/* Seat numbering dialog. It reads the selection once, when it opens, and
@@ -772,6 +806,28 @@ class LayoutBuilderPage {
 		await this.page.mouse.up();
 
 		await expect(this.selectedSeats).toHaveCount(last - first + 1);
+	}
+
+	async rotateSelection(degrees, direction) {
+		await this.inRotateDialog(async () => {
+			await this.rotateDegreesInput.fill(String(degrees));
+			await this.rotateButton(direction).click();
+		});
+	}
+
+	async changeSelectionSpacing(percent, direction) {
+		await this.inRotateDialog(async () => {
+			await this.spacingPercentInput.fill(String(percent));
+			await this.spacingButton(direction).click();
+		});
+	}
+
+	async inRotateDialog(action) {
+		await this.rotateDialogButton.click();
+		await expectModalShown(this.rotateDialog);
+		await action();
+		await this.rotateDialog.locator('.modal-footer button[data-dismiss="modal"]').click();
+		await expectModalHidden(this.rotateDialog);
 	}
 
 	async openSeatNumberingDialog() {

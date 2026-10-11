@@ -531,6 +531,7 @@
 		this.hasCustomPayments = false; //does registration have custom payments (new ones, not legacy)
 		this.hasSavedLayout = false; //export sends the saved layout, so it needs one to exist
 		this.seatColors = {}; //registration page fill per seat status, only for the statuses that have one
+		this.lastArrangement = null; //repeated turns and spacing changes start from the same positions so rounding does not add up
 	}
 
 	Registration.prototype.clearRegistrationData = function() {
@@ -556,6 +557,7 @@
 		this.roomNameChange = {};  //if room name got changed. store old and new here
 		this.hasSavedLayout = false; //export sends the saved layout, so it needs one to exist
 		this.seatColors = {};
+		this.lastArrangement = null;
 		this.paintSeatColors();
 
 		$('#room-selection-wrapper').empty();
@@ -2623,6 +2625,51 @@
 		}
 	};
 
+	Registration.prototype.arrangeActiveBoxes = function(degreesChange, scaleChange) {
+		var currentRoom = this.rooms[this.currentRoom];
+		var boxes = this.activeBoxArray.map(function(id) {
+			return currentRoom.findAndReturnBox(id);
+		});
+		var arrangement = this.lastArrangement;
+		var arrangementContinues = arrangement !== null &&
+			arrangement.boxes.length === boxes.length &&
+			boxes.every(function(box, i) {
+				return box === arrangement.boxes[i] &&
+					box.xPosition === arrangement.positions[i].x &&
+					box.yPosition === arrangement.positions[i].y;
+			});
+
+		if(!arrangementContinues) {
+			arrangement = {
+				boxes: boxes,
+				startPositions: boxes.map(function(box) {
+					return {x: Number(box.xPosition), y: Number(box.yPosition)};
+				}),
+				degrees: 0,
+				scale: 1
+			};
+		}
+
+		if(arrangement.scale + scaleChange <= 0) {
+			return;
+		}
+
+		arrangement.degrees += degreesChange;
+		arrangement.scale += scaleChange;
+		arrangement.positions = arrangedPositions(boxes, arrangement.startPositions, arrangement.degrees, arrangement.scale);
+
+		boxes.forEach(function(box, i) {
+			box.changePosition(arrangement.positions[i].x, arrangement.positions[i].y);
+			$('.build-area .drag-box[data-id="' + box.id + '"]').css({
+				left: arrangement.positions[i].x,
+				top: arrangement.positions[i].y
+			});
+		});
+
+		this.lastArrangement = arrangement;
+		currentRoom.setBuildingAreaDimentions();
+	};
+
 	Registration.prototype.showClickControls = function() {
 		if(this.activeBoxArray.length > 0) {
 			$('#build-section-click-controls').css({'display': 'inline-block'});
@@ -2773,6 +2820,37 @@
 			}
 
 			return direction === 'rightToLeft' ? b.xPosition - a.xPosition : a.xPosition - b.xPosition;
+		});
+	}
+
+	//turns and scales the box centres around the middle of the group, the boxes themselves stay upright
+	function arrangedPositions(boxes, startPositions, degrees, scale) {
+		var widths = boxes.map(function(box) { return Number(box.width); });
+		var heights = boxes.map(function(box) { return Number(box.height); });
+		var left = Math.min.apply(null, startPositions.map(function(position) { return position.x; }));
+		var top = Math.min.apply(null, startPositions.map(function(position) { return position.y; }));
+		var right = Math.max.apply(null, startPositions.map(function(position, i) { return position.x + widths[i]; }));
+		var bottom = Math.max.apply(null, startPositions.map(function(position, i) { return position.y + heights[i]; }));
+		var pivotX = (left + right) / 2;
+		var pivotY = (top + bottom) / 2;
+		var radians = degrees * Math.PI / 180;
+		var cos = Math.cos(radians);
+		var sin = Math.sin(radians);
+
+		var positions = startPositions.map(function(position, i) {
+			var fromPivotX = (position.x + widths[i] / 2 - pivotX) * scale;
+			var fromPivotY = (position.y + heights[i] / 2 - pivotY) * scale;
+
+			return {
+				x: Math.round(pivotX + fromPivotX * cos - fromPivotY * sin - widths[i] / 2),
+				y: Math.round(pivotY + fromPivotX * sin + fromPivotY * cos - heights[i] / 2)
+			};
+		});
+		var overflowLeft = Math.max(0, -Math.min.apply(null, positions.map(function(position) { return position.x; })));
+		var overflowTop = Math.max(0, -Math.min.apply(null, positions.map(function(position) { return position.y; })));
+
+		return positions.map(function(position) {
+			return {x: position.x + overflowLeft, y: position.y + overflowTop};
 		});
 	}
 
@@ -3993,6 +4071,35 @@
     	var destinationAm = Math.abs($('#click-control-move-nr').val());
 
     	reg.prepareMoveActiveBoxes(destination, destinationAm);
+	});
+
+	$('#rotate-dialog').on('show.bs.modal', function() {
+		var hasSelection = reg.activeBoxArray.length > 0;
+
+		$('#rotate-no-selection').toggleClass('d-none', hasSelection);
+		$('#rotate-controls').toggleClass('d-none', !hasSelection);
+	});
+
+	$('#rotate-dialog [data-rotation]').on('click', function() {
+		var degrees = Math.abs(parseFloat($('#rotate-degrees').val()));
+
+		if(isNaN(degrees)) {
+			$('#rotate-degrees').trigger('focus');
+			return;
+		}
+
+		reg.arrangeActiveBoxes($(this).data('rotation') === 'clockwise' ? degrees : -degrees, 0);
+	});
+
+	$('#rotate-dialog [data-spacing]').on('click', function() {
+		var percent = Math.abs(parseFloat($('#spacing-percent').val()));
+
+		if(isNaN(percent)) {
+			$('#spacing-percent').trigger('focus');
+			return;
+		}
+
+		reg.arrangeActiveBoxes(0, ($(this).data('spacing') === 'apart' ? percent : -percent) / 100);
 	});
 
 	$('.progress').css({'display': 'none'});

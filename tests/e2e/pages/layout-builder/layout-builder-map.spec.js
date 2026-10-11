@@ -97,6 +97,40 @@ test.describe('Layout builder map', () => {
 		await expect(registration.seats).toHaveText(['3', '2', '1']);
 	});
 
+	/* Turning moves the seats along a circle around the middle of the selection
+	   and spacing moves them towards or away from it, the seats stay upright.
+	   Two 45 degree turns land exactly where one of 90 would, and undoing both
+	   lands exactly on the start, so rounding does not build up. */
+	test('turns and spaces the selected seats as a group', async () => {
+		await builder.placeSeats(SEAT_COUNT);
+		const row = await builder.seatPositions();
+		const rowOffsets = row.map((seat) => seat.left - row[0].left);
+
+		await builder.lassoSelectSeats(1, SEAT_COUNT);
+		await builder.rotateSelection(45, 'clockwise');
+		await builder.rotateSelection(45, 'clockwise');
+
+		const column = await builder.seatPositions();
+		expect(column.map((seat) => seat.left)).toEqual(row.map(() => column[0].left));
+		expect(column.map((seat) => seat.top - column[0].top)).toEqual(rowOffsets);
+
+		await builder.changeSelectionSpacing(50, 'apart');
+
+		const spacedColumn = await builder.seatPositions();
+		expect(spacedColumn.map((seat) => seat.top - spacedColumn[0].top)).toEqual(
+			rowOffsets.map((offset) => offset * 1.5)
+		);
+
+		await builder.save();
+
+		const registration = await builder.openRegistration();
+		expect(await registration.seatPositions()).toEqual(spacedColumn);
+
+		await builder.changeSelectionSpacing(50, 'closer');
+		await builder.rotateSelection(90, 'counterclockwise');
+		expect(await builder.seatPositions()).toEqual(row);
+	});
+
 	test('locks and password protects seats', async () => {
 		await builder.placeSeats(SEAT_COUNT);
 		await builder.lassoSelectSeats(1, 2);

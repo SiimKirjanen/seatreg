@@ -1,0 +1,20 @@
+.seatreg-map-builder-page {
+	.build-area-side .side-option.rotate-icon,
+	.guide-item2.rotate-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: 41px;
+		height: 41px;
+		padding: 0;
+		background: #999;
+		border: 1px solid #000;
+		font-size: 24px;
+		color: #000;
+	}
+
+	.build-area-side .side-option.rotate-icon:hover {
+		background: #f9a326;
+	}
+}
