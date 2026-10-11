@@ -415,7 +415,7 @@
 							/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 							_x('Reorder selected %s starting from', 'seat word is neuter', 'seatreg')
 						)); ?></label></div>
-						<input type="number" id="seat-reorder" size="3" style="width:60px" />
+						<input type="number" id="seat-reorder" />
 						<select id="seat-reorder-direction" aria-label="<?php echo esc_attr_x('Numbering direction', 'layout builder seat numbering direction select', 'seatreg'); ?>">
 							<option value="leftToRight"><?php echo esc_html_x('Left to right', 'layout builder seat numbering direction', 'seatreg'); ?></option>
 							<option value="rightToLeft"><?php echo esc_html_x('Right to left', 'layout builder seat numbering direction', 'seatreg'); ?></option>
