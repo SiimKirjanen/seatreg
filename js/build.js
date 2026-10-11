@@ -124,6 +124,7 @@
 
 	Box.prototype.changeSeatNr = function(newSeatNr) {
 		this.seat = newSeatNr;
+		reg.needToSave = true;
 	};
 
 	//change color
@@ -202,6 +203,7 @@
 
 	Box.prototype.changePrefix = function(newPrefix) {
 		this.prefix = newPrefix;
+		reg.needToSave = true;
 
 		this.renderSeatNr();
 	}
@@ -2101,39 +2103,17 @@
 				$('.build-area .ui-selected').addClass('active-box').removeClass('ui-selected');
 
 				var bIndex = regScope.biggestzIndex();
-				var selectedBoxesData = [];
+				var currentRoom = regScope.rooms[regScope.currentRoom];
+				var selectedBoxes = [];
 
 				$('.build-area .active-box').each(function() {
-					selectedBoxesData.push({
-						id: $(this).attr('data-id'),
-						left: parseInt($(this).css('left')),
-						top: parseInt($(this).css('top')),
-					});
+					selectedBoxes.push(currentRoom.findAndReturnBox($(this).attr('data-id')));
 					$(this).css({'zIndex':bIndex});
 				});
 
-				var beforeNewRow = 10;
-				selectedBoxesData.sort(function(a, b) {
-					if( a.top + beforeNewRow < b.top ) {
-						return -1;
-					}
-					if( a.top - beforeNewRow > b.top ) {
-						return 1;
-					}
-					if( a.left < b.left ) {
-						return -1;
-					}
-					if( a.left > b.left ) {
-						return 1;
-					}
-
-					return 0;
-				});
-				
-				var selectedBoxesIds = selectedBoxesData.map(function(box) {
+				regScope.activeBoxArray = sortBoxesInRows(selectedBoxes, 'leftToRight').map(function(box) {
 					return box.id;
 				});
-				regScope.activeBoxArray = selectedBoxesIds;
 
 				if($('.build-area .active-box').length > 1) {
 					$('.build-area .drag-box:not(.text-box)').resizable( "option", "alsoResize", ".active-box:not(.text-box)" );
@@ -2785,6 +2765,17 @@
 		return highest;
 	}
 
+	//boxes whose tops are within half a box height of each other count as one row
+	function sortBoxesInRows(boxes, direction) {
+		return boxes.slice().sort(function(a, b) {
+			if( Math.abs(a.yPosition - b.yPosition) > Math.min(a.height, b.height) / 2 ) {
+				return a.yPosition - b.yPosition;
+			}
+
+			return direction === 'rightToLeft' ? b.xPosition - a.xPosition : a.xPosition - b.xPosition;
+		});
+	}
+
 	//the builder concatenates several of these into markup, and an imported file is not ours
 	function escapeAngleBrackets(value) {
 		return typeof value === 'string' ? value.replace(/</g, '&lt;').replace(/>/g, '&gt;') : value;
@@ -2967,14 +2958,17 @@
 		$('#seat-numbering-dialog .alert').addClass('d-none');
 		$('#seat-numbering-wrap').removeClass('d-none');
 
-		if(!selectedSeats.length) {
-			$('#seat-nr-change-no-selection').removeClass('d-none');
-			$('#seat-numbering-wrap').addClass('d-none');
-		}else {
-			if(hasStatusSeat) {
-				$('#seat-nr-change-warning').removeClass('d-none');
-			}
+		if(hasStatusSeat) {
+			$('#seat-nr-change-warning').removeClass('d-none');
+		}
 
+		if(!selectedSeats.length) {
+			$('#seat-numbering-wrap').addClass('d-none');
+
+			if(!hasStatusSeat) {
+				$('#seat-nr-change-no-selection').removeClass('d-none');
+			}
+		}else {
 			$('#set-seat-prefix').off('click').on('click', function() {
 				selectedSeats.forEach(function(seat) {
 					var box = currentRoom.findAndReturnBox(seat.id);
@@ -2983,14 +2977,17 @@
 				});
 			})
 			$('#reorder-seats').off('click').on('click', function() {
-				var startReorderFrom = $('#seat-reorder').val();
+				var seatNr = parseInt($('#seat-reorder').val(), 10);
 
-				selectedSeats.forEach(function(seat) {
-					var box = currentRoom.findAndReturnBox(seat.id);
+				if(isNaN(seatNr)) {
+					$('#seat-reorder').trigger('focus');
+					return;
+				}
 
-					box.changeSeatNr(startReorderFrom);
+				sortBoxesInRows(selectedSeats, $('#seat-reorder-direction').val()).forEach(function(box) {
+					box.changeSeatNr(seatNr);
 					box.renderSeatNr();
-					startReorderFrom++;
+					seatNr++;
 				});
 			});
 		}

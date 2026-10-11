@@ -364,6 +364,10 @@
 							_x('Reorder selected %s starting from', 'seat word is neuter', 'seatreg')
 						)); ?></label></div>
 						<input type="number" id="seat-reorder" size="3" style="width:60px" />
+						<select id="seat-reorder-direction" aria-label="<?php echo esc_attr_x('Numbering direction', 'layout builder seat numbering direction select', 'seatreg'); ?>">
+							<option value="leftToRight"><?php echo esc_html_x('Left to right', 'layout builder seat numbering direction', 'seatreg'); ?></option>
+							<option value="rightToLeft"><?php echo esc_html_x('Right to left', 'layout builder seat numbering direction', 'seatreg'); ?></option>
+						</select>
 						<button type="button" class="btn btn-success btn-sm" id="reorder-seats"><?php seatreg_noun_span('seat', 'pluralUpper', _x('Reorder %s', 'layout builder button that renumbers the selected seats', 'seatreg')); ?></button>
 					</div>
 				</div>

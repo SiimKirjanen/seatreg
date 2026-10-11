@@ -196,6 +196,10 @@ class LayoutBuilderPage {
 		return this.page.locator('#seat-reorder');
 	}
 
+	get seatReorderDirectionSelect() {
+		return this.page.locator('#seat-reorder-direction');
+	}
+
 	get reorderSeatsButton() {
 		return this.page.locator('#reorder-seats');
 	}
@@ -788,10 +792,15 @@ class LayoutBuilderPage {
 		await this.closeSeatNumberingDialog();
 	}
 
-	/** Same precondition as setSeatPrefix(). */
-	async reorderSeatsFrom(start) {
+	/**
+	 * Same precondition as setSeatPrefix().
+	 *
+	 * @param {string} options.direction leftToRight or rightToLeft
+	 */
+	async reorderSeatsFrom(start, { direction = 'leftToRight' } = {}) {
 		await this.openSeatNumberingDialog();
 		await this.seatReorderInput.fill(String(start));
+		await this.seatReorderDirectionSelect.selectOption(direction);
 		await this.reorderSeatsButton.click();
 		await this.closeSeatNumberingDialog();
 	}

@@ -52,6 +52,9 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 = 1.80.0 =
 * In languages that need it, you can now choose the grammatical gender of the word you use for a seat or a room, so the sentences around it match.
 * Fixed seats opening while moving the map on a phone, and pinch zoom not working on the map.
+* In the layout builder you can now number the selected seats from right to left.
+* Fixed the layout builder not warning about unsaved changes after changing seat numbers or prefixes.
+* Fixed the seat numbering dialog saying no seats are selected when only pending or booked seats are.
 
 = 1.79.0 =
 * In the layout builder you can now choose the colors of pending, approved, selected and locked seats.

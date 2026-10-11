@@ -78,7 +78,7 @@ test.describe('Layout builder map', () => {
 		await expect(registration.seat(2)).toHaveText('2');
 	});
 
-	test('renumbers the selected seats counting up from a chosen number', async () => {
+	test('renumbers the selected seats from a chosen number in either direction', async () => {
 		await builder.placeSeats(SEAT_COUNT);
 		await builder.lassoSelectSeats(2, SEAT_COUNT);
 
@@ -86,12 +86,15 @@ test.describe('Layout builder map', () => {
 
 		await expect(builder.seatNumbers).toHaveText(['1', '10', '11']);
 
+		await builder.lassoSelectSeats(1, SEAT_COUNT);
+		await builder.reorderSeatsFrom(1, { direction: 'rightToLeft' });
+
+		await expect(builder.seatNumbers).toHaveText(['3', '2', '1']);
+
 		await builder.save();
 
 		const registration = await builder.openRegistration();
-		await expect(registration.seat(1)).toHaveText('1');
-		await expect(registration.seat(10)).toHaveText('10');
-		await expect(registration.seat(11)).toHaveText('11');
+		await expect(registration.seats).toHaveText(['3', '2', '1']);
 	});
 
 	test('locks and password protects seats', async () => {
