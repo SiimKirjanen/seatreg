@@ -51,6 +51,7 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 
 = 1.80.0 =
 * In languages that need it, you can now choose the grammatical gender of the word you use for a seat or a room, so the sentences around it match.
+* Fixed seats opening while moving the map on a phone, and pinch zoom not working on the map.
 
 = 1.79.0 =
 * In the layout builder you can now choose the colors of pending, approved, selected and locked seats.
