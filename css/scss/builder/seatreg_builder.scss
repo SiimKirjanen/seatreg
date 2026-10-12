@@ -4,6 +4,7 @@
 @import 'modal/legends';
 @import 'modal/layout-start';
 @import 'modal/seat-colors';
+@import 'modal/rotate';
 
 .seatreg-map-builder-page .seatreg-builder-popup .fa-times-circle {
 	color: red;
@@ -725,6 +726,21 @@
 }
 .seatreg-map-builder-page .seat-number {
 	text-align: center;
+}
+.seatreg-map-builder-page #seat-reorder {
+	width: 80px;
+	padding-right: 4px;
+}
+.seatreg-map-builder-page .drag-box.turned-box {
+	transform: rotate(var(--box-turn));
+}
+.seatreg-map-builder-page .drag-box.turned-box .seat-number {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	transform: rotate(calc(-1 * var(--box-turn)));
 }
 /*scrollbar*/
 

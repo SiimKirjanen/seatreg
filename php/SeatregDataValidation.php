@@ -452,6 +452,11 @@ class SeatregDataValidation {
                     $validationStatus->setInvalid('box password is invalid');
                     return $validationStatus;
                 }
+
+                if( property_exists($box, 'rotation') && !( is_int($box->rotation) || is_float($box->rotation) ) ) {
+                    $validationStatus->setInvalid('box rotation is invalid');
+                    return $validationStatus;
+                }
             }
         }
 

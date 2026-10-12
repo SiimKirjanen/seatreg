@@ -1,0 +1,78 @@
+.seatreg-map-builder-page {
+	.build-area-side .side-option.rotate-icon,
+	.guide-item2.rotate-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: 41px;
+		height: 41px;
+		padding: 0;
+		position: relative;
+		background: #999;
+		border: 1px solid #000;
+	}
+
+	.rotate-icon__boxes {
+		display: flex;
+		gap: 1px;
+		margin-top: 4px;
+	}
+
+	.rotate-icon__box {
+		width: 8px;
+		height: 8px;
+		border: 1px solid #000;
+		background: #61b329;
+		transform: rotate(45deg);
+	}
+
+	.rotate-icon__box--first {
+		transform: translateY(-9px) rotate(45deg);
+	}
+
+	.rotate-icon__box--third {
+		transform: translateY(9px) rotate(45deg);
+	}
+
+	.rotate-icon__arrow {
+		position: absolute;
+		top: 2px;
+		right: 3px;
+		font-size: 13px;
+		color: #000;
+	}
+
+	.build-area-side .side-option.rotate-icon:hover {
+		background: #f9a326;
+	}
+
+	#rotate-dialog {
+		.turn-section + .turn-section {
+			margin-top: 16px;
+			padding-top: 16px;
+			border-top: 1px solid #dee2e6;
+		}
+
+		.turn-section-title {
+			margin-bottom: 4px;
+			font-size: 16px;
+			font-weight: 600;
+		}
+
+		.turn-section-text {
+			margin-bottom: 8px;
+			font-size: 13px;
+			color: #6c757d;
+		}
+
+		label {
+			margin-bottom: 2px;
+		}
+
+		input[type="number"] {
+			width: 80px;
+			padding-right: 4px;
+		}
+	}
+}

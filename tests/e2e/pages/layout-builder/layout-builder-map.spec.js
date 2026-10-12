@@ -4,6 +4,7 @@ const { LayoutBuilderPage } = require('./layout-builder-page');
 const { SettingsPage } = require('../settings/settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
 const { escapeForRegExp } = require('../../utils/text');
+const { seatAngles } = require('../../utils/seats');
 
 const ROOM = 'Main hall';
 const SEAT_COUNT = 3;
@@ -78,7 +79,7 @@ test.describe('Layout builder map', () => {
 		await expect(registration.seat(2)).toHaveText('2');
 	});
 
-	test('renumbers the selected seats counting up from a chosen number', async () => {
+	test('renumbers the selected seats from a chosen number in either direction', async () => {
 		await builder.placeSeats(SEAT_COUNT);
 		await builder.lassoSelectSeats(2, SEAT_COUNT);
 
@@ -86,12 +87,62 @@ test.describe('Layout builder map', () => {
 
 		await expect(builder.seatNumbers).toHaveText(['1', '10', '11']);
 
+		await builder.lassoSelectSeats(1, SEAT_COUNT);
+		await builder.reorderSeatsFrom(1, { direction: 'rightToLeft' });
+
+		await expect(builder.seatNumbers).toHaveText(['3', '2', '1']);
+
 		await builder.save();
 
 		const registration = await builder.openRegistration();
-		await expect(registration.seat(1)).toHaveText('1');
-		await expect(registration.seat(10)).toHaveText('10');
-		await expect(registration.seat(11)).toHaveText('11');
+		await expect(registration.seats).toHaveText(['3', '2', '1']);
+	});
+
+	/* Turns and spacing are worked out from where the selection started, so
+	   rounding never builds up and undoing them lands exactly on the start. */
+	test('turns and spaces the selected seats as a group', async () => {
+		await builder.placeSeats(SEAT_COUNT);
+		const row = await builder.seatPositions();
+		const rowOffsets = row.map((seat) => seat.left - row[0].left);
+
+		await builder.lassoSelectSeats(1, SEAT_COUNT);
+		await builder.rotateSelection(45, 'clockwise');
+		await builder.rotateSelection(45, 'clockwise');
+
+		const column = await builder.seatPositions();
+		expect(column.map((seat) => seat.left)).toEqual(row.map(() => column[0].left));
+		expect(column.map((seat) => seat.top - column[0].top)).toEqual(rowOffsets);
+
+		await builder.changeSelectionSpacing(50, 'apart');
+
+		const spacedColumn = await builder.seatPositions();
+		expect(spacedColumn.map((seat) => seat.top - spacedColumn[0].top)).toEqual(
+			rowOffsets.map((offset) => offset * 1.5)
+		);
+
+		await builder.save();
+
+		const registration = await builder.openRegistration();
+		expect(await registration.seatPositions()).toEqual(spacedColumn);
+
+		await builder.changeSelectionSpacing(50, 'closer');
+		await builder.rotateSelection(90, 'counterclockwise');
+		expect(await builder.seatPositions()).toEqual(row);
+	});
+
+	test('turns a seat itself and keeps its number upright', async () => {
+		await builder.placeSeats(2);
+		await builder.selectSeat(1);
+		await builder.turnSelectedBoxes(90, 'clockwise');
+
+		expect(await seatAngles(builder.seat(1))).toEqual({ seat: 90, number: 0 });
+		expect(await seatAngles(builder.seat(2))).toEqual({ seat: 0, number: 0 });
+
+		await builder.save();
+
+		const registration = await builder.openRegistration();
+		expect(await seatAngles(registration.seat(1))).toEqual({ seat: 90, number: 0 });
+		expect(await seatAngles(registration.seat(2))).toEqual({ seat: 0, number: 0 });
 	});
 
 	test('locks and password protects seats', async () => {

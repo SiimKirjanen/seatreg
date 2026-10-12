@@ -3,6 +3,7 @@ const { readFile } = require('fs/promises');
 const { expect } = require('@playwright/test');
 const { TIMEOUTS } = require('../../utils/timeouts');
 const { clickUntil, expectModalShown, expectModalHidden } = require('../../utils/interactions');
+const { seatPositions } = require('../../utils/seats');
 const { HomePage } = require('../home/home-page');
 const { RegistrationPage } = require('../registration/registration-page');
 
@@ -165,6 +166,48 @@ class LayoutBuilderPage {
 		return this.page.locator('.build-area .text-box');
 	}
 
+	/** In the order the seats were placed. */
+	async seatPositions() {
+		return seatPositions(this.seats);
+	}
+
+	/* Rotate dialog. It turns whatever is selected at the moment a button is clicked. */
+
+	get rotateDialogButton() {
+		return this.page.locator('.rotate-option');
+	}
+
+	get rotateDialog() {
+		return this.page.locator('#rotate-dialog');
+	}
+
+	get rotateDegreesInput() {
+		return this.page.locator('#rotate-degrees');
+	}
+
+	/** @param {string} direction clockwise or counterclockwise */
+	rotateButton(direction) {
+		return this.rotateDialog.locator(`[data-rotation="${direction}"]`);
+	}
+
+	get boxTurnDegreesInput() {
+		return this.page.locator('#box-turn-degrees');
+	}
+
+	/** @param {string} direction clockwise or counterclockwise */
+	boxTurnButton(direction) {
+		return this.rotateDialog.locator(`[data-box-rotation="${direction}"]`);
+	}
+
+	get spacingPercentInput() {
+		return this.page.locator('#spacing-percent');
+	}
+
+	/** @param {string} direction closer or apart */
+	spacingButton(direction) {
+		return this.rotateDialog.locator(`[data-spacing="${direction}"]`);
+	}
+
 	/* Seat numbering dialog. It reads the selection once, when it opens, and
 	   rebinds its buttons to exactly those seats. */
 
@@ -194,6 +237,10 @@ class LayoutBuilderPage {
 
 	get seatReorderInput() {
 		return this.page.locator('#seat-reorder');
+	}
+
+	get seatReorderDirectionSelect() {
+		return this.page.locator('#seat-reorder-direction');
 	}
 
 	get reorderSeatsButton() {
@@ -770,6 +817,35 @@ class LayoutBuilderPage {
 		await expect(this.selectedSeats).toHaveCount(last - first + 1);
 	}
 
+	async rotateSelection(degrees, direction) {
+		await this.inRotateDialog(async () => {
+			await this.rotateDegreesInput.fill(String(degrees));
+			await this.rotateButton(direction).click();
+		});
+	}
+
+	async turnSelectedBoxes(degrees, direction) {
+		await this.inRotateDialog(async () => {
+			await this.boxTurnDegreesInput.fill(String(degrees));
+			await this.boxTurnButton(direction).click();
+		});
+	}
+
+	async changeSelectionSpacing(percent, direction) {
+		await this.inRotateDialog(async () => {
+			await this.spacingPercentInput.fill(String(percent));
+			await this.spacingButton(direction).click();
+		});
+	}
+
+	async inRotateDialog(action) {
+		await this.rotateDialogButton.click();
+		await expectModalShown(this.rotateDialog);
+		await action();
+		await this.rotateDialog.locator('.modal-footer button[data-dismiss="modal"]').click();
+		await expectModalHidden(this.rotateDialog);
+	}
+
 	async openSeatNumberingDialog() {
 		await this.numberingButton.click();
 		await expectModalShown(this.numberingDialog);
@@ -788,10 +864,15 @@ class LayoutBuilderPage {
 		await this.closeSeatNumberingDialog();
 	}
 
-	/** Same precondition as setSeatPrefix(). */
-	async reorderSeatsFrom(start) {
+	/**
+	 * Same precondition as setSeatPrefix().
+	 *
+	 * @param {string} options.direction leftToRight or rightToLeft
+	 */
+	async reorderSeatsFrom(start, { direction = 'leftToRight' } = {}) {
 		await this.openSeatNumberingDialog();
 		await this.seatReorderInput.fill(String(start));
+		await this.seatReorderDirectionSelect.selectOption(direction);
 		await this.reorderSeatsButton.click();
 		await this.closeSeatNumberingDialog();
 	}

@@ -90,6 +90,7 @@
 		this.lock = false;
 		this.password = '';
 		this.prefix = '';
+		this.rotation = 0;
 	}
 
 	//Change box values. position and size
@@ -124,6 +125,7 @@
 
 	Box.prototype.changeSeatNr = function(newSeatNr) {
 		this.seat = newSeatNr;
+		reg.needToSave = true;
 	};
 
 	//change color
@@ -200,8 +202,16 @@
 		$('.build-area .drag-box[data-id="'+ this.id +'"] .seat-number').text(this.prefix + this.seat);
 	};
 
+	Box.prototype.changeRotation = function(degrees) {
+		this.rotation = ((degrees % 360) + 360) % 360;
+		reg.needToSave = true;
+
+		turnBoxElement($('.build-area .drag-box[data-id="'+ this.id +'"]'), this.rotation);
+	};
+
 	Box.prototype.changePrefix = function(newPrefix) {
 		this.prefix = newPrefix;
+		reg.needToSave = true;
 
 		this.renderSeatNr();
 	}
@@ -308,6 +318,7 @@
 				lock: this.boxes[i].lock,
 				password: this.boxes[i].password,
 				prefix: this.boxes[i].prefix,
+				rotation: this.boxes[i].rotation,
 			});
 		}
 
@@ -353,7 +364,7 @@
 	};
 
 	//add box to room from server data
-	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize, lock, password, prefix, seatNr) {
+	Room.prototype.addBoxS = function(title,posX,posY,sizeX,sizeY,id,color,hoverText,canIRegister,status,boxZIndex, price, type, input, fontColor, inputSize, lock, password, prefix, seatNr, rotation) {
 		if(canIRegister) {
 			this.roomSeatCounter++;
 		}
@@ -364,6 +375,7 @@
 		box.password = password;
 		box.lock = lock;
 		box.prefix = prefix ? prefix : '';
+		box.rotation = isNumeric(rotation) ? Number(rotation) : 0;
 		this.boxes.push(box);
 		this.boxCounter++;
 		this.setBuildingAreaDimentions();
@@ -529,6 +541,7 @@
 		this.hasCustomPayments = false; //does registration have custom payments (new ones, not legacy)
 		this.hasSavedLayout = false; //export sends the saved layout, so it needs one to exist
 		this.seatColors = {}; //registration page fill per seat status, only for the statuses that have one
+		this.lastArrangement = null; //repeated turns and spacing changes start from the same positions so rounding does not add up
 	}
 
 	Registration.prototype.clearRegistrationData = function() {
@@ -554,6 +567,7 @@
 		this.roomNameChange = {};  //if room name got changed. store old and new here
 		this.hasSavedLayout = false; //export sends the saved layout, so it needs one to exist
 		this.seatColors = {};
+		this.lastArrangement = null;
 		this.paintSeatColors();
 
 		$('#room-selection-wrapper').empty();
@@ -1070,6 +1084,8 @@
 		this.currentRoom = this.roomLocator;
 		this.rooms[this.currentRoom].order = roomOrder;
 		this.roomLocator++;
+		this.activeBoxArray.length = 0;
+		this.showClickControls();
 		clearBuildArea();
 
 		if(buildSkeleton) {
@@ -1142,12 +1158,17 @@
 				var roomHeight = 0;
 
 				for(var i = 0; i < arrLen; i++) {
-					if(this.rooms[property].boxes[i].width + this.rooms[property].boxes[i].xPosition > roomWidth) {
-						roomWidth = this.rooms[property].boxes[i].width + this.rooms[property].boxes[i].xPosition;
+					var box = this.rooms[property].boxes[i];
+					var outer = turnedSize(Number(box.width), Number(box.height), box.rotation);
+					var right = Number(box.xPosition) + (Number(box.width) + outer.width) / 2;
+					var bottom = Number(box.yPosition) + (Number(box.height) + outer.height) / 2;
+
+					if(right > roomWidth) {
+						roomWidth = Math.ceil(right);
 					}
 
-					if(this.rooms[property].boxes[i].height + this.rooms[property].boxes[i].yPosition > roomHeight) {
-						roomHeight = this.rooms[property].boxes[i].height + this.rooms[property].boxes[i].yPosition;
+					if(bottom > roomHeight) {
+						roomHeight = Math.ceil(bottom);
 					}
 				}
 
@@ -1842,6 +1863,8 @@
 					$.powerTip.hide();
 				}
 			}).appendTo('.build-area').each(function(){
+				turnBoxElement($(this), regScope.rooms[regScope.currentRoom].boxes[i].rotation);
+
 				if(regScope.rooms[regScope.currentRoom].boxes[i].canRegister === true) {
 					$(this).addClass('can-register').attr({
 						'data-seatnr': regScope.rooms[regScope.currentRoom].boxes[i].seat,
@@ -1931,7 +1954,13 @@
 			scrollSpeed: 30, 
 			stack: ".drag-box",
 			disabled: disableDrag,
-			start: function(){
+			start: function(event, ui){
+				//jQuery UI places a turned box by its outer corner, so keep the drag where the box really is
+				$(this).data('dragCorrection', {
+					left: parseFloat($(this).css('left')) - ui.position.left,
+					top: parseFloat($(this).css('top')) - ui.position.top
+				});
+
 				if(!regScope.needMultiDrag) {
 					regScope.activeBoxArray.length = 0;  //make sure activebox in empty.
 					regScope.activeBoxArray.push($(this).attr('data-id'));	//this box in now active
@@ -1942,6 +1971,11 @@
 				}	
 			},
 			drag: function(event, ui) {
+				var dragCorrection = $(this).data('dragCorrection');
+
+				ui.position.left = Math.max(0, ui.position.left + dragCorrection.left);
+				ui.position.top = Math.max(0, ui.position.top + dragCorrection.top);
+
 				if(regScope.needMultiDrag) {
 					var currentLoc = $(this).position();
 					var prevLoc = $(this).data('prevLoc');
@@ -1955,9 +1989,8 @@
 
 					multiDragBoxes.each(function(){
 						$this =$(this);
-						var p = $this.position();
-						var l = p.left;
-						var t = p.top;
+						var l = parseFloat($this.css('left'));
+						var t = parseFloat($this.css('top'));
 						
 						if(l + offsetLeft <= 0 || t + offsetTop <= 0) {					        
 							outOfContainer = true;
@@ -1967,9 +2000,8 @@
 					if(!outOfContainer) {
 						multiDragBoxes.each(function(){
 							$this =$(this);
-							var p = $this.position();
-							var l = p.left;
-							var t = p.top;
+							var l = parseFloat($this.css('left'));
+							var t = parseFloat($this.css('top'));
 							$this.css('left', l+offsetLeft);
 							$this.css('top', t+offsetTop);
 						});
@@ -2101,39 +2133,17 @@
 				$('.build-area .ui-selected').addClass('active-box').removeClass('ui-selected');
 
 				var bIndex = regScope.biggestzIndex();
-				var selectedBoxesData = [];
+				var currentRoom = regScope.rooms[regScope.currentRoom];
+				var selectedBoxes = [];
 
 				$('.build-area .active-box').each(function() {
-					selectedBoxesData.push({
-						id: $(this).attr('data-id'),
-						left: parseInt($(this).css('left')),
-						top: parseInt($(this).css('top')),
-					});
+					selectedBoxes.push(currentRoom.findAndReturnBox($(this).attr('data-id')));
 					$(this).css({'zIndex':bIndex});
 				});
 
-				var beforeNewRow = 10;
-				selectedBoxesData.sort(function(a, b) {
-					if( a.top + beforeNewRow < b.top ) {
-						return -1;
-					}
-					if( a.top - beforeNewRow > b.top ) {
-						return 1;
-					}
-					if( a.left < b.left ) {
-						return -1;
-					}
-					if( a.left > b.left ) {
-						return 1;
-					}
-
-					return 0;
-				});
-				
-				var selectedBoxesIds = selectedBoxesData.map(function(box) {
+				regScope.activeBoxArray = sortBoxesInRows(selectedBoxes, 'leftToRight').map(function(box) {
 					return box.id;
 				});
-				regScope.activeBoxArray = selectedBoxesIds;
 
 				if($('.build-area .active-box').length > 1) {
 					$('.build-area .drag-box:not(.text-box)').resizable( "option", "alsoResize", ".active-box:not(.text-box)" );
@@ -2486,7 +2496,8 @@
 						arr[i].lock,
 						arr[i].password,
 						arr[i].prefix,
-						arr[i].seat
+						arr[i].seat,
+						arr[i].rotation
 					);
 		    	}
 		    }
@@ -2643,6 +2654,62 @@
 		}
 	};
 
+	Registration.prototype.arrangeActiveBoxes = function(degreesChange, scaleChange, boxDegreesChange) {
+		var currentRoom = this.rooms[this.currentRoom];
+		var boxes = this.activeBoxArray.map(function(id) {
+			return currentRoom.findAndReturnBox(id);
+		});
+		var arrangement = this.lastArrangement;
+		var arrangementContinues = arrangement !== null &&
+			arrangement.boxes.length === boxes.length &&
+			boxes.every(function(box, i) {
+				return box === arrangement.boxes[i] &&
+					box.xPosition === arrangement.positions[i].x &&
+					box.yPosition === arrangement.positions[i].y;
+			});
+
+		if(!arrangementContinues) {
+			arrangement = {
+				boxes: boxes,
+				startPositions: boxes.map(function(box) {
+					return {x: Number(box.xPosition), y: Number(box.yPosition)};
+				}),
+				startRotations: boxes.map(function(box) {
+					return box.rotation;
+				}),
+				degrees: 0,
+				boxDegrees: 0,
+				scale: 1
+			};
+		}
+
+		if(arrangement.scale + scaleChange <= 0) {
+			return;
+		}
+
+		arrangement.degrees += degreesChange;
+		arrangement.scale += scaleChange;
+		arrangement.boxDegrees += boxDegreesChange;
+
+		var rotations = arrangement.startRotations.map(function(rotation) {
+			return rotation + arrangement.boxDegrees;
+		});
+
+		arrangement.positions = arrangedPositions(boxes, arrangement.startPositions, arrangement.degrees, arrangement.scale, rotations);
+
+		boxes.forEach(function(box, i) {
+			box.changeRotation(rotations[i]);
+			box.changePosition(arrangement.positions[i].x, arrangement.positions[i].y);
+			$('.build-area .drag-box[data-id="' + box.id + '"]').css({
+				left: arrangement.positions[i].x,
+				top: arrangement.positions[i].y
+			});
+		});
+
+		this.lastArrangement = arrangement;
+		currentRoom.setBuildingAreaDimentions();
+	};
+
 	Registration.prototype.showClickControls = function() {
 		if(this.activeBoxArray.length > 0) {
 			$('#build-section-click-controls').css({'display': 'inline-block'});
@@ -2785,6 +2852,69 @@
 		return highest;
 	}
 
+	//boxes whose tops are within half a box height of each other count as one row
+	function sortBoxesInRows(boxes, direction) {
+		return boxes.slice().sort(function(a, b) {
+			if( Math.abs(a.yPosition - b.yPosition) > Math.min(a.height, b.height) / 2 ) {
+				return a.yPosition - b.yPosition;
+			}
+
+			return direction === 'rightToLeft' ? b.xPosition - a.xPosition : a.xPosition - b.xPosition;
+		});
+	}
+
+	function turnedSize(width, height, degrees) {
+		var turn = degrees * Math.PI / 180;
+
+		return {
+			width: width * Math.abs(Math.cos(turn)) + height * Math.abs(Math.sin(turn)),
+			height: width * Math.abs(Math.sin(turn)) + height * Math.abs(Math.cos(turn))
+		};
+	}
+
+	function turnBoxElement($box, degrees) {
+		$box.toggleClass('turned-box', degrees !== 0).css('--box-turn', degrees + 'deg');
+	}
+
+	//turns and scales the box centres around the middle of the group, and keeps every box inside the room
+	function arrangedPositions(boxes, startPositions, degrees, scale, rotations) {
+		var widths = boxes.map(function(box) { return Number(box.width); });
+		var heights = boxes.map(function(box) { return Number(box.height); });
+		var left = Math.min.apply(null, startPositions.map(function(position) { return position.x; }));
+		var top = Math.min.apply(null, startPositions.map(function(position) { return position.y; }));
+		var right = Math.max.apply(null, startPositions.map(function(position, i) { return position.x + widths[i]; }));
+		var bottom = Math.max.apply(null, startPositions.map(function(position, i) { return position.y + heights[i]; }));
+		var pivotX = (left + right) / 2;
+		var pivotY = (top + bottom) / 2;
+		var radians = degrees * Math.PI / 180;
+		var cos = Math.cos(radians);
+		var sin = Math.sin(radians);
+
+		var positions = startPositions.map(function(position, i) {
+			var fromPivotX = (position.x + widths[i] / 2 - pivotX) * scale;
+			var fromPivotY = (position.y + heights[i] / 2 - pivotY) * scale;
+
+			return {
+				x: Math.round(pivotX + fromPivotX * cos - fromPivotY * sin - widths[i] / 2),
+				y: Math.round(pivotY + fromPivotX * sin + fromPivotY * cos - heights[i] / 2)
+			};
+		});
+		var outerEdges = positions.map(function(position, i) {
+			var outer = turnedSize(widths[i], heights[i], rotations[i]);
+
+			return {
+				left: Math.min(position.x, position.x + (widths[i] - outer.width) / 2),
+				top: Math.min(position.y, position.y + (heights[i] - outer.height) / 2)
+			};
+		});
+		var overflowLeft = Math.ceil(Math.max(0, -Math.min.apply(null, outerEdges.map(function(edge) { return edge.left; }))));
+		var overflowTop = Math.ceil(Math.max(0, -Math.min.apply(null, outerEdges.map(function(edge) { return edge.top; }))));
+
+		return positions.map(function(position) {
+			return {x: position.x + overflowLeft, y: position.y + overflowTop};
+		});
+	}
+
 	//the builder concatenates several of these into markup, and an imported file is not ours
 	function escapeAngleBrackets(value) {
 		return typeof value === 'string' ? value.replace(/</g, '&lt;').replace(/>/g, '&gt;') : value;
@@ -2894,6 +3024,7 @@
 				box.hoverText = escapeAngleBrackets(box.hoverText);
 				box.legend = escapeAngleBrackets(box.legend);
 				box.seat = Number(box.seat);
+				box.rotation = isNumeric(box.rotation) ? Number(box.rotation) : 0;
 				box.password = typeof box.password === 'string' ? box.password : '';
 
 				if( Array.isArray(box.price) ) {
@@ -2967,14 +3098,17 @@
 		$('#seat-numbering-dialog .alert').addClass('d-none');
 		$('#seat-numbering-wrap').removeClass('d-none');
 
-		if(!selectedSeats.length) {
-			$('#seat-nr-change-no-selection').removeClass('d-none');
-			$('#seat-numbering-wrap').addClass('d-none');
-		}else {
-			if(hasStatusSeat) {
-				$('#seat-nr-change-warning').removeClass('d-none');
-			}
+		if(hasStatusSeat) {
+			$('#seat-nr-change-warning').removeClass('d-none');
+		}
 
+		if(!selectedSeats.length) {
+			$('#seat-numbering-wrap').addClass('d-none');
+
+			if(!hasStatusSeat) {
+				$('#seat-nr-change-no-selection').removeClass('d-none');
+			}
+		}else {
 			$('#set-seat-prefix').off('click').on('click', function() {
 				selectedSeats.forEach(function(seat) {
 					var box = currentRoom.findAndReturnBox(seat.id);
@@ -2983,14 +3117,17 @@
 				});
 			})
 			$('#reorder-seats').off('click').on('click', function() {
-				var startReorderFrom = $('#seat-reorder').val();
+				var seatNr = parseInt($('#seat-reorder').val(), 10);
 
-				selectedSeats.forEach(function(seat) {
-					var box = currentRoom.findAndReturnBox(seat.id);
+				if(isNaN(seatNr)) {
+					$('#seat-reorder').trigger('focus');
+					return;
+				}
 
-					box.changeSeatNr(startReorderFrom);
+				sortBoxesInRows(selectedSeats, $('#seat-reorder-direction').val()).forEach(function(box) {
+					box.changeSeatNr(seatNr);
 					box.renderSeatNr();
-					startReorderFrom++;
+					seatNr++;
 				});
 			});
 		}
@@ -3996,6 +4133,48 @@
     	var destinationAm = Math.abs($('#click-control-move-nr').val());
 
     	reg.prepareMoveActiveBoxes(destination, destinationAm);
+	});
+
+	$('#rotate-dialog').on('show.bs.modal', function() {
+		var hasSelection = reg.activeBoxArray.length > 0;
+
+		$('#rotate-no-selection').toggleClass('d-none', hasSelection);
+		$('#rotate-controls').toggleClass('d-none', !hasSelection);
+	});
+
+	function positiveNumberFrom($input) {
+		var value = Math.abs(parseFloat($input.val()));
+
+		if(!isFinite(value)) {
+			$input.trigger('focus');
+			return null;
+		}
+
+		return value;
+	}
+
+	$('#rotate-dialog [data-rotation]').on('click', function() {
+		var degrees = positiveNumberFrom($('#rotate-degrees'));
+
+		if(degrees !== null) {
+			reg.arrangeActiveBoxes($(this).data('rotation') === 'clockwise' ? degrees : -degrees, 0, 0);
+		}
+	});
+
+	$('#rotate-dialog [data-box-rotation]').on('click', function() {
+		var degrees = positiveNumberFrom($('#box-turn-degrees'));
+
+		if(degrees !== null) {
+			reg.arrangeActiveBoxes(0, 0, $(this).data('box-rotation') === 'clockwise' ? degrees : -degrees);
+		}
+	});
+
+	$('#rotate-dialog [data-spacing]').on('click', function() {
+		var percent = positiveNumberFrom($('#spacing-percent'));
+
+		if(percent !== null) {
+			reg.arrangeActiveBoxes(0, ($(this).data('spacing') === 'apart' ? percent : -percent) / 100, 0);
+		}
 	});
 
 	$('.progress').css({'display': 'none'});

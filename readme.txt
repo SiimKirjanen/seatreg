@@ -50,8 +50,9 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 == Changelog ==
 
 = 1.80.0 =
-* In languages that need it, you can now choose the grammatical gender of the word you use for a seat or a room, so the sentences around it match.
+* In languages that need it, you can now choose the grammatical gender of the words you use for a seat and a room, so the sentences around them match.
 * Fixed seats opening while moving the map on a phone, and pinch zoom not working on the map.
+* The layout builder can now number seats from right to left, turn a group of seats or each seat at an angle, and change the spacing between them.
 
 = 1.79.0 =
 * In the layout builder you can now choose the colors of pending, approved, selected and locked seats.

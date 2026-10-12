@@ -68,6 +68,7 @@
 			<div class="side-option price-option" data-action="8" title="Price" data-toggle="modal" data-target="#price-dialog"></div>
 			<div class="side-option lock-option" data-action="10" title="Lock" data-toggle="modal" data-target="#lock-seat-dialog"></div>
 			<div class="side-option numbering-option" data-action="11" title="Change numbering" data-toggle="modal" data-target="#seat-numbering-dialog"></div>
+			<div class="side-option rotate-option rotate-icon" data-action="13" title="<?php esc_attr_e('Turn selection', 'seatreg'); ?>" data-toggle="modal" data-target="#rotate-dialog"><span class="rotate-icon__boxes"><span class="rotate-icon__box rotate-icon__box--first"></span><span class="rotate-icon__box"></span><span class="rotate-icon__box rotate-icon__box--third"></span></span><i class="fa fa-rotate-right rotate-icon__arrow" aria-hidden="true"></i></div>
 		</div>
 	
 		<div class="build-area-wrapper" data-cursor="1">
@@ -309,6 +310,57 @@
 		</div>
 	</div>
 
+	<div class="modal vert-modal fade" id="rotate-dialog" tabindex="-1" role="dialog" aria-labelledby="rotate-dialog-title" aria-hidden="true">
+		<div class="modal-dialog vert-modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="rotate-dialog-title"><?php esc_html_e('Turn selection', 'seatreg'); ?></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-primary d-none" id="rotate-no-selection"><?php esc_html_e('No boxes selected', 'seatreg'); ?></div>
+				<div id="rotate-controls">
+					<div class="turn-section" role="group" aria-labelledby="turn-circle-title">
+						<h5 class="turn-section-title" id="turn-circle-title"><?php esc_html_e('Move along a circle', 'seatreg'); ?></h5>
+						<p class="turn-section-text"><?php esc_html_e('Moves the selected boxes along a circle around the middle of the selection. Each box keeps its own angle.', 'seatreg'); ?></p>
+						<label for="rotate-degrees"><?php esc_html_e('Degrees', 'seatreg'); ?></label>
+						<div>
+							<input type="number" id="rotate-degrees" value="15" />
+							<button type="button" class="btn btn-success btn-sm" data-rotation="counterclockwise"><i class="fa fa-rotate-left" aria-hidden="true"></i> <?php esc_html_e('Counterclockwise', 'seatreg'); ?></button>
+							<button type="button" class="btn btn-success btn-sm" data-rotation="clockwise"><i class="fa fa-rotate-right" aria-hidden="true"></i> <?php esc_html_e('Clockwise', 'seatreg'); ?></button>
+						</div>
+					</div>
+
+					<div class="turn-section" role="group" aria-labelledby="turn-boxes-title">
+						<h5 class="turn-section-title" id="turn-boxes-title"><?php esc_html_e('Turn each box', 'seatreg'); ?></h5>
+						<p class="turn-section-text"><?php esc_html_e('Turns each selected box around its own center without moving it. Numbers stay upright.', 'seatreg'); ?></p>
+						<label for="box-turn-degrees"><?php esc_html_e('Degrees', 'seatreg'); ?></label>
+						<div>
+							<input type="number" id="box-turn-degrees" value="15" />
+							<button type="button" class="btn btn-success btn-sm" data-box-rotation="counterclockwise"><i class="fa fa-rotate-left" aria-hidden="true"></i> <?php esc_html_e('Counterclockwise', 'seatreg'); ?></button>
+							<button type="button" class="btn btn-success btn-sm" data-box-rotation="clockwise"><i class="fa fa-rotate-right" aria-hidden="true"></i> <?php esc_html_e('Clockwise', 'seatreg'); ?></button>
+						</div>
+					</div>
+
+					<div class="turn-section" role="group" aria-labelledby="turn-spacing-title">
+						<h5 class="turn-section-title" id="turn-spacing-title"><?php esc_html_e('Spacing', 'seatreg'); ?></h5>
+						<p class="turn-section-text"><?php esc_html_e('Moves the selected boxes closer to or further from the middle of the selection.', 'seatreg'); ?></p>
+						<label for="spacing-percent"><?php esc_html_e('Percent', 'seatreg'); ?></label>
+						<div>
+							<input type="number" id="spacing-percent" value="10" />
+							<button type="button" class="btn btn-success btn-sm" data-spacing="closer"><i class="fa fa-compress" aria-hidden="true"></i> <?php esc_html_e('Closer', 'seatreg'); ?></button>
+							<button type="button" class="btn btn-success btn-sm" data-spacing="apart"><i class="fa fa-expand" aria-hidden="true"></i> <?php esc_html_e('Further apart', 'seatreg'); ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'seatreg');?></button>
+			</div>
+		</div>
+		</div>
+	</div>
+
 	<div class="modal vert-modal fade" id="seat-numbering-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog vert-modal-dialog">
 		<div class="modal-content">
@@ -363,7 +415,11 @@
 							/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 							_x('Reorder selected %s starting from', 'seat word is neuter', 'seatreg')
 						)); ?></label></div>
-						<input type="number" id="seat-reorder" size="3" style="width:60px" />
+						<input type="number" id="seat-reorder" />
+						<select id="seat-reorder-direction" aria-label="<?php echo esc_attr_x('Numbering direction', 'layout builder seat numbering direction select', 'seatreg'); ?>">
+							<option value="leftToRight"><?php echo esc_html_x('Left to right', 'layout builder seat numbering direction', 'seatreg'); ?></option>
+							<option value="rightToLeft"><?php echo esc_html_x('Right to left', 'layout builder seat numbering direction', 'seatreg'); ?></option>
+						</select>
 						<button type="button" class="btn btn-success btn-sm" id="reorder-seats"><?php seatreg_noun_span('seat', 'pluralUpper', _x('Reorder %s', 'layout builder button that renumbers the selected seats', 'seatreg')); ?></button>
 					</div>
 				</div>
@@ -748,6 +804,13 @@
 								/* translators: %1$s: the word the admin uses for a seat, %2$s: the word the admin uses for a seat. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 								_x('Lets you change %1$s numbers. Pending and booked %2$s numbers can\'t be changed.', 'seat word is neuter', 'seatreg')
 							));?>
+						</p>
+					</div>
+
+					<div class="help-dialog-row">
+						<div class="guide-item2 rotate-icon"><span class="rotate-icon__boxes"><span class="rotate-icon__box rotate-icon__box--first"></span><span class="rotate-icon__box"></span><span class="rotate-icon__box rotate-icon__box--third"></span></span><i class="fa fa-rotate-right rotate-icon__arrow" aria-hidden="true"></i></div>
+						<p class="help-dialog-text">
+							<?php esc_html_e('Moves the selected boxes along a circle around the middle of the selection, turns each box around its own center, or moves the boxes closer together or further apart. Numbers always stay upright.', 'seatreg');?>
 						</p>
 					</div>
 

@@ -1,5 +1,6 @@
 const { expect } = require('@playwright/test');
 const { TIMEOUTS } = require('../../utils/timeouts');
+const { seatPositions } = require('../../utils/seats');
 
 /**
  * Page object for the public registration view
@@ -122,6 +123,11 @@ class RegistrationPage {
 
 	seat(number) {
 		return this.page.locator(`#boxes .box[data-seat-nr="${number}"]`);
+	}
+
+	/** In the order the seats were placed in the builder. */
+	async seatPositions() {
+		return seatPositions(this.seats);
 	}
 
 	get textBoxes() {
