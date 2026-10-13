@@ -4873,7 +4873,8 @@ function seatreg_add_booking_with_manager_callback() {
 
 	$bookingsToAdd = [];
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
-	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields), $options->registration_code);
+	$createdCustomFields = json_decode($options->custom_fields ?? '[]');
+	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, $createdCustomFields, $options->registration_code);
 	$bookingStatus = sanitize_text_field($_POST['booking-status']);
 	$sendBookingConfirmToBooker = isset($_POST['send-booking-confirmation']) && sanitize_text_field($_POST['send-booking-confirmation']) === '1';
 	$singleBooking = count($_POST['first-name']) === 1;
@@ -4887,6 +4888,10 @@ function seatreg_add_booking_with_manager_callback() {
 	}
 	$customFields = json_decode($customFieldsInput);
 
+	if( count($customFields) !== count($_POST['first-name']) ) {
+		wp_send_json_error( array('message' => 'Custom fields do not match the booked seats', 'status' => 'custom field validation failed') );
+	}
+
 	foreach ( $_POST['first-name'] as $key => $value ) {
 		$email = wp_unslash($_POST['email'][$key] ?? null);
 
@@ -4899,7 +4904,7 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingToAdd->lastName = sanitize_text_field($_POST['last-name'][$key]);
 		$bookingToAdd->seatId = sanitize_text_field($_POST['seat-id'][$key]);
 		$bookingToAdd->roomName = sanitize_text_field($_POST['room'][$key]);
-		$bookingToAdd->customfield = $customFields[$key];
+		$bookingToAdd->customfield = SeatregCustomFieldService::bookingData($customFields[$key], $createdCustomFields);
 		$bookingToAdd->email = sanitize_email($email);
 		$bookingToAdd->status = $bookingStatus;
 		$bookingToAdd->multiPriceSelection = $_POST['seat-multi-price'][$key] ?? null;

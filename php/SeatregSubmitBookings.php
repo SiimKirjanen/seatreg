@@ -95,7 +95,7 @@ class SeatregSubmitBookings extends SeatregBooking {
     		$booking->seat_id = sanitize_text_field($seatID[$key]);
     		$booking->seat_nr = sanitize_text_field($seatNr[$key]);
 			$booking->room_uuid = sanitize_text_field($roomUUID[$key]);
-    		$booking->custom_field = $customFieldData[$key];
+    		$booking->custom_field = SeatregCustomFieldService::bookingData($customFieldData[$key], $this->_createdCustomFields);
 			$booking->multi_price_selection = sanitize_text_field($multiPriceUUID[$key]);
 			$booking->applied_coupon = $appliedCoupon;
 

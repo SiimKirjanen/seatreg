@@ -299,16 +299,17 @@ class SeatregBookingRepository {
         ) );
     }
 
-    public static function findIfExistingBookingWasMadeWithCustomFieldValue($registrationCode, $assosiatedCustomField, $personCustomField) {
+    public static function findIfExistingBookingWasMadeWithCustomFieldValue($registrationCode, $label, $value) {
         $bookings = self::getConfirmedAndApprovedBookingsByRegistrationCode($registrationCode);
         $existingUniqueCustomFieldValue = false;
 
         foreach($bookings as $booking) {
             $bookingCustomFields = json_decode($booking->custom_field_data);
 
-            if($bookingCustomFields) {
+            if( is_array($bookingCustomFields) ) {
                 foreach($bookingCustomFields as $bookingCustomField) {
-                    if($bookingCustomField->label === $personCustomField->label && $bookingCustomField->value ===  $personCustomField->value) {
+                    //Bookings made before values were trimmed can hold them with surrounding spaces
+                    if( is_string($bookingCustomField->label ?? null) && is_string($bookingCustomField->value ?? null) && trim($bookingCustomField->label) === trim($label) && trim($bookingCustomField->value) === trim($value) ) {
                         $existingUniqueCustomFieldValue = true;
 
                         break 2;

@@ -608,7 +608,7 @@ class SeatregDataValidation {
                 $customFieldValidation = self::validateSingleCustomFieldSubmit($editCustomFieldDecoded, $editCustomFieldsDecoded, $existingCustomFieldsDecoded, $registrationCode);
 
                 if( !$customFieldValidation->valid ) {
-                    $validationStatus->setInvalid($personCustomFieldValidation->errorMessage);
+                    $validationStatus->setInvalid($customFieldValidation->errorMessage);
                     return $validationStatus;
                 }
             }
@@ -625,6 +625,7 @@ class SeatregDataValidation {
 
         try {
             $customFieldsDecoded = json_decode($submittedCustomFields);
+            $createdCustomFields = is_array($createdCustomFields) ? $createdCustomFields : array();
 
             if( !is_array($customFieldsDecoded) ) {
                 $validationStatus->setInvalid('Custom fields not array');
@@ -649,7 +650,12 @@ class SeatregDataValidation {
                         $validationStatus->setInvalid($personCustomFieldValidation->errorMessage);
                         return $validationStatus;
                     }
-                
+
+                }
+
+                if( self::isRequiredCustomFieldMissing($personCustomFields, $createdCustomFields) ) {
+                    $validationStatus->setInvalid('Custom field value is required');
+                    return $validationStatus;
                 }
             }
 
@@ -662,6 +668,17 @@ class SeatregDataValidation {
 
     public static function validateSingleCustomFieldSubmit($personCustomField, $personCustomFields, $createdCustomFields, $registrationCode) {
         $validationStatus = new SeatregValidationStatus();
+
+        if( !is_object($personCustomField) || !property_exists($personCustomField, 'label') || !is_string($personCustomField->label) ) {
+            $validationStatus->setInvalid('Custom field label is missing or invalid');
+            return $validationStatus;
+        }
+
+        if( !property_exists($personCustomField, 'value') || !is_string($personCustomField->value) ) {
+            $validationStatus->setInvalid('Custom field value is missing or invalid');
+            return $validationStatus;
+        }
+
         $assosiatedCustomField = SeatregFindCustomField($personCustomField->label, $createdCustomFields);
 
         if( !$assosiatedCustomField ) {
@@ -669,19 +686,9 @@ class SeatregDataValidation {
             return $validationStatus;
         }
         $isOptional = $assosiatedCustomField->optional ?? false;
-        $customFieldValue = trim($personCustomField->value);
+        $customFieldValue = SeatregCustomFieldService::storedValue($assosiatedCustomField, $personCustomField->value);
 
-        if( !property_exists($personCustomField, 'label') || !is_string($personCustomField->label) ) {
-            $validationStatus->setInvalid('Custom field label is missing or invalid');
-            return $validationStatus;
-        }
-     
-        if( !property_exists($personCustomField, 'value') ) {
-            $validationStatus->setInvalid('Custom field value is missing');
-            return $validationStatus;
-        }
-
-        if (!$isOptional && $customFieldValue === '') {
+        if (!$isOptional && trim($customFieldValue) === '') {
             $validationStatus->setInvalid('Custom field value is required');
             return $validationStatus;
         }
@@ -692,7 +699,7 @@ class SeatregDataValidation {
         }
 
         $duplicates = array_filter($personCustomFields, function($cust) use ($personCustomField) {
-            return $cust->label === $personCustomField->label;
+            return is_object($cust) && isset($cust->label) && is_string($cust->label) && trim($cust->label) === trim($personCustomField->label);
         });
 
         if( count($duplicates) > 1) {
@@ -701,19 +708,19 @@ class SeatregDataValidation {
         }
 
         if($assosiatedCustomField->type === 'check') {
-            if( !in_array($personCustomField->value, array('0', '1')) ) {
+            if( !in_array($customFieldValue, array('0', '1'), true) ) {
                 $validationStatus->setInvalid('Checkbox value is invalid');
                 return $validationStatus;
             }
         }
 
         if($assosiatedCustomField->type === 'text') {
-            if( strlen($personCustomField->value) > SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH ) {
+            if( strlen($customFieldValue) > SEATREG_CUSTOM_TEXT_FIELD_MAX_LENGTH ) {
                 $validationStatus->setInvalid('Text field too long');
                 return $validationStatus;
             }
-            if( $assosiatedCustomField->unique === true ) {
-                $foundExistingUnique = SeatregBookingRepository::findIfExistingBookingWasMadeWithCustomFieldValue($registrationCode, $assosiatedCustomField, $personCustomField);
+            if( ($assosiatedCustomField->unique ?? false) === true && $customFieldValue !== '' ) {
+                $foundExistingUnique = SeatregBookingRepository::findIfExistingBookingWasMadeWithCustomFieldValue($registrationCode, $assosiatedCustomField->label, $customFieldValue);
 
                 if($foundExistingUnique) {
                     /* translators: %s: Custom field label */
@@ -724,13 +731,23 @@ class SeatregDataValidation {
         }
 
         if($assosiatedCustomField->type === 'sel') {
-            if( !in_array($personCustomField->value, $assosiatedCustomField->options) ) {
+            if( !in_array($customFieldValue, $assosiatedCustomField->options, true) ) {
                 $validationStatus->setInvalid('Select option does not exist');
                 return $validationStatus;
             }
         }
 
         return $validationStatus;
+    }
+
+    private static function isRequiredCustomFieldMissing($personCustomFields, $createdCustomFields) {
+        foreach($createdCustomFields as $createdCustomField) {
+            if( !($createdCustomField->optional ?? false) && !SeatregFindCustomField($createdCustomField->label, $personCustomFields) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static function validateDefaultInputOnBookingSubmit($firstName, $lastname, $email, $requireName = true) {
