@@ -425,6 +425,8 @@ function seatreg_generate_admin_strings() {
     $translations->setPassword = esc_html__('Set password', 'seatreg');
     $translations->changesApplied = esc_html__('Changes applied', 'seatreg');
     $translations->addPriceDescription = esc_html__('Please add price description', 'seatreg');
+    /* translators: %s: currency code, e.g. JPY */
+    $translations->priceCantHaveDecimals = esc_html__('Prices in %s can not have decimal places', 'seatreg');
     $translations->enableZipExtension = esc_html__('PHP Zip extension is needed for XLSX file generation', 'seatreg');
     $translations->reloadingPage = esc_html__('Reloading page. Please wait.', 'seatreg');
     $translations->dateNotProvided = esc_html__('Date not provided', 'seatreg');

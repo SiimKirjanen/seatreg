@@ -2949,7 +2949,7 @@ function seatreg_get_registration_data($code) {
 	global $seatreg_db_table_names;
 
 	$registration = $wpdb->get_results( $wpdb->prepare(
-		"SELECT a.*, b.paypal_payments, b.paypal_rest_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates, b.custom_payments, b.room_noun_singular, b.room_noun_plural, b.room_noun_gender, b.seat_noun_singular, b.seat_noun_plural, b.seat_noun_gender
+		"SELECT a.*, b.paypal_payments, b.paypal_rest_payments, b.stripe_payments, b.custom_payment, b.using_seats, b.using_calendar, b.calendar_dates, b.custom_payments, b.room_noun_singular, b.room_noun_plural, b.room_noun_gender, b.seat_noun_singular, b.seat_noun_plural, b.seat_noun_gender, b.paypal_currency_code
 		FROM $seatreg_db_table_names->table_seatreg AS a
 		INNER JOIN $seatreg_db_table_names->table_seatreg_options AS b
 		ON a.registration_code = b.registration_code
@@ -4219,6 +4219,7 @@ function seatreg_get_registration_layout_and_bookings() {
 	$dataToSend->uploadedImages = $uploadedImages;
 	$dataToSend->roomNouns = SeatregTerminologyService::getRoomNouns( isset($registration[0]) ? $registration[0] : null );
 	$dataToSend->seatNouns = SeatregTerminologyService::getSeatNouns( isset($registration[0]) ? $registration[0] : null );
+	$dataToSend->priceDecimals = SeatregPaymentService::getPriceDecimals( isset($registration[0]) ? $registration[0]->paypal_currency_code : null );
 	$response = new SeatregJsonResponse();
 	$response->setData( $dataToSend);
 	wp_send_json( $response );

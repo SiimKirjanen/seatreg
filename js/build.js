@@ -3186,8 +3186,12 @@
 	function createPriceInput(value, inputEnabled) {
 		return $('<input>')
 			.addClass('price-input')
-			.attr({ type: 'number', min: '0', step: '0.01', oninput: 'if(this.value < 0) this.value = Math.abs(this.value)', value: value })
+			.attr({ type: 'number', min: '0', step: priceStep(), oninput: 'if(this.value < 0) this.value = Math.abs(this.value)', value: value })
 			.prop('disabled', !inputEnabled);
+	}
+
+	function priceStep() {
+		return reg.settings.price_decimals === 0 ? '1' : '0.01';
 	}
 
 	function readPriceInput($input) {
@@ -3207,6 +3211,7 @@
 		});
 
 		$pricingWrap.empty();
+		$('#price-for-all-selected').attr('step', priceStep());
 		$('#set-prices').removeClass('d-none');
 		if(reg.settings.paypal_payments === '1' || reg.settings.paypal_rest_payments === '1' || reg.settings.stripe_payments === '1' || reg.settings.custom_payment === '1' || reg.hasCustomPayments) {
 			
@@ -3325,6 +3330,16 @@
 		});
 
 		if(!valid) {
+			return false;
+		}
+
+		var hasDecimalPrice = $('#selected-seats-for-pricing .price-input').not(':disabled').toArray().some(function(input) {
+			return Number(input.value) % 1 !== 0;
+		});
+
+		if(reg.settings.price_decimals === 0 && hasDecimalPrice) {
+			alertify.error(seatregFormat(translator.translate('priceCantHaveDecimals'), [reg.settings.currency_code]));
+
 			return false;
 		}
 

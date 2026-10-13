@@ -67,6 +67,17 @@ class SeatregPaymentService {
 
     /**
      *
+     * How many decimal places a price in this currency can have. Zero when any payment provider charges it in whole units
+     *
+    */
+    public static function getPriceDecimals($currencyCode) {
+        $zeroDecimalCurrencies = array_merge(SEATREG_PAYPAL_ZERO_DECIMAL_CURRENCIES, SEATREG_STRIPE_ZERO_DECIMAL_CURRENCIES);
+
+        return in_array(strtoupper((string)$currencyCode), $zeroDecimalCurrencies) ? 0 : 2;
+    }
+
+    /**
+     *
      * Show a price with cents only when it has them: 17, 17.50
      *
     */

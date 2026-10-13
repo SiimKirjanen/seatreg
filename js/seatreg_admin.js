@@ -246,7 +246,9 @@
 					paypal_rest_payments: data._response.data.registration[0].paypal_rest_payments,
 					stripe_payments: data._response.data.registration[0].stripe_payments,
 					custom_payment: data._response.data.registration[0].custom_payment,
-					using_seats: data._response.data.registration[0].using_seats
+					using_seats: data._response.data.registration[0].using_seats,
+					currency_code: data._response.data.registration[0].paypal_currency_code,
+					price_decimals: data._response.data.priceDecimals
 				};
 				window.seatreg.roomNouns = data._response.data.roomNouns;
 				window.seatreg.seatNouns = data._response.data.seatNouns;

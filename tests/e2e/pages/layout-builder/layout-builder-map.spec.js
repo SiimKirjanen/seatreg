@@ -175,6 +175,31 @@ test.describe('Layout builder map', () => {
 		await expect(registration.roomCounts.first()).toContainText(`: ${SEAT_COUNT - 1}`);
 	});
 
+	test('prices seats in whole units for a currency that has no cents', async ({ page }) => {
+		const settings = new SettingsPage(page);
+
+		await builder.placeSeats(1);
+		await builder.save();
+
+		await settings.open(code);
+		await settings.allowPaidBookings({ currency: 'JPY' });
+
+		await settings.openLayout(code);
+		await builder.selectSeat(1);
+		await builder.openPriceDialog();
+
+		await builder.priceInputs(1).fill('12.5');
+		await builder.setPricesButton.click();
+
+		await expect(builder.errorToast).toHaveText('Prices in JPY can not have decimal places');
+		await expect(builder.priceDialog).toBeVisible();
+
+		await builder.priceInputs(1).fill('12');
+		await builder.setPricesButton.click();
+
+		await expect(builder.priceDialog).toBeHidden();
+	});
+
 	test('adds text that reaches the registration and drops it when left empty', async () => {
 		await builder.addText(LAYOUT_TEXT);
 		await expect(builder.textBoxes).toHaveCount(1);

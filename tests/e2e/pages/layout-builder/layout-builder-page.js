@@ -536,6 +536,10 @@ class LayoutBuilderPage {
 		return this.page.locator('#alertify-cancel');
 	}
 
+	get errorToast() {
+		return this.page.locator('.alertify-log-error');
+	}
+
 	/* Actions */
 
 	/** @return {Promise<string>} The registration's code */
