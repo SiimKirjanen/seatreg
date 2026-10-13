@@ -1,8 +1,12 @@
 const { test, expect } = require('@playwright/test');
 const { SettingsPage } = require('../settings/settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
+const { uniqueBookerEmail } = require('../../utils/mail');
 
 const SEAT_COUNT = 3;
+
+/* Enough bookers that some of them reach the server together. */
+const RIVAL_BOOKERS = 5;
 
 const BOOKER = { firstName: 'Riina', lastName: 'Tamm', email: 'riina.tamm@example.com' };
 const MALFORMED_EMAIL = 'riina.tamm.example.com';
@@ -223,5 +227,45 @@ test.describe('Registration booking', () => {
 		await registration.page.reload();
 
 		await expect(registration.seat(1)).toHaveAttribute('data-status', 'tak');
+	});
+
+	test('gives a seat to only one of the bookers who book it at the same moment', async ({ browser }) => {
+		await settings.allowBookings({ approved: true });
+
+		const bookers = [];
+
+		for (let booker = 0; booker < RIVAL_BOOKERS; booker += 1) {
+			const registration = await settings.openRegistrationAsVisitor(browser, code);
+
+			await registration.bookSeats(1);
+			await registration.fillBooking({ ...BOOKER, email: uniqueBookerEmail('rival') });
+
+			bookers.push(registration);
+		}
+
+		const holds = await Promise.all(bookers.map((registration) => registration.holdBookingRequest()));
+
+		for (const registration of bookers) {
+			await registration.submitBooking();
+		}
+
+		await Promise.all(holds.map(({ held }) => held));
+		holds.forEach(({ release }) => release());
+
+		for (const registration of bookers) {
+			await expect(registration.bookingOutcome).toBeVisible();
+		}
+
+		const confirmed = [];
+
+		for (const registration of bookers) {
+			confirmed.push(await registration.bookingConfirmed.isVisible());
+		}
+
+		expect(confirmed.filter(Boolean)).toHaveLength(1);
+
+		for (const registration of bookers) {
+			await registration.page.context().close();
+		}
 	});
 });

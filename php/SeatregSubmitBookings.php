@@ -13,6 +13,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 	protected $_bookerEmail; //confirm email is send to this address
 	protected $_submittedPassword;  //user submitted password
 	protected $_bookingId; //id for booking
+	protected $_confCode;
 	protected $_isValid = true;
 	
     public function __construct($code, $resp){
@@ -242,77 +243,89 @@ class SeatregSubmitBookings extends SeatregBooking {
 
 		}
 
-		//7.step. Check if seat/seats are allready taken
-		$bookStatus = $this->isAllSelectedSeatsOpen($this->_userSelectedCalendarDate);
-		if($bookStatus != 'ok') {
-			$this->response->setError($bookStatus);
+		if( !$this->lockRegistrationSeats() ) {
+			$this->response->setError(esc_html__('Too many bookings are being made right now. Please try again', 'seatreg'));
 
 			return;
 		}
 
-		//8.step. Check if seat/seats are locked
-		$lockStatus = $this->seatLockCheck();
-		if($lockStatus != 'ok') {
-			$this->response->setError($lockStatus);
-
-			return;
-		}
-
-		//9.step. seat/seats password check
-		$passwordStatus = $this->seatPasswordCheck();
-		if($passwordStatus != 'ok') {
-			$this->response->setError($passwordStatus);
-
-			return;
-		}
-
-		//10.step. If multi price selected then make sure that price uuid exists
-		$multiPriceUUIDCheckStatus = $this->multiPriceUUIDCheck();
-		if($multiPriceUUIDCheckStatus != 'ok') {
-			$this->response->setError($multiPriceUUIDCheckStatus);
-
-			return;
-		}
-
-		//11. start time check
-		$startTimeCheck = $this->registrationStartTimeCheck();
-		if($startTimeCheck !== 'ok') {
-			$this->response->setError($startTimeCheck);
-
-			return;
-		}
-
-		//12. end time check
-		$endTimeCheck = $this->registrationEndTimeCheck();
-		if($endTimeCheck !== 'ok') {
-			$this->response->setError($endTimeCheck);
-
-			return;
-		}
-
-		//13. WP user booking limit restriction.
-		if( $this->_wp_user_booking_limit !== null && SeatregAuthService::isLoggedIn() ) {
-			$wpUserLimitStatus = $this->wpUserLimitCheck( SeatregAuthService::getCurrentUserId(), $this->_registrationCode );
-
-			if( $wpUserLimitStatus !== 'ok' ) {
-				$this->response->setValidationError($wpUserLimitStatus);
+		try {
+			//7.step. Check if seat/seats are allready taken
+			$bookStatus = $this->isAllSelectedSeatsOpen($this->_userSelectedCalendarDate);
+			if($bookStatus != 'ok') {
+				$this->response->setError($bookStatus);
 
 				return;
 			}
-		}
 
-		//14. WP user bookings seats limit restriction.
-		if( $this->_wp_user_bookings_seat_limit !== null && SeatregAuthService::isLoggedIn() ) {
-			$wpUserBookingsSeatsLimitStatus = $this->wpUserBookingsSeatLimitCheck( SeatregAuthService::getCurrentUserId(), $this->_registrationCode, count($this->_bookings) );
-
-			if( $wpUserBookingsSeatsLimitStatus !== 'ok' ) {
-				$this->response->setValidationError($wpUserBookingsSeatsLimitStatus);
+			//8.step. Check if seat/seats are locked
+			$lockStatus = $this->seatLockCheck();
+			if($lockStatus != 'ok') {
+				$this->response->setError($lockStatus);
 
 				return;
 			}
+
+			//9.step. seat/seats password check
+			$passwordStatus = $this->seatPasswordCheck();
+			if($passwordStatus != 'ok') {
+				$this->response->setError($passwordStatus);
+
+				return;
+			}
+
+			//10.step. If multi price selected then make sure that price uuid exists
+			$multiPriceUUIDCheckStatus = $this->multiPriceUUIDCheck();
+			if($multiPriceUUIDCheckStatus != 'ok') {
+				$this->response->setError($multiPriceUUIDCheckStatus);
+
+				return;
+			}
+
+			//11. start time check
+			$startTimeCheck = $this->registrationStartTimeCheck();
+			if($startTimeCheck !== 'ok') {
+				$this->response->setError($startTimeCheck);
+
+				return;
+			}
+
+			//12. end time check
+			$endTimeCheck = $this->registrationEndTimeCheck();
+			if($endTimeCheck !== 'ok') {
+				$this->response->setError($endTimeCheck);
+
+				return;
+			}
+
+			//13. WP user booking limit restriction.
+			if( $this->_wp_user_booking_limit !== null && SeatregAuthService::isLoggedIn() ) {
+				$wpUserLimitStatus = $this->wpUserLimitCheck( SeatregAuthService::getCurrentUserId(), $this->_registrationCode );
+
+				if( $wpUserLimitStatus !== 'ok' ) {
+					$this->response->setValidationError($wpUserLimitStatus);
+
+					return;
+				}
+			}
+
+			//14. WP user bookings seats limit restriction.
+			if( $this->_wp_user_bookings_seat_limit !== null && SeatregAuthService::isLoggedIn() ) {
+				$wpUserBookingsSeatsLimitStatus = $this->wpUserBookingsSeatLimitCheck( SeatregAuthService::getCurrentUserId(), $this->_registrationCode, count($this->_bookings) );
+
+				if( $wpUserBookingsSeatsLimitStatus !== 'ok' ) {
+					$this->response->setValidationError($wpUserBookingsSeatsLimitStatus);
+
+					return;
+				}
+			}
+
+			$this->insertBookings();
+		} finally {
+			$this->unlockRegistrationSeats();
 		}
 
-		$this->insertRegistration();
+		$this->sendBookingEmails();
 	}
 
 	public function getStatus() {
@@ -335,20 +348,17 @@ class SeatregSubmitBookings extends SeatregBooking {
 		}
 	}
 
-	public function insertRegistration() {
+	private function insertBookings() {
 		if($this->_isValid) {
 			global $wpdb;
 			global $seatreg_db_table_names;
 
 			$dataLength = count($this->_bookings);
-			$inserted = true;
 			$bookingStatus = 0;
-			$confCode = SeatregRandomGenerator::generateRandom();
+			$this->_confCode = SeatregRandomGenerator::generateRandom();
 			$this->_bookingId = SeatregRandomGenerator::generateRandom();
 			$currentTimeStamp = time();
 			$registrationConfirmDate = null;
-			$seatsString = $this->generateSeatString();
-			$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
 
 			if(!$this->_requireBookingEmailConfirm) {
 				$bookingStatus = $this->_insertState;
@@ -371,7 +381,7 @@ class SeatregSubmitBookings extends SeatregBooking {
 						'seat_id' => $this->_bookings[$i]->seat_id,
 						'seat_nr' => $this->_bookings[$i]->seat_nr,
 						'room_uuid' => $this->_bookings[$i]->room_uuid,
-						'conf_code' => $confCode, 
+						'conf_code' => $this->_confCode,
 						'custom_field_data' => json_encode($this->_bookings[$i]->custom_field, JSON_UNESCAPED_UNICODE),
 						'booking_id' => $this->_bookingId,
 						'status' => $bookingStatus,
@@ -388,9 +398,15 @@ class SeatregSubmitBookings extends SeatregBooking {
 				);
 			}
 			seatreg_add_activity_log('booking', $this->_bookingId, 'Booking inserted to database', false);
-			
+		}
+	}
+
+	private function sendBookingEmails() {
+		if($this->_isValid) {
+			$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
+
 			if($this->_requireBookingEmailConfirm) {
-				$emailVerificationMailSent = seatreg_sent_email_verification_email($confCode, $this->_bookerEmail, $this->_registrationName, $this->_registrationCode, $this->_emailVerificationTemplate, $this->_emailFromAddress, $this->_emailVerificationSubject, array('bg' => $this->_emailBackgroundColor, 'text' => $this->_emailTextColor, 'heading' => $this->_emailHeadingColor, 'logo' => $this->_emailLogo, 'logoPosition' => $this->_emailLogoPosition));
+				$emailVerificationMailSent = seatreg_sent_email_verification_email($this->_confCode, $this->_bookerEmail, $this->_registrationName, $this->_registrationCode, $this->_emailVerificationTemplate, $this->_emailFromAddress, $this->_emailVerificationSubject, array('bg' => $this->_emailBackgroundColor, 'text' => $this->_emailTextColor, 'heading' => $this->_emailHeadingColor, 'logo' => $this->_emailLogo, 'logoPosition' => $this->_emailLogoPosition));
 
 				if($emailVerificationMailSent) {
 					seatreg_add_activity_log('booking', $this->_bookingId, 'Booking email verification sent', false);
