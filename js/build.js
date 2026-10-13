@@ -623,7 +623,7 @@
 		this.rooms[this.currentRoom].backgroundImageHeight = parseInt(dim[1]);
 		$('.room-image').remove();
 
-		var bgImg = $('<img class="room-image" src="' + window.WP_Seatreg.uploads_url + '/room_images/' + seatreg.selectedRegistration  + '/' + imgLog + '" />');
+		var bgImg = $('<img class="room-image" />').attr('src', roomImageUrl(imgLog));
 		$('.build-area').append(bgImg);
 	};
 
@@ -1615,7 +1615,7 @@
 		//add fragment to build area. .skeleton-box are in fragment
 		$('.build-area').append(fragment);
 		if(this.rooms[this.currentRoom].backgroundImage !== null) {
-			var bgImg = $('<img class="room-image" src="' + window.WP_Seatreg.uploads_url + '/room_images/'+ seatreg.selectedRegistration + '/' + this.rooms[this.currentRoom].backgroundImage + '" />');
+			var bgImg = $('<img class="room-image" />').attr('src', roomImageUrl(this.rooms[this.currentRoom].backgroundImage));
 			
 			$('.build-area').append(bgImg);
 		}
@@ -2918,6 +2918,10 @@
 	//the builder concatenates several of these into markup, and an imported file is not ours
 	function escapeAngleBrackets(value) {
 		return typeof value === 'string' ? value.replace(/</g, '&lt;').replace(/>/g, '&gt;') : value;
+	}
+
+	function roomImageUrl(fileName) {
+		return window.WP_Seatreg.uploads_url + '/room_images/' + seatreg.selectedRegistration + '/' + fileName;
 	}
 
 	function hoverTextHtml(hoverText) {
@@ -4252,7 +4256,7 @@
 		reg.setRoomImage($(this).data('img'), $(this).data('size'));
 
 		var curImgWrap = $('<div class="cur-img-wrap"></div>');
-		var bgImg = $('<img class="uploaded-image" src="' + window.WP_Seatreg.uploads_url + '/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
+		var bgImg = $('<img class="uploaded-image" />').attr('src', roomImageUrl(reg.rooms[reg.currentRoom].backgroundImage));
 		var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ seatregFormat(seatregAgree(translator.translate('removeFromRoom'), seatregRoomNouns()), [seatregRoomNouns().singular]) +'</span>');
 
 		curImgWrap.append(bgImg, remImg);
@@ -4265,7 +4269,7 @@
 
 		if(reg.rooms[reg.currentRoom].backgroundImage !== null) {
 			var curImgWrap = $('<div class="cur-img-wrap"></div>');
-			var bgImg = $('<img class="uploaded-image" src="'+ window.WP_Seatreg.uploads_url + '/room_images/' + seatreg.selectedRegistration + '/' + reg.rooms[reg.currentRoom].backgroundImage + '" />');
+			var bgImg = $('<img class="uploaded-image" />').attr('src', roomImageUrl(reg.rooms[reg.currentRoom].backgroundImage));
 			var remImg = $('<span id="rem-room-img"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> '+ seatregFormat(seatregAgree(translator.translate('removeFromRoom'), seatregRoomNouns()), [seatregRoomNouns().singular]) +'</span>');
 
 			curImgWrap.append(bgImg, remImg);
