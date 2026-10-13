@@ -217,10 +217,8 @@ class SeatregLayoutService {
         foreach( $layout as $layoutData ) {
             if( $layoutData->room->uuid === $booking->room_uuid ) {
                 foreach( $layoutData->boxes as $box ) {
-                    if( $box->id === $booking->seat_id ) {
-                        $prices = $box->price;
-
-                        foreach( $prices as $price ) {
+                    if( $box->id === $booking->seat_id && is_array($box->price) ) {
+                        foreach( $box->price as $price ) {
                             if( $price->uuid === $booking->multi_price_selection ) {
                                 $multiPriceUUIDFound = $price;
 
@@ -234,6 +232,20 @@ class SeatregLayoutService {
         }
 
         return $multiPriceUUIDFound;
+    }
+
+    public static function seatHasMultiplePrices($booking, $layout) {
+        foreach( $layout as $layoutData ) {
+            if( $layoutData->room->uuid === $booking->room_uuid ) {
+                foreach( $layoutData->boxes as $box ) {
+                    if( $box->id === $booking->seat_id ) {
+                        return is_array($box->price);
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
      /**

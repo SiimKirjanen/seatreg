@@ -753,13 +753,18 @@ class SeatregDataValidation {
     public static function validateDefaultInputOnBookingSubmit($firstName, $lastname, $email, $requireName = true) {
         $validationStatus = new SeatregValidationStatus();
 
+        if( !is_string($firstName) || !is_string($lastname) || !is_string($email) ) {
+            $validationStatus->setInvalid('Default input is invalid');
+            return $validationStatus;
+        }
+
         if(strlen($firstName) > SEATREG_DEFAULT_INPUT_MAX_LENGHT || strlen($lastname) > SEATREG_DEFAULT_INPUT_MAX_LENGHT || strlen($email) > SEATREG_DEFAULT_INPUT_MAX_LENGHT ) {
             $validationStatus->setInvalid('Default input too long');
             return $validationStatus;
         }
 
         if ( $requireName ) {
-            if(!preg_match('/^[\p{L}\p{N}\\s-]*$/u', $firstName) || !preg_match('/^[\p{L}\p{N}\\s-]*$/u', $lastname)) {
+            if(!preg_match('/^[\p{L}\p{N}\\s-]+$/u', $firstName) || !preg_match('/^[\p{L}\p{N}\\s-]+$/u', $lastname) || trim($firstName) === '' || trim($lastname) === '') {
                 $validationStatus->setInvalid('Illegal characters in default inputs');
                 return $validationStatus;
             }
@@ -780,6 +785,11 @@ class SeatregDataValidation {
 
     public static function validateBookingData($seatId, $seatNr, $roomUUID) {
         $validationStatus = new SeatregValidationStatus();
+
+        if( !is_string($seatId) || !is_string($seatNr) || !is_string($roomUUID) ) {
+            $validationStatus->setInvalid('Illegal characters in booking data');
+            return $validationStatus;
+        }
 
         if(!preg_match(SEATREG_SEAT_ID_REGEX, $seatId)) {
             $validationStatus->setInvalid('Illegal characters in booking data');

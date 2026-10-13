@@ -162,9 +162,13 @@ class SeatregBooking {
 
 		foreach( $this->_bookings as $booking ) {
 			if( $booking->multi_price_selection ) {
-				if( SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) === false ) {
-					$statusReport = esc_html__('Selected price not found', 'seatreg');
-				}
+				$priceFound = SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) !== false;
+			}else {
+				$priceFound = !SeatregLayoutService::seatHasMultiplePrices($booking, $this->_registrationLayout);
+			}
+
+			if( !$priceFound ) {
+				$statusReport = esc_html__('Selected price not found', 'seatreg');
 			}
 		}
 
@@ -255,7 +259,7 @@ class SeatregBooking {
 								$searchStatus = 'seat-nr-check';
 								$seatPrefix = property_exists($this->_registrationLayout[$j]->boxes[$k], 'prefix') ? $this->_registrationLayout[$j]->boxes[$k]->prefix : '';
 							
-								if($seatPrefix . $this->_registrationLayout[$j]->boxes[$k]->seat == $this->_bookings[$i]->seat_nr) {
+								if(sanitize_text_field($seatPrefix . $this->_registrationLayout[$j]->boxes[$k]->seat) === (string)$this->_bookings[$i]->seat_nr) {
 									$searchStatus = 'seat-ok';
 								}
 

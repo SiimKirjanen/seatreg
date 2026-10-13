@@ -31,7 +31,13 @@ class SeatregSubmitBookings extends SeatregBooking {
 
     	$this->_bookerEmail = sanitize_email($emailToSend);
         $this->_submittedPassword = $pw;
-		$this->_seatPasswords = json_decode(stripslashes_deep($passwords));
+		$seatPasswords = json_decode(stripslashes_deep($passwords));
+
+		if( !is_object($seatPasswords) ) {
+			$this->response->setValidationError('Seat passwords are invalid');
+
+			return false;
+		}
 
 		if( $this->_usingCalendar ) {
 			$this->_userSelectedCalendarDate = $_POST['selected-calendar-date'] ?? null;
@@ -60,12 +66,18 @@ class SeatregSubmitBookings extends SeatregBooking {
 
 		$bookings = [];
 		$customFieldData = json_decode( $customFields );
+		$personData = array($firstname, $lastname, $email, $seatID, $seatNr, $roomUUID, $multiPriceUUID);
 
-		if( !is_array($firstname) || count($customFieldData) !== count($firstname) ) {
-			$this->response->setValidationError('Custom fields do not match the booked seats');
+		foreach($personData as $values) {
+			if( !is_array($values) || count($values) !== count($customFieldData) ) {
+				$this->response->setValidationError('Booking data does not match the booked seats');
 
-			return false;
+				return false;
+			}
 		}
+
+		//Keyed by position, as the custom fields are, so each seat gets its own person's data
+		list($firstname, $lastname, $email, $seatID, $seatNr, $roomUUID, $multiPriceUUID) = array_map('array_values', $personData);
 
     	foreach ($firstname as $key => $value) {
 
@@ -109,9 +121,18 @@ class SeatregSubmitBookings extends SeatregBooking {
 		}
 
 		$this->_bookings = $bookings;
-		
+		$this->_seatPasswords = $this->bookedSeatPasswords($seatPasswords);
+
         return true;
     }
+
+	private function bookedSeatPasswords($seatPasswords) {
+		$bookedSeatIds = array_column($this->_bookings, 'seat_id');
+
+		return (object) array_filter(get_object_vars($seatPasswords), function($password, $seatId) use($bookedSeatIds) {
+			return is_string($password) && in_array((string)$seatId, $bookedSeatIds, true);
+		}, ARRAY_FILTER_USE_BOTH);
+	}
 
 	public function validateBooking() {
 		if( !SeatregAuthService::registrationPasswordMatches($this->_registrationPassword, $this->_submittedPassword) ) {
@@ -157,11 +178,14 @@ class SeatregSubmitBookings extends SeatregBooking {
 		//4.step. GMail check if needed
 		if($this->_gmailNeeded) {
 			$gmailReg = '/^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/';
+			$emails = array_merge( array($this->_bookerEmail), array_column($this->_bookings, 'email') );
 
-			if(!preg_match($gmailReg, $this->_bookerEmail)) {
-				$this->response->setError(esc_html__('Gmail needed!', 'seatreg'));
+			foreach($emails as $email) {
+				if(!preg_match($gmailReg, $email)) {
+					$this->response->setError(esc_html__('Gmail needed!', 'seatreg'));
 
-				return;
+					return;
+				}
 			}
 		}
 
