@@ -1778,7 +1778,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 				</div>
 			<?php endif; ?>
 			<div class="management-extra-actions">
-				<div class="add-booking" data-custom-fields='<?php echo json_encode($custom_fields); ?>' data-registration-code="<?php echo esc_attr($code); ?>" data-has-seats="<?php echo SeatregLayoutService::hasSeats($roomsData) ? 'true' : 'false'; ?>">
+				<div class="add-booking" data-custom-fields="<?php echo esc_attr(wp_json_encode($custom_fields)); ?>" data-registration-code="<?php echo esc_attr($code); ?>" data-has-seats="<?php echo SeatregLayoutService::hasSeats($roomsData) ? 'true' : 'false'; ?>">
 					<span><?php esc_html_e('Add booking', 'seatreg'); ?></span>
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 				</div>
@@ -2090,7 +2090,7 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 			}
 			if( $custom_field['type'] === 'sel' ) {
 				?>
-					<span class="custom-field-value" data-type="sel" data-options='<?php echo json_encode($custom_field['options']); ?>'>
+					<span class="custom-field-value" data-type="sel" data-options="<?php echo esc_attr(wp_json_encode($custom_field['options'])); ?>">
 						<?php echo esc_html($submitted_custom_data[$j]['value']) ?>
 					</span></div>
 				<?php
@@ -2103,7 +2103,7 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 
 	if(!$foundIt) {
 		?>
-			<span class="custom-field-value" data-options='<?php echo json_encode($custom_field['options']); ?>'><?php echo esc_html__('Not set', 'seatreg'); ?></span></div>
+			<span class="custom-field-value" data-options="<?php echo esc_attr(wp_json_encode($custom_field['options'])); ?>"><?php echo esc_html__('Not set', 'seatreg'); ?></span></div>
 		<?php
 	}
 }
