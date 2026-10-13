@@ -74,7 +74,7 @@ class SeatregPaymentBase {
 
     protected function currencyAndAmountCheck($receivedCurrency, $receivedPrice) {
 		// check that payment_amount/payment_currency are correct
-		if( strtoupper($receivedCurrency) === $this->_currency && floatval($receivedPrice) === floatval($this->_price) ) {
+		if( strtoupper($receivedCurrency) === $this->_currency && round(floatval($receivedPrice), 2) === round(floatval($this->_price), 2) ) {
 			return true;
 		}else {
 			/* translators: 1: received price and currency, 2: expected price and currency */

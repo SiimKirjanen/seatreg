@@ -66,6 +66,11 @@ class BookingStatusPage {
 		return this.paymentForms.locator(`form:has(input[value="${provider}"])`);
 	}
 
+	/** What the PayPal Pay Now form asks PayPal to charge. */
+	get payPalPayNowAmount() {
+		return this.paymentForm('_xclick').locator('input[name="amount"]');
+	}
+
 	customPaymentButton(title) {
 		return this.paymentForms.locator('.custom-payment-box').filter({ hasText: title });
 	}

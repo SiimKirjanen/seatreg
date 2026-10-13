@@ -30,7 +30,7 @@ class SeatregBookingService {
             $totalCost += $seatPrice->price;
         }
     
-        return $totalCost;
+        return round($totalCost, 2);
     }
 
     /**
@@ -313,14 +313,16 @@ class SeatregBookingService {
 
             $rows[] = array(
                 'seatNr' => $booking->seatNr,
-                'price' => $booking->price . ' ' . $bookingData->paypal_currency_code . ' ' . $priceDescription,
+                'price' => SeatregPaymentService::formatPrice($booking->price) . ' ' . $bookingData->paypal_currency_code . ' ' . $priceDescription,
             );
         }
+
+        $totalCost = round($totalCost, 2);
 
         return array(
             'spotName' => SeatregTerminologyService::getSeatNouns($bookingData)->singularUpper,
             'rows' => $rows,
-            'total' => ( $couponsEnabled ? self::applyCouponDiscountToTotalCost($totalCost, $appliedCoupon) : $totalCost ) . ' ' . $bookingData->paypal_currency_code,
+            'total' => SeatregPaymentService::formatPrice( $couponsEnabled ? self::applyCouponDiscountToTotalCost($totalCost, $appliedCoupon) : $totalCost ) . ' ' . $bookingData->paypal_currency_code,
         );
     }
 
@@ -465,7 +467,7 @@ class SeatregBookingService {
             return $totalCost;
         }
 
-        $bookingPrice = $totalCost - $coupon->discountValue;
+        $bookingPrice = round($totalCost - $coupon->discountValue, 2);
 
         return $bookingPrice;
     }

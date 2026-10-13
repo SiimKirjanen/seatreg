@@ -95,7 +95,7 @@
 						echo SeatregPaymentService::generatePayPalPayNowForm(
 							$payPalFromAction,
 							$bookingData,
-							$bookingTotalCost,
+							SeatregPayPalApiService::formatAmount($bookingTotalCost, $bookingData->paypal_currency_code),
 							$returnUrl,
 							$cancelUrl,
 							SEATREG_PAYPAL_NOTIFY_URL,

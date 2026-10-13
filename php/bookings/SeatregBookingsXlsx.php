@@ -104,7 +104,7 @@ class SeatregBookingsXlsx extends SeatregBookingsFile {
             $bookingDate = $this->getBookingDate($registration->booking_date);
             $seatPrice = SeatregLayoutService::getSeatPriceFromLayout($registration, $this->_roomData);
             $priceDescription = $seatPrice->description ? '('. $seatPrice->description . ')' : '';
-            $priceText = $seatPrice->price . ' ' . $this->_registrationInfo->paypal_currency_code .  ' ' . $priceDescription;
+            $priceText = SeatregPaymentService::formatPrice($seatPrice->price) . ' ' . $this->_registrationInfo->paypal_currency_code .  ' ' . $priceDescription;
             $usedCouponString = SeatregCouponService::getAppliedCouponString(json_decode($registration->applied_coupon) ?? null);
 
             $nameField = $this->_separateFirstandLastName

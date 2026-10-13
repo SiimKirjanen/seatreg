@@ -1870,7 +1870,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									?>
 										<div> 
 											<?php
-												echo esc_html__('Price', 'seatreg'), ': ',  esc_html($seatPrice->price), ' ', esc_html($seatregData->paypal_currency_code);
+												echo esc_html__('Price', 'seatreg'), ': ',  esc_html(SeatregPaymentService::formatPrice($seatPrice->price)), ' ', esc_html($seatregData->paypal_currency_code);
 
 												if($seatPrice->description) {
 													echo ' (', esc_html($seatPrice->description) , ')';
@@ -1947,7 +1947,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									?>
 										<div> 
 											<?php
-												echo esc_html__('Price', 'seatreg'), ': ',  esc_html($seatPrice->price), ' ' ,esc_html($seatregData->paypal_currency_code);
+												echo esc_html__('Price', 'seatreg'), ': ',  esc_html(SeatregPaymentService::formatPrice($seatPrice->price)), ' ' ,esc_html($seatregData->paypal_currency_code);
 
 												if($seatPrice->description) {
 													echo ' (', esc_html($seatPrice->description) , ')';
@@ -2017,7 +2017,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 									?>
 										<div>
 											<?php
-												echo esc_html__('Price', 'seatreg'), ': ',  esc_html($seatPrice->price), ' ' ,esc_html($seatregData->paypal_currency_code);
+												echo esc_html__('Price', 'seatreg'), ': ',  esc_html(SeatregPaymentService::formatPrice($seatPrice->price)), ' ' ,esc_html($seatregData->paypal_currency_code);
 
 												if($seatPrice->description) {
 													echo ' (', esc_html($seatPrice->description) , ')';
@@ -2170,7 +2170,7 @@ function seatreg_generate_payment_section($booking, $optionsData, $readOnly = fa
 			<div>
 				<?php 
 					/* translators: %s is replaced with the payment total price and currency, for example "20 USD" */
-					echo sprintf(esc_html__('Payment of %s', 'seatreg'), esc_html("$booking->payment_total_price  $booking->payment_currency"));
+					echo sprintf(esc_html__('Payment of %s', 'seatreg'), esc_html(SeatregPaymentService::formatPrice($booking->payment_total_price) . "  $booking->payment_currency"));
 				?>
 			</div>
 
@@ -2899,7 +2899,7 @@ function seatreg_set_up_db() {
 			payment_update_date TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT NOW(),
 			payment_status varchar(255) NOT NULL,
 			payment_currency varchar(3) DEFAULT NULL,
-			payment_total_price int(11) DEFAULT NULL,
+			payment_total_price decimal(10,2) DEFAULT NULL,
 			payment_txn_id varchar(255), 
 			PRIMARY KEY  (id)
 		) $charset_collate;";

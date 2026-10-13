@@ -202,7 +202,7 @@ class SeatregBookingPDF extends tFPDF {
 
             if( $seatPrice ) {
                 $priceDescription = $seatPrice->description ? '('. $seatPrice->description . ')' : '';
-                $this->Cell(20, 6, esc_html__('Price', 'seatreg') . ': ' . $seatPrice->price . ' ' . $this->_bookingData->paypal_currency_code . ' ' . $priceDescription, 0, 1, 'L');
+                $this->Cell(20, 6, esc_html__('Price', 'seatreg') . ': ' . SeatregPaymentService::formatPrice($seatPrice->price) . ' ' . $this->_bookingData->paypal_currency_code . ' ' . $priceDescription, 0, 1, 'L');
             }
 
             if( $booking->calendar_date ) {
@@ -222,7 +222,7 @@ class SeatregBookingPDF extends tFPDF {
                 $this->Cell(20, 6, esc_html__('Payment status', 'seatreg') . ': ' . $paymentStatus, 0, 1, 'L');
 
                 if( $paymentStatus == SEATREG_PAYMENT_COMPLETED ) {
-                    $this->Cell(20, 6, esc_html__('Payment received', 'seatreg') . ': ' . $this->_payment->payment_total_price . ' ' . $this->_payment->payment_currency, 0, 1, 'L');
+                    $this->Cell(20, 6, esc_html__('Payment received', 'seatreg') . ': ' . SeatregPaymentService::formatPrice($this->_payment->payment_total_price) . ' ' . $this->_payment->payment_currency, 0, 1, 'L');
                 }
             }
 

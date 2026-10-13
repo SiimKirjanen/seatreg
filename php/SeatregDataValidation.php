@@ -414,7 +414,7 @@ class SeatregDataValidation {
                     return $validationStatus;
                 }
 
-                if( !property_exists($box, 'price') || !( is_numeric($box->price) || is_array($box->price) || is_null($box->price) ) || (is_int($box->price) && $box->price < 0) ) {
+                if( !property_exists($box, 'price') || !( is_numeric($box->price) || is_array($box->price) || is_null($box->price) ) || (is_numeric($box->price) && $box->price < 0) ) {
                     $validationStatus->setInvalid('box price is missing or invalid');
                     return $validationStatus;
                 }

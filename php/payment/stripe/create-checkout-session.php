@@ -41,6 +41,8 @@ if( !in_array($currencyCode, SEATREG_STRIPE_ZERO_DECIMAL_CURRENCIES) ) {
   $unitAmount = $unitAmount * 100;
 }
 
+$unitAmount = (int) round($unitAmount);
+
 $checkout_session = \Stripe\Checkout\Session::create([
   'line_items' => [[
     'price_data' => [

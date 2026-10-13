@@ -3186,8 +3186,12 @@
 	function createPriceInput(value, inputEnabled) {
 		return $('<input>')
 			.addClass('price-input')
-			.attr({ type: 'number', min: '0', oninput: 'this.value = Math.abs(this.value)', value: value })
+			.attr({ type: 'number', min: '0', step: '0.01', oninput: 'if(this.value < 0) this.value = Math.abs(this.value)', value: value })
 			.prop('disabled', !inputEnabled);
+	}
+
+	function readPriceInput($input) {
+		return Math.round(Math.abs(parseFloat($input.val())) * 100) / 100;
 	}
 
 	$('#price-dialog').on('show.bs.modal', function() {
@@ -3334,14 +3338,14 @@
 				//Multi price configured
 				$this.find('.multi-input').each(function() {
 					price.push({
-						price: parseInt($(this).find('.price-input').val()),
+						price: readPriceInput($(this).find('.price-input')),
 						description: $(this).find('.text-input').val(),
 						uuid: $(this).data('price-uuid')
 					});
 				});
 			}else {
 				//Single price configuration
-				price = parseInt($this.find('.price-input').val());
+				price = readPriceInput($this.find('.price-input'));
 			}
 			
 			box.changePrice(price);

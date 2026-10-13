@@ -265,7 +265,7 @@
 						/* translators: %s: the word the admin uses for seats, plural. Only used when the seat word is neuter in your language. If the sentence reads the same for every gender, give it the same translation as without this context. */
 						_x('Fill price to all selected %s', 'seat word is neuter', 'seatreg')
 					)); ?></label></div>
-					<input type="number" min="0" oninput="this.value = Math.abs(this.value)" id="price-for-all-selected" value="0" />
+					<input type="number" min="0" step="0.01" oninput="if(this.value < 0) this.value = Math.abs(this.value)" id="price-for-all-selected" value="0" />
 					<button type="button" class="btn btn-success btn-sm" id="fill-price-for-all-selected"><?php esc_html_e('Fill prices', 'seatreg'); ?></button>
 				</div>
 				<div id="selected-seats-for-pricing"></div>

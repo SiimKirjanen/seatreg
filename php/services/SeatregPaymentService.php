@@ -65,6 +65,21 @@ class SeatregPaymentService {
         return $session->status === 'complete' && $session->client_reference_id === $bookingId;
     }
 
+    /**
+     *
+     * Show a price with cents only when it has them: 17, 17.50
+     *
+    */
+    public static function formatPrice($price) {
+        if( !is_numeric($price) ) {
+            return $price;
+        }
+
+        $rounded = round((float)$price, 2);
+
+        return number_format($rounded, floor($rounded) == $rounded ? 0 : 2, '.', '');
+    }
+
     public static function insertOrUpdatePayment($bookingId, $status, $txnId = null, $paymentCurrency = null, $paymentTotalPrice = null) {
         global $seatreg_db_table_names;
         global $wpdb;

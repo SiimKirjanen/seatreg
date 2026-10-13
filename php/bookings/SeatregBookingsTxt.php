@@ -55,7 +55,7 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
 
             if( $seatPrice ) {
                 $priceDescription = $seatPrice->description ? '('. $seatPrice->description . ')' : '';
-                echo esc_html__('Price', 'seatreg'), ': ', esc_html($seatPrice->price), ' ', esc_html($this->_registrationInfo->paypal_currency_code), ' ', esc_html($priceDescription), esc_html($this->lineBreak());
+                echo esc_html__('Price', 'seatreg'), ': ', esc_html(SeatregPaymentService::formatPrice($seatPrice->price)), ' ', esc_html($this->_registrationInfo->paypal_currency_code), ' ', esc_html($priceDescription), esc_html($this->lineBreak());
             }
 
             if($this->_calendarDate) {
@@ -78,7 +78,7 @@ class SeatregBookingsTxt extends SeatregBookingsFile {
   
                 if($registration->payment_status == SEATREG_PAYMENT_COMPLETED) {
                     echo esc_html__('Payment txn id', 'seatreg'), ': ', esc_html($registration->payment_txn_id), esc_html($this->lineBreak());
-                    echo esc_html__('Payment received', 'seatreg'), ': ', esc_html($registration->payment_total_price) . ' ' . esc_html($registration->payment_currency), esc_html($this->lineBreak());
+                    echo esc_html__('Payment received', 'seatreg'), ': ', esc_html(SeatregPaymentService::formatPrice($registration->payment_total_price)) . ' ' . esc_html($registration->payment_currency), esc_html($this->lineBreak());
                 }
             }
         

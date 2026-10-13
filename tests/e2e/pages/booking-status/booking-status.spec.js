@@ -14,7 +14,8 @@ const SEAT_COUNT = 2;
 const CUSTOM_FIELD = { label: 'Meal', type: 'text' };
 const MEAL = 'Vegetarian';
 
-const SEAT_PRICE = 25;
+const SEAT_PRICE = 12.5;
+const SEAT_PRICE_SHOWN = '12.50';
 
 const PAYPAL = {
 	businessEmail: 'payments@example.com',
@@ -81,12 +82,13 @@ test.describe('Booking status page', () => {
 		await bookingStatus.goto(code, booking.id);
 
 		// The forms are only ever read: submitting one would send the run to PayPal
-		await expect(bookingStatus.paymentTable).toContainText(String(SEAT_PRICE));
+		await expect(bookingStatus.paymentTable).toContainText(SEAT_PRICE_SHOWN);
 
 		await expect(bookingStatus.paymentForm('_xclick')).toHaveAttribute(
 			'action',
 			/paypal\.com/
 		);
+		await expect(bookingStatus.payPalPayNowAmount).toHaveValue(SEAT_PRICE_SHOWN);
 
 		const customPayment = bookingStatus.customPaymentButton(PAID_BOOKING_PAYMENT.title);
 
