@@ -137,7 +137,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var siteLanguage = "'. esc_js($siteLanguage) . '";';
 			$inlineScript .= 'var controlledScroll = "'. esc_js($data->controlled_scroll) . '";';
 			$inlineScript .= 'var zoomControlsOnTop = "'. esc_js($data->zoom_on_top === '1' ? '1' : '0') . '";';
-			$inlineScript .= 'var customFooterText = "'. esc_js($data->custom_footer_text) . '";';
+			$inlineScript .= 'var customFooterText = ' . wp_json_encode( (string) $data->custom_footer_text, JSON_HEX_TAG | JSON_HEX_AMP ) . ';';
 			$inlineScript .= 'var registrationTimeRestrictions = jQuery.parseJSON(' . wp_json_encode($registrationTimeRestrictions) . ');';
 			$inlineScript .= 'var bookingRedirectToStatusPage = "'. esc_js($data->booking_redirect_status_page) . '";';
 			$inlineScript .= 'var requireWPLogin = "'. esc_js($data->require_wp_login) . '";';

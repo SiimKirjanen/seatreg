@@ -672,7 +672,7 @@
 
 					if(newHover != '') {
 						this.rooms[this.currentRoom].boxes[index].hoverText = newHover;
-						var newHoverToShow = newHover;
+						var newHoverToShow = hoverTextHtml(newHover);
 
 						if(canRegistraBox) {
 							newHoverToShow = 'ID: ' + this.rooms[this.currentRoom].boxes[index].id + '<br>' + newHoverToShow;
@@ -1916,12 +1916,12 @@
 					}
 				}
 				var hoverText = regScope.rooms[regScope.currentRoom].boxes[i].hoverText;
-				
+
 				if(hoverText != 'nohover') {
 					if(canRegisterBox) {
-						$(this).attr('data-powertip', 'ID: ' + regScope.rooms[regScope.currentRoom].boxes[i].id + '<br>' + hoverText).addClass('box-hover');
+						$(this).attr('data-powertip', 'ID: ' + regScope.rooms[regScope.currentRoom].boxes[i].id + '<br>' + hoverTextHtml(hoverText)).addClass('box-hover');
 					}else {
-						$(this).attr('data-powertip', hoverText).addClass('box-hover');
+						$(this).attr('data-powertip', hoverTextHtml(hoverText)).addClass('box-hover');
 					}
 				}else {
 					if(canRegisterBox) {
@@ -2918,6 +2918,10 @@
 	//the builder concatenates several of these into markup, and an imported file is not ours
 	function escapeAngleBrackets(value) {
 		return typeof value === 'string' ? value.replace(/</g, '&lt;').replace(/>/g, '&gt;') : value;
+	}
+
+	function hoverTextHtml(hoverText) {
+		return escapeAngleBrackets(hoverText).replace(/&lt;br\s*\/?&gt;/gi, '<br>');
 	}
 
 	function isPlainObject(value) {
