@@ -4507,20 +4507,22 @@ add_action( 'wp_ajax_nopriv_seatreg_resend_receipt', 'seatreg_resend_receipt_cal
 function seatreg_resend_receipt_callback() {
 	$resp = new SeatregJsonResponse();
 
-	if( empty($_POST['bookingId']) || empty($_POST['registrationCode'])) {
+	if( empty($_POST['bookingId']) ) {
 			$resp->setError('Missing data');
 			$resp->echoData();
-			
+
 			die();
 	}
 	$bookingId = sanitize_text_field($_POST['bookingId']);
 	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 
-	if($bookings && $bookings[0]->status === '2') {
-		seatreg_send_approved_booking_email( $bookingId, sanitize_text_field($_POST['registrationCode']), $bookingData->approved_booking_email_template );
+	if( !$bookings || !$bookingData || $bookings[0]->status !== '2' || $bookingData->send_approved_booking_email !== '1' ) {
+		$resp->setError( esc_html__('The receipt can not be sent for this booking', 'seatreg') );
+	}else if( !SeatregBookingService::claimReceiptResend($bookingId) ) {
+		$resp->setError( esc_html__('The receipt has been sent again too many times. Please try again later', 'seatreg') );
 	}else {
-		$resp->setError('Not allowed');
+		seatreg_send_approved_booking_email( $bookingId, $bookingData->registration_code, $bookingData->approved_booking_email_template );
 	}
 
 	$resp->echoData();

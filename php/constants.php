@@ -10,7 +10,9 @@ define('SEATREG_PAGE_ID', 'seatreg');
 
 // DB
 define('SEATREG_DB_VERSION', '1.66');
-define('SEATREG_SEATS_LOCK_TIMEOUT_SECONDS', 10);
+define('SEATREG_LOCK_TIMEOUT_SECONDS', 10);
+define('SEATREG_RECEIPT_RESEND_LIMIT', 3);
+define('SEATREG_RECEIPT_RESEND_WINDOW_SECONDS', HOUR_IN_SECONDS);
 
 // Validation
 define('SEATREG_MANAGER_ALLOWED_ORDER', array('id', 'date', 'name', 'room', 'nr', 'payment-status'));

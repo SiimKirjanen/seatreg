@@ -10,7 +10,6 @@
 		    url: WP_Seatreg.ajaxUrl,
             data: {
                 bookingId: $this.data('booking-id'),
-                registrationCode: $this.data('registration-id'),
                 action: 'seatreg_resend_receipt',
             },
             success: function(data) {
@@ -20,7 +19,8 @@
                 if(resp.type === 'ok') {
                     alertify.success(WP_Seatreg.successMessage);	
                 }else {
-                    alertify.error(WP_Seatreg.errorMessage);
+                    // Already escaped with esc_html__() on the server
+                    alertify.error(resp.text || WP_Seatreg.errorMessage);
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {

@@ -42,6 +42,7 @@ require( 'php/repositories/SeatregCouponRepository.php' );
 require( 'php/repositories/SeatregCompanionAppRepository.php' );
 require( 'php/services/SeatregRegistrationService.php' );
 require( 'php/services/SeatregBookingService.php' );
+require( 'php/services/SeatregLockService.php' );
 require( 'php/services/SeatregPaymentService.php' );
 require( 'php/services/SeatregPaymentLogService.php' );
 require( 'php/services/SeatregJobService.php' );

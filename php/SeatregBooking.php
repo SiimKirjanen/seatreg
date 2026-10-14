@@ -50,29 +50,13 @@ class SeatregBooking {
 	protected $_roomNouns = null;
 	protected $_seatNouns = null;
 
-	/**
-	 *
-	 * Only one request at a time may check a registration's seats and book them, or two could both
-	 * find a seat free and both take it. MySQL also lets go of the lock when the request ends.
-	 *
-	 */
+	//Only one request at a time may check a registration's seats and book them, or two could both find a seat free and both take it
 	protected function lockRegistrationSeats() {
-		global $wpdb;
-
-		return $wpdb->get_var( $wpdb->prepare('SELECT GET_LOCK(%s, %d)', $this->seatsLockName(), SEATREG_SEATS_LOCK_TIMEOUT_SECONDS) ) === '1';
+		return SeatregLockService::lock('seats_' . $this->_registrationCode);
 	}
 
 	protected function unlockRegistrationSeats() {
-		global $wpdb;
-
-		$wpdb->query( $wpdb->prepare('SELECT RELEASE_LOCK(%s)', $this->seatsLockName()) );
-	}
-
-	//Lock names are shared by every database on the MySQL server and capped at 64 characters
-	private function seatsLockName() {
-		global $wpdb;
-
-		return 'seatreg_seats_' . md5( DB_NAME . $wpdb->prefix . $this->_registrationCode );
+		SeatregLockService::unlock('seats_' . $this->_registrationCode);
 	}
 
     protected function generateSeatString() {
