@@ -39,13 +39,16 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 
 == Screenshots ==
 
-1. Map builder
-2. Registration view
-3. Booking manager
-4. Custom fields
-5. Overview
-6. Legends and background image
-7. Seat custom numbering
+1. Registration view
+2. Registration view on a phone
+3. Map builder
+4. Booking form with custom fields
+5. Booking manager
+6. Overview
+7. Legends and background image
+8. Approved booking email with QR code
+9. Companion app
+10. Companion app QR code scanning
 
 == Changelog ==
 
