@@ -47,6 +47,7 @@ class SeatregBooking {
 	protected $_wp_user_bookings_seat_limit = null;
 	protected $_require_name = true; //require full name from registrants
 	protected $_couponsEnabled = false;
+	protected $_paymentEnabled = false;
 	protected $_roomNouns = null;
 	protected $_seatNouns = null;
 
@@ -173,7 +174,8 @@ class SeatregBooking {
 			if( $booking->multi_price_selection ) {
 				$priceFound = SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) !== false;
 			}else {
-				$priceFound = !SeatregLayoutService::seatHasMultiplePrices($booking, $this->_registrationLayout);
+				//Without payments the registration page books a multi-price seat with no price choice
+				$priceFound = !$this->_paymentEnabled || !SeatregLayoutService::seatHasMultiplePrices($booking, $this->_registrationLayout);
 			}
 
 			if( !$priceFound ) {
@@ -404,6 +406,7 @@ class SeatregBooking {
 		$this->_wp_user_bookings_seat_limit = $result->wp_user_bookings_seat_limit ? (int)$result->wp_user_bookings_seat_limit: null;
 		$this->_require_name = $result->require_name === '1';
 		$this->_couponsEnabled = $result->enable_coupons === '1';
+		$this->_paymentEnabled = SeatregPaymentRepository::hasPaymentEnabled($result);
 		$this->_roomNouns = SeatregTerminologyService::getRoomNouns($result);
 		$this->_seatNouns = SeatregTerminologyService::getSeatNouns($result);
 		
