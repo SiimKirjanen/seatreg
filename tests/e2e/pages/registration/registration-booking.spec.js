@@ -212,6 +212,34 @@ test.describe('Registration booking', () => {
 			'data-booking-price',
 			String(PRICE_OPTIONS[1].price)
 		);
+
+		await registration.openCheckout();
+		await registration.fillBooking(BOOKER);
+		await registration.submitBooking();
+
+		await expect(registration.bookingConfirmed).toBeVisible();
+	});
+
+	test('books a seat that has several prices when the registration takes no payments', async () => {
+		/* The builder only prices a seat while a payment is on, so the payment goes
+		   once the seat has its prices. The seat is then offered with no price to pick. */
+		const payment = await settings.allowPaidBookings();
+
+		const builder = await settings.openLayout(code);
+
+		await builder.selectSeat(1);
+		await builder.setSeatPriceOptions(1, PRICE_OPTIONS);
+		await builder.save();
+
+		await settings.open(code);
+		await settings.removeCustomPayment(payment.title);
+		await settings.save();
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.completeBooking(BOOKER);
+
+		await expect(registration.bookingConfirmed).toBeVisible();
 	});
 
 	test('books straight through when bookings are approved automatically', async () => {
