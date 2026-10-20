@@ -3906,7 +3906,7 @@ function seatreg_update() {
 	}
 
 	if( !empty($_POST['custom-footer-text']) ) {
-	    $_POST['custom-footer-text'] = wp_kses_post(wpautop($_POST['custom-footer-text']));
+	    $_POST['custom-footer-text'] = wp_kses_post(wpautop(wp_unslash($_POST['custom-footer-text'])));
 	}else {
 		$_POST['custom-footer-text'] = null;
 	}
