@@ -4,7 +4,7 @@ Tags: reservation, online booking, event management, online registration, seat p
 Requires at least: 5.3
 Requires PHP: 7.2.28
 Tested up to: 7.1
-Stable tag: 1.80.0
+Stable tag: 1.80.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -39,15 +39,21 @@ It is commonly used for events and conferences, theaters and cinemas, classes an
 
 == Screenshots ==
 
-1. Map builder
-2. Registration view
-3. Booking manager
-4. Custom fields
-5. Overview
-6. Legends and background image
-7. Seat custom numbering
+1. Registration view
+2. Registration view on a phone
+3. Map builder
+4. Booking form with custom fields
+5. Booking manager
+6. Overview
+7. Legends and background image
+8. Approved booking email with QR code
+9. Companion app
+10. Companion app QR code scanning
 
 == Changelog ==
+
+= 1.80.1 =
+* Security fixes and improvements.
 
 = 1.80.0 =
 * In languages that need it, you can now choose the grammatical gender of the words you use for a seat and a room, so the sentences around them match.

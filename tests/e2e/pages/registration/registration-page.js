@@ -293,6 +293,16 @@ class RegistrationPage {
 		return this.page.locator('#request-error');
 	}
 
+	/** Where a booking the server could not make says why, a seat taken meanwhile among them. */
+	get bookingError() {
+		return this.page.locator('#error-text');
+	}
+
+	/** Whichever of the confirmation and the error the server's answer put on screen. Both are always in the page. */
+	get bookingOutcome() {
+		return this.bookingConfirmed.or(this.bookingError).filter({ visible: true });
+	}
+
 	/* Nothing else on the page ever shows the new booking's address, so this
 	   dialog is the only way a test can learn it. */
 
@@ -480,6 +490,37 @@ class RegistrationPage {
 		this.page.once('dialog', (dialog) => dialog.accept());
 
 		await this.page.locator('#checkout-confirm-btn').click();
+	}
+
+	/**
+	 * Keep the booking this page submits from reaching the server until released,
+	 * so the bookings of several pages can be let go at the same moment.
+	 *
+	 * @return {Promise<{held: Promise<void>, release: Function}>} held settles once the booking is caught
+	 */
+	async holdBookingRequest() {
+		let caught;
+		let release;
+		const held = new Promise((resolve) => {
+			caught = resolve;
+		});
+		const released = new Promise((resolve) => {
+			release = resolve;
+		});
+
+		await this.page.route('**/admin-ajax.php', async (route) => {
+			if (!(route.request().postData() ?? '').includes('action=seatreg_booking_submit')) {
+				await route.fallback();
+
+				return;
+			}
+
+			caught();
+			await released;
+			await route.continue();
+		});
+
+		return { held, release };
 	}
 
 	/**

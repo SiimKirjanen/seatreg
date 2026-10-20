@@ -1115,20 +1115,31 @@ $('#seatreg-booking-manager').on('click', '.add-booking', function() {
 	customFields.forEach(function(customField) {
 		var type = customField.type;
 		var label = customField.label;
+		var $input;
 
 		if(type === "check") {
-			modalCutsom.append('<div class="modal-custom" data-type="check"><label for="'+ label +'" class="modal-custom-l"><h5>'+ label +'</h5></label><br><input type="checkbox" id="'+ label +'" class="modal-custom-v" /></div>');
+			$input = $('<input type="checkbox" />');
 		}else if(type === "sel") {
 			var selectOptions = customField.options;
 
-			if(Array.isArray(selectOptions)) {
-				modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l" for="'+ label +'"><h5>'+ label+ '</h5></label><br><select id="'+ label +'" class="modal-custom-v">' +  selectOptions.map((option) => {
-					return '<option>' + option + '</option>';
-				})  + '</select>' + '</div>');
+			if(!Array.isArray(selectOptions)) {
+				return;
 			}
+
+			$input = $('<select>').append(selectOptions.map(function(option) {
+				return $('<option>').text(option);
+			}));
 		}else {
-			modalCutsom.append('<div class="modal-custom"><label class="modal-custom-l" for="'+ label +'"><h5>'+ label +'</h5></label><br><input type="text" id="'+ label +'" class="modal-custom-v" /></div>');
+			$input = $('<input type="text" />');
 		}
+
+		modalCutsom.append(
+			$('<div class="modal-custom">').attr('data-type', type === "check" ? type : null).append(
+				$('<label class="modal-custom-l">').attr('for', label).append($('<h5>').text(label)),
+				'<br>',
+				$input.attr('id', label).addClass('modal-custom-v')
+			)
+		);
 	});
 	modal.modal('show');
 });
@@ -1907,31 +1918,32 @@ $('.seatreg_page_seatreg-options .apply-custom-field').on('click', function(e) {
 });
 
 function seatreg_insert_custom_field(label,type,options, placeToPut) {
-		var containerDiv = $('<div class="custom-container" data-label="'+ label +'"></div>');
+		var containerDiv = $('<div class="custom-container"></div>').attr('data-label', label);
 		var move_up = $('<i class="custom-container-move custom-container-move-up">▲</i>');
 		var move_down = $('<i class="custom-container-move custom-container-move-down">▼</i>');
 		containerDiv.append(move_up);
 		containerDiv.append(move_down);
 
 		if(type == 'field') {
-			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="text"/></label> <div class="custom-container-controls"><span class="seatreg-ui-tooltip" title="' + translator.translate("preventsBookingWhenSameInputValueProvided") +'">'+ translator.translate("unique") +'</span> <input type="checkbox" class="unique-input" /> <span class="seatreg-ui-tooltip" title="'+ translator.translate("makeFieldOptional") +'">'+ translator.translate("optional") +'</span> <input type="checkbox" class="optional-input" /> <i class="fa fa-times-circle remove-cust-item"></i></div>'); 
+			var cusLabel = $('<label><span class="l-text"></span><input type="text"/></label> <div class="custom-container-controls"><span class="seatreg-ui-tooltip" title="' + translator.translate("preventsBookingWhenSameInputValueProvided") +'">'+ translator.translate("unique") +'</span> <input type="checkbox" class="unique-input" /> <span class="seatreg-ui-tooltip" title="'+ translator.translate("makeFieldOptional") +'">'+ translator.translate("optional") +'</span> <input type="checkbox" class="optional-input" /> <i class="fa fa-times-circle remove-cust-item"></i></div>'); 
 			containerDiv.attr('data-type','text').append(cusLabel);
 		}else if(type == 'checkbox') {
-			var cusLabel = $('<label><span class="l-text">'+ label +'</span><input type="checkbox"/></label><div class="custom-container-controls"><i class="fa fa-times-circle remove-cust-item"></i></div>'); 
+			var cusLabel = $('<label><span class="l-text"></span><input type="checkbox"/></label><div class="custom-container-controls"><i class="fa fa-times-circle remove-cust-item"></i></div>'); 
 			containerDiv.attr('data-type','check').append(cusLabel);
 
 		}else if(type == 'select') {
-			var lab = $('<label><span class="l-text">'+ label + '</span></label>'); 
+			var lab = $('<label><span class="l-text"></span></label>');
 			var sel = $('<select></select>');
 			var arrlen = options.length;
 
 			for(var i = 0; i < arrlen;i++) {
-				sel.append('<option>' + options[i] + '</option>');
+				sel.append($('<option>').text(options[i]));
 			}
 			var remBtn = '<div class="custom-container-controls"><i class="fa fa-times-circle remove-cust-item"></i></div>';
 			lab.append(sel,remBtn);
 			containerDiv.attr('data-type','sel').append(lab);
-		}	
+		}
+		containerDiv.find('.l-text').text(label);
 		placeToPut.append(containerDiv);
 		initTooltips();
 }
@@ -1959,7 +1971,10 @@ $('.seatreg_page_seatreg-options .add-select-option').on('click', function(e) {
 			return;
 		}
 
-		$(this).prev().prev().append('<li class="select-option"><span class="option-value">'+ $(this).prev().find('.option-name').val() +'</span><i class="fa fa-times-circle remove-cust-item"></i></li>');
+		var $selectOption = $('<li class="select-option"><span class="option-value"></span><i class="fa fa-times-circle remove-cust-item"></i></li>');
+
+		$selectOption.find('.option-value').text(selectOptionValue);
+		$(this).prev().prev().append($selectOption);
 });
 
 $('.seatreg_page_seatreg-options .existing-custom-fields').on('click','.remove-cust-item', function() {
@@ -2010,17 +2025,23 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-op
         <button id="save-options" class="btn btn-success mt-2 w-100">Save Changes and Close</button>
     `;
 
+    function appendOptionRow(optionText) {
+        var $row = $('<li class="d-flex"><input type="text"><button class="remove-option btn btn-danger ml-2 w-100">Remove</button></li>');
+
+        $row.find('input').val(optionText);
+        $('#options-list', dialog).append($row);
+    }
+
     // Populate the dialog with existing options
     options.each(function() {
-        var optionText = $(this).text();
-        $('#options-list', dialog).append('<li class="d-flex"><input type="text" value="' + optionText + '"><button class="remove-option btn btn-danger ml-2 w-100">Remove</button></li>');
+        appendOptionRow($(this).text());
     });
 
     // Add event listeners for adding, removing, and saving options
     dialog.querySelector('#add-option').addEventListener('click', function() {
         var newOptionText = dialog.querySelector('#new-option').value;
         if (newOptionText !== '') {
-            $('#options-list', dialog).append('<li class="d-flex"><input type="text" value="' + newOptionText + '"><button class="remove-option btn btn-danger ml-2 w-100">Remove</button></li>');
+            appendOptionRow(newOptionText);
             dialog.querySelector('#new-option').value = ''; // Clear the input field
         }
     });
@@ -2048,7 +2069,7 @@ $('.seatreg_page_seatreg-options .existing-custom-fields').on('click', '.edit-op
         // Update the select element with new options
         selectElement.empty();
         $.each(newOptions, function(index, option) {
-            selectElement.append('<option><span class="option-value">' + option + '</span></option>');
+            selectElement.append($('<option>').text(option));
         });
 
         dialog.close();

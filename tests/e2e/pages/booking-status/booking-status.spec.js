@@ -16,6 +16,10 @@ const MEAL = 'Vegetarian';
 
 const SEAT_PRICE = 25;
 
+/* SEATREG_RECEIPT_RESEND_LIMIT: how often a booker may ask for the receipt again in an hour. */
+const RECEIPT_RESENDS = 3;
+const RESEND_LIMIT_REACHED = 'sent again too many times';
+
 const PAYPAL = {
 	businessEmail: 'payments@example.com',
 	buttonId: 'ABCD1234EFGH',
@@ -116,7 +120,7 @@ test.describe('Booking status page', () => {
 		await expect(bookingStatus.customPaymentButton(PAID_BOOKING_PAYMENT.title)).toBeVisible();
 	});
 
-	test('sends the booking receipt again', async ({ page }) => {
+	test('sends the booking receipt again, but only a few times', async ({ page }) => {
 		// The only one here that needs a receipt to have gone out at all
 		test.skip(await shouldSkipWithoutMail(page), NO_MAIL_CAPTURE);
 
@@ -130,13 +134,21 @@ test.describe('Booking status page', () => {
 		await waitForMail(page, booking.email);
 
 		await bookingStatus.goto(code, booking.id);
-		await bookingStatus.resendReceiptButton.click();
 
-		await expect(bookingStatus.successToast).toBeVisible();
+		for (let resend = 0; resend < RECEIPT_RESENDS; resend += 1) {
+			await bookingStatus.resendReceipt();
+		}
+
+		await expect(bookingStatus.successToast.first()).toBeVisible();
+		await expect(bookingStatus.errorToast).toHaveCount(0);
+
+		await bookingStatus.resendReceipt();
+
+		await expect(bookingStatus.errorToast).toContainText(RESEND_LIMIT_REACHED);
 
 		const received = await mailSentTo(page, booking.email);
 
-		expect(received).toHaveLength(2);
+		expect(received).toHaveLength(1 + RECEIPT_RESENDS);
 	});
 
 	test('offers the booking as a PDF only while the settings allow one', async () => {

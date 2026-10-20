@@ -1,8 +1,12 @@
 const { test, expect } = require('@playwright/test');
 const { SettingsPage } = require('../settings/settings-page');
 const { uniqueRegistrationName } = require('../../utils/registrations');
+const { uniqueBookerEmail } = require('../../utils/mail');
 
 const SEAT_COUNT = 3;
+
+/* Enough bookers that some of them reach the server together. */
+const RIVAL_BOOKERS = 5;
 
 const BOOKER = { firstName: 'Riina', lastName: 'Tamm', email: 'riina.tamm@example.com' };
 const MALFORMED_EMAIL = 'riina.tamm.example.com';
@@ -208,6 +212,34 @@ test.describe('Registration booking', () => {
 			'data-booking-price',
 			String(PRICE_OPTIONS[1].price)
 		);
+
+		await registration.openCheckout();
+		await registration.fillBooking(BOOKER);
+		await registration.submitBooking();
+
+		await expect(registration.bookingConfirmed).toBeVisible();
+	});
+
+	test('books a seat that has several prices when the registration takes no payments', async () => {
+		/* The builder only prices a seat while a payment is on, so the payment goes
+		   once the seat has its prices. The seat is then offered with no price to pick. */
+		const payment = await settings.allowPaidBookings();
+
+		const builder = await settings.openLayout(code);
+
+		await builder.selectSeat(1);
+		await builder.setSeatPriceOptions(1, PRICE_OPTIONS);
+		await builder.save();
+
+		await settings.open(code);
+		await settings.removeCustomPayment(payment.title);
+		await settings.save();
+
+		const registration = await settings.openRegistration(code);
+
+		await registration.completeBooking(BOOKER);
+
+		await expect(registration.bookingConfirmed).toBeVisible();
 	});
 
 	test('books straight through when bookings are approved automatically', async () => {
@@ -223,5 +255,45 @@ test.describe('Registration booking', () => {
 		await registration.page.reload();
 
 		await expect(registration.seat(1)).toHaveAttribute('data-status', 'tak');
+	});
+
+	test('gives a seat to only one of the bookers who book it at the same moment', async ({ browser }) => {
+		await settings.allowBookings({ approved: true });
+
+		const bookers = [];
+
+		for (let booker = 0; booker < RIVAL_BOOKERS; booker += 1) {
+			const registration = await settings.openRegistrationAsVisitor(browser, code);
+
+			await registration.bookSeats(1);
+			await registration.fillBooking({ ...BOOKER, email: uniqueBookerEmail('rival') });
+
+			bookers.push(registration);
+		}
+
+		const holds = await Promise.all(bookers.map((registration) => registration.holdBookingRequest()));
+
+		for (const registration of bookers) {
+			await registration.submitBooking();
+		}
+
+		await Promise.all(holds.map(({ held }) => held));
+		holds.forEach(({ release }) => release());
+
+		for (const registration of bookers) {
+			await expect(registration.bookingOutcome).toBeVisible();
+		}
+
+		const confirmed = [];
+
+		for (const registration of bookers) {
+			confirmed.push(await registration.bookingConfirmed.isVisible());
+		}
+
+		expect(confirmed.filter(Boolean)).toHaveLength(1);
+
+		for (const registration of bookers) {
+			await registration.page.context().close();
+		}
 	});
 });

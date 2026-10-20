@@ -47,9 +47,19 @@ class SeatregBooking {
 	protected $_wp_user_bookings_seat_limit = null;
 	protected $_require_name = true; //require full name from registrants
 	protected $_couponsEnabled = false;
+	protected $_paymentEnabled = false;
 	protected $_roomNouns = null;
 	protected $_seatNouns = null;
-	
+
+	//Only one request at a time may check a registration's seats and book them, or two could both find a seat free and both take it
+	protected function lockRegistrationSeats() {
+		return SeatregLockService::lock('seats_' . $this->_registrationCode);
+	}
+
+	protected function unlockRegistrationSeats() {
+		SeatregLockService::unlock('seats_' . $this->_registrationCode);
+	}
+
     protected function generateSeatString() {
     	$dataLen = count($this->_bookings);
     	$seatsString = '';
@@ -162,9 +172,14 @@ class SeatregBooking {
 
 		foreach( $this->_bookings as $booking ) {
 			if( $booking->multi_price_selection ) {
-				if( SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) === false ) {
-					$statusReport = esc_html__('Selected price not found', 'seatreg');
-				}
+				$priceFound = SeatregLayoutService::checkIfMultiPriceUUIDExists($booking, $this->_registrationLayout) !== false;
+			}else {
+				//Without payments the registration page books a multi-price seat with no price choice
+				$priceFound = !$this->_paymentEnabled || !SeatregLayoutService::seatHasMultiplePrices($booking, $this->_registrationLayout);
+			}
+
+			if( !$priceFound ) {
+				$statusReport = esc_html__('Selected price not found', 'seatreg');
 			}
 		}
 
@@ -255,7 +270,7 @@ class SeatregBooking {
 								$searchStatus = 'seat-nr-check';
 								$seatPrefix = property_exists($this->_registrationLayout[$j]->boxes[$k], 'prefix') ? $this->_registrationLayout[$j]->boxes[$k]->prefix : '';
 							
-								if($seatPrefix . $this->_registrationLayout[$j]->boxes[$k]->seat == $this->_bookings[$i]->seat_nr) {
+								if(sanitize_text_field($seatPrefix . $this->_registrationLayout[$j]->boxes[$k]->seat) === (string)$this->_bookings[$i]->seat_nr) {
 									$searchStatus = 'seat-ok';
 								}
 
@@ -391,6 +406,7 @@ class SeatregBooking {
 		$this->_wp_user_bookings_seat_limit = $result->wp_user_bookings_seat_limit ? (int)$result->wp_user_bookings_seat_limit: null;
 		$this->_require_name = $result->require_name === '1';
 		$this->_couponsEnabled = $result->enable_coupons === '1';
+		$this->_paymentEnabled = SeatregPaymentRepository::hasPaymentEnabled($result);
 		$this->_roomNouns = SeatregTerminologyService::getRoomNouns($result);
 		$this->_seatNouns = SeatregTerminologyService::getSeatNouns($result);
 		

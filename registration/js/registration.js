@@ -403,7 +403,7 @@
 				box.setAttribute('data-legend',legend);
 				box.setAttribute('data-leg',legend.replace(/\s+/g, '_').toLowerCase());
 				box.classList.add( sanitizeClassName( legend ) );
-				tooltipContent = '<div class="seatreg-tooltip-row">' + legend + '</div>';
+				tooltipContent = '<div class="seatreg-tooltip-row">' + escapeHtml(legend) + '</div>';
 				clickable = true;
 			}
 
@@ -422,7 +422,7 @@
 			}
 
 			if(loc[i].hoverText !== "nohover") {
-				tooltipContent += '<div class="seatreg-tooltip-row">' + loc[i].hoverText.replace(/\^/g,'<br>') + '</div>';
+				tooltipContent += '<div class="seatreg-tooltip-row">' + hoverTextHtml(loc[i].hoverText) + '</div>';
 				box.className = box.className +' bubble-text';
 				clickable = true;
 
@@ -1014,8 +1014,7 @@ SeatReg.prototype.generateField = function(fieldName, isLastCheckItem) {
 };
 
 SeatReg.prototype.generateCustomFooterFextField = function (customFooterText) {
-	var decodedcustomFooterText = $("<div/>").html(customFooterText).text();
-	var div = $('<div class="field-label custom-footer-text">'+ decodedcustomFooterText + '</div>');
+	var div = $('<div class="field-label custom-footer-text"></div>').html(customFooterText);
 	div.find('script').remove();
 	return div;
 };
@@ -1023,6 +1022,11 @@ SeatReg.prototype.generateCustomFooterFextField = function (customFooterText) {
 //For the places that build markup as a string. A translator is not always an administrator
 function escapeHtml(text) {
 	return $('<span></span>').text(text).html();
+}
+
+//The builder stores line breaks in hover text as <br>, older layouts as ^
+function hoverTextHtml(hoverText) {
+	return escapeHtml(hoverText).replace(/&lt;br\s*\/?&gt;|\^/gi, '<br>');
 }
 
 function customFieldLabelText(custom) {

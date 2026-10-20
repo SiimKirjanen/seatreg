@@ -46,7 +46,7 @@ class SeatregConfirmBooking extends SeatregBooking {
 		}
 	}
 
-	public function confirmBookings() {
+	private function updateBookingStatus() {
 		global $wpdb;
 		global $seatreg_db_table_names;
 
@@ -61,11 +61,10 @@ class SeatregConfirmBooking extends SeatregBooking {
 			array('%d', '%d', '%s')
 		);
 
-		if(!$rowsUpdated) {
-			esc_html_e('Something went wrong while confirming your booking', 'seatreg');
+		return (bool) $rowsUpdated;
+	}
 
-			return;
-		}
+	public function confirmBookings() {
 		$bookingCheckURL = seatreg_get_registration_status_url($this->_registrationCode, $this->_bookingId);
 		$this->status = 'success';
 
@@ -151,127 +150,145 @@ class SeatregConfirmBooking extends SeatregBooking {
 			return;
 		}
 
-		//5 step. Check if seat/seats is already bron or taken
-		$seatsOpenCheck = $this->isAllSelectedSeatsOpen($this->_selectedBookingCalendarDate);
-		if($seatsOpenCheck != 'ok') {
-			echo wp_kses($seatsOpenCheck, array('b' => array()));
+		if( !$this->lockRegistrationSeats() ) {
+			esc_html_e('Too many bookings are being made right now. Please try again', 'seatreg');
 
 			return;
 		}
+
+		try {
+			//5 step. Check if seat/seats is already bron or taken
+			$seatsOpenCheck = $this->isAllSelectedSeatsOpen($this->_selectedBookingCalendarDate);
+			if($seatsOpenCheck != 'ok') {
+				echo wp_kses($seatsOpenCheck, array('b' => array()));
+
+				return;
+			}
 		
-		//6 step. Seat/seats lock check
-		$lockStatus = $this->seatLockCheck();
-		if($lockStatus != 'ok') {
-			echo esc_html($lockStatus);
+			//6 step. Seat/seats lock check
+			$lockStatus = $this->seatLockCheck();
+			if($lockStatus != 'ok') {
+				echo esc_html($lockStatus);
 
-			return;
-		}
+				return;
+			}
 
-		//7 step. Seat/seats password check
-		$passwordStatus = $this->seatPasswordCheck();
-		if($passwordStatus != 'ok') {
-			echo esc_html($passwordStatus);
+			//7 step. Seat/seats password check
+			$passwordStatus = $this->seatPasswordCheck();
+			if($passwordStatus != 'ok') {
+				echo esc_html($passwordStatus);
 
-			return;
-		}
+				return;
+			}
 
-		//8 step. If enebled check booking email limit
-		if($this->_bookingSameEmailLimit) {
-			$sameEmailBookingCheckStatus = $this->sameEmailBookingCheck($this->_bookerEmail, $this->_bookingSameEmailLimit);
+			//8 step. If enebled check booking email limit
+			if($this->_bookingSameEmailLimit) {
+				$sameEmailBookingCheckStatus = $this->sameEmailBookingCheck($this->_bookerEmail, $this->_bookingSameEmailLimit);
 
-			if($sameEmailBookingCheckStatus != 'ok') {
-				echo esc_html($sameEmailBookingCheckStatus);
+				if($sameEmailBookingCheckStatus != 'ok') {
+					echo esc_html($sameEmailBookingCheckStatus);
 	
-				return;
-			}
-		}
-
-		//9 step. Custom field validation
-		$bookingCustomFields = [];
-
-		foreach($this->_bookings as $booking) {
-			$customFieldDecoded = json_decode($booking->custom_field_data);
-			array_push($bookingCustomFields, $customFieldDecoded);
-		}
-
-		$bookingCustomFieldsEncoded = json_encode($bookingCustomFields);
-		$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($bookingCustomFieldsEncoded, $this->_maxSeats, $this->_createdCustomFields, $this->_registrationCode);
-		if( !$customFieldValidation->valid ) {
-			echo esc_html($customFieldValidation->errorMessage);
-
-			return false;
-		}
-
-		//10 step. Calendar mode validation
-		if( $this->_usingCalendar ) {
-			$calendarDateFormatCheck = $this->calendarDateFormatCheck( $this->_selectedBookingCalendarDate );
-			if($calendarDateFormatCheck != 'ok') {
-				echo esc_html($calendarDateFormatCheck);
-
-				return;
+					return;
+				}
 			}
 
-			$calendarDateCheck = $this->calendarDateValidation( $this->_selectedBookingCalendarDate );
-			if($calendarDateCheck != 'ok') {
-				echo esc_html($calendarDateCheck);
+			//9 step. Custom field validation
+			$bookingCustomFields = [];
+
+			foreach($this->_bookings as $booking) {
+				$customFieldDecoded = json_decode($booking->custom_field_data);
+				array_push($bookingCustomFields, $customFieldDecoded);
+			}
+
+			$bookingCustomFieldsEncoded = json_encode($bookingCustomFields);
+			$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($bookingCustomFieldsEncoded, $this->_maxSeats, $this->_createdCustomFields, $this->_registrationCode);
+			if( !$customFieldValidation->valid ) {
+				echo esc_html($customFieldValidation->errorMessage);
+
+				return false;
+			}
+
+			//10 step. Calendar mode validation
+			if( $this->_usingCalendar ) {
+				$calendarDateFormatCheck = $this->calendarDateFormatCheck( $this->_selectedBookingCalendarDate );
+				if($calendarDateFormatCheck != 'ok') {
+					echo esc_html($calendarDateFormatCheck);
+
+					return;
+				}
+
+				$calendarDateCheck = $this->calendarDateValidation( $this->_selectedBookingCalendarDate );
+				if($calendarDateCheck != 'ok') {
+					echo esc_html($calendarDateCheck);
+
+					return;
+				}
+
+				$calendarDatePastCheck = $this->calendarDatePastDateCheck( $this->_selectedBookingCalendarDate );
+				if($calendarDatePastCheck != 'ok') {
+					echo esc_html($calendarDatePastCheck);
+
+					return;
+				}
+			}
+
+			//11. start time check
+			$startTimeCheck = $this->registrationStartTimeCheck();
+			if($startTimeCheck !== 'ok') {
+				echo esc_html($startTimeCheck);
 
 				return;
 			}
 
-			$calendarDatePastCheck = $this->calendarDatePastDateCheck( $this->_selectedBookingCalendarDate );
-			if($calendarDatePastCheck != 'ok') {
-				echo esc_html($calendarDatePastCheck);
+			//12. end time check
+			$endTimeCheck = $this->registrationEndTimeCheck();
+			if($endTimeCheck !== 'ok') {
+				echo esc_html($endTimeCheck);
 
 				return;
 			}
+
+			//13. WP user booking limit restriction.
+			if( $this->_wp_user_booking_limit !== null && $this->_wpUserId ) {
+				$wpUserLimitStatus = $this->wpUserLimitCheck( $this->_wpUserId, $this->_registrationCode );
+
+				if( $wpUserLimitStatus !== 'ok' ) {
+					echo esc_html($wpUserLimitStatus);
+
+					return;
+				}
+			}
+
+			//14. WP user bookings seats limit restriction.
+			if( $this->_wp_user_bookings_seat_limit !== null && $this->_wpUserId ) {
+		
+			    $bookingsCount = 0;
+		
+			    if (isset($this->_bookings) && is_array($this->_bookings)) {
+			        $bookingsCount = count($this->_bookings);
+			    }
+		
+			    $wpUserBookingsSeatsLimitStatus = $this->wpUserBookingsSeatLimitCheck(
+			        $this->_wpUserId,
+			        $this->_registrationCode,
+			        $bookingsCount
+			    );
+		
+			    if( $wpUserBookingsSeatsLimitStatus !== 'ok' ) {
+			        echo esc_html($wpUserBookingsSeatsLimitStatus);
+			        return;
+			    }
+			}
+
+			$statusUpdated = $this->updateBookingStatus();
+		} finally {
+			$this->unlockRegistrationSeats();
 		}
 
-		//11. start time check
-		$startTimeCheck = $this->registrationStartTimeCheck();
-		if($startTimeCheck !== 'ok') {
-			echo esc_html($startTimeCheck);
+		if(!$statusUpdated) {
+			esc_html_e('Something went wrong while confirming your booking', 'seatreg');
 
 			return;
-		}
-
-		//12. end time check
-		$endTimeCheck = $this->registrationEndTimeCheck();
-		if($endTimeCheck !== 'ok') {
-			echo esc_html($endTimeCheck);
-
-			return;
-		}
-
-		//13. WP user booking limit restriction.
-		if( $this->_wp_user_booking_limit !== null && $this->_wpUserId ) {
-			$wpUserLimitStatus = $this->wpUserLimitCheck( $this->_wpUserId, $this->_registrationCode );
-
-			if( $wpUserLimitStatus !== 'ok' ) {
-				echo esc_html($wpUserLimitStatus);
-
-				return;
-			}
-		}
-
-		//14. WP user bookings seats limit restriction.
-		if( $this->_wp_user_bookings_seat_limit !== null && $this->_wpUserId ) {
-		
-		    $bookingsCount = 0;
-		
-		    if (isset($this->_bookings) && is_array($this->_bookings)) {
-		        $bookingsCount = count($this->_bookings);
-		    }
-		
-		    $wpUserBookingsSeatsLimitStatus = $this->wpUserBookingsSeatLimitCheck(
-		        $this->_wpUserId,
-		        $this->_registrationCode,
-		        $bookingsCount
-		    );
-		
-		    if( $wpUserBookingsSeatsLimitStatus !== 'ok' ) {
-		        echo esc_html($wpUserBookingsSeatsLimitStatus);
-		        return;
-		    }
 		}
 
 		$this->confirmBookings();

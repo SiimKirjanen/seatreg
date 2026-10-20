@@ -83,7 +83,7 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_script('jquery-powertip', SEATREG_PLUGIN_FOLDER_URL . 'js/jquery.powertip.js' , array(), '1.2.0', true);
 		wp_enqueue_script('pg-calendar', SEATREG_PLUGIN_FOLDER_URL . 'js/pg-calendar/dist/js/pignose.calendar.full.min.js' , array('jquery'), '1.4.31', false);
 		wp_enqueue_script('seatreg-utils', SEATREG_PLUGIN_FOLDER_URL . 'js/utils.js' , array(), '1.5.0', true);
-		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.43.0', true);
+		wp_enqueue_script('seatreg-registration', SEATREG_PLUGIN_FOLDER_URL . 'registration/js/registration.js' , array('jquery', 'date-format', 'iscroll-zoom', 'jquery-powertip', 'seatreg-utils'), '1.44.0', true);
 		wp_enqueue_script('alertify', SEATREG_PLUGIN_FOLDER_URL . 'js/alertify.js', array('jquery'), '1.0.0', true);
 
 		$data = seatreg_get_options_reg($_GET['c']);
@@ -137,7 +137,7 @@ function seatreg_public_scripts_and_styles() {
 			$inlineScript .= 'var siteLanguage = "'. esc_js($siteLanguage) . '";';
 			$inlineScript .= 'var controlledScroll = "'. esc_js($data->controlled_scroll) . '";';
 			$inlineScript .= 'var zoomControlsOnTop = "'. esc_js($data->zoom_on_top === '1' ? '1' : '0') . '";';
-			$inlineScript .= 'var customFooterText = "'. esc_js($data->custom_footer_text) . '";';
+			$inlineScript .= 'var customFooterText = ' . wp_json_encode( wp_unslash( (string) $data->custom_footer_text ), JSON_HEX_TAG | JSON_HEX_AMP ) . ';';
 			$inlineScript .= 'var registrationTimeRestrictions = jQuery.parseJSON(' . wp_json_encode($registrationTimeRestrictions) . ');';
 			$inlineScript .= 'var bookingRedirectToStatusPage = "'. esc_js($data->booking_redirect_status_page) . '";';
 			$inlineScript .= 'var requireWPLogin = "'. esc_js($data->require_wp_login) . '";';
@@ -191,7 +191,7 @@ function seatreg_public_scripts_and_styles() {
 		wp_enqueue_style('alertify-default', plugins_url('css/alertify.default.css', dirname(__FILE__) ), array(), '1.0.0', 'all');
 		wp_enqueue_script("jquery");
 		wp_enqueue_script('alertify', plugins_url('js/alertify.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true);
-		wp_enqueue_script('seatreg-booking-check', SEATREG_PLUGIN_FOLDER_URL . 'js/seatreg_booking_check.js' , array('jquery'), '1.3.0', true);
+		wp_enqueue_script('seatreg-booking-check', SEATREG_PLUGIN_FOLDER_URL . 'js/seatreg_booking_check.js' , array('jquery'), '1.4.0', true);
 		wp_localize_script('seatreg-booking-check', 'WP_Seatreg', array(
 			'ajaxUrl' => admin_url('admin-ajax.php'),
 			'successMessage' => __('Receipt sent', 'seatreg'),

@@ -1778,7 +1778,7 @@ function seatreg_generate_booking_manager_html($active_tab, $order, $searchTerm,
 				</div>
 			<?php endif; ?>
 			<div class="management-extra-actions">
-				<div class="add-booking" data-custom-fields='<?php echo json_encode($custom_fields); ?>' data-registration-code="<?php echo esc_attr($code); ?>" data-has-seats="<?php echo SeatregLayoutService::hasSeats($roomsData) ? 'true' : 'false'; ?>">
+				<div class="add-booking" data-custom-fields="<?php echo esc_attr(wp_json_encode($custom_fields)); ?>" data-registration-code="<?php echo esc_attr($code); ?>" data-has-seats="<?php echo SeatregLayoutService::hasSeats($roomsData) ? 'true' : 'false'; ?>">
 					<span><?php esc_html_e('Add booking', 'seatreg'); ?></span>
 					<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
 				</div>
@@ -2090,7 +2090,7 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 			}
 			if( $custom_field['type'] === 'sel' ) {
 				?>
-					<span class="custom-field-value" data-type="sel" data-options='<?php echo json_encode($custom_field['options']); ?>'>
+					<span class="custom-field-value" data-type="sel" data-options="<?php echo esc_attr(wp_json_encode($custom_field['options'])); ?>">
 						<?php echo esc_html($submitted_custom_data[$j]['value']) ?>
 					</span></div>
 				<?php
@@ -2103,7 +2103,7 @@ function seatreg_customfield_with_value($custom_field, $submitted_custom_data) {
 
 	if(!$foundIt) {
 		?>
-			<span class="custom-field-value" data-options='<?php echo json_encode($custom_field['options']); ?>'><?php echo esc_html__('Not set', 'seatreg'); ?></span></div>
+			<span class="custom-field-value" data-options="<?php echo esc_attr(wp_json_encode($custom_field['options'])); ?>"><?php echo esc_html__('Not set', 'seatreg'); ?></span></div>
 		<?php
 	}
 }
@@ -3906,7 +3906,7 @@ function seatreg_update() {
 	}
 
 	if( !empty($_POST['custom-footer-text']) ) {
-	    $_POST['custom-footer-text'] = wp_kses_post(wpautop($_POST['custom-footer-text']));
+	    $_POST['custom-footer-text'] = wp_kses_post(wpautop(wp_unslash($_POST['custom-footer-text'])));
 	}else {
 		$_POST['custom-footer-text'] = null;
 	}
@@ -4507,20 +4507,22 @@ add_action( 'wp_ajax_nopriv_seatreg_resend_receipt', 'seatreg_resend_receipt_cal
 function seatreg_resend_receipt_callback() {
 	$resp = new SeatregJsonResponse();
 
-	if( empty($_POST['bookingId']) || empty($_POST['registrationCode'])) {
+	if( empty($_POST['bookingId']) ) {
 			$resp->setError('Missing data');
 			$resp->echoData();
-			
+
 			die();
 	}
 	$bookingId = sanitize_text_field($_POST['bookingId']);
 	$bookings = SeatregBookingRepository::getBookingsById($bookingId);
 	$bookingData = SeatregBookingRepository::getDataRelatedToBooking($bookingId);
 
-	if($bookings && $bookings[0]->status === '2') {
-		seatreg_send_approved_booking_email( $bookingId, sanitize_text_field($_POST['registrationCode']), $bookingData->approved_booking_email_template );
+	if( !$bookings || !$bookingData || $bookings[0]->status !== '2' || $bookingData->send_approved_booking_email !== '1' ) {
+		$resp->setError( esc_html__('The receipt can not be sent for this booking', 'seatreg') );
+	}else if( !SeatregBookingService::claimReceiptResend($bookingId) ) {
+		$resp->setError( esc_html__('The receipt has been sent again too many times. Please try again later', 'seatreg') );
 	}else {
-		$resp->setError('Not allowed');
+		seatreg_send_approved_booking_email( $bookingId, $bookingData->registration_code, $bookingData->approved_booking_email_template );
 	}
 
 	$resp->echoData();
@@ -4873,7 +4875,8 @@ function seatreg_add_booking_with_manager_callback() {
 
 	$bookingsToAdd = [];
 	$customFieldsInput = stripslashes_deep( $_POST['custom-fields'] );
-	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, json_decode($options->custom_fields), $options->registration_code);
+	$createdCustomFields = json_decode($options->custom_fields ?? '[]');
+	$customFieldValidation = SeatregDataValidation::validateBookingCustomFields($customFieldsInput, $options->seats_at_once, $createdCustomFields, $options->registration_code);
 	$bookingStatus = sanitize_text_field($_POST['booking-status']);
 	$sendBookingConfirmToBooker = isset($_POST['send-booking-confirmation']) && sanitize_text_field($_POST['send-booking-confirmation']) === '1';
 	$singleBooking = count($_POST['first-name']) === 1;
@@ -4887,6 +4890,10 @@ function seatreg_add_booking_with_manager_callback() {
 	}
 	$customFields = json_decode($customFieldsInput);
 
+	if( count($customFields) !== count($_POST['first-name']) ) {
+		wp_send_json_error( array('message' => 'Custom fields do not match the booked seats', 'status' => 'custom field validation failed') );
+	}
+
 	foreach ( $_POST['first-name'] as $key => $value ) {
 		$email = wp_unslash($_POST['email'][$key] ?? null);
 
@@ -4899,7 +4906,7 @@ function seatreg_add_booking_with_manager_callback() {
 		$bookingToAdd->lastName = sanitize_text_field($_POST['last-name'][$key]);
 		$bookingToAdd->seatId = sanitize_text_field($_POST['seat-id'][$key]);
 		$bookingToAdd->roomName = sanitize_text_field($_POST['room'][$key]);
-		$bookingToAdd->customfield = $customFields[$key];
+		$bookingToAdd->customfield = SeatregCustomFieldService::bookingData($customFields[$key], $createdCustomFields);
 		$bookingToAdd->email = sanitize_email($email);
 		$bookingToAdd->status = $bookingStatus;
 		$bookingToAdd->multiPriceSelection = $_POST['seat-multi-price'][$key] ?? null;

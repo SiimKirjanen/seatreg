@@ -426,7 +426,36 @@ class SeatregBookingService {
         return false;
     }
 
-    public static function checkIfSeatAlreadyBooked($seatId, $seatNr, $existingBookings) {	
+    /**
+     *
+     * Count a request to send the booking receipt again and say whether it may go out. Counted
+     * under a lock, as requests sent at the same moment would otherwise all read the same count.
+     *
+     */
+    public static function claimReceiptResend($bookingId) {
+        $lockName = 'receipt_' . $bookingId;
+
+        if( !SeatregLockService::lock($lockName) ) {
+            return false;
+        }
+
+        try {
+            $transientName = 'seatreg_receipt_resends_' . $bookingId;
+            $resends = (int) get_transient($transientName);
+
+            if( $resends >= SEATREG_RECEIPT_RESEND_LIMIT ) {
+                return false;
+            }
+
+            set_transient($transientName, $resends + 1, SEATREG_RECEIPT_RESEND_WINDOW_SECONDS);
+
+            return true;
+        } finally {
+            SeatregLockService::unlock($lockName);
+        }
+    }
+
+    public static function checkIfSeatAlreadyBooked($seatId, $seatNr, $existingBookings) {
             $statusReport = (object) ['is_valid' => true, 'messages' => []];
             $bookingsLength = count($existingBookings);
     

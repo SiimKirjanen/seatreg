@@ -88,6 +88,10 @@ class BookingStatusPage {
 		return this.page.locator('.alertify-log-success');
 	}
 
+	get errorToast() {
+		return this.page.locator('.alertify-log-error');
+	}
+
 	/* Actions */
 
 	/**
@@ -105,6 +109,20 @@ class BookingStatusPage {
 	async gotoPaymentReturn(bookingId) {
 		await this.page.goto(`/?seatreg=payment-return&id=${bookingId}`);
 		await expect(this.shell).toBeVisible({ timeout: TIMEOUTS.NAVIGATION });
+	}
+
+	/** The toasts fade on their own, so the server's answer is what is waited for. */
+	async resendReceipt() {
+		const answered = this.page.waitForResponse(
+			(response) =>
+				response.url().includes('admin-ajax.php') &&
+				(response.request().postData() ?? '').includes('seatreg_resend_receipt'),
+			{ timeout: TIMEOUTS.NAVIGATION }
+		);
+
+		await this.resendReceiptButton.click();
+		await answered;
+		await expect(this.resendReceiptButton).toBeEnabled();
 	}
 
 	/** The src alone only says where the page looked, not that anything was served. */

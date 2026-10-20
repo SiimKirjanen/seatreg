@@ -118,6 +118,42 @@ class SeatregCustomFieldService {
 
     /**
      *
+     * The value a booking stores for a field. A select's is kept as sent, as it has to equal one of
+     * the options exactly.
+     *
+     */
+    public static function storedValue($customField, $value) {
+        return $customField->type === 'sel' ? $value : trim($value);
+    }
+
+    /**
+     *
+     * One person's validated custom field data rebuilt from the registration's fields, so a booking
+     * stores the admin's label and nothing beyond a label and a value.
+     *
+     * @param array $personCustomFields as submitted
+     * @param array $createdCustomFields the registration's custom fields
+     *
+     * @return array
+     *
+     */
+    public static function bookingData($personCustomFields, $createdCustomFields) {
+        $bookingData = array();
+
+        foreach($personCustomFields as $personCustomField) {
+            $customField = SeatregFindCustomField($personCustomField->label, $createdCustomFields);
+
+            $bookingData[] = (object) array(
+                'label' => $customField->label,
+                'value' => self::storedValue($customField, $personCustomField->value),
+            );
+        }
+
+        return $bookingData;
+    }
+
+    /**
+     *
      * A booking table asks for the same label once per booking, and the booking page for every
      * option of every field, so the lookup is answered from memory after the first time.
      *
